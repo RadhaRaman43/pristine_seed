@@ -184,8 +184,7 @@ class AllSprMappingScreen extends StatelessWidget{
                   Container(
                     width: size.width * .35,
                     child: Tooltip(
-                      message:  pendingDraftQuoteController.PendingDraftQuoteList[position]
-                          .itemCategoryName ?? "",
+                      message:  pendingDraftQuoteController.PendingDraftQuoteList[position].itemCategoryName ?? "",
                       child: Text(
                         pendingDraftQuoteController.PendingDraftQuoteList[position]
                             .itemCategoryName ?? "",
@@ -259,17 +258,17 @@ class AllSprMappingScreen extends StatelessWidget{
                   );
                 },),
 
-              _buildLabelWithValue(label: "Customer Name: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].accountName ?? "",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Customer: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].accountName ?? "",color:AllColors.textColor),
               _buildLabelWithValue(label: "Owner: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].createdFullName ?? "",color:AllColors.textColor),
               _buildLabelWithValue(label: "Created on: ", value: StaticMethod.onlyDate(pendingDraftQuoteController.PendingDraftQuoteList[position].createdOn ?? "") ,color:AllColors.textColor),
               _buildLabelWithValue(label: "Total Gross Amount: ", value:"₹ ${pendingDraftQuoteController.PendingDraftQuoteList[position].quoteTotalAmount.toString() ?? ""}"  ,color:AllColors.textColor),
-              _buildLabelWithValue(label: "RH Approval  Gmail: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].rhApprovalEmail ?? "",color:AllColors.textColor),
+              _buildLabelWithValue(label: "RH Approval  email: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].rhApprovalEmail ?? "",color:AllColors.textColor),
               _buildLabelWithValue(label: "RH Approval  On: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].rhApprovalOn ?? "",color:AllColors.textColor),
               _buildLabelWithValue(label: "RH Approval : ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].rhApproval ?? "",color:AllColors.textColor),
-              _buildLabelWithValue(label: "CBH Approval Gmail: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].cbhApprovalEmail ?? "",color:AllColors.textColor),
+              _buildLabelWithValue(label: "CBH Approval email: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].cbhApprovalEmail ?? "",color:AllColors.textColor),
               _buildLabelWithValue(label: "CBH Approval: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].cbhApproval ?? "",color:AllColors.textColor),
               _buildLabelWithValue(label: "CBH Approval On: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].cbhApprovalOn ?? "",color:AllColors.textColor),
-              _buildLabelWithValue(label: "GM  Approval Gmail: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].gmApprovalEmail ?? "",color:AllColors.textColor),
+              _buildLabelWithValue(label: "GM  Approval email: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].gmApprovalEmail ?? "",color:AllColors.textColor),
               _buildLabelWithValue(label: "GM  Approval: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].gmApproval ?? "",color:AllColors.textColor),
               _buildLabelWithValue(label: "GM  Approval On: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].gmApprovalOn ?? "",color:AllColors.textColor),
 

@@ -65,7 +65,7 @@ class QuoteInformationScreen extends StatelessWidget {
         else if (saleCycleController.quoteApprovalPage.value == "ALLQuoteLineItems") {
           pendingDraftQuoteController.clearAllFieldOfQuoteFilter();
           pendingDraftQuoteController.pageNumberForQuote =0;
-          pendingDraftQuoteController.getPendingDraftQuoteList(pendingDraftQuoteController.pageNumberForQuote, "All");
+          pendingDraftQuoteController.getPendingDraftQuoteList(pendingDraftQuoteController.pageNumberForQuote, "ALLQuoteLineItems");
           Get.offNamed(RoutesName.allQuoteLineItemScreen);
         }
         else if(saleCycleController.quoteApprovalPage.value=="FromAllSPRMapping"){
@@ -215,12 +215,24 @@ class QuoteInformationScreen extends StatelessWidget {
                                     borderRadius: BorderRadius.circular(30),
                                     border: Border.all(color: AllColors.primaryDark1)
                                 ),
-                                child: IconButton(
-                                    onPressed: (){
-                                      saleCycleController.reOpenRemarksController.value.text = "";
-                                      reOpenSalesCycle(context);
-                                    },
-                                    icon: Icon(Icons.lock_open)),
+                                child:  GestureDetector(
+                                  onTap: () {
+                                    saleCycleController.reOpenRemarksController.value.text = "";
+                                    reOpenSalesCycle(context);
+                                    //showDialogForHeaderUpdate(context);
+                                  },
+                                  child: Container(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(7.0),
+                                      child: Icon(Icons.lock_open, size: 20,),
+                                    ),
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(30),
+                                        border: Border.all(
+                                            color: AllColors.primaryDark1)),
+                                  ),
+                                ),
+
                               ),
                             ),);
                         }),
@@ -309,13 +321,7 @@ class QuoteInformationScreen extends StatelessWidget {
                           );
                         }),
                         Obx(() {
-                          print("draft quote status ${saleCycleController.quoteHeaderdata[0].quoteStatus?.toLowerCase()} ");
-                          print("draft quote accepted ${saleCycleController.quoteHeaderdata[0].quoteAccepted?.toLowerCase()} ");
-                          print("draft is read ${saleCycleController.quoteHeaderdata[0].isReadySendForApproval} ");
-                          print("draft isAdminWritePermission ${saleCycleController.isAdminWritePermission} ");
-                          print("draft userType ${saleCycleController.userType} ");
-                          print("draft actualSalesCycleApprovalStatus ${saleCycleController.saleCycleList[0].actualSalesCycleApprovalStatus?.toLowerCase()} ");
-                          return Visibility(
+                         return Visibility(
                             visible: ((saleCycleController.quoteHeaderdata[0].quoteStatus?.toLowerCase() == "draft" &&
                                     saleCycleController.quoteHeaderdata[0].quoteAccepted?.toLowerCase() == "open"&&
                                     saleCycleController.quoteHeaderdata[0].isReadySendForApproval == 1) ||
@@ -326,7 +332,8 @@ class QuoteInformationScreen extends StatelessWidget {
                             child: GestureDetector(
                               onTap: () {
                                 saleCycleController.bindAddress();
-                                showDialogForHeaderUpdate(context);
+                                Get.toNamed(RoutesName.updateQuoteHeaderScreen);
+                                //showDialogForHeaderUpdate(context);
                               },
                               child: Container(
                                 child: Padding(

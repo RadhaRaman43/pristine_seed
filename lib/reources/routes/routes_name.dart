@@ -136,6 +136,7 @@ class RoutesName{
   static const salesCycleCompetitorProductInforScreen="/sales_cycle_competitor_product_infor_screen";
   static const allQuoteLineItemScreen="/All_Quote_Line_Item_Screen";
   static const salesCycleProduct="/sales_product_list";
+  static const updateQuoteHeaderScreen="/update_quote_header_screen";
 
   //todo business tour plan
   static const BusinessTourPlanScreen="/bussiness_tour_plan_screen";
