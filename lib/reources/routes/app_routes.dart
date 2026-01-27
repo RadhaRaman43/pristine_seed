@@ -55,6 +55,7 @@ import '../../CRM_Directory/CRM_View/sales_cycle/All_Quote_Line_Item_View/All_Qu
 import '../../CRM_Directory/CRM_View/sales_cycle/All_Quote_view/All_Quote_Screen.dart';
 import '../../CRM_Directory/CRM_View/sales_cycle/Pending_Draft_Quote_view/pending_Draft_Quote.dart';
 import '../../CRM_Directory/CRM_View/sales_cycle/all_spr_mapping_view/all_spr_mapping_screen.dart';
+import '../../CRM_Directory/CRM_View/sales_cycle/all_spr_mapping_view/update_quote_header_screen.dart';
 import '../../CRM_Directory/CRM_View/sales_cycle/quote_approval_list/quote_approval_list_screen.dart';
 import '../../CRM_Directory/CRM_View/sales_cycle/sales_advise_view/all_sales_advise_line_items_screen.dart';
 import '../../CRM_Directory/CRM_View/sales_cycle/sales_advise_view/all_sales_advise_list.dart';
@@ -660,6 +661,13 @@ class AppRoutes{
         transitionDuration: Duration(microseconds: 180),
         transition: Transition.rightToLeftWithFade
     ),
+
+    GetPage(name: RoutesName.updateQuoteHeaderScreen,
+        page: ()=>UpdateQuoteHeaderScreen(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
+
 
     GetPage(name: RoutesName.salesAdviseCreateScreen,
         page: ()=>SalesAdviseCreateScreen(),

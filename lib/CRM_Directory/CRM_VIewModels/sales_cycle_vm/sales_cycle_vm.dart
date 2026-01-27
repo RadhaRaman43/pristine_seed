@@ -2064,8 +2064,7 @@ class SalesCycleVm extends GetxController {
             List<ItemQuoteModal> response =
                 jsonResponse.map((e) => ItemQuoteModal.fromJson(e)).toList();
             if (response[0].condition == "True") {
-              Utils.sanckBarSuccess(
-                  "Message !", response[0].message.toString());
+              Utils.sanckBarSuccess("Message !", response[0].message.toString());
               loading.value = false;
               getQuoteHeaderInformation(quoteId, quoteApprovalPage.value);
             } else {

@@ -89,7 +89,7 @@ class PendingDraftQuoteVm extends GetxController{
   }
 
   Future<void>refreshList() async{
-    getPendingDraftQuoteList(pageNumberForQuote, "All");
+    getPendingDraftQuoteList(pageNumberForQuote, filterFlag);
   }
   getItemCategoryMstWithoutTaskIdApi() {
     this.loading.value = true;
@@ -268,6 +268,7 @@ class PendingDraftQuoteVm extends GetxController{
       _api.QuoteHeaderGetNewApiHit(data, sessionManagement).then((onValue){
         final jsonResponse = json.decode(onValue);
         print(onValue);
+       this.filterFlag=flagFilter;
         if(jsonResponse is List){
           List<Pending_Draft_Quote_Model> response = jsonResponse.map((e) => Pending_Draft_Quote_Model.fromJson(e)).toList();
           if(response!= null && response.length>0 && response[0].condition=="True"){
