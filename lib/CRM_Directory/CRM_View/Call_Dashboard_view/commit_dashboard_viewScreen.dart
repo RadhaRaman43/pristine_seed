@@ -1296,7 +1296,40 @@ class CommitDashboardViewscreen extends StatelessWidget{
     );
   }
 
-  bindQuoteSubmitted(BuildContext context) {
+  Widget bindQuoteSubmitted(BuildContext context) {
+    return GestureDetector(
+      onTap: () => _showMultiSelectDialog(context, "Select Sales Cycle Stage",
+          dashboard_view_Controller.QuoteAccepted_controller,
+          dashboard_view_Controller.quoteAcceptedList),
+      child: AbsorbPointer(
+        child: TextField(
+          controller: dashboard_view_Controller.QuoteAccepted_controller.value,
+          decoration: InputDecoration(
+            labelText: "Quote Accepted",
+            labelStyle: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontSize: AllFontSize.fourtine,
+              fontWeight: FontWeight.w600,
+            ),
+            enabledBorder: const OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+              borderSide: BorderSide(color: AllColors.primaryDark1),
+            ),
+            focusedBorder: const OutlineInputBorder(
+              borderSide: BorderSide(color: AllColors.primaryDark1),
+            ),
+            contentPadding: const EdgeInsets.symmetric(
+              vertical: AllFontSize.two,
+              horizontal: AllFontSize.ten,
+            ),
+            suffixIcon: const Icon(Icons.arrow_drop_down),
+          ),
+        ),
+      ),
+    );
+  }
+
+  /*bindQuoteSubmitted(BuildContext context) {
     return DropdownMenu<String>(
       width: MediaQuery.of(context).size.width*.96,
       controller: dashboard_view_Controller.QuoteAccepted_controller.value,
@@ -1346,7 +1379,7 @@ class CommitDashboardViewscreen extends StatelessWidget{
             ));
       }).toList(),
     );
-  }
+  }*/
 
   bindIsCommitDropDown(BuildContext context) {
     return DropdownMenu<String>(
@@ -1458,8 +1491,113 @@ class CommitDashboardViewscreen extends StatelessWidget{
       },
     );
   }
+  Widget bindSalesStageStatus(BuildContext context) {
+    return GestureDetector(
+      onTap: () => _showMultiSelectDialog(context, "Select Sales Cycle Stage",
+          dashboard_view_Controller.StageName_controller,
+          dashboard_view_Controller.selectedSalesStageStatusList),
+      child: AbsorbPointer(
+        child: TextField(
+          controller: dashboard_view_Controller.StageName_controller.value,
+          decoration: InputDecoration(
+            labelText: "Sales Cycle Stage",
+            labelStyle: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontSize: AllFontSize.fourtine,
+              fontWeight: FontWeight.w600,
+            ),
+            enabledBorder: const OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+              borderSide: BorderSide(color: AllColors.primaryDark1),
+            ),
+            focusedBorder: const OutlineInputBorder(
+              borderSide: BorderSide(color: AllColors.primaryDark1),
+            ),
+            contentPadding: const EdgeInsets.symmetric(
+              vertical: AllFontSize.two,
+              horizontal: AllFontSize.ten,
+            ),
+            suffixIcon: const Icon(Icons.arrow_drop_down),
+          ),
+        ),
+      ),
+    );
+  }
 
-  bindSalesStageStatus(BuildContext context) {
+  void _showMultiSelectDialog(BuildContext context,
+      String dialogHeader,
+      Rx<TextEditingController> textController, RxList<String> itemList, ) {
+    final List<String> allItems =
+        itemList.value;
+
+    List<String> selectedItems =
+    textController.value.text
+        .split(',')
+        .map((e) => e.trim())
+        .where((e) => e.isNotEmpty)
+        .toList();
+
+    if (selectedItems.isEmpty) {
+      selectedItems = ["All"];
+    }
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title:  Text(dialogHeader),
+          content: SizedBox(
+            width: double.maxFinite,
+            child: ListView(
+              shrinkWrap: true,
+              children: allItems.map((item) {
+                final isChecked = selectedItems.contains(item);
+                return CheckboxListTile(
+                  title: Text(item),
+                  value: isChecked,
+                  onChanged: (bool? checked) {
+                    if (checked == true) {
+                      if (item == "All") {
+                        selectedItems
+                          ..clear()
+                          ..add("All");
+                      } else {
+                        selectedItems.remove("All");
+                        selectedItems.add(item);
+                      }
+                    } else {
+                      selectedItems.remove(item);
+                      if (selectedItems.isEmpty) {
+                        selectedItems.add("All");
+                      }
+                    }
+
+                    (context as Element).markNeedsBuild();
+                  },
+                );
+              }).toList(),
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text("Cancel"),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                textController.value.text =
+                    selectedItems.join(", ");
+                Navigator.pop(context);
+              },
+              child: const Text("OK"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+ /* bindSalesStageStatus(BuildContext context) {
     return Obx((){
       if(dashboard_view_Controller.StageName_controller.value.text.isNotEmpty && dashboard_view_Controller.filterDataChecker.value=='1' ){
         dashboard_view_Controller.selectedSalesStageStatusList.value =
@@ -1527,7 +1665,7 @@ class CommitDashboardViewscreen extends StatelessWidget{
       );
     });
 
-  }
+  }*/
   bindCustomerNameFilter(BuildContext context) {
     return Obx(() {
       if (dashboard_view_Controller.CustomerName_controller.value.text

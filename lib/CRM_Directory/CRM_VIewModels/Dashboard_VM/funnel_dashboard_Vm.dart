@@ -47,7 +47,8 @@ class FunnelDashboardVm extends GetxController{
   RxList<funnelDashboardDataListModel> funnelDashboardUserWiseDataList = <funnelDashboardDataListModel>[].obs;
 
   RxList<String> SalesCycleStageStatusList = <String>[].obs;
-  RxList<String> selectedSalesStageStatusList = <String>[].obs;
+  //RxList<String> selectedSalesStageStatusList = <String>[].obs;
+  RxList<String> selectedSalesStageStatusList = ['ALL','Suspect', 'Prospect', 'Propose'].obs;
   RxList<EmployeeMemberModel> employee_Member_list = <EmployeeMemberModel>[].obs;
   RxList<EmployeeMemberModel> SelectedEmployee_Member_list = <EmployeeMemberModel>[].obs;
   RxList<ItemCategoryMstModel> Item_Category_master_list_without_task = <ItemCategoryMstModel>[].obs;
@@ -91,9 +92,10 @@ class FunnelDashboardVm extends GetxController{
     super.onInit();
     email = await sessionManagement.getEmail() ?? '';
     isAdminWritePermission = await sessionManagement.getIsAdminPermission() ?? '';
-    SalesCycleStageStatusList.value = ['All','Suspect', 'Prospect', 'Propose'];
-    selectedSalesStageStatusList.value = ["All"];
+    //SalesCycleStageStatusList.value = ['All','Suspect', 'Prospect', 'Propose'];
+    //selectedSalesStageStatusList.value = ["All"];
     QuoteAccepted_controller.value.text = "All";
+    StageName_controller.value.text = "All";
     IsCommit_controller.value.text = 'ALL';
     DateRange("monthly");
     filterCustomDateController.value.text = '${formattedStartDate} - ${formattedEndDate}';
@@ -204,8 +206,8 @@ class FunnelDashboardVm extends GetxController{
         "filter_owner_name": AccountOwnerForApi.isEmpty?"":AccountOwnerForApi,
         "filter_region_name": RegionNameForApi.isEmpty?"":RegionNameForApi,
         "filter_cluster_name": ClusterNameForApi.isEmpty?"":ClusterNameForApi,
-        "filter_quote_accepted": (QuoteAcceptedForApi.isEmpty||QuoteAcceptedForApi=='All')?"":QuoteAcceptedForApi,
-        "filter_stage_name": StageNameForApi.isEmpty?"":StageNameForApi,
+        "filter_quote_accepted": (QuoteAcceptedForApi.isEmpty||QuoteAcceptedForApi.toLowerCase()=='all')?"":QuoteAcceptedForApi,
+        "filter_stage_name": (StageNameForApi.isEmpty || StageNameForApi.toLowerCase()=='all')?"":StageNameForApi,
         "filter_product_category": ProductCategoryForApi.isEmpty?"":ProductCategoryForApi,
         "filter_customer_name": CustomerNameApi.isEmpty?"":CustomerNameApi,
       };
@@ -259,8 +261,8 @@ class FunnelDashboardVm extends GetxController{
         "filter_owner_name": AccountOwnerForApi.isEmpty?"":AccountOwnerForApi,
         "filter_region_name": RegionNameForApi.isEmpty?"":RegionNameForApi,
         "filter_cluster_name": ClusterNameForApi.isEmpty?"":ClusterNameForApi,
-        "filter_quote_accepted": (QuoteAcceptedForApi.isEmpty||QuoteAcceptedForApi=='All')?"":QuoteAcceptedForApi,
-        "filter_stage_name": StageNameForApi.isEmpty?SelectedTabForApi:StageNameForApi,
+        "filter_quote_accepted": (QuoteAcceptedForApi.isEmpty||QuoteAcceptedForApi.toLowerCase()=='all')?"":QuoteAcceptedForApi,
+        "filter_stage_name":(StageNameForApi.isEmpty || StageNameForApi.toLowerCase()=='all')?SelectedTabForApi:StageNameForApi,
         "filter_product_category": ProductCategoryForApi.isEmpty?"":ProductCategoryForApi,
         "filter_customer_name": CustomerNameApi.isEmpty?"":CustomerNameApi,
         "rowsPerPage": rowsPerPage,
@@ -754,7 +756,7 @@ class FunnelDashboardVm extends GetxController{
     ProductCategory_controller.value.clear();
     QuoteAccepted_controller.value.text = "All";
     IsCommit_controller.value.text = 'ALL';
-    StageName_controller.value.clear();
+    StageName_controller.value.text='All';
     filter_created_on_cont.value.clear();
     //clusterName_controller.value.clear();
     CustomerName_controller.value.clear();

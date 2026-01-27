@@ -43,8 +43,9 @@ class CallDashboardVm extends GetxController{
   RxList<Records> callDashboardRecordList = <Records>[].obs;
   RxList<CallDashboardUserWiseDataModel> callDashboardUserWiseDataList = <CallDashboardUserWiseDataModel>[].obs;
 
-  RxList<String> TaskStatusListTypeList = <String>[].obs;
-  RxList<String> selectedTaskStatusList = <String>[].obs;
+  //RxList<String> TaskStatusListTypeList = <String>[].obs;
+  //RxList<String> selectedTaskStatusList = <String>[].obs;
+  RxList<String> TaskStatusListTypeList = ['ALL','Pending','Pending For Approval', 'Approved', 'Rejected'].obs;
   RxList<CallStatusMasterModel> DSARStatus_Master_list = <CallStatusMasterModel>[].obs;
   RxList<CallStatusMasterModel> selectedDSARStatusList = <CallStatusMasterModel>[].obs;
   RxList<AccountMasterModel> Account_Master_list=<AccountMasterModel>[].obs;
@@ -89,8 +90,9 @@ class CallDashboardVm extends GetxController{
     email = await sessionManagement.getEmail() ?? '';
     userType = await sessionManagement.getUserType() ?? '';
     isAdminWritePermission.value = await sessionManagement.getIsAdminPermission() ?? '';
-    TaskStatusListTypeList.value = ['All','Pending','Pending For Approval', 'Approved', 'Rejected'];
-    selectedTaskStatusList.value = ["All"];
+    //TaskStatusListTypeList.value = ['All','Pending','Pending For Approval', 'Approved', 'Rejected'];
+   // selectedTaskStatusList.value = ["All"];
+    task_Status_controller.value.text="All";
     selectedTypeCallList.add(CallStatusMasterModel(taskStatus: "All",),);
     selectedDSARStatusList.add(CallStatusMasterModel(taskStatus: "All",),);
     DateRange("month");
@@ -810,7 +812,7 @@ class CallDashboardVm extends GetxController{
     SelectedProductCategory_list.value = [];
     SelectedCluster_list.value = [];
     SelectedRegion_list.value = [];
-    selectedTaskStatusList.value = ["All"];
+    //selectedTaskStatusList.value = ["All"];
     selectedTypeCallList.add(CallStatusMasterModel(taskStatus: "All",),);
     selectedDSARStatusList.add(CallStatusMasterModel(taskStatus: "All",),);
     DateRange("month");

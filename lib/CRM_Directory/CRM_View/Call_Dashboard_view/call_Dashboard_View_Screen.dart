@@ -1535,7 +1535,115 @@ class CallDashboardViewScreen extends StatelessWidget {
     );
   }
 
-  bindTaskStatus(BuildContext context) {
+
+
+  void _showMultiSelectDialog(BuildContext context,
+      String dialogHeader,
+      Rx<TextEditingController> textController, RxList<String> itemList, ) {
+    final List<String> allItems =
+        itemList.value;
+
+    List<String> selectedItems =
+    textController.value.text
+        .split(',')
+        .map((e) => e.trim())
+        .where((e) => e.isNotEmpty)
+        .toList();
+
+    if (selectedItems.isEmpty) {
+      selectedItems = ["All"];
+    }
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title:  Text(dialogHeader),
+          content: SizedBox(
+            width: double.maxFinite,
+            child: ListView(
+              shrinkWrap: true,
+              children: allItems.map((item) {
+                final isChecked = selectedItems.contains(item);
+                return CheckboxListTile(
+                  title: Text(item),
+                  value: isChecked,
+                  onChanged: (bool? checked) {
+                    if (checked == true) {
+                      if (item == "All") {
+                        selectedItems
+                          ..clear()
+                          ..add("All");
+                      } else {
+                        selectedItems.remove("All");
+                        selectedItems.add(item);
+                      }
+                    } else {
+                      selectedItems.remove(item);
+                      if (selectedItems.isEmpty) {
+                        selectedItems.add("All");
+                      }
+                    }
+
+                    (context as Element).markNeedsBuild();
+                  },
+                );
+              }).toList(),
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text("Cancel"),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                textController.value.text =
+                    selectedItems.join(", ");
+                Navigator.pop(context);
+              },
+              child: const Text("OK"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget bindTaskStatus(BuildContext context) {
+    return GestureDetector(
+      onTap: () => _showMultiSelectDialog(context, "Select Task Status",
+          dashboard_view_Controller.task_Status_controller,
+          dashboard_view_Controller.TaskStatusListTypeList),
+      child: AbsorbPointer(
+        child: TextField(
+          controller: dashboard_view_Controller.task_Status_controller.value,
+          decoration: InputDecoration(
+            labelText: "Task Status",
+            labelStyle: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontSize: AllFontSize.fourtine,
+              fontWeight: FontWeight.w600,
+            ),
+            enabledBorder: const OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+              borderSide: BorderSide(color: AllColors.primaryDark1),
+            ),
+            focusedBorder: const OutlineInputBorder(
+              borderSide: BorderSide(color: AllColors.primaryDark1),
+            ),
+            contentPadding: const EdgeInsets.symmetric(
+              vertical: AllFontSize.two,
+              horizontal: AllFontSize.ten,
+            ),
+            suffixIcon: const Icon(Icons.arrow_drop_down),
+          ),
+        ),
+      ),
+    );
+  }
+
+/*  bindTaskStatus(BuildContext context) {
     return Obx(() {
       if(dashboard_view_Controller.task_Status_controller.value.text.isNotEmpty && dashboard_view_Controller.filterDataChecker.value=='1' ){
         dashboard_view_Controller.selectedTaskStatusList.value =
@@ -1600,7 +1708,7 @@ class CallDashboardViewScreen extends StatelessWidget {
         ),
       );
     });
-  }
+  }*/
 
   bindLastActivityStatus(BuildContext context) {
     return Obx(() {
@@ -1701,12 +1809,11 @@ class CallDashboardViewScreen extends StatelessWidget {
           ),
         ),
         dropdownBuilder: (context, selectedItems) {
-          // Custom builder to just show comma-separated names
           if (selectedItems.isEmpty) {
             return Text(
               "Type Of Call",
               style: GoogleFonts.poppins(
-                color: AllColors.primaryDark1, // Match your hint color
+                color: AllColors.primaryDark1,
                 fontSize: AllFontSize.sisxteen,
                 fontWeight: FontWeight.w500,
               ),
@@ -1716,7 +1823,7 @@ class CallDashboardViewScreen extends StatelessWidget {
             scrollDirection: Axis.horizontal,
             child: Text(
               selectedItems.map((e) => e.taskStatus).join(', '),
-              style: TextStyle(color: Colors.black), // Only black text
+              style: TextStyle(color: Colors.black),
             ),
           );
         },
@@ -1730,7 +1837,6 @@ class CallDashboardViewScreen extends StatelessWidget {
           searchFieldProps: TextFieldProps(
             decoration: InputDecoration(
               contentPadding: EdgeInsets.only(top: 20, left: 12, right: 12),
-              // Top margin here
               hintText: "Search...",
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
