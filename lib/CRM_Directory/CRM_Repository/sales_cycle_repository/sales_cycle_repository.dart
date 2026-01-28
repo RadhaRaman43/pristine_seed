@@ -276,4 +276,8 @@ class SalesCycleRepository{
   Future<String> getCompanyTypeMasterGet(var data,SessionManagement sessionManagement) async{
     return _apiService.postApi(data,AppUrl.CompanyTypeMasterGet, sessionManagement);
   }
+  Future<String> getQuoteHeaderUpdateMarkWon(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data,AppUrl.QuoteHeaderUpdateMarkWon, sessionManagement);
+  }
+
 }

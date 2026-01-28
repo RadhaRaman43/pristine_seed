@@ -194,6 +194,12 @@ class SalesCycleVm extends GetxController {
   var salesCycleOwnerController = TextEditingController().obs;
   var updatesalesCycleBudgetAmountController = TextEditingController().obs;
 
+
+  //todo quotation won controller
+  var quotationWonLossController=TextEditingController().obs;
+  var quotationReasonController=TextEditingController().obs;
+  RxBool reasonQuotationVisibilty=false.obs;
+
   RxString saleCycleOwnerSelected = "".obs;
   RxBool showUpdateBtnApproveQuoteItem = false.obs;
   RxBool showBranchHead = false.obs;
@@ -396,16 +402,13 @@ class SalesCycleVm extends GetxController {
     });
   }
 
-  Future<Iterable<EmployeeMemberModel>> EmployeeMasterGet(String query) async {
-    if (query == '') {
-      return const Iterable<EmployeeMemberModel>.empty();
-    }
+  Future<List<EmployeeMemberModel>> EmployeeMasterGet(String query) async {
     Map data = {
       'filter_name': '',
       'filter_email': query,
       'filter_location_id': '',
       'email_id': email,
-      'rowsPerPage': 50,
+      'rowsPerPage': 500,
       'pageNumber': 0,
     };
     String employee_response =await _api.EmployeeMatserGetApiHit(data, sessionManagement);
@@ -416,13 +419,11 @@ class SalesCycleVm extends GetxController {
         print(jsonResponse);
         List<EmployeeMemberModel> response =
         jsonResponse.map((data) => EmployeeMemberModel.fromJson(data)).toList();
-        print('condition..'+response[0].condition.toString());
         if (response[0].condition == 'True') {
           print(jsonResponse);
           employee_Member_list.value = response;
-
+          print( employee_Member_list.value.length);
         } else {
-          // Utils.sanckBarException('False!', response[0].message!);
           employee_Member_list.value = [];
         }
       } else {
@@ -435,6 +436,8 @@ class SalesCycleVm extends GetxController {
     }
     return employee_Member_list.value;
   }
+
+
   getEmployeeMemberApi() {
     Map data = {
       "email_id": email,
@@ -1491,14 +1494,9 @@ class SalesCycleVm extends GetxController {
               quoteHeaderdata.value = response;
               quoteLinedata.value = quoteHeaderdata[0].quoteItems ?? [];
               if (quoteLinedata.length > 0) {
-                print(
-                    'InsideAPI...${quoteLinedata[index.value].itemDescription}');
+
                 updateItemDescriptionController.value.text =
                     quoteLinedata[index.value].itemDescription ?? "";
-                print(
-                    'ItemDesc...${updateItemDescriptionController.value.text}');
-                print(
-                    'ItemDescList...${quoteLinedata[index.value].itemDescription.toString()}');
                 qtyUpdateLineController.value.text =
                     quoteLinedata[index.value].qty.toString();
                 updateUnitPriceController.value.text =
@@ -4730,6 +4728,11 @@ class SalesCycleVm extends GetxController {
     AccountOwnerForApi = '';
     AccountOwner_controller.value.clear();
     SelectedEmployee_Member_list.value = [];
+
+    SelectedCluster_list.value=[];
+    SelectedRegion_list.value=[];
+    RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join('|');
+    clusterName_controller.value.text = clusterGetByEmailList.map((e) => e.geoValue).join('|');
   }
 
   void clearAllFieldOfQuoteFilter() {
@@ -4754,6 +4757,10 @@ class SalesCycleVm extends GetxController {
     createdOnStartToEnd.value = "";
     extClosureStartToEnd.value = "";
     quoteValidityStartToEnd.value = "";
+    SelectedCluster_list.value=[];
+    SelectedRegion_list.value=[];
+    RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join('|');
+    clusterName_controller.value.text = clusterGetByEmailList.map((e) => e.geoValue).join('|');
   }
 
   getSalesCycleMstRejectReopen(String salesCycleId, String remarks) {
@@ -5918,6 +5925,50 @@ class SalesCycleVm extends GetxController {
 
     final formatter = NumberFormat('#,##,##0.00', 'en_IN');
     return formatter.format(num.parse(number.toString()));
+  }
+
+
+
+  getQuoteHeaderUpdateMarkWon(String quoteId) {
+    Map data = {
+      "quote_status_won": quotationWonLossController.value.text,
+      "quote_id": quoteId,
+      "created_by": email,
+      "loss_reason": quotationReasonController.value.text
+    };
+
+    loading.value = true;
+    _api.getQuoteHeaderUpdateMarkWon(data, sessionManagement).then(
+          (onValue) {
+        try {
+          final jsonResponse = json.decode(onValue);
+          print(onValue);
+          if (jsonResponse is List) {
+            List<SalesCycleApproveRejectModal> response = jsonResponse
+                .map((e) => SalesCycleApproveRejectModal.fromJson(e))
+                .toList();
+            if (response[0].condition?.toLowerCase() == "true") {
+              Utils.sanckBarSuccess("Success", response[0].message.toString());
+              pageNumber=0;
+              getQuoteHeaderInformation(quoteId,quoteApprovalPage.value);
+            } else {
+              Utils.sanckBarError("False Message", response[0].message.toString());
+            }
+          } else {
+            loading.value = false;
+          }
+        } catch (e) {
+          print(e);
+        } finally {
+          loading.value = false;
+        }
+      },
+    ).onError(
+          (error, stackTrace) {
+      },
+    ).whenComplete(() {
+      this.loading.value = false;
+    });
   }
 
 }
