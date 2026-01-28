@@ -247,7 +247,7 @@ class AllQuoteScreen extends StatelessWidget{
               _buildLabelWithValue(label: "Quote Total Amt: ", value:"₹ ${pendingDraftQuoteController.numberFormatWithComma(pendingDraftQuoteController.PendingDraftQuoteList[position].quoteTotalAmount).toString() ?? ""}"  ,color:AllColors.textColor),
               _buildLabelWithValue(label: "Quote Gross Amt: ", value:"₹ ${pendingDraftQuoteController.numberFormatWithComma(pendingDraftQuoteController.PendingDraftQuoteList[position].quoteGrossAmount).toString() ?? ""}"  ,color:AllColors.textColor),
               _buildLabelWithValue(label: "Quote Gst Amt: ", value:"₹ ${pendingDraftQuoteController.numberFormatWithComma(pendingDraftQuoteController.PendingDraftQuoteList[position].quoteGstAmount).toString() ?? ""}"  ,color:AllColors.textColor),
-              _buildLabelWithValue(label: "Created By: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].createdBy ?? "",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Created By: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].createdFullName ?? "",color:AllColors.textColor),
               _buildLabelWithValue(label: "Created on: ", value: StaticMethod.onlyDate(pendingDraftQuoteController.PendingDraftQuoteList[position].createdOn ?? "") ,color:AllColors.textColor),
               _buildLabelWithValue(label: "Reporting Manager: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].approvedFullName ?? "",color:AllColors.textColor),
               _buildLabelWithValue(label: "Approved on: ", value: StaticMethod.onlyDate(pendingDraftQuoteController.PendingDraftQuoteList[position].approvedOn ?? "") ,color:AllColors.textColor),

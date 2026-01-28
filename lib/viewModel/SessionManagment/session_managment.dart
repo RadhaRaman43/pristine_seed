@@ -49,6 +49,20 @@ class SessionManagement {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('AuthToken', AuthToken);
   }
+  Future<void> setUserCode(String UserCode) async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('userCode', UserCode);
+  }
+  Future<String?> getUserCode() async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      var code = prefs.getString('userCode');
+      if (code == null || code == "") return null;
+      return code;
+    } catch (e) {
+      return null;
+    }
+  }
 
   Future<void> setName(String name) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -893,6 +907,8 @@ class SessionManagement {
       return null;
     }
   }
+
+
 
 
 }
