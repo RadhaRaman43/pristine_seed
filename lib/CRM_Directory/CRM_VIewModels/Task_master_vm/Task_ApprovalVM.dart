@@ -417,9 +417,7 @@ class TaskApprovalvm extends GetxController{
               getTaskMstDSARList(taskId);
               Get.toNamed(RoutesName.taslMasterApprovalDetailsScreen);
           }else {
-
             Task_Master_list_line_Wise.value=[];
-
           }
         } else {
 

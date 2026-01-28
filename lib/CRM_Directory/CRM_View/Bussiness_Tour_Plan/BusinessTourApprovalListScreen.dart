@@ -153,32 +153,63 @@ class BusinessTourApprovalListScreen extends StatelessWidget{
         onTap: () {
           businessTourPlanViewController.getBusinessTourPlanDetailsApi(businessTourPlanController.BusinessTourApprovalList[position].tourId, "SendForApproval");
         },
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              children: [
+                Text(
+                  "Tour ID : ",
+                  style: GoogleFonts.poppins(
+                      color: AllColors.primaryDark1,
+                      fontSize: AllFontSize.fourtine,
+                      fontWeight: FontWeight.w700),
+                ),
+                Container(
+                  child: Tooltip(
+                    message:businessTourPlanController.BusinessTourApprovalList[position].tourId ?? "",
+                    child: Text(
+                        businessTourPlanController.BusinessTourApprovalList[position].tourId?? "",
+                      overflow: TextOverflow.ellipsis,
+                      style: GoogleFonts.poppins(
+                          color:Colors.blue,
+                          fontSize: AllFontSize.fourtine,
+                          fontWeight: FontWeight.w700),
+                    ),
+                    textAlign: TextAlign.end,
+                  ),
+                ),
+              ],
+            ),
+            Icon(Icons.remove_red_eye_outlined,  color: Colors.blue,),
+          ],
+        ),
         subtitle:Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _buildLabelWithValue(
               label: "Tour ID : ",
-              value: businessTourPlanController.BusinessTourApprovalList[position].tourId,
+              value: businessTourPlanController.BusinessTourApprovalList[position].tourId ?? "",
             ),
             _buildLabelWithValue(
               label: "Cluster : ",
-              value: businessTourPlanController.BusinessTourApprovalList[position].cluster,
+              value: businessTourPlanController.BusinessTourApprovalList[position].cluster?? "",
             ),
             _buildLabelWithValue(
               label: "Zone : ",
-              value: businessTourPlanController.BusinessTourApprovalList[position].zone,
+              value: businessTourPlanController.BusinessTourApprovalList[position].zone?? "",
             ),
             _buildLabelWithValue(
               label: "Region : ",
-              value: businessTourPlanController.BusinessTourApprovalList[position].region,
+              value: businessTourPlanController.BusinessTourApprovalList[position].region?? "",
             ),
             _buildLabelWithValue(
               label: "Touring Region : ",
-              value: businessTourPlanController.BusinessTourApprovalList[position].frontliners,
+              value: businessTourPlanController.BusinessTourApprovalList[position].frontliners?? "",
             ),
             _buildLabelWithValue(
               label: "Status : ",
-              value: businessTourPlanController.BusinessTourApprovalList[position].status,
+              value: businessTourPlanController.BusinessTourApprovalList[position].status?? "",
               color: getStatusColor(saleCycleStatus),
             ),
             _buildLabelWithValue(
@@ -191,11 +222,11 @@ class BusinessTourApprovalListScreen extends StatelessWidget{
             ),
             _buildLabelWithValue(
               label: "Reporting Manager : ",
-              value: businessTourPlanController.BusinessTourApprovalList[position].accountReportingFullName,
+              value: businessTourPlanController.BusinessTourApprovalList[position].accountReportingFullName?? "",
             ),
             _buildLabelWithValue(
               label: "Created By: ",
-              value: businessTourPlanController.BusinessTourApprovalList[position].accountCreateFullName,
+              value: businessTourPlanController.BusinessTourApprovalList[position].accountCreateFullName?? "",
             ),
             _buildLabelWithValue(
               label: "Created On: ",
@@ -209,7 +240,6 @@ class BusinessTourApprovalListScreen extends StatelessWidget{
           ],
         ),
 
-        trailing: Icon(Icons.remove_red_eye_outlined,  color: Colors.blue,),
       ),
     );
   }
@@ -221,6 +251,7 @@ class BusinessTourApprovalListScreen extends StatelessWidget{
     Color color = AllColors.textColor,
   }) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
           label,

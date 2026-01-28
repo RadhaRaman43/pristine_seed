@@ -88,11 +88,14 @@ class EmpMarkLeaveRequestVm extends GetxController{
   RxList<RegionWithClusterFilterModal> regionwithclusterGetByEmailList = <RegionWithClusterFilterModal>[].obs;
   RxList<RegionWithClusterFilterModal> SelectedRegion_list = <RegionWithClusterFilterModal>[].obs;
 
+  RxString isHeadOfficePermission = "".obs;
+
   @override
   Future<void> onInit() async {
     // TODO: implement onInit
     super.onInit();
     email = await sessionManagement.getEmail()??"";
+    isHeadOfficePermission.value = await sessionManagement.getisHeadofficePermission() ?? '';
     getLeaveTypeData();
     getClustersGetByEmail();
     //getEmployeeLeaveData(filterStatus.value, pageNumber);
@@ -115,8 +118,7 @@ class EmpMarkLeaveRequestVm extends GetxController{
             clusterGetByEmailList.value=response;
             if (clusterGetByEmailList.value.isNotEmpty && SelectedCluster_list.isEmpty) {
               SelectedCluster_list.assignAll(clusterGetByEmailList.value);
-              clusterName_controller.value.text =
-                  clusterGetByEmailList.value.map((e) => e.geoValue).join(', ');
+              clusterName_controller.value.text = clusterGetByEmailList.value.map((e) => e.geoValue).join('|');
               getRegionsWithClusterFilterGetByEmail();
             }
           }else {
@@ -145,7 +147,7 @@ class EmpMarkLeaveRequestVm extends GetxController{
       selectedCluster = clusterName_controller.value.text
           .split(',')
           .map((e) => e.trim())
-          .join('||');
+          .join('|');
     }
     try{
       Map<String, String> data={
@@ -162,9 +164,10 @@ class EmpMarkLeaveRequestVm extends GetxController{
           if(response.length>0 && response[0].condition=="True"){
             loading.value = false;
             regionwithclusterGetByEmailList.value=response;
-            RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join(', ');
+            RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join('|');
             print('region....${RegionName_controller.value.text}');
-            getEmployeeLeaveData(filterStatus.value, pageNumber);
+            getFilterData();
+            //getEmployeeLeaveData(filterStatus.value, pageNumber);
 
           }else {
             loading.value = false;
@@ -530,22 +533,74 @@ class EmpMarkLeaveRequestVm extends GetxController{
     getEmployeeLeaveRequestRejectApproveDataGet(filterStatus.value, pageNumber);
   }
 
- /* void bindData(AttendanceLeaveModal employee_leave_data_list) {
-    StartDate_controller.text=employee_leave_data_list.workingDate??"";
-    EndDate_controller.text=employee_leave_data_list.workingDate??"";
-    isDateDifferenceShow.value = false;
-    employee_leave_data_list.isHalfDay==1?isHalfDay.value = true:isHalfDay.value = false;
-    employee_leave_data_list.isShortLeave==1?isShortLeave.value = true:isShortLeave.value = false;
-    // selectedRadio = 0.obs;
-    leaveCode_controller.text=employee_leave_data_list.leaveDescription??"";
-    isComprehensiveLeave.value = false;
-    isPaternityLeave.value = false;
-    CompOffDate_controller.text=employee_leave_data_list.compOffDate??"";
-    isTwinBabies_cobtroller.text=employee_leave_data_list.isTwinBabies==1?"Yes":"No";
-    babyName_controller.text=employee_leave_data_list.babyName??"";
-    babyGender_controller.text=employee_leave_data_list.babyGender??"";
-    babyBirthDate_controller.text=employee_leave_data_list.babyBirthDate??"";
-    babyLeaveRerason_controller.text=employee_leave_data_list.leaveReason??"";
-  }*/
+  clearFilter(){
+    leaveCode_filter_controller.value.clear();
+    StartDate_filter_controller.clear();
+    EndDate_filter_controller.clear();
+    leaveId_filter_controller.clear();
+    leave_reason_filter_controller.clear();
+    CreatedBy_filter_controller.clear();
+    createdOn_filter_controller.clear();
+    select_leaveType_data_list.value=[];
+    pageNumber=0;
+    getEmployeeLeaveData(filterStatus.value, pageNumber);
+  }
+
+  RxString filterDataChecker = ''.obs;
+  void SaveFilterData() async{
+    await sessionManagement.saveMarkLeaveData({
+
+      'leaveId_filter_controller': leaveId_filter_controller.value.text,
+      'region_name': RegionName_controller.value.text,
+      'cluster_name': clusterName_controller.value.text,
+      'leaveCode_filter_controller': leaveCode_filter_controller.value.text,
+      'leave_reason_filter_controller': leave_reason_filter_controller.text,
+      'StartDate_filter_controller': StartDate_filter_controller.text,
+      'EndDate_filter_controller': EndDate_filter_controller.text,
+      'createdOn_filter_controller': createdOn_filter_controller.value.text,
+      'CreatedBy_filter_controller': CreatedBy_filter_controller.value.text,
+
+    });
+    filterDataChecker.value='';
+    pageNumber=0;
+    getEmployeeLeaveData(filterStatus.value, pageNumber);
+  }
+
+  void getFilterData() async{
+    Map getFilterData=await sessionManagement.getMarkLeaveData();
+
+    if(getFilterData.isNotEmpty){
+      leaveId_filter_controller.value=getFilterData["leaveId_filter_controller"]??"";
+      leaveCode_filter_controller.value.text=getFilterData["leaveCode_filter_controller"]??"";
+      leave_reason_filter_controller.text=getFilterData["leave_reason_filter_controller"]??"";
+      StartDate_filter_controller.text=getFilterData["StartDate_filter_controller"]??"";
+      EndDate_filter_controller.text=getFilterData["EndDate_filter_controller"]??"";
+      createdOn_filter_controller.text=getFilterData["createdOn_filter_controller"]??"";
+      CreatedBy_filter_controller.text=getFilterData["CreatedBy_filter_controller"]??"";
+      filterDataChecker.value='1';
+
+      if(getFilterData["region_name"].toString().isNotEmpty && getFilterData["region_name"].toString()!=""){
+        RegionName_controller.value.text = "";
+        RegionName_controller.value.text = getFilterData["region_name"].toString()??"";
+      }
+      if(getFilterData["cluster_name"].toString().isNotEmpty && getFilterData["cluster_name"].toString()!=""){
+        clusterName_controller.value.text="";
+        clusterName_controller.value.text=getFilterData["cluster_name"].toString()??"";
+        print("clusterName_controller.value.text.....${clusterName_controller.value.text}");
+      }
+    }
+    else{
+      print("else condition");
+    }
+    pageNumber=0;
+    getEmployeeLeaveData(filterStatus.value, pageNumber);
+  }
+
+  void clearFilterData() {
+    filterDataChecker.value='';
+    sessionManagement.clearMarkLeaveData();
+  }
+
+
 }
 

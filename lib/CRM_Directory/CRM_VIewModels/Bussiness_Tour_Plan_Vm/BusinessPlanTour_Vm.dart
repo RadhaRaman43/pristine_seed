@@ -30,8 +30,8 @@ class BusinessPlanTourViewModel extends GetxController{
   final _api = BusinessTourPlanRepo();
   SessionManagement sessionManagement = SessionManagement();
   String email = "";
-  String isAdminWritePermission = "";
-  String isHeadOfficePermission = "";
+  RxString isAdminWritePermission = "".obs;
+  RxString isHeadOfficePermission = "".obs;
   String filterRouting = "";
   int pageNumber = 0;
   int rowsPerPage = 10;
@@ -115,8 +115,8 @@ class BusinessPlanTourViewModel extends GetxController{
   @override
   Future<void> onInit() async {
     email = await sessionManagement.getEmail() ?? '';
-    isAdminWritePermission = await sessionManagement.getIsAdminPermission() ?? '';
-    isHeadOfficePermission = await sessionManagement.getisHeadofficePermission() ?? '';
+    isAdminWritePermission.value = await sessionManagement.getIsAdminPermission() ?? '';
+    isHeadOfficePermission.value = await sessionManagement.getisHeadofficePermission() ?? '';
     filterRouting = await sessionManagement.getfilterRouting() ?? '';
     approveRejectList.value = ['Approve', 'Reject'];
     clearAllFieldOfFilter();
@@ -367,7 +367,7 @@ class BusinessPlanTourViewModel extends GetxController{
             if (response.length > 0 && response[0].condition == "True") {
               loading.value = false;
               Utils.showToastification("Message !", response[0].message.toString());
-              getBusinessTourPlanDetailsApi(response[0].tourId, "");
+              getBusinessTourPlanDetailsApi(response[0].tourId, "TourDetail");
 
             } else {
               loading.value = false;
@@ -498,7 +498,6 @@ class BusinessPlanTourViewModel extends GetxController{
               EndDate = BusinessTourPlanDetails_list[0].endDate??"";
               isSendForApproval.value = Flag;
               Get.toNamed(RoutesName.BusinessTourPlanDetails);
-
 
             } else {
               BusinessTourPlanDetails_list.value=[];
@@ -1127,6 +1126,11 @@ class BusinessPlanTourViewModel extends GetxController{
     filterCreatedOnController.value.clear();
     createdOnStartToEnd.value="";
 
+    SelectedCluster_list.value=[];
+    SelectedRegion_list.value=[];
+    RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join('|');
+    clusterName_controller.value.text = clusterGetByEmailList.map((e) => e.geoValue).join('|');
+
   }
 
   void clearAllCreateLinePlanController(){
@@ -1140,6 +1144,11 @@ class BusinessPlanTourViewModel extends GetxController{
     TourType_Controller.value.clear();
     SelectedAlongPersonWith_list.value=[];
     SelectedMeetingWith_List.value=[];
+
+    SelectedCluster_list.value=[];
+    SelectedRegion_list.value=[];
+    RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join('|');
+    clusterName_controller.value.text = clusterGetByEmailList.map((e) => e.geoValue).join('|');
   }
 
   RxString filterDataChecker = ''.obs;
