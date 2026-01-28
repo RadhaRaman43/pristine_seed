@@ -474,8 +474,8 @@ class FunnelDashboardVm extends GetxController{
       return const Iterable<EmployeeMemberModel>.empty();
     }
     Map data = {
-      'filter_name': '',
-      'filter_email': query,
+      'filter_name': query,
+      'filter_email': "",
       'filter_location_id': '',
       'email_id': email,
       "filter_cluster_name": "",
@@ -770,6 +770,8 @@ class FunnelDashboardVm extends GetxController{
     selectedSalesStageStatusList.value = ["All"];
     DateRange("monthly");
     filterCustomDateController.value.text = '${formattedStartDate} - ${formattedEndDate}';
+    RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join(',');
+    clusterName_controller.value.text = clusterGetByEmailList.map((e) => e.geoValue).join(',');
 
   }
 

@@ -108,17 +108,20 @@ class ViewAddressScreen extends StatelessWidget{
                                 thickness: 1,
                               ),
                             ),
-                            Center(
-                              child: IconButton(onPressed: () {
-                                address_vm_controller.clearController();
-                                accountMaster_page_controller.gst_registration_type_controller.value.text = 'UnRegistered';
-                                address_vm_controller.getGeoPostalCodeApi();
-                                Get.toNamed(RoutesName.addNewAddress_screen);
-                              },
-                                icon: Icon(Icons.add, size: 40, color: AllColors.textColor,),
+                            Obx((){
+                              return Visibility(visible:address_vm_controller.isHeadofficePermission!="1",child: Center(
+                                child: IconButton(onPressed: () {
+                                  address_vm_controller.clearController();
+                                  accountMaster_page_controller.gst_registration_type_controller.value.text = 'UnRegistered';
+                                  address_vm_controller.getGeoPostalCodeApi();
+                                  Get.toNamed(RoutesName.addNewAddress_screen);
+                                },
+                                  icon: Icon(Icons.add, size: 40, color: AllColors.textColor,),
 
-                              ),
-                            )
+                                ),
+                              ) );
+                            })
+
                           ],
                         ),
                       ),

@@ -546,6 +546,12 @@ class TaskApprovalvm extends GetxController{
     AccountOwnerForApi = '';
     AccountOwner_controller.value.clear();
     SelectedEmployee_Member_list.value = [];
+
+    SelectedCluster_list.value=[];
+    SelectedRegion_list.value=[];
+    RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join('|');
+    clusterName_controller.value.text = clusterGetByEmailList.map((e) => e.geoValue).join('|');
+
   }
 
   void getClustersGetByEmail() {
@@ -1165,8 +1171,7 @@ class TaskApprovalvm extends GetxController{
                         style: GoogleFonts.poppins(
                             color: AllColors.blackColor,
                             fontWeight: FontWeight.w300,
-                            fontSize: AllFontSize
-                                .sisxteen // Change the text color here
+                            fontSize: AllFontSize.sisxteen // Change the text color here
                         ),
                       ),
                     ),
@@ -1182,7 +1187,6 @@ class TaskApprovalvm extends GetxController{
 
 
   RxString filterDataChecker = ''.obs;
-
   void SaveFilterData() async{
     await sessionManagement.saveTaskApproverData({
       'task_id': filterTask_Id_controller.value.text,

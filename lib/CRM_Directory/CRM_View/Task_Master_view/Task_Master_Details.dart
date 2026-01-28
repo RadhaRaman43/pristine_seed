@@ -107,22 +107,27 @@ class TaskMasterDetails extends StatelessWidget{
           title:Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                'Task Information',
-                style: GoogleFonts.poppins(
-                  color: AllColors.whiteColor,
-                  fontSize: 20.0,
-                  fontWeight: FontWeight.w700,
+              Expanded(
+                child: Tooltip(
+                  message: 'Task Information',
+                  child: Text('Task Information',
+                    style: GoogleFonts.poppins(
+                      color: AllColors.whiteColor,
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
                 ),
               ),
-             // Spacer(),
-              TaskMaster_page_controller.Task_Master_list.isEmpty?SizedBox():
               Row(
                 children: [
                   Obx((){
                     print("DSAR..R${TaskMaster_page_controller.Task_Master_list[0].isCreateTaskDsar??""}");
                     return  Visibility(
-                      visible: TaskMaster_page_controller.TaskDSAR_Master_list.isEmpty?true:false,
+                      visible: TaskMaster_page_controller.TaskDSAR_Master_list.isEmpty
+                          && TaskMaster_page_controller.Task_Master_list[0].isCreateTaskDsar == 1
+                          && TaskMaster_page_controller.isHeadofficePermission != "1"
+                          && TaskMaster_page_controller.isAdminWritePermission == "0"?true:false,
                       //visible: account_vm_controller.view=='Sales'?false:true,
                       child: IconButton(onPressed: () {
                         //createDSARDialog(context);
@@ -143,16 +148,13 @@ class TaskMasterDetails extends StatelessWidget{
                         }
                         TaskMaster_page_controller.isInfraLeadValueSubmit.value = false;
                         TaskMaster_page_controller.Task_Master_list[0].isCreateTaskDsar == 1 ? Get.toNamed(RoutesName.addNewDSARTask_screen): "";
-                      }, icon: Visibility(
-                          visible: TaskMaster_page_controller.Task_Master_list[0].isCreateTaskDsar == 1 && TaskMaster_page_controller.isAdminWritePermission == "0",
-                          child: Icon(Icons.add))),
+                      },
+                          icon: Icon(Icons.add)),
                     );
                   }),
                   Obx((){
                     return  Visibility(
-                      visible: TaskMaster_page_controller
-                          .Task_Master_list[0]
-                          .isReadyForApprove.toString()=='1'?true:false,
+                      visible: TaskMaster_page_controller.isHeadofficePermission!="1" &&TaskMaster_page_controller.Task_Master_list[0].isReadyForApprove.toString()=='1'?true:false,
                       child: IconButton(onPressed: () {
                          showApprovRejectDialog(context, TaskMaster_page_controller.Task_Master_list[0].taskId!);
                       }, icon: Icon(Icons.update)),
@@ -161,53 +163,19 @@ class TaskMasterDetails extends StatelessWidget{
 
                   Obx((){
                     return Visibility(
-                      visible: TaskMaster_page_controller
-                          .Task_Master_list[0]
-                          .taskStatus?.toLowerCase() == 'rejected' && TaskMaster_page_controller.isAdminWritePermission=="1"?true:false,
+                      visible: TaskMaster_page_controller.Task_Master_list[0].taskStatus?.toLowerCase() == 'rejected'
+                          && TaskMaster_page_controller.isHeadofficePermission=="1"
+                          && TaskMaster_page_controller.isAdminWritePermission=="1"?true:false,
                       child: IconButton(
                         icon: Icon(Icons.lock_open_rounded),
                         onPressed: (){
                           showTaskReopenDialog(context, TaskMaster_page_controller.Task_Master_list[0].taskId!);
                         },
                       )
-
-                      /*ActionChip(
-                        elevation: 2,
-                        padding: EdgeInsets.all(5),
-                        backgroundColor: AllColors.primaryDark1,
-                        shadowColor: Colors.black,
-                        shape: StadiumBorder(
-                            side: BorderSide(color: AllColors.whiteColor)),
-                        //avatar: Icon(Icons.add, color: AllColors.customDarkerWhite),
-                        //CircleAvatar
-                        label: Row(
-                          children: [
-                            Icon(Icons.lock_open_rounded),
-                            //SizedBox(width: 5,),
-                            *//*Tooltip(
-                              message: "Reopen task ",
-                              child: Text('Reopen',
-                                  style: GoogleFonts.poppins(
-                                    color: AllColors.whiteColor,
-                                    fontSize: AllFontSize.ten,
-                                    fontWeight: FontWeight.w400,
-                                  )),
-                            ),*//*
-                          ],
-                        ),
-                        onPressed: () async {
-                          showTaskReopenDialog(context, TaskMaster_page_controller.Task_Master_list[0].taskId!);
-                        }, //Text
-                      ),*/
                     );
                   })
-
-
                 ],
               )
-
-
-
             ],
           )
       ),

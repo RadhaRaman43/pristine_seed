@@ -65,11 +65,21 @@ class Addressmastervm extends GetxController{
   RxList<PincodeMasterModel> CityMasterPinCode_list = <PincodeMasterModel>[].obs;
   RxList<PincodeMasterModel> DistrictMasterPinCode_list = <PincodeMasterModel>[].obs;
 
+  String UserName="";
+  String UserCode="";
+  RxString isAdminWritePermission = "".obs;
+  RxString isHeadofficePermission = "".obs;
+
   @override
   void onInit() async{
     // TODO: implement onInit
     super.onInit();
     email=await sessionManagement.getEmail() ?? '';
+    UserName=await sessionManagement.getName() ?? '';
+    UserCode=await sessionManagement.getUserCode() ?? '';
+    isAdminWritePermission.value = await sessionManagement.getIsAdminPermission() ?? '';
+    isHeadofficePermission.value = await sessionManagement.getisHeadofficePermission() ?? '';
+
     //getAddressMasterList(pageNumber,account_vm_controller.account_code_controller.value.text);
 
   }

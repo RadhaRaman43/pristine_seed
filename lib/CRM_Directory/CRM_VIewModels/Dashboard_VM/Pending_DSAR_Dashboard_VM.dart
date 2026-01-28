@@ -807,6 +807,8 @@ class PendingDsarDashboardVm extends GetxController{
     selectedDSARStatusList.add(CallStatusMasterModel(taskStatus: "All",),);
     DateRange("month");
     filterCustomDateController.value.text = '${formattedStartDate} - ${formattedEndDate}';
+    RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join(',');
+    clusterName_controller.value.text = clusterGetByEmailList.map((e) => e.geoValue).join(',');
 
   }
   RxString filterDataChecker = ''.obs;

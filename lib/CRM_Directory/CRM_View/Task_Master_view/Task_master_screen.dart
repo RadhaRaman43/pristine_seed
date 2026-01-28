@@ -76,19 +76,22 @@ class TaskMasterScreen extends StatelessWidget {
                   ),
                 ),
                 Spacer(),
-                Visibility(
-                  //visible: TaskMaster_page_controller.isAdminWritePermission.value == '0'?true:false,
-                  visible:TaskMaster_page_controller.isHeadofficePermission.value!="1"  ? true:false ,
-                  child: IconButton(onPressed: () {
-                    //TaskMaster_page_controller.clearCreateTaskController();
-                    TaskMaster_page_controller.resetAllFieldOfFilter();
-                    TaskMaster_page_controller.CallStatusMasterApiHit('Call');
-                    TaskMaster_page_controller.getItemCategoryMstWithoutTaskIdApi();
-                    TaskMaster_page_controller.getEmpMstEmailByApi();
-                    Get.toNamed(RoutesName.addNewTaskMaster_screen);
+                Obx((){
+                  return  Visibility(
+                    //visible: TaskMaster_page_controller.isAdminWritePermission.value == '0'?true:false,
+                    visible:TaskMaster_page_controller.isHeadofficePermission.value!="1"  ? true:false ,
+                    child: IconButton(onPressed: () {
+                      //TaskMaster_page_controller.clearCreateTaskController();
+                      TaskMaster_page_controller.resetAllFieldOfFilter();
+                      TaskMaster_page_controller.CallStatusMasterApiHit('Call');
+                      TaskMaster_page_controller.getItemCategoryMstWithoutTaskIdApi();
+                      TaskMaster_page_controller.getEmpMstEmailByApi();
+                      Get.toNamed(RoutesName.addNewTaskMaster_screen);
 
-                  }, icon: Icon(Icons.add)),
-                ),
+                    }, icon: Icon(Icons.add)),
+                  );
+                }),
+
 
 
                 IconButton(onPressed: () {

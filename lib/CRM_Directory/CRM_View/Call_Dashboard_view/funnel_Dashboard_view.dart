@@ -1378,10 +1378,6 @@ class FunnelDashboardView extends StatelessWidget{
                   fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
                 ),
               ),
-              /*trailing: isSelected
-                  ? const Icon(Icons.check_box, color: Colors.blue)
-                  : const Icon(
-                  Icons.check_box_outline_blank, color: Colors.grey),*/
               selected: isSelected,
             );
           },
@@ -1389,84 +1385,6 @@ class FunnelDashboardView extends StatelessWidget{
       );
     });
   }
-
-/*  bindCustomerNameFilter(BuildContext context) {
-    return Obx((){
-      if (dashboard_view_Controller.CustomerName_controller.value.text.isNotEmpty && dashboard_view_Controller.filterDataChecker.value=='1') {
-        List<String> nameList = dashboard_view_Controller.CustomerName_controller.value.text.split(',');
-
-        dashboard_view_Controller.SelectedAccount_Master_list.value =
-            List.generate(nameList.length, (index) {
-              return AccountMasterModel(
-                accountName: nameList[index].trim(),
-              );
-            });
-      }
-      return  DropdownSearch<AccountMasterModel>.multiSelection(
-        asyncItems: (String filter) async {
-          return await dashboard_view_Controller.getAccountMaster(filter);
-        },
-        itemAsString: (AccountMasterModel u) => u.accountName??"",
-        selectedItems: dashboard_view_Controller.SelectedAccount_Master_list,
-        dropdownDecoratorProps: DropDownDecoratorProps(
-          baseStyle: TextStyle(color: Colors.black),
-          dropdownSearchDecoration: InputDecoration(
-            filled: false,
-            labelText: dashboard_view_Controller.SelectedAccount_Master_list.isNotEmpty?"Customer Name":null,
-            hintText: "Customer Name",
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-          ),
-        ),
-        dropdownBuilder: (context, selectedItems) {
-          // Custom builder to just show comma-separated names
-          if (selectedItems.isEmpty) {
-            return Text(
-              " Customer Name",
-              style: GoogleFonts.poppins(
-                color: AllColors.primaryDark1, // Match your hint color
-                fontSize: AllFontSize.sisxteen,
-                fontWeight: FontWeight.w500,
-              ),
-            );
-          }
-          return SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Text(
-              selectedItems.map((e) => e.accountName).join(', '),
-              style: TextStyle(color: Colors.black), // Only black text
-            ),
-          );
-        },
-        onChanged: (List<AccountMasterModel> selectedList) {
-          dashboard_view_Controller.SelectedAccount_Master_list.value = selectedList;
-          dashboard_view_Controller.CustomerName_controller.value.text =
-              selectedList.map((e) => e.accountName).join(', ');
-        },
-
-        popupProps: PopupPropsMultiSelection.dialog(
-          showSearchBox: true,
-          isFilterOnline: true,
-          searchDelay: const Duration(milliseconds: 0),
-          searchFieldProps: TextFieldProps(
-            padding: EdgeInsets.only(top: 20, left: 10, right: 10),
-            decoration: InputDecoration(
-              contentPadding: EdgeInsets.only(top: 20, left: 12, right: 12),
-              hintText: "Search...",
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-            ),
-          ),
-
-          itemBuilder: (context, item, isSelected) =>
-              ListTile(
-                title: Text(item.accountName??""),
-              ),
-        ),
-      );
-    });
-
-  }*/
 
   Widget bindAccountOwnerFilter(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -1537,12 +1455,10 @@ class FunnelDashboardView extends StatelessWidget{
                                       fontSize: 16, fontWeight: FontWeight.w600,color: Colors.black),
                                 ),
                               ),
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                child: const Text('Cancel'),
-                              ),
+                              IconButton(onPressed: () {
+                                Navigator.of(context).pop();
+                              }, icon: Icon(Icons.close,color: AllColors.primaryDark1,weight: 700,))
+
                             ],
                           ),
                         ),
@@ -1558,15 +1474,13 @@ class FunnelDashboardView extends StatelessWidget{
                               border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(8)),
                               isDense: true,
-                              suffixIcon: searchController.text.isNotEmpty
-                                  ? IconButton(
+                              suffixIcon: searchController.text.isNotEmpty ? IconButton(
                                 icon: const Icon(Icons.clear),
                                 onPressed: () {
                                   searchController.clear();
                                   setState(() {});
                                 },
-                              )
-                                  : null,
+                              ) : null,
                             ),
                             onChanged: (v) => setState(() {}),
                           ),
@@ -1598,9 +1512,7 @@ class FunnelDashboardView extends StatelessWidget{
 
                         // List
                         Expanded(
-                          child: filtered.isEmpty
-                              ? const Center(child: Text('No Record Found!'))
-                              : ListView.builder(
+                          child: filtered.isEmpty ? const Center(child: Text('No Record Found!')) : ListView.builder(
                             padding:
                             const EdgeInsets.symmetric(vertical: 8),
                             itemCount: filtered.length,
@@ -1635,6 +1547,15 @@ class FunnelDashboardView extends StatelessWidget{
                             children: [
                               Expanded(
                                 child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: AllColors.green,
+                                    shadowColor: AllColors.green,
+                                    foregroundColor: AllColors.primaryDark1,
+                                    side: BorderSide(color: AllColors.primaryDark1, width: 1),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                  ),
                                   onPressed: () {
                                     dashboard_view_Controller.SelectedEmployee_Member_list
                                         .assignAll(tempSelected);
@@ -1643,7 +1564,8 @@ class FunnelDashboardView extends StatelessWidget{
 
                                     Navigator.of(context).pop();
                                   },
-                                  child: const Text('Done'),
+                                  child: Text('Done',style: GoogleFonts.poppins(
+                                      fontSize: 16, fontWeight: FontWeight.w600,color: Colors.white),),
                                 ),
                               ),
                             ],
@@ -1692,72 +1614,6 @@ class FunnelDashboardView extends StatelessWidget{
       );
     });
   }
-
-  /*bindAccountOwnerFilter(BuildContext context) {
-    return Obx((){
-      return  DropdownSearch<EmployeeMemberModel>.multiSelection(
-        items: dashboard_view_Controller.employee_Member_list,
-        itemAsString: (EmployeeMemberModel u) => u.fullName??"",
-        selectedItems: dashboard_view_Controller.SelectedEmployee_Member_list,
-        dropdownDecoratorProps: DropDownDecoratorProps(
-          baseStyle: TextStyle(color: Colors.black),
-          dropdownSearchDecoration: InputDecoration(
-            filled: false,
-            labelText: dashboard_view_Controller.SelectedEmployee_Member_list.isNotEmpty?"Sale Cycle Owner":null,
-            hintText: "Sale Cycle Owner",
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-          ),
-        ),
-        dropdownBuilder: (context, selectedItems) {
-          // Custom builder to just show comma-separated names
-          if (selectedItems.isEmpty) {
-            return Text(
-              " Sale Cycle Owner",
-              style: GoogleFonts.poppins(
-                color: AllColors.primaryDark1, // Match your hint color
-                fontSize: AllFontSize.sisxteen,
-                fontWeight: FontWeight.w500,
-              ),
-            );
-          }
-          return SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Text(
-              selectedItems.map((e) => e.fullName).join(', '),
-              style: TextStyle(color: Colors.black), // Only black text
-            ),
-          );
-        },
-        onChanged: (List<EmployeeMemberModel> selectedList) {
-          dashboard_view_Controller.SelectedEmployee_Member_list.value =
-              selectedList;
-          dashboard_view_Controller.AccountOwner_controller.value.text =
-              selectedList.map((e) => e.fullName).join(', ');
-        },
-
-        popupProps: PopupPropsMultiSelection.dialog(
-          showSearchBox: true,
-          searchFieldProps: TextFieldProps(
-            padding: EdgeInsets.only(top: 20, left: 10, right: 10),
-            decoration: InputDecoration(
-              contentPadding: EdgeInsets.only(top: 20, left: 12, right: 12),
-              // Top margin here
-              hintText: "Search...",
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-            ),
-          ),
-
-          itemBuilder: (context, item, isSelected) =>
-              ListTile(
-                title: Text(item.fullName??""),
-              ),
-        ),
-      );
-    });
-
-  }*/
 
   bindProductCategoryFilter(BuildContext context) {
     return Obx((){

@@ -1723,6 +1723,7 @@ class Taskmastervm extends GetxController{
     }
 
   void resetAllFieldOfFilter() {
+
     Selection_CallStatus_Master_list.value=[];
     Selection_MethodOfCall_Master_list.value=[];
     selected_company_type_list.value=[];
@@ -1760,6 +1761,12 @@ class Taskmastervm extends GetxController{
        AccountOwnerForApi = '';
        AccountOwner_controller.value.clear();
        SelectedEmployee_Member_list.value = [];
+
+      SelectedCluster_list.value=[];
+      SelectedRegion_list.value=[];
+      RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join('|');
+      clusterName_controller.value.text = clusterGetByEmailList.map((e) => e.geoValue).join('|');
+
   }
 
     RxString filterDataChecker = ''.obs;
