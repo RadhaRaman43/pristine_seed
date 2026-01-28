@@ -320,6 +320,43 @@ class QuoteInformationScreen extends StatelessWidget {
                             ),
                           );
                         }),
+                         //todo mark quotation work is worked by nirupma
+                        Obx(() {
+                          return Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Visibility(
+                              visible:(saleCycleController.userType?.toLowerCase()=='branch head' ||
+                                  saleCycleController.email.toLowerCase()==saleCycleController.quoteHeaderdata[0].createdBy?.toLowerCase())
+                                  && saleCycleController.quoteHeaderdata[0].quoteStatus?.toLowerCase() == 'approved' &&
+                                  saleCycleController.quoteHeaderdata[0].quoteStatusWon?.toLowerCase() == 'open',
+                              child: GestureDetector(
+                                onTap: () {
+
+                                },
+                                child:  ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                      backgroundColor: AllColors.primaryDark1
+                                  ),
+                                  onPressed: () {
+                                    saleCycleController.quotationWonLossController.value.text='WON';
+                                    saleCycleController.reasonQuotationVisibilty.value=false;
+                                    showDialogquotationWonLoss(context);
+                                  },
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(6.0),
+                                    child: Text('Mark Quotation Won',
+                                      style: GoogleFonts.poppins(
+                                        color: AllColors.whiteColor,
+                                        fontSize: AllFontSize.fourtine,
+                                        fontWeight: FontWeight.w500,
+                                      ),),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          );
+                        }),
+
                         Obx(() {
                          return Visibility(
                             visible: ((saleCycleController.quoteHeaderdata[0].quoteStatus?.toLowerCase() == "draft" &&
@@ -379,6 +416,10 @@ class QuoteInformationScreen extends StatelessWidget {
                             ),
                           );
                         }),
+
+
+
+
                       ],
                     ),
                     Obx(() {
@@ -995,7 +1036,7 @@ class QuoteInformationScreen extends StatelessWidget {
                         ),
                         InkWell(
                           onTap: () {
-                            showDialogForCreateDuplicate(context, index);
+                            showDialogForCreateDuplicate(context, index ,"Create Duplicate",'Do you want to Create Duplicate Line of this Quote?');
                           },
                           child: Icon(
                             Icons.add_chart,
@@ -1765,7 +1806,7 @@ class QuoteInformationScreen extends StatelessWidget {
         });
   }
 
-  Future showDialogForCreateDuplicate(BuildContext context, int index) {
+/*  Future showDialogForCreateDuplicate(BuildContext context, int index) {
     return showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -1779,8 +1820,8 @@ class QuoteInformationScreen extends StatelessWidget {
                 ),
               ),
               content: Container(
-                  /* height: size.height*.21,
-                  width: size.width*4,*/
+                  *//* height: size.height*.21,
+                  width: size.width*4,*//*
                   child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -1856,7 +1897,7 @@ class QuoteInformationScreen extends StatelessWidget {
             ),
           );
         });
-  }
+  }*/
 
   Widget bindRejectreason(BuildContext context) {
     return TextField(
@@ -4590,7 +4631,7 @@ class QuoteInformationScreen extends StatelessWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  bindOpenRemarks(context),
+                  bindTextField(context,saleCycleController.reOpenRemarksController.value,'Reopen Remarks*' ),
                   SizedBox(
                     height: 10,
                   ),
@@ -4624,33 +4665,7 @@ class QuoteInformationScreen extends StatelessWidget {
           );
         });
   }
-  bindOpenRemarks(BuildContext context) {
-    return TextField(
-      maxLines: 3,
-      maxLength: 500,
-      controller: saleCycleController.reOpenRemarksController.value,
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(
-              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-          labelText: 'Reopen Remarks*',
-          hintText: 'Reopen Remarks*',
-          hintStyle: GoogleFonts.poppins(
-              color: AllColors.lightblackColor,
-              fontWeight: FontWeight.w300,
-              fontSize: AllFontSize.ten),
-          labelStyle: GoogleFonts.poppins(
-              color: AllColors.primaryDark1,
-              fontWeight: FontWeight.w500,
-              fontSize: AllFontSize.sisxteen),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          )),
-      cursorColor: AllColors.primaryDark1,
-    );
-  }
+
   showDialogConfirmation(context) {
     showDialog(
         context: context,
@@ -4747,6 +4762,378 @@ class QuoteInformationScreen extends StatelessWidget {
   }
 
 
+  void showDialogquotationWonLoss(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Icon(Icons.check_circle, color: AllColors.lightredColor),
+              SizedBox(width: 5),
+              Text(
+                'Update Quotation',
+                style: GoogleFonts.poppins(
+                  fontSize: AllFontSize.sisxteen,
+                  fontWeight: FontWeight.w700,
+                  color: AllColors.primaryDark1,
+                ),
+              ),
+            ],
+          ),
+          content: SingleChildScrollView(
+            child: Obx(() {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  bindQuoteWonLoss(context),
+                  SizedBox(height: 10),
+                  Visibility(
+                    visible:
+                    saleCycleController.reasonQuotationVisibilty.value,
+                    child: bindTextField(
+                      context,
+                      saleCycleController.quotationReasonController.value,
+                      'Quote Loss Reason',
+                    ),
+                  ),
 
+                  SizedBox(height: 12),
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      ElevatedButton(
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all<Color>(
+                            saleCycleController.reasonQuotationVisibilty.value
+                                ? AllColors.redColor
+                                : AllColors.primaryDark1,
+                          ),
+                        ),
+                        onPressed: () {
+                          if (saleCycleController.reasonQuotationVisibilty.value && saleCycleController
+                              .quotationReasonController.value.text
+                              .isEmpty ) {
+                            Utils.sanckBarError(
+                                'Error', 'Please Enter Quote Reason');
+                            return;
+                          }
+                          showDialogForCreateDuplicate(context,0,'Update', 'Do you want to mark won ?');
+                          saleCycleController
+                              .quotationReasonController.value.text="";
+
+
+                        },
+                        child: Text(
+                          saleCycleController.reasonQuotationVisibilty.value
+                              ? 'Loss'
+                              : 'Won',
+                          style: GoogleFonts.poppins(
+                            color:
+                            saleCycleController.reasonQuotationVisibilty.value
+                                ? AllColors.blackColor
+                                : AllColors.whiteColor,
+                            fontSize: AllFontSize.fourtine,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              );
+            }),
+          ),
+        );
+      },
+    );
+  }
+
+
+
+  Widget bindQuoteWonLoss(BuildContext context) {
+    return Autocomplete<String>(
+      displayStringForOption: _displayCustomerNeedIdentityStatusForOption,
+      optionsBuilder: (TextEditingValue textEditingValue) {
+        if (textEditingValue.text.isEmpty) {
+          return saleCycleController.quoteAcceptedList;
+        }
+        return saleCycleController.quoteAcceptedList.where((String option) {
+          return option
+              .toString()
+              .toLowerCase()
+              .contains(textEditingValue.text.toLowerCase());
+        }).toList();
+      },
+      onSelected: (String selection) {
+        print(selection);
+        saleCycleController.quotationWonLossController.value.text =
+            _displayCustomerNeedIdentityStatusForOption(selection!)
+                .toString();
+        if(saleCycleController.quotationWonLossController.value.text.toUpperCase() == 'LOSS'){
+          saleCycleController.reasonQuotationVisibilty.value=true;
+        }
+          else{
+          saleCycleController
+              .quotationReasonController.value.text="";
+          saleCycleController.reasonQuotationVisibilty.value=false;
+        }
+        /*saleCycleController.reasonQuotationVisibilty.value =
+            saleCycleController.quotationWonLossController.value.text.toUpperCase() == 'LOSS';*/
+        FocusNode().unfocus();
+      },
+      fieldViewBuilder: (BuildContext context,
+          TextEditingController controller,
+          FocusNode focusNode,
+          VoidCallback onFieldSubmitted) {
+        return TextField(
+          cursorColor: AllColors.primaryDark1,
+          controller: controller
+            ..text = saleCycleController.quotationWonLossController.value.text,
+          focusNode: focusNode,
+          decoration: InputDecoration(
+              contentPadding: EdgeInsets.symmetric(
+                  vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+              hintText: 'Quote Accepted',
+              labelText: 'Quote Accepted',
+              hintStyle: GoogleFonts.poppins(
+                  color: AllColors.lightblackColor,
+                  fontWeight: FontWeight.w300,
+                  fontSize: AllFontSize.ten),
+              labelStyle: GoogleFonts.poppins(
+                  color: AllColors.primaryDark1,
+                  fontWeight: FontWeight.w500,
+                  fontSize: AllFontSize.sisxteen),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+              ),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+              )),
+        );
+      },
+      optionsViewBuilder: (BuildContext context,
+          AutocompleteOnSelected<String> onSelected,
+          Iterable<String> suggestions) {
+        return Align(
+          alignment: Alignment.topLeft,
+          child: Material(
+            elevation: 4.0,
+            child: Container(
+              //width: size.width * .5,
+              constraints: BoxConstraints(maxHeight: 200),
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: suggestions.length,
+                itemBuilder: (context, index) {
+                  final String option = suggestions.elementAt(index);
+                  return GestureDetector(
+                    onTap: () {
+                      onSelected(option);
+                    },
+                    child: Container(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text(
+                        option,
+                        style: GoogleFonts.poppins(
+                            color: AllColors.blackColor,
+                            fontWeight: FontWeight.w300,
+                            fontSize: AllFontSize
+                                .sisxteen // Change the text color here
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+/*  Widget bindQuoteWonLoss(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      child: DropdownMenu<String>(
+        controller: saleCycleController.quotationWonLossController.value,
+        label: Text(
+          "Quote Accepted",
+          style: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontSize: AllFontSize.fourtine,
+              fontWeight: FontWeight.w700),
+        ),
+        inputDecorationTheme: const InputDecorationTheme(
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+            borderSide: BorderSide(
+              color: AllColors.primaryDark1,
+            ),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+                color: AllColors.primaryDark1), // Change the color to green
+          ),
+          border: OutlineInputBorder(
+            borderSide: BorderSide(
+                color: AllColors.primaryDark1), // Change the color to green
+          ),
+          filled: false,
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.two, horizontal: AllFontSize.ten),
+        ),
+        onSelected: (String? selection) {
+          print(selection);
+          saleCycleController.quotationWonLossController.value.text =
+              _displayCustomerNeedIdentityStatusForOption(selection!).toString();
+          saleCycleController.reasonQuotationVisibilty.value =
+              saleCycleController.quotationWonLossController.value.text == 'LOSS';
+          print("${saleCycleController.reasonQuotationVisibilty.value}..${saleCycleController.quotationWonLossController.value.text}");
+        },
+        dropdownMenuEntries: saleCycleController.quoteAcceptedList
+            .map<DropdownMenuEntry<String>>((String e) {
+          return DropdownMenuEntry<String>(
+              value: e,
+              label: e!,
+              style: ButtonStyle(
+                foregroundColor:
+                MaterialStateProperty.all<Color>(AllColors.primaryDark1),
+              ));
+        }).toList(),
+      ),
+    );
+  }*/
+
+
+  bindTextField(BuildContext context, TextEditingController controller, String labelText) {
+    return TextField(
+      maxLines: labelText=='Quote Loss Reason'?2:3,
+      maxLength: 500,
+      controller: controller,
+      decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+          labelText: labelText,
+          hintText: labelText,
+          hintStyle: GoogleFonts.poppins(
+              color: AllColors.lightblackColor,
+              fontWeight: FontWeight.w300,
+              fontSize: AllFontSize.ten),
+          labelStyle: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontWeight: FontWeight.w500,
+              fontSize: AllFontSize.sisxteen),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          )),
+      cursorColor: AllColors.primaryDark1,
+    );
+  }
+
+  Future showDialogForCreateDuplicate(BuildContext context, int index, String headerMessege, String lineMessage) {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Container(
+            child: AlertDialog(
+              title: Text(
+                headerMessege,
+                style: GoogleFonts.poppins(
+                  color: AllColors.primaryDark1,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              content: Container(
+                /* height: size.height*.21,
+                  width: size.width*4,*/
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(lineMessage,
+                          style: GoogleFonts.poppins(
+                            fontSize: AllFontSize.fourtine,
+                            fontWeight: FontWeight.w500,
+                            color: AllColors.primaryDark1,
+                          )),
+                      SizedBox(height: 10),
+                      Container(
+                        width: size.width,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              child: ElevatedButton(
+                                style: ButtonStyle(
+                                  backgroundColor: MaterialStateProperty.all<Color>(
+                                    AllColors.lightredColor,
+                                  ),
+                                ),
+                                onPressed: () {
+                                  Get.back();
+                                },
+                                child: Container(
+                                  child: Text(
+                                    'Cancel',
+                                    style: GoogleFonts.poppins(
+                                      color: AllColors.blackColor,
+                                      fontSize: AllFontSize.fourtine,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Expanded(
+                              child: ElevatedButton(
+                                style: ButtonStyle(
+                                  backgroundColor: MaterialStateProperty.all<Color>(
+                                    AllColors.greenblue,
+                                  ),
+                                ),
+                                onPressed: () {
+                                  if(headerMessege=='Update'){
+                                    saleCycleController.getQuoteHeaderUpdateMarkWon(saleCycleController
+                                        .quoteHeaderdata[0].quoteId??'');
+                                  }else{
+                                    saleCycleController
+                                        .quoteLineCreateDuplicateApiHit(
+                                        saleCycleController
+                                            .quoteLinedata[index].lineNo!);
+                                  }
+
+                                  Navigator.pop(context);
+                                  Navigator.pop(context);
+                                },
+                                child: Container(
+                                  child: Text(
+                                    'Confirm',
+                                    style: GoogleFonts.poppins(
+                                      color: AllColors.blackColor,
+                                      fontSize: AllFontSize.fourtine,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      )
+                    ],
+                  )),
+            ),
+          );
+        });
+  }
 
 }
