@@ -64,19 +64,21 @@ class AccountmasterScreen extends StatelessWidget{
                 ),
               ),
               Spacer(),
-              Visibility(
-                //visible:accountMaster_page_controller.isAdminWritePermission=="0"  ? true:false ,
-                visible:accountMaster_page_controller.isHeadofficePermission!="1"  ? true:false ,
-                child: IconButton(onPressed: () {
-                  accountMaster_page_controller.DraftId = '';
-                  accountMaster_page_controller.account_type_controller.text='New Account';
-                  accountMaster_page_controller.clearController();
-                  accountMaster_page_controller.getCompanyProfileSubTypeApi();
-                  accountMaster_page_controller.getCompanyProfileTypeApi("");
-                  accountMaster_page_controller.getGeoPostalCodeApi();
-                  Get.toNamed(RoutesName.add_New_AccountMaster_screen);
-                }, icon: Icon(Icons.add)),
-              ),
+              Obx((){
+               return Visibility(
+                 //visible:accountMaster_page_controller.isAdminWritePermission=="0"  ? true:false ,
+                 visible:accountMaster_page_controller.isHeadofficePermission!="1"|| accountMaster_page_controller.UserCode?.toLowerCase() == 'cce'  ?true:false ,
+                 child: IconButton(onPressed: () {
+                   accountMaster_page_controller.DraftId = '';
+                   accountMaster_page_controller.account_type_controller.text='New Account';
+                   accountMaster_page_controller.clearController();
+                   accountMaster_page_controller.getCompanyProfileSubTypeApi();
+                   accountMaster_page_controller.getCompanyProfileTypeApi("");
+                   accountMaster_page_controller.getGeoPostalCodeApi();
+                   Get.toNamed(RoutesName.add_New_AccountMaster_screen);
+                 }, icon: Icon(Icons.add)),
+               );
+              }),
 
               IconButton(onPressed: () {
                 showFilterBottomSheet(context);
@@ -123,7 +125,6 @@ class AccountmasterScreen extends StatelessWidget{
   }
 
   Widget BindCustomerListView(context) {
-
     if (accountMaster_page_controller
         .Account_Master_list.value.isNotEmpty &&
         accountMaster_page_controller
@@ -306,44 +307,32 @@ class AccountmasterScreen extends StatelessWidget{
   }
 
   Widget buildInfoRow(BuildContext context,String label, String? value,{String? account_code, int? index}) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 2),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween, // 👈 space between text and icon
-        children: [
-          // Left section (label + value)
-          Expanded(
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "$label: ",
-                  style: GoogleFonts.poppins(
-                    color: AllColors.primaryDark1,
-                    fontSize: AllFontSize.fourtine,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                Flexible(
-                  child: Tooltip(
-                    message: value ?? "",
-                    child: Text(
-                      value ?? "",
-                      overflow: TextOverflow.ellipsis,
-                      style: GoogleFonts.poppins(
-                        color: AllColors.textColor,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          "$label: ",
+          style: GoogleFonts.poppins(
+            color: AllColors.primaryDark1,
+            fontSize: AllFontSize.fourtine,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        Flexible(
+          child: Tooltip(
+            message: value ?? "",
+            child: Text(
+              value ?? "",
+              overflow: TextOverflow.ellipsis,
+              style: GoogleFonts.poppins(
+                color: AllColors.textColor,
+                fontSize: AllFontSize.fourtine,
+                fontWeight: FontWeight.w500,
+              ),
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
 
   }

@@ -43,7 +43,7 @@ class LoginViewModel extends GetxController{
           }*/
 
          // Utils.sanckBarSuccess("Success", loginResponse[0].message!);
-          sessionManagement.setName(loginResponse[0].name.toString());
+          sessionManagement.setUserCode(loginResponse[0].userType.toString());
           sessionManagement.setCompanyId(loginResponse[0].companyId.toString());
           sessionManagement.setEmail(loginResponse[0].email.toString());
           sessionManagement.setUserType(loginResponse[0].userTypeName.toString());

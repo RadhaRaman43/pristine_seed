@@ -162,9 +162,7 @@ class UpdateAccountMaster extends StatelessWidget{
          ),
          title:Row(
            children: [
-             Text(
-         accountMaster_page_controller.view=='VIEW'?"Account Details":
-               'Account',
+             Text(accountMaster_page_controller.view=='VIEW'?"Account Details": 'Account',
                style: GoogleFonts.poppins(
                  color: AllColors.whiteColor,
                  fontSize: 20.0,
@@ -172,8 +170,6 @@ class UpdateAccountMaster extends StatelessWidget{
                ),
              ),
              Spacer(),
-
-
            ],
          ),
          actions: [
@@ -383,7 +379,7 @@ class UpdateAccountMaster extends StatelessWidget{
          child: SingleChildScrollView(
            child: Obx((){
              return  IgnorePointer(
-               ignoring: accountMaster_page_controller.isAdminWritePermission.value=="1"?true:false,
+               ignoring: accountMaster_page_controller.isHeadofficePermission.value=="1"?true:false,
                child: Column(
                  children: [
                    SizedBox(height: 10),

@@ -68,6 +68,8 @@ class SalesCycleQuoteInformationModal {
   String? quoteWonName;
   dynamic? wonOn;
   dynamic? lossReason;
+  String? branchHeadValue;
+  String? clustureHeadValue;
   List<QuoteItems>? quoteItems;
 
   SalesCycleQuoteInformationModal(
@@ -140,6 +142,8 @@ class SalesCycleQuoteInformationModal {
         this.quoteWonName,
         this.wonOn,
         this.lossReason,
+        this.branchHeadValue,
+        this.clustureHeadValue,
         this.quoteItems});
 
   SalesCycleQuoteInformationModal.fromJson(Map<String, dynamic> json) {
@@ -213,6 +217,8 @@ class SalesCycleQuoteInformationModal {
     quoteWonName = json['quote_won_name'];
     lossReason = json['loss_reason'];
     wonOn = json['won_on'];
+    branchHeadValue = json['branch_head_value'];
+    clustureHeadValue = json['clusture_head_value'];
     if (json['quote_items'] != null) {
       quoteItems = <QuoteItems>[];
       json['quote_items'].forEach((v) {
@@ -294,6 +300,8 @@ class SalesCycleQuoteInformationModal {
     data['quote_won_name'] = this.quoteWonName;
     data['won_on'] = this.wonOn;
     data['loss_reason'] = this.lossReason;
+    data['branch_head_value'] = this.branchHeadValue;
+    data['clusture_head_value'] = this.clustureHeadValue;
     if (this.quoteItems != null) {
       data['quote_items'] = this.quoteItems!.map((v) => v.toJson()).toList();
     }
@@ -315,6 +323,7 @@ class QuoteItems {
   double? quoteLinePrice;
   double? totalPrice;
   double? discountPer;
+  dynamic? discountAmtPerUnit;
   double? bmDiscountPer;
   double? gmDiscountPer;
   double? gmDiscountAmount;
@@ -372,6 +381,7 @@ class QuoteItems {
         this.approvedAmount,
         this.approvedAmountPerUnit,
         this.discountAmt,
+        this.discountAmtPerUnit,
         this.standardCost,
         this.branchTransferPrice,
         this.minimalAcceptablePrice,
@@ -422,6 +432,7 @@ class QuoteItems {
     approvedAmount = json['approved_amount'];
     approvedAmountPerUnit = json['approved_amount_per_unit'];
     discountAmt = json['discount_amt'];
+    discountAmtPerUnit = json['discount_amt_per_unit'];
     standardCost = json['standard_cost'];
     branchTransferPrice = json['branch_transfer_price'];
     minimalAcceptablePrice = json['minimal_acceptable_price'];
@@ -473,6 +484,7 @@ class QuoteItems {
     data['approved_amount'] = this.approvedAmount;
     data['approved_amount_per_unit'] = this.approvedAmountPerUnit;
     data['discount_amt'] = this.discountAmt;
+    data['discount_amt_per_unit'] = this.discountAmtPerUnit;
     data['standard_cost'] = this.standardCost;
     data['branch_transfer_price'] = this.branchTransferPrice;
     data['minimal_acceptable_price'] = this.minimalAcceptablePrice;

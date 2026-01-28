@@ -65,6 +65,7 @@ class Accountmastervm extends GetxController{
   RxString isHeadofficePermission = "".obs;
   String email="";
   String UserName="";
+  String UserCode="";
   String accountName='';
   String AccountOwner = '';
   String tatResponseType = '', SalesRepresentativeEmail = '', RegionalHeadEmail = '';
@@ -225,10 +226,12 @@ class Accountmastervm extends GetxController{
 
     email=await sessionManagement.getEmail() ?? '';
     UserName=await sessionManagement.getName() ?? '';
+    UserCode=await sessionManagement.getUserCode() ?? '';
     isAdminWritePermission.value = await sessionManagement.getIsAdminPermission() ?? '';
     isHeadofficePermission.value = await sessionManagement.getisHeadofficePermission() ?? '';
+    print("isHeadofficePermission....${isHeadofficePermission}");
     filterRouting = await sessionManagement.getfilterRouting() ?? '';
-    print("isAd.... ${isHeadofficePermission} and ${isAdminWritePermission}");
+    print("isAd.... ${isHeadofficePermission} and ${UserCode}");
     getClustersGetByEmail();
     //getAccountMaster(pageNumber ,is_Active.toString());
     //getDraftAccountMaster(pageNumber ,is_Active.toString());

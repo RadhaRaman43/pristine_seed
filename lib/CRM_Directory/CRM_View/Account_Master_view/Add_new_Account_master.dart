@@ -142,7 +142,7 @@ class AddNewAccountMaster extends StatelessWidget{
                       Icon(Icons.save_as),
                       SizedBox(width: 5,),
                       Tooltip(
-                        message: "Create Account ",
+                        message: "Save Draft ",
                         child: Text('Draft',
                             style: GoogleFonts.poppins(
                               color: AllColors.whiteColor,
@@ -186,7 +186,8 @@ class AddNewAccountMaster extends StatelessWidget{
       ),
       drawer: CustomDrawer(),
       floatingActionButton:  Visibility(
-        visible: accountMaster_page_controller.isAdminWritePermission=='0'?true:false,
+        //visible: accountMaster_page_controller.isAdminWritePermission=='0'?true:false,
+        visible: accountMaster_page_controller.isHeadofficePermission!='1'?true:false,
         child: Container(
           margin: EdgeInsets.only(left: 30),
           child: DefaultButton(
@@ -289,7 +290,7 @@ class AddNewAccountMaster extends StatelessWidget{
             height: double.infinity,
             child: SingleChildScrollView(
               child: IgnorePointer(
-                ignoring: accountMaster_page_controller.isAdminWritePermission=='1'?true:false,
+                ignoring: accountMaster_page_controller.isHeadofficePermission=='1'?true:false,
                 child: Column(
                   children: [
                     SizedBox(height: 10),
@@ -1092,6 +1093,7 @@ class AddNewAccountMaster extends StatelessWidget{
   }
 
   Widget bindAccountOwnerDropDown(context){
+    //print("accountMaster_page_controller.Account_Master_list.length ${accountMaster_page_controller.Account_Master_list.length} and ${accountMaster_page_controller.Account_Master_list[0].isManager}");
     return Autocomplete<EmployeeMemberModel>(
       displayStringForOption: _displayEmpMemberForOption,
       optionsBuilder: (TextEditingValue textEditingValue) {
