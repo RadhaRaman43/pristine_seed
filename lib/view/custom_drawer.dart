@@ -442,7 +442,7 @@ class _Drawer extends State<CustomDrawer> {
                                                 IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
                                                 home_vm.openMenu(cTitle, iconData);
                                                 Get.delete<PendingDraftQuoteVm>();
-                                                Get.toNamed(RoutesName.pendingDraftQuoteScreen,);
+                                                Get.toNamed(RoutesName.pendingDraftQuoteScreen,arguments: 'Pending Draft Quote');
                                                 Navigator.of(context);
                                                 break;
           
@@ -451,7 +451,7 @@ class _Drawer extends State<CustomDrawer> {
                                                 IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
                                                 home_vm.openMenu(cTitle, iconData);
                                                 Get.delete<PendingDraftQuoteVm>();
-                                                Get.toNamed(RoutesName.approvedRejectedQuoteScreen,);
+                                                Get.toNamed(RoutesName.approvedRejectedQuoteScreen,arguments: 'Approved / Rejected Quote');
                                                 Navigator.of(context);
                                                 break;
           
@@ -460,7 +460,7 @@ class _Drawer extends State<CustomDrawer> {
                                                 IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
                                                 home_vm.openMenu(cTitle, iconData);
                                                 Get.delete<PendingDraftQuoteVm>();
-                                                Get.toNamed(RoutesName.allSPRMappingScreen,);
+                                                Get.toNamed(RoutesName.allSPRMappingScreen,arguments: 'All SPR Mapping Line Items');
                                                 Navigator.of(context);
                                                 break;
           
@@ -479,7 +479,7 @@ class _Drawer extends State<CustomDrawer> {
                                                 IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
                                                 home_vm.openMenu(cTitle, iconData);
                                                 Get.delete<PendingDraftQuoteVm>();
-                                                Get.toNamed(RoutesName.allQuoteScreenScreen,);
+                                                Get.toNamed(RoutesName.allQuoteScreenScreen,arguments: 'All Quote');
                                                 Navigator.of(context);
                                                 break;
           
@@ -488,7 +488,7 @@ class _Drawer extends State<CustomDrawer> {
                                                 IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
                                                 home_vm.openMenu(cTitle, iconData);
                                                 Get.delete<PendingDraftQuoteVm>();
-                                                Get.toNamed(RoutesName.allQuoteLineItemScreen,);
+                                                Get.toNamed(RoutesName.allQuoteLineItemScreen,arguments: 'All Quote Line Items');
                                                 Navigator.of(context);
                                                 break;
           
