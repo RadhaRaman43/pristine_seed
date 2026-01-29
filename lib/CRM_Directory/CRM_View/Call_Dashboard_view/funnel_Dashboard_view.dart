@@ -2,6 +2,7 @@
 import 'dart:ui' as ui;
 import 'dart:io';
 import 'package:flutter/rendering.dart';
+import 'package:navigation_drawer_flutter/component/circular_loading.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:media_store_plus/media_store_plus.dart';
 import 'package:dropdown_search/dropdown_search.dart';
@@ -83,26 +84,30 @@ class FunnelDashboardView extends StatelessWidget{
               )
           ),
           drawer: CustomDrawer(),
-          body: RefreshIndicator(
-            onRefresh: (){
-              return dashboard_view_Controller.onRefereshMethod();
-            },
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Obx(() {
-                  return Visibility(
-                    visible: dashboard_view_Controller.loading.value,
-                    child: LinearProgressIndicator(
-                      backgroundColor: AllColors.green,
-                      color: AllColors.textColor,
-                    ),
-                  );
-                }),
-                Expanded(
-                    child: ListView(
-                      children: [
-                        Container(
+          body: Obx((){
+            if(dashboard_view_Controller.loading.value || saleCycleController.loading.value){
+              return const FullScreenLoader();
+            }
+            return RefreshIndicator(
+              onRefresh: (){
+                return dashboard_view_Controller.onRefereshMethod();
+              },
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Obx(() {
+                    return Visibility(
+                      visible: dashboard_view_Controller.loading.value,
+                      child: LinearProgressIndicator(
+                        backgroundColor: AllColors.green,
+                        color: AllColors.textColor,
+                      ),
+                    );
+                  }),
+                  Expanded(
+                      child: ListView(
+                        children: [
+                          Container(
                             padding: EdgeInsets.only(left: 15.0, bottom: 0.0, top: 15.0),
                             child:
                             RepaintBoundary(
@@ -180,7 +185,7 @@ class FunnelDashboardView extends StatelessWidget{
                                               dashboard_view_Controller.SelectedTabForApi = 'Suspect';
                                               dashboard_view_Controller.pageNumber = 0;
                                               dashboard_view_Controller.funnelDashboardData();
-                                             // dashboard_view_Controller.getDashboardUserWiseData(dashboard_view_Controller.pageNumber);
+                                              // dashboard_view_Controller.getDashboardUserWiseData(dashboard_view_Controller.pageNumber);
                                             },
                                             child: Container(
                                               width: 90,
@@ -220,7 +225,7 @@ class FunnelDashboardView extends StatelessWidget{
                                               dashboard_view_Controller.SelectedTabForApi = 'Prospect';
                                               dashboard_view_Controller.pageNumber = 0;
                                               dashboard_view_Controller.funnelDashboardData();
-                                             // dashboard_view_Controller.getDashboardUserWiseData(dashboard_view_Controller.pageNumber);
+                                              // dashboard_view_Controller.getDashboardUserWiseData(dashboard_view_Controller.pageNumber);
                                             },
                                             child: Container(
                                               width: 90,
@@ -260,7 +265,7 @@ class FunnelDashboardView extends StatelessWidget{
                                               dashboard_view_Controller.SelectedTabForApi = 'Propose';
                                               dashboard_view_Controller.pageNumber = 0;
                                               dashboard_view_Controller.funnelDashboardData();
-                                             // dashboard_view_Controller.getDashboardUserWiseData(dashboard_view_Controller.pageNumber);
+                                              // dashboard_view_Controller.getDashboardUserWiseData(dashboard_view_Controller.pageNumber);
                                             },
                                             child: Container(
                                               width: 90,
@@ -305,59 +310,60 @@ class FunnelDashboardView extends StatelessWidget{
                                 ],
                               ),
                             ),
-                        ),
+                          ),
 
-                        /*Obx(() {
+                          /*Obx(() {
                           return BindDashboardFunnelChartData(context);
                         }),*/
-                        Container(
-                            padding: EdgeInsets.only(left: 15.0, bottom: 10.0),
-                            child:
-                            Obx((){
-                              return  Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    dashboard_view_Controller.SelectedTabForApi.isEmpty?
-                                    'All Details':dashboard_view_Controller.SelectedTabForApi,
-                                    style: GoogleFonts.poppins(
-                                      color: AllColors.primaryDark1,
-                                      fontSize: AllFontSize.fourtine,
-                                      fontWeight: FontWeight.w700,
+                          Container(
+                              padding: EdgeInsets.only(left: 15.0, bottom: 10.0),
+                              child:
+                              Obx((){
+                                return  Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      dashboard_view_Controller.SelectedTabForApi.isEmpty?
+                                      'All Details':dashboard_view_Controller.SelectedTabForApi,
+                                      style: GoogleFonts.poppins(
+                                        color: AllColors.primaryDark1,
+                                        fontSize: AllFontSize.fourtine,
+                                        fontWeight: FontWeight.w700,
+                                      ),
                                     ),
-                                  ),
-                                  SizedBox(width: 10,),
-                                  Text(
-                                    '(' +dashboard_view_Controller.total_rows.value.toString()+')',
-                                    style: GoogleFonts.poppins(
-                                      color: AllColors.redColor,
-                                      fontSize: AllFontSize.fourtine,
-                                      fontWeight: FontWeight.w700,
+                                    SizedBox(width: 10,),
+                                    Text(
+                                      '(' +dashboard_view_Controller.total_rows.value.toString()+')',
+                                      style: GoogleFonts.poppins(
+                                        color: AllColors.redColor,
+                                        fontSize: AllFontSize.fourtine,
+                                        fontWeight: FontWeight.w700,
+                                      ),
                                     ),
-                                  ),
-                                ],
-                              );
-                            })
-                        ),
+                                  ],
+                                );
+                              })
+                          ),
 
-                        Divider(
-                          height: 1,
-                          color: AllColors.lightgreyColor,
-                        ),
-                        Container(
-                          height: size.height/2,
-                          child: Obx(() {
-                            return BindDashboardWiseDataList(context);
-                          }),
-                        )
-                      ],
-                    )),
+                          Divider(
+                            height: 1,
+                            color: AllColors.lightgreyColor,
+                          ),
+                          Container(
+                            height: size.height/2,
+                            child: Obx(() {
+                              return BindDashboardWiseDataList(context);
+                            }),
+                          )
+                        ],
+                      )),
+                ],
+              ),
+            );
+
+          })
 
 
-
-              ],
-            ),
-          ),
         ),
     );
 
@@ -626,6 +632,7 @@ class FunnelDashboardView extends StatelessWidget{
               ),
               InkWell(
                   onTap: (){
+
                     saleCycleController.ProductCategoryWiseAmtGet(0, dashboard_view_Controller.funnelDashboardUserWiseDataList[position].salesCycleId!);
                     saleCycleController.pageNumber = 0;
                     saleCycleController.filterQuoteAcceptedFlag.value="";

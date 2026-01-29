@@ -195,14 +195,21 @@ class Taskmastervm extends GetxController{
     @override
     void onInit() async {
       super.onInit();
-        email=await sessionManagement.getEmail() ?? '';
-        isAdminWritePermission.value = await sessionManagement.getIsAdminPermission() ?? '';
-        isHeadofficePermission.value = await sessionManagement.getisHeadofficePermission() ?? '';
+      try {
+        loading.value=true;
+        email = await sessionManagement.getEmail() ?? '';
+        isAdminWritePermission.value =
+            await sessionManagement.getIsAdminPermission() ?? '';
+        isHeadofficePermission.value =
+            await sessionManagement.getisHeadofficePermission() ?? '';
         print("emais...${email}");
-        print("isAdminWritePermission.valueTask....${isAdminWritePermission.value.toString()}");
+        print(
+            "isAdminWritePermission.valueTask....${isAdminWritePermission.value
+                .toString()}");
         getMenuList();
         print("List${userGeoHierarchyy.length}");
-        TaskStatusListTypeList.value = ['All','Pending For Approval', 'Approved', 'Rejected'];
+        TaskStatusListTypeList.value =
+        ['All', 'Pending For Approval', 'Approved', 'Rejected'];
         SaleCycleActiveTypeList.value = ['All', 'Yes', 'No'];
         SaleCycleActive_Controller.text = SaleCycleActiveTypeList[0];
         approveRejectList.value = ['Approve', 'Reject'];
@@ -210,7 +217,7 @@ class Taskmastervm extends GetxController{
         //userGeoHierarchy=await sessionManagement.getUserGeoHierarchy() ?? [];
         //getTaskMaster(pageNumber, is_Active.toString(), '', '', '', date_filter,is_done.value);
         bindFinancialYear();
-        product_category_type_Controller.value.text="Contains";
+        product_category_type_Controller.value.text = "Contains";
         getClustersGetByEmail();
         getAccountMaster(pageNumber);
         getItemCategoryMstWithoutTaskIdApi();
@@ -219,13 +226,19 @@ class Taskmastervm extends GetxController{
         MethodOfCallMasterApiHit();
         CallDSARsMasterApiHit();
 
-      if(this.isAdminWritePermission.value==1){
+        if (this.isAdminWritePermission.value == 1) {
           EmployeeMasterGet('');
-      }
-      else{
+        }
+        else {
           getEmployeeMemberApi();
+        }
       }
+      catch(e){
 
+      }
+      finally{
+        loading.value=false;
+      }
     }
 
     bindFinancialYear(){

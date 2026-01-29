@@ -348,25 +348,35 @@ class SalesCycleVm extends GetxController {
 
   @override
   Future<void> onInit() async {
-    email = await sessionManagement.getEmail() ?? '';
-    userType = await sessionManagement.getUserType() ?? '';
-    isAdminWritePermission.value = await sessionManagement.getIsAdminPermission() ?? '';
-    isHeadofficePermission.value = await sessionManagement.getisHeadofficePermission() ?? '';
-    clearAllFieldOfFilter();
-    product_category_type_Controller.value.text="Contains";
-    getItemCategoryMstWithoutTaskIdApi();
-    getCompanyTypeMasterGet();
-    if(this.isAdminWritePermission.value==1){
-      EmployeeMasterGet('');
-    }
-    else{
-      getEmployeeMemberApi();
-    }
-    //getsalesCycleData(pageNumber, "", "", '');
+    try {
+      loading.value=true;
+      email = await sessionManagement.getEmail() ?? '';
+      userType = await sessionManagement.getUserType() ?? '';
+      isAdminWritePermission.value =
+          await sessionManagement.getIsAdminPermission() ?? '';
+      isHeadofficePermission.value =
+          await sessionManagement.getisHeadofficePermission() ?? '';
+      clearAllFieldOfFilter();
+      product_category_type_Controller.value.text = "Contains";
+      getItemCategoryMstWithoutTaskIdApi();
+      getCompanyTypeMasterGet();
+      if (this.isAdminWritePermission.value == 1) {
+        EmployeeMasterGet('');
+      }
+      else {
+        getEmployeeMemberApi();
+      }
+      //getsalesCycleData(pageNumber, "", "", '');
 
-    getClustersGetByEmail();
-    itemCategorySelectedlist.value = [];
+      getClustersGetByEmail();
+      itemCategorySelectedlist.value = [];
+    }
+    catch(e){
 
+    }
+    finally{
+      loading.value=false;
+    }
     super.onInit();
   }
 

@@ -10,6 +10,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:navigation_drawer_flutter/component/circular_loading.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:media_store_plus/media_store_plus.dart';
 import 'package:flutter/rendering.dart';
@@ -81,143 +82,148 @@ class CommitDashboardViewscreen extends StatelessWidget{
             )
         ),
         drawer: CustomDrawer(),
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Obx(() {
-              return Visibility(
-                visible: dashboard_view_Controller.loading.value,
-                child: LinearProgressIndicator(
-                  backgroundColor: AllColors.green,
-                  color: AllColors.textColor,
-                ),
-              );
-            }),
-            Expanded(
-                child: ListView(
-                  children: [
-                    Visibility(
-                      child: SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: ConstrainedBox(
-                          constraints: BoxConstraints(minWidth: MediaQuery.of(context).size.width),
-                          child: Container(
-                            padding: EdgeInsets.symmetric(horizontal: 8), // optional spacing
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Visibility(
-                                    visible: dashboard_view_Controller.userType != 'Branch Head',
-                                    child: _buildActionChip("Cluster")),
-                                SizedBox(width: 8),
-                                _buildActionChip("Region"),
-                                SizedBox(width: 8),
-                                _buildActionChip("Employee"),
-                              ],
+        body: Obx((){
+          if(dashboard_view_Controller.loading.value || saleCycleController.loading.value){
+            return const FullScreenLoader();
+          }
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Obx(() {
+                return Visibility(
+                  visible: dashboard_view_Controller.loading.value,
+                  child: LinearProgressIndicator(
+                    backgroundColor: AllColors.green,
+                    color: AllColors.textColor,
+                  ),
+                );
+              }),
+              Expanded(
+                  child: ListView(
+                    children: [
+                      Visibility(
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: ConstrainedBox(
+                            constraints: BoxConstraints(minWidth: MediaQuery.of(context).size.width),
+                            child: Container(
+                              padding: EdgeInsets.symmetric(horizontal: 8), // optional spacing
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Visibility(
+                                      visible: dashboard_view_Controller.userType != 'Branch Head',
+                                      child: _buildActionChip("Cluster")),
+                                  SizedBox(width: 8),
+                                  _buildActionChip("Region"),
+                                  SizedBox(width: 8),
+                                  _buildActionChip("Employee"),
+                                ],
+                              ),
                             ),
                           ),
                         ),
+                        visible: dashboard_view_Controller.userType != 'Frontliners',
                       ),
-                      visible: dashboard_view_Controller.userType != 'Frontliners',
-                    ),
 
-                    Container(
-                        padding: EdgeInsets.only(left: 15.0, bottom: 10.0, top: 10.0),
-                        child:
-                        Obx((){
-                          return  Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Commit Due ${dashboard_view_Controller.character.value}',
-                                style: GoogleFonts.poppins(
-                                  color: AllColors.primaryDark1,
-                                  fontSize: AllFontSize.fourtine,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
-                              SizedBox(width: 10,),
-                              Text(
-                                '${dashboard_view_Controller.character.value} : Type Of Calls (R)',
-                                style: GoogleFonts.poppins(
-                                  color: AllColors.blackColor,
-                                  fontSize: AllFontSize.twelve,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ],
-                          );
-                        })
-                    ),
-
-                    Obx(() {
-                      return BindDashboardBarChartData(context);
-                    }),
-
-                    
-
-                    Container(
-                        padding: EdgeInsets.only(left: 15.0, bottom: 10.0),
-                        child:
-                        Obx((){
-                          return  Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Visibility(
-                                visible : dashboard_view_Controller.rodName == '',
-                                child: Text(
-                                  'All ${dashboard_view_Controller.selectedOption.value}',
+                      Container(
+                          padding: EdgeInsets.only(left: 15.0, bottom: 10.0, top: 10.0),
+                          child:
+                          Obx((){
+                            return  Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Commit Due ${dashboard_view_Controller.character.value}',
                                   style: GoogleFonts.poppins(
                                     color: AllColors.primaryDark1,
                                     fontSize: AllFontSize.fourtine,
                                     fontWeight: FontWeight.w700,
                                   ),
                                 ),
-                              ),
-                              Visibility(
-                                visible : dashboard_view_Controller.rodName != '',
-                                child: Text(
-                                  '${dashboard_view_Controller.geoValueName}',
+                                SizedBox(width: 10,),
+                                Text(
+                                  '${dashboard_view_Controller.character.value} : Type Of Calls (R)',
                                   style: GoogleFonts.poppins(
-                                    color: AllColors.primaryDark1,
-                                    fontSize: AllFontSize.fourtine,
-                                    fontWeight: FontWeight.w700,
+                                    color: AllColors.blackColor,
+                                    fontSize: AllFontSize.twelve,
+                                    fontWeight: FontWeight.w500,
                                   ),
                                 ),
-                              ),
-                              SizedBox(width: 10,),
-                              Text(
-                                '(' +dashboard_view_Controller.total_rows.value.toString()+')',
-                                style: GoogleFonts.poppins(
-                                  color: AllColors.redColor,
-                                  fontSize: AllFontSize.fourtine,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
-                            ],
-                          );
-                        })
+                              ],
+                            );
+                          })
+                      ),
 
-
-                    ),
-                    Divider(
-                      height: 1,
-                      color: AllColors.lightgreyColor,
-                    ),
-                    Container(
-                      height: size.height/2,
-                      child: Obx(() {
-                        return BindDashboardWiseDataList(context);
+                      Obx(() {
+                        return BindDashboardBarChartData(context);
                       }),
-                    )
-                  ],
-                )),
 
 
 
-          ],
-        ),
+                      Container(
+                          padding: EdgeInsets.only(left: 15.0, bottom: 10.0),
+                          child:
+                          Obx((){
+                            return  Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Visibility(
+                                  visible : dashboard_view_Controller.rodName == '',
+                                  child: Text(
+                                    'All ${dashboard_view_Controller.selectedOption.value}',
+                                    style: GoogleFonts.poppins(
+                                      color: AllColors.primaryDark1,
+                                      fontSize: AllFontSize.fourtine,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                ),
+                                Visibility(
+                                  visible : dashboard_view_Controller.rodName != '',
+                                  child: Text(
+                                    '${dashboard_view_Controller.geoValueName}',
+                                    style: GoogleFonts.poppins(
+                                      color: AllColors.primaryDark1,
+                                      fontSize: AllFontSize.fourtine,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(width: 10,),
+                                Text(
+                                  '(' +dashboard_view_Controller.total_rows.value.toString()+')',
+                                  style: GoogleFonts.poppins(
+                                    color: AllColors.redColor,
+                                    fontSize: AllFontSize.fourtine,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                              ],
+                            );
+                          })
+
+
+                      ),
+                      Divider(
+                        height: 1,
+                        color: AllColors.lightgreyColor,
+                      ),
+                      Container(
+                        height: size.height/2,
+                        child: Obx(() {
+                          return BindDashboardWiseDataList(context);
+                        }),
+                      )
+                    ],
+                  )),
+            ],
+          );
+        })
+
+
+
       ),
 
     );
