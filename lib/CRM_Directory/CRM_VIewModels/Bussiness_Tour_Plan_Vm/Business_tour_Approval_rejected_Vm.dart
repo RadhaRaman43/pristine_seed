@@ -60,6 +60,12 @@ class BusinessTourApproveRejectedVm extends GetxController{
     filterCreatedByController.value.clear();
     createdOn_filter_controller.value.clear();
 
+    SelectedCluster_list.value=[];
+    SelectedRegion_list.value=[];
+    RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join('|');
+    clusterName_controller.value.text = clusterGetByEmailList.map((e) => e.geoValue).join('|');
+
+
 
   }
 

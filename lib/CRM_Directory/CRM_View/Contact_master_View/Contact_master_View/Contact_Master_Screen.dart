@@ -49,18 +49,21 @@ class ContactMasterScreen extends StatelessWidget{
                 ),
               ),
               Spacer(),
-              Visibility(
-                //visible: TaskMaster_page_controller.isAdminWritePermission.value == '0'?true:false,
-                visible:contact_vm_controller.isHeadofficePermission.value!="1"  ? true:false ,
-                child: IconButton(onPressed: () {
-                  contact_vm_controller.resetAllContactCreativeField('Icon');
-                  contact_vm_controller.insideOut = true;
-                  //contact_vm_controller.IsHeDecisionMakerController.value.text = "No";
-                  contact_vm_controller.getAccountMaster("");
-                  contact_vm_controller.getDecisionRoleMaster();
-                  Get.toNamed(RoutesName.addNewContactMaster_screen);
-                }, icon: Icon(Icons.add)),
-              ),
+              Obx((){
+                return Visibility(
+                  //visible: TaskMaster_page_controller.isAdminWritePermission.value == '0'?true:false,
+                  visible:contact_vm_controller.isHeadofficePermission.value!="1"  ? true:false ,
+                  child: IconButton(onPressed: () {
+                    contact_vm_controller.resetAllContactCreativeField('Icon');
+                    contact_vm_controller.insideOut = true;
+                    //contact_vm_controller.IsHeDecisionMakerController.value.text = "No";
+                    contact_vm_controller.getAccountMaster("");
+                    contact_vm_controller.getDecisionRoleMaster();
+                    Get.toNamed(RoutesName.addNewContactMaster_screen);
+                  }, icon: Icon(Icons.add)),
+                );
+              }),
+
 
               Container(
                 child: IconButton(onPressed: () {
@@ -420,7 +423,7 @@ class ContactMasterScreen extends StatelessWidget{
            _buildLabelWithValue( "Contact Name : ",contact_vm_controller.contact_master_list[position].contactName?? "" ),
             SizedBox(height: 2,),
             Row(
-              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
                   "Customer Name : ",
@@ -490,7 +493,7 @@ class ContactMasterScreen extends StatelessWidget{
 
   Widget _buildLabelWithValue(String label, String value) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(label,
           style: GoogleFonts.poppins(

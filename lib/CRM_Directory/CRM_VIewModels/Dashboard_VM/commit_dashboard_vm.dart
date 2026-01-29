@@ -735,6 +735,9 @@ class CommitDashboardVm extends GetxController{
     selectedSalesStageStatusList.value = ["All"];
     DateRange("monthly");
     filterCustomDateController.value.text = '${formattedStartDate} - ${formattedEndDate}';
+    RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join(',');
+    clusterName_controller.value.text = clusterGetByEmailList.map((e) => e.geoValue).join(',');
+
 
   }
 

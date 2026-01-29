@@ -103,19 +103,24 @@ class ViewContactsScreen extends StatelessWidget{
                             thickness: 1,
                           ),
                         ),
-                        Center(
-                          child: IconButton(onPressed: () {
-                            contact_vm_controller.insideOut = false;
-                            contact_vm_controller.resetAllContactCreativeField('Card');
-                           // contact_vm_controller.IsHeDecisionMakerController.value.text = "No";
-                            contact_vm_controller.getAccountMaster("");
-                            contact_vm_controller.getDecisionRoleMaster();
-                            Get.toNamed(RoutesName.addNewContactMaster_screen);
-                          },
-                            icon: Icon(Icons.add, size: 40, color: AllColors.textColor,),
+                        Obx((){
+                          return  Visibility(
+                            visible: contact_vm_controller.isHeadofficePermission!="1",
+                            child: Center(
+                              child: IconButton(onPressed: () {
+                                contact_vm_controller.insideOut = false;
+                                contact_vm_controller.resetAllContactCreativeField('Card');
+                                // contact_vm_controller.IsHeDecisionMakerController.value.text = "No";
+                                contact_vm_controller.getAccountMaster("");
+                                contact_vm_controller.getDecisionRoleMaster();
+                                Get.toNamed(RoutesName.addNewContactMaster_screen);
+                              },
+                                icon: Icon(Icons.add, size: 40, color: AllColors.textColor,),
+                              ),
+                            ),
+                          );
+                        })
 
-                          ),
-                        )
                       ],
                     ),
                   ),

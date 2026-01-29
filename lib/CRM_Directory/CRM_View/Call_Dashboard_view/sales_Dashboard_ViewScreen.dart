@@ -1531,64 +1531,6 @@ class SalesDashboardViewscreen extends StatelessWidget{
                       ],
                     ),
                   ),
-                  /*Container(
-                    padding: EdgeInsets.only(left: 10, right: 10, bottom: 10),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          width: size.width * 0.4,
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                foregroundColor: AllColors.lightgreyColor,
-                                backgroundColor: AllColors.whiteColor,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(15),
-                                  side: BorderSide(
-                                      color: AllColors.primaryDark, width: 1),
-                                )),
-                            onPressed: () {
-                              dashboard_view_Controller.salesDashboardData();
-                              Get.back();
-                            },
-                            child: Text(
-                              'Submit',
-                              style: GoogleFonts.poppins(
-                                  color: AllColors.primaryDark1,
-                                  fontSize: AllFontSize.sisxteen,
-                                  fontWeight: FontWeight.w700),
-                            ),
-                          ),
-                        ),
-                        Container(
-                          width: size.width * 0.4,
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                foregroundColor: AllColors.lightgreyColor,
-                                backgroundColor: AllColors.whiteColor,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(15),
-                                  side: BorderSide(
-                                      color: AllColors.redColor, width: 1),
-                                )),
-                            onPressed: () {
-                              dashboard_view_Controller.clearAllFilterController();
-                              dashboard_view_Controller.pageNumber = 0;
-                              dashboard_view_Controller.salesDashboardData();
-                              Get.back();
-                            },
-                            child: Text(
-                              'Reset',
-                              style: GoogleFonts.poppins(
-                                  color: AllColors.redColor,
-                                  fontSize: AllFontSize.sisxteen,
-                                  fontWeight: FontWeight.w700),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),*/
                 ],
               ),
             );

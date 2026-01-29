@@ -759,6 +759,21 @@ class SessionManagement {
     prefs.remove("BusinessApproveTourPlan_data");
   }
 
+  //todo mark leave tour
+  Future<void> saveMarkLeaveData(Map<String, dynamic> data) async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString("MarkLeave_data", jsonEncode(data));
+  }
+  Future<Map<String, dynamic>> getMarkLeaveData() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? data = prefs.getString("MarkLeave_data");
+    return data != null ? jsonDecode(data) : {};
+  }
+  Future<void> clearMarkLeaveData() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.remove("MarkLeave_data");
+  }
+
 
   //todo dashboard
   Future<void> saveFunnelDashboardData(Map<String, dynamic> data) async {

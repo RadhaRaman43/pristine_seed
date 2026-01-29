@@ -27,35 +27,54 @@ class BussinessTourPlanScreen extends StatelessWidget{
       return false;
     },
       child: Scaffold(
-        appBar:  AppBar(
-            backgroundColor: AllColors.primaryDark1,
-            iconTheme: IconThemeData(
-              color: AllColors.whiteColor,
-            ),
-            title:Row(
-              children: [
-                Text(
-                  'Business Tour Plan',
-                  style: GoogleFonts.poppins(
-                    color: AllColors.whiteColor,
-                    fontSize: 17.0,
-                    fontWeight: FontWeight.w700,
+        appBar: AppBar(
+          backgroundColor: AllColors.primaryDark1,
+          iconTheme: IconThemeData(
+            color: AllColors.whiteColor,
+          ),
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: Tooltip(
+                  message: 'Business Tour Plan',
+                  child: Text(
+                    'Business Tour Plan',
+                    overflow: TextOverflow.ellipsis,
+                    style: GoogleFonts.poppins(
+                      color: AllColors.whiteColor,
+                      fontSize: 17.0,
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                 ),
-                Spacer(),
-                IconButton(onPressed: (){
-                  businessTourPlanController.startDateController.value.clear();
-                  businessTourPlanController.endDateController.value.clear();
-                  businessTourPlanController.touringRegionController.value.clear();
-                  OpenDialogToCreateBTP(context);
-                },
-                    icon: Icon(Icons.add)),
-                IconButton(onPressed: () {
+              ),
+
+              Obx(() {
+                return Visibility(
+                  visible: businessTourPlanController.isHeadOfficePermission != "1",
+                  child: IconButton(
+                    onPressed: () {
+                      businessTourPlanController.startDateController.value.clear();
+                      businessTourPlanController.endDateController.value.clear();
+                      businessTourPlanController.touringRegionController.value.clear();
+                      OpenDialogToCreateBTP(context);
+                    },
+                    icon: Icon(Icons.add),
+                  ),
+                );
+              }),
+
+              IconButton(
+                onPressed: () {
                   showFilterBottomSheet(context);
-                }, icon: Icon(Icons.filter_alt_sharp))
-              ],
-            )
+                },
+                icon: Icon(Icons.filter_alt_sharp),
+              ),
+            ],
+          ),
         ),
+
         drawer: CustomDrawer(),
         body: RefreshIndicator(
           onRefresh:businessTourPlanController.refreshList,
@@ -761,64 +780,6 @@ class BussinessTourPlanScreen extends StatelessWidget{
                       ],
                     ),
                   ),
-
-                 /* Container(
-                    padding: EdgeInsets.only(left: 10, right: 10, bottom: 10),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          width: size.width * 0.4,
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                foregroundColor: AllColors.lightgreyColor, backgroundColor: AllColors.whiteColor, shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15),
-                              side: BorderSide(
-                                  color: AllColors.primaryDark,
-                                  width: 1),
-                            )),
-                            onPressed: () {
-                              Get.back();
-                              businessTourPlanController.pageNumber = 0;
-                              businessTourPlanController.getBusinessTourPlanData(businessTourPlanController.pageNumber);
-                            },
-                            child: Text(
-                              'Submit',
-                              style: GoogleFonts.poppins(
-                                  color: AllColors.primaryDark1,
-                                  fontSize: AllFontSize.sisxteen,
-                                  fontWeight: FontWeight.w700),
-                            ),
-                          ),
-                        ),
-                        Container(
-                          width: size.width * 0.4,
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                foregroundColor: AllColors.lightgreyColor, backgroundColor: AllColors.whiteColor, shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15),
-                              side: BorderSide(
-                                  color: AllColors.redColor, width: 1),
-                            )),
-                            onPressed: () {
-                              Get.back();
-                              businessTourPlanController.clearAllFieldOfFilter();
-                              businessTourPlanController.pageNumber=0;
-                              businessTourPlanController.getBusinessTourPlanData(businessTourPlanController.pageNumber);
-
-                            },
-                            child: Text(
-                              'Reset',
-                              style: GoogleFonts.poppins(
-                                  color: AllColors.redColor,
-                                  fontSize: AllFontSize.sisxteen,
-                                  fontWeight: FontWeight.w700),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),*/
                 ],
               ),
             );

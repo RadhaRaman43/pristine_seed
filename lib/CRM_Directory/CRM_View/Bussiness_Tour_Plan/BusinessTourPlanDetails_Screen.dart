@@ -24,7 +24,7 @@ class BusinessTourPlanDeatil extends StatelessWidget {
   Widget build(BuildContext context) {
     return WillPopScope(
         onWillPop: () async {
-          if(businessTourPlanController.isSendForApproval.value == ""){
+          if(businessTourPlanController.isSendForApproval.value == "TourDetail"){
             businessTourPlanController.clearAllFieldOfFilter();
             businessTourPlanController.pageNumber = 0;
             businessTourPlanController.getBusinessTourPlanData(businessTourPlanController.pageNumber);
@@ -56,7 +56,7 @@ class BusinessTourPlanDeatil extends StatelessWidget {
                   Spacer(),
                   Obx((){
                     return Visibility(
-                      visible:
+                      visible:businessTourPlanController.isHeadOfficePermission!="1"&&
                       businessTourPlanController.BusinessTourHourLines.isEmpty? true : false,
                       child: ActionChip(
                         elevation: 2,
@@ -84,7 +84,7 @@ class BusinessTourPlanDeatil extends StatelessWidget {
                   }),
                   Obx((){
                     return Visibility(
-                      visible:
+                      visible:businessTourPlanController.isHeadOfficePermission!="1"&&
                       businessTourPlanController.BusinessTourHourLines.isNotEmpty &&  businessTourPlanController.BusinessTourPlanDetails_list[0].status == "PENDING"? true : false,
                       child: ActionChip(
                         elevation: 2,
@@ -130,7 +130,7 @@ class BusinessTourPlanDeatil extends StatelessWidget {
                   }),
                   Obx((){
                     return Visibility(
-                      visible:
+                      visible:businessTourPlanController.isHeadOfficePermission!="1"&&
                       businessTourPlanController.BusinessTourHourLines.isNotEmpty &&  businessTourPlanController.BusinessTourPlanDetails_list[0].status != "PENDING"? true : false,
                       child: IconButton(
                         icon: Icon(Icons.download_for_offline_sharp ,size: 30,),
@@ -176,7 +176,7 @@ class BusinessTourPlanDeatil extends StatelessWidget {
                           ),
                         ),
                         Visibility(
-                          visible: businessTourPlanController.BusinessTourPlanDetails_list[0].status?.toUpperCase() ==  'PENDING',
+                          visible: businessTourPlanController.isHeadOfficePermission!="1"&& businessTourPlanController.BusinessTourPlanDetails_list[0].status?.toUpperCase() ==  'PENDING',
                           child: GestureDetector(
                             onTap: () {
                               businessTourPlanController.clearAllCreateLinePlanController();

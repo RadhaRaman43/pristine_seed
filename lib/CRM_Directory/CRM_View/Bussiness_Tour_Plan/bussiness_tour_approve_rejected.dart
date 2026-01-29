@@ -223,6 +223,37 @@ class BussinessTourApproveRejected extends StatelessWidget{
         onTap: () {
           businessTourPlanViewController.getBusinessTourPlanDetailsApi(businessTourPlanController.BusinessTourApprovalList[position].tourId, "ApproveRejectPage");
         },
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              children: [
+                Text(
+                  "Tour ID : ",
+                  style: GoogleFonts.poppins(
+                      color: AllColors.primaryDark1,
+                      fontSize: AllFontSize.fourtine,
+                      fontWeight: FontWeight.w700),
+                ),
+                Container(
+                  child: Tooltip(
+                    message: businessTourPlanController.BusinessTourApprovalList[position].tourId?? "",
+                    child: Text(
+                      businessTourPlanController.BusinessTourApprovalList[position].tourId?? "",
+                      overflow: TextOverflow.ellipsis,
+                      style: GoogleFonts.poppins(
+                          color:Colors.blue,
+                          fontSize: AllFontSize.fourtine,
+                          fontWeight: FontWeight.w700),
+                    ),
+                    textAlign: TextAlign.end,
+                  ),
+                ),
+              ],
+            ),
+            Icon(Icons.remove_red_eye_outlined,  color: Colors.blue,),
+          ],
+        ),
         subtitle:Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -282,7 +313,6 @@ class BussinessTourApproveRejected extends StatelessWidget{
           ],
         ),
 
-        trailing: Icon(Icons.remove_red_eye_outlined,  color: Colors.blue,),
       ),
     );
   }
@@ -294,6 +324,7 @@ class BussinessTourApproveRejected extends StatelessWidget{
     Color color = AllColors.textColor,
   }) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
           label,
@@ -417,7 +448,7 @@ class BussinessTourApproveRejected extends StatelessWidget{
                           borderColor: AllColors.redColor,
                           textColor: AllColors.redColor,
                           onTap: () {
-                            //businessTourPlanController.clearFilterData();
+                            businessTourPlanController.clearFilterData();
                             businessTourPlanController.clearAllFieldOfFilter();
                             businessTourPlanController.pageNumber=0;
                             businessTourPlanController.getBusinessTourApprovalListData(businessTourPlanController.pageNumber,businessTourPlanController.filterStatusFlag.value);

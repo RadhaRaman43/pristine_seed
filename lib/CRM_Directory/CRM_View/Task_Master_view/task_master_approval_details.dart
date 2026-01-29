@@ -66,7 +66,8 @@ class TaskMasterApprovalDetails extends StatelessWidget{
                   Obx((){
                     print("hhhhh ${TaskMaster_page_controller.Task_Master_list_line_Wise[0].isReadyForApprove} ");
                     return  Visibility(
-                      visible: TaskMaster_page_controller.Task_Master_list_line_Wise[0].isReadyForApprove==1
+                      visible: TaskMaster_page_controller.Task_Master_list_line_Wise[0].isReadyForApprove==1 &&
+                          TaskMaster_page_controller.isHeadofficePermission!="1"? true:false
                           /*&& TaskMaster_page_controller.isAdminWritePermission=="1"*/ && TaskMaster_page_controller.isHeadofficePermission!="1",
                       child: IconButton(onPressed: () {
                         TaskMaster_page_controller.showApprovRejectDialog(context, TaskMaster_page_controller.Task_Master_list_line_Wise[0].taskId!);

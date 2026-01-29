@@ -580,6 +580,10 @@ class SalesDashboardVm extends GetxController{
     SelectedEmployee_Member_list.value = [];
     DateRange("financial");
     filterCustomDateController.value.text = '${formattedStartDate} - ${formattedEndDate}';
+    RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join(',');
+    clusterName_controller.value.text = clusterGetByEmailList.map((e) => e.geoValue).join(',');
+    RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join(',');
+    clusterName_controller.value.text = clusterGetByEmailList.map((e) => e.geoValue).join(',');
 
   }
 

@@ -1783,6 +1783,8 @@ class Accountmastervm extends GetxController{
     zone_head__value_controller.value.clear();
     //clusterName_controller.value.clear();
     pageNumber=0;
+    RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join(',');
+    clusterName_controller.value.text = clusterGetByEmailList.map((e) => e.geoValue).join(',');
     getAccountMaster(pageNumber,'All');
 
   }
