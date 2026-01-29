@@ -1370,11 +1370,13 @@ class AddNewTaskScreen extends StatelessWidget{
             FocusNode focusNode, VoidCallback onFieldSubmitted) {
           return TextField(
             onTap: (){
-              if(focusNode.hasFocus){
+             /* if(focusNode.hasFocus){
                 focusNode.unfocus();
               }else{
                 focusNode.requestFocus();
-              }
+              }*/
+
+              controller.clear();
             },
             cursorColor: AllColors.primaryDark1,
             controller: controller
@@ -1469,7 +1471,68 @@ class AddNewTaskScreen extends StatelessWidget{
     );
   }
 
-  Widget bindProductCategoryDropDown(context){
+
+
+
+  Widget  bindProductCategoryDropDown(context){
+   return DropdownMenu<ItemCategoryMstModel>(
+      width: MediaQuery.of(context).size.width-25,
+      controller: taskMaster_page_controller.ItemCat_type_controller,
+      label: Text(
+        "Product Category",
+       /* style: GoogleFonts.poppins(
+            color: AllColors.primaryDark1,
+            fontSize: AllFontSize.fourtine,
+            fontWeight: FontWeight.w300),*/
+      ),
+      inputDecorationTheme: const InputDecorationTheme(
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+          borderSide: BorderSide(
+            color: AllColors.primaryDark1,
+          ),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+              color: AllColors.primaryDark1), // Change the color to green
+        ),
+        border: OutlineInputBorder(
+          borderSide: BorderSide(
+              color: AllColors.primaryDark1), // Change the color to green
+        ),
+        filled: false,
+        contentPadding: EdgeInsets.symmetric(
+            vertical: AllFontSize.two, horizontal: AllFontSize.ten),
+      ),
+      menuHeight: 200,
+      onSelected: (ItemCategoryMstModel? selection) {
+        print(selection);
+        taskMaster_page_controller.ItemCat_type_controller.text =
+            _displayItemCatMasterForOption(selection!).toString();
+
+        if (!taskMaster_page_controller.Item_Category_Selected_list.contains(selection)) {
+          taskMaster_page_controller.Item_Category_Selected_list.add(selection);
+          Utils.showToastification('Success', 'Add Successfully');
+        }else{
+          Utils.showErrorToastification('Error', 'Already Selected');
+        }
+      },
+
+      dropdownMenuEntries: taskMaster_page_controller.Item_Category_master_list_without_task
+          .map<DropdownMenuEntry<ItemCategoryMstModel>>((ItemCategoryMstModel e) {
+        return DropdownMenuEntry<ItemCategoryMstModel>(
+            value: e,
+            label: e.categoryName??"",
+            style: ButtonStyle(
+              foregroundColor:
+              MaterialStateProperty.all<Color>(AllColors.primaryDark1),
+            ));
+      }).toList(),
+    );
+  }
+
+
+/*  Widget bindProductCategoryDropDown(context){
     return Padding(
       padding: const EdgeInsets.only(left: 15, right: 15),
       child: Autocomplete<ItemCategoryMstModel>(
@@ -1582,6 +1645,6 @@ class AddNewTaskScreen extends StatelessWidget{
         },
       ),
     );
-  }
+  }*/
 
 }

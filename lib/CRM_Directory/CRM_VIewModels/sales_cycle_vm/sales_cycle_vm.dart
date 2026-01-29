@@ -751,7 +751,7 @@ class SalesCycleVm extends GetxController {
               }
               if (saleCycleList[0].salesCycleStatus == "Suspect") {
                 itemCategorySelectedlist.value = [];
-                getItemCategoryMstApi(saleCycleList[0].salesCycleId!, saleCycleList[0].taskId!,"");
+                getItemCategoryMstApi(saleCycleList[0].salesCycleId??"", saleCycleList[0].taskId??"","");
                 ProductCategoryWiseAmtGet(0, saleCycleList[0].salesCycleId!);
               }
               if (saleCycleList[0].salesCycleStatus == "Propose") {

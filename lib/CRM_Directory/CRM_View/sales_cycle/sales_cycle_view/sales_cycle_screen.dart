@@ -301,17 +301,17 @@ class SalesCycleScreen extends StatelessWidget{
   Widget BindCustomerRequestListView(context, int position) {
     var createdOn=StaticMethod.dateTimeToDate(salesCycleController.saleCycleList[position].createdOn??"");
     var approvedOn=StaticMethod.dateTimeToDate(salesCycleController.saleCycleList[position].approvedOn??"");
-    String saleCycleStatus = salesCycleController.saleCycleList[position].salesCycleApprovalStatus??"";
+    String saleCycleStatus = salesCycleController.saleCycleList[position].salesCycleApprovalStatus?.toLowerCase()??"";
     String saleQuoteAccepted= salesCycleController.saleCycleList[position].quoteAccepted?.toLowerCase()??"";
     Color getStatusColor(String status) {
       switch (status) {
-        case 'PENDING' || 'Pending':
+        case 'PENDING' || 'pending':
           return Colors.red[900]!;
         case 'Rejected' || 'rejected':
           return AllColors.redColor;
-        case 'APPROVED' || 'Approved':
+        case 'APPROVED' || 'approved':
           return Colors.green;
-        case 'PENDING FOR APPROVAL' || 'Pending For Approval':
+        case 'PENDING FOR APPROVAL' || 'pending for approval':
           return Colors.yellow[700]!;
         default:
           return Colors.black;

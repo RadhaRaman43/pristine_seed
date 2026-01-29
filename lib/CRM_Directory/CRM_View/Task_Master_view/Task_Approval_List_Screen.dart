@@ -255,7 +255,7 @@ class TaskApprovalListScreen extends StatelessWidget{
               _buildLabelWithValue(label: "Customer Code: ", value: TaskMaster_page_controller.Task_Master_list[position].accountCode??"",),
               _buildLabelWithValue(label: "Contact Name: ", value: TaskMaster_page_controller.Task_Master_list[position].contactName??"",),
               _buildLabelWithValue(label: "Task Owner: ", value: TaskMaster_page_controller.Task_Master_list[position].taskOwner??"",),
-              _buildLabelWithValue(label: "Task Due Date: ", value: StaticMethod.onlyDate(TaskMaster_page_controller.Task_Master_list[position].taskDueDate??""),),
+              _buildLabelWithValue(label: "Task Due Date: ", value: StaticMethod.convertDateFormat1(TaskMaster_page_controller.Task_Master_list[position].taskDueDate??""),),
               _buildLabelWithValue(label: "Type Of Call: ", value: TaskMaster_page_controller.Task_Master_list[position].typeOfCall??"",),
               _buildLabelWithValue(label: "Type Of Mode of Call: ", value: TaskMaster_page_controller.Task_Master_list[position].methodOfCall??"",),
               _buildLabelWithValue(label: "Last Activity Status: ", value: TaskMaster_page_controller.Task_Master_list[position].lastActivityStatus??"",),
@@ -270,11 +270,11 @@ class TaskApprovalListScreen extends StatelessWidget{
               _buildLabelWithValue(label: "Region Name: ", value: TaskMaster_page_controller.Task_Master_list[position].branchHeadValue??"",),
               _buildLabelWithValue(label: "Task Remarks: ", value: TaskMaster_page_controller.Task_Master_list[position].taskRemarks??"",),
               _buildLabelWithValue(label: "Purpose Of Visit: ", value: TaskMaster_page_controller.Task_Master_list[position].purposeOfVisit??"",),
-              _buildLabelWithValue(label: "Last Activity Updated On: ", value: TaskMaster_page_controller.Task_Master_list[position].lastActivityUpdatedOn??"",),
-              _buildLabelWithValue(label: "Created On: ", value:StaticMethod.onlyDate(TaskMaster_page_controller.Task_Master_list[position].createdOn??"") ,),
+              _buildLabelWithValue(label: "Last Activity Updated On: ", value: StaticMethod.dateTimeToDate(TaskMaster_page_controller.Task_Master_list[position].lastActivityUpdatedOn??""),),
+              _buildLabelWithValue(label: "Created On: ", value: StaticMethod.dateTimeToDate(TaskMaster_page_controller.Task_Master_list[position].createdOn??"") ,),
               _buildLabelWithValue(label: "Reporting Person: ", value: TaskMaster_page_controller.Task_Master_list[position].approvedFullName??"",),
               _buildLabelWithValue(label: "Approved By: ", value: TaskMaster_page_controller.Task_Master_list[position].approvedFullName??"",),
-              _buildLabelWithValue(label: "Approved On: ", value: TaskMaster_page_controller.Task_Master_list[position].approvedOn??"",),
+              _buildLabelWithValue(label: "Approved On: ", value:  StaticMethod.convertDateFormat1(TaskMaster_page_controller.Task_Master_list[position].approvedOn??""),),
               Visibility(
                 visible: TaskMaster_page_controller.Task_Master_list[position]
                     .taskStatus == 'Rejected' ? true : false,

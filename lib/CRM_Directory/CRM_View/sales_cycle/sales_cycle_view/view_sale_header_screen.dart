@@ -423,8 +423,10 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                 visible: (saleCycleController.saleCycleList[0].quoteAccepted?.toUpperCase() == "OPEN" &&
                                             saleCycleController.saleCycleList[0].salesCycleStatus!.toUpperCase() == "SUSPECT") &&
                                         !(saleCycleController.FromPage.value == "FromDashboard") &&
-                                        saleCycleController.email.toLowerCase() ==
-                                            saleCycleController.saleCycleList[0].salesCycleOwner?.toLowerCase()
+                                        (saleCycleController.email.toLowerCase() ==
+                                            saleCycleController.saleCycleList[0].salesCycleOwner?.toLowerCase() ||
+                                            saleCycleController.userType?.toLowerCase()=='branch head'
+                                        )
                                     ? true : false,
                                 child: Column(
                                   children: [
@@ -2680,13 +2682,13 @@ class ViewSaleHeaderScreen extends StatelessWidget {
   }
   Color getStatusColor(String status) {
     switch (status) {
-      case 'PENDING' || 'Pending':
+      case 'PENDING' || 'pending':
         return Colors.red[900]!;
       case 'Rejected' || 'rejected':
         return AllColors.redColor;
-      case 'APPROVED' || 'Approved':
+      case 'APPROVED' || 'approved':
         return Colors.green;
-      case 'PENDING FOR APPROVAL' || 'Pending For Approval':
+      case 'PENDING FOR APPROVAL' || 'pending for approval':
         return Colors.yellow[700]!;
       default:
         return Colors.black;
@@ -2700,7 +2702,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
     String? expClosureDate = StaticMethod.convertDateFormat1(
         saleCycleController.saleCycleList[0].estClosureDate ?? "");
     String saleCycleStatus =
-        saleCycleController.saleCycleList[0].salesCycleApprovalStatus ?? "";
+        saleCycleController.saleCycleList[0].salesCycleApprovalStatus?.toLowerCase() ?? "";
 
 
 

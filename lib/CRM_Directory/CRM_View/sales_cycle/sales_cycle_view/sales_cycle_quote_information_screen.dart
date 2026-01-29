@@ -1061,7 +1061,7 @@ class QuoteInformationScreen extends StatelessWidget {
               ),
             ],
           ),
-          leading: Row(
+         /* leading: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
@@ -1076,7 +1076,7 @@ class QuoteInformationScreen extends StatelessWidget {
                 color: Colors.grey,
               )
             ],
-          ),
+          ),*/
         ),
       ),
     );
@@ -5105,6 +5105,7 @@ class QuoteInformationScreen extends StatelessWidget {
                                   if(headerMessege=='Update'){
                                     saleCycleController.getQuoteHeaderUpdateMarkWon(saleCycleController
                                         .quoteHeaderdata[0].quoteId??'');
+                                    Navigator.pop(context);
                                   }else{
                                     saleCycleController
                                         .quoteLineCreateDuplicateApiHit(
@@ -5112,7 +5113,7 @@ class QuoteInformationScreen extends StatelessWidget {
                                             .quoteLinedata[index].lineNo!);
                                   }
 
-                                  Navigator.pop(context);
+
                                   Navigator.pop(context);
                                 },
                                 child: Container(
