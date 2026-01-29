@@ -1551,7 +1551,29 @@ class CommitDashboardViewscreen extends StatelessWidget{
       context: context,
       builder: (context) {
         return AlertDialog(
-          title:  Text(dialogHeader),
+          titlePadding: const EdgeInsets.fromLTRB(20, 10, 10, 0),
+          title:  Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Flexible(
+                child: Tooltip(
+                  message: dialogHeader,
+                  child: Text(dialogHeader,style: GoogleFonts.poppins(
+                      fontSize: 16, fontWeight: FontWeight.w600,color: AllColors.primaryDark1),
+                    overflow: TextOverflow.ellipsis,),
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  IconButton(onPressed: () {
+                    Navigator.of(context).pop();
+                  }, icon: Icon(Icons.close,color: AllColors.primaryDark1,weight: 700,)),
+                ],
+              )
+
+            ],
+          ),
           content: SizedBox(
             width: double.maxFinite,
             child: ListView(
@@ -1559,6 +1581,9 @@ class CommitDashboardViewscreen extends StatelessWidget{
               children: allItems.map((item) {
                 final isChecked = selectedItems.contains(item);
                 return CheckboxListTile(
+                  dense: true, // makes it compact
+                  visualDensity: VisualDensity(horizontal: 0, vertical: -4), // reduce height
+                  contentPadding: EdgeInsets.zero, // remove side padding
                   title: Text(item),
                   value: isChecked,
                   onChanged: (bool? checked) {
@@ -1585,17 +1610,34 @@ class CommitDashboardViewscreen extends StatelessWidget{
             ),
           ),
           actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text("Cancel"),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                textController.value.text =
-                    selectedItems.join(", ");
-                Navigator.pop(context);
-              },
-              child: const Text("OK"),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12),
+              child: SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () {
+                    textController.value.text = selectedItems.join(", ");
+                    Navigator.pop(context);
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AllColors.primaryDark1,
+                    shadowColor: AllColors.primaryDark1,
+                    foregroundColor: AllColors.primaryDark1,
+                    side: BorderSide(color: AllColors.primaryDark1, width: 1),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                  ),
+                  child: Text(
+                    'Done',
+                    style: GoogleFonts.poppins(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
             ),
           ],
         );
@@ -1882,12 +1924,8 @@ class CommitDashboardViewscreen extends StatelessWidget{
 
               return StatefulBuilder(builder: (context, setState) {
                 final query = searchController.text.toLowerCase();
-                final filtered = query.isEmpty
-                    ? allItems
-                    : allItems
-                    .where((c) =>
-                    (c.fullName ?? "").toLowerCase().contains(query))
-                    .toList();
+                final filtered = query.isEmpty ? allItems : allItems.where((c) =>
+                    (c.fullName ?? "").toLowerCase().contains(query)).toList();
 
                 final allSelected =
                     allItems.isNotEmpty && tempSelected.length == allItems.length;
@@ -1919,12 +1957,10 @@ class CommitDashboardViewscreen extends StatelessWidget{
                                       fontSize: 16, fontWeight: FontWeight.w600,color: Colors.black),
                                 ),
                               ),
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                child: const Text('Cancel'),
-                              ),
+                              IconButton(onPressed: () {
+                                Navigator.of(context).pop();
+                              }, icon: const Icon(Icons.close,color: AllColors.primaryDark1,weight: 700,))
+
                             ],
                           ),
                         ),
@@ -2027,7 +2063,17 @@ class CommitDashboardViewscreen extends StatelessWidget{
 
                                     Navigator.of(context).pop();
                                   },
-                                  child: const Text('Done'),
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: AllColors.primaryDark1,
+                                    shadowColor: AllColors.primaryDark1,
+                                    foregroundColor: AllColors.primaryDark1,
+                                    side: BorderSide(color: AllColors.primaryDark1, width: 1),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                  ),
+                                  child: Text('Done',style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w600,color: Colors.white),),
+
                                 ),
                               ),
                             ],
@@ -2387,8 +2433,8 @@ class CommitDashboardViewscreen extends StatelessWidget{
                               Expanded(
                                 child: ElevatedButton(
                                   style: ElevatedButton.styleFrom(
-                                    backgroundColor: AllColors.green,
-                                    shadowColor: AllColors.green,
+                                    backgroundColor: AllColors.primaryDark1,
+                                    shadowColor: AllColors.primaryDark1,
                                     foregroundColor: AllColors.primaryDark1,
                                     side: BorderSide(color: AllColors.primaryDark1, width: 1),
                                     shape: RoundedRectangleBorder(
@@ -2624,8 +2670,8 @@ class CommitDashboardViewscreen extends StatelessWidget{
                               Expanded(
                                 child: ElevatedButton(
                                   style: ElevatedButton.styleFrom(
-                                    backgroundColor: AllColors.green,
-                                    shadowColor: AllColors.green,
+                                    backgroundColor: AllColors.primaryDark1,
+                                    shadowColor: AllColors.primaryDark1,
                                     foregroundColor: AllColors.primaryDark1,
                                     side: BorderSide(color: AllColors.primaryDark1, width: 1),
                                     shape: RoundedRectangleBorder(

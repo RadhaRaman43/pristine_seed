@@ -1234,72 +1234,6 @@ class FunnelDashboardView extends StatelessWidget{
       ),
     );
   }
- /* bindSalesStageStatus(BuildContext context) {
-    return Obx((){
-      if(dashboard_view_Controller.StageName_controller.value.text.isNotEmpty && dashboard_view_Controller.filterDataChecker.value=='1' ){
-        dashboard_view_Controller.selectedSalesStageStatusList.value =
-            dashboard_view_Controller.StageName_controller.value.text
-                .split(',').map((e) => e.trim()).where((e) => e.isNotEmpty).toList();
-      }
-      return DropdownSearch<String>.multiSelection(
-        items: dashboard_view_Controller.SalesCycleStageStatusList,
-        itemAsString: (String u) => u,
-        selectedItems: dashboard_view_Controller.selectedSalesStageStatusList,
-        dropdownDecoratorProps: DropDownDecoratorProps(
-          baseStyle: TextStyle(color: Colors.black),
-          dropdownSearchDecoration: InputDecoration(
-            filled: false,
-            labelText: dashboard_view_Controller.selectedSalesStageStatusList.isNotEmpty?"Sales Cycle Stage":null,
-            hintText: "Sales Cycle Stage",
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-          ),
-        ),
-        dropdownBuilder: (context, selectedItems) {
-          // Custom builder to just show comma-separated names
-          if (selectedItems.isEmpty) {
-            return Text("Sales Cycle Stage",
-              style: GoogleFonts.poppins(
-                color: AllColors.primaryDark1, // Match your hint color
-                fontSize: AllFontSize.sisxteen,
-                fontWeight: FontWeight.w500,
-              ),
-            );
-          }
-          return SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            //child: Text(dashboard_view_Controller.filterDataChecker.value=='1'?dashboard_view_Controller.StageName_controller.value.text:selectedItems.map((e) => e).join(', '),
-            child: Text(selectedItems.map((e) => e).join(', '),
-              style: TextStyle(color: Colors.black), // Only black text
-            ),
-          );
-        },
-        onChanged: (List<String> selectedList) {
-          dashboard_view_Controller.selectedSalesStageStatusList.value = selectedList;
-          dashboard_view_Controller.StageName_controller.value.text = selectedList.map((e) => e).join(', ');
-        },
-
-        popupProps: PopupPropsMultiSelection.dialog(
-          showSearchBox: true,
-          searchFieldProps: TextFieldProps(
-            decoration: InputDecoration(
-              contentPadding: EdgeInsets.only(top: 20, left: 12, right: 12),
-              // Top margin here
-              hintText: "Search...",
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-            ),
-          ),
-
-          itemBuilder: (context, item, isSelected) =>
-              ListTile(
-                title: Text(item),
-              ),
-        ),
-      );
-    });
-
-  }*/
 
   bindCustomerNameFilter(BuildContext context) {
     return Obx(() {
@@ -1464,7 +1398,7 @@ class FunnelDashboardView extends StatelessWidget{
                               ),
                               IconButton(onPressed: () {
                                 Navigator.of(context).pop();
-                              }, icon: Icon(Icons.close,color: AllColors.primaryDark1,weight: 700,))
+                              }, icon: const Icon(Icons.close,color: AllColors.primaryDark1,weight: 700,))
 
                             ],
                           ),
@@ -1554,15 +1488,6 @@ class FunnelDashboardView extends StatelessWidget{
                             children: [
                               Expanded(
                                 child: ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: AllColors.green,
-                                    shadowColor: AllColors.green,
-                                    foregroundColor: AllColors.primaryDark1,
-                                    side: BorderSide(color: AllColors.primaryDark1, width: 1),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20),
-                                    ),
-                                  ),
                                   onPressed: () {
                                     dashboard_view_Controller.SelectedEmployee_Member_list
                                         .assignAll(tempSelected);
@@ -1571,8 +1496,17 @@ class FunnelDashboardView extends StatelessWidget{
 
                                     Navigator.of(context).pop();
                                   },
-                                  child: Text('Done',style: GoogleFonts.poppins(
-                                      fontSize: 16, fontWeight: FontWeight.w600,color: Colors.white),),
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: AllColors.primaryDark1,
+                                    shadowColor: AllColors.primaryDark1,
+                                    foregroundColor: AllColors.primaryDark1,
+                                    side: BorderSide(color: AllColors.primaryDark1, width: 1),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                  ),
+                                  child: Text('Done',style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w600,color: Colors.white),),
+
                                 ),
                               ),
                             ],
@@ -1672,7 +1606,6 @@ class FunnelDashboardView extends StatelessWidget{
           dashboard_view_Controller.ProductCategory_controller.value.text =
               selectedList.map((e) => e.categoryName).join(', ');
         },
-
         popupProps: PopupPropsMultiSelection.dialog(
           showSearchBox: true,
           searchFieldProps: TextFieldProps(
@@ -1714,14 +1647,10 @@ class FunnelDashboardView extends StatelessWidget{
           dashboard_view_Controller.getRegionsWithClusterFilterGetByEmail();
         }
       }
-
     });
-
     return Obx(() {
-
       final selected = dashboard_view_Controller.SelectedCluster_list;
       final selectedText = selected.isEmpty ? null : selected.map((e) => e.geoValue).join(', ');
-
       return GestureDetector(
         onTap: () async {
           await showModalBottomSheet(
@@ -1859,8 +1788,8 @@ class FunnelDashboardView extends StatelessWidget{
                               Expanded(
                                 child: ElevatedButton(
                                   style: ElevatedButton.styleFrom(
-                                    backgroundColor: AllColors.green,
-                                    shadowColor: AllColors.green,
+                                    backgroundColor: AllColors.primaryDark1,
+                                    shadowColor: AllColors.primaryDark1,
                                     foregroundColor: AllColors.primaryDark1,
                                     side: BorderSide(color: AllColors.primaryDark1, width: 1),
                                     shape: RoundedRectangleBorder(
@@ -2096,8 +2025,8 @@ class FunnelDashboardView extends StatelessWidget{
                               Expanded(
                                 child: ElevatedButton(
                                   style: ElevatedButton.styleFrom(
-                                    backgroundColor: AllColors.green,
-                                    shadowColor: AllColors.green,
+                                    backgroundColor: AllColors.primaryDark1,
+                                    shadowColor: AllColors.primaryDark1,
                                     foregroundColor: AllColors.primaryDark1,
                                     side: BorderSide(color: AllColors.primaryDark1, width: 1),
                                     shape: RoundedRectangleBorder(
@@ -2160,19 +2089,11 @@ class FunnelDashboardView extends StatelessWidget{
       );
     });
   }
-  void _showMultiSelectDialog(BuildContext context,
-      String dialogHeader,
+  void _showMultiSelectDialog(BuildContext context, String dialogHeader,
       Rx<TextEditingController> textController, RxList<String> itemList, ) {
-    final List<String> allItems =
-        itemList.value;
-
+    final List<String> allItems = itemList.value;
     List<String> selectedItems =
-    textController.value.text
-        .split(',')
-        .map((e) => e.trim())
-        .where((e) => e.isNotEmpty)
-        .toList();
-
+    textController.value.text.split(',').map((e) => e.trim()).where((e) => e.isNotEmpty).toList();
     if (selectedItems.isEmpty) {
       selectedItems = ["All"];
     }
@@ -2181,7 +2102,29 @@ class FunnelDashboardView extends StatelessWidget{
       context: context,
       builder: (context) {
         return AlertDialog(
-          title:  Text(dialogHeader),
+          titlePadding: const EdgeInsets.fromLTRB(20, 10, 10, 0),
+          title:  Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Flexible(
+                child: Tooltip(
+                  message: dialogHeader,
+                  child: Text(dialogHeader,style: GoogleFonts.poppins(
+                  fontSize: 16, fontWeight: FontWeight.w600,color: AllColors.primaryDark1),
+                  overflow: TextOverflow.ellipsis,),
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  IconButton(onPressed: () {
+                    Navigator.of(context).pop();
+                  }, icon: Icon(Icons.close,color: AllColors.primaryDark1,weight: 700,)),
+                ],
+              )
+
+            ],
+          ),
           content: SizedBox(
             width: double.maxFinite,
             child: ListView(
@@ -2189,6 +2132,9 @@ class FunnelDashboardView extends StatelessWidget{
               children: allItems.map((item) {
                 final isChecked = selectedItems.contains(item);
                 return CheckboxListTile(
+                  dense: true, // makes it compact
+                  visualDensity: VisualDensity(horizontal: 0, vertical: -4), // reduce height
+                  contentPadding: EdgeInsets.zero, // remove side padding
                   title: Text(item),
                   value: isChecked,
                   onChanged: (bool? checked) {
@@ -2207,7 +2153,6 @@ class FunnelDashboardView extends StatelessWidget{
                         selectedItems.add("All");
                       }
                     }
-
                     (context as Element).markNeedsBuild();
                   },
                 );
@@ -2215,19 +2160,37 @@ class FunnelDashboardView extends StatelessWidget{
             ),
           ),
           actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text("Cancel"),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                textController.value.text =
-                    selectedItems.join(", ");
-                Navigator.pop(context);
-              },
-              child: const Text("OK"),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12),
+              child: SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () {
+                    textController.value.text = selectedItems.join(", ");
+                    Navigator.pop(context);
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AllColors.primaryDark1,
+                    shadowColor: AllColors.primaryDark1,
+                    foregroundColor: AllColors.primaryDark1,
+                    side: BorderSide(color: AllColors.primaryDark1, width: 1),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                  ),
+                  child: Text(
+                    'Done',
+                    style: GoogleFonts.poppins(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
             ),
           ],
+
         );
       },
     );
@@ -2268,57 +2231,6 @@ class FunnelDashboardView extends StatelessWidget{
     );
   }
 
-  /* bindQuoteSubmitted(BuildContext context) {
-    return DropdownMenu<String>(
-      width: MediaQuery.of(context).size.width*.96,
-      controller: dashboard_view_Controller.QuoteAccepted_controller.value,
-      label: Text("Quote Accepted",
-        style: GoogleFonts.poppins(
-            color: AllColors.primaryDark1,
-            fontSize: AllFontSize.fourtine,
-            fontWeight: FontWeight.w600),
-      ),
-      initialSelection: 'All',
-      inputDecorationTheme: const InputDecorationTheme(
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(10)),
-          borderSide: BorderSide(
-            color: AllColors.primaryDark1,
-          ),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(
-              color: AllColors.primaryDark1), // Change the color to green
-        ),
-        border: OutlineInputBorder(
-          borderSide: BorderSide(
-              color: AllColors.primaryDark1), // Change the color to green
-        ),
-        filled: false,
-        contentPadding: EdgeInsets.symmetric(
-            vertical: AllFontSize.two, horizontal: AllFontSize.ten),
-      ),
-
-      onSelected: (String? selection) {
-        print(selection);
-        dashboard_view_Controller.QuoteAccepted_controller.value.text =
-            _displayCustomerNeedIdentityStatusForOption(selection!)
-                .toString();
-      },
-
-      dropdownMenuEntries: dashboard_view_Controller.quoteAcceptedList
-          .map<DropdownMenuEntry<String>>((String e) {
-        return DropdownMenuEntry<String>(
-            value: e,
-            label: e,
-            style: ButtonStyle(
-              foregroundColor:
-              MaterialStateProperty.all<Color>(AllColors.primaryDark1),
-            ));
-      }).toList(),
-    );
-  }
-*/
   bindIsCommitDropDown(BuildContext context) {
     return DropdownMenu<String>(
       width: MediaQuery.of(context).size.width*.96,
@@ -2340,11 +2252,11 @@ class FunnelDashboardView extends StatelessWidget{
         ),
         focusedBorder: OutlineInputBorder(
           borderSide: BorderSide(
-              color: AllColors.primaryDark1), // Change the color to green
+              color: AllColors.primaryDark1),
         ),
         border: OutlineInputBorder(
           borderSide: BorderSide(
-              color: AllColors.primaryDark1), // Change the color to green
+              color: AllColors.primaryDark1),
         ),
         filled: false,
         contentPadding: EdgeInsets.symmetric(
@@ -2373,63 +2285,6 @@ class FunnelDashboardView extends StatelessWidget{
 
 
 }
-
-/*class FunnelData {
-  final String label;
-  final double value;
-
-  FunnelData(this.label, this.value);
-}
-
-class FunnelChartWidget extends StatelessWidget {
-  final double propose;
-  final double prospect;
-  final double suspect;
-
-  const FunnelChartWidget({
-    super.key,
-    required this.propose,
-    required this.prospect,
-    required this.suspect,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final List<FunnelData> data = [
-      FunnelData('Propose', propose),
-      FunnelData('Prospect', prospect),
-      FunnelData('Suspect', suspect),
-    ];
-
-    return SfFunnelChart(
-      title: ChartTitle(text: 'Funnel Chart'),
-      tooltipBehavior: TooltipBehavior(enable: true),
-      series: FunnelSeries<FunnelData, String>(
-        dataSource: data,
-        xValueMapper: (FunnelData data, _) => data.label,
-        yValueMapper: (FunnelData data, _) => data.value,
-        dataLabelSettings: const DataLabelSettings(
-          isVisible: true,
-          labelPosition: ChartDataLabelPosition.inside,
-          textStyle: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-        ),
-        pointColorMapper: (FunnelData data, _) {
-          switch (data.label) {
-            case 'Propose':
-              return Colors.blue;
-            case 'Prospect':
-              return Colors.orange;
-            case 'Suspect':
-              return Colors.green;
-            default:
-              return Colors.grey;
-          }
-        },
-      ),
-    );
-  }
-}*/
-
 
 class PyramidData {
   final String stage;
