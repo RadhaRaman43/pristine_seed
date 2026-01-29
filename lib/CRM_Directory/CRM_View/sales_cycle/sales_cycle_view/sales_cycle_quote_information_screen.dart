@@ -340,6 +340,8 @@ class QuoteInformationScreen extends StatelessWidget {
                                   onPressed: () {
                                     saleCycleController.quotationWonLossController.value.text='WON';
                                     saleCycleController.reasonQuotationVisibilty.value=false;
+                                    saleCycleController
+                                        .quotationReasonController.value.text="";
                                     showDialogquotationWonLoss(context);
                                   },
                                   child: Padding(
@@ -4821,8 +4823,7 @@ class QuoteInformationScreen extends StatelessWidget {
                             return;
                           }
                           showDialogForCreateDuplicate(context,0,'Update', 'Do you want to mark won ?');
-                          saleCycleController
-                              .quotationReasonController.value.text="";
+
 
 
                         },
@@ -4875,7 +4876,7 @@ class QuoteInformationScreen extends StatelessWidget {
         if(saleCycleController.quotationWonLossController.value.text.toUpperCase() == 'LOSS'){
           saleCycleController.reasonQuotationVisibilty.value=true;
         }
-          else{
+        else{
           saleCycleController
               .quotationReasonController.value.text="";
           saleCycleController.reasonQuotationVisibilty.value=false;

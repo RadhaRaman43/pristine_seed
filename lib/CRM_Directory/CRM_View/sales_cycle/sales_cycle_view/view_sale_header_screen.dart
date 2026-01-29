@@ -1369,7 +1369,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                   }),
                   Obx(() {
                     return Visibility(
-                      visible: saleCycleController
+                      visible: (saleCycleController
                                       .saleCycleList[0].salesCycleOwner
                                       ?.toLowerCase() !=
                                   saleCycleController.email.toLowerCase() &&
@@ -1383,7 +1383,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                               saleCycleController
                                       .saleCycleList[0].salesCycleApprovalStatus
                                       ?.toLowerCase() ==
-                                  "pending for approval"
+                                  "pending for approval") && saleCycleController.isHeadofficePermission!='1'
                           ? true
                           : false,
                       child: Container(
