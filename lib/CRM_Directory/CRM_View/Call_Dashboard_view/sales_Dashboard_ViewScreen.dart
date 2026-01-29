@@ -294,12 +294,18 @@ class SalesDashboardViewscreen extends StatelessWidget{
                                     padding: const EdgeInsets.only(left: 10),
                                     child: Icon(Icons.business, color: AllColors.whiteColor,),
                                   ),
-                                  Text(
-                                    "Business Central Booking",
-                                    style: GoogleFonts.poppins(
-                                      color: AllColors.whiteColor,
-                                      fontSize: AllFontSize.twentee,
-                                      fontWeight: FontWeight.w600,
+                                  Flexible(
+                                    child: Tooltip(
+                                      message: "Business Central Booking",
+                                      child: Text(
+                                        "Business Central Booking",
+                                        style: GoogleFonts.poppins(
+                                          color: AllColors.whiteColor,
+                                          fontSize: AllFontSize.twentee,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
                                     ),
                                   ),
                                   Obx(
@@ -1853,12 +1859,10 @@ class SalesDashboardViewscreen extends StatelessWidget{
                                       fontSize: 16, fontWeight: FontWeight.w600,color: Colors.black),
                                 ),
                               ),
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                child: const Text('Cancel'),
-                              ),
+                              IconButton(onPressed: () {
+                                Navigator.of(context).pop();
+                              }, icon: const Icon(Icons.close,color: AllColors.primaryDark1,weight: 700,))
+
                             ],
                           ),
                         ),
@@ -1960,7 +1964,17 @@ class SalesDashboardViewscreen extends StatelessWidget{
 
                                     Navigator.of(context).pop();
                                   },
-                                  child: const Text('Done'),
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: AllColors.primaryDark1,
+                                    shadowColor: AllColors.primaryDark1,
+                                    foregroundColor: AllColors.primaryDark1,
+                                    side: BorderSide(color: AllColors.primaryDark1, width: 1),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                  ),
+                                  child: Text('Done',style: GoogleFonts.poppins(
+                                      fontSize: 16, fontWeight: FontWeight.w600,color: Colors.white),),
                                 ),
                               ),
                             ],
@@ -2027,9 +2041,7 @@ class SalesDashboardViewscreen extends StatelessWidget{
       }
 
       final selected = dashboard_view_Controller.SelectedEmployee_Member_list;
-      final selectedText = selected.isEmpty
-          ? null
-          : selected.map((e) => e.fullName).join(', ');
+      final selectedText = selected.isEmpty ? null : selected.map((e) => e.fullName).join(', ');
 
       return GestureDetector(
         onTap: () async {
@@ -2086,12 +2098,10 @@ class SalesDashboardViewscreen extends StatelessWidget{
                                       fontSize: 16, fontWeight: FontWeight.w600,color: Colors.black),
                                 ),
                               ),
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                child: const Text('Cancel'),
-                              ),
+                              IconButton(onPressed: () {
+                                Navigator.of(context).pop();
+                              }, icon: const Icon(Icons.close,color: AllColors.primaryDark1,weight: 700,))
+
                             ],
                           ),
                         ),
@@ -2192,7 +2202,17 @@ class SalesDashboardViewscreen extends StatelessWidget{
 
                                     Navigator.of(context).pop();
                                   },
-                                  child: const Text('Done'),
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: AllColors.primaryDark1,
+                                    shadowColor: AllColors.primaryDark1,
+                                    foregroundColor: AllColors.primaryDark1,
+                                    side: BorderSide(color: AllColors.primaryDark1, width: 1),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                  ),
+                                  child: Text('Done',style: GoogleFonts.poppins(
+                                      fontSize: 16, fontWeight: FontWeight.w600,color: Colors.white),),
                                 ),
                               ),
                             ],
@@ -2475,8 +2495,8 @@ class SalesDashboardViewscreen extends StatelessWidget{
                               Expanded(
                                 child: ElevatedButton(
                                   style: ElevatedButton.styleFrom(
-                                    backgroundColor: AllColors.green,
-                                    shadowColor: AllColors.green,
+                                    backgroundColor: AllColors.primaryDark1,
+                                    shadowColor: AllColors.primaryDark1,
                                     foregroundColor: AllColors.primaryDark1,
                                     side: BorderSide(color: AllColors.primaryDark1, width: 1),
                                     shape: RoundedRectangleBorder(
@@ -2620,7 +2640,8 @@ class SalesDashboardViewscreen extends StatelessWidget{
                               ),
                               IconButton(onPressed: () {
                                 Navigator.of(context).pop();
-                              }, icon: Icon(Icons.close,color: AllColors.primaryDark1,weight: 700,))
+                              }, icon: const Icon(Icons.close,color: AllColors.primaryDark1,weight: 700,))
+
                             ],
                           ),
                         ),
@@ -2711,21 +2732,21 @@ class SalesDashboardViewscreen extends StatelessWidget{
                             children: [
                               Expanded(
                                 child: ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: AllColors.green,
-                                    shadowColor: AllColors.green,
-                                    foregroundColor: AllColors.primaryDark1,
-                                    side: BorderSide(color: AllColors.primaryDark1, width: 1),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20),
-                                    ),
-                                  ),
                                   onPressed: () {
                                     dashboard_view_Controller.filterDataChecker.value='';
                                     dashboard_view_Controller.SelectedRegion_list.assignAll(tempSelected);
                                     dashboard_view_Controller.RegionName_controller.value.text = tempSelected.map((e) => e.geoValue).join(',');
                                     Navigator.of(context).pop();
                                   },
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: AllColors.primaryDark1,
+                                    shadowColor: AllColors.primaryDark1,
+                                    foregroundColor: AllColors.primaryDark1,
+                                    side: BorderSide(color: AllColors.primaryDark1, width: 1),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                  ),
                                   child: Text('Done',style: GoogleFonts.poppins(
                                       fontSize: 16, fontWeight: FontWeight.w600,color: Colors.white),),
                                 ),
