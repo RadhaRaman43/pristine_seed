@@ -130,7 +130,6 @@ class AddNewTaskScreen extends StatelessWidget{
 
                   taskMaster_page_controller.TaskMasterCreate();
 
-
                 }, //Text
               ),*/
             ],
@@ -176,8 +175,8 @@ class AddNewTaskScreen extends StatelessWidget{
                         color: AllColors.whiteColor,
                         borderRadius: BorderRadius.circular(10),
                         border: Border.all(
-                          color: AllColors.lightblackColor, // Set the border color to black
-                          width: 1.0, // You can adjust the width of the border as needed
+                          color: AllColors.lightblackColor,
+                          width: 1.0,
                         ),
                       ),
                       child: IconButton(
@@ -461,7 +460,6 @@ class AddNewTaskScreen extends StatelessWidget{
           ),
         ),
       ),
-
     ),
     );
   }
@@ -551,8 +549,7 @@ class AddNewTaskScreen extends StatelessWidget{
                         style: GoogleFonts.poppins(
                             color: AllColors.blackColor,
                             fontWeight: FontWeight.w300,
-                            fontSize: AllFontSize
-                                .sisxteen // Change the text color here
+                            fontSize: AllFontSize.sisxteen // Change the text color here
                         ),
                       ),
                     ),

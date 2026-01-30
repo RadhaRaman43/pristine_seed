@@ -785,13 +785,7 @@ class TaskMasterScreen extends StatelessWidget {
                               .salesCycleId!, "ViewHeader", 'FromTaskScreen');
                       salesCycleController.getSaleCycleProductByIdList(
                           salesCycleController.pageNumber,
-                          TaskMaster_page_controller
-                              .Task_Master_list[position].salesCycleId ?? "");
-
-                      /*     salesCycleController.getsalesCycleCompetitorProductGetBySalesCycleId(
-                          salesCycleController.pageNumber ,
-                          TaskMaster_page_controller
-                              .Task_Master_list[position].salesCycleId ?? "");*/
+                          TaskMaster_page_controller.Task_Master_list[position].salesCycleId ?? "");
 
                       salesCycleController.itemCategorySelectedlist.value = [];
                       salesCycleController.getPurchaseProcessApi();
@@ -799,9 +793,7 @@ class TaskMasterScreen extends StatelessWidget {
                       salesCycleController.getItemCategoryMstApi(
                           TaskMaster_page_controller.Task_Master_list[position].salesCycleId!,
                           TaskMaster_page_controller.Task_Master_list[position].taskId!,"");
-                      salesCycleController.ProductCategoryWiseAmtGet(0,
-                          TaskMaster_page_controller.Task_Master_list[position]
-                              .salesCycleId!);
+                      salesCycleController.ProductCategoryWiseAmtGet(0, TaskMaster_page_controller.Task_Master_list[position].salesCycleId!);
                     },
                   ),
                 ],
@@ -1837,8 +1829,8 @@ class TaskMasterScreen extends StatelessWidget {
                               Expanded(
                                 child: ElevatedButton(
                                   style: ElevatedButton.styleFrom(
-                                    backgroundColor: AllColors.green,
-                                    shadowColor: AllColors.green,
+                                    backgroundColor: AllColors.primaryDark1,
+                                    shadowColor: AllColors.primaryDark1,
                                     foregroundColor: AllColors.primaryDark1,
                                     side: BorderSide(color: AllColors.primaryDark1, width: 1),
                                     shape: RoundedRectangleBorder(
@@ -1904,6 +1896,7 @@ class TaskMasterScreen extends StatelessWidget {
       );
     });
   }
+
   Widget bindRegionNameFilter(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final availableItems = TaskMaster_page_controller.regionwithclusterGetByEmailList;
@@ -2077,8 +2070,8 @@ class TaskMasterScreen extends StatelessWidget {
                               Expanded(
                                 child: ElevatedButton(
                                   style: ElevatedButton.styleFrom(
-                                    backgroundColor: AllColors.green,
-                                    shadowColor: AllColors.green,
+                                    backgroundColor: AllColors.primaryDark1,
+                                    shadowColor: AllColors.primaryDark1,
                                     foregroundColor: AllColors.primaryDark1,
                                     side: BorderSide(color: AllColors.primaryDark1, width: 1),
                                     shape: RoundedRectangleBorder(

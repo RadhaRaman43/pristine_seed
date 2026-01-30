@@ -130,6 +130,7 @@ class TaskApprovalvm extends GetxController{
   Future<void> onInit() async {
     // TODO: implement onInit
     super.onInit();
+    loading.value=true;
     email=await sessionManagement.getEmail() ?? '';
     isAdminWritePermission = await sessionManagement.getIsAdminPermission() ?? '';
     isHeadofficePermission.value = await sessionManagement.getisHeadofficePermission() ?? '';
@@ -557,7 +558,9 @@ class TaskApprovalvm extends GetxController{
       Map<String, String> data={
         "email_id":email
       };
+
       loading.value=true;
+      print("loading ....${loading.value}");
       print("data is ${data}");
       _api.clustersGetByEmailApiHit(data, sessionManagement).then((onValue){
         print(onValue);

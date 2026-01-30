@@ -19,9 +19,6 @@ class AccountdashboardcountScreen extends StatelessWidget{
   AccountdashboardcountScreen({super.key});
 
   final accountMaster_page_controller=Get.put(Accountmastervm());
-  final contact_vm_controller = Get.put(ContactMasterVM());
-  final TaskMaster_page_controller=Get.put(Taskmastervm());
-  final saleCycleController=Get.put(SalesCycleVm());
   Size size=Get.size;
   @override
   Widget build(BuildContext context) {

@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:navigation_drawer_flutter/CRM_Directory/CRM_View/Account_Master_view/update_account_master.dart';
+import 'package:navigation_drawer_flutter/component/circular_loading.dart';
 import 'package:navigation_drawer_flutter/models/employeeDetail/employee_details_model.dart';
 import '../../../component/default_button.dart';
 import '../../../constants/app_colors.dart';
@@ -33,7 +34,6 @@ class AddNewAccountMaster extends StatelessWidget{
   AddNewAccountMaster({super.key});
 
   final accountMaster_page_controller=Get.put(Accountmastervm());
-  final saleCycleController=Get.put(SalesCycleVm());
   SessionManagement sessionManagement= SessionManagement();
   DatabaseHelper crmDatabase = DatabaseHelper();
   Size size=Get.size;
@@ -115,16 +115,23 @@ class AddNewAccountMaster extends StatelessWidget{
             color: AllColors.whiteColor,
           ),
           title:Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                'Create Account',
-                style: GoogleFonts.poppins(
-                  color: AllColors.whiteColor,
-                  fontSize: 20,
-                  fontWeight: FontWeight.w700,
+              Flexible(
+                child: Tooltip(
+                  message: 'Create Account',
+                  child: Text(
+                    'Create Account',
+                    style: GoogleFonts.poppins(
+                      color: AllColors.whiteColor,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w700,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
               ),
-              Spacer(),
+              //Spacer(),
               Visibility(
                // visible: accountMaster_page_controller.isAdminWritePermission=='0'?true:false,
                 visible: accountMaster_page_controller.isHeadofficePermission == '0' ? true : false,
@@ -283,8 +290,10 @@ class AddNewAccountMaster extends StatelessWidget{
         ),
       ),
       body: Obx(() {
-        return
-          Container(
+        if(accountMaster_page_controller.loading.value){
+          return const FullScreenLoader();
+        }
+        return Container(
             padding: EdgeInsets.only(bottom: 70),
             width: double.infinity,
             height: double.infinity,
@@ -951,7 +960,6 @@ class AddNewAccountMaster extends StatelessWidget{
               ),
             ),
           );
-
       }),
       )
     );
@@ -1123,9 +1131,9 @@ class AddNewAccountMaster extends StatelessWidget{
             accountMaster_page_controller.AccountOwner = accountMaster_page_controller.employee_Member_list[i].loginEmailId??"";
           }
         }
-        WidgetsBinding.instance.addPostFrameCallback((_) {
+      /*  WidgetsBinding.instance.addPostFrameCallback((_) {
           accountMaster_page_controller.getEmployee(accountMaster_page_controller.AccountOwner);
-        });
+        });*/
         return TextField(
           readOnly: accountMaster_page_controller.Account_Master_list != null &&
               accountMaster_page_controller.Account_Master_list.isNotEmpty && accountMaster_page_controller.Account_Master_list[0].isManager == 1?true :false,

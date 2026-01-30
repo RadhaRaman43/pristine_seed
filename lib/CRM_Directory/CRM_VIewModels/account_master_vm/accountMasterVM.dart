@@ -224,34 +224,44 @@ class Accountmastervm extends GetxController{
   void onInit() async {
     super.onInit();
 
-    email=await sessionManagement.getEmail() ?? '';
-    UserName=await sessionManagement.getName() ?? '';
-    UserCode=await sessionManagement.getUserCode() ?? '';
-    isAdminWritePermission.value = await sessionManagement.getIsAdminPermission() ?? '';
-    isHeadofficePermission.value = await sessionManagement.getisHeadofficePermission() ?? '';
-    print("isHeadofficePermission....${isHeadofficePermission}");
-    filterRouting = await sessionManagement.getfilterRouting() ?? '';
-    print("isAd.... ${isHeadofficePermission} and ${UserCode}");
-    getClustersGetByEmail();
-    //getAccountMaster(pageNumber ,is_Active.toString());
-    //getDraftAccountMaster(pageNumber ,is_Active.toString());
-    getAccCategoryApi();
-    getAccountTypeApi();
-    getCompanyProfileTypeApi("");
-    //getCompanyProfileSubTypeApi();
-    getGstRegistrationTypeApi();
-    //IsActive_controller.text = 'All';
-    IsActiveTypeList.value = ['Yes', 'No'];
-    AnnualRevenueListFilter.value = ['0-500000', '500000-1000000', '1000000-25000000' ,'2500000-Above'];
-    NoOfEmpListFilter.value = ['0-25', '25-50', '50-100' ,'100-Above'];
-    IsActiveTypeAllList.value = ['All','Yes', 'No'];
-    UploadImageTypeList.value = ['Upload Image','Url'];
-    getEmployeeMemberApi();
-    getGeoPostalCodeApi();
-    getSateListApi();
-    getTatResponseMasterApi();
-    if(this.isAdminWritePermission==1){
-      EmployeeMasterGet('');
+    try {
+      loading.value=true;
+      email = await sessionManagement.getEmail() ?? '';
+      UserName = await sessionManagement.getName() ?? '';
+      UserCode = await sessionManagement.getUserCode() ?? '';
+      isAdminWritePermission.value =
+          await sessionManagement.getIsAdminPermission() ?? '';
+      isHeadofficePermission.value =
+          await sessionManagement.getisHeadofficePermission() ?? '';
+      print("isHeadofficePermission....${isHeadofficePermission}");
+      filterRouting = await sessionManagement.getfilterRouting() ?? '';
+      print("isAd.... ${isHeadofficePermission} and ${UserCode}");
+      getClustersGetByEmail();
+      //getAccountMaster(pageNumber ,is_Active.toString());
+      //getDraftAccountMaster(pageNumber ,is_Active.toString());
+      getAccCategoryApi();
+      getAccountTypeApi();
+      getCompanyProfileTypeApi("");
+      //getCompanyProfileSubTypeApi();
+      getGstRegistrationTypeApi();
+      //IsActive_controller.text = 'All';
+      IsActiveTypeList.value = ['Yes', 'No'];
+      AnnualRevenueListFilter.value =
+      ['0-500000', '500000-1000000', '1000000-25000000', '2500000-Above'];
+      NoOfEmpListFilter.value = ['0-25', '25-50', '50-100', '100-Above'];
+      IsActiveTypeAllList.value = ['All', 'Yes', 'No'];
+      UploadImageTypeList.value = ['Upload Image', 'Url'];
+      getEmployeeMemberApi();
+      getGeoPostalCodeApi();
+      getSateListApi();
+      getTatResponseMasterApi();
+      if (this.isAdminWritePermission == 1) {
+        EmployeeMasterGet('');
+      }
+    }catch(e){
+
+    }finally{
+      loading.value=false;
     }
 
   }
@@ -419,7 +429,6 @@ class Accountmastervm extends GetxController{
         if(jsonResponse is List){
           List<ClusterModal> response = jsonResponse.map((e) => ClusterModal.fromJson(e)).toList();
           if(response.length>0 && response[0].condition=="True"){
-            loading.value = false;
             clusterGetByEmailList.value=response;
             if (clusterGetByEmailList.value.isNotEmpty && SelectedCluster_list.isEmpty) {
               SelectedCluster_list.assignAll(clusterGetByEmailList.value);
@@ -428,11 +437,8 @@ class Accountmastervm extends GetxController{
               getRegionsWithClusterFilterGetByEmail();
             }
           }else {
-            loading.value = false;
             clusterGetByEmailList.value=[];
           }
-        } else {
-          loading.value = false;
         }
       },
       ).onError(
@@ -441,7 +447,6 @@ class Accountmastervm extends GetxController{
         },
       );
     }catch(e){
-      loading.value = false;
       print(e);
     }finally{
       loading.value = false;
@@ -468,7 +473,6 @@ class Accountmastervm extends GetxController{
         if(jsonResponse is List){
           List<RegionWithClusterFilterModal> response = jsonResponse.map((e) => RegionWithClusterFilterModal.fromJson(e)).toList();
           if(response.length>0 && response[0].condition=="True"){
-            loading.value = false;
             regionwithclusterGetByEmailList.value=response;
             RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join('|');
             print('region....${RegionName_controller.value.text}');
@@ -483,20 +487,15 @@ class Accountmastervm extends GetxController{
             //getAccountMaster(pageNumber ,is_Active.toString());
             
           }else {
-            loading.value = false;
             regionwithclusterGetByEmailList.value=[];
           }
-        } else {
-          loading.value = false;
         }
       },
-      ).onError(
-            (error, stackTrace) {
+      ).onError((error, stackTrace) {
           print(error);
         },
       );
     }catch(e){
-      loading.value = false;
       print(e);
     }finally{
       loading.value = false;
@@ -578,52 +577,63 @@ class Accountmastervm extends GetxController{
    }
 
   getEmployee(String AccOwnerEmail){
-    Map  data=
-    {
-      "email_id":AccOwnerEmail,
-    };
-    loading.value=true;
-    print(data);
-    _api.EmployeeGetDashBoardApiHit(data, sessionManagement).then((value) {
-      print(value);
-      final JsonResponse=json.decode(value);
-      if(JsonResponse is List){
-        List<EmployeeDetailsGetResponse> response=JsonResponse.map((e)
-        =>EmployeeDetailsGetResponse.fromJson(e)).toList();
-        if(response!=null && response.length>0 && response[0].condition=="True"){
-          loading.value=false;
-          if(response[0].userGeoHierarchy != null){
-            userGeoHierarchyy = response[0].userGeoHierarchy!;
-            for(int i = 0; i<userGeoHierarchyy.length; i++){
-              if(AccOwnerEmail == userGeoHierarchyy[i].approverEmail){
-                int pos = i - 1;
-                int pos2 = i - 2;
-                print("RegionalHead ${pos > -1 ? userGeoHierarchyy[pos].approvedFullName : ""}");
-                Regional_service_head_Controller.value.text = pos > -1 ?userGeoHierarchyy[pos].approvedFullName.toString():"";
-                RegionalHeadEmail = pos > -1 ?userGeoHierarchyy[pos].approverEmail.toString():"";
-                print("SalesRepre.. ${pos2 > -1 ? userGeoHierarchyy[pos2].approvedFullName : ""}");
-                Sale_Representative_Controller.value.text = pos2 > -1 ?userGeoHierarchyy[pos2].approvedFullName.toString():"";
-                SalesRepresentativeEmail = pos2 > -1 ?userGeoHierarchyy[pos2].approverEmail.toString():"";
+    try {
+      Map data =
+      {
+        "email_id": AccOwnerEmail,
+      };
+      loading.value = true;
+      print(data);
+      _api.EmployeeGetDashBoardApiHit(data, sessionManagement).then((value) {
+        print(value);
+        final JsonResponse = json.decode(value);
+        if (JsonResponse is List) {
+          List<EmployeeDetailsGetResponse> response = JsonResponse.map((e) =>
+              EmployeeDetailsGetResponse.fromJson(e)).toList();
+          if (response != null && response.length > 0 &&
+              response[0].condition == "True") {
+            if (response[0].userGeoHierarchy != null) {
+              userGeoHierarchyy = response[0].userGeoHierarchy!;
+              for (int i = 0; i < userGeoHierarchyy.length; i++) {
+                if (AccOwnerEmail == userGeoHierarchyy[i].approverEmail) {
+                  int pos = i - 1;
+                  int pos2 = i - 2;
+                  print("RegionalHead ${pos > -1 ? userGeoHierarchyy[pos]
+                      .approvedFullName : ""}");
+                  Regional_service_head_Controller.value.text = pos > -1
+                      ? userGeoHierarchyy[pos].approvedFullName.toString()
+                      : "";
+                  RegionalHeadEmail = pos > -1
+                      ? userGeoHierarchyy[pos].approverEmail.toString()
+                      : "";
+                  print("SalesRepre.. ${pos2 > -1 ? userGeoHierarchyy[pos2]
+                      .approvedFullName : ""}");
+                  Sale_Representative_Controller.value.text =
+                  pos2 > -1 ? userGeoHierarchyy[pos2].approvedFullName
+                      .toString() : "";
+                  SalesRepresentativeEmail = pos2 > -1
+                      ? userGeoHierarchyy[pos2].approverEmail.toString()
+                      : "";
+                }
               }
+            } else {
+              Regional_service_head_Controller.value.text = "";
+              Sale_Representative_Controller.value.text = "";
             }
-          }else{
-            Regional_service_head_Controller.value.text = "";
-            Sale_Representative_Controller.value.text = "";
           }
-
-        }else {
-          loading.value=false;
-
+        } else {
+          Utils.sanckBarException("Api Error!", JsonResponse);
         }
-      }else{
-        loading.value=false;
-        Utils.sanckBarException("Api Error!", JsonResponse);
-      }
-    },).onError((error, stackTrace) {
-      loading.value=false;
-      print(error);
-    },);
-
+      },).onError((error, stackTrace) {
+        loading.value = false;
+        print(error);
+      },);
+    }catch(e){
+      print(e);
+    }
+    finally{
+      loading.value = false;
+    }
 
   }
 
@@ -656,14 +666,12 @@ class Accountmastervm extends GetxController{
         "row_per_page": rowsPerPage.toString(),
         "page_number": page_no.toString()
       };
-      print("Pro/////////${data}");
       loading.value=true;
       _api.DraftAccountMstGetApiHit(data, sessionManagement).then((onValue){
         final jsonResponse = json.decode(onValue);
         if(jsonResponse is List){
           List<AccountMasterGetByCodeModel> response = jsonResponse.map((e) => AccountMasterGetByCodeModel.fromJson(e)).toList();
           if(response!= null && response.length>0 && response[0].condition=="True"){
-            loading.value = false;
             print("last index account master length ${response.length}");
             if(page_no==0){
               Account_Master_Draft_list1.clear();
@@ -673,23 +681,19 @@ class Accountmastervm extends GetxController{
             total_rows=int.parse(Account_Master_Draft_list1[0].totalRows!);
 
           }else {
-            loading.value = false;
             Account_Master_Draft_list1.value=[];
-
           }
-        } else {
-          loading.value = false;
-
         }
       },
-      ).onError(
-            (error, stackTrace) {
+      ).onError((error, stackTrace) {
           print(error);
         },
       );
     }catch(e){
-      loading.value = false;
       print(e);
+    }
+    finally{
+      loading.value = false;
     }
   }
 
@@ -722,6 +726,7 @@ class Accountmastervm extends GetxController{
     }).whenComplete(() {
       this.loading.value = false;
     });
+
   }
 
   getAccountTypeApi() {
@@ -1510,13 +1515,11 @@ class Accountmastervm extends GetxController{
           //Get.toNamed(RoutesName.update_AccountMaster_screen);
           //viewRequestDetails(response);
         } else {
-          loading.value = false;
          // AccountMasterGetCode_list.value = [];
           Utils.sanckBarError("Error!", response[0].message??"");
           //service_installation_details_list.value=[];
         }
       } else {
-        loading.value = false;
         // service_indent_header_list.value = [];
         Utils.sanckBarException("Api Error!", JsonResponse);
       }
@@ -1526,6 +1529,9 @@ class Accountmastervm extends GetxController{
       print("Exce3ption....$error");
       //service_indent_header_list.value = [];
       Utils.sanckBarException("catch Api Error!", error.toString());
+    }
+    finally{
+      loading.value = false;
     }
   }
 
@@ -1783,6 +1789,9 @@ class Accountmastervm extends GetxController{
     zone_head__value_controller.value.clear();
     //clusterName_controller.value.clear();
     pageNumber=0;
+
+    SelectedRegion_list.value=[];
+    SelectedCluster_list.value =[];
     RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join(',');
     clusterName_controller.value.text = clusterGetByEmailList.map((e) => e.geoValue).join(',');
     getAccountMaster(pageNumber,'All');

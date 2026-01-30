@@ -974,8 +974,7 @@ class TaskApprovalListScreen extends StatelessWidget{
     return Obx(() {
       final selected = TaskMaster_page_controller.SelectedCluster_list;
       final selectedText = selected.isEmpty
-          ? null
-          : selected.map((e) => e.geoValue).join(', ');
+          ? null : selected.map((e) => e.geoValue).join(', ');
 
       return GestureDetector(
         onTap: () async {
@@ -1130,8 +1129,8 @@ class TaskApprovalListScreen extends StatelessWidget{
                               Expanded(
                                 child: ElevatedButton(
                                   style: ElevatedButton.styleFrom(
-                                    backgroundColor: AllColors.green,
-                                    shadowColor: AllColors.green,
+                                    backgroundColor: AllColors.primaryDark1,
+                                    shadowColor: AllColors.primaryDark1,
                                     foregroundColor: AllColors.primaryDark1,
                                     side: BorderSide(color: AllColors.primaryDark1, width: 1),
                                     shape: RoundedRectangleBorder(
@@ -1364,15 +1363,14 @@ class TaskApprovalListScreen extends StatelessWidget{
 
                         // Done button
                         Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 16.0, vertical: 12),
+                          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12),
                           child: Row(
                             children: [
                               Expanded(
                                 child: ElevatedButton(
                                   style: ElevatedButton.styleFrom(
-                                    backgroundColor: AllColors.green,
-                                    shadowColor: AllColors.green,
+                                    backgroundColor: AllColors.primaryDark1,
+                                    shadowColor: AllColors.primaryDark1,
                                     foregroundColor: AllColors.primaryDark1,
                                     side: BorderSide(color: AllColors.primaryDark1, width: 1),
                                     shape: RoundedRectangleBorder(
