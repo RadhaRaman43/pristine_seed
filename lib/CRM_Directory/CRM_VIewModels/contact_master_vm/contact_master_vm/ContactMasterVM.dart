@@ -157,9 +157,7 @@ class ContactMasterVM extends GetxController{
         }
 
       },
-      ).onError(
-            (error, stackTrace) {
-              loading.value = false;
+      ).onError((error, stackTrace) {
           print(error);
         },
       ).whenComplete(() {

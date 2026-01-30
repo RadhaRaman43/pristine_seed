@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:navigation_drawer_flutter/component/circular_loading.dart';
 
 import '../../../constants/app_colors.dart';
 import '../../../constants/app_font_size.dart';
@@ -61,38 +62,44 @@ class DraftItemList extends StatelessWidget{
 
       ),
       drawer: CustomDrawer(),
-      body: RefreshIndicator(
-        onRefresh: accountMaster_page_controller.refreshDraftList,
-        child: Container(
-          width: double.infinity,
-          height: double.infinity,
-          child: Column(
-            children: [
-              Obx((){
-                return Visibility(
-                  visible:accountMaster_page_controller.loading.value ,
-                  child: LinearProgressIndicator(
-                    backgroundColor: AllColors.primaryDark1,
-                    color: AllColors.textColor,
-                  ),
-                );
-              }),
-              Flexible(
-                fit: FlexFit.loose,
-                child: Container(
-                  padding: EdgeInsets.only(left: 2.0, top: 8.0, right: 2.0, bottom: 8.0),
-                   child:Obx((){
-                     return  BindCustomerListView(context);
-                   })
+      body: Obx((){
+        if(accountMaster_page_controller.loading.value) {
+          return const FullScreenLoader();
+        }
+        return    RefreshIndicator(
+          onRefresh: accountMaster_page_controller.refreshDraftList,
+          child: Container(
+            width: double.infinity,
+            height: double.infinity,
+            child: Column(
+              children: [
+                Obx((){
+                  return Visibility(
+                    visible:accountMaster_page_controller.loading.value ,
+                    child: LinearProgressIndicator(
+                      backgroundColor: AllColors.primaryDark1,
+                      color: AllColors.textColor,
+                    ),
+                  );
+                }),
+                Flexible(
+                  fit: FlexFit.loose,
+                  child: Container(
+                      padding: EdgeInsets.only(left: 2.0, top: 8.0, right: 2.0, bottom: 8.0),
+                      child:Obx((){
+                        return  BindCustomerListView(context);
+                      })
 
                   ),
 
                 ),
-
-            ],
+              ],
+            ),
           ),
-        ),
-      ),
+        );
+      })
+
+
     ),
     );
   }

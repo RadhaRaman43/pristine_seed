@@ -637,8 +637,12 @@ class Taskmastervm extends GetxController{
 
     TaskDSARMasterCreate(){
         String EstClosureDate = "";
-        DateTime selectNextInterDate = DateFormat('dd-MM-yyyy').parseStrict(NextInterdate_controller.value.text);
-        String NextInterDate = DateFormat('yyyy-MM-dd').format(selectNextInterDate);
+        String NextInterDate ="";
+        if(DSARStatus.value && NextInterdate_controller.value.text.isNotEmpty){
+          DateTime selectNextInterDate = DateFormat('dd-MM-yyyy').parseStrict(NextInterdate_controller.value.text);
+          NextInterDate = DateFormat('yyyy-MM-dd').format(selectNextInterDate);
+        }
+
         if(EstClosuredate_controller.value.text.isNotEmpty){
             DateTime selectEstClosureDate = DateFormat('dd-MM-yyyy').parseStrict(EstClosuredate_controller.value.text);
             EstClosureDate = DateFormat('yyyy-MM-dd').format(selectEstClosureDate);

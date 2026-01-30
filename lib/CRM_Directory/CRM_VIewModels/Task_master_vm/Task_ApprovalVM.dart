@@ -130,27 +130,35 @@ class TaskApprovalvm extends GetxController{
   Future<void> onInit() async {
     // TODO: implement onInit
     super.onInit();
-    loading.value=true;
-    email=await sessionManagement.getEmail() ?? '';
-    isAdminWritePermission = await sessionManagement.getIsAdminPermission() ?? '';
-    isHeadofficePermission.value = await sessionManagement.getisHeadofficePermission() ?? '';
-    SaleCycleActiveTypeList.value = ['All', 'Yes', 'No'];
-    approveRejectList.value = ['Approve', 'Reject'];
-    product_category_type_Controller.value.text="Contains";
-    //getFilterData();
+    try {
+      email = await sessionManagement.getEmail() ?? '';
+      isAdminWritePermission =
+          await sessionManagement.getIsAdminPermission() ?? '';
+      isHeadofficePermission.value =
+          await sessionManagement.getisHeadofficePermission() ?? '';
+      SaleCycleActiveTypeList.value = ['All', 'Yes', 'No'];
+      approveRejectList.value = ['Approve', 'Reject'];
+      product_category_type_Controller.value.text = "Contains";
+      //getFilterData();
       getCompanyTypeMasterGet();
       getItemCategoryMstWithoutTaskIdApi();
       CallStatusMasterApiHit('Call');
       MethodOfCallMasterApiHit();
       CallDSARsMasterApiHit();
-      if(isAdminWritePermission==1){
+      if (isAdminWritePermission == 1) {
         EmployeeMasterGet('');
       }
-      else{
+      else {
         getEmployeeMemberApi();
       }
       getClustersGetByEmail();
+    }
+    catch(e){
+      print("object.....${e.toString()}");
+     // loading.value=true;
+    }
     //getTaskMasterApprovalList(pageNumber, is_Active.toString(),);
+   // loading.value=true;
 
   }
 

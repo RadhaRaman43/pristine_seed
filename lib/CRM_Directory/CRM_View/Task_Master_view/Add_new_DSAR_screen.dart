@@ -246,8 +246,6 @@ class AddNewDsarScreen extends StatelessWidget{
                 );
               }),
 
-
-
               Obx((){
                 return Visibility(
                   visible: TaskMaster_page_controller.typeOfCall.value,
@@ -323,8 +321,6 @@ class AddNewDsarScreen extends StatelessWidget{
                   ),
                 );
               }),
-
-
 
               Obx((){
                 return Visibility(
@@ -1071,9 +1067,7 @@ class AddNewDsarScreen extends StatelessWidget{
             },
           );
           var outputFormat = DateFormat('dd-MM-yyyy');
-          TaskMaster_page_controller.NextInterdate_controller.text =
-              outputFormat.format(date!);
-
+          TaskMaster_page_controller.NextInterdate_controller.text = outputFormat.format(date!);
         },
       ),
     );

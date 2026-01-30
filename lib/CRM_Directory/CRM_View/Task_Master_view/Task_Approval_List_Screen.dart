@@ -25,10 +25,6 @@ class TaskApprovalListScreen extends StatelessWidget{
 
   final TaskMaster_page_controller = Get.put(TaskApprovalvm());
   Size size = Get.size;
-
-
-
-
   static String _displaySaleCycleActiveForOption(String option) => option;
 
   @override
@@ -70,7 +66,7 @@ class TaskApprovalListScreen extends StatelessWidget{
             print("show loading.......");
             return const FullScreenLoader();
           }else{
-            print("no..... show loading.......");
+            print("no.....show loading.......");
             return Visibility(child: RefreshIndicator(
               onRefresh: TaskMaster_page_controller.refreshList,
               child: Container(

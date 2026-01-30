@@ -832,39 +832,39 @@ class BusinessTourPlanDeatil extends StatelessWidget {
               ),
               child: Column(
                 children: [
-                  _buildLabelWithValue(label: "Tour ID ", value: businessTourPlanController.BusinessTourPlanDetails_list[0].tourId ?? "",),
+                  _buildLabelWithValue(label: "Tour ID: ", value: businessTourPlanController.BusinessTourPlanDetails_list[0].tourId ?? "",),
                   SizedBox(
                     height: 3,
                   ),
-                  _buildLabelWithValue(label: "Cluster", value: businessTourPlanController.BusinessTourPlanDetails_list[0].cluster ?? "",),
+                  _buildLabelWithValue(label: "Cluster: ", value: businessTourPlanController.BusinessTourPlanDetails_list[0].cluster ?? "",),
                   SizedBox(
                     height: 3,
                   ),
-                  _buildLabelWithValue(label: "Region", value: businessTourPlanController.BusinessTourPlanDetails_list[0].region ?? "",),
+                  _buildLabelWithValue(label: "Region: ", value: businessTourPlanController.BusinessTourPlanDetails_list[0].region ?? "",),
                   SizedBox(
                     height: 3,
                   ),
-                  _buildLabelWithValue(label: "Touring Region", value: businessTourPlanController.BusinessTourPlanDetails_list[0].touringRegion ?? "",),
+                  _buildLabelWithValue(label: "Touring Region: ", value: businessTourPlanController.BusinessTourPlanDetails_list[0].touringRegion ?? "",),
                   SizedBox(
                     height: 3,
                   ),
-                  _buildLabelWithValue(label: "Reporting Manager", value: businessTourPlanController.BusinessTourPlanDetails_list[0].reportingFullName ?? "",),
+                  _buildLabelWithValue(label: "Reporting Manager: ", value: businessTourPlanController.BusinessTourPlanDetails_list[0].reportingFullName ?? "",),
                   SizedBox(
                     height: 3,
                   ),
-                  _buildLabelWithValue(label: "Status", value: Status, color:  getStatusColor(Status)),
+                  _buildLabelWithValue(label: "Status: ", value: Status, color:  getStatusColor(Status)),
                   SizedBox(
                     height: 3,
                   ),
-                  _buildLabelWithValue(label: "Start Date", value:StartDate ?? "",),
+                  _buildLabelWithValue(label: "Start Date: ", value:StartDate ?? "",),
                   SizedBox(
                     height: 3,
                   ),
-                  _buildLabelWithValue(label: "End Date", value:EndDate ?? "",),
+                  _buildLabelWithValue(label: "End Date: ", value:EndDate ?? "",),
                   SizedBox(
                     height: 3,
                   ),
-                  _buildLabelWithValue(label: "Created On", value:dateTimeCreatedOn ?? "",),
+                  _buildLabelWithValue(label: "Created On: ", value:dateTimeCreatedOn ?? "",),
                   SizedBox(
                     height: 3,
                   ),

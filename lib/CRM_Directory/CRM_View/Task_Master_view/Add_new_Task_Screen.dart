@@ -406,7 +406,7 @@ class AddNewTaskScreen extends StatelessWidget{
                 child: DefaultButton(
                   press: (){
                     if(taskMaster_page_controller.account_Name_controller.text.isEmpty || taskMaster_page_controller.account_Name_controller == null){
-                      Utils.sanckBarError('Account Name!', "Please Enter Account Name");
+                      Utils.sanckBarError('Account Name!', "Please Enter Customer Name");
                       return  ;
                     }
                     if(taskMaster_page_controller.Type_of_call_controller.value.text!="New Call" &&
