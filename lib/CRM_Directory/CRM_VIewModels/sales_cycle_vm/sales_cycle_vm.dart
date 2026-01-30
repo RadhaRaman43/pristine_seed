@@ -1452,6 +1452,8 @@ class SalesCycleVm extends GetxController {
               getQuoteHeaderData(
                   pageNumberForQuote, saleCycleList[0].salesCycleId!, '');
               //Get.toNamed(RoutesName.viewSalesCycleHeaderScreen);
+              Utils.sanckBarSuccess(
+                  "Success Message !", response[0].message.toString());
             } else {
               Utils.sanckBarError(
                   "False Message !", response[0].message.toString());

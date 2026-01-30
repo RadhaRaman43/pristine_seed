@@ -772,7 +772,7 @@ class QuoteInformationScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Text(
-                      "Item Name: ",
+                      "Item Name : ",
                       style: GoogleFonts.poppins(
                         color: AllColors.primaryDark1,
                         fontSize: AllFontSize.fourtine,
@@ -797,7 +797,6 @@ class QuoteInformationScreen extends StatelessWidget {
                   ],
                 ),
               ),
-             
               Obx(() {
                 return Visibility(
                   visible:(saleCycleController.showBranchHead.value ||
@@ -858,16 +857,18 @@ class QuoteInformationScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         bindData("Qty : ",(saleCycleController.quoteLinedata[index].qty?.toInt()).toString(),context),
-                        bindData( "LSP :","₹ ${saleCycleController.numberFormatWithComma(saleCycleController.quoteLinedata[index].sgstAmt).toString()}",context),
+                        bindData( "LSP :","₹ ${saleCycleController.numberFormatWithComma(saleCycleController.quoteLinedata[index].listSellingPrice).toString()}",context),
                         Obx(() {
                           return Visibility(
-                            visible: saleCycleController.showBranchHead.value ||
-                                saleCycleController.showClusterHead.value|| saleCycleController.isAdminWritePermission=="1",
+                            visible: saleCycleController.userType?.toLowerCase()=='branch head' ||
+                                saleCycleController.userType?.toLowerCase()=='cluster head'||
+                                saleCycleController.isAdminWritePermission=="1" ||
+                                saleCycleController.userType?.toLowerCase()=='general manager',
                             child: bindData("MAP:","₹ ${saleCycleController.numberFormatWithComma(saleCycleController
                                 .quoteLinedata[index].minimalAcceptablePrice).toString()}",context),
                           );
                         }),
-                        Obx(() {
+                        /*Obx(() {
                           return Visibility(
                             visible:
                                 saleCycleController.showGeneralManager.value,
@@ -875,7 +876,7 @@ class QuoteInformationScreen extends StatelessWidget {
                                 saleCycleController.numberFormatWithComma(saleCycleController.quoteLinedata[index].minimalAcceptablePrice).toString()}",context),
 
                           );
-                        }),
+                        }),*/
                         bindData( "Seeking % : ",saleCycleController.quoteLinedata[index].discountPer.toString(),context),
                         bindData( "Seeking Amt P/U : ","₹ ${saleCycleController.numberFormatWithComma(saleCycleController.quoteLinedata[index].discountAmtPerUnit).toString()}",context),
                         Obx((){
@@ -897,7 +898,7 @@ class QuoteInformationScreen extends StatelessWidget {
                         bindData( "Approved Dis. %:",saleCycleController.quoteLinedata[index].approvedDiscountPer.toString(),context),
                         bindData( "Appr. Amt / Unit : ","₹ ${saleCycleController.numberFormatWithComma(saleCycleController.quoteLinedata[index].approvedAmountPerUnit).toString()}",context),
                         bindData( "Sales Credit % : ",saleCycleController.quoteLinedata[index].salesCredit.toString(),context),
-                        bindData("Category: ",saleCycleController.quoteLinedata[index].categoryName ?? "",context),
+                        bindData("Category Name : ",saleCycleController.quoteLinedata[index].categoryName ?? "",context),
 
                       ],
                     ),
@@ -935,7 +936,7 @@ class QuoteInformationScreen extends StatelessWidget {
 
                         bindData("GST % :",saleCycleController.quoteLinedata[index].sgstPer.toString(),context),
                         bindData( "GST Amt.:","₹ ${saleCycleController.numberFormatWithComma(saleCycleController.quoteLinedata[index].gstAmount).toString()}" ,context),
-                        bindData( "Total Amt.: ","₹ ${saleCycleController.numberFormatWithComma(saleCycleController.quoteLinedata[index].totalPrice).toString()}" ,context),
+                        bindData( "Total Amt.: ","₹ ${saleCycleController.numberFormatWithComma(saleCycleController.quoteLinedata[index].grossAmount).toString()}" ,context),
                         bindData("Item Desc: ",saleCycleController.quoteLinedata[index].itemDescription ?? "",context),
 
                       ],
@@ -1474,7 +1475,7 @@ class QuoteInformationScreen extends StatelessWidget {
     return Row(
       children: [
         Text(
-          label,
+          "$label : ",
           style: GoogleFonts.poppins(
             color: AllColors.primaryDark1,
             fontSize: AllFontSize.fourtine,
@@ -1503,10 +1504,9 @@ class QuoteInformationScreen extends StatelessWidget {
         ),
 
         if (label == "Product Category" &&
-            saleCycleController.quoteHeaderdata[0].quoteStatus
-                .toString()
-                .toLowerCase() ==
-                "draft")
+            saleCycleController.quoteHeaderdata[0].quoteStatus?.toLowerCase() ==
+                "draft" && saleCycleController.isHeadofficePermission !=
+            "1")
           InkWell(
             onTap: () {
               saleCycleController.itemCategorySelectedlist.clear();
@@ -3458,7 +3458,7 @@ class QuoteInformationScreen extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.only(left: 10.0),
                     child: Text(
-                      "Sales Cycle Products",
+                      "Sales Product List : ",
                       style: GoogleFonts.poppins(
                         color: AllColors.primaryDark1,
                         fontSize: AllFontSize.sisxteen,
@@ -3514,7 +3514,7 @@ class QuoteInformationScreen extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                        "Qty: ",
+                        "Qty : ",
                         style: GoogleFonts.poppins(
                           color: AllColors.textColor,
                           fontSize: AllFontSize.sisxteen,
@@ -3531,9 +3531,9 @@ class QuoteInformationScreen extends StatelessWidget {
                               .productTotalQty ==
                               null
                               ? "0"
-                              : saleCycleController
+                              :( saleCycleController
                               .get_SalesCycleProductById_List[0]
-                              .productTotalQty
+                              .productTotalQty?.toInt())
                               .toString())
                               : "",
                           style: GoogleFonts.poppins(
@@ -3931,7 +3931,7 @@ class QuoteInformationScreen extends StatelessWidget {
         title: Row(
           children: [
             Text(
-              "Item Code: ",
+              "Item Code : ",
               style: GoogleFonts.poppins(
                 color: AllColors.primaryDark1,
                 fontSize: AllFontSize.fourtine,
@@ -3964,8 +3964,8 @@ class QuoteInformationScreen extends StatelessWidget {
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-                Container(
-                  width: size.width * .4,
+                Flexible(
+                 // width: size.width * .4,
                   child: Tooltip(
                     message: saleCycleController
                             .get_SalesCycleProductById_List[index]
@@ -4022,7 +4022,7 @@ class QuoteInformationScreen extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  saleCycleController.get_SalesCycleProductById_List[index].qty
+                  (saleCycleController.get_SalesCycleProductById_List[index].qty?.toInt())
                       .toString(),
                   style: GoogleFonts.poppins(
                     color: AllColors.textColor,
@@ -4032,6 +4032,9 @@ class QuoteInformationScreen extends StatelessWidget {
                 ),
               ],
             ),
+
+
+
             /* Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -4061,17 +4064,15 @@ class QuoteInformationScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "MRP Price : ",
+                  "LSP : ",
                   style: GoogleFonts.poppins(
                     color: AllColors.primaryDark1,
                     fontSize: AllFontSize.twelve,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-                Text(
-                  saleCycleController
-                      .get_SalesCycleProductById_List[index].mrpPrice
-                      .toString(),
+                Text("₹ ${saleCycleController.numberFormatWithComma(
+                    saleCycleController.get_SalesCycleProductById_List[index].mrpPrice).toString()}",
                   style: GoogleFonts.poppins(
                     color: AllColors.textColor,
                     fontSize: AllFontSize.twelve,
@@ -4080,6 +4081,9 @@ class QuoteInformationScreen extends StatelessWidget {
                 ),
               ],
             ),
+
+
+
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -4091,10 +4095,8 @@ class QuoteInformationScreen extends StatelessWidget {
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-                Text(
-                  saleCycleController
-                      .get_SalesCycleProductById_List[index].totalPrice
-                      .toString(),
+                Text("₹ ${saleCycleController.numberFormatWithComma(
+                    saleCycleController.get_SalesCycleProductById_List[index].totalPrice).toString()}",
                   style: GoogleFonts.poppins(
                     color: AllColors.textColor,
                     fontSize: AllFontSize.twelve,
@@ -4103,7 +4105,7 @@ class QuoteInformationScreen extends StatelessWidget {
                 ),
               ],
             ),
-           /* Row(
+            Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
@@ -4125,7 +4127,7 @@ class QuoteInformationScreen extends StatelessWidget {
                   ),
                 ),
               ],
-            ),*/
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -4139,7 +4141,7 @@ class QuoteInformationScreen extends StatelessWidget {
                 ),
                 Text(
                   saleCycleController
-                      .get_SalesCycleProductById_List[index].createdBy
+                      .get_SalesCycleProductById_List[index].createdFullName
                       .toString(),
                   style: GoogleFonts.poppins(
                     color: AllColors.textColor,
@@ -4170,7 +4172,7 @@ class QuoteInformationScreen extends StatelessWidget {
                 ),
               ],
             ),
-            /*Column(
+            Column(
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -4339,7 +4341,7 @@ class QuoteInformationScreen extends StatelessWidget {
                   ],
                 ),
               ],
-            )*/
+            )
           ],
         ),
       ),
