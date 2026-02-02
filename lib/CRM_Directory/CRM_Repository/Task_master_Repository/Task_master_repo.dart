@@ -62,9 +62,9 @@ class TaskMasterRepo{
     return _apiService.getApi(AppUrl.ItemCategoryMstGet, sessionManagement, data);
   }
 
-  Future<String> TaskSaleCatCreateApiHit(var data,SessionManagement sessionManagement) async{
-    return _apiService.postApi(data, AppUrl.TaskSalesProductCategoryCreate, sessionManagement);
-  }
+/*  Future<String> SalesProductCategoryCreate(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.SalesProductCategoryCreate, sessionManagement);
+  }*/
 
   Future<String> taskMstInfraUpdateApiHit(var data,SessionManagement sessionManagement) async{
     return _apiService.postApi(data, AppUrl.taskMstInfraUpdate, sessionManagement);
@@ -104,6 +104,13 @@ class TaskMasterRepo{
   Future<String> RegionsWithClusterFilterGetByEmailApiHit(var data,SessionManagement sessionManagement) async{
     return _apiService.getApi(AppUrl.RegionsWithClusterFilterGetByEmail, sessionManagement, data);
   }
+
+
+  Future<String> TaskSaleCatCreateApiHit(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.TaskSalesProductCategoryCreate, sessionManagement);
+  }
+
+
 
 
 }

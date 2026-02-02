@@ -72,7 +72,7 @@ class AccountmasterScreen extends StatelessWidget{
                    accountMaster_page_controller.clearController();
                    accountMaster_page_controller.getCompanyProfileSubTypeApi();
                    accountMaster_page_controller.getCompanyProfileTypeApi("");
-                   accountMaster_page_controller.getGeoPostalCodeApi();
+                   accountMaster_page_controller.getGeoPostalCodeApi(50,'');
                    Get.toNamed(RoutesName.add_New_AccountMaster_screen);
                  }, icon: Icon(Icons.add)),
                );
@@ -218,7 +218,7 @@ class AccountmasterScreen extends StatelessWidget{
             accountMaster_page_controller.getEmployeeMemberApi();
             accountMaster_page_controller.getAccMasterBuyCodeApi(accountMaster_page_controller.Account_Master_list[position].accountCode);
             accountMaster_page_controller.getCompanyProfileSubTypeApi();
-            accountMaster_page_controller.getGeoPostalCodeApi();
+            accountMaster_page_controller.getGeoPostalCodeApi(50, '');
 
           },
         title: Row(

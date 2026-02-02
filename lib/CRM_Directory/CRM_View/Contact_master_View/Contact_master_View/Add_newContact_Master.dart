@@ -225,7 +225,7 @@ class AddNewcontactMasterContact extends StatelessWidget{
                               accountMaster_page_controller.clearController();
                               accountMaster_page_controller.getEmployeeMemberApi();
                               accountMaster_page_controller.getCompanyProfileTypeApi("");
-                              accountMaster_page_controller.getGeoPostalCodeApi();
+                              accountMaster_page_controller.getGeoPostalCodeApi(50,'');
                               Get.toNamed(RoutesName.add_New_AccountMaster_screen);
                             }, icon: Icon(Icons.add)),
                       ),

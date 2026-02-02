@@ -346,6 +346,7 @@ class SalesCycleVm extends GetxController {
   var AccountOwner_controller=TextEditingController().obs;
   var product_category_type_Controller = TextEditingController().obs;
 
+
   @override
   Future<void> onInit() async {
     try {
@@ -1409,7 +1410,7 @@ class SalesCycleVm extends GetxController {
     print(data);
     loading.value = true;
     try {
-      final value = await _api.TaskSaleCatCreateApiHit(data, sessionManagement);
+      final value = await _api.SalesProductCategoryCreateApiHit(data, sessionManagement);
       print(value);
       final JsonResponse = json.decode(value);
 

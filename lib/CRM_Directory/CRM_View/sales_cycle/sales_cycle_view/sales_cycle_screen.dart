@@ -26,7 +26,7 @@ import '../../../CRM_VIewModels/sales_cycle_vm/sales_cycle_vm.dart';
 
 class SalesCycleScreen extends StatelessWidget{
   SalesCycleScreen({super.key});
-
+  ScrollController scrollController = ScrollController();
   SalesCycleVm salesCycleController=Get.put(SalesCycleVm());
   final account_vm_controller = Get.put(Accountmastervm());
   final contact_vm_controller = Get.put(ContactMasterVM());
@@ -40,8 +40,8 @@ class SalesCycleScreen extends StatelessWidget{
   static String _displayCustomerNeedIdentityStatusForOption(String option) =>
       option;
 
-  static String _displayItemCatMasterForOption(ItemCategoryMstModel option) =>
-      option.categoryName!;
+ /* static String _displayItemCatMasterForOption(ItemCategoryMstModel option) =>
+      option.categoryName!;*/
 
   static String _displaySaleCycleActiveForOption(String option) =>
       option;
@@ -255,11 +255,10 @@ class SalesCycleScreen extends StatelessWidget{
 
   Widget BindCustomerListView(context) {
     if (salesCycleController.saleCycleList.value.isNotEmpty && salesCycleController.saleCycleList.value.length > 0) {
-      ScrollController scrollController = ScrollController();
       scrollController.addListener(() {
         if (scrollController.position.pixels ==
             scrollController.position.maxScrollExtent) {
-          // You have reached the end of the list
+            // You have reached the end of the list
           int total_page = (salesCycleController.total_rows_sales /
               salesCycleController.rowsPerPage)
               .toInt();
@@ -267,15 +266,15 @@ class SalesCycleScreen extends StatelessWidget{
 
           print("last index ${salesCycleController.pageNumber} ${salesCycleController.total_rows_sales} ${salesCycleController.rowsPerPage} ${total_page}");
 
-          /*if (salesCycleController.pageNumber + 1 != total_page) {
+          if (salesCycleController.pageNumber + 1 != total_page) {
             salesCycleController.getsalesCycleData(salesCycleController.pageNumber +1, "", "", "Sales");
-            this.salesCycleController.pageNumber += 1;
-          }*/
-
-          if (salesCycleController.pageNumber + 1 < total_page) {
-            salesCycleController.getsalesCycleData(salesCycleController.pageNumber + 1, "", "", "Sales");
             salesCycleController.pageNumber += 1;
           }
+
+          /*if (salesCycleController.pageNumber + 1 < total_page) {
+            salesCycleController.getsalesCycleData(salesCycleController.pageNumber + 1, "", "", "Sales");
+            salesCycleController.pageNumber += 1;
+          }*/
         }
       });
 

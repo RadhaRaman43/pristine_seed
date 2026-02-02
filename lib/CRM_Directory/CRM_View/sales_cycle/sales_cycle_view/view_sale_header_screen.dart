@@ -2010,7 +2010,8 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                       .rejectReasonController.value.text,
                                   payloadMessage);
                             }
-                            Get.back();
+                            //Get.back();
+                            Navigator.pop(context);
                           },
                           child: Container(
                             child: Text(

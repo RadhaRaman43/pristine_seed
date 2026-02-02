@@ -181,563 +181,566 @@ class Itemlist_by_sales_cycle_Screen extends StatelessWidget{
               }),
             ],
           ),
-          subtitle:Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          subtitle:Column(
             children: [
-              Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Name : ",
-                          style: GoogleFonts.poppins(
-                            color: AllColors.primaryDark1,
-                            fontSize: AllFontSize.twelve,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        Flexible(
-                          //width: size.width*.2,
-                          child: Tooltip(
-                            message: saleCycleController
-                                .itemMstGetBySalesIdList[index]
-                                .name?? "",
-                            child: Text(
-                              (saleCycleController
-                                  .itemMstGetBySalesIdList[index]
-                                  .name?? "") ,
-                              overflow: TextOverflow.ellipsis,
-                              style: GoogleFonts.poppins(
-                                color: AllColors.textColor,
-                                fontSize: AllFontSize.twelve,
-                                fontWeight: FontWeight.w500,
-                              ),
-                              textAlign: TextAlign.end,
-                            ),
-                          ),
-                        ),
-                      ],
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    "Name : ",
+                    style: GoogleFonts.poppins(
+                      color: AllColors.primaryDark1,
+                      fontSize: AllFontSize.twelve,
+                      fontWeight: FontWeight.w500,
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Category  : ",
-                          style: GoogleFonts.poppins(
-                            color: AllColors.primaryDark1,
-                            fontSize: AllFontSize.twelve,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        Flexible(
-                          //width: size.width*.15,
-                          child: Tooltip(
-                            message: saleCycleController
-                                .itemMstGetBySalesIdList[index]
-                                .categoryName??"",
-                            child: Text(
-                              saleCycleController
-                                  .itemMstGetBySalesIdList[index]
-                                  .categoryName??"",
-                              overflow: TextOverflow.ellipsis,
-                              style: GoogleFonts.poppins(
-                                color: AllColors.textColor,
-                                fontSize: AllFontSize.twelve,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Brand Code : ",
-                          style: GoogleFonts.poppins(
-                            color: AllColors.primaryDark1,
-                            fontSize: AllFontSize.twelve,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-
-                        Flexible(
-                          child: Tooltip(
-                            message:  saleCycleController
-                                .itemMstGetBySalesIdList[index]
-                                .brandCode??"",
-                            child: Text(
-                              saleCycleController
-                                  .itemMstGetBySalesIdList[index]
-                                  .brandCode??"",
-                              overflow: TextOverflow.ellipsis,
-                              style: GoogleFonts.poppins(
-                                color: AllColors.textColor,
-                                fontSize: AllFontSize.twelve,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Text(
-                          "BUOM: ",
-                          style: GoogleFonts.poppins(
-                            color: AllColors.primaryDark1,
-                            fontSize: AllFontSize.twelve,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-
-                        Text(
-                          saleCycleController
-                              .itemMstGetBySalesIdList[index]
-                              .baseUnitOfMeasure??"",
-                          overflow: TextOverflow.ellipsis,
-                          style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.twelve,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ],
-                    ),
-
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Text(
-                          "GST Group Code : ",
-                          style: GoogleFonts.poppins(
-                            color: AllColors.primaryDark1,
-                            fontSize: AllFontSize.twelve,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-
-                        Text(
-                          saleCycleController
-                              .itemMstGetBySalesIdList[index]
-                              .gstGroupCode??"",
-                          overflow: TextOverflow.ellipsis,
-                          style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.twelve,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Hsn Code :",
-                          style: GoogleFonts.poppins(
-                            color: AllColors.primaryDark1,
-                            fontSize: AllFontSize.twelve,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-
-                        Text(
-                          saleCycleController
-                              .itemMstGetBySalesIdList[index]
-                              .hsnCode??"",
-                          overflow: TextOverflow.ellipsis,
-                          style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.twelve,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ],
-                    ),
-
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Component Type: ",
-                          style: GoogleFonts.poppins(
-                            color: AllColors.primaryDark1,
-                            fontSize: AllFontSize.twelve,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-
-                        Flexible(
-                         // width: size.width*.12,
-                          child: Tooltip(
-                            message: saleCycleController
-                                .itemMstGetBySalesIdList[index]
-                                .componentType??"",
-                            child: Text(
-                              saleCycleController
-                                  .itemMstGetBySalesIdList[index]
-                                  .componentType??"",
-                              overflow: TextOverflow.ellipsis,
-                              style: GoogleFonts.poppins(
-                                color: AllColors.textColor,
-                                fontSize: AllFontSize.twelve,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-
-
-
-
-
-
-
-
-                  ],
-                ),
-              ),
-              Expanded(
-                child: Container(
-                  //width: size.width/2,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Cost Per Unit : ",
-                            style: GoogleFonts.poppins(
-                              color: AllColors.primaryDark1,
-                              fontSize: AllFontSize.twelve,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                          SizedBox(width: 10),
-                          Flexible(
-                            //width: size.width*.17,
-                            child: Tooltip(
-                              message:  saleCycleController
-                                  .itemMstGetBySalesIdList[index]
-                                  .costPerUnit==0?"0":saleCycleController
-                                  .itemMstGetBySalesIdList[index]
-                                  .costPerUnit.toString(),
-                              child: Text(
-                                saleCycleController
-                                    .itemMstGetBySalesIdList[index]
-                                    .costPerUnit==0?"0":saleCycleController
-                                    .itemMstGetBySalesIdList[index]
-                                    .costPerUnit.toString(),
-                                overflow: TextOverflow.ellipsis,
-                                style: GoogleFonts.poppins(
-                                  color: AllColors.textColor,
-                                  fontSize: AllFontSize.twelve,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-
-                        children: [
-                          Text(
-                            "MRP: ",
-                            style: GoogleFonts.poppins(
-                              color: AllColors.primaryDark1,
-                              fontSize: AllFontSize.twelve,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                          SizedBox(width: 10),
-                          Container(
-                            width: size.width*.2,
-                            child: Tooltip(
-                              message:  saleCycleController
-                                  .itemMstGetBySalesIdList[index]
-                                  .mrp.toString(),
-                              child: Text(
-                                saleCycleController
-                                    .itemMstGetBySalesIdList[index]
-                                    .mrp.toString(),
-                                overflow: TextOverflow.ellipsis,
-                                style: GoogleFonts.poppins(
-                                  color: AllColors.textColor,
-                                  fontSize: AllFontSize.twelve,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    /*  Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Standard Cost:",
-                            style: GoogleFonts.poppins(
-                              color: AllColors.primaryDark1,
-                              fontSize: AllFontSize.twelve,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                          SizedBox(width: 5),
-                          Container(
-                            width: size.width*.08,
-                            child: Tooltip(
-                              message:  saleCycleController
-                                  .itemMstGetBySalesIdList[index]
-                                  .standardCost.toString(),
-                              child: Text(
-                                saleCycleController
-                                    .itemMstGetBySalesIdList[index]
-                                    .standardCost.toString(),
-                                overflow: TextOverflow.ellipsis,
-                                style: GoogleFonts.poppins(
-                                  color: AllColors.textColor,
-                                  fontSize: AllFontSize.twelve,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-
-                        children: [
-                          Container(
-                            width:size.width*0.3,
-                            child: Tooltip(
-                              message:    "Branch Transfer Price:",
-                              child: Text(
-                                "Branch Transfer Price:",
-                                overflow: TextOverflow.ellipsis,
-                                style: GoogleFonts.poppins(
-                                  color: AllColors.primaryDark1,
-                                  fontSize: AllFontSize.twelve,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(width: 5),
-                          Container(
-                            width: size.width*.08,
-                            child: Tooltip(
-                              message:  saleCycleController
-                                  .itemMstGetBySalesIdList[index]
-                                  .branchTransferPrice.toString(),
-                              child: Text(
-                                saleCycleController
-                                    .itemMstGetBySalesIdList[index]
-                                    .branchTransferPrice.toString(),
-                                overflow: TextOverflow.ellipsis,
-                                style: GoogleFonts.poppins(
-                                  color: AllColors.textColor,
-                                  fontSize: AllFontSize.twelve,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-
-                        children: [
-                          Container(
-                            width:size.width*0.3,
-                            child: Tooltip(
-                              message: "Min. Acceptable price:",
-                              child: Text(
-                                "Min. Acceptable price:",
-                                overflow: TextOverflow.ellipsis,
-                                style: GoogleFonts.poppins(
-                                  color: AllColors.primaryDark1,
-                                  fontSize: AllFontSize.twelve,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(width: 5),
-                          Container(
-                            width: size.width*.08,
-                            child: Tooltip(
-                              message:saleCycleController
-                                  .itemMstGetBySalesIdList[index]
-                                  .minimalAcceptablePrice.toString(),
-                              child: Text(
-                                saleCycleController
-                                    .itemMstGetBySalesIdList[index]
-                                    .minimalAcceptablePrice.toString(),
-                                overflow: TextOverflow.ellipsis,
-                                style: GoogleFonts.poppins(
-                                  color: AllColors.textColor,
-                                  fontSize: AllFontSize.twelve,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),*/
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-
-                        children: [
-                          Text(
-                            "LSP:",
-                            style: GoogleFonts.poppins(
-                              color: AllColors.primaryDark1,
-                              fontSize: AllFontSize.twelve,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                          SizedBox(width: 5),
-                          Flexible(
-                            //width: size.width*.1,
-                            child: Tooltip(
-                              message:saleCycleController
-                                  .itemMstGetBySalesIdList[index]
-                                  .listSellingPrice.toString(),
-                              child: Text(
-                                saleCycleController
-                                    .itemMstGetBySalesIdList[index]
-                                    .listSellingPrice.toString(),
-                                overflow: TextOverflow.ellipsis,
-                                style: GoogleFonts.poppins(
-                                  color: AllColors.textColor,
-                                  fontSize: AllFontSize.twelve,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Is Active : ",
-                            style: GoogleFonts.poppins(
-                              color: AllColors.primaryDark1,
-                              fontSize: AllFontSize.twelve,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                          SizedBox(width: 10),
-                          Container(
-                            width: size.width*.2,
-                            child: Tooltip(
-                              message: saleCycleController
-                                  .itemMstGetBySalesIdList[index]
-                                  .active.toString() == '1'?'Yes':'No',
-                              child: Text(
-                                saleCycleController
-                                    .itemMstGetBySalesIdList[index]
-                                    .active.toString() == '1'?'Yes':'No',
-                                overflow: TextOverflow.ellipsis,
-                                style: GoogleFonts.poppins(
-                                  color: AllColors.textColor,
-                                  fontSize: AllFontSize.twelve,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Is Bulky : ",
-                            style: GoogleFonts.poppins(
-                              color: AllColors.primaryDark1,
-                              fontSize: AllFontSize.twelve,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                          SizedBox(width: 10),
-                          Container(
-                            width: size.width*.2,
-                            child: Tooltip(
-                              message: saleCycleController
-                                  .itemMstGetBySalesIdList[index]
-                                  .isBulky.toString() == "1"?'Yes':'No',
-                              child: Text(
-                                saleCycleController
-                                    .itemMstGetBySalesIdList[index]
-                                    .isBulky.toString() == "1"?'Yes':'No',
-                                overflow: TextOverflow.ellipsis,
-                                style: GoogleFonts.poppins(
-                                  color: AllColors.textColor,
-                                  fontSize: AllFontSize.twelve,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Is Expiry Mandatory : ",
-                            style: GoogleFonts.poppins(
-                              color: AllColors.primaryDark1,
-                              fontSize: AllFontSize.twelve,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                          SizedBox(width: 10),
-                          Container(
-                            width: size.width*.06,
-                            child: Tooltip(
-                              message: saleCycleController
-                                  .itemMstGetBySalesIdList[index]
-                                  .isExpiryMandatory.toString()=='1'?"Yes":'No',
-                              child: Text(
-                                saleCycleController
-                                    .itemMstGetBySalesIdList[index]
-                                    .isExpiryMandatory.toString()=='1'?"Yes":'No',
-                                overflow: TextOverflow.ellipsis,
-                                style: GoogleFonts.poppins(
-                                  color: AllColors.textColor,
-                                  fontSize: AllFontSize.twelve,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-
-                    ],
                   ),
-                ),
-              )
+                  Flexible(
+                    child: Tooltip(
+                      message: saleCycleController
+                          .itemMstGetBySalesIdList[index]
+                          .name?? "",
+                      child: Text(
+                        (saleCycleController
+                            .itemMstGetBySalesIdList[index]
+                            .name?? "") ,
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.poppins(
+                          color: AllColors.textColor,
+                          fontSize: AllFontSize.twelve,
+                          fontWeight: FontWeight.w500,
+                        ),
+                        textAlign: TextAlign.end,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 5,),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Category Name : ",
+                              style: GoogleFonts.poppins(
+                                color: AllColors.primaryDark1,
+                                fontSize: AllFontSize.twelve,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            Flexible(
+                              //width: size.width*.15,
+                              child: Tooltip(
+                                message: saleCycleController
+                                    .itemMstGetBySalesIdList[index]
+                                    .categoryName??"",
+                                child: Text(
+                                  saleCycleController
+                                      .itemMstGetBySalesIdList[index]
+                                      .categoryName??"",
+                                  overflow: TextOverflow.ellipsis,
+                                  style: GoogleFonts.poppins(
+                                    color: AllColors.textColor,
+                                    fontSize: AllFontSize.twelve,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      /*  Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Brand Code : ",
+                              style: GoogleFonts.poppins(
+                                color: AllColors.primaryDark1,
+                                fontSize: AllFontSize.twelve,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+
+                            Flexible(
+                              child: Tooltip(
+                                message:  saleCycleController
+                                    .itemMstGetBySalesIdList[index]
+                                    .brandCode??"",
+                                child: Text(
+                                  saleCycleController
+                                      .itemMstGetBySalesIdList[index]
+                                      .brandCode??"",
+                                  overflow: TextOverflow.ellipsis,
+                                  style: GoogleFonts.poppins(
+                                    color: AllColors.textColor,
+                                    fontSize: AllFontSize.twelve,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),*/
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text(
+                              "BUOM : ",
+                              style: GoogleFonts.poppins(
+                                color: AllColors.primaryDark1,
+                                fontSize: AllFontSize.twelve,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+
+                            Text(
+                              saleCycleController
+                                  .itemMstGetBySalesIdList[index]
+                                  .baseUnitOfMeasure??"",
+                              overflow: TextOverflow.ellipsis,
+                              style: GoogleFonts.poppins(
+                                color: AllColors.textColor,
+                                fontSize: AllFontSize.twelve,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
+                        ),
+
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text(
+                              "GST Group Code : ",
+                              style: GoogleFonts.poppins(
+                                color: AllColors.primaryDark1,
+                                fontSize: AllFontSize.twelve,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+
+                            Text(
+                              saleCycleController
+                                  .itemMstGetBySalesIdList[index]
+                                  .gstGroupCode??"",
+                              overflow: TextOverflow.ellipsis,
+                              style: GoogleFonts.poppins(
+                                color: AllColors.textColor,
+                                fontSize: AllFontSize.twelve,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Hsn Code : ",
+                              style: GoogleFonts.poppins(
+                                color: AllColors.primaryDark1,
+                                fontSize: AllFontSize.twelve,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+
+                            Text(
+                              saleCycleController
+                                  .itemMstGetBySalesIdList[index]
+                                  .hsnCode??"",
+                              overflow: TextOverflow.ellipsis,
+                              style: GoogleFonts.poppins(
+                                color: AllColors.textColor,
+                                fontSize: AllFontSize.twelve,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
+                        ),
+
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Component Type : ",
+                              style: GoogleFonts.poppins(
+                                color: AllColors.primaryDark1,
+                                fontSize: AllFontSize.twelve,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+
+                            Flexible(
+                             // width: size.width*.12,
+                              child: Tooltip(
+                                message: saleCycleController
+                                    .itemMstGetBySalesIdList[index]
+                                    .componentType??"",
+                                child: Text(
+                                  saleCycleController
+                                      .itemMstGetBySalesIdList[index]
+                                      .componentType??"",
+                                  overflow: TextOverflow.ellipsis,
+                                  style: GoogleFonts.poppins(
+                                    color: AllColors.textColor,
+                                    fontSize: AllFontSize.twelve,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+
+
+
+
+
+
+
+
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    child: Container(
+                      //width: size.width/2,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                         /* Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Cost Per Unit : ",
+                                style: GoogleFonts.poppins(
+                                  color: AllColors.primaryDark1,
+                                  fontSize: AllFontSize.twelve,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              SizedBox(width: 10),
+                              Flexible(
+                                //width: size.width*.17,
+                                child: Tooltip(
+                                  message:  saleCycleController
+                                      .itemMstGetBySalesIdList[index]
+                                      .costPerUnit==0?"0":saleCycleController
+                                      .itemMstGetBySalesIdList[index]
+                                      .costPerUnit.toString(),
+                                  child: Text(
+                                    saleCycleController
+                                        .itemMstGetBySalesIdList[index]
+                                        .costPerUnit==0?"0":saleCycleController
+                                        .itemMstGetBySalesIdList[index]
+                                        .costPerUnit.toString(),
+                                    overflow: TextOverflow.ellipsis,
+                                    style: GoogleFonts.poppins(
+                                      color: AllColors.textColor,
+                                      fontSize: AllFontSize.twelve,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+
+                            children: [
+                              Text(
+                                "MRP: ",
+                                style: GoogleFonts.poppins(
+                                  color: AllColors.primaryDark1,
+                                  fontSize: AllFontSize.twelve,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              SizedBox(width: 10),
+                              Container(
+                                width: size.width*.2,
+                                child: Tooltip(
+                                  message:  saleCycleController
+                                      .itemMstGetBySalesIdList[index]
+                                      .mrp.toString(),
+                                  child: Text(
+                                    saleCycleController
+                                        .itemMstGetBySalesIdList[index]
+                                        .mrp.toString(),
+                                    overflow: TextOverflow.ellipsis,
+                                    style: GoogleFonts.poppins(
+                                      color: AllColors.textColor,
+                                      fontSize: AllFontSize.twelve,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),*/
+                        /*  Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Standard Cost:",
+                                style: GoogleFonts.poppins(
+                                  color: AllColors.primaryDark1,
+                                  fontSize: AllFontSize.twelve,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              SizedBox(width: 5),
+                              Container(
+                                width: size.width*.08,
+                                child: Tooltip(
+                                  message:  saleCycleController
+                                      .itemMstGetBySalesIdList[index]
+                                      .standardCost.toString(),
+                                  child: Text(
+                                    saleCycleController
+                                        .itemMstGetBySalesIdList[index]
+                                        .standardCost.toString(),
+                                    overflow: TextOverflow.ellipsis,
+                                    style: GoogleFonts.poppins(
+                                      color: AllColors.textColor,
+                                      fontSize: AllFontSize.twelve,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+
+                            children: [
+                              Container(
+                                width:size.width*0.3,
+                                child: Tooltip(
+                                  message:    "Branch Transfer Price:",
+                                  child: Text(
+                                    "Branch Transfer Price:",
+                                    overflow: TextOverflow.ellipsis,
+                                    style: GoogleFonts.poppins(
+                                      color: AllColors.primaryDark1,
+                                      fontSize: AllFontSize.twelve,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(width: 5),
+                              Container(
+                                width: size.width*.08,
+                                child: Tooltip(
+                                  message:  saleCycleController
+                                      .itemMstGetBySalesIdList[index]
+                                      .branchTransferPrice.toString(),
+                                  child: Text(
+                                    saleCycleController
+                                        .itemMstGetBySalesIdList[index]
+                                        .branchTransferPrice.toString(),
+                                    overflow: TextOverflow.ellipsis,
+                                    style: GoogleFonts.poppins(
+                                      color: AllColors.textColor,
+                                      fontSize: AllFontSize.twelve,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+
+                            children: [
+                              Container(
+                                width:size.width*0.3,
+                                child: Tooltip(
+                                  message: "Min. Acceptable price:",
+                                  child: Text(
+                                    "Min. Acceptable price:",
+                                    overflow: TextOverflow.ellipsis,
+                                    style: GoogleFonts.poppins(
+                                      color: AllColors.primaryDark1,
+                                      fontSize: AllFontSize.twelve,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(width: 5),
+                              Container(
+                                width: size.width*.08,
+                                child: Tooltip(
+                                  message:saleCycleController
+                                      .itemMstGetBySalesIdList[index]
+                                      .minimalAcceptablePrice.toString(),
+                                  child: Text(
+                                    saleCycleController
+                                        .itemMstGetBySalesIdList[index]
+                                        .minimalAcceptablePrice.toString(),
+                                    overflow: TextOverflow.ellipsis,
+                                    style: GoogleFonts.poppins(
+                                      color: AllColors.textColor,
+                                      fontSize: AllFontSize.twelve,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),*/
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+
+                            children: [
+                              Text(
+                                "LSP:",
+                                style: GoogleFonts.poppins(
+                                  color: AllColors.primaryDark1,
+                                  fontSize: AllFontSize.twelve,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              SizedBox(width: 5),
+                              Flexible(
+                                //width: size.width*.1,
+                                child: Tooltip(
+                                  message:saleCycleController
+                                      .itemMstGetBySalesIdList[index]
+                                      .listSellingPrice.toString(),
+                                  child: Text(
+                                    saleCycleController
+                                        .itemMstGetBySalesIdList[index]
+                                        .listSellingPrice.toString(),
+                                    overflow: TextOverflow.ellipsis,
+                                    style: GoogleFonts.poppins(
+                                      color: AllColors.textColor,
+                                      fontSize: AllFontSize.twelve,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Is Active : ",
+                                style: GoogleFonts.poppins(
+                                  color: AllColors.primaryDark1,
+                                  fontSize: AllFontSize.twelve,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              SizedBox(width: 10),
+                              Container(
+                                width: size.width*.2,
+                                child: Tooltip(
+                                  message: saleCycleController
+                                      .itemMstGetBySalesIdList[index]
+                                      .active.toString() == '1'?'Yes':'No',
+                                  child: Text(
+                                    saleCycleController
+                                        .itemMstGetBySalesIdList[index]
+                                        .active.toString() == '1'?'Yes':'No',
+                                    overflow: TextOverflow.ellipsis,
+                                    style: GoogleFonts.poppins(
+                                      color: AllColors.textColor,
+                                      fontSize: AllFontSize.twelve,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Is Bulky : ",
+                                style: GoogleFonts.poppins(
+                                  color: AllColors.primaryDark1,
+                                  fontSize: AllFontSize.twelve,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              SizedBox(width: 10),
+                              Container(
+                                width: size.width*.2,
+                                child: Tooltip(
+                                  message: saleCycleController
+                                      .itemMstGetBySalesIdList[index]
+                                      .isBulky.toString() == "1"?'Yes':'No',
+                                  child: Text(
+                                    saleCycleController
+                                        .itemMstGetBySalesIdList[index]
+                                        .isBulky.toString() == "1"?'Yes':'No',
+                                    overflow: TextOverflow.ellipsis,
+                                    style: GoogleFonts.poppins(
+                                      color: AllColors.textColor,
+                                      fontSize: AllFontSize.twelve,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Is Expiry Mandatory : ",
+                                style: GoogleFonts.poppins(
+                                  color: AllColors.primaryDark1,
+                                  fontSize: AllFontSize.twelve,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              SizedBox(width: 10),
+                              Container(
+                                width: size.width*.06,
+                                child: Tooltip(
+                                  message: saleCycleController
+                                      .itemMstGetBySalesIdList[index]
+                                      .isExpiryMandatory.toString()=='1'?"Yes":'No',
+                                  child: Text(
+                                    saleCycleController
+                                        .itemMstGetBySalesIdList[index]
+                                        .isExpiryMandatory.toString()=='1'?"Yes":'No',
+                                    overflow: TextOverflow.ellipsis,
+                                    style: GoogleFonts.poppins(
+                                      color: AllColors.textColor,
+                                      fontSize: AllFontSize.twelve,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+
+                        ],
+                      ),
+                    ),
+                  )
+                ],
+              ),
             ],
           )
       ),

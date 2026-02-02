@@ -252,7 +252,7 @@ class Accountmastervm extends GetxController{
       IsActiveTypeAllList.value = ['All', 'Yes', 'No'];
       UploadImageTypeList.value = ['Upload Image', 'Url'];
       getEmployeeMemberApi();
-      getGeoPostalCodeApi();
+      getGeoPostalCodeApi(50,'');
       getSateListApi();
       getTatResponseMasterApi();
       if (this.isAdminWritePermission == 1) {
@@ -1128,10 +1128,52 @@ class Accountmastervm extends GetxController{
     }
   }*/
 
-  getGeoPostalCodeApi() {
+
+
+  Future<Iterable<PostalCodeModel>> getGeoPostalCodeApi(int rowPerPage,String text) async {
+    loading.value=true;
     Map data = {
       "email_id": email,
-      "pincode": ""
+      "pincode": text,
+      "row_per_page": rowPerPage,
+      "page_number": 0
+
+    };
+    String customer_response =await  _api.GeoGetPincodeHierarchy(data, sessionManagement);
+    try {
+      final jsonResponse = json.decode(customer_response);
+
+      if (jsonResponse is List) {
+        print(jsonResponse);
+        List<PostalCodeModel> response =
+        jsonResponse.map((data) => PostalCodeModel.fromJson(data)).toList();
+        if (response[0].condition?.toLowerCase() == 'true') {
+          geoPostal_Code_list.value = response;
+        } else {
+          geoPostal_Code_list.value= [];
+        }
+      } else {
+        Utils.sanckBarException('False!', jsonResponse.message);
+        geoPostal_Code_list.value = [];
+      }
+    } catch (e) {
+      Utils.sanckBarException('Exception!', e.toString());
+      geoPostal_Code_list.value = [];
+    }
+    finally{
+      loading.value=false;
+    }
+    return  geoPostal_Code_list.value;
+  }
+
+
+/*  getGeoPostalCodeApi(int rowPerPage, String pinCode) {
+    Map data = {
+      "email_id": email,
+      "pincode": pinCode,
+      "row_per_page": 0,
+      "page_number": rowPerPage
+
     };
     print(data);
     loading.value = true;
@@ -1154,12 +1196,9 @@ class Accountmastervm extends GetxController{
             } else {
               loading.value = false;
               geoPostal_Code_list.value=[];
-              //Utils.sanckBarError("Error!", "No Date Found");
-              //service_installation_details_list.value=[];
             }
           } else {
             loading.value = false;
-            // service_indent_header_list.value = [];
             Utils.sanckBarException("Api Error!", JsonResponse);
           }
         },
@@ -1174,7 +1213,7 @@ class Accountmastervm extends GetxController{
       geoPostal_Code_list.value = [];
       print(e);
     }
-  }
+  }*/
 
   Future<void> upLoadImage(BuildContext context) async {
     var image;

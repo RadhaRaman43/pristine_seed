@@ -183,7 +183,8 @@ class AddNewDsarScreen extends StatelessWidget{
 
             }*/
             else{
-              TaskMaster_page_controller.TaskDSARMasterCreate();
+              TaskMaster_page_controller.TaskSaleCatCreateApiHit('DSAR');
+
 
             }
           },
@@ -607,6 +608,9 @@ class AddNewDsarScreen extends StatelessWidget{
       fieldViewBuilder: (BuildContext context, TextEditingController controller,
           FocusNode focusNode, VoidCallback onFieldSubmitted) {
         return TextField(
+          onTap: (){
+            controller.clear();
+          },
           cursorColor: AllColors.primaryDark1,
           controller: controller
             ..text = TaskMaster_page_controller.DSAR_Status_type_controller.value
@@ -705,6 +709,9 @@ class AddNewDsarScreen extends StatelessWidget{
       fieldViewBuilder: (BuildContext context, TextEditingController controller,
           FocusNode focusNode, VoidCallback onFieldSubmitted) {
         return TextField(
+          onTap: (){
+            controller.clear();
+          },
           cursorColor: AllColors.primaryDark1,
           controller: controller
             ..text = TaskMaster_page_controller.Type_of_call_controller.value.text,
@@ -812,12 +819,15 @@ class AddNewDsarScreen extends StatelessWidget{
           FocusNode focusNode, VoidCallback onFieldSubmitted) {
         return TextField(
           onTap: (){
+            controller.clear();
+          },
+          /*onTap: (){
             if(focusNode.hasFocus){
               focusNode.unfocus();
             }else{
               focusNode.requestFocus();
             }
-          },
+          },*/
           cursorColor: AllColors.primaryDark1,
           controller: controller
             ..text = TaskMaster_page_controller.Method_of_call_controller
@@ -970,7 +980,7 @@ class AddNewDsarScreen extends StatelessWidget{
             borderRadius: BorderRadius.all(Radius.circular(10)),
             elevation: 4.0,
             child: Container(
-              width: size.width*.7,
+              //width: size.width*.7,
               constraints: BoxConstraints(maxHeight: 200),
               child: ListView.builder(
                 shrinkWrap: true,

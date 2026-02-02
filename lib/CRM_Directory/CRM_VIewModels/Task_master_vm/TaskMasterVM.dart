@@ -1264,6 +1264,7 @@ class Taskmastervm extends GetxController{
         Map<String, dynamic> data = {
             "created_by": email,
             "task_id": TaskID,
+            "sales_cycle_id": "",
             "lines": lines.map((line) => line.toJson()).toList(),
         };
 
@@ -1287,13 +1288,10 @@ class Taskmastervm extends GetxController{
                         getTaskMaster(0, 'All', TaskID, "",'', date_filter, is_done.value);
                         //todo by raman
                         getItemCategoryMstApi(TaskID);
-
                         Get.toNamed(RoutesName.taskMasterDetails_screen);
                     } else if(flag == 'DSAR'){
-                       // getTaskMaster(0, 'All', TaskID, "",'', date_filter, is_done.value);
-                       // getItemCategoryMstApi(TaskID);
+                      TaskDSARMasterCreate();
                     }
-
                 } else {
                     loading.value = false;
                     Utils.sanckBarError("Error!", "${response[0].message}");
@@ -1308,6 +1306,9 @@ class Taskmastervm extends GetxController{
             print("Exception....");
         }
     }
+
+
+
     Future<void> getMenuList() async {
         print("GetList");
         await sessionManagement.getUserGeoHierarchy().then((userGeoHierarchy) {

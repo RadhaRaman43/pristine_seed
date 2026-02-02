@@ -733,7 +733,7 @@ class TaskMasterScreen extends StatelessWidget {
               ),
               _buildLabelWithValue(label: "Customer Code: ", value: TaskMaster_page_controller.Task_Master_list[position].accountCode??"",),
               _buildLabelWithValue(label: "Contact Name: ", value: TaskMaster_page_controller.Task_Master_list[position].contactName??"",),
-              _buildLabelWithValue(label: "Task Owner: ", value: TaskMaster_page_controller.Task_Master_list[position].taskOwner??"",),
+              _buildLabelWithValue(label: "Task Owner: ", value: TaskMaster_page_controller.Task_Master_list[position].createdFullName??"",),
               _buildLabelWithValue(label: "Task Due Date: ", value: StaticMethod.convertDateFormat1(TaskMaster_page_controller.Task_Master_list[position].taskDueDate??""),),
               _buildLabelWithValue(label: "Type Of Call: ", value: TaskMaster_page_controller.Task_Master_list[position].typeOfCall??"",),
               _buildLabelWithValue(label: "Type Of Mode of Call: ", value: TaskMaster_page_controller.Task_Master_list[position].methodOfCall??"",),
