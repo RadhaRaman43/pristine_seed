@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:navigation_drawer_flutter/component/circular_loading.dart';
 import 'package:navigation_drawer_flutter/constants/static_methods.dart';
 import '../../../constants/app_colors.dart';
 import '../../../constants/app_font_size.dart';
@@ -28,9 +29,6 @@ class AccountmasterScreen extends StatelessWidget{
 
   static String _displayAccCategoryForOption(GetMasterTypeModel option) =>
       option.code! + " (" + option.description! + ")";
-
-  static String _displayCompProfileTypeForOption(CompanyTypeModel option) =>
-      option.description!;
 
   static String _displayIsActiveForOption(String option) =>
       option;
@@ -88,38 +86,44 @@ class AccountmasterScreen extends StatelessWidget{
 
       ),
       drawer: CustomDrawer(),
-      body: RefreshIndicator(
-        onRefresh: accountMaster_page_controller.refreshList,
-        child: Container(
-          width: double.infinity,
-          height: double.infinity,
-          child: Column(
-            children: [
-              Obx((){
-                return Visibility(
-                  visible:accountMaster_page_controller.loading.value ,
-                  child: LinearProgressIndicator(
-                    backgroundColor: AllColors.primaryDark1,
-                    color: AllColors.textColor,
-                  ),
-                );
-              }),
-              Flexible(
-                fit: FlexFit.loose,
-                child: Container(
-                  padding: EdgeInsets.only(left: 2.0, top: 8.0, right: 2.0, bottom: 8.0),
-                  child:
-                      Obx(() {
-                        return BindCustomerListView(context);
-                      }),
+      body: Obx((){
+        if(accountMaster_page_controller.loading.value){
+          return const FullScreenLoader();
+        }
+        return RefreshIndicator(
+          onRefresh: accountMaster_page_controller.refreshList,
+          child: Container(
+            width: double.infinity,
+            height: double.infinity,
+            child: Column(
+              children: [
+                Obx((){
+                  return Visibility(
+                    visible:accountMaster_page_controller.loading.value ,
+                    child: LinearProgressIndicator(
+                      backgroundColor: AllColors.primaryDark1,
+                      color: AllColors.textColor,
+                    ),
+                  );
+                }),
+                Flexible(
+                  fit: FlexFit.loose,
+                  child: Container(
+                    padding: EdgeInsets.only(left: 2.0, top: 8.0, right: 2.0, bottom: 8.0),
+                    child:
+                    Obx(() {
+                      return BindCustomerListView(context);
+                    }),
 
                   ),
-              ),
+                ),
+              ],
+            ),
+          ),
+        );
+      })
 
-            ],
-          ),
-          ),
-      ),
+
       ),
     );
   }
@@ -525,9 +529,9 @@ class AccountmasterScreen extends StatelessWidget{
                               SizedBox(height: 10,),
                               bindIsActiveDropDown(context),
                               SizedBox(height: 10,),
-                              bindRegionNameFilter(context),
-                              SizedBox(height: 10,),
                               bindClusterNameFilter(context),
+                              SizedBox(height: 10,),
+                              bindRegionNameFilter(context),
                               SizedBox(height: 10,),
                               bindAccountOwnerFilter(context),
                               SizedBox(height: 10,),
@@ -1402,8 +1406,8 @@ class AccountmasterScreen extends StatelessWidget{
                               Expanded(
                                 child: ElevatedButton(
                                   style: ElevatedButton.styleFrom(
-                                    backgroundColor: AllColors.green,
-                                    shadowColor: AllColors.green,
+                                    backgroundColor: AllColors.primaryDark1,
+                                    shadowColor: AllColors.primaryDark1,
                                     foregroundColor: AllColors.primaryDark1,
                                     side: BorderSide(color: AllColors.primaryDark1, width: 1),
                                     shape: RoundedRectangleBorder(
@@ -1639,8 +1643,8 @@ class AccountmasterScreen extends StatelessWidget{
                               Expanded(
                                 child: ElevatedButton(
                                   style: ElevatedButton.styleFrom(
-                                    backgroundColor: AllColors.green,
-                                    shadowColor: AllColors.green,
+                                    backgroundColor: AllColors.primaryDark1,
+                                    shadowColor: AllColors.primaryDark1,
                                     foregroundColor: AllColors.primaryDark1,
                                     side: BorderSide(color: AllColors.primaryDark1, width: 1),
                                     shape: RoundedRectangleBorder(

@@ -90,27 +90,39 @@ class FunnelDashboardVm extends GetxController{
   Future<void> onInit() async {
     // TODO: implement onInit
     super.onInit();
-    email = await sessionManagement.getEmail() ?? '';
-    isAdminWritePermission = await sessionManagement.getIsAdminPermission() ?? '';
-    //SalesCycleStageStatusList.value = ['All','Suspect', 'Prospect', 'Propose'];
-    //selectedSalesStageStatusList.value = ["All"];
-    QuoteAccepted_controller.value.text = "All";
-    StageName_controller.value.text = "All";
-    IsCommit_controller.value.text = 'ALL';
-    DateRange("monthly");
-    filterCustomDateController.value.text = '${formattedStartDate} - ${formattedEndDate}';
-    getClustersGetByEmail();
-    //funnelDashboardData();
 
-    if(this.isAdminWritePermission==1){
-      EmployeeMasterGet('');
+    try {
+      loading.value=true;
+      email = await sessionManagement.getEmail() ?? '';
+      isAdminWritePermission =
+          await sessionManagement.getIsAdminPermission() ?? '';
+      //SalesCycleStageStatusList.value = ['All','Suspect', 'Prospect', 'Propose'];
+      //selectedSalesStageStatusList.value = ["All"];
+      QuoteAccepted_controller.value.text = "All";
+      StageName_controller.value.text = "All";
+      IsCommit_controller.value.text = 'ALL';
+      DateRange("monthly");
+      filterCustomDateController.value.text =
+      '${formattedStartDate} - ${formattedEndDate}';
+      getClustersGetByEmail();
+      //funnelDashboardData();
+
+      if (this.isAdminWritePermission == 1) {
+        EmployeeMasterGet('');
+      }
+      else {
+        getEmployeeTeamMemberGetByClusterRegionApi();
+      }
+      getItemCategoryMstWithoutTaskIdApi();
+      getAccountMaster("");
+      //getFilterData();
     }
-    else{
-      getEmployeeTeamMemberGetByClusterRegionApi();
+    catch(e){
+
     }
-    getItemCategoryMstWithoutTaskIdApi();
-    getAccountMaster("");
-    //getFilterData();
+    finally{
+      loading.value=false;
+    }
   }
 
 

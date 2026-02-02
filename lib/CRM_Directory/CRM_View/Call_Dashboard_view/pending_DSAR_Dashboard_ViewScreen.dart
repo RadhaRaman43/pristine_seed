@@ -3,6 +3,7 @@ import 'dart:math';
 import 'dart:ui' as ui;
 import 'dart:io';
 import 'package:flutter/rendering.dart';
+import 'package:navigation_drawer_flutter/component/circular_loading.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:media_store_plus/media_store_plus.dart';
 
@@ -52,15 +53,20 @@ class PendingDsarDashboardViewscreen extends StatelessWidget{
             ),
             title:Row(
               children: [
-                Text(
-                  'Pending DSAR Dashboard',
-                  style: GoogleFonts.poppins(
-                    color: AllColors.whiteColor,
-                    fontSize: 15.0,
-                    fontWeight: FontWeight.w700,
+                Flexible(
+                  child: Tooltip(
+                    message: 'Pending DSAR Dashboard',
+                    child: Text(
+                      'Pending DSAR Dashboard',
+                      style: GoogleFonts.poppins(
+                        color: AllColors.whiteColor,
+                        fontSize: 15.0,
+                        fontWeight: FontWeight.w700,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
                 ),
-                Spacer(),
                 Tooltip(
                   message: "Take Screenshot",
                   child: IconButton(
@@ -77,191 +83,195 @@ class PendingDsarDashboardViewscreen extends StatelessWidget{
             )
         ),
         drawer: CustomDrawer(),
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Obx(() {
-              return Visibility(
-                visible: dashboard_view_Controller.loading.value,
-                child: LinearProgressIndicator(
-                  backgroundColor: AllColors.green,
-                  color: AllColors.textColor,
-                ),
-              );
-            }),
-            Expanded(
-                child: ListView(
-                  children: [
-                    Visibility(
-                      child: SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: ConstrainedBox(
-                          constraints: BoxConstraints(minWidth: MediaQuery.of(context).size.width),
-                          child: Container(
-                            padding: EdgeInsets.symmetric(horizontal: 8), // optional spacing
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Visibility(
-                                    visible: dashboard_view_Controller.userType != 'Branch Head',
-                                    child: _buildActionChip("Cluster")),
-                                SizedBox(width: 8),
-                                _buildActionChip("Region"),
-                                SizedBox(width: 8),
-                                _buildActionChip("Employee"),
-                              ],
+        body: Obx((){
+          if(dashboard_view_Controller.loading.value || TaskMaster_page_controller.loading.value){
+            return const FullScreenLoader();
+          }
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Obx(() {
+                return Visibility(
+                  visible: dashboard_view_Controller.loading.value,
+                  child: LinearProgressIndicator(
+                    backgroundColor: AllColors.green,
+                    color: AllColors.textColor,
+                  ),
+                );
+              }),
+              Expanded(
+                  child: ListView(
+                    children: [
+                      Visibility(
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: ConstrainedBox(
+                            constraints: BoxConstraints(minWidth: MediaQuery.of(context).size.width),
+                            child: Container(
+                              padding: EdgeInsets.symmetric(horizontal: 8), // optional spacing
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Visibility(
+                                      visible: dashboard_view_Controller.userType != 'Branch Head',
+                                      child: _buildActionChip("Cluster")),
+                                  SizedBox(width: 8),
+                                  _buildActionChip("Region"),
+                                  SizedBox(width: 8),
+                                  _buildActionChip("Employee"),
+                                ],
+                              ),
                             ),
                           ),
                         ),
+                        visible: dashboard_view_Controller.userType != 'Frontliners',
                       ),
-                      visible: dashboard_view_Controller.userType != 'Frontliners',
-                    ),
 
-                    Container(
-                        padding: EdgeInsets.only(left: 15.0, bottom: 0.0, top: 10.0),
-                        child:
-                        Obx((){
-                          return  Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Task Due ${dashboard_view_Controller.character.value}',
-                                style: GoogleFonts.poppins(
-                                  color: AllColors.primaryDark1,
-                                  fontSize: AllFontSize.fourtine,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
-                              SizedBox(width: 10,),
-                              Text(
-                                '${dashboard_view_Controller.character.value} : Type Of Calls (R)',
-                                style: GoogleFonts.poppins(
-                                  color: AllColors.blackColor,
-                                  fontSize: AllFontSize.twelve,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ],
-                          );
-                        })
-
-
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-
-                    Padding(
-                      padding: const EdgeInsets.only(left: 15.0, right: 25),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Column(
-                            children: [
-                              Text(
-                                '1. Follow-Up-Call',
-                                style: GoogleFonts.poppins(
-                                  color: Colors.blue,
-                                  fontSize: AllFontSize.twelve,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ],
-                          ),
-                          Column(
-                            children: [
-                              Text(
-                                '2. New Call',
-                                style: GoogleFonts.poppins(
-                                  color: Colors.green,
-                                  fontSize: AllFontSize.twelve,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ],
-                          ),
-                          Column(
-                            children: [
-                              Text(
-                                '3. Payment Call',
-                                style: GoogleFonts.poppins(
-                                  color: Colors.orange,
-                                  fontSize: AllFontSize.twelve,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-
-                    Obx(() {
-                      return BindDashboardBarChartData(context);
-                    }),
-
-                    Container(
-                        padding: EdgeInsets.only(left: 15.0, bottom: 10.0),
-                        child:
-                        Obx((){
-                          return  Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Visibility(
-                                visible : dashboard_view_Controller.rodName == '',
-                                child: Text(
-                                  'All ${dashboard_view_Controller.selectedOption.value}',
+                      Container(
+                          padding: EdgeInsets.only(left: 15.0, bottom: 0.0, top: 10.0),
+                          child:
+                          Obx((){
+                            return  Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Task Due ${dashboard_view_Controller.character.value}',
                                   style: GoogleFonts.poppins(
                                     color: AllColors.primaryDark1,
                                     fontSize: AllFontSize.fourtine,
                                     fontWeight: FontWeight.w700,
                                   ),
                                 ),
-                              ),
-                              Visibility(
-                                visible : dashboard_view_Controller.rodName != '',
-                                child: Text(
-                                  '${dashboard_view_Controller.geoValueName} ${dashboard_view_Controller.rodName}',
+                                SizedBox(width: 10,),
+                                Text(
+                                  '${dashboard_view_Controller.character.value} : Type Of Calls (R)',
                                   style: GoogleFonts.poppins(
-                                    color: AllColors.primaryDark1,
-                                    fontSize: AllFontSize.fourtine,
-                                    fontWeight: FontWeight.w700,
+                                    color: AllColors.blackColor,
+                                    fontSize: AllFontSize.twelve,
+                                    fontWeight: FontWeight.w500,
                                   ),
                                 ),
-                              ),
-                              SizedBox(width: 10,),
-                              Text(
-                                '(' +dashboard_view_Controller.total_rows.value.toString()+')',
-                                style: GoogleFonts.poppins(
-                                  color: AllColors.redColor,
-                                  fontSize: AllFontSize.fourtine,
-                                  fontWeight: FontWeight.w700,
+                              ],
+                            );
+                          })
+
+
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+
+                      Padding(
+                        padding: const EdgeInsets.only(left: 15.0, right: 25),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Column(
+                              children: [
+                                Text(
+                                  '1. Follow-Up-Call',
+                                  style: GoogleFonts.poppins(
+                                    color: Colors.blue,
+                                    fontSize: AllFontSize.twelve,
+                                    fontWeight: FontWeight.w500,
+                                  ),
                                 ),
-                              ),
-                            ],
-                          );
-                        })
+                              ],
+                            ),
+                            Column(
+                              children: [
+                                Text(
+                                  '2. New Call',
+                                  style: GoogleFonts.poppins(
+                                    color: Colors.green,
+                                    fontSize: AllFontSize.twelve,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Column(
+                              children: [
+                                Text(
+                                  '3. Payment Call',
+                                  style: GoogleFonts.poppins(
+                                    color: Colors.orange,
+                                    fontSize: AllFontSize.twelve,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
 
-
-                    ),
-                    Divider(
-                      height: 1,
-                      color: AllColors.lightgreyColor,
-                    ),
-                    Container(
-                      height: size.height/2,
-                      child: Obx(() {
-                        return BindDashboardWiseDataList(context);
+                      Obx(() {
+                        return BindDashboardBarChartData(context);
                       }),
-                    )
-                  ],
-                )),
+
+                      Container(
+                          padding: EdgeInsets.only(left: 15.0, bottom: 10.0),
+                          child:
+                          Obx((){
+                            return  Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Visibility(
+                                  visible : dashboard_view_Controller.rodName == '',
+                                  child: Text(
+                                    'All ${dashboard_view_Controller.selectedOption.value}',
+                                    style: GoogleFonts.poppins(
+                                      color: AllColors.primaryDark1,
+                                      fontSize: AllFontSize.fourtine,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                ),
+                                Visibility(
+                                  visible : dashboard_view_Controller.rodName != '',
+                                  child: Text(
+                                    '${dashboard_view_Controller.geoValueName} ${dashboard_view_Controller.rodName}',
+                                    style: GoogleFonts.poppins(
+                                      color: AllColors.primaryDark1,
+                                      fontSize: AllFontSize.fourtine,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(width: 10,),
+                                Text(
+                                  '(' +dashboard_view_Controller.total_rows.value.toString()+')',
+                                  style: GoogleFonts.poppins(
+                                    color: AllColors.redColor,
+                                    fontSize: AllFontSize.fourtine,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                              ],
+                            );
+                          })
 
 
+                      ),
+                      Divider(
+                        height: 1,
+                        color: AllColors.lightgreyColor,
+                      ),
+                      Container(
+                        height: size.height/2,
+                        child: Obx(() {
+                          return BindDashboardWiseDataList(context);
+                        }),
+                      )
+                    ],
+                  )),
+            ],
+          );
+        })
 
-          ],
-        ),
+
       ),
     );
   }
@@ -1500,7 +1510,29 @@ class PendingDsarDashboardViewscreen extends StatelessWidget{
       context: context,
       builder: (context) {
         return AlertDialog(
-          title:  Text(dialogHeader),
+          titlePadding: const EdgeInsets.fromLTRB(20, 10, 10, 0),
+          title:  Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Flexible(
+                child: Tooltip(
+                  message: dialogHeader,
+                  child: Text(dialogHeader,style: GoogleFonts.poppins(
+                      fontSize: 16, fontWeight: FontWeight.w600,color: AllColors.primaryDark1),
+                    overflow: TextOverflow.ellipsis,),
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  IconButton(onPressed: () {
+                    Navigator.of(context).pop();
+                  }, icon: Icon(Icons.close,color: AllColors.primaryDark1,weight: 700,)),
+                ],
+              )
+
+            ],
+          ),
           content: SizedBox(
             width: double.maxFinite,
             child: ListView(
@@ -1508,6 +1540,9 @@ class PendingDsarDashboardViewscreen extends StatelessWidget{
               children: allItems.map((item) {
                 final isChecked = selectedItems.contains(item);
                 return CheckboxListTile(
+                  dense: true, // makes it compact
+                  visualDensity: VisualDensity(horizontal: 0, vertical: -4), // reduce height
+                  contentPadding: EdgeInsets.zero, // remove side padding
                   title: Text(item),
                   value: isChecked,
                   onChanged: (bool? checked) {
@@ -1534,17 +1569,34 @@ class PendingDsarDashboardViewscreen extends StatelessWidget{
             ),
           ),
           actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text("Cancel"),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                textController.value.text =
-                    selectedItems.join(", ");
-                Navigator.pop(context);
-              },
-              child: const Text("OK"),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12),
+              child: SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () {
+                    textController.value.text = selectedItems.join(", ");
+                    Navigator.pop(context);
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AllColors.primaryDark1,
+                    shadowColor: AllColors.primaryDark1,
+                    foregroundColor: AllColors.primaryDark1,
+                    side: BorderSide(color: AllColors.primaryDark1, width: 1),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                  ),
+                  child: Text(
+                    'Done',
+                    style: GoogleFonts.poppins(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
             ),
           ],
         );
@@ -2602,8 +2654,8 @@ class PendingDsarDashboardViewscreen extends StatelessWidget{
                               Expanded(
                                 child: ElevatedButton(
                                   style: ElevatedButton.styleFrom(
-                                    backgroundColor: AllColors.green,
-                                    shadowColor: AllColors.green,
+                                    backgroundColor: AllColors.primaryDark1,
+                                    shadowColor: AllColors.primaryDark1,
                                     foregroundColor: AllColors.primaryDark1,
                                     side: BorderSide(color: AllColors.primaryDark1, width: 1),
                                     shape: RoundedRectangleBorder(
@@ -2839,8 +2891,8 @@ class PendingDsarDashboardViewscreen extends StatelessWidget{
                               Expanded(
                                 child: ElevatedButton(
                                   style: ElevatedButton.styleFrom(
-                                    backgroundColor: AllColors.green,
-                                    shadowColor: AllColors.green,
+                                    backgroundColor: AllColors.primaryDark1,
+                                    shadowColor: AllColors.primaryDark1,
                                     foregroundColor: AllColors.primaryDark1,
                                     side: BorderSide(color: AllColors.primaryDark1, width: 1),
                                     shape: RoundedRectangleBorder(

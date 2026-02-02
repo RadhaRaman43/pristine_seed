@@ -1063,7 +1063,7 @@ class TaskMasterDetails extends StatelessWidget{
         margin: EdgeInsets.only(left: 10.0, right: 10.0),
         child: Column(
           children: [
-            _buildLabelWithValue(label: "Previous Task ID",
+            _buildLabelWithValue(label: "Previous Task ID: ",
               value: TaskMaster_page_controller.Task_Master_list[0].previousTaskId ?? "",
               onTap: () {
                 print('task....${TaskMaster_page_controller
@@ -1078,13 +1078,13 @@ class TaskMasterDetails extends StatelessWidget{
               color:Colors.blueAccent,
             ),
 
-            _buildLabelWithValue(label: "Task ID", value: TaskMaster_page_controller.Task_Master_list[0].taskId ?? "",),
+            _buildLabelWithValue(label: "Task ID: ", value: TaskMaster_page_controller.Task_Master_list[0].taskId ?? "",),
 
-            _buildLabelWithValue(label: "Type of Call", value: TaskMaster_page_controller.Task_Master_list[0].typeOfCall ?? "",),
+            _buildLabelWithValue(label: "Type of Call: ", value: TaskMaster_page_controller.Task_Master_list[0].typeOfCall ?? "",),
 
-            _buildLabelWithValue(label: "Mode of Call", value: TaskMaster_page_controller.Task_Master_list[0].methodOfCall ?? "",),
+            _buildLabelWithValue(label: "Mode of Call: ", value: TaskMaster_page_controller.Task_Master_list[0].methodOfCall ?? "",),
 
-            _buildLabelWithValue(label: "Customer Name",
+            _buildLabelWithValue(label: "Customer Name: ",
               value: TaskMaster_page_controller.Task_Master_list[0].accountName ?? "",
               onTap: (){
                 if(account_vm_controller.view=="Sales"){
@@ -1097,40 +1097,40 @@ class TaskMasterDetails extends StatelessWidget{
               },
               color:Colors.blueAccent,
             ),
-            _buildLabelWithValue(label: "Customer Code", value: TaskMaster_page_controller.Task_Master_list[0].accountCode ?? "",),
+            _buildLabelWithValue(label: "Customer Code: ", value: TaskMaster_page_controller.Task_Master_list[0].accountCode ?? "",),
 
-            _buildLabelWithValue(label: 'Contact Name', value: TaskMaster_page_controller.Task_Master_list[0].contactName ?? "",),
+            _buildLabelWithValue(label: 'Contact Name: ', value: TaskMaster_page_controller.Task_Master_list[0].contactName ?? "",),
 
-            _buildLabelWithValue(label: "Task Status", value: TaskMaster_page_controller.Task_Master_list[0].taskStatus ?? "",color: getStatusColor(taskStatus)),
+            _buildLabelWithValue(label: "Task Status: ", value: TaskMaster_page_controller.Task_Master_list[0].taskStatus ?? "",color: getStatusColor(taskStatus)),
 
-            _buildLabelWithValue(label: "Product Category ", value: TaskMaster_page_controller.Task_Master_list[0].productCategory ?? "",),
+            _buildLabelWithValue(label: "Product Category: ", value: TaskMaster_page_controller.Task_Master_list[0].productCategory ?? "",),
 
-            _buildLabelWithValue(label: "Date of Visit", value: dateTimeCreatedOn,),
+            _buildLabelWithValue(label: "Date of Visit: ", value: dateTimeCreatedOn,),
 
-            _buildLabelWithValue(label: "Time of Visit", value: TaskMaster_page_controller.Task_Master_list[0].timeOfVisit ?? "",),
+            _buildLabelWithValue(label: "Time of Visit: ", value: TaskMaster_page_controller.Task_Master_list[0].timeOfVisit ?? "",),
 
-            _buildLabelWithValue(label: "Sale Cycle Active", value: TaskMaster_page_controller.IsSaleCycleActive,),
+            _buildLabelWithValue(label: "Sale Cycle Active: ", value: TaskMaster_page_controller.IsSaleCycleActive,),
 
-            _buildLabelWithValue(label: "Sale Cycle Activated By", value: TaskMaster_page_controller.Task_Master_list[0].salesCycleActivatedBy ?? "",),
+            _buildLabelWithValue(label: "Sale Cycle Activated By: ", value: TaskMaster_page_controller.Task_Master_list[0].salesCycleActivatedBy ?? "",),
 
-            _buildLabelWithValue(label: "Sale Cycle Activated On", value: StaticMethod.onlyDate(TaskMaster_page_controller.Task_Master_list[0].salesCycleActivatedOn??""),),
+            _buildLabelWithValue(label: "Sale Cycle Activated On: ", value: StaticMethod.onlyDate(TaskMaster_page_controller.Task_Master_list[0].salesCycleActivatedOn??""),),
 
-            _buildLabelWithValue(label: "Sale Cycle ID", value: TaskMaster_page_controller.Task_Master_list[0].salesCycleId ?? "",),
+            _buildLabelWithValue(label: "Sale Cycle ID: ", value: TaskMaster_page_controller.Task_Master_list[0].salesCycleId ?? "",),
 
-            _buildLabelWithValue(label: "Along With Person Name ", value: TaskMaster_page_controller.Task_Master_list[0].alongWithPersonName ?? "",),
+            _buildLabelWithValue(label: "Along With Person Name: ", value: TaskMaster_page_controller.Task_Master_list[0].alongWithPersonName ?? "",),
 
-            _buildLabelWithValue(label: "Task Remarks", value: TaskMaster_page_controller.Task_Master_list[0].taskRemarks ?? "",),
+            _buildLabelWithValue(label: "Task Remarks: ", value: TaskMaster_page_controller.Task_Master_list[0].taskRemarks ?? "",),
 
             Visibility(
               visible: TaskMaster_page_controller
                   .Task_Master_list[0]
                   .taskStatus!.toLowerCase() == 'rejected',
-              child: _buildLabelWithValue(label: "Reject Remarks", value: TaskMaster_page_controller.Task_Master_list[0].rejectReason ?? "",),
+              child: _buildLabelWithValue(label: "Reject Remarks: ", value: TaskMaster_page_controller.Task_Master_list[0].rejectReason ?? "",),
             ),
 
-            _buildLabelWithValue(label: "Manager Remarks", value: TaskMaster_page_controller.Task_Master_list[0].managerRemarks ?? "",),
+            _buildLabelWithValue(label: "Manager Remarks: ", value: TaskMaster_page_controller.Task_Master_list[0].managerRemarks ?? "",),
 
-            _buildLabelWithValue(label: "Reopen Remarks", value: TaskMaster_page_controller.Task_Master_list[0].reopenRemarks ?? "",),
+            _buildLabelWithValue(label: "Reopen Remarks: ", value: TaskMaster_page_controller.Task_Master_list[0].reopenRemarks ?? "",),
 
           ],
         ),
@@ -1145,12 +1145,12 @@ class TaskMasterDetails extends StatelessWidget{
         margin: EdgeInsets.only(left: 10.0, right: 10.0),
         child: Column(
           children: [
-            _buildLabelWithValue(label: "Created By", value: TaskMaster_page_controller.Task_Master_list[0].createdFullName ?? "",),
-            _buildLabelWithValue(label: "Created On", value:StaticMethod.formatDateWithTime(TaskMaster_page_controller.Task_Master_list[0].createdOn!) ?? "",),
-            _buildLabelWithValue(label: "Reporting Manager Name", value: TaskMaster_page_controller.Task_Master_list[0].approvedFullName ?? "",),
-            _buildLabelWithValue(label: "Approved/Rejected By", value: TaskMaster_page_controller.Task_Master_list[0].approvedFullName ?? "",),
-            _buildLabelWithValue(label: "Approved/Rejected On", value: StaticMethod.formatDateWithTime(TaskMaster_page_controller.Task_Master_list[0].approvedOn??"") ?? "",),
-            _buildLabelWithValue(label: "Purpose of Visit", value: TaskMaster_page_controller.Task_Master_list[0].purposeOfVisit ?? "",),
+            _buildLabelWithValue(label: "Created By: ", value: TaskMaster_page_controller.Task_Master_list[0].createdFullName ?? "",),
+            _buildLabelWithValue(label: "Created On: ", value:StaticMethod.formatDateWithTime(TaskMaster_page_controller.Task_Master_list[0].createdOn!) ?? "",),
+            _buildLabelWithValue(label: "Reporting Manager Name: ", value: TaskMaster_page_controller.Task_Master_list[0].approvedFullName ?? "",),
+            _buildLabelWithValue(label: "Approved/Rejected By: ", value: TaskMaster_page_controller.Task_Master_list[0].approvedFullName ?? "",),
+            _buildLabelWithValue(label: "Approved/Rejected On: ", value: StaticMethod.formatDateWithTime(TaskMaster_page_controller.Task_Master_list[0].approvedOn??"") ?? "",),
+            _buildLabelWithValue(label: "Purpose of Visit: ", value: TaskMaster_page_controller.Task_Master_list[0].purposeOfVisit ?? "",),
 
           ],
         ),
@@ -1165,8 +1165,8 @@ class TaskMasterDetails extends StatelessWidget{
         margin: EdgeInsets.only(left: 10.0, right: 10.0),
         child: Column(
           children: [
-            _buildLabelWithValue(label: "Region Name", value: TaskMaster_page_controller.Task_Master_list[0].branchHeadValue ?? "",),
-            _buildLabelWithValue(label: "Cluster Name", value: TaskMaster_page_controller.Task_Master_list[0].clustureHeadValue ?? "",),
+            _buildLabelWithValue(label: "Region Name: ", value: TaskMaster_page_controller.Task_Master_list[0].branchHeadValue ?? "",),
+            _buildLabelWithValue(label: "Cluster Name: ", value: TaskMaster_page_controller.Task_Master_list[0].clustureHeadValue ?? "",),
           ],
         ),
       ),
@@ -1185,14 +1185,14 @@ class TaskMasterDetails extends StatelessWidget{
         margin: EdgeInsets.only(left: 10.0, right: 10.0),
         child: Column(
           children: [
-            _buildLabelWithValue(label: "DSAR Status", value: TaskMaster_page_controller.TaskDSAR_Master_list[0].dsarStatus??"",),
-            _buildLabelWithValue(label: "Interaction Date", value: StaticMethod.onlyDate(TaskMaster_page_controller.TaskDSAR_Master_list[0].nextInteractionDate??"") ?? "",),
-            _buildLabelWithValue(label: "Interaction Time", value: TaskMaster_page_controller.TaskDSAR_Master_list[0].nextInteractionTime?? "",),
-            _buildLabelWithValue(label: "Mode Of Call", value: TaskMaster_page_controller.TaskDSAR_Master_list[0].methodOfCall?? "",),
-            _buildLabelWithValue(label: "Purpose Of Visit", value: TaskMaster_page_controller.TaskDSAR_Master_list[0].purposeOfVisit?? "",),
-            _buildLabelWithValue(label: "Call Description", value: TaskMaster_page_controller.TaskDSAR_Master_list[0].remarks?? "",),
-            _buildLabelWithValue(label: "Created Name", value: TaskMaster_page_controller.TaskDSAR_Master_list[0].createdFullName?? "",),
-            _buildLabelWithValue(label: "Created On", value: StaticMethod.formatDateWithTime(TaskMaster_page_controller.TaskDSAR_Master_list[0].createdOn?? ""),),
+            _buildLabelWithValue(label: "DSAR Status: ", value: TaskMaster_page_controller.TaskDSAR_Master_list[0].dsarStatus??"",),
+            _buildLabelWithValue(label: "Interaction Date: ", value: StaticMethod.onlyDate(TaskMaster_page_controller.TaskDSAR_Master_list[0].nextInteractionDate??"") ?? "",),
+            _buildLabelWithValue(label: "Interaction Time: ", value: TaskMaster_page_controller.TaskDSAR_Master_list[0].nextInteractionTime?? "",),
+            _buildLabelWithValue(label: "Mode Of Call: ", value: TaskMaster_page_controller.TaskDSAR_Master_list[0].methodOfCall?? "",),
+            _buildLabelWithValue(label: "Purpose Of Visit: ", value: TaskMaster_page_controller.TaskDSAR_Master_list[0].purposeOfVisit?? "",),
+            _buildLabelWithValue(label: "Call Description: ", value: TaskMaster_page_controller.TaskDSAR_Master_list[0].remarks?? "",),
+            _buildLabelWithValue(label: "Created Name: ", value: TaskMaster_page_controller.TaskDSAR_Master_list[0].createdFullName?? "",),
+            _buildLabelWithValue(label: "Created On: ", value: StaticMethod.formatDateWithTime(TaskMaster_page_controller.TaskDSAR_Master_list[0].createdOn?? ""),),
 
           ],
         ),

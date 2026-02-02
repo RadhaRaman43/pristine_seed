@@ -25,10 +25,6 @@ class TaskApprovalListScreen extends StatelessWidget{
 
   final TaskMaster_page_controller = Get.put(TaskApprovalvm());
   Size size = Get.size;
-
-
-
-
   static String _displaySaleCycleActiveForOption(String option) => option;
 
   @override
@@ -70,7 +66,7 @@ class TaskApprovalListScreen extends StatelessWidget{
             print("show loading.......");
             return const FullScreenLoader();
           }else{
-            print("no..... show loading.......");
+            print("no.....show loading.......");
             return Visibility(child: RefreshIndicator(
               onRefresh: TaskMaster_page_controller.refreshList,
               child: Container(
@@ -974,8 +970,7 @@ class TaskApprovalListScreen extends StatelessWidget{
     return Obx(() {
       final selected = TaskMaster_page_controller.SelectedCluster_list;
       final selectedText = selected.isEmpty
-          ? null
-          : selected.map((e) => e.geoValue).join(', ');
+          ? null : selected.map((e) => e.geoValue).join(', ');
 
       return GestureDetector(
         onTap: () async {
@@ -1130,8 +1125,8 @@ class TaskApprovalListScreen extends StatelessWidget{
                               Expanded(
                                 child: ElevatedButton(
                                   style: ElevatedButton.styleFrom(
-                                    backgroundColor: AllColors.green,
-                                    shadowColor: AllColors.green,
+                                    backgroundColor: AllColors.primaryDark1,
+                                    shadowColor: AllColors.primaryDark1,
                                     foregroundColor: AllColors.primaryDark1,
                                     side: BorderSide(color: AllColors.primaryDark1, width: 1),
                                     shape: RoundedRectangleBorder(
@@ -1364,15 +1359,14 @@ class TaskApprovalListScreen extends StatelessWidget{
 
                         // Done button
                         Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 16.0, vertical: 12),
+                          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12),
                           child: Row(
                             children: [
                               Expanded(
                                 child: ElevatedButton(
                                   style: ElevatedButton.styleFrom(
-                                    backgroundColor: AllColors.green,
-                                    shadowColor: AllColors.green,
+                                    backgroundColor: AllColors.primaryDark1,
+                                    shadowColor: AllColors.primaryDark1,
                                     foregroundColor: AllColors.primaryDark1,
                                     side: BorderSide(color: AllColors.primaryDark1, width: 1),
                                     shape: RoundedRectangleBorder(

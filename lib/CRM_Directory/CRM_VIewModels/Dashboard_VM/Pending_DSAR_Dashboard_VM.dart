@@ -82,22 +82,35 @@ class PendingDsarDashboardVm extends GetxController{
   Future<void> onInit() async {
     // TODO: implement onInit
     super.onInit();
-    email = await sessionManagement.getEmail() ?? '';
-    userType = await sessionManagement.getUserType() ?? '';
-    isAdminWritePermission.value = await sessionManagement.getIsAdminPermission() ?? '';
-    //TaskStatusListTypeList.value = ['Pending','Pending For Approval', 'Approved', 'Rejected'];
-    task_Status_controller.value.text='All';
-    selectedTypeCallList.insert(0, CallStatusMasterModel(taskStatus: "All"));
-    selectedDSARStatusList.insert(0, CallStatusMasterModel(taskStatus: 'All'));
-    DateRange("month");
-    filterCustomDateController.value.text = '${formattedStartDate} - ${formattedEndDate}';
-    //getDashboardUserWiseData(pageNumber);
-    CallDSARsMasterApiHit();
-    CallMasterApiHit();
-    isAdminWritePermission == 1 ? EmployeeMasterGet(""): getEmployeeTeamMemberGetByClusterRegionApi();
-    getItemCategoryMstWithoutTaskIdApi();
-    getClustersGetByEmail();
-    getAccountMaster("");
+    try {
+      loading.value=true;
+      email = await sessionManagement.getEmail() ?? '';
+      userType = await sessionManagement.getUserType() ?? '';
+      isAdminWritePermission.value =
+          await sessionManagement.getIsAdminPermission() ?? '';
+      //TaskStatusListTypeList.value = ['Pending','Pending For Approval', 'Approved', 'Rejected'];
+      task_Status_controller.value.text = 'All';
+      selectedTypeCallList.insert(0, CallStatusMasterModel(taskStatus: "All"));
+      selectedDSARStatusList.insert(
+          0, CallStatusMasterModel(taskStatus: 'All'));
+      DateRange("month");
+      filterCustomDateController.value.text =
+      '${formattedStartDate} - ${formattedEndDate}';
+      //getDashboardUserWiseData(pageNumber);
+      CallDSARsMasterApiHit();
+      CallMasterApiHit();
+      isAdminWritePermission == 1
+          ? EmployeeMasterGet("")
+          : getEmployeeTeamMemberGetByClusterRegionApi();
+      getItemCategoryMstWithoutTaskIdApi();
+      getClustersGetByEmail();
+      getAccountMaster("");
+    }
+    catch(e){
+
+    }finally{
+      loading.value=false;
+    }
 
   }
 

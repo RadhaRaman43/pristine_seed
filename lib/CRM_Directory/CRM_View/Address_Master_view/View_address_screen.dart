@@ -268,42 +268,6 @@ class ViewAddressScreen extends StatelessWidget{
             SizedBox(
               height: 2,
             ),
-            /*Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  "Acc. Name : ",
-                  style: GoogleFonts.poppins(
-                      color: AllColors.primaryDark1,
-                      fontSize: AllFontSize.fourtine,
-                      fontWeight: FontWeight.w500),
-                ),
-                Container(
-                  width: size.width * .55,
-                  child: Tooltip(
-                    message: address_vm_controller.address_master_list[position]
-                        .accountName?? "",
-                    child: InkWell(
-                      onTap: (){
-
-                      },
-                      child: Text(
-                        address_vm_controller.address_master_list[position]
-                            .accountName?? "",
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 2,
-            ),*/
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -371,8 +335,7 @@ class ViewAddressScreen extends StatelessWidget{
                 Container(
                   width: size.width * .55,
                   child: Text(
-                    address_vm_controller.address_master_list[position]
-                        .ifscCode ?? "",
+                    address_vm_controller.address_master_list[position].ifscCode ?? "",
                     overflow: TextOverflow.ellipsis,
                     style: GoogleFonts.poppins(
                         color: AllColors.textColor,

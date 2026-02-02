@@ -82,22 +82,35 @@ class CommitDashboardVm extends GetxController{
   Future<void> onInit() async {
     // TODO: implement onInit
     super.onInit();
-    email = await sessionManagement.getEmail() ?? '';
-    userType = await sessionManagement.getUserType() ?? '';
-    isAdminWritePermission.value = await sessionManagement.getIsAdminPermission() ?? '';
-    //SalesCycleStageStatusList.value = ['ALL','Suspect', 'Prospect', 'Propose'];
-   // selectedSalesStageStatusList.value = ["All"];
-    QuoteAccepted_controller.value.text = "All";
-    StageName_controller.value.text = "All";
-    IsCommit_controller.value.text = 'All';
-    DateRange("monthly");
-    filterCustomDateController.value.text = '${formattedStartDate} - ${formattedEndDate}';
-    //commitDashboardData();
-    isAdminWritePermission == 1 ? EmployeeMasterGet(""): getEmployeeTeamMemberGetByClusterRegionApi();
+    try {
+      loading.value=true;
+      email = await sessionManagement.getEmail() ?? '';
+      userType = await sessionManagement.getUserType() ?? '';
+      isAdminWritePermission.value =
+          await sessionManagement.getIsAdminPermission() ?? '';
+      //SalesCycleStageStatusList.value = ['ALL','Suspect', 'Prospect', 'Propose'];
+      // selectedSalesStageStatusList.value = ["All"];
+      QuoteAccepted_controller.value.text = "All";
+      StageName_controller.value.text = "All";
+      IsCommit_controller.value.text = 'All';
+      DateRange("monthly");
+      filterCustomDateController.value.text =
+      '${formattedStartDate} - ${formattedEndDate}';
+      //commitDashboardData();
+      isAdminWritePermission == 1
+          ? EmployeeMasterGet("")
+          : getEmployeeTeamMemberGetByClusterRegionApi();
 
-    getItemCategoryMstWithoutTaskIdApi();
-    getClustersGetByEmail();
-   getAccountMaster("");
+      getItemCategoryMstWithoutTaskIdApi();
+      getClustersGetByEmail();
+      getAccountMaster("");
+    }
+    catch(e){
+
+    }
+    finally{
+      loading.value=false;
+    }
   }
 
   void DateRange(String type) {
