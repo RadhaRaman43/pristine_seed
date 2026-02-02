@@ -617,11 +617,11 @@ class Itemlist_by_sales_cycle_Screen extends StatelessWidget{
                             child: Tooltip(
                               message:saleCycleController
                                   .itemMstGetBySalesIdList[index]
-                                  .standardCost.toString(),
+                                  .listSellingPrice.toString(),
                               child: Text(
                                 saleCycleController
                                     .itemMstGetBySalesIdList[index]
-                                    .standardCost.toString(),
+                                    .listSellingPrice.toString(),
                                 overflow: TextOverflow.ellipsis,
                                 style: GoogleFonts.poppins(
                                   color: AllColors.textColor,

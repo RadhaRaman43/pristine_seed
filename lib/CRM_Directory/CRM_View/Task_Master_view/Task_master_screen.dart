@@ -592,13 +592,10 @@ class TaskMasterScreen extends StatelessWidget {
     }
   }
   Widget BindCustomerRequestListView(context, int position) {
-    String taskStatus = TaskMaster_page_controller.Task_Master_list[position].taskStatus!.toLowerCase();
 
-    int IsReadyForApprove = TaskMaster_page_controller.Task_Master_list[position].isReadyForApprove!;
-    String pipeLine = TaskMaster_page_controller.Task_Master_list[position]
-        .taskDueTime!.isNotEmpty ? "|" : "";
-    // Determine the color based on taskStatus
-
+    //int IsReadyForApprove = TaskMaster_page_controller.Task_Master_list[position].isReadyForApprove!;
+    /*String pipeLine = TaskMaster_page_controller.Task_Master_list[position]
+        .taskDueTime!.isNotEmpty ? "|" : "";*/
     return Card(
       margin: EdgeInsets.all(5),
       child: ListTile(
@@ -645,21 +642,12 @@ class TaskMasterScreen extends StatelessWidget {
               children: [
                 Obx(() {
                   return Visibility(
-                    visible:TaskMaster_page_controller.Task_Master_list[position].taskStatus!.toLowerCase() == 'pending for approval'
-                        && TaskMaster_page_controller.isHeadofficePermission.value!="1",
+                    visible:TaskMaster_page_controller.Task_Master_list[position].isReadyForApprove==1 &&
+                        TaskMaster_page_controller.Task_Master_list[position].taskStatus!.toLowerCase() == 'pending for approval'
+                        && TaskMaster_page_controller.isHeadofficePermission.value!="1" ,
                     child: InkWell(
                       onTap: () {
-                        if (IsReadyForApprove == 1) {
                           showApprovRejectDialog(context, TaskMaster_page_controller.Task_Master_list[position].taskId!);
-                        } else {
-                          TaskMaster_page_controller.getTaskMaster(0,
-                              TaskMaster_page_controller.is_Active.toString(),
-                              TaskMaster_page_controller.Task_Master_list[position].taskId,
-                              'View',
-                              'GET FROM TASK ID',
-                              TaskMaster_page_controller.date_filter,
-                              TaskMaster_page_controller.is_done.value);
-                        }
                       },
                       child: const Icon(Icons.update, color: Colors.blue,),),
                   );
@@ -746,7 +734,7 @@ class TaskMasterScreen extends StatelessWidget {
               _buildLabelWithValue(label: "Customer Code: ", value: TaskMaster_page_controller.Task_Master_list[position].accountCode??"",),
               _buildLabelWithValue(label: "Contact Name: ", value: TaskMaster_page_controller.Task_Master_list[position].contactName??"",),
               _buildLabelWithValue(label: "Task Owner: ", value: TaskMaster_page_controller.Task_Master_list[position].taskOwner??"",),
-              _buildLabelWithValue(label: "Task Due Date: ", value: StaticMethod.onlyDate(TaskMaster_page_controller.Task_Master_list[position].taskDueDate??""),),
+              _buildLabelWithValue(label: "Task Due Date: ", value: StaticMethod.convertDateFormat1(TaskMaster_page_controller.Task_Master_list[position].taskDueDate??""),),
               _buildLabelWithValue(label: "Type Of Call: ", value: TaskMaster_page_controller.Task_Master_list[position].typeOfCall??"",),
               _buildLabelWithValue(label: "Type Of Mode of Call: ", value: TaskMaster_page_controller.Task_Master_list[position].methodOfCall??"",),
               _buildLabelWithValue(label: "Last Activity Status: ", value: TaskMaster_page_controller.Task_Master_list[position].lastActivityStatus??"",),
@@ -808,11 +796,11 @@ class TaskMasterScreen extends StatelessWidget {
               _buildLabelWithValue(label: "Region Name: ", value: TaskMaster_page_controller.Task_Master_list[position].branchHeadValue??"",),
               _buildLabelWithValue(label: "Task Remarks: ", value: TaskMaster_page_controller.Task_Master_list[position].taskRemarks??"",),
               _buildLabelWithValue(label: "Purpose Of Visit: ", value: TaskMaster_page_controller.Task_Master_list[position].purposeOfVisit??"",),
-              _buildLabelWithValue(label: "Last Activity Updated On: ", value: TaskMaster_page_controller.Task_Master_list[position].lastActivityUpdatedOn??"",),
-              _buildLabelWithValue(label: "Created On: ", value:StaticMethod.onlyDate(TaskMaster_page_controller.Task_Master_list[position].createdOn??"") ,),
+              _buildLabelWithValue(label: "Last Activity Updated On: ", value: StaticMethod.dateTimeToDate(TaskMaster_page_controller.Task_Master_list[position].lastActivityUpdatedOn??""),),
+              _buildLabelWithValue(label: "Created On: ", value:StaticMethod.dateTimeToDate(TaskMaster_page_controller.Task_Master_list[position].createdOn??"") ,),
               _buildLabelWithValue(label: "Reporting Person: ", value: TaskMaster_page_controller.Task_Master_list[position].approvedFullName??"",),
               _buildLabelWithValue(label: "Approved By: ", value: TaskMaster_page_controller.Task_Master_list[position].approvedFullName??"",),
-              _buildLabelWithValue(label: "Approved On: ", value: TaskMaster_page_controller.Task_Master_list[position].approvedOn??"",),
+              _buildLabelWithValue(label: "Approved On: ", value: StaticMethod.convertDateFormat1(TaskMaster_page_controller.Task_Master_list[position].approvedOn??""),),
               Visibility(
                 visible: TaskMaster_page_controller.Task_Master_list[position]
                     .taskStatus == 'Rejected' ? true : false,

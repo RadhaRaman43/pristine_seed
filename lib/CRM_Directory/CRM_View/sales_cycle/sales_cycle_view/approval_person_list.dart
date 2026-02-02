@@ -20,7 +20,6 @@ class ApprovalPersonList extends StatelessWidget{
     return  WillPopScope(
       onWillPop: ()  async {
         Get.toNamed(RoutesName.quoteInformationScreen);
-
         return false;
 
       },
