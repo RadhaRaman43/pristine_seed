@@ -107,7 +107,7 @@ class PendingDraftQuoteVm extends GetxController{
     getPendingDraftQuoteList(pageNumberForQuote, filterFlag);
   }
   getItemCategoryMstWithoutTaskIdApi() {
-    this.loading.value = true;
+    loading.value = true;
     Map<String, String> data = {
 
     };
@@ -134,7 +134,7 @@ class PendingDraftQuoteVm extends GetxController{
       Utils.sanckBarError('Api Exception onError', error.toString());
       print('catchEx....${error.toString()}');
     }).whenComplete(() {
-      this.loading.value = false;
+      loading.value = false;
     });
   }
 
@@ -170,13 +170,13 @@ class PendingDraftQuoteVm extends GetxController{
             (error, stackTrace) {
           print(error);
         },
-      );
+      ).whenComplete(() {
+        loading.value=false;
+      },);
     }catch(e){
       loading.value = false;
       print(e);
-    }finally{
-      loading.value = false;
-    }
+    } 
   }
   void getRegionsWithClusterFilterGetByEmail() {
     var selectedCluster="";
@@ -241,7 +241,9 @@ class PendingDraftQuoteVm extends GetxController{
   }
 
   getPendingDraftQuoteList(int pageNumberForQuote,String flagFilter){
+    loading.value=true;
     try{
+
       Map data={
           "filter_quote_id": filterQuoteIdController.value.text.isEmpty?"":filterQuoteIdController.value.text,
           "filter_sales_cycle_id": filterQuoteSaleCycleController.value.text.isEmpty?"":filterQuoteSaleCycleController.value.text,
@@ -279,7 +281,7 @@ class PendingDraftQuoteVm extends GetxController{
           "page_number": pageNumberForQuote
       };
 
-      loading.value=true;
+
       _api.QuoteHeaderGetNewApiHit(data, sessionManagement).then((onValue){
         final jsonResponse = json.decode(onValue);
         print(onValue);
@@ -306,14 +308,14 @@ class PendingDraftQuoteVm extends GetxController{
             (error, stackTrace) {
           print(error);
         },
-      );
+      ).whenComplete(() {
+        loading.value = false;
+      },);
     }catch(e){
       loading.value = false;
       print(e);
     }
-    finally{
-      loading.value = false;
-    }
+
   }
 
   void clearAllFieldOfQuoteFilter() {

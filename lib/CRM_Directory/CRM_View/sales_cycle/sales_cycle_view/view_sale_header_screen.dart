@@ -2838,6 +2838,10 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                     ],
                   ),
                   SizedBox(height: 3,),
+                  bindData("Cluster Name : ",saleCycleController.saleCycleList[0].clustureHeadValue ?? ""),
+                  SizedBox(height: 3,),
+                  bindData("Region Name : ",saleCycleController.saleCycleList[0].branchHeadValue ?? ""),
+                  SizedBox(height: 3,),
                   bindData("Sales Cycle Stage : ",saleCycleController.saleCycleList[0].salesCycleStatus ?? ""),
                   SizedBox(height: 3,),
                   Row(

@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:navigation_drawer_flutter/component/circular_loading.dart';
 
 import '../../../../constants/app_colors.dart';
 import '../../../../constants/app_font_size.dart';
@@ -25,10 +26,12 @@ class AllSprMappingScreen extends StatelessWidget{
   AllSprMappingScreen({super.key});
 
   PendingDraftQuoteVm pendingDraftQuoteController=Get.put(PendingDraftQuoteVm());
-  SalesCycleVm saleCycleController=Get.put(SalesCycleVm());
-  Size size=Get.size;
   final account_vm_controller = Get.put(Accountmastervm());
   final contact_vm_controller = Get.put(ContactMasterVM());
+  SalesCycleVm saleCycleController=Get.put(SalesCycleVm());
+
+  Size size=Get.size;
+
 
   static String _displayQuoteStatusForOption(String option) =>
       option;
@@ -66,34 +69,41 @@ class AllSprMappingScreen extends StatelessWidget{
             )
         ),
         drawer: CustomDrawer(),
-        body: RefreshIndicator(
-          onRefresh:pendingDraftQuoteController.refreshList,
-          child: Container(
-            width: double.infinity,
-            height: double.infinity,
-            child: Column(
-              children: [
-                Obx((){
-                  return Visibility(
-                    visible:pendingDraftQuoteController.loading.value ,
-                    child: LinearProgressIndicator(
-                      backgroundColor: AllColors.primaryDark1,
-                      color: AllColors.textColor,
+        body: Obx((){
+          if(pendingDraftQuoteController.loading.value || saleCycleController.loading.value){
+            return FullScreenLoader();
+          }
+          return RefreshIndicator(
+            onRefresh:pendingDraftQuoteController.refreshList,
+            child: Container(
+              width: double.infinity,
+              height: double.infinity,
+              child: Column(
+                children: [
+                  Obx((){
+                    return Visibility(
+                      visible:pendingDraftQuoteController.loading.value ,
+                      child: LinearProgressIndicator(
+                        backgroundColor: AllColors.primaryDark1,
+                        color: AllColors.textColor,
+                      ),
+                    );
+                  }),
+                  Flexible(
+                    fit: FlexFit.loose,
+                    child: Container(
+                      child: Obx(() {
+                        return BindPendingListView(context);
+                      }),
                     ),
-                  );
-                }),
-                Flexible(
-                  fit: FlexFit.loose,
-                  child: Container(
-                    child: Obx(() {
-                      return BindPendingListView(context);
-                    }),
-                  ),
-                )
-              ],
+                  )
+                ],
+              ),
             ),
-          ),
-        ),
+          );
+        })
+
+
       ),);
   }
 
@@ -252,10 +262,7 @@ class AllSprMappingScreen extends StatelessWidget{
                 onTap: (){
                   account_vm_controller.view = 'FromAllSPRMapping';
                   contact_vm_controller.view = 'FromAllSPRMapping';
-                  account_vm_controller.getAccMasterBuyCodeApi(
-                    pendingDraftQuoteController
-                        .PendingDraftQuoteList[position].accountCode!,
-                  );
+                  account_vm_controller.getAccMasterBuyCodeApi(pendingDraftQuoteController.PendingDraftQuoteList[position].accountCode!,);
                 },),
 
               _buildLabelWithValue(label: "Customer: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].accountName ?? "",color:AllColors.textColor),

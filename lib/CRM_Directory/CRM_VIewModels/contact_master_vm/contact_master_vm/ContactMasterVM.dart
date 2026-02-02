@@ -117,7 +117,7 @@ class ContactMasterVM extends GetxController{
   }
 
   void getContactMasterList(int pageNumber, String account_name, String contact_name, String depart_name) {
-
+    loading.value=true;
       Map<String, String> data={
         "filter_contact_name": contact_name,
         "filter_account_code":account_code_controller.text.isEmpty?"":account_code_controller.value.text,
@@ -129,7 +129,6 @@ class ContactMasterVM extends GetxController{
         "row_per_page": rowsPerPage.toString(),
         "page_number": pageNumber.toString()
       };
-      loading.value=true;
       print("data is ${data}");
       _api.contactMstGetList(data, sessionManagement).then((onValue){
         final jsonResponse = json.decode(onValue);
@@ -137,6 +136,7 @@ class ContactMasterVM extends GetxController{
           if(jsonResponse is List){
             List<ContactMstGetListModal> response = jsonResponse.map((e) => ContactMstGetListModal.fromJson(e)).toList();
             if(response!= null && response.length>0 && response[0].condition=="True"){
+              print("finally1....");
               if(pageNumber==0){
                 contact_master_list.clear();
               }
@@ -144,16 +144,16 @@ class ContactMasterVM extends GetxController{
               total_rows=int.parse(contact_master_list[0].totalRows!);
               print('Total rows ${total_rows}');
             }else {
+              print("finally2....");
               contact_master_list.value=[];
 
             }
           } else {
+            print("finally3....");
             Utils.showErrorToastification("Api Response!", jsonResponse);
           }
         }catch(e){
           print(e);
-        }finally{
-          loading.value = false;
         }
 
       },
@@ -170,7 +170,7 @@ class ContactMasterVM extends GetxController{
     /*if (text == '') {
       return const Iterable<CompanyTypeModel>.empty();
     }*/
-    loading.value=true;
+
     Map data = {
       "filter_account_name": text,
       "filter_account_owner": "",
@@ -215,9 +215,6 @@ class ContactMasterVM extends GetxController{
     } catch (e) {
       Utils.sanckBarException('Exception!', e.toString());
       Account_Master_list.value = [];
-    }
-    finally{
-      loading.value=false;
     }
     return  Account_Master_list.value;
   }
@@ -264,9 +261,6 @@ class ContactMasterVM extends GetxController{
           }
         }catch(e){
           print(e);
-        }finally{
-          loading.value = false;
-
         }
       },
     ).onError(

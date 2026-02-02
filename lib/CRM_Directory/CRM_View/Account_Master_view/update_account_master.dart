@@ -2300,7 +2300,6 @@ class UpdateAccountMaster extends StatelessWidget{
       },
       fieldViewBuilder: (BuildContext context, TextEditingController controller,
           FocusNode focusNode, VoidCallback onFieldSubmitted) {
-        print("managher is${accountMaster_page_controller.Account_Master_list[0].isManager}");
         return TextField(
            readOnly: accountMaster_page_controller.Account_Master_list != null &&
           accountMaster_page_controller.Account_Master_list.isNotEmpty && accountMaster_page_controller.Account_Master_list[0].isManager == 1 &&

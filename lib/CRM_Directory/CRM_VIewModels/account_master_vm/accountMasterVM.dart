@@ -259,8 +259,6 @@ class Accountmastervm extends GetxController{
         EmployeeMasterGet('');
       }
     }catch(e){
-
-    }finally{
       loading.value=false;
     }
 
@@ -417,11 +415,12 @@ class Accountmastervm extends GetxController{
   }
 
   void getClustersGetByEmail() {
+    loading.value=true;
     try{
       Map<String, String> data={
         "email_id":email
       };
-      loading.value=true;
+
       print("data is ${data}");
       _api.clustersGetByEmailApiHit(data, sessionManagement).then((onValue){
         print(onValue);
@@ -443,16 +442,18 @@ class Accountmastervm extends GetxController{
       },
       ).onError(
             (error, stackTrace) {
+              loading.value=false;
           print(error);
         },
-      );
+      ).whenComplete(() {
+        loading.value=false;
+      },);
     }catch(e){
       print(e);
-    }finally{
-      loading.value = false;
     }
   }
   void getRegionsWithClusterFilterGetByEmail() {
+    loading.value=true;
     var selectedCluster="";
     if(clusterName_controller.value.text.isNotEmpty){
       selectedCluster = clusterName_controller.value.text
@@ -465,7 +466,7 @@ class Accountmastervm extends GetxController{
         "email_id":email,
         "cluster_filter":selectedCluster.isEmpty?"":selectedCluster
       };
-      loading.value=true;
+
       print("data is ${data}");
       _api.RegionsWithClusterFilterGetByEmailApiHit(data, sessionManagement).then((onValue){
         print(onValue);
@@ -492,17 +493,20 @@ class Accountmastervm extends GetxController{
         }
       },
       ).onError((error, stackTrace) {
+        loading.value = false;
           print(error);
         },
-      );
+      ).whenComplete(() {
+        loading.value = false;
+      },);
     }catch(e){
-      print(e);
-    }finally{
       loading.value = false;
+      print(e);
     }
   }
 
    getAccountMaster(int page_no, String IsActive)  {
+     loading.value=true;
     if(IsActive == 'All'){
       is_Active = -1;
     }else if( IsActive == 'Yes'){
@@ -542,7 +546,7 @@ class Accountmastervm extends GetxController{
         "row_per_page": rowsPerPage.toString(),
         "page_number": page_no.toString()
       };
-      loading.value=true;
+
       _api.AccountMasterGetApiHit(data, sessionManagement).then((onValue){
         print(onValue);
          final jsonResponse = json.decode(onValue);
@@ -566,23 +570,26 @@ class Accountmastervm extends GetxController{
         Utils.sanckBarException("Error!", error.toString());
           print(error);
         },
-      );
+      ).whenComplete(() {
+        loading.value=false;
+      },);
     }catch(e){
+      loading.value=false;
       Utils.sanckBarException("Api Error!",' API error' );
       print(e);
     }
-    finally{
-      loading.value = false;
-    }
+
    }
 
   getEmployee(String AccOwnerEmail){
+    loading.value = true;
+
     try {
       Map data =
       {
         "email_id": AccOwnerEmail,
       };
-      loading.value = true;
+
       print(data);
       _api.EmployeeGetDashBoardApiHit(data, sessionManagement).then((value) {
         print(value);
@@ -627,17 +634,19 @@ class Accountmastervm extends GetxController{
       },).onError((error, stackTrace) {
         loading.value = false;
         print(error);
+      },).whenComplete(() {
+        loading.value = false;
       },);
     }catch(e){
+      loading.value = false;
       print(e);
     }
-    finally{
-      loading.value = false;
-    }
+
 
   }
 
   getDraftAccountMaster(int page_no, String IsActive){
+    loading.value=true;
     if(IsActive == 'All'){
       is_Active = -1;
     }else if( IsActive == 'Yes'){
@@ -666,7 +675,7 @@ class Accountmastervm extends GetxController{
         "row_per_page": rowsPerPage.toString(),
         "page_number": page_no.toString()
       };
-      loading.value=true;
+
       _api.DraftAccountMstGetApiHit(data, sessionManagement).then((onValue){
         final jsonResponse = json.decode(onValue);
         if(jsonResponse is List){
@@ -687,14 +696,16 @@ class Accountmastervm extends GetxController{
       },
       ).onError((error, stackTrace) {
           print(error);
+          loading.value = false;
         },
-      );
+      ).whenComplete(() {
+        loading.value = false;
+      },);
     }catch(e){
+      loading.value = false;
       print(e);
     }
-    finally{
-      loading.value = false;
-    }
+
   }
 
   getAccCategoryApi() {
@@ -863,9 +874,11 @@ class Accountmastervm extends GetxController{
           print(error);
           //service_indent_header_list.value = [];
         },
-      );
+      ).whenComplete(() {
+        loading.value = false;
+      },);
     } catch (e) {
-      loading.value = false;
+
       employee_Member_list.value = [];
       print(e);
     }
@@ -981,13 +994,14 @@ class Accountmastervm extends GetxController{
   }
 
   getShippingStateMasterApi(String text, String flag) {
+    loading.value = true;
     Map data = {
       "filter_pincode": text,
       "filter_search": "",
       "flag": flag,
     };
     print(data);
-    loading.value = true;
+
     try {
       _api.PincodeMasterGet(data, sessionManagement).then(
             (value) {
@@ -1025,10 +1039,13 @@ class Accountmastervm extends GetxController{
         },
       ).onError(
             (error, stackTrace) {
+              loading.value = false;
           print(error);
           //service_indent_header_list.value = [];
         },
-      );
+      ).whenComplete(() {
+        loading.value = false;
+      },);
     } catch (e) {
       loading.value = false;
       ShippingStateMasterPinCode_list.value = [];
@@ -1073,9 +1090,7 @@ class Accountmastervm extends GetxController{
       Utils.sanckBarException('Exception!', e.toString());
       get_Comp_Profile_type_list.value = [];
     }
-    finally{
-      loading.value=false;
-    }
+
     return  get_Comp_Profile_type_list.value;
   }
 
@@ -1168,9 +1183,11 @@ class Accountmastervm extends GetxController{
           print(error);
           //service_indent_header_list.value = [];
         },
-      );
+      ).whenComplete(() {
+        loading.value = false;
+      },);
     } catch (e) {
-      loading.value = false;
+
       geoPostal_Code_list.value = [];
       print(e);
     }
@@ -1342,12 +1359,13 @@ class Accountmastervm extends GetxController{
   }
 
    getAccMasterBuyCodeApi(String? accountCode) {
+     loading.value = true;
     AccountCode = accountCode!;
     Map<String , String> data = {
       "account_code": accountCode.toString()
     };
     print('data: $data');
-    loading.value = true;
+
       _api.getAccountMasterGetByCodeApiHit(data, sessionManagement).then(
             (value) {
           print(value);
@@ -1357,9 +1375,7 @@ class Accountmastervm extends GetxController{
               List<AccountMasterGetByCodeModel> response =
               JsonResponse.map((e) => AccountMasterGetByCodeModel.fromJson(e))
                   .toList();
-              if (response != null &&
-                  response.length > 0 &&
-                  response[0].condition == "True") {
+              if (response != null && response.length > 0 && response[0].condition == "True") {
                 AccountMasterGetCode_list.value=response;
                 accountName=AccountMasterGetCode_list[0].accountName.toString();
                 print('Api Hit Mster....${AccountMasterGetCode_list[0].profile.toString()}');
@@ -1379,9 +1395,8 @@ class Accountmastervm extends GetxController{
               Utils.sanckBarException("Api Error!", JsonResponse);
             }
           }catch(e){
-            print(e);
-          }finally{
             loading.value = false;
+            print(e);
           }
         },
       ).onError(
@@ -1525,9 +1540,7 @@ class Accountmastervm extends GetxController{
       //service_indent_header_list.value = [];
       Utils.sanckBarException("catch Api Error!", error.toString());
     }
-    finally{
-      loading.value = false;
-    }
+
   }
 
   DraftAccountMstUploaderApiHit(String flag) async {
@@ -1595,6 +1608,7 @@ class Accountmastervm extends GetxController{
         if (response != null &&
             response.length > 0 &&
             response[0].condition == "True") {
+          loading.value = false;
           if(flag == 'Create'){
             print("ttttttttttt");
             Utils.sanckBarSuccess("Success!", "Account is Save In Draft Successful");
@@ -1617,21 +1631,22 @@ class Accountmastervm extends GetxController{
           //Get.toNamed(RoutesName.update_AccountMaster_screen);
           //viewRequestDetails(response);
         } else {
+          loading.value = false;
           Utils.sanckBarError("Error!", response[0].message??"");
         }
       } else {
+        loading.value = false;
         Utils.sanckBarException("Response Error!", JsonResponse);
       }
     } catch (error, stackTrace) {
       print(error);
       print(stackTrace);
       print("Exce3ption....${error}");
+      loading.value = false;
       Utils.sanckBarException("Api Error!", error.toString());
       //service_indent_header_list.value = [];
     }
-    finally{
-      loading.value = false;
-    }
+
   }
 
   viewRequestDetails(List<AccountMasterGetByCodeModel> response){
