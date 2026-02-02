@@ -187,7 +187,7 @@ class AddNewTaskScreen extends StatelessWidget{
                             accountMaster_page_controller.getEmployeeMemberApi();
                             accountMaster_page_controller.getCompanyProfileTypeApi("");
                             accountMaster_page_controller.getCompanyProfileSubTypeApi();
-                            accountMaster_page_controller.getGeoPostalCodeApi();
+                            accountMaster_page_controller.getGeoPostalCodeApi(50,'');
                             Get.toNamed(RoutesName.add_New_AccountMaster_screen);
                           }, icon: Icon(Icons.add)),
                     )
@@ -492,7 +492,11 @@ class AddNewTaskScreen extends StatelessWidget{
       },
       fieldViewBuilder: (BuildContext context, TextEditingController controller,
           FocusNode focusNode, VoidCallback onFieldSubmitted) {
+
         return TextField(
+          onTap: (){
+            controller.clear();
+          },
           cursorColor: AllColors.primaryDark1,
           controller: controller
             ..text = taskMaster_page_controller.account_Name_controller
@@ -590,6 +594,9 @@ class AddNewTaskScreen extends StatelessWidget{
       fieldViewBuilder: (BuildContext context, TextEditingController controller,
           FocusNode focusNode, VoidCallback onFieldSubmitted) {
         return TextField(
+          onTap: (){
+            controller.clear();
+          },
           cursorColor: AllColors.primaryDark1,
           controller: controller
             ..text = taskMaster_page_controller.Contact_Name_controller
@@ -693,11 +700,7 @@ class AddNewTaskScreen extends StatelessWidget{
           FocusNode focusNode, VoidCallback onFieldSubmitted) {
         return TextField(
           onTap: (){
-            if(focusNode.hasFocus){
-              focusNode.unfocus();
-            }else{
-              focusNode.requestFocus();
-            }
+            controller.clear();
           },
           cursorColor: AllColors.primaryDark1,
           controller: controller
@@ -812,12 +815,15 @@ class AddNewTaskScreen extends StatelessWidget{
           FocusNode focusNode, VoidCallback onFieldSubmitted) {
         return TextField(
           onTap: (){
+            controller.clear();
+          },
+         /* onTap: (){
             if(focusNode.hasFocus){
               focusNode.unfocus();
             }else{
               focusNode.requestFocus();
             }
-          },
+          },*/
           cursorColor: AllColors.primaryDark1,
           controller: controller
             ..text = taskMaster_page_controller.Method_of_call_controller

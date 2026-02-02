@@ -221,7 +221,7 @@ class AppUrl {
      static const String TaskDSARMstCreate = "$BASE_URL/api/CRM/Task/TaskDSARMstCreate";
      static const String ItemCategoryMstGetByTaskId = "$BASE_URL/api/CRM/Task/ItemCategoryMstGetByTaskId";
      static const String ItemCategoryMstGetByDocument = "$BASE_URL/api/CRM/Task/ItemCategoryMstGetByDocument";
-     static const String TaskSalesProductCategoryCreate = "$BASE_URL/api/CRM/Task/SalesProductCategoryCreate";
+     static const String SalesProductCategoryCreate = "$BASE_URL/api/CRM/Task/SalesProductCategoryCreate";
      static const String taskMstInfraUpdate = "$BASE_URL/api/CRM/Task/TaskMstInfraUpdate";
      static const String ItemCategoryMstGet = "$BASE_URL/api/ItemMaster/ItemCategoryMstGet";
      static const String TaskPersonMstGetByTaskId = "$BASE_URL/api/CRM/Task/TakPersonMstGetByTaskId";
@@ -230,6 +230,7 @@ class AppUrl {
      static const String PincodeMasterGet = "$BASE_URL/api/CRM/Master/PincodeMasterGetByPincode";
      static const String TaskMstRejectReopen = "$BASE_URL/api/CRM/Task/TaskMstRejectReopen";
      static const String TaskMstGetApprovalList = "$BASE_URL/api/CRM/Task/TaskMstGetApprovalList";
+     static const String TaskSalesProductCategoryCreate = "$BASE_URL/api/CRM/Task/TaskSalesProductCategoryCreate";
 
      //todo radha raman
      static const String TaskMstDelete = "$BASE_URL/api/CRM/Task/TaskMstDelete";

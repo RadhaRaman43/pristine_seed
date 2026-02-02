@@ -180,7 +180,7 @@ class DraftItemList extends StatelessWidget{
           accountMaster_page_controller.getEmployeeMemberApi();
           accountMaster_page_controller.getCompanyProfileTypeApi("");
           accountMaster_page_controller.getCompanyProfileSubTypeApi();
-          accountMaster_page_controller.getGeoPostalCodeApi();
+          accountMaster_page_controller.getGeoPostalCodeApi(50,'');
           accountMaster_page_controller.getStateMasterApi('', 'state');
           accountMaster_page_controller.getStateMasterApi('', 'city');
           accountMaster_page_controller.getStateMasterApi('', 'district');
