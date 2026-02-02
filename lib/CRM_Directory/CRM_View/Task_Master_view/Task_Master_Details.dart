@@ -1115,7 +1115,30 @@ class TaskMasterDetails extends StatelessWidget{
 
             _buildLabelWithValue(label: "Sale Cycle Activated On: ", value: StaticMethod.onlyDate(TaskMaster_page_controller.Task_Master_list[0].salesCycleActivatedOn??""),),
 
-            _buildLabelWithValue(label: "Sale Cycle ID: ", value: TaskMaster_page_controller.Task_Master_list[0].salesCycleId ?? "",),
+            _buildLabelWithValue(label: "Sale Cycle ID: ", value: TaskMaster_page_controller.Task_Master_list[0].salesCycleId ?? "",
+            onTap: (){
+              salesCycleController.pageNumber = 0;
+              salesCycleController.clearSaleProductListController();
+              salesCycleController.filterQuoteAcceptedFlag.value="";
+              salesCycleController.pageNumber=0;
+              salesCycleController.clearAllFieldOfFilter();
+              salesCycleController.getsalesCycleData( salesCycleController.pageNumber, TaskMaster_page_controller.Task_Master_list[0].salesCycleId!, "ViewHeader", 'Task');
+              salesCycleController.getSaleCycleProductByIdList(salesCycleController.pageNumber, TaskMaster_page_controller
+                  .Task_Master_list[0].salesCycleId??"" );
+
+              /*  salesCycleController.getsalesCycleCompetitorProductGetBySalesCycleId(
+                        salesCycleController.pageNumber ,
+                        TaskMaster_page_controller
+                            .Task_Master_list[0].salesCycleId??"");*/
+
+              salesCycleController.itemCategorySelectedlist.value = [];
+              salesCycleController.getPurchaseProcessApi();
+              salesCycleController.getPurchaseTimeFrameApi();
+              salesCycleController.getItemCategoryMstApi(TaskMaster_page_controller.Task_Master_list[0].salesCycleId??"" ,
+                  TaskMaster_page_controller.Task_Master_list[0].taskId??"","" );
+              salesCycleController.ProductCategoryWiseAmtGet(0, TaskMaster_page_controller.Task_Master_list[0].salesCycleId!);
+
+            }),
 
             _buildLabelWithValue(label: "Along With Person Name: ", value: TaskMaster_page_controller.Task_Master_list[0].alongWithPersonName ?? "",),
 
