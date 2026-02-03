@@ -1271,7 +1271,6 @@ class AddNewDsarScreen extends StatelessWidget{
 
   Widget bindContactNameDropDown(context){
     return Container(
-      padding: const EdgeInsets.only(right: 15),
       child: DropdownMenu<ContactMstGetListModal>(
         width: MediaQuery.of(context).size.width - 25,
         controller: TaskMaster_page_controller.Contact_Name_controller,
@@ -1307,8 +1306,9 @@ class AddNewDsarScreen extends StatelessWidget{
         onSelected: (ContactMstGetListModal? selection) {
           TaskMaster_page_controller.Contact_Name_controller.text =
               _displayContactNameForOption(selection!).toString();
-          TaskMaster_page_controller.contact_code_for_dsar.value=selection.contactCode!;
-          FocusScope.of(context).unfocus();
+          TaskMaster_page_controller.contact_code_for_dsar.value=selection.contactCode??"";
+
+          //FocusScope.of(context).unfocus();
         },
         enableFilter: true,
         requestFocusOnTap: true,

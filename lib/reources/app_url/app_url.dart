@@ -1,7 +1,7 @@
 class AppUrl {
 
    //todo testing url...
-     //static const String BASE_URL = "https://devlogin.pristinefulfil.com";
+    // static const String BASE_URL = "https://devlogin.pristinefulfil.com";
     //todo live url....
        static const String BASE_URL = "https://care.pristinefulfil.com";
 
