@@ -34,7 +34,7 @@ class UpdateBussinessTermPage extends StatelessWidget{
 
     }else{
       saleCycleController.installationChargesController.value.clear();
-      saleCycleController.otherChargesController.value.clear();
+      saleCycleController.otherChargesController. value.clear();
       //saleCycleController.warrentyPeriodController.value.clear();
       //saleCycleController.deliveryWeeksController.value.clear();
       saleCycleController.advncPaymentPerController.value.clear();
@@ -383,8 +383,8 @@ class UpdateBussinessTermPage extends StatelessWidget{
   }
 
   Widget bindFinalAmt(BuildContext context) {
-   // double totAmount = saleCycleController.quoteHeaderdata[0].quoteTotalAmount!;
-   // saleCycleController.finalAmountController.value.text = totAmount.toString();
+    double totAmount = saleCycleController.quoteHeaderdata[0].quoteTotalAmount!;
+    saleCycleController.finalAmountController.value.text = totAmount.toString();
     return Padding(
       padding: const EdgeInsets.only(left: 15.0, right: 15, top: 15),
       child: Obx(() {
@@ -471,7 +471,7 @@ class UpdateBussinessTermPage extends StatelessWidget{
           controller: saleCycleController.quoteRemarkController.value,
           decoration: InputDecoration(
               contentPadding: EdgeInsets.symmetric(
-                  vertical: AllFontSize.two, horizontal: AllFontSize.ten,),
+                  vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
               hintText: 'Remarks',
               labelText: 'Remarks',
               hintStyle: GoogleFonts.poppins(
@@ -626,12 +626,14 @@ class UpdateBussinessTermPage extends StatelessWidget{
       padding: const EdgeInsets.only(left: 15.0, right: 15, top: 15),
       child: Obx(() {
         return TextField(
+          maxLines: 2,
+          maxLength: 500,
           readOnly:  saleCycleController.BusinessTerm.value,
           cursorColor: AllColors.primaryDark1,
           controller: saleCycleController.termConditionController.value,
           decoration: InputDecoration(
               contentPadding: EdgeInsets.symmetric(
-                  vertical: AllFontSize.two, horizontal: AllFontSize.ten),
+                  vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
               hintText: 'Term & Condition *',
               labelText: 'Term & Condition *',
               hintStyle: GoogleFonts.poppins(
