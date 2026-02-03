@@ -223,34 +223,26 @@ class Accountmastervm extends GetxController{
   @override
   void onInit() async {
     super.onInit();
-
-    try {
-      loading.value=true;
       email = await sessionManagement.getEmail() ?? '';
       UserName = await sessionManagement.getName() ?? '';
       UserCode = await sessionManagement.getUserCode() ?? '';
-      isAdminWritePermission.value =
-          await sessionManagement.getIsAdminPermission() ?? '';
-      isHeadofficePermission.value =
-          await sessionManagement.getisHeadofficePermission() ?? '';
-      print("isHeadofficePermission....${isHeadofficePermission}");
+      isAdminWritePermission.value = await sessionManagement.getIsAdminPermission() ?? '';
+      isHeadofficePermission.value = await sessionManagement.getisHeadofficePermission() ?? '';
       filterRouting = await sessionManagement.getfilterRouting() ?? '';
-      print("isAd.... ${isHeadofficePermission} and ${UserCode}");
-      getClustersGetByEmail();
-      //getAccountMaster(pageNumber ,is_Active.toString());
-      //getDraftAccountMaster(pageNumber ,is_Active.toString());
-      getAccCategoryApi();
-      getAccountTypeApi();
-      getCompanyProfileTypeApi("");
-      //getCompanyProfileSubTypeApi();
-      getGstRegistrationTypeApi();
-      //IsActive_controller.text = 'All';
       IsActiveTypeList.value = ['Yes', 'No'];
       AnnualRevenueListFilter.value =
       ['0-500000', '500000-1000000', '1000000-25000000', '2500000-Above'];
       NoOfEmpListFilter.value = ['0-25', '25-50', '50-100', '100-Above'];
       IsActiveTypeAllList.value = ['All', 'Yes', 'No'];
       UploadImageTypeList.value = ['Upload Image', 'Url'];
+
+       getClustersGetByEmail();
+
+       getAccCategoryApi();
+      getAccountTypeApi();
+      getCompanyProfileTypeApi("");
+      getGstRegistrationTypeApi();
+
       getEmployeeMemberApi();
       getGeoPostalCodeApi(50,'');
       getSateListApi();
@@ -258,9 +250,7 @@ class Accountmastervm extends GetxController{
       if (this.isAdminWritePermission == 1) {
         EmployeeMasterGet('');
       }
-    }catch(e){
-      loading.value=false;
-    }
+
 
   }
 
@@ -269,6 +259,7 @@ class Accountmastervm extends GetxController{
     if (query == '') {
       return const Iterable<EmployeeMemberModel>.empty();
     }
+    try {
     Map data = {
       'filter_name': '',
       'filter_email': query,
@@ -277,8 +268,9 @@ class Accountmastervm extends GetxController{
       'rowsPerPage': 50,
       'pageNumber': 0,
     };
+    loading.value=true;
     String employee_response =await _api.EmployeeMatserGetApiHit(data, sessionManagement);
-    try {
+
       final jsonResponse = json.decode(employee_response);
 
       if (jsonResponse is List) {
@@ -302,10 +294,13 @@ class Accountmastervm extends GetxController{
       Utils.sanckBarException('Exception!', e.toString());
       employee_Member_list.value = [];
     }
+    finally{
+      loading.value=false;
+    }
     return employee_Member_list.value;
   }
 
-  AccountMstDelete(String? account_code, int index) {
+  AccountMstDelete(String? account_code, int index) async{
     Map data = {
       "account_code": account_code,
       "created_by": email
@@ -313,38 +308,29 @@ class Accountmastervm extends GetxController{
     print(data);
     loading.value = true;
     try {
-      _api.AccountMstDelete(data, sessionManagement).then(
-            (value) {
+      String value = await _api.AccountMstDelete(data, sessionManagement);
           print(value);
           final JsonResponse = json.decode(value);
           if (JsonResponse is List) {
             List<AccountMasterModel> response =
             JsonResponse.map((e) => AccountMasterModel.fromJson(e)).toList();
             if (response != null && response.length > 0 && response[0].condition == "True") {
-              loading.value = false;
               Account_Master_list.removeAt(index);
               Utils.sanckBarSuccess('Success Message!',response[0].message.toString());
 
             } else {
-              loading.value = false;
               Utils.sanckBarError("False Message !", response[0].message.toString());
-              //Account_Master_list.value=[];
             }
           } else {
-            loading.value = false;
-            // service_indent_header_list.value = [];
+
             Utils.sanckBarException("Api Error!", JsonResponse);
           }
-        },
-      ).onError(
-            (error, stackTrace) {
-          print(error);
-          //service_indent_header_list.value = [];
-        },
-      );
+
     } catch (e) {
-      loading.value = false;
       print(e);
+    }
+    finally{
+      loading.value = false;
     }
   }
 
@@ -414,61 +400,52 @@ class Accountmastervm extends GetxController{
     getDraftAccountMaster(pageNumber ,'All');
   }
 
-  void getClustersGetByEmail() {
-    loading.value=true;
-    try{
-      Map<String, String> data={
-        "email_id":email
-      };
+  Future<void> getClustersGetByEmail() async {
+    try {
 
-      print("data is ${data}");
-      _api.clustersGetByEmailApiHit(data, sessionManagement).then((onValue){
-        print(onValue);
-        final jsonResponse = json.decode(onValue);
-        if(jsonResponse is List){
-          List<ClusterModal> response = jsonResponse.map((e) => ClusterModal.fromJson(e)).toList();
-          if(response.length>0 && response[0].condition=="True"){
-            clusterGetByEmailList.value=response;
-            if (clusterGetByEmailList.value.isNotEmpty && SelectedCluster_list.isEmpty) {
-              SelectedCluster_list.assignAll(clusterGetByEmailList.value);
-              clusterName_controller.value.text =
-                  clusterGetByEmailList.value.map((e) => e.geoValue).join('|');
-              getRegionsWithClusterFilterGetByEmail();
-            }
-          }else {
-            clusterGetByEmailList.value=[];
+      Map<String, String> data = {
+        "email_id": email
+      };
+      loading.value = true;
+      print("data is $data");
+      String onValue = await _api.clustersGetByEmailApiHit(data, sessionManagement);
+      print(onValue);
+      final jsonResponse = json.decode(onValue);
+      if(jsonResponse is List){
+        List<ClusterModal> response = jsonResponse.map((e) => ClusterModal.fromJson(e)).toList();
+        if(response.length>0 && response[0].condition=="True"){
+          clusterGetByEmailList.value=response;
+          if (clusterGetByEmailList.value.isNotEmpty && SelectedCluster_list.isEmpty) {
+            SelectedCluster_list.assignAll(clusterGetByEmailList.value);
+            clusterName_controller.value.text = clusterGetByEmailList.value.map((e) => e.geoValue).join('|');
+             await getRegionsWithClusterFilterGetByEmail();
           }
+        }else {
+          clusterGetByEmailList.value=[];
         }
-      },
-      ).onError(
-            (error, stackTrace) {
-              loading.value=false;
-          print(error);
-        },
-      ).whenComplete(() {
-        loading.value=false;
-      },);
-    }catch(e){
-      print(e);
+      }
+
+    } catch (e) {
+      Utils.sanckBarError("Api Error!", e.toString());
+    } finally {
+      loading.value = false;
     }
   }
-  void getRegionsWithClusterFilterGetByEmail() {
-    loading.value=true;
+
+  Future<void> getRegionsWithClusterFilterGetByEmail() async{
     var selectedCluster="";
     if(clusterName_controller.value.text.isNotEmpty){
       selectedCluster = clusterName_controller.value.text
-          .split(',')
-          .map((e) => e.trim())
-          .join('|');
+          .split(',').map((e) => e.trim()).join('|');
     }
     try{
       Map<String, String> data={
         "email_id":email,
         "cluster_filter":selectedCluster.isEmpty?"":selectedCluster
       };
-
+      loading.value=true;
       print("data is ${data}");
-      _api.RegionsWithClusterFilterGetByEmailApiHit(data, sessionManagement).then((onValue){
+      String onValue = await _api.RegionsWithClusterFilterGetByEmailApiHit(data, sessionManagement);
         print(onValue);
         final jsonResponse = json.decode(onValue);
         if(jsonResponse is List){
@@ -486,27 +463,21 @@ class Accountmastervm extends GetxController{
               getFilterData();
             }
             //getAccountMaster(pageNumber ,is_Active.toString());
-            
+
           }else {
             regionwithclusterGetByEmailList.value=[];
           }
         }
-      },
-      ).onError((error, stackTrace) {
-        loading.value = false;
-          print(error);
-        },
-      ).whenComplete(() {
-        loading.value = false;
-      },);
     }catch(e){
-      loading.value = false;
-      print(e);
+      Utils.sanckBarError("Exception Error!", e.toString());
+    }
+    finally{
+      loading.value=false;
     }
   }
 
-   getAccountMaster(int page_no, String IsActive)  {
-     loading.value=true;
+  getAccountMaster(int page_no, String IsActive) async  {
+
     if(IsActive == 'All'){
       is_Active = -1;
     }else if( IsActive == 'Yes'){
@@ -546,53 +517,45 @@ class Accountmastervm extends GetxController{
         "row_per_page": rowsPerPage.toString(),
         "page_number": page_no.toString()
       };
-
-      _api.AccountMasterGetApiHit(data, sessionManagement).then((onValue){
+      loading.value=true;
+      String onValue = await _api.AccountMasterGetApiHit(data, sessionManagement);
         print(onValue);
-         final jsonResponse = json.decode(onValue);
-         if(jsonResponse is List){
-           List<AccountMasterModel> response = jsonResponse.map((e) => AccountMasterModel.fromJson(e)).toList();
-           if(response!= null && response.length>0 && response[0].condition=="True"){
-              if(page_no==0){
-                Account_Master_list.clear();
-              }
-             Account_Master_list.addAll(response);
-             total_rows=int.parse(Account_Master_list[0].totalRows!);
+        final jsonResponse = json.decode(onValue);
+        if(jsonResponse is List){
+          List<AccountMasterModel> response = jsonResponse.map((e) => AccountMasterModel.fromJson(e)).toList();
+          if(response!= null && response.length>0 && response[0].condition=="True"){
+            if(page_no==0){
+              Account_Master_list.clear();
+            }
+            Account_Master_list.addAll(response);
+            total_rows=int.parse(Account_Master_list[0].totalRows!);
 
-           }else {
-             Account_Master_list.value=[];
+          }else {
+            Account_Master_list.value=[];
 
-           }
-         }
-      },
-      ).onError((error, stackTrace) {
-        loading.value=false;
-        Utils.sanckBarException("Error!", error.toString());
-          print(error);
-        },
-      ).whenComplete(() {
-        loading.value=false;
-      },);
+          }
+        }
     }catch(e){
-      loading.value=false;
+
       Utils.sanckBarException("Api Error!",' API error' );
       print(e);
     }
+    finally{
+      loading.value=false;
+    }
 
-   }
+  }
 
-  getEmployee(String AccOwnerEmail){
-    loading.value = true;
+  getEmployee(String AccOwnerEmail) async{
 
     try {
       Map data =
       {
         "email_id": AccOwnerEmail,
       };
-
+      loading.value = true;
       print(data);
-      _api.EmployeeGetDashBoardApiHit(data, sessionManagement).then((value) {
-        print(value);
+      String value = await _api.EmployeeGetDashBoardApiHit(data, sessionManagement);
         final JsonResponse = json.decode(value);
         if (JsonResponse is List) {
           List<EmployeeDetailsGetResponse> response = JsonResponse.map((e) =>
@@ -631,22 +594,18 @@ class Accountmastervm extends GetxController{
         } else {
           Utils.sanckBarException("Api Error!", JsonResponse);
         }
-      },).onError((error, stackTrace) {
-        loading.value = false;
-        print(error);
-      },).whenComplete(() {
-        loading.value = false;
-      },);
+
     }catch(e){
-      loading.value = false;
       print(e);
+    }
+    finally{
+      loading.value = false;
     }
 
 
   }
 
-  getDraftAccountMaster(int page_no, String IsActive){
-    loading.value=true;
+  getDraftAccountMaster(int page_no, String IsActive) async{
     if(IsActive == 'All'){
       is_Active = -1;
     }else if( IsActive == 'Yes'){
@@ -676,7 +635,8 @@ class Accountmastervm extends GetxController{
         "page_number": page_no.toString()
       };
 
-      _api.DraftAccountMstGetApiHit(data, sessionManagement).then((onValue){
+      loading.value=true;
+      String onValue = await _api.DraftAccountMstGetApiHit(data, sessionManagement);
         final jsonResponse = json.decode(onValue);
         if(jsonResponse is List){
           List<AccountMasterGetByCodeModel> response = jsonResponse.map((e) => AccountMasterGetByCodeModel.fromJson(e)).toList();
@@ -693,29 +653,24 @@ class Accountmastervm extends GetxController{
             Account_Master_Draft_list1.value=[];
           }
         }
-      },
-      ).onError((error, stackTrace) {
-          print(error);
-          loading.value = false;
-        },
-      ).whenComplete(() {
-        loading.value = false;
-      },);
+
     }catch(e){
-      loading.value = false;
       print(e);
+    }
+    finally{
+      loading.value = false;
     }
 
   }
 
-  getAccCategoryApi() {
-    this.loading.value = true;
+  getAccCategoryApi() async{
+    try {
     Map<String, String> data = {};
-
-    _api.getAccountCategoryTypeApiHit(data, sessionManagement).then((value) {
-      try {
+    String customer_response =await  _api.getAccountCategoryTypeApiHit(data, sessionManagement);
+    this.loading.value = true;
+    final jsonResponse = json.decode(customer_response);
         List<GetMasterTypeModel> emp_masterResponse =
-        (json.decode(value) as List<dynamic>)
+        (json.decode(jsonResponse) as List<dynamic>)
             .map((i) => GetMasterTypeModel.fromJson(i as Map<String, dynamic>))
             .toList();
 
@@ -730,23 +685,19 @@ class Accountmastervm extends GetxController{
         get_Acc_category_list.value = [];
         print('catch....${e.toString()}');
       }
-    }).onError((error, stackTrace) {
-      get_Acc_category_list.value = [];
-      Utils.sanckBarError('Api Exception onError', error.toString());
-      print('catchEx....${error.toString()}');
-    }).whenComplete(() {
-      this.loading.value = false;
-    });
+      finally{
+      loading.value=false;
+      }
 
   }
 
-  getAccountTypeApi() {
+  getAccountTypeApi() async {
     this.loading.value = true;
+    try {
     Map<String, String> data = {'flag': "account_type"};
 
     print("get account type ${data}");
-    _api.getMasterTypeApiHit(data, sessionManagement).then((value) {
-      try {
+    String value = await _api.getMasterTypeApiHit(data, sessionManagement);
         List<GetMasterTypeModel> emp_masterResponse =
         (json.decode(value) as List<dynamic>)
             .map((i) => GetMasterTypeModel.fromJson(i as Map<String, dynamic>))
@@ -759,56 +710,21 @@ class Accountmastervm extends GetxController{
           get_Acc_type_list.value = [];
           print('master listelsse....${get_Acc_type_list.length.toString()}');
         }
-      } catch (e) {
-        get_Acc_type_list.value = [];
-        print('catch....${e.toString()}');
-      }
-    }).onError((error, stackTrace) {
+    } catch (e) {
       get_Acc_type_list.value = [];
-      Utils.sanckBarError('Api Exception onError', error.toString());
-      print('catchEx....${error.toString()}');
-    }).whenComplete(() {
-      this.loading.value = false;
-    });
+      print('catch....${e.toString()}');
+    }
+    finally{
+      loading.value=false;
+    }
   }
 
-  /*getCompanyProfileTypeApi(){
-    this.loading.value = true;
-    Map<String, String> data = {'flag': "company"};
-
-    _api.getMasterTypeApiHit(data, sessionManagement).then((value) {
-      try {
-        List<GetMasterTypeModel> emp_masterResponse =
-        (json.decode(value) as List<dynamic>)
-            .map((i) => GetMasterTypeModel.fromJson(i as Map<String, dynamic>))
-            .toList();
-
-        if (emp_masterResponse.isNotEmpty && emp_masterResponse[0]?.condition.toString() == "True") {
-          get_Comp_Profile_type_list.value = emp_masterResponse[0].list!;
-          print('master list....${get_Comp_Profile_type_list.length.toString()}');
-        } else {
-          get_Comp_Profile_type_list.value = [];
-          print('master listelsse....${get_Comp_Profile_type_list.length.toString()}');
-        }
-      } catch (e) {
-        get_Comp_Profile_type_list.value = [];
-        print('catch....${e.toString()}');
-      }
-    }).onError((error, stackTrace) {
-      get_Comp_Profile_type_list.value = [];
-      Utils.sanckBarError('Api Exception onError', error.toString());
-      print('catchEx....${error.toString()}');
-    }).whenComplete(() {
-      this.loading.value = false;
-    });
-  }*/
-
-  getGstRegistrationTypeApi() {
-    this.loading.value = true;
+  getGstRegistrationTypeApi() async{
+    try {
     Map<String, String> data = {'flag': "gst_type"};
+    this.loading.value = true;
+    String value = await _api.getMasterTypeApiHit(data, sessionManagement);
 
-    _api.getMasterTypeApiHit(data, sessionManagement).then((value) {
-      try {
         List<GetMasterTypeModel> emp_masterResponse =
         (json.decode(value) as List<dynamic>)
             .map((i) => GetMasterTypeModel.fromJson(i as Map<String, dynamic>))
@@ -821,20 +737,17 @@ class Accountmastervm extends GetxController{
           get_Gst_Registration_list.value = [];
           //print('master listelsse....${get_Acc_category_list.length.toString()}');
         }
-      } catch (e) {
-        get_Gst_Registration_list.value = [];
-        print('catch....${e.toString()}');
-      }
-    }).onError((error, stackTrace) {
+
+    } catch (e) {
       get_Gst_Registration_list.value = [];
-      Utils.sanckBarError('Api Exception onError', error.toString());
-      print('catchEx....${error.toString()}');
-    }).whenComplete(() {
-      this.loading.value = false;
-    });
+      print('catch....${e.toString()}');
+    }
+    finally{
+      loading.value=true;
+    }
   }
 
-  getEmployeeMemberApi() {
+  getEmployeeMemberApi() async{
     Map data = {
       "email_id": email,
       "flag": "GeoLevelLower"
@@ -842,8 +755,7 @@ class Accountmastervm extends GetxController{
     print(data);
     loading.value = true;
     try {
-      _api.EmployeeMamberGetApiHit(data, sessionManagement).then(
-            (value) {
+      String value = await _api.EmployeeMamberGetApiHit(data, sessionManagement);
           print(value);
           final JsonResponse = json.decode(value);
           if (JsonResponse is List) {
@@ -860,34 +772,23 @@ class Accountmastervm extends GetxController{
             } else {
               loading.value = false;
               employee_Member_list.value=[];
-              //Utils.sanckBarError("Error!", "No Date Found");
-              //service_installation_details_list.value=[];
             }
           } else {
-            loading.value = false;
-            // service_indent_header_list.value = [];
+            employee_Member_list.value=[];
             Utils.sanckBarException("Api Error!", JsonResponse);
           }
-        },
-      ).onError(
-            (error, stackTrace) {
-          print(error);
-          //service_indent_header_list.value = [];
-        },
-      ).whenComplete(() {
-        loading.value = false;
-      },);
-    } catch (e) {
 
+    } catch (e) {
       employee_Member_list.value = [];
       print(e);
     }
+    finally{
+      loading.value=false;
+    }
   }
 
-
-
-
-  getCompanyProfileSubTypeApi() {
+  getCompanyProfileSubTypeApi() async{
+    try {
     Map data = {
       "filter_code":"",
       "filter_description": "",
@@ -896,9 +797,8 @@ class Accountmastervm extends GetxController{
     };
     print(data);
     loading.value = true;
-    try {
-      _api.CompanyProfileMsGetApiHit(data, sessionManagement).then(
-            (value) {
+
+      String value = await _api.CompanyProfileMsGetApiHit(data, sessionManagement);
           print(value);
           final JsonResponse = json.decode(value);
           if (JsonResponse is List) {
@@ -915,30 +815,23 @@ class Accountmastervm extends GetxController{
             } else {
               loading.value = false;
               CompanyProfileMst_list.value=[];
-              Utils.sanckBarError(
-                  "Error!", "No Date Found");
-              //service_installation_details_list.value=[];
+              Utils.sanckBarError("Error!", "No Date Found");
             }
           } else {
-            loading.value = false;
             CompanyProfileMst_list.value = [];
             Utils.sanckBarException("Api Error!", JsonResponse);
           }
-        },
-      ).onError(
-            (error, stackTrace) {
-          print(error);
-          //service_indent_header_list.value = [];
-        },
-      );
     } catch (e) {
-      loading.value = false;
       employee_Member_list.value = [];
       print(e);
     }
+    finally{
+      loading.value = false;
+    }
   }
 
-  getStateMasterApi(String text, String flag) {
+  getStateMasterApi(String text, String flag) async {
+    try {
     Map data = {
       "filter_pincode": text,
       "filter_search": "",
@@ -946,9 +839,7 @@ class Accountmastervm extends GetxController{
     };
     print(data);
     loading.value = true;
-    try {
-      _api.PincodeMasterGet(data, sessionManagement).then(
-            (value) {
+      String value = await _api.PincodeMasterGet(data, sessionManagement);
           print(value);
           final JsonResponse = json.decode(value);
           if (JsonResponse is List) {
@@ -970,41 +861,31 @@ class Accountmastervm extends GetxController{
             } else {
               loading.value = false;
               StateMasterPinCode_list.value=[];
-              Utils.sanckBarError(
-                  "Error!", "No Date Found");
-              //service_installation_details_list.value=[];
+              Utils.sanckBarError("Error!", "No Date Found");
             }
           } else {
-            loading.value = false;
-            // service_indent_header_list.value = [];
             Utils.sanckBarException("Api Error!", JsonResponse);
           }
-        },
-      ).onError(
-            (error, stackTrace) {
-          print(error);
-          //service_indent_header_list.value = [];
-        },
-      );
+
     } catch (e) {
-      loading.value = false;
       StateMasterPinCode_list.value = [];
       print(e);
     }
+    finally{
+      loading.value = false;
+    }
   }
 
-  getShippingStateMasterApi(String text, String flag) {
-    loading.value = true;
+  getShippingStateMasterApi(String text, String flag) async{
+    try {
     Map data = {
       "filter_pincode": text,
       "filter_search": "",
       "flag": flag,
     };
     print(data);
-
-    try {
-      _api.PincodeMasterGet(data, sessionManagement).then(
-            (value) {
+    loading.value = true;
+      String value = await _api.PincodeMasterGet(data, sessionManagement);
           print(value);
           final JsonResponse = json.decode(value);
           if (JsonResponse is List) {
@@ -1025,31 +906,19 @@ class Accountmastervm extends GetxController{
               }
 
             } else {
-              loading.value = false;
               ShippingStateMasterPinCode_list.value=[];
-              Utils.sanckBarError(
-                  "Error!", "No Date Found");
-              //service_installation_details_list.value=[];
+              Utils.sanckBarError("Error!", "No Date Found");
             }
           } else {
-            loading.value = false;
-            // service_indent_header_list.value = [];
             Utils.sanckBarException("Api Error!", JsonResponse);
           }
-        },
-      ).onError(
-            (error, stackTrace) {
-              loading.value = false;
-          print(error);
-          //service_indent_header_list.value = [];
-        },
-      ).whenComplete(() {
-        loading.value = false;
-      },);
+
     } catch (e) {
-      loading.value = false;
       ShippingStateMasterPinCode_list.value = [];
       print(e);
+    }
+    finally{
+      loading.value = false;
     }
   }
 
@@ -1058,15 +927,16 @@ class Accountmastervm extends GetxController{
     /*if (text == '') {
       return const Iterable<CompanyTypeModel>.empty();
     }*/
-    loading.value=true;
+    try {
     Map data = {
      "filter_description": text,
       "row_per_page":50 ,
       "page_number": 0
     };
+    loading.value=true;
     print("Complany Data....${data}");
     String customer_response =await  _api.CompanyTypeMsGetApiHit(data, sessionManagement);
-    try {
+
       final jsonResponse = json.decode(customer_response);
 
       if (jsonResponse is List) {
@@ -1090,63 +960,15 @@ class Accountmastervm extends GetxController{
       Utils.sanckBarException('Exception!', e.toString());
       get_Comp_Profile_type_list.value = [];
     }
+    finally{
+      loading.value=false;
+    }
 
     return  get_Comp_Profile_type_list.value;
   }
 
-
-  /*getCompanyProfileTypeApi() {
-    Map data = {
-      "filter_description": "",
-      "row_per_page": 1000,
-      "page_number": 0
-    };
-    print(data);
-    loading.value = true;
-    try {
-      _api.CompanyTypeMsGetApiHit(data, sessionManagement).then(
-            (value) {
-          print(value);
-          final JsonResponse = json.decode(value);
-          if (JsonResponse is List) {
-            List<CompanyTypeModel> response =
-            JsonResponse.map((e) => CompanyTypeModel.fromJson(e))
-                .toList();
-            if (response != null && response.length > 0 && response[0].condition == "True") {
-              loading.value = false;
-              get_Comp_Profile_type_list.value=response;
-              //Get.toNamed(RoutesName.create_preventive_calender_view_screen);
-
-            } else {
-              loading.value = false;
-              get_Comp_Profile_type_list.value=[];
-              Utils.sanckBarError(
-                  "Error!", "No Date Found");
-              //service_installation_details_list.value=[];
-            }
-          } else {
-            loading.value = false;
-            get_Comp_Profile_type_list.value = [];
-            Utils.sanckBarException("Api Error!", JsonResponse);
-          }
-        },
-      ).onError(
-            (error, stackTrace) {
-          print(error);
-          //service_indent_header_list.value = [];
-        },
-      );
-    } catch (e) {
-      loading.value = false;
-      get_Comp_Profile_type_list.value = [];
-      print(e);
-    }
-  }*/
-
-
-
   Future<Iterable<PostalCodeModel>> getGeoPostalCodeApi(int rowPerPage,String text) async {
-    loading.value=true;
+    try {
     Map data = {
       "email_id": email,
       "pincode": text,
@@ -1154,8 +976,9 @@ class Accountmastervm extends GetxController{
       "page_number": 0
 
     };
+    loading.value=true;
     String customer_response =await  _api.GeoGetPincodeHierarchy(data, sessionManagement);
-    try {
+
       final jsonResponse = json.decode(customer_response);
 
       if (jsonResponse is List) {
@@ -1320,12 +1143,12 @@ class Accountmastervm extends GetxController{
 
 
 
-  getSateListApi() {
-    this.loading.value = true;
+  getSateListApi() async{
     Map<String, String> data = {};
+    try {
+      this.loading.value = true;
+    String value = await _api.getStateMasterApiHit(data, sessionManagement);
 
-    _api.getStateMasterApiHit(data, sessionManagement).then((value) {
-      try {
         List<StateMasterListModel> emp_masterResponse =
         (json.decode(value) as List<dynamic>)
             .map((i) => StateMasterListModel.fromJson(i as Map<String, dynamic>))
@@ -1342,22 +1165,16 @@ class Accountmastervm extends GetxController{
         StateMaster_list.value = [];
         print('catch....${e.toString()}');
       }
-    }).onError((error, stackTrace) {
-      StateMaster_list.value = [];
-      Utils.sanckBarError('Api Exception onError', error.toString());
-      print('catchEx....${error.toString()}');
-    }).whenComplete(() {
-      this.loading.value = false;
-    });
+
   }
 
-  getTatResponseMasterApi() {
+  getTatResponseMasterApi() async{
+    try {
     Map data = {};
     print(data);
     loading.value = true;
-    try {
-      _api.getTatResponseMasterApiHit(data, sessionManagement).then(
-            (value) {
+
+      String value = await _api.getTatResponseMasterApiHit(data, sessionManagement);
           print(value);
           final JsonResponse = json.decode(value);
           if (JsonResponse is List) {
@@ -1383,13 +1200,7 @@ class Accountmastervm extends GetxController{
             // service_indent_header_list.value = [];
             Utils.sanckBarException("Api Error!", JsonResponse);
           }
-        },
-      ).onError(
-            (error, stackTrace) {
-          print(error);
-          //service_indent_header_list.value = [];
-        },
-      );
+
     } catch (e) {
       loading.value = false;
       TatResponseMaster_list.value = [];
@@ -1397,19 +1208,19 @@ class Accountmastervm extends GetxController{
     }
   }
 
-   getAccMasterBuyCodeApi(String? accountCode) {
-     loading.value = true;
+   getAccMasterBuyCodeApi(String? accountCode) async{
+     try{
     AccountCode = accountCode!;
     Map<String , String> data = {
       "account_code": accountCode.toString()
     };
     print('data: $data');
+    loading.value = true;
 
-      _api.getAccountMasterGetByCodeApiHit(data, sessionManagement).then(
-            (value) {
+    String value = await _api.getAccountMasterGetByCodeApiHit(data, sessionManagement);
           print(value);
           final JsonResponse = json.decode(value);
-          try{
+
             if (JsonResponse is List) {
               List<AccountMasterGetByCodeModel> response =
               JsonResponse.map((e) => AccountMasterGetByCodeModel.fromJson(e))
@@ -1418,9 +1229,8 @@ class Accountmastervm extends GetxController{
                 AccountMasterGetCode_list.value=response;
                 accountName=AccountMasterGetCode_list[0].accountName.toString();
                 print('Api Hit Mster....${AccountMasterGetCode_list[0].profile.toString()}');
-                viewRequestDetails(response);
+                await viewRequestDetails(response);
                 Get.toNamed(RoutesName.update_AccountMaster_screen);
-
 
               } else {
                 AccountMasterGetCode_list.value=[];
@@ -1437,16 +1247,6 @@ class Accountmastervm extends GetxController{
             loading.value = false;
             print(e);
           }
-        },
-      ).onError(
-            (error, stackTrace) {
-              loading.value = false;
-          print(error);
-          //service_indent_header_list.value = [];
-        },
-      ).whenComplete(() {
-        loading.value = false;
-      },);
   }
 
 
@@ -1690,14 +1490,13 @@ class Accountmastervm extends GetxController{
 
   viewRequestDetails(List<AccountMasterGetByCodeModel> response){
     try{
-      print('valuein...${compProfileRemrk.value}');
-
-      ImageString.value = response[0].profile??"";
+       ImageString.value = response[0].profile??"";
       account_code_controller.text = response[0].accountCode??"";
       account_name_controller.text = response[0].accountName??"";
       EmployeeMember_Controller.text = response[0].accountOwnerFullName??"";
       AccountOwner = response[0].accountOwner??"";
-      print('AccountOwener.....${AccountOwner}');
+
+
       AccountTitle_Controller.text = response[0].accountTitle??"";
       account_type_controller.text = response[0].accountType??"";
       ReferralBy_Controller.text = response[0].isReferral==1?"Yes":"No";
@@ -1713,7 +1512,6 @@ class Accountmastervm extends GetxController{
       comp_prof_type_controller.text = response[0].companyProfileType??"";
       comp_prof_sub_type_controller.value.text = response[0].companyProfileSubType??"";
       if(comp_prof_type_controller.value.text == 'Others'){
-        print('value...${compProfileRemrk.value}');
         compProfileRemrk.value = true;
       }
       comp_prof_remarks_controller.text = response[0].companyProfileRemark??"";
@@ -1737,7 +1535,6 @@ class Accountmastervm extends GetxController{
 
       //IsActive_controller.text = response[0].isActive.toString();
       Address_controller.text = response[0].permanentAddress!.address??"";
-      print('Adresss....${response[0].permanentAddress!.address??""}');
       Address2_Controller.text = response[0].permanentAddress!.address2??"";
       PostCode_Controller.text = response[0].permanentAddress!.postCode??"";
       State_Controller.text = response[0].permanentAddress!.stateName??"";
@@ -3202,7 +2999,7 @@ class Accountmastervm extends GetxController{
       //print("else condition");
     }
 
-    getDraftAccountMaster(pageNumber, IsActive_controller.text);
+    await getDraftAccountMaster(pageNumber, IsActive_controller.text);
 
   }
 

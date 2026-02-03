@@ -18,7 +18,6 @@ class LoginViewModel extends GetxController{
   final passFocusNode=FocusNode().obs;
 
   RxBool loading=false.obs;
-
   SessionManagement sessionManagement=SessionManagement();
 
   Future<void> loginApi() async{
@@ -36,12 +35,12 @@ class LoginViewModel extends GetxController{
         if(loginResponse!=null &&  loginResponse[0].condition=="True"){
           loading.value=false;
 
-          if(loginResponse[0].isHo=='1'){
+          /*if(loginResponse[0].isHo=='1'){
             sessionManagement.clearSession();
            Get.offAllNamed(RoutesName.loginScreen);
             Utils.sanckBarError('Message !', "Cluster User Can Not Access Mobile Application.");
             return;
-          }
+          }*/
 
          // Utils.sanckBarSuccess("Success", loginResponse[0].message!);
           sessionManagement.setUserCode(loginResponse[0].userType.toString());
