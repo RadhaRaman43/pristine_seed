@@ -113,7 +113,7 @@ class ViewAddressScreen extends StatelessWidget{
                                 child: IconButton(onPressed: () {
                                   address_vm_controller.clearController();
                                   accountMaster_page_controller.gst_registration_type_controller.value.text = 'UnRegistered';
-                                  address_vm_controller.getGeoPostalCodeApi();
+                                  address_vm_controller.getGeoPostalCodeApi(50, '');
                                   Get.toNamed(RoutesName.addNewAddress_screen);
                                 },
                                   icon: Icon(Icons.add, size: 40, color: AllColors.textColor,),
