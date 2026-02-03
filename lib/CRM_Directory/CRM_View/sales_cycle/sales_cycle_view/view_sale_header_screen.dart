@@ -426,7 +426,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                         !(saleCycleController.FromPage.value == "FromDashboard") &&
                                         (saleCycleController.email.toLowerCase() ==
                                             saleCycleController.saleCycleList[0].salesCycleOwner?.toLowerCase() ||
-                                            saleCycleController.userType?.toLowerCase()=='branch head'
+                                            saleCycleController.userType?.toLowerCase()=='branch head' || saleCycleController.isAdminWritePermission=='1'
                                         )
                                     ? true : false,
                                 child: Column(
@@ -1338,10 +1338,12 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                       .saleCycleList[0].salesCycleApprovalStatus
                                       ?.toLowerCase() ==
                                   "pending" &&
-                              saleCycleController
+                              (saleCycleController
                                       .saleCycleList[0].salesCycleOwner
                                       ?.toLowerCase() ==
-                                  saleCycleController.email.toLowerCase()
+                                  saleCycleController.email.toLowerCase() ||
+                                  saleCycleController.userType?.toLowerCase()=='branch head'
+                              || saleCycleController.isAdminWritePermission=='1')
                           /*saleCycleController.saleCycleList[0]
                                       .isReadySendForApproval ==
                                   1*/
@@ -3563,7 +3565,9 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                           "rejected" ||
                       saleCycleController.saleCycleList[0].quoteAccepted
                               ?.toLowerCase() !=
-                          "open") || saleCycleController.saleCycleList[0].isMarkRateContract==1,
+                          "open") || saleCycleController.saleCycleList[0].isMarkRateContract==1
+                  || saleCycleController.isHeadofficePermission=='1'
+                  ,
                   child: InkWell(
                     onTap: () {
                       saleCycleController.qtyUpdateLineController.value.text =
@@ -3590,7 +3594,8 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                             saleCycleController.email.toLowerCase() ||
                             saleCycleController.userType.toLowerCase() ==
                                 "branch head" ||
-                            saleCycleController.isAdminWritePermission == "1")|| saleCycleController.saleCycleList[0].isMarkRateContract==1
+                            saleCycleController.isAdminWritePermission == "1"
+                        )|| saleCycleController.saleCycleList[0].isMarkRateContract==1
                             ? TextDecoration.none
                             : TextDecoration.underline,
                       ),
@@ -7099,7 +7104,8 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                         .actualSalesCycleApprovalStatus
                                         ?.toLowerCase() !=
                                     "rejected") &&
-                            saleCycleController.FromPage.value == "Sales" &&  saleCycleController.saleCycleList[0].isMarkRateContract==0)
+                            (saleCycleController.FromPage.value == "Sales" ||
+                                saleCycleController.FromPage.value=='FromSCPendingForApproval') &&  saleCycleController.saleCycleList[0].isMarkRateContract==0)
                         /*  if (!(saleCycleController.FromPage.value ==
                                     "FromDashboard" ||saleCycleController.FromPage.value == "QuotePendingPage" || saleCycleController.FromPage.value == "ApprovedRejectedQuotePage" || saleCycleController.FromPage.value == "FromAllQuotePage" || saleCycleController.FromPage.value == "FromALLQuoteLineItems") &&
                                 saleCycleController
@@ -7138,7 +7144,8 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                       .actualSalesCycleApprovalStatus
                                       ?.toLowerCase() !=
                                   "rejected") &&
-                          saleCycleController.FromPage.value == "Sales"  &&  saleCycleController.saleCycleList[0].isMarkRateContract==0,
+                         ( saleCycleController.FromPage.value == "Sales" ||
+                             saleCycleController.FromPage.value=='FromSCPendingForApproval')  &&  saleCycleController.saleCycleList[0].isMarkRateContract==0,
                       /*saleCycleController.saleCycleList[0]
                                               .salesCycleApprovalStatus
                                               ?.toLowerCase() ==
@@ -10444,7 +10451,6 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                 bottom: MediaQuery.of(context).viewInsets.bottom,
               ),
               child: Column(
-                //mainAxisSize: MainAxisSize.min, // Ensure minimal height
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -10469,7 +10475,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                         Spacer(),
                         InkWell(
                           onTap: () {
-                            Navigator.pop(context);
+                            Get.back();
                           },
                           child: Padding(
                             padding: const EdgeInsets.only(right: 18.0),
@@ -10596,8 +10602,8 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                               SizedBox(
                                 height: 10,
                               ),*/
-                              //filterWithQuoteBranchHead(),
-                              bindRegionNameFilter(context),
+                              filterWithQuoteBranchHead(),
+                             // bindRegionNameFilter(context),
                               SizedBox(
                                 height: 10,
                               ),
@@ -10605,8 +10611,8 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                               SizedBox(
                                 height: 10,
                               ),*/
-                              //filterWithQuoteClusterHead(),
-                              bindClusterNameFilter(context),
+                              filterWithQuoteClusterHead(),
+                             // bindClusterNameFilter(context),
 
                               SizedBox(
                                 height: 10,
@@ -10731,17 +10737,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
   }
 
 
-  Widget bindRegionNameFilter(BuildContext context) {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      final availableItems = saleCycleController.regionwithclusterGetByEmailList;
-      if (availableItems.isNotEmpty &&
-          saleCycleController.SelectedRegion_list.isEmpty) {
-        saleCycleController.SelectedRegion_list.assignAll(availableItems);
-        saleCycleController.RegionName_controller.value.text =
-            availableItems.map((e) => e.geoValue).join('|');
-
-      }
-    });
+  /*Widget bindRegionNameFilter(BuildContext context) {
     return Obx(() {
       final selected = saleCycleController.SelectedRegion_list;
       final selectedText = selected.isEmpty
@@ -10961,18 +10957,8 @@ class ViewSaleHeaderScreen extends StatelessWidget {
       );
     });
   }
-  Widget bindClusterNameFilter(BuildContext context) {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      final availableItems = saleCycleController.clusterGetByEmailList;
-      if (availableItems.isNotEmpty &&
-          saleCycleController.SelectedCluster_list.isEmpty) {
-        saleCycleController.SelectedCluster_list.assignAll(availableItems);
-        saleCycleController.clusterName_controller.value.text =
-            availableItems.map((e) => e.geoValue).join('|');
-        saleCycleController.getRegionsWithClusterFilterGetByEmail();
-      }
-    });
 
+  Widget bindClusterNameFilter(BuildContext context) {
     return Obx(() {
       final selected = saleCycleController.SelectedCluster_list;
       final selectedText = selected.isEmpty
@@ -11195,9 +11181,69 @@ class ViewSaleHeaderScreen extends StatelessWidget {
         ),
       );
     });
+  }*/
+
+  filterWithQuoteClusterHead() {
+    return TextField(
+      controller: saleCycleController.quoteFilterClusterController.value,
+      decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+          labelText: 'Cluster Name',
+          hintText: 'Cluster Name',
+          hintStyle: GoogleFonts.poppins(
+              color: AllColors.lightblackColor,
+              fontWeight: FontWeight.w300,
+              fontSize: AllFontSize.ten),
+          labelStyle: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontWeight: FontWeight.w500,
+              fontSize: AllFontSize.sisxteen),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          )),
+      cursorColor: AllColors.primaryDark1,
+      onChanged: (value) {
+        // Handle the text field value changes if needed
+      },
+    );
   }
-  
-  
+
+
+  filterWithQuoteBranchHead() {
+    return TextField(
+      controller: saleCycleController.quoteFilterRegionController.value,
+      decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+          labelText: 'Region Name',
+          hintText: 'Region Name',
+          hintStyle: GoogleFonts.poppins(
+              color: AllColors.lightblackColor,
+              fontWeight: FontWeight.w300,
+              fontSize: AllFontSize.ten),
+          labelStyle: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontWeight: FontWeight.w500,
+              fontSize: AllFontSize.sisxteen),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          )),
+      cursorColor: AllColors.primaryDark1,
+      onChanged: (value) {
+        // Handle the text field value changes if needed
+      },
+    );
+  }
+
+
+
   filterWithQuoteCreatedOn(BuildContext context) {
     return TextField(
       cursorColor: AllColors.primaryDark1,

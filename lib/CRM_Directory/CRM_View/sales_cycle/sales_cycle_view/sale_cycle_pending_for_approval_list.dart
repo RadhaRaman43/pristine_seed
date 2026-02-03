@@ -26,7 +26,7 @@ import '../../../CRM_VIewModels/sales_cycle_vm/sales_cycle_vm.dart';
 
 class SaleCyclePendingForApprovalList extends StatelessWidget{
   final salesCyclePendingForApprovalController=Get.put(SalesCyclePendingForApprovalVm());
-  final salesCycleController=Get.put(SalesCycleVm());
+
 
   static String _displayCustomerNeedIdentityStatusForOption(String option) =>
       option;
@@ -169,6 +169,7 @@ class SaleCyclePendingForApprovalList extends StatelessWidget{
       margin: EdgeInsets.all(5),
       child: ListTile(
         onTap: () {
+          final salesCycleController=Get.put(SalesCycleVm());
           var item = salesCyclePendingForApprovalController.saleCyclePendingForApprovalList[position];
           String salesCycleId = item.salesCycleId ?? "";
           String taskId = item.taskId ?? "";
@@ -176,7 +177,9 @@ class SaleCyclePendingForApprovalList extends StatelessWidget{
           salesCycleController.filterQuoteAcceptedFlag.value="";
           salesCycleController.salesCycleId.value=salesCycleId;
           salesCycleController.pageNumber=0;
-          salesCycleController.getsalesCycleData(salesCycleController.pageNumber, salesCycleId, "ViewHeader", 'FromSCPendingForApproval');
+          salesCycleController.clearAllFieldOfFilter();
+          salesCycleController.getsalesCycleData(salesCycleController.pageNumber,
+              salesCycleId, "ViewHeader", 'FromSCPendingForApproval');
           salesCycleController.itemCategorySelectedlist.value = [];
           salesCycleController.getPurchaseProcessApi();
           salesCycleController.getPurchaseTimeFrameApi();

@@ -25,8 +25,7 @@ class QuoteApprovalListScreen extends StatelessWidget{
   QuoteApprovalListScreen({super.key});
   QuoteApprovalListVm quoteApprovalController=Get.put(QuoteApprovalListVm());
   SalesCycleVm saleCycleController=Get.put(SalesCycleVm());
-  final account_vm_controller = Get.put(Accountmastervm());
-  final contact_vm_controller = Get.put(ContactMasterVM());
+
   Size size=Get.size;
 
   static String _displaySaleCycleActiveForOption(String option) =>
@@ -213,6 +212,8 @@ class QuoteApprovalListScreen extends StatelessWidget{
                 },),
               _buildLabelOnTap(label: "Customer Name: ", value:  quoteApprovalController.quoteApprovalList[position].accountName ?? "",color:Colors.blueAccent,
                 onTap: (){
+                  final account_vm_controller = Get.put(Accountmastervm());
+                  final contact_vm_controller = Get.put(ContactMasterVM());
                   account_vm_controller.view='FromQuoteApproval';
                   contact_vm_controller.view='FromQuoteVIEW';
                   account_vm_controller.getAccMasterBuyCodeApi(quoteApprovalController.quoteApprovalList[position]

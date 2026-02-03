@@ -27,8 +27,7 @@ class AllQuoteScreen extends StatelessWidget{
   PendingDraftQuoteVm pendingDraftQuoteController=Get.put(PendingDraftQuoteVm());
   SalesCycleVm saleCycleController=Get.put(SalesCycleVm());
   Size size=Get.size;
-  final account_vm_controller = Get.put(Accountmastervm());
-  final contact_vm_controller = Get.put(ContactMasterVM());
+
 
   static String _displayQuoteStatusForOption(String option) =>
       option;
@@ -216,6 +215,8 @@ class AllQuoteScreen extends StatelessWidget{
                 },),
               _buildLabelOnTap(label: "Customer Name: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].accountName ?? "",color:Colors.blueAccent,
                 onTap: (){
+                  final account_vm_controller = Get.put(Accountmastervm());
+                  final contact_vm_controller = Get.put(ContactMasterVM());
                   account_vm_controller.view = 'FromAllQuotePage';
                   contact_vm_controller.view = 'FromAllQuotePage';
                   account_vm_controller.getAccMasterBuyCodeApi(

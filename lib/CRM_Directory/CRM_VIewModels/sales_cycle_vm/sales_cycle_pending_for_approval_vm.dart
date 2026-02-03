@@ -335,7 +335,7 @@ class SalesCyclePendingForApprovalVm extends GetxController{
     }
   }
 
-  getsalesCycleData(int page_no) {
+  getsalesCycleData(int page_no) async{
     try {
       AccountOwnerForApi = '';
       if(AccountOwner_controller.value.text.isNotEmpty){
@@ -373,7 +373,7 @@ class SalesCyclePendingForApprovalVm extends GetxController{
         "page_number": page_no
       };
       loading.value = true;
-      _api.SalesCycleMstGetApprovalList(data, sessionManagement).then(
+     await _api.SalesCycleMstGetApprovalList(data, sessionManagement).then(
             (onValue) {
           final jsonResponse = json.decode(onValue);
           print(onValue);
@@ -383,15 +383,12 @@ class SalesCyclePendingForApprovalVm extends GetxController{
             if (response != null &&
                 response.length > 0 &&
                 response[0].condition == "True") {
-              print('listSize.....${saleCyclePendingForApprovalList.length}');
-              loading.value = false;
               if (page_no == 0) {
                 saleCyclePendingForApprovalList.clear();
               }
               saleCyclePendingForApprovalList.addAll(response);
               total_rows = int.parse(saleCyclePendingForApprovalList[0].totalRows!);
             } else {
-              loading.value = false;
               saleCyclePendingForApprovalList.value = [];
             }
           } else {
@@ -403,12 +400,17 @@ class SalesCyclePendingForApprovalVm extends GetxController{
           print(error);
           loading.value = false;
         },
-      );
+      ).whenComplete(() {
+        loading.value = false;
+        print("API call completed (success or error)");
+      });
     } catch (e) {
       loading.value = false;
       print(e);
     }
   }
+
+
   void clearAllFieldOfFilter() {
     print("Clear Filed");
     product_category_type_Controller.value.text="Contains";
@@ -479,9 +481,6 @@ class SalesCyclePendingForApprovalVm extends GetxController{
 
   void getFilterData() async{
     Map getFilterData=await sessionManagement.getSaleCycleApproverData();
-
-
-
     if(getFilterData.isNotEmpty){
       filterDataChecker.value='1';
       SaleCycleStatusController.value.text=getFilterData["sale_cycle_stage"];
