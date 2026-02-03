@@ -35,6 +35,7 @@ class LoginViewModel extends GetxController{
 
         if(loginResponse!=null &&  loginResponse[0].condition=="True"){
           loading.value=false;
+
           if(loginResponse[0].isHo=='1'){
             sessionManagement.clearSession();
            Get.offAllNamed(RoutesName.loginScreen);
