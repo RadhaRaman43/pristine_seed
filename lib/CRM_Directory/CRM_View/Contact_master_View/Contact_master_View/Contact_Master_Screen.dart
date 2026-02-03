@@ -361,71 +361,67 @@ class ContactMasterScreen extends StatelessWidget{
     return Card(
       margin: EdgeInsets.all(5),
       child: ListTile(
-        onTap: () {
+        /*onTap: () {
           //accountMaster_page_controller.getAccMasterBuyCodeApi(accountMaster_page_controller.Account_Master_list[position].accountCode);
-        },
-        title: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
+        },*/
+        title:Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              "Contact Code : ",
-              style: GoogleFonts.poppins(
-                color: AllColors.primaryDark1,
-                fontSize: AllFontSize.fourtine,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-
-            Flexible(
-              child: Tooltip(
-                message: contact_vm_controller.contact_master_list[position].contactCode?? "",
-                child: Text(
-                  contact_vm_controller.contact_master_list[position].contactCode?? "",
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1,
-                  style: GoogleFonts.poppins(
-                    color: AllColors.textColor,
-                    fontSize: AllFontSize.fourtine,
-                    fontWeight: FontWeight.w500,
+            Expanded(
+              child: Row(
+                children: [
+                  Text(
+                    "Contact Code : ",
+                    style: GoogleFonts.poppins(
+                        color: AllColors.primaryDark1,
+                        fontSize: AllFontSize.fourtine,
+                        fontWeight: FontWeight.w500),
                   ),
-                ),
-              ),
-            ),
-
-            const Spacer(), // force icons to the far right
-
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Visibility(
-                  //visible: TaskMaster_page_controller.isAdminWritePermission.value == '0'?true:false,
-                  visible:contact_vm_controller.isHeadofficePermission.value!="1"  ? true:false ,
-                  child: InkWell(
-                    onTap: (){
-                      contact_vm_controller.FromPage.value="";
-                      contact_vm_controller.insideOut = true;
-                      contact_vm_controller.upDateContact('OutSide', position);
-                    },
-                    child:Icon(Icons.update) ,
-                  ),
-                ),
-                Obx(() {
-                  return Visibility(
-                    visible: contact_vm_controller.isAdminWritePermission.value == "1" &&
-                        contact_vm_controller.isHeadofficePermission.value == "0",
-                    child: GestureDetector(
-                      onTap: () => showConfirmCompleteDialog(context, position!),
-                      child: const Padding(
-                        padding: EdgeInsets.only(left: 8.0),
-                        child: Icon(Icons.delete, color: Colors.red),
+                  Flexible(
+                    child: Tooltip(
+                      message: contact_vm_controller.contact_master_list[position].contactCode?? "",
+                      child: Text(contact_vm_controller.contact_master_list[position].contactCode?? "",
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.poppins(
+                            color: AllColors.textColor,
+                            fontSize: AllFontSize.fourtine,
+                            fontWeight: FontWeight.w500),
                       ),
                     ),
-                  );
-                }),
-              ],
+                  ),
+                ],
+              ),
             ),
+            Visibility(
+              //visible: TaskMaster_page_controller.isAdminWritePermission.value == '0'?true:false,
+              visible:contact_vm_controller.isHeadofficePermission.value!="1"  ? true:false ,
+              child: InkWell(
+                onTap: (){
+                  contact_vm_controller.FromPage.value="";
+                  contact_vm_controller.insideOut = true;
+                  contact_vm_controller.upDateContact('OutSide', position);
+                },
+                child:Icon(Icons.update) ,
+              ),
+            ),
+            SizedBox(width: 5,),
+            Obx(() {
+              return Visibility(
+                visible: contact_vm_controller.isAdminWritePermission.value == "1" &&
+                    contact_vm_controller.isHeadofficePermission.value == "0",
+                child: GestureDetector(
+                  onTap: () => showConfirmCompleteDialog(context, position!),
+                  child: const Padding(
+                    padding: EdgeInsets.only(left: 8.0),
+                    child: Icon(Icons.delete, color: Colors.red),
+                  ),
+                ),
+              );
+            }),
+
           ],
         ),
+
         subtitle: Column(
           children: [
            _buildLabelWithValue( "Contact Name : ",contact_vm_controller.contact_master_list[position].contactName?? "" ),

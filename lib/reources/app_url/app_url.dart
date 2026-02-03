@@ -1,9 +1,9 @@
 class AppUrl {
 
    //todo testing url...
-     static const String BASE_URL = "https://devlogin.pristinefulfil.com";
+     //static const String BASE_URL = "https://devlogin.pristinefulfil.com";
     //todo live url....
-       //static const String BASE_URL = "https://care.pristinefulfil.com";
+       static const String BASE_URL = "https://care.pristinefulfil.com";
 
   static const String login_url = "$BASE_URL/api/UserLogin/Login";
   static const String logout_url = "$BASE_URL/api/UserLogin/Logout";
@@ -29,7 +29,6 @@ class AppUrl {
 
 
   //todo for service indent....
-
   static const String serviceIndentGet = "$BASE_URL/api/ServiceIndent/IndentHeaderListGet";
   static const String serviceIndentHeaderCreate = "$BASE_URL/api/ServiceIndent/IndentHeaderCreate";
   static const String serviceIndentLineCreate = "$BASE_URL/api/ServiceIndent/IndentLineAdd";

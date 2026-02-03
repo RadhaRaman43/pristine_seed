@@ -183,9 +183,7 @@ class TaskApprovalvm extends GetxController{
       } catch (e) {
         print('catch....${e.toString()}');
       }
-      finally{
-       loading.value = false;
-      }
+
     }).onError((error, stackTrace) {
       Utils.sanckBarError('Api Exception onError', error.toString());
       print('catchEx....${error.toString()}');
@@ -217,10 +215,8 @@ class TaskApprovalvm extends GetxController{
         Item_Category_master_list_without_task.value = [];
         print('catch....${e.toString()}');
       }
-      finally{
-        loading.value = false;
-      }
     }).onError((error, stackTrace) {
+      loading.value = false;
       Item_Category_master_list_without_task.value = [];
       Utils.sanckBarError('Api Exception onError', error.toString());
       print('catchEx....${error.toString()}');
@@ -228,12 +224,13 @@ class TaskApprovalvm extends GetxController{
       loading.value = false;
     });
   }
+
   CallDSARsMasterApiHit(){
     try{
       Map<String, String> data={
         "filter_type_of_call": "dsar",
       };
-      loading.value=true;
+      //loading.value=true;
       _api.CallStatusMasterGetApiHit(data, sessionManagement).then((onValue){
         final jsonResponse = json.decode(onValue);
         if(jsonResponse is List){
@@ -259,9 +256,9 @@ class TaskApprovalvm extends GetxController{
     }catch(e){
       print(e);
     }
-    finally{
+    /*finally{
       loading.value = false;
-    }
+    }*/
   }
 
   Future<Iterable<EmployeeMemberModel>> EmployeeMasterGet(String query) async {
@@ -276,7 +273,7 @@ class TaskApprovalvm extends GetxController{
       'rowsPerPage': 50,
       'pageNumber': 0,
     };
-    loading.value = true;
+   // loading.value = true;
     String employee_response =await _api.EmployeeMatserGetApiHit(data, sessionManagement);
     try {
       final jsonResponse = json.decode(employee_response);
@@ -302,9 +299,9 @@ class TaskApprovalvm extends GetxController{
       Utils.sanckBarException('Exception!', e.toString());
       employee_Member_list.value = [];
     }
-    finally{
+   /* finally{
       loading.value = false;
-    }
+    }*/
     return employee_Member_list.value;
   }
   getEmployeeMemberApi() {
@@ -313,7 +310,7 @@ class TaskApprovalvm extends GetxController{
       "flag": "GeoLevelLower"
     };
     print(data);
-    loading.value = true;
+    //loading.value = true;
     try {
       _api.EmployeeMamberGetApiHit(data, sessionManagement).then(
             (value) {
@@ -352,9 +349,9 @@ class TaskApprovalvm extends GetxController{
       employee_Member_list.value = [];
       print(e);
     }
-    finally{
-      loading.value = false;
-    }
+    // finally{
+    //   loading.value = false;
+    // }
   }
 
   Future<void>refreshList() async{
@@ -364,6 +361,7 @@ class TaskApprovalvm extends GetxController{
   RxInt infraLeadValue=0.obs;
   
   getTaskMaster(int page_no, String IsActive, String? taskId){
+    loading.value=true;
     if(isInfraLeadFilterController.text=="All"){
       infraLeadValue.value=-1;
     }
@@ -383,7 +381,6 @@ class TaskApprovalvm extends GetxController{
     }else if(IsActive == 'No'){
       is_Active = 0;
     }
-    try{
       Map data={
         "filter_account_code": account_code_controller.value.text.isEmpty?"":account_code_controller.value.text,
         "filter_account_name": account_Name_controller.value.text.isEmpty?"":account_Name_controller.value.text,
@@ -415,35 +412,33 @@ class TaskApprovalvm extends GetxController{
         "page_number": page_no.toString()
       };
       print("Data Json....${data}");
-      loading.value=true;
       _api.TaskMasterGetApiHit(data, sessionManagement).then((onValue){
-        final jsonResponse = json.decode(onValue);
-        print("onValue${onValue}");
-        if(jsonResponse is List){
-          List<TaskMasterGetModel> response = jsonResponse.map((e) => TaskMasterGetModel.fromJson(e)).toList();
-          if(response!= null && response.length>0 && response[0].condition?.toLowerCase()=="true"){
-            Task_Master_list_line_Wise.value=response;
+        try{
+          final jsonResponse = json.decode(onValue);
+          print("onValue${onValue}");
+          if(jsonResponse is List){
+            List<TaskMasterGetModel> response = jsonResponse.map((e) => TaskMasterGetModel.fromJson(e)).toList();
+            if(response!= null && response.length>0 && response[0].condition?.toLowerCase()=="true"){
+              Task_Master_list_line_Wise.value=response;
               getTaskMstDSARList(taskId);
               Get.toNamed(RoutesName.taslMasterApprovalDetailsScreen);
-          }else {
-            Task_Master_list_line_Wise.value=[];
+            }else {
+              Task_Master_list_line_Wise.value=[];
+            }
           }
-        } else {
-
+        }
+        catch(e){
+          Utils.sanckBarError("Exception Error! ", e.toString());
         }
       },
       ).onError((error, stackTrace) {
           print(error);
-
+          loading.value=false;
         },
-      );
-    }catch(e){
-
-      print("task approver list ${e.toString()}");
-    }
-    finally{
-      loading.value = false;
-    }
+      ).whenComplete(() {
+        loading.value=false;
+      },);
+    
   }
 
   CallStatusMasterApiHit(String flag){
@@ -451,7 +446,6 @@ class TaskApprovalvm extends GetxController{
       Map<String, String> data={
         "filter_type_of_call": flag,
       };
-      loading.value=true;
       _api.CallStatusMasterGetApiHit(data, sessionManagement).then((onValue){
         print(onValue);
         final jsonResponse = json.decode(onValue);
@@ -477,16 +471,14 @@ class TaskApprovalvm extends GetxController{
     }catch(e){
       print(e);
     }
-    finally{
-      loading.value = false;
-    }
   }
+
   MethodOfCallMasterApiHit(){
     try{
       Map<String, String> data={
         "filter_type_of_call": "method",
       };
-      loading.value=true;
+      //loading.value=true;
       _api.CallStatusMasterGetApiHit(data, sessionManagement).then((onValue){
         final jsonResponse = json.decode(onValue);
         if(jsonResponse is List){
@@ -514,9 +506,9 @@ class TaskApprovalvm extends GetxController{
     }catch(e){
       print(e);
     }
-    finally{
+    /*finally{
       loading.value = false;
-    }
+    }*/
   }
   void resetAllFieldOfFilter() {
     Selection_CallStatus_Master_list.value=[];
@@ -562,43 +554,47 @@ class TaskApprovalvm extends GetxController{
   }
 
   void getClustersGetByEmail() {
-    try{
+    loading.value=true;
       Map<String, String> data={
         "email_id":email
       };
 
-      loading.value=true;
+
       print("loading ....${loading.value}");
       print("data is ${data}");
       _api.clustersGetByEmailApiHit(data, sessionManagement).then((onValue){
         print(onValue);
-        final jsonResponse = json.decode(onValue);
-        if(jsonResponse is List){
-          List<ClusterModal> response = jsonResponse.map((e) => ClusterModal.fromJson(e)).toList();
-          if(response.length>0 && response[0].condition=="True"){
-            clusterGetByEmailList.value=response;
-            if (clusterGetByEmailList.value.isNotEmpty && SelectedCluster_list.isEmpty) {
-              SelectedCluster_list.assignAll(clusterGetByEmailList.value);
-              clusterName_controller.value.text = clusterGetByEmailList.value.map((e) => e.geoValue).join('|');
-              getRegionsWithClusterFilterGetByEmail();
+        try{
+          final jsonResponse = json.decode(onValue);
+          if(jsonResponse is List){
+            List<ClusterModal> response = jsonResponse.map((e) => ClusterModal.fromJson(e)).toList();
+            if(response.length>0 && response[0].condition=="True"){
+              clusterGetByEmailList.value=response;
+              if (clusterGetByEmailList.value.isNotEmpty && SelectedCluster_list.isEmpty) {
+                SelectedCluster_list.assignAll(clusterGetByEmailList.value);
+                clusterName_controller.value.text = clusterGetByEmailList.value.map((e) => e.geoValue).join('|');
+                getRegionsWithClusterFilterGetByEmail();
+              }
+            }else {
+              clusterGetByEmailList.value=[];
             }
-          }else {
-            clusterGetByEmailList.value=[];
           }
+        }catch(e){
+          Utils.sanckBarError("Exception error!", e.toString());
         }
       },
       ).onError((error, stackTrace) {
+        loading.value=false;
           print(error);
         },
-      );
-    }catch(e){
-      print(e);
-    }finally{
-      loading.value = false;
-    }
+      ).whenComplete( () {
+        loading.value=false;
+      },);
+
   }
   void getRegionsWithClusterFilterGetByEmail() {
     var selectedCluster="";
+    loading.value=true;
     if(clusterName_controller.value.text.isNotEmpty){
       selectedCluster = clusterName_controller.value.text.split(',').map((e) => e.trim()).join('|');
     }
@@ -607,7 +603,7 @@ class TaskApprovalvm extends GetxController{
         "email_id":email,
         "cluster_filter":selectedCluster.isEmpty?"":selectedCluster
       };
-      loading.value=true;
+
       print("data is ${data}");
       _api.RegionsWithClusterFilterGetByEmailApiHit(data, sessionManagement).then((onValue){
         print(onValue);
