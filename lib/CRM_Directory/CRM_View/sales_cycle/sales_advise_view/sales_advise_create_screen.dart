@@ -1189,7 +1189,7 @@ class SalesAdviseCreateScreen extends StatelessWidget {
                               address_vm_controller.account_code_controller.text=saleCycleController.quoteHeaderdata[0].accountCode??"";
                               address_vm_controller.account_name_controller.text=saleCycleController.quoteHeaderdata[0].accountName??"";
                               address_vm_controller.gst_registration_type_controller.value.text = 'UnRegistered';
-                              address_vm_controller.getGeoPostalCodeApi();
+                              address_vm_controller.getGeoPostalCodeApi(50, '');
                               Get.toNamed(RoutesName.addNewAddress_screen);
                             },
                             child: Container(
