@@ -763,13 +763,13 @@ class SalesCycleVm extends GetxController {
               if (saleCycleList[0].salesCycleStatus == "Suspect") {
                 itemCategorySelectedlist.value = [];
                 getItemCategoryMstApi(saleCycleList[0].salesCycleId??"", saleCycleList[0].taskId??"","");
-                ProductCategoryWiseAmtGet(0, saleCycleList[0].salesCycleId!);
+                ProductCategoryWiseAmtGet(0, saleCycleList[0].salesCycleId??"");
               }
               if (saleCycleList[0].salesCycleStatus == "Propose") {
                 print("Sales cycle status..${saleCycleList[0].salesCycleId}");
                 pageNumberForQuote = 0;
-                getQuoteHeaderData(pageNumberForQuote, saleCycleList[0].salesCycleId!, '');
-                getQuoteWonData(saleCycleList[0].salesCycleId!);
+                getQuoteHeaderData(pageNumberForQuote, saleCycleList[0].salesCycleId??"", '');
+                getQuoteWonData(saleCycleList[0].salesCycleId??"");
               }
               /* accountNameController.value.text=saleCycleList[0].accountName??"";
             contactNameController.value.text=saleCycleList[0].contactName??"";

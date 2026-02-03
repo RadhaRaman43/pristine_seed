@@ -183,9 +183,12 @@ class AddNewDsarScreen extends StatelessWidget{
 
             }*/
             else{
-              TaskMaster_page_controller.TaskSaleCatCreateApiHit('DSAR');
-
-
+              if(TaskMaster_page_controller.ItemCat_type_controller
+                  .text.isNotEmpty){
+                TaskMaster_page_controller.TaskSaleCatCreateApiHit('DSAR');
+              }else{
+                TaskMaster_page_controller.TaskDSARMasterCreate();
+              }
             }
           },
         ),
