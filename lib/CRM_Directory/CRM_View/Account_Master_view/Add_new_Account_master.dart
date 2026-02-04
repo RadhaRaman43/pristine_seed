@@ -203,7 +203,7 @@ class AddNewAccountMaster extends StatelessWidget{
                 Utils.sanckBarError('Customer Name!', "Please Enter Customer Name");
                 return  ;
               }
-              if(defaultFullName == "" && accountMaster_page_controller.EmployeeMember_Controller.text.isEmpty){
+              if(defaultFullName == "" && accountMaster_page_controller.account_owner_Controller.text.isEmpty){
                 Utils.sanckBarError('Customer Owner!', "Please Enter Customer Owner");
                 return  ;
               }
@@ -1109,7 +1109,7 @@ class AddNewAccountMaster extends StatelessWidget{
       },
       onSelected: (EmployeeMemberModel selection) {
         print(selection.loginEmailId);
-        accountMaster_page_controller.EmployeeMember_Controller.text =
+        accountMaster_page_controller.account_owner_Controller.text =
             _displayEmpMemberForOption(selection).toString();
         accountMaster_page_controller.AccountOwner = selection.loginEmailId!;
         print("accountOu...${selection.loginEmailId!}");
@@ -1133,8 +1133,8 @@ class AddNewAccountMaster extends StatelessWidget{
           readOnly: accountMaster_page_controller.Account_Master_list != null &&
               accountMaster_page_controller.Account_Master_list.isNotEmpty && accountMaster_page_controller.Account_Master_list[0].isManager == 1?true :false,
           cursorColor: AllColors.primaryDark1,
-          controller: controller..text = accountMaster_page_controller.EmployeeMember_Controller.text.isEmpty
-              ?defaultFullName:accountMaster_page_controller.EmployeeMember_Controller.text,
+          controller: controller..text = accountMaster_page_controller.account_owner_Controller.text.isEmpty
+              ?defaultFullName:accountMaster_page_controller.account_owner_Controller.text,
           focusNode: focusNode,
           decoration: InputDecoration(
             suffixIcon: IconButton(
@@ -3014,7 +3014,7 @@ class AddNewAccountMaster extends StatelessWidget{
       await crmDatabase.insertItem(AccountDraftModel(
         profile: accountMaster_page_controller.ImageUrl_Controller.value.text,
         accountName: accountMaster_page_controller.account_name_controller.value.text,
-        accountOwner: accountMaster_page_controller.EmployeeMember_Controller.value.text.isEmpty?accountMaster_page_controller.UserName:accountMaster_page_controller.EmployeeMember_Controller.value.text,
+        accountOwner: accountMaster_page_controller.account_owner_Controller.value.text.isEmpty?accountMaster_page_controller.UserName:accountMaster_page_controller.account_owner_Controller.value.text,
         accountTitle: accountMaster_page_controller.AccountTitle_Controller.value.text,
         accountType: accountMaster_page_controller.account_type_controller.value.text,
         phoneNo: accountMaster_page_controller.PhoneNo_Controller.value.text,
@@ -3058,7 +3058,7 @@ class AddNewAccountMaster extends StatelessWidget{
         id: int.tryParse(draftId),
         profile: accountMaster_page_controller.ImageUrl_Controller.value.text,
         accountName: accountMaster_page_controller.account_name_controller.value.text,
-        accountOwner: accountMaster_page_controller.EmployeeMember_Controller.value.text.isEmpty?accountMaster_page_controller.UserName:accountMaster_page_controller.EmployeeMember_Controller.value.text,
+        accountOwner: accountMaster_page_controller.account_owner_Controller.value.text.isEmpty?accountMaster_page_controller.UserName:accountMaster_page_controller.account_owner_Controller.value.text,
         accountTitle: accountMaster_page_controller.AccountTitle_Controller.value.text,
         accountType: accountMaster_page_controller.account_type_controller.value.text,
         phoneNo: accountMaster_page_controller.PhoneNo_Controller.value.text,

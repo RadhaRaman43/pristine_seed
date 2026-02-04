@@ -73,7 +73,7 @@ class AccountmasterScreen extends StatelessWidget{
                    accountMaster_page_controller.getCompanyProfileSubTypeApi();
                    accountMaster_page_controller.getCompanyProfileTypeApi("");
                    accountMaster_page_controller.getGeoPostalCodeApi(50,'');
-                   Get.toNamed(RoutesName.add_New_AccountMaster_screen);
+                   Get.toNamed(RoutesName.add_New_AccountMaster_screen,arguments: 'Create');
                  }, icon: Icon(Icons.add)),
                );
               }),
@@ -86,11 +86,7 @@ class AccountmasterScreen extends StatelessWidget{
 
       ),
       drawer: CustomDrawer(),
-      body: Obx((){
-        if(accountMaster_page_controller.loading.value){
-          return const FullScreenLoader();
-        }
-        return RefreshIndicator(
+      body: RefreshIndicator(
           onRefresh: accountMaster_page_controller.refreshList,
           child: Container(
             width: double.infinity,
@@ -120,9 +116,7 @@ class AccountmasterScreen extends StatelessWidget{
               ],
             ),
           ),
-        );
-      })
-
+        ),
 
       ),
     );
@@ -1356,7 +1350,7 @@ class AccountmasterScreen extends StatelessWidget{
                           padding:
                           const EdgeInsets.symmetric(horizontal: 8.0),
                           child: CheckboxListTile(
-                            title: const Text('Select All'),
+                            title: Text(allSelected?'UnSelect All':"Select All"),
                             value: allSelected,
                             onChanged: (val) {
                               setState(() {
@@ -1588,7 +1582,7 @@ class AccountmasterScreen extends StatelessWidget{
                           padding:
                           const EdgeInsets.symmetric(horizontal: 8.0),
                           child: CheckboxListTile(
-                            title: const Text('Select All'),
+                            title: Text(allSelected?'UnSelect All':"Select All"),
                             value: allSelected,
                             onChanged: (val) {
                               setState(() {

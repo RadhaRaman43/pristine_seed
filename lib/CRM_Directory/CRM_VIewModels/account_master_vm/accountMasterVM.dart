@@ -116,7 +116,7 @@ class Accountmastervm extends GetxController{
   var stateName_controller = TextEditingController();
   var ImageUrl_Controller = TextEditingController();
   var CompProfileDescription_Controller = TextEditingController();
-  var EmployeeMember_Controller = TextEditingController();
+  var account_owner_Controller = TextEditingController();
   var AccountTitle_Controller = TextEditingController();
   var PhoneNo_Controller = TextEditingController();
   var Alternate_PhoneNo_Controller = TextEditingController();
@@ -1321,7 +1321,6 @@ class Accountmastervm extends GetxController{
         if (response != null &&
             response.length > 0 &&
             response[0].condition == "True") {
-          loading.value = false;
           //AccountMasterGetCode_list.value=response;
 
      //     print('Api Hit Mster....${AccountMasterGetCode_list[0].message.toString()}');
@@ -1378,6 +1377,9 @@ class Accountmastervm extends GetxController{
       print("Exce3ption....$error");
       //service_indent_header_list.value = [];
       Utils.sanckBarException("catch Api Error!", error.toString());
+    }
+    finally{
+      loading.value=false;
     }
 
   }
@@ -1493,7 +1495,7 @@ class Accountmastervm extends GetxController{
        ImageString.value = response[0].profile??"";
       account_code_controller.text = response[0].accountCode??"";
       account_name_controller.text = response[0].accountName??"";
-      EmployeeMember_Controller.text = response[0].accountOwnerFullName??"";
+       account_owner_Controller.text = response[0].accountOwnerFullName??"";
       AccountOwner = response[0].accountOwner??"";
 
 
@@ -1693,7 +1695,7 @@ class Accountmastervm extends GetxController{
 
       account_code_controller.clear();
       account_name_controller.clear();
-      EmployeeMember_Controller.clear();
+      account_owner_Controller.clear();
       AccountOwner = '';
       AccountTitle_Controller.clear();
       account_type_controller.clear();
@@ -2182,9 +2184,8 @@ class Accountmastervm extends GetxController{
       ImageString.value = response[position].profile??"";
       account_code_controller.text = response[position].accountCode??"";
       account_name_controller.text = response[position].accountName??"";
-      EmployeeMember_Controller.text = response[position].accountOwnerFullName??"";
+      account_owner_Controller.text = response[position].accountOwnerFullName??"";
       AccountOwner = response[position].accountOwner??"";
-      print('Onwer...${EmployeeMember_Controller.text}');
      // AccountOwner = employee_Member_list[position].loginEmailId??"";
       AccountTitle_Controller.text = response[position].accountTitle??"";
       account_type_controller.text = response[position].accountType??"";
