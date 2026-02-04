@@ -1855,7 +1855,8 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                             ),
                           ),
                           onPressed: () {
-                            Get.back();
+                            Navigator.pop(context);
+                            //Get.back();
                           },
                           child: Container(
                             child: Text(
@@ -1890,7 +1891,8 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                               saleCycleController
                                   .ProductCategoryWiseAmtDeleteApiHit(Id!);
                             }
-                            Get.back();
+                            Navigator.pop(context);
+                            //Get.back();
                           },
                           child: Container(
                             child: Text(
@@ -2817,7 +2819,8 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                 saleCycleController.isAdminWritePermission == "1") &&
                             (saleCycleController.FromPage.value == "Sales" || saleCycleController.FromPage.value == "FromSCPendingForApproval")  &&
                             saleCycleController.saleCycleList[0].quoteAccepted?.toLowerCase() == 'open' &&
-                            saleCycleController.saleCycleList[0].actualSalesCycleApprovalStatus?.toLowerCase() != 'rejected' && saleCycleController.saleCycleList[0].isMarkRateContract==0,
+                            saleCycleController.saleCycleList[0].actualSalesCycleApprovalStatus?.toLowerCase() != 'rejected' ,
+                            //&& saleCycleController.saleCycleList[0].isMarkRateContract==0,
 
                         child: InkWell(
                             onTap: () {
@@ -3576,7 +3579,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                       updateQtySalesCycleProduct(context, index);
                     },
                     child: Text(
-                      (saleCycleController.get_SalesCycleProductById_List[index].qty).toString(),
+                      (saleCycleController.get_SalesCycleProductById_List[index].qty?.toInt()).toString(),
                       style: GoogleFonts.poppins(
                         color: AllColors.textColor,
                         fontSize: AllFontSize.twelve,
@@ -3589,7 +3592,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                 saleCycleController
                                         .saleCycleList[0].quoteAccepted
                                         ?.toLowerCase() !=
-                                    "open" ) && (saleCycleController.saleCycleList[0].createdBy
+                                    "open"  ) && (saleCycleController.saleCycleList[0].createdBy
                             ?.toLowerCase() ==
                             saleCycleController.email.toLowerCase() ||
                             saleCycleController.userType.toLowerCase() ==

@@ -10,6 +10,7 @@ import '../../CRM_Models/AccountMaster_model/cluster_modal.dart';
 import '../../CRM_Models/AccountMaster_model/region_with_cluster_filter_modal.dart';
 import '../../CRM_Models/TaskMaster_model/Item_Category_Mast_model.dart';
 import '../../CRM_Models/sale_cycle_modal/Pending_Draft_Quote_model.dart';
+import '../../CRM_Models/sale_cycle_modal/sales_cycle_update_status_modal.dart';
 import '../../CRM_Repository/sales_cycle_repository/sales_cycle_repository.dart';
 
 class PendingDraftQuoteVm extends GetxController{
@@ -772,6 +773,49 @@ class PendingDraftQuoteVm extends GetxController{
 
     final formatter = NumberFormat('#,##,##0.00', 'en_IN');
     return formatter.format(num.parse(number.toString()));
+  }
+
+
+
+  QuoteMstDelete(String quoteId) {
+    Map data = {
+      "quote_id": quoteId,
+      "created_by": email
+    };
+    print(data);
+    loading.value = true;
+    try {
+      _api.QuoteMstDelete(data, sessionManagement).then(
+            (value) {
+          print(value);
+          final JsonResponse = json.decode(value);
+          if (JsonResponse is List) {
+            List<SalesCycleUpdateStatusModal> response =
+            JsonResponse.map((e) => SalesCycleUpdateStatusModal.fromJson(e)).toList();
+            if (response != null && response.length > 0 && response[0].condition?.toLowerCase() == "true") {
+              loading.value = false;
+              Utils.sanckBarSuccess('Success Message!',response[0].message.toString());
+              pageNumberForQuote=0;
+              getPendingDraftQuoteList(pageNumberForQuote,filterFlag);
+            } else {
+              loading.value = false;
+              Utils.sanckBarError("False Message !", response[0].message.toString());
+            }
+          } else {
+            loading.value = false;
+            Utils.sanckBarException("Api Error!", JsonResponse);
+          }
+        },
+      ).onError(
+            (error, stackTrace) {
+          print(error);
+          loading.value = false;
+        },
+      );
+    } catch (e) {
+      loading.value = false;
+      print(e);
+    }
   }
 
 }

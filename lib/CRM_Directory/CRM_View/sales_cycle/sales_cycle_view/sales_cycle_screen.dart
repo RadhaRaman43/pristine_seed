@@ -116,13 +116,20 @@ class SalesCycleScreen extends StatelessWidget{
                             ),
                             label: Text(
                               'Open',
-                              style: GoogleFonts.poppins(
+                              style: TextStyle(
                                 color: salesCycleController.quoteAcceptedForFilterOnSaleCycle.value=="Open"
                                     ? AllColors.whiteColor
                                     : AllColors.primaryDark1,
                                 fontSize: AllFontSize.fourtine,
                                 fontWeight: FontWeight.w500,
-                              ),
+                              )
+                            /*  style: GoogleFonts.poppins(
+                                color: salesCycleController.quoteAcceptedForFilterOnSaleCycle.value=="Open"
+                                    ? AllColors.whiteColor
+                                    : AllColors.primaryDark1,
+                                fontSize: AllFontSize.fourtine,
+                                fontWeight: FontWeight.w500,
+                              ),*/
                             ),
                             onPressed: () {
                               salesCycleController.filterQuoteAcceptedFlag.value = 'Open';
@@ -147,13 +154,20 @@ class SalesCycleScreen extends StatelessWidget{
                             ),
                             label: Text(
                               'Won',
-                              style: GoogleFonts.poppins(
+                            style: TextStyle(
+                              color: salesCycleController.quoteAcceptedForFilterOnSaleCycle.value=="Won"
+                                  ? AllColors.whiteColor
+                                  : AllColors.primaryDark1,
+                              fontSize: AllFontSize.fourtine,
+                              fontWeight: FontWeight.w500,
+                            ),
+                            /*  style: GoogleFonts.poppins(
                                 color: salesCycleController.quoteAcceptedForFilterOnSaleCycle.value=="Won"
                                     ? AllColors.whiteColor
                                     : AllColors.primaryDark1,
                                 fontSize: AllFontSize.fourtine,
                                 fontWeight: FontWeight.w500,
-                              ),
+                              ),*/
                             ),
                             onPressed: () {
                               salesCycleController.filterQuoteAcceptedFlag.value = 'Won';
@@ -177,13 +191,20 @@ class SalesCycleScreen extends StatelessWidget{
                             ),
                             label: Text(
                               'Loss',
-                              style: GoogleFonts.poppins(
+                              style: TextStyle(
                                 color: salesCycleController.quoteAcceptedForFilterOnSaleCycle.value=="Loss"
                                     ? AllColors.whiteColor
                                     : AllColors.primaryDark1,
                                 fontSize: AllFontSize.fourtine,
                                 fontWeight: FontWeight.w500,
                               ),
+                            /*  style: GoogleFonts.poppins(
+                                color: salesCycleController.quoteAcceptedForFilterOnSaleCycle.value=="Loss"
+                                    ? AllColors.whiteColor
+                                    : AllColors.primaryDark1,
+                                fontSize: AllFontSize.fourtine,
+                                fontWeight: FontWeight.w500,
+                              ),*/
                             ),
                             onPressed: () {
                               salesCycleController.filterQuoteAcceptedFlag.value = 'Loss';
@@ -207,13 +228,20 @@ class SalesCycleScreen extends StatelessWidget{
                             ),
                             label: Text(
                               'All',
-                              style: GoogleFonts.poppins(
+                             style: TextStyle(
+                               color: salesCycleController.quoteAcceptedForFilterOnSaleCycle.value==""
+                                   ? AllColors.whiteColor
+                                   : AllColors.primaryDark1,
+                               fontSize: AllFontSize.fourtine,
+                               fontWeight: FontWeight.w500,
+                             ),
+                             /* style: GoogleFonts.poppins(
                                 color: salesCycleController.quoteAcceptedForFilterOnSaleCycle.value==""
                                     ? AllColors.whiteColor
                                     : AllColors.primaryDark1,
                                 fontSize: AllFontSize.fourtine,
                                 fontWeight: FontWeight.w500,
-                              ),
+                              ),*/
                             ),
                             onPressed: () {
                               salesCycleController.quoteAcceptedForFilterOnSaleCycle.value="";

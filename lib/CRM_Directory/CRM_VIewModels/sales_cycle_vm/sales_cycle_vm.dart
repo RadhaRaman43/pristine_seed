@@ -836,7 +836,7 @@ class SalesCycleVm extends GetxController {
   }
   SalesCycleMstDelete(int index) {
     Map data = {
-      "account_code": saleCycleList[index].salesCycleId,
+      'sales_cycle_id': saleCycleList[index].salesCycleId,
       "created_by": email
     };
     print(data);

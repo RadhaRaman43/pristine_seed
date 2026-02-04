@@ -73,7 +73,7 @@ class AccountmasterScreen extends StatelessWidget{
                    accountMaster_page_controller.getCompanyProfileSubTypeApi();
                    accountMaster_page_controller.getCompanyProfileTypeApi("");
                    accountMaster_page_controller.getGeoPostalCodeApi(50,'');
-                   Get.toNamed(RoutesName.add_New_AccountMaster_screen);
+                   Get.toNamed(RoutesName.add_New_AccountMaster_screen, arguments: 'Create');
                  }, icon: Icon(Icons.add)),
                );
               }),

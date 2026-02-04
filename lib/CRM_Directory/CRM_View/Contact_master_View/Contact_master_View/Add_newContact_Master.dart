@@ -1,6 +1,7 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -310,13 +311,13 @@ class AddNewcontactMasterContact extends StatelessWidget{
                       _formKey.currentState?.validate();
                     },
                     keyboardType: TextInputType.number,
+                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                     controller: contact_vm_controller.phone_no_controller,
                     decoration: InputDecoration(
                         hintText: "Phone No.*",
                         labelText: "Phone No.*",
                         //suffixIcon: Icon(Icons.email),
                         contentPadding: EdgeInsets.symmetric(vertical: AllFontSize.ten,horizontal: AllFontSize.ten ),
-
                         focusedBorder: OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.blue)
                         ),
@@ -333,6 +334,7 @@ class AddNewcontactMasterContact extends StatelessWidget{
                 padding: EdgeInsets.only(left: 15.0, right: 15.0),
                 child: TextFormField(
                   keyboardType: TextInputType.number,
+                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                   controller: contact_vm_controller.alternate_no_controller,
                   decoration: InputDecoration(
                       hintText: "Alternate Phone No.",
