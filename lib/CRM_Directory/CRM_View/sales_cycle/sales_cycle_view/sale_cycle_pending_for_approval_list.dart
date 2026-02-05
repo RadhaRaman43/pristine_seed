@@ -70,11 +70,7 @@ class SaleCyclePendingForApprovalList extends StatelessWidget{
            )
        ),
        drawer: CustomDrawer(),
-       body: Obx((){
-         if(salesCyclePendingForApprovalController.loading.value || salesCycleController.loading.value){
-           return FullScreenLoader();
-         }
-         return RefreshIndicator(
+       body: RefreshIndicator(
            onRefresh:salesCyclePendingForApprovalController.refreshList,
            child: Container(
              width: double.infinity,
@@ -101,9 +97,7 @@ class SaleCyclePendingForApprovalList extends StatelessWidget{
                ],
              ),
            ),
-         );
-       })
-
+         ),
 
      ),);
   }

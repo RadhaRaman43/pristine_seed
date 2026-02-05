@@ -33,6 +33,7 @@ import '../../CRM_Models/Address_Master_Model/PincodeMaster_Model.dart';
 import '../../CRM_Models/Address_Master_Model/PostalCode_Model.dart';
 import '../../CRM_Models/Address_Master_Model/address_master_model.dart';
 import '../../CRM_Models/Contact_Master_modal/Contact_Master_modal/conract_master_modal.dart';
+import '../../CRM_Models/TaskMaster_model/company_type_modal.dart';
 import '../../CRM_Models/sale_cycle_modal/sales_cycle_quote_header_modal.dart';
 import '../../CRM_Repository/AccountMaster_Repository/account_master_repo.dart';
 import '../../CRM_View/Account_Master_view/AccountTaskHistoryModel.dart';
@@ -82,6 +83,7 @@ class Accountmastervm extends GetxController{
   String WonLoss = '';
   String DraftId = '';
   RxBool isChecked = false.obs;
+  RxString yesNoValue = 'No'.obs;
   RxBool isExpandDetails = true.obs;
   RxBool isExpandSales = true.obs;
   RxBool isExpandQuotation = true.obs;
@@ -107,7 +109,7 @@ class Accountmastervm extends GetxController{
   var account_type_controller = TextEditingController();
   var account_cat_type_controller = TextEditingController();
   var gst_registration_type_controller = TextEditingController().obs;
-  var comp_prof_type_controller = TextEditingController();
+  var comp_prof_type_controller = TextEditingController().obs;
   var comp_prof_sub_type_controller = TextEditingController().obs;
   var comp_prof_remarks_controller = TextEditingController();
   var Address_controller = TextEditingController();
@@ -203,6 +205,8 @@ class Accountmastervm extends GetxController{
   RxList<RegionWithClusterFilterModal> regionwithclusterGetByEmailList = <RegionWithClusterFilterModal>[].obs;
   RxList<RegionWithClusterFilterModal> SelectedRegion_list = <RegionWithClusterFilterModal>[].obs;
 
+  RxList<CompanyTypeModal> company_profile_type_list = <CompanyTypeModal>[].obs;
+  RxList<CompanyTypeModal> selected_company_type_list = <CompanyTypeModal>[].obs;
 
   //todo new filter controller
   //var account_code_controller = TextEditingController().obs;
@@ -235,10 +239,9 @@ class Accountmastervm extends GetxController{
       NoOfEmpListFilter.value = ['0-25', '25-50', '50-100', '100-Above'];
       IsActiveTypeAllList.value = ['All', 'Yes', 'No'];
       UploadImageTypeList.value = ['Upload Image', 'Url'];
-
+      getAccCategoryApi();
+    getCompanyTypeMasterGet();
        getClustersGetByEmail();
-
-       getAccCategoryApi();
       getAccountTypeApi();
       getCompanyProfileTypeApi("");
       getGstRegistrationTypeApi();
@@ -254,6 +257,37 @@ class Accountmastervm extends GetxController{
 
   }
 
+  getCompanyTypeMasterGet() {
+    this.loading.value = true;
+    Map<String, dynamic> data = {
+      "filter_description": "",
+      "row_per_page": 999,
+      "page_number": 0
+    };
+
+    _api.getCompanyTypeMasterGet(data, sessionManagement).then((value) {
+      print("company profile...${value}");
+      try {
+        List<CompanyTypeModal> Response =
+        (json.decode(value) as List<dynamic>)
+            .map((i) => CompanyTypeModal.fromJson(i as Map<String, dynamic>))
+            .toList();
+
+        if (Response.isNotEmpty && Response[0].condition?.toLowerCase() == "true") {
+          company_profile_type_list.value=Response;
+        } else {
+          company_profile_type_list.value=[];
+        }
+      } catch (e) {
+        print('catch....${e.toString()}');
+      }
+    }).onError((error, stackTrace) {
+      Utils.sanckBarError('Api Exception onError', error.toString());
+      print('catchEx....${error.toString()}');
+    }).whenComplete(() {
+      this.loading.value = false;
+    });
+  }
 
   Future<Iterable<EmployeeMemberModel>> EmployeeMasterGet(String query) async {
     if (query == '') {
@@ -359,7 +393,7 @@ class Accountmastervm extends GetxController{
     account_cat_type_controller.text = '';
     PhoneNo_Controller.text = '';
     EmailId_Controller.text = '';
-    comp_prof_type_controller.text = '';
+    comp_prof_type_controller.value.text = '';
     Address_controller.text = '';
     stateName_controller.text = '';
   }
@@ -370,7 +404,7 @@ class Accountmastervm extends GetxController{
     EmailId_Controller.text="";
     AccountTitle_Controller.text="";
     ImageUrl_Controller.text="";
-    comp_prof_type_controller.text = '';
+    comp_prof_type_controller.value.text = '';
     Website_Controller.text="";
     ReferralBy_Controller.text="";
     Address_controller.text = '';
@@ -663,14 +697,45 @@ class Accountmastervm extends GetxController{
 
   }
 
-  getAccCategoryApi() async{
+  getAccCategoryApi() {
+    this.loading.value = true;
+    Map<String, String> data = {};
+
+    _api.getAccountCategoryTypeApiHit(data, sessionManagement).then((value) {
+      try {
+        List<GetMasterTypeModel> emp_masterResponse =
+        (json.decode(value) as List<dynamic>)
+            .map((i) => GetMasterTypeModel.fromJson(i as Map<String, dynamic>))
+            .toList();
+
+        if (emp_masterResponse.isNotEmpty && emp_masterResponse[0].condition.toString() == "True") {
+          get_Acc_category_list.value = emp_masterResponse;
+          print('master list....${get_Acc_category_list.length.toString()}');
+        } else {
+          get_Acc_category_list.value = [];
+          print('master listelsse....${get_Acc_category_list.length.toString()}');
+        }
+      } catch (e) {
+        get_Acc_category_list.value = [];
+        print('catch....${e.toString()}');
+      }
+    }).onError((error, stackTrace) {
+      get_Acc_category_list.value = [];
+      Utils.sanckBarError('Api Exception onError', error.toString());
+      print('catchEx....${error.toString()}');
+    }).whenComplete(() {
+      this.loading.value = false;
+    });
+
+  }
+  /*getAccCategoryApi() async{
     try {
     Map<String, String> data = {};
     String customer_response =await  _api.getAccountCategoryTypeApiHit(data, sessionManagement);
     this.loading.value = true;
     final jsonResponse = json.decode(customer_response);
         List<GetMasterTypeModel> emp_masterResponse =
-        (json.decode(jsonResponse) as List<dynamic>)
+        (json.decode(jsonResponse) as List<GetMasterTypeModel>)
             .map((i) => GetMasterTypeModel.fromJson(i as Map<String, dynamic>))
             .toList();
 
@@ -689,7 +754,7 @@ class Accountmastervm extends GetxController{
       loading.value=false;
       }
 
-  }
+  }*/
 
   getAccountTypeApi() async {
     this.loading.value = true;
@@ -705,7 +770,7 @@ class Accountmastervm extends GetxController{
 
         if (emp_masterResponse.isNotEmpty && emp_masterResponse[0]?.condition.toString() == "True") {
           get_Acc_type_list.value = emp_masterResponse[0].list!;
-          print('master list....${get_Acc_type_list.length.toString()}');
+          //print('master list....${get_Acc_type_list.length.toString()}');
         } else {
           get_Acc_type_list.value = [];
           print('master listelsse....${get_Acc_type_list.length.toString()}');
@@ -1156,7 +1221,7 @@ class Accountmastervm extends GetxController{
 
         if (emp_masterResponse.isNotEmpty && emp_masterResponse[0]?.condition.toString() == "True") {
           StateMaster_list.value = emp_masterResponse!;
-          print('master list....${StateMaster_list.length.toString()}');
+          //print('master list....${StateMaster_list.length.toString()}');
         } else {
           StateMaster_list.value = [];
           print('master listelsse....${StateMaster_list.length.toString()}');
@@ -1167,6 +1232,8 @@ class Accountmastervm extends GetxController{
       }
 
   }
+
+
 
   getTatResponseMasterApi() async{
     try {
@@ -1276,7 +1343,7 @@ class Accountmastervm extends GetxController{
           "phone_no": PhoneNo_Controller.text.isEmpty?'':PhoneNo_Controller.text,
           "email_id": EmailId_Controller.text.isEmpty?'':EmailId_Controller.text,
           "account_category_type": accountCatTypeCode,
-          "company_profile_type": comp_prof_type_controller.text.isEmpty?'':comp_prof_type_controller.text,
+          "company_profile_type": comp_prof_type_controller.value.text.isEmpty?'':comp_prof_type_controller.value.text,
           "company_profile_sub_type": comp_prof_sub_type_controller.value.text.isEmpty?'':comp_prof_sub_type_controller.value.text,
           "company_profile_remark": comp_prof_remarks_controller.text.isEmpty?'':comp_prof_remarks_controller.text,
           "address": Address_controller.text.isEmpty?'':Address_controller.text,
@@ -1405,7 +1472,7 @@ class Accountmastervm extends GetxController{
           "phone_no": PhoneNo_Controller.text.isEmpty?'':PhoneNo_Controller.text,
           "email_id": EmailId_Controller.text.isEmpty?'':EmailId_Controller.text,
           "account_category_type": account_cat_type_controller.text.isEmpty?'':account_cat_type_controller.text,
-          "company_profile_type": comp_prof_type_controller.text.isEmpty?'':comp_prof_type_controller.text,
+          "company_profile_type": comp_prof_type_controller.value.text.isEmpty?'':comp_prof_type_controller.value.text,
           "company_profile_sub_type": comp_prof_sub_type_controller.value.text.isEmpty?'':comp_prof_sub_type_controller.value.text,
           "company_profile_remark": comp_prof_remarks_controller.text.isEmpty?'':comp_prof_remarks_controller.text,
           "address": Address_controller.text.isEmpty?'':Address_controller.text,
@@ -1511,7 +1578,7 @@ class Accountmastervm extends GetxController{
       PhoneNo_Controller.text= response[0].phoneNo??"";
       EmailId_Controller.text = response[0].emailId??"";
       account_cat_type_controller.text = response[0].accountCategoryType??"";
-      comp_prof_type_controller.text = response[0].companyProfileType??"";
+      comp_prof_type_controller.value.text = response[0].companyProfileType??"";
       comp_prof_sub_type_controller.value.text = response[0].companyProfileSubType??"";
       if(comp_prof_type_controller.value.text == 'Others'){
         compProfileRemrk.value = true;
@@ -1552,7 +1619,7 @@ class Accountmastervm extends GetxController{
       Shipping_District_Controller.value.text = response[0].shippingDistrict??"";
       Shipping_State_Controller.value.text = response[0].shippingStateName??"";
      // Shipping_FullAddress_Controller.value.text = Shipping_Address_controller.value.text + "," + Shipping_Address2_Controller.value.text + "," + Shipping_City_Controller.value.text + "," + Shipping_District_Controller.value.text + "," + Shipping_State_Controller.value.text + "," + Shipping_PostCode_Controller.value.text;
-      No_Of_Emp_Controller.text = response[0].noOfEmployees.toString();
+       No_Of_Emp_Controller.text = response[0].noOfEmployees.toString();
       Annual_Revenue_Controller.text = response[0].annualRevenue.toString();
       TatResponse_Controller.text = response[0].tatResponseType??"" + ' (${response[0].tatResponseTime} Hours)';
       tatResponseType = response[0].tatResponseType??"";
@@ -1624,7 +1691,7 @@ class Accountmastervm extends GetxController{
     account_code_controller.clear();
     account_name_controller.clear();
     account_type_controller.clear();
-    comp_prof_type_controller.clear();
+    comp_prof_type_controller.value.clear();
     stateName_controller.clear();
     IsActive_controller.clear();
     PhoneNo_Controller.clear();
@@ -1650,7 +1717,7 @@ class Accountmastervm extends GetxController{
     account_code_controller.clear();
     account_name_controller.clear();
     account_type_controller.clear();
-    comp_prof_type_controller.clear();
+    comp_prof_type_controller.value.clear();
     stateName_controller.clear();
     IsActive_controller.clear();
     PhoneNo_Controller.clear();
@@ -1703,7 +1770,7 @@ class Accountmastervm extends GetxController{
       Alternate_PhoneNo_Controller.clear();
       EmailId_Controller.clear();
       account_cat_type_controller.clear();
-      comp_prof_type_controller.clear();
+      comp_prof_type_controller.value.clear();
       comp_prof_sub_type_controller.value.clear();
       comp_prof_remarks_controller.clear();
       gst_registration_type_controller.value.text = 'UnRegistered';
@@ -2194,7 +2261,7 @@ class Accountmastervm extends GetxController{
       ReferralBy_Controller.text = response[position].isReferral==1?"Yes":"No";
       print('ISReferral...${ReferralBy_Controller.text}');
       account_cat_type_controller.text = response[position].accountCategoryType??"";
-      comp_prof_type_controller.text = response[position].companyProfileType??"";
+      comp_prof_type_controller.value.text = response[position].companyProfileType??"";
       comp_prof_sub_type_controller.value.text = response[position].companyProfileSubType??"";
       if(comp_prof_type_controller.value.text == 'Others'){
         print('value...${compProfileRemrk.value}');
@@ -2903,7 +2970,7 @@ class Accountmastervm extends GetxController{
       "account_type_controller": account_type_controller.text,
       "EmailId_Controller": EmailId_Controller.text,
       "PhoneNo_Controller": PhoneNo_Controller.text,
-      "comp_prof_type_controller": comp_prof_type_controller.text,
+      "comp_prof_type_controller": comp_prof_type_controller.value.text,
       "stateName_controller": stateName_controller.text,
       "postal_code_controller": postal_code_controller.value.text,
       "district_controller": district_controller.value.text,
@@ -2928,7 +2995,7 @@ class Accountmastervm extends GetxController{
       account_type_controller.text=getFilterData["account_type_controller"];
       EmailId_Controller.text=getFilterData["EmailId_Controller"];
       PhoneNo_Controller.text=getFilterData["PhoneNo_Controller"];
-      comp_prof_type_controller.text=getFilterData["comp_prof_type_controller"];
+      comp_prof_type_controller.value.text=getFilterData["comp_prof_type_controller"];
       stateName_controller.text=getFilterData["stateName_controller"];
       postal_code_controller.value.text=getFilterData["postal_code_controller"];
       district_controller.value.text=getFilterData["district_controller"];
@@ -2965,7 +3032,7 @@ class Accountmastervm extends GetxController{
       "account_code_controller": account_code_controller.text,
       "account_name_controller": account_name_controller.text,
       "account_type_controller": account_type_controller.text,
-      "comp_prof_type_controller": comp_prof_type_controller.text,
+      "comp_prof_type_controller": comp_prof_type_controller.value.text,
       "EmailId_Controller": EmailId_Controller.text,
       "PhoneNo_Controller": PhoneNo_Controller.text,
       "stateName_controller": stateName_controller.text,
@@ -2988,7 +3055,7 @@ class Accountmastervm extends GetxController{
       account_type_controller.text=getFilterData["account_type_controller"];
       EmailId_Controller.text=getFilterData["EmailId_Controller"];
       PhoneNo_Controller.text=getFilterData["PhoneNo_Controller"];
-      comp_prof_type_controller.text=getFilterData["comp_prof_type_controller"];
+      comp_prof_type_controller.value.text=getFilterData["comp_prof_type_controller"];
       stateName_controller.text=getFilterData["stateName_controller"];
       postal_code_controller.value.text=getFilterData["postal_code_controller"];
       district_controller.value.text=getFilterData["district_controller"];

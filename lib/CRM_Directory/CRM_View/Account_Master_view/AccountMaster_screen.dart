@@ -17,6 +17,7 @@ import '../../CRM_Models/AccountMaster_model/Employee_Member_Model.dart';
 import '../../CRM_Models/AccountMaster_model/cluster_modal.dart';
 import '../../CRM_Models/AccountMaster_model/getMasterTypeModel.dart';
 import '../../CRM_Models/AccountMaster_model/region_with_cluster_filter_modal.dart';
+import '../../CRM_Models/TaskMaster_model/company_type_modal.dart';
 import '../../CRM_VIewModels/account_master_vm/accountMasterVM.dart';
 
 class AccountmasterScreen extends StatelessWidget{
@@ -513,7 +514,8 @@ class AccountmasterScreen extends StatelessWidget{
                               SizedBox(height: 10,),
                               bindData(context,'Phone No.',accountMaster_page_controller.PhoneNo_Controller),
                               SizedBox(height: 10,),
-                              bindData(context,'Company Profile Type',accountMaster_page_controller.comp_prof_type_controller),
+                              //bindData(context,'Company Profile Type',accountMaster_page_controller.comp_prof_type_controller),
+                              bindCompProfileTypeDropDown(context),
                               SizedBox(height: 10,),
                               bindData(context,'State Name',accountMaster_page_controller.stateName_controller),
                               SizedBox(height: 10,),
@@ -708,7 +710,75 @@ class AccountmasterScreen extends StatelessWidget{
       },
     );
   }
+  bindCompProfileTypeDropDown(BuildContext context) {
+    return Obx(() {
+      if (accountMaster_page_controller.comp_prof_type_controller.value.text.isNotEmpty && accountMaster_page_controller.filterDataChecker.value=='1') {
+        List<String> nameList = accountMaster_page_controller.comp_prof_type_controller.value.text.split('|');
 
+        accountMaster_page_controller.selected_company_type_list.value =
+            List.generate(nameList.length, (index) {
+              return CompanyTypeModal(
+                description: nameList[index].trim(),
+              );
+            });
+      }
+      return DropdownSearch<CompanyTypeModal>.multiSelection(
+        items: accountMaster_page_controller.company_profile_type_list,
+        itemAsString: (CompanyTypeModal u) => u.description ?? "",
+        selectedItems: accountMaster_page_controller.selected_company_type_list,
+        dropdownDecoratorProps: DropDownDecoratorProps(
+          baseStyle: TextStyle(color: Colors.black),
+          dropdownSearchDecoration: InputDecoration(
+            filled: false,
+            labelText: accountMaster_page_controller.selected_company_type_list.isNotEmpty ? "Company Profile Type" : null,
+            hintText: "Company Profile Type",
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+          ),
+        ),
+        dropdownBuilder: (context, selectedItems) {
+          // Custom builder to just show comma-separated names
+          if (selectedItems.isEmpty) {
+            return Text(
+              "Company Profile Type",
+              style: GoogleFonts.poppins(
+                color: AllColors.primaryDark1, // Match your hint color
+                fontSize: AllFontSize.sisxteen,
+                fontWeight: FontWeight.w500,
+              ),
+            );
+          }
+          return SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Text(
+              selectedItems.map((e) => e.description).join(', '),
+              style: TextStyle(color: Colors.black), // Only black text
+            ),
+          );
+        },
+        onChanged: (List<CompanyTypeModal> selectedList) {
+          accountMaster_page_controller.selected_company_type_list.value = selectedList;
+          accountMaster_page_controller.comp_prof_type_controller.value.text =
+              selectedList.map((e) => e.description).join('|');
+        },
+        popupProps: PopupPropsMultiSelection.dialog(
+          showSearchBox: true,
+          searchFieldProps: TextFieldProps(
+            decoration: InputDecoration(
+              contentPadding: EdgeInsets.only(top: 20, left: 12, right: 12),
+              // Top margin here
+              hintText: "Search...",
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+          ),
+          itemBuilder: (context, item, isSelected) => ListTile(
+            title: Text(item.description ?? ""),
+          ),
+        ),
+      );
+    });
+  }
 
   Widget bindAccountTypeDropDown(context) {
     return Container(
@@ -782,6 +852,10 @@ class AccountmasterScreen extends StatelessWidget{
             filled: false,
             labelText: accountMaster_page_controller.SelectedEmployee_Member_list.isNotEmpty?"Account Owner":null,
             hintText: "Account Owner Name",
+            labelStyle: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontWeight: FontWeight.w500,
+              fontSize: AllFontSize.sisxteen),
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
           ),
         ),
@@ -1433,7 +1507,11 @@ class AccountmasterScreen extends StatelessWidget{
         },
         child: InputDecorator(
           decoration: InputDecoration(
-            labelText: "Cluster Name", // 👈 Label restored here
+            labelText: "Cluster Name",
+            labelStyle: GoogleFonts.poppins(
+                color: AllColors.primaryDark1,
+                fontWeight: FontWeight.w500,
+                fontSize: AllFontSize.sisxteen),// 👈 Label restored here
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
             ),
@@ -1668,7 +1746,11 @@ class AccountmasterScreen extends StatelessWidget{
         },
         child: InputDecorator(
           decoration: InputDecoration(
-            labelText: "Region Name", // 👈 Label like before
+            labelText: "Region Name",
+            labelStyle: GoogleFonts.poppins(
+                color: AllColors.primaryDark1,
+                fontWeight: FontWeight.w500,
+                fontSize: AllFontSize.sisxteen),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
             ),

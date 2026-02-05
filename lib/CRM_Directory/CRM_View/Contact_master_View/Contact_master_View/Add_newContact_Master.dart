@@ -83,8 +83,7 @@ class AddNewcontactMasterContact extends StatelessWidget{
           ),
           title:Row(
             children: [
-              Text(
-                contact_vm_controller.updateContact?'Update Contact':"Create Contact",
+              Text(contact_vm_controller.updateContact?'Update Contact':"Create Contact",
                 style: GoogleFonts.poppins(
                   color: AllColors.whiteColor,
                   fontSize: 20.0,
