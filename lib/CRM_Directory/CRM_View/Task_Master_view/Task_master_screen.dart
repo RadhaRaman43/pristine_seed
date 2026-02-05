@@ -79,7 +79,8 @@ class TaskMasterScreen extends StatelessWidget {
                 Obx((){
                   return  Visibility(
                     //visible: TaskMaster_page_controller.isAdminWritePermission.value == '0'?true:false,
-                    visible:TaskMaster_page_controller.isHeadofficePermission.value!="1"  ? true:false ,
+                    visible:TaskMaster_page_controller.isHeadofficePermission.value!="1" &&
+                        TaskMaster_page_controller.isAdminWritePermission.value=="0"? true:false ,
                     child: IconButton(onPressed: () {
                       //TaskMaster_page_controller.clearCreateTaskController();
                       TaskMaster_page_controller.resetAllFieldOfFilter();
