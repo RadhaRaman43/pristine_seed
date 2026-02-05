@@ -3575,7 +3575,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                     onTap: () {
                       saleCycleController.qtyUpdateLineController.value.text =
                           saleCycleController.get_SalesCycleProductById_List[index].qty == null ?
-                          "0" : saleCycleController.get_SalesCycleProductById_List[index].qty.toString();
+                          "0" : (saleCycleController.get_SalesCycleProductById_List[index].qty?.toInt()).toString();
                       updateQtySalesCycleProduct(context, index);
                     },
                     child: Text(
@@ -9362,9 +9362,9 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                       .productTotalQty ==
                                       null
                                       ? "0"
-                                      : saleCycleController
+                                      : (saleCycleController
                                       .get_SalesCycleProductById_List[0]
-                                      .productTotalQty
+                                      .productTotalQty?.toInt())
                                       .toString())
                                       : "",
                                   style: GoogleFonts.poppins(
