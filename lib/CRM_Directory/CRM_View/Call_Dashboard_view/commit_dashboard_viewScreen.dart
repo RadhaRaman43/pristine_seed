@@ -1544,7 +1544,7 @@ class CommitDashboardViewscreen extends StatelessWidget{
         .toList();
 
     if (selectedItems.isEmpty) {
-      selectedItems = ["All"];
+      selectedItems = ["OPEN"];
     }
 
     showDialog(

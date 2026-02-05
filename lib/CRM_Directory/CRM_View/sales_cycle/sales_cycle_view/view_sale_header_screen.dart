@@ -1971,7 +1971,8 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                             ),
                           ),
                           onPressed: () {
-                            Get.back();
+                            Navigator.pop(context);
+                           // Get.back();
                           },
                           child: Container(
                             child: Text(
@@ -2466,7 +2467,8 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                           ),
                         ),
                         onPressed: () {
-                          Get.back();
+                          Navigator.pop(context);
+                         // Get.back();
                         },
                         child: Container(
                           width: 60,
@@ -2490,7 +2492,8 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                         onPressed: () {
                           saleCycleController
                               .UpdateProposeConfirmDecisionApiHit(SalesId);
-                          Get.back();
+                          Navigator.pop(context);
+                          //Get.back();
                         },
                         child: Container(
                           width: 60,
@@ -4305,6 +4308,28 @@ class ViewSaleHeaderScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
+                  "Is Sales Advice : ",
+                  style: GoogleFonts.poppins(
+                    color: AllColors.primaryDark1,
+                    fontSize: AllFontSize.twelve,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                Text(
+                  saleCycleController
+                      .quoteList[index].isSalesAdviceCreated==1?'Yes':'No',
+                  style: GoogleFonts.poppins(
+                    color: AllColors.textColor,
+                    fontSize: AllFontSize.twelve,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
                   "Quote Total Amount : ",
                   style: GoogleFonts.poppins(
                     color: AllColors.primaryDark1,
@@ -5425,7 +5450,8 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                           ),
                         ),
                         onPressed: () {
-                          Get.back();
+                          Navigator.pop(context);
+                          //Get.back();
                         },
                         child: Container(
                           width: 60,
@@ -5449,7 +5475,8 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                         onPressed: () {
                           saleCycleController.QuoteHeaderDupicateCreate(
                               quoteId);
-                          Get.back();
+                          Navigator.pop(context);
+                         // Get.back();
                         },
                         child: Container(
                           width: 60,
@@ -5516,7 +5543,8 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                           ),
                         ),
                         onPressed: () {
-                          Get.back();
+                          Navigator.pop(context);
+                          //Get.back();
                         },
                         child: Container(
                           width: 60,
@@ -5540,7 +5568,8 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                         onPressed: () {
                           saleCycleController.SalesCycleLineDeleteApiHit(
                               LineNo, SalesId);
-                          Get.back();
+                          Navigator.pop(context);
+                         // Get.back();
                         },
                         child: Container(
                           width: 60,
@@ -8122,7 +8151,8 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                         ),
                         onPressed: () {
                           saleCycleController.ProductCategoryWiseAmtCreateApiHit(id!);
-                          Get.back();
+                          Navigator.pop(context);
+                          //Get.back();
                         },
                         child: Container(
                           width: 60,
@@ -8240,7 +8270,8 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                         onPressed: () {
                           saleCycleController
                               .ProductCategoryWiseAmtCreateApiHit(id!);
-                          Get.back();
+                          Navigator.pop(context);
+                         // Get.back();
                         },
                         child: Container(
                           width: 60,
@@ -8358,7 +8389,8 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                         onPressed: () {
                           saleCycleController
                               .ProductCategoryWiseAmtCreateApiHit(id!);
-                          Get.back();
+                          Navigator.pop(context);
+                          //Get.back();
                         },
                         child: Container(
                           width: 60,
@@ -8662,7 +8694,8 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                       //saleCycleController.SalesCycleMstPurchaseByUpdateAPI(saleCycleList);
                       saleCycleController.salesCycleMstUpdateApiHit(
                           saleCycleList, "", "", "", "", "");
-                      Get.back();
+                      Navigator.pop(context);
+                     // Get.back();
                       // pageNumberForQuote = 0;
                       //getQuoteHeaderData(pageNumberForQuote,salesCycleId.value, "Approved");
                       // Get.toNamed(RoutesName.approvedQuotationListScreen);
@@ -9769,7 +9802,8 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                         saleCycleController.pageNumber,
                                         saleCycleController
                                             .saleCycleList[0].salesCycleId!);
-                                    Get.back();
+                                    Navigator.pop(context);
+                                    //Get.back();
                                   },
                                   child: Text(
                                     'Reset',
@@ -9798,7 +9832,8 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                             saleCycleController.pageNumber,
                                             saleCycleController.saleCycleList[0]
                                                 .salesCycleId!);*/
-                                    Get.back();
+                                    Navigator.pop(context);
+                                   // Get.back();
                                   },
                                   child: Text(
                                     'Submit',
@@ -9877,7 +9912,8 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                           "line",
                           saleCycleController.competitorMappingSalesCycleProductList,
                           position);
-                      Get.back();
+                      Navigator.pop(context);
+                      //Get.back();
                     },
                     child: Text(
                       'Submit',
@@ -10082,7 +10118,8 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                       saleCycleController.pageNumber,
                                       saleCycleController
                                           .saleCycleList[0].salesCycleId!);*/
-                                  Get.back();
+                                  Navigator.pop(context);
+                                  //Get.back();
                                 },
                                 child: Text(
                                   'Submit',
@@ -10117,7 +10154,8 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                       saleCycleController.pageNumber,
                                       saleCycleController
                                           .saleCycleList[0].salesCycleId!);*/
-                                  Get.back();
+                                  Navigator.pop(context);
+                                  //Get.back();
                                 },
                                 child: Text(
                                   'Reset',
@@ -10386,7 +10424,8 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                               saleCycleController.get_SalesCycleProductById_List[position].salesCycleId!,
                               saleCycleController.get_SalesCycleProductById_List[position].lineNo!,
                               "Update");
-                          Get.back();
+                          Navigator.pop(context);
+                          //Get.back();
                           /*  saleCycleController
                               .ProductCategoryWiseAmtCreateApiHit(id!);
                           Get.back();*/
@@ -10478,7 +10517,8 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                         Spacer(),
                         InkWell(
                           onTap: () {
-                            Get.back();
+                            Navigator.pop(context);
+                            //Get.back();
                           },
                           child: Padding(
                             padding: const EdgeInsets.only(right: 18.0),
@@ -10655,7 +10695,8 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                     .saleCycleList[0].salesCycleId!,
                                 "",
                               );
-                              Get.back();
+                              Navigator.pop(context);
+                              //Get.back();
                             },
                             child: Text(
                               'Submit',
@@ -10687,7 +10728,8 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                     .saleCycleList[0].salesCycleId!,
                                 "",
                               );
-                              Get.back();
+                              Navigator.pop(context);
+                              //Get.back();
                             },
                             child: Text(
                               'Reset',
@@ -11566,7 +11608,8 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                           ),
                         ),
                         onPressed: () {
-                          Get.back();
+                          Navigator.pop(context);
+                          //Get.back();
                         },
                         child: Container(
                           width: 60,
@@ -11592,7 +11635,8 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                               SalesId,
                               saleCycleController
                                   .reOpenRemarksController.value.text);
-                          Get.back();
+                         // Get.back();
+                          Navigator.pop(context);
                           Get.back();
                         },
                         child: Container(
@@ -11657,7 +11701,8 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                         child: DefaultButton(
                           text: "Cancel",
                           press: () {
-                            Get.back();
+                           // Get.back();
+                            Navigator.pop(context);
                           },
                         ),
                       ),
@@ -11671,7 +11716,8 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                             saleCycleController
                                 .getSalesProductLineCompetitorClear(
                                     salesCucleId);
-                            Get.back();
+                            Navigator.pop(context);
+                            //Get.back();
                            // Get.back();
                           },
                         ),
@@ -11752,7 +11798,8 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                         child: DefaultButtonRed(
                           text: "Cancel",
                           press: () {
-                            Get.back();
+                            Navigator.pop(context);
+                            //Get.back();
                           },
                         ),
                       ),
@@ -11766,7 +11813,8 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                             saleCycleController
                                 .getSalesCycleCompetitorCreateFromProspectProducts(
                                     salesCycleId);
-                            Get.back();
+                            Navigator.pop(context);
+                           // Get.back();
                             //Get.back();
                           },
                         ),
@@ -12110,7 +12158,8 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                           .saleCycleList[0].salesCycleId!,
                                       "",
                                     );
-                                    Get.back();
+                                    Navigator.pop(context);
+                                    //Get.back();
                                   },
                                   child: Text(
                                     'Reset',
@@ -12136,8 +12185,8 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                           .saleCycleList[0].salesCycleId!,
                                       "",
                                     );
-
-                                    Get.back();
+                                    Navigator.pop(context);
+                                    //Get.back();
                                   },
                                   child: Text(
                                     'Submit',
@@ -12206,7 +12255,8 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                           ),
                         ),
                         onPressed: () {
-                          Get.back();
+                          Navigator.pop(context);
+                          //Get.back();
                         },
                         child: Container(
                           width: 60,
@@ -12229,7 +12279,8 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                         ),
                         onPressed: () {
                           saleCycleController.getSalesCycleMstMarkRateContract(SalesId);
-                          Get.back();
+                          Navigator.pop(context);
+                          //et.back();
                         },
                         child: Container(
                           width: 60,

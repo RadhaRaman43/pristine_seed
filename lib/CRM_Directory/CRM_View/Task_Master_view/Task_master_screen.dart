@@ -736,13 +736,13 @@ class TaskMasterScreen extends StatelessWidget {
               _buildLabelWithValue(label: "Task Owner: ", value: TaskMaster_page_controller.Task_Master_list[position].createdFullName??"",),
               _buildLabelWithValue(label: "Task Due Date: ", value: StaticMethod.convertDateFormat1(TaskMaster_page_controller.Task_Master_list[position].taskDueDate??""),),
               _buildLabelWithValue(label: "Type Of Call: ", value: TaskMaster_page_controller.Task_Master_list[position].typeOfCall??"",),
-              _buildLabelWithValue(label: "Type Of Mode of Call: ", value: TaskMaster_page_controller.Task_Master_list[position].methodOfCall??"",),
+              _buildLabelWithValue(label: "Mode of Call: ", value: TaskMaster_page_controller.Task_Master_list[position].methodOfCall??"",),
               _buildLabelWithValue(label: "Last Activity Status: ", value: TaskMaster_page_controller.Task_Master_list[position].lastActivityStatus??"",),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    "Sale Cycle ID : ",
+                    "Sales Cycle Id : ",
                     style: GoogleFonts.poppins(
                         color: AllColors.primaryDark1,
                         fontSize: AllFontSize.fourtine,
@@ -1406,7 +1406,7 @@ class TaskMasterScreen extends StatelessWidget {
                               SizedBox(height: 10,),
                               bindLastActivityStatus(context),
                               SizedBox(height: 10,),
-                              bindFilterData(context,'Sale Cycle Id',TaskMaster_page_controller.Sale_cycle_Id_controller),
+                              bindFilterData(context,'Sales Cycle Id',TaskMaster_page_controller.Sale_cycle_Id_controller),
                               SizedBox(height: 10,),
                               bindCompProfileTypeDropDown(context),
                               SizedBox(height: 10,),
@@ -2252,7 +2252,7 @@ class TaskMasterScreen extends StatelessWidget {
       width: MediaQuery.of(context).size.width - 15,
       controller: TaskMaster_page_controller.SaleCycleActive_Controller,
       label: Text(
-        "Is Sale Cycle Active",
+        "Is Sales Cycle Active",
         style: GoogleFonts.poppins(
             color: AllColors.primaryDark1,
             fontSize: AllFontSize.sisxteen,

@@ -194,6 +194,8 @@ class SalesCycleVm extends GetxController {
   var salesCycleOwnerController = TextEditingController().obs;
   var updatesalesCycleBudgetAmountController = TextEditingController().obs;
 
+  var updateQuoteShippingAddressConfirmation = TextEditingController().obs;
+  RxBool isVisibiltyShippingAddressQuote=false.obs;
 
   //todo quotation won controller
   var quotationWonLossController=TextEditingController().obs;
@@ -5139,6 +5141,11 @@ class SalesCycleVm extends GetxController {
     Shipping_State_Controller.value.text = quoteHeaderdata[0].shippingStateName ?? "";
     Shipping_phone_Controller.value.text = quoteHeaderdata[0].shippingPhoneNo ?? "";
     Shipping_email_Controller.value.text = quoteHeaderdata[0].shippingEmailId ?? "";
+
+    (quoteHeaderdata[0].shippingStateName==null )?updateQuoteShippingAddressConfirmation.value.text='No':'Yes';
+    isVisibiltyShippingAddressQuote.value =updateQuoteShippingAddressConfirmation.value.text == 'Yes';
+    print('address...${quoteHeaderdata[0].shippingStateName}');
+
 
     //todo by radha raman
     installationChargesController.value.text = quoteHeaderdata[0].installationCharges.toString() ?? "";

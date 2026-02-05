@@ -209,7 +209,7 @@ class TaskMasterDetails extends StatelessWidget{
                           child: Icon(Icons.border_color_outlined, color: AllColors.whiteColor,),
                         ),
                         Text(
-                          "Task/Sale Info",
+                          "Task/Sales Info",
                           style: GoogleFonts.poppins(
                             color: AllColors.whiteColor,
                             fontSize: AllFontSize.twentee,
@@ -1109,13 +1109,13 @@ class TaskMasterDetails extends StatelessWidget{
 
             _buildLabelWithValue(label: "Time of Visit: ", value: TaskMaster_page_controller.Task_Master_list[0].timeOfVisit ?? "",),
 
-            _buildLabelWithValue(label: "Sale Cycle Active: ", value: TaskMaster_page_controller.IsSaleCycleActive,),
+            _buildLabelWithValue(label: "Sales Cycle Active: ", value: TaskMaster_page_controller.IsSaleCycleActive,),
 
-            _buildLabelWithValue(label: "Sale Cycle Activated By: ", value: TaskMaster_page_controller.Task_Master_list[0].salesCycleActivatedBy ?? "",),
+            _buildLabelWithValue(label: "Sales Cycle Activated By: ", value: TaskMaster_page_controller.Task_Master_list[0].salesCycleActivatedBy ?? "",),
 
-            _buildLabelWithValue(label: "Sale Cycle Activated On: ", value: StaticMethod.onlyDate(TaskMaster_page_controller.Task_Master_list[0].salesCycleActivatedOn??""),),
+            _buildLabelWithValue(label: "Sales Cycle Activated On: ", value: StaticMethod.onlyDate(TaskMaster_page_controller.Task_Master_list[0].salesCycleActivatedOn??""),),
 
-            _buildLabelWithValue(label: "Sale Cycle ID: ", value: TaskMaster_page_controller.Task_Master_list[0].salesCycleId ?? "",),
+            _buildLabelWithValue(label: "Sales Cycle ID: ", value: TaskMaster_page_controller.Task_Master_list[0].salesCycleId ?? "",),
 
             _buildLabelWithValue(label: "Along With Person Name: ", value: TaskMaster_page_controller.Task_Master_list[0].alongWithPersonName ?? "",),
 

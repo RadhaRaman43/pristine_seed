@@ -320,7 +320,7 @@ class QuoteInformationScreen extends StatelessWidget {
                             ),
                           );
                         }),
-                         //todo mark quotation work is worked by nirupma
+                         //todo mark quotation work is done by nirupma
                         Obx(() {
                           return Padding(
                             padding: const EdgeInsets.all(8.0),
@@ -370,17 +370,21 @@ class QuoteInformationScreen extends StatelessWidget {
                                     saleCycleController.quoteHeaderdata[0].quoteStatus?.toLowerCase() == "pending for approval")) ? true : false,
                             child: GestureDetector(
                               onTap: () {
+                                saleCycleController.updateQuoteShippingAddressConfirmation.value.text='No';
                                 saleCycleController.bindAddress();
                                 Get.toNamed(RoutesName.updateQuoteHeaderScreen);
                                 //showDialogForHeaderUpdate(context);
                               },
                               child: Container(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(7.0),
-                                  child: Icon(
-                                    Icons.update,
-                                    color: AllColors.primaryDark1,
-                                    size: 20,
+                                child: Tooltip(
+                                  message: 'Update Quote Header',
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(7.0),
+                                    child: Icon(
+                                      Icons.update,
+                                      color: AllColors.primaryDark1,
+                                      size: 20,
+                                    ),
                                   ),
                                 ),
                                 decoration: BoxDecoration(
@@ -1761,7 +1765,8 @@ class QuoteInformationScreen extends StatelessWidget {
                               ),
                             ),
                             onPressed: () {
-                              Get.back();
+                              Navigator.pop(context);
+                              //Get.back();
                             },
                             child: Container(
                               child: Text(
@@ -2027,7 +2032,8 @@ class QuoteInformationScreen extends StatelessWidget {
                         ),
                         onPressed: () {
                           saleCycleController.quoteHeaderUpdateApiHit(saleCycleController.quoteHeaderdata[0].quoteId!);
-                          Get.back();
+                          //Get.back();
+                          Navigator.pop(context);
                         },
                         child: Container(
                           child: Text(
@@ -2912,7 +2918,8 @@ class QuoteInformationScreen extends StatelessWidget {
                             ),
                           ),
                           onPressed: () {
-                            Get.back();
+                            Navigator.pop(context);
+                           // Get.back();
                           },
                           child: Container(
                             child: Text(
@@ -2952,7 +2959,8 @@ class QuoteInformationScreen extends StatelessWidget {
                               saleCycleController.quoteSendForApprovalApiHit();
                             }
 
-                            Get.back();
+                            //Get.back();
+                            Navigator.pop(context);
                             Get.back();
                           },
                           child: Container(
@@ -3164,7 +3172,8 @@ class QuoteInformationScreen extends StatelessWidget {
                           ),
                         ),
                         onPressed: () {
-                          Get.back();
+                          Navigator.pop(context);
+                          //Get.back();
                         },
                         child: Container(
                           width: 60,
@@ -3188,7 +3197,8 @@ class QuoteInformationScreen extends StatelessWidget {
                         onPressed: () {
                           saleCycleController.FetchSalesProductApiHit(
                               SalesId, QuoteId);
-                          Get.back();
+                          Navigator.pop(context);
+                          //Get.back();
                         },
                         child: Container(
                           width: 60,
@@ -3673,7 +3683,8 @@ class QuoteInformationScreen extends StatelessWidget {
                                             saleCycleController
                                                 .quoteHeaderdata[0]
                                                 .salesCycleId!);
-                                    Get.back();
+                                    Navigator.pop(context);
+                                   // Get.back();
                                   },
                                   child: Text(
                                     'Reset',
@@ -3705,7 +3716,8 @@ class QuoteInformationScreen extends StatelessWidget {
                                         saleCycleController.pageNumber,
                                         saleCycleController
                                             .quoteHeaderdata[0].salesCycleId!);*/
-                                    Get.back();
+                                   // Get.back();
+                                    Navigator.pop(context);
                                   },
                                   child: Text(
                                     'Submit',
@@ -4405,7 +4417,8 @@ class QuoteInformationScreen extends StatelessWidget {
                             ),
                           ),
                           onPressed: () {
-                            Get.back();
+                            Navigator.pop(context);
+                           // Get.back();
                           },
                           child: Text(
                             'Cancel',
@@ -4428,7 +4441,8 @@ class QuoteInformationScreen extends StatelessWidget {
                                 saleCycleController
                                     .quoteLinedata[index].itemCode!,
                                 "BmGMUpdate");
-                            Get.back();
+                            //Get.back();
+                            Navigator.pop(context);
                           },
                           child: Text(
                             'Update',
@@ -4557,7 +4571,8 @@ class QuoteInformationScreen extends StatelessWidget {
                         GestureDetector(
                           onTap: (){
                             saleCycleController.reportwithDownload();
-                            Get.back();
+                            Navigator.pop(context);
+                            //Get.back();
                           },
                           child: Row(
                             children: [
@@ -4584,7 +4599,8 @@ class QuoteInformationScreen extends StatelessWidget {
                         GestureDetector(
                           onTap: (){
                             saleCycleController.reportDownload("quoteReport");
-                            Get.back();
+                            //Get.back();
+                            Navigator.pop(context);
                           },
                           child: Row(
                             children: [
@@ -4719,7 +4735,9 @@ class QuoteInformationScreen extends StatelessWidget {
                           ),
                         ),
                         onPressed: () {
-                          Get.back();
+                          Navigator.pop(context);
+
+                          //Get.back();
                         },
                         child: Container(
                           width: 60,
@@ -4746,7 +4764,8 @@ class QuoteInformationScreen extends StatelessWidget {
                                   .quoteHeaderdata[0].quoteId??"",
                               saleCycleController
                                   .reOpenRemarksController.value.text);
-                          Get.back();
+                          //Get.back();
+                          Navigator.pop(context);
                           Get.back();
                         },
                         child: Container(
@@ -5085,7 +5104,8 @@ class QuoteInformationScreen extends StatelessWidget {
                                   ),
                                 ),
                                 onPressed: () {
-                                  Get.back();
+                                  Navigator.pop(context);
+                                 // Get.back();
                                 },
                                 child: Container(
                                   child: Text(
