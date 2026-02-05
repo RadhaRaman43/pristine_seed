@@ -873,7 +873,7 @@ class QuoteInformationScreen extends StatelessWidget {
                                 saleCycleController.userType?.toLowerCase()=='cluster head'||
                                 saleCycleController.isAdminWritePermission=="1" ||
                                 saleCycleController.userType?.toLowerCase()=='general manager',
-                            child: bindData("MAP:","₹ ${saleCycleController.numberFormatWithComma(saleCycleController
+                            child: bindData("MAP : ","₹ ${saleCycleController.numberFormatWithComma(saleCycleController
                                 .quoteLinedata[index].minimalAcceptablePrice).toString()}",context),
                           );
                         }),
@@ -886,12 +886,16 @@ class QuoteInformationScreen extends StatelessWidget {
 
                           );
                         }),*/
-                        bindData( "Seeking % : ",saleCycleController.quoteLinedata[index].discountPer.toString(),context),
+                        bindData( "Seeking % : ",(saleCycleController.quoteLinedata[index].discountPer?.toInt()).toString(),context),
                         bindData( "Seeking Amt P/U : ","₹ ${saleCycleController.numberFormatWithComma(saleCycleController.quoteLinedata[index].discountAmtPerUnit).toString()}",context),
                         Obx((){
                           return Visibility(
-                            visible: saleCycleController.showBranchHead.value ||
-                                saleCycleController.showClusterHead.value || saleCycleController.isAdminWritePermission.value=="1",
+                            visible: saleCycleController.userType?.toLowerCase()=='branch head' ||
+                                saleCycleController.userType?.toLowerCase()=='cluster head'||
+                                saleCycleController.userType?.toLowerCase()=='general manager'||
+                                saleCycleController.isAdminWritePermission.value=="1",
+                          /*  visible: saleCycleController.showBranchHead.value ||
+                                saleCycleController.showClusterHead.value || saleCycleController.isAdminWritePermission.value=="1",*/
                             child:  bindData( "BTP : ","₹ ${saleCycleController.numberFormatWithComma(saleCycleController.
                             quoteLinedata[index].branchTransferPrice).toString()}",context),
                           );
@@ -899,15 +903,15 @@ class QuoteInformationScreen extends StatelessWidget {
                         Obx(() {
                           return Visibility(
                             visible:
-                            saleCycleController.showGeneralManager.value || saleCycleController.isAdminWritePermission=="1",
-                            child:  bindData( "Standard Cost : ","₹ ${
+                            saleCycleController.userType?.toLowerCase()=='general manager' || saleCycleController.isAdminWritePermission=="1",
+                            child:  bindData( "Std Cost : ","₹ ${
                                 saleCycleController.numberFormatWithComma(saleCycleController.quoteLinedata[index].standardCost).toString()}",context),
                           );
                         }),
-                        bindData( "Approved Dis. %:",saleCycleController.quoteLinedata[index].approvedDiscountPer.toString(),context),
-                        bindData( "Appr. Amt / Unit : ","₹ ${saleCycleController.numberFormatWithComma(saleCycleController.quoteLinedata[index].approvedAmountPerUnit).toString()}",context),
+                        bindData( "Approved Dis. % :",saleCycleController.quoteLinedata[index].approvedDiscountPer.toString(),context),
+                        bindData( "Appr. Amt P/U : ","₹ ${saleCycleController.numberFormatWithComma(saleCycleController.quoteLinedata[index].approvedAmountPerUnit).toString()}",context),
                         bindData( "Sales Credit % : ",saleCycleController.quoteLinedata[index].salesCredit.toString(),context),
-                        bindData("Category Name : ",saleCycleController.quoteLinedata[index].categoryName ?? "",context),
+
 
                       ],
                     ),
@@ -921,33 +925,35 @@ class QuoteInformationScreen extends StatelessWidget {
                       children: [
                         Obx(() {
                           return Visibility(
-                            visible: saleCycleController.showGeneralManager.value || saleCycleController.isAdminWritePermission=="1",
+                            visible: saleCycleController.userType?.toLowerCase()=='general manager' || saleCycleController.isAdminWritePermission=="1",
                             child: Column(
                               children: [
                                 bindData( "Gm % : ",saleCycleController.quoteLinedata[index].gmDiscountPer.toString(),context),
-                                bindData( "Gm Amt:","₹ ${saleCycleController.numberFormatWithComma(saleCycleController.quoteLinedata[index].gmDiscountAmount).toString()}",context),
-                                bindData( "Gm Total Amt:","₹ ${saleCycleController.numberFormatWithComma(saleCycleController.quoteLinedata[index].gmTotalDiscountAmount).toString()}",context),
+                                bindData( "Gm Amt : ","₹ ${saleCycleController.numberFormatWithComma(saleCycleController.quoteLinedata[index].gmDiscountAmount).toString()}",context),
+                                bindData( "Gm Total Amt : ","₹ ${saleCycleController.numberFormatWithComma(saleCycleController.quoteLinedata[index].gmTotalDiscountAmount).toString()}",context),
                               ],
                             ),
                           );
                         }),
-                        bindData("Total App. Price :",saleCycleController.quoteLinedata[index].approvedAmount == null ? "0"
+                        bindData("Total App. Price : ",saleCycleController.quoteLinedata[index].approvedAmount == null ? "0"
                             : "₹ ${saleCycleController.numberFormatWithComma(saleCycleController.quoteLinedata[index].approvedAmount).toString()
                         }",context),
-                        bindData("Price Per Unit : ","₹ ${saleCycleController.numberFormatWithComma(saleCycleController.quoteLinedata[index].quoteLinePrice).toString()}",context),
+                        bindData("Price P/U : ","₹ ${saleCycleController.numberFormatWithComma(saleCycleController.quoteLinedata[index].quoteLinePrice).toString()}",context),
+                        bindData("Total Seeking Price : ","₹ ${saleCycleController.numberFormatWithComma(saleCycleController.quoteLinedata[index].discountAmt).toString()}",context),
                         Obx(() {
                           return Visibility(
-                            visible: saleCycleController.showBranchHead.value ||
-                                saleCycleController.showClusterHead.value|| saleCycleController.isAdminWritePermission=="1",
+                            visible: saleCycleController.userType?.toLowerCase()=='branch head' ||
+                                saleCycleController.userType?.toLowerCase()=='cluster head'||
+                                saleCycleController.isAdminWritePermission.value=="1",
                             child:  bindData( "Bm % : ",saleCycleController.quoteLinedata[index].bmDiscountPer.toString(),context),
                           );
                         }),
 
-                        bindData("GST % :",saleCycleController.quoteLinedata[index].sgstPer.toString(),context),
-                        bindData( "GST Amt.:","₹ ${saleCycleController.numberFormatWithComma(saleCycleController.quoteLinedata[index].gstAmount).toString()}" ,context),
+                        bindData("GST % : ",(saleCycleController.quoteLinedata[index].sgstPer?.toInt()).toString(),context),
+                        bindData( "GST Amt.: ","₹ ${saleCycleController.numberFormatWithComma(saleCycleController.quoteLinedata[index].gstAmount).toString()}" ,context),
                         bindData( "Total Amt.: ","₹ ${saleCycleController.numberFormatWithComma(saleCycleController.quoteLinedata[index].grossAmount).toString()}" ,context),
-                        bindData("Item Desc: ",saleCycleController.quoteLinedata[index].itemDescription ?? "",context),
-
+                        bindData("Item Desc : ",saleCycleController.quoteLinedata[index].itemDescription ?? "",context),
+                        bindData("Category Name : ",saleCycleController.quoteLinedata[index].categoryName ?? "",context),
                       ],
                     ),
                   )),
@@ -983,7 +989,7 @@ class QuoteInformationScreen extends StatelessWidget {
                                     .toString();
                             saleCycleController
                                     .qtyUpdateLineController.value.text =
-                                saleCycleController.quoteLinedata[index].qty
+                                (saleCycleController.quoteLinedata[index].qty?.toInt())
                                     .toString();
                             saleCycleController
                                     .updateUnitPriceController.value.text =
@@ -997,8 +1003,8 @@ class QuoteInformationScreen extends StatelessWidget {
                                     .toString();
                             saleCycleController
                                     .updateDiscountPerController.value.text =
-                                saleCycleController
-                                    .quoteLinedata[index].discountPer
+                                (saleCycleController
+                                    .quoteLinedata[index].discountPer?.toInt())
                                     .toString();
 
                             saleCycleController

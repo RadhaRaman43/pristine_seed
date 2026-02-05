@@ -284,9 +284,9 @@ class SalesCycleVm extends GetxController {
   var isCommitController = TextEditingController().obs;
   var isCommitForProposeController = TextEditingController().obs;
   var RegionName_controller = TextEditingController().obs;
-  //var zone_head_value_controller=TextEditingController().obs;
+  var quoteFilterClusterController=TextEditingController().obs;
   var clusterName_controller = TextEditingController().obs;
-  //var frontliner_controller=TextEditingController().obs;
+  var quoteFilterRegionController=TextEditingController().obs;
   var createdByController = TextEditingController().obs;
   var reportingManagerController = TextEditingController().obs;
   var district_controller = TextEditingController().obs;
@@ -347,6 +347,11 @@ class SalesCycleVm extends GetxController {
   var product_category_type_Controller = TextEditingController().obs;
 
 
+
+
+
+
+
   @override
   Future<void> onInit() async {
     try {
@@ -367,6 +372,8 @@ class SalesCycleVm extends GetxController {
       else {
         getEmployeeMemberApi();
       }
+
+
       //getsalesCycleData(pageNumber, "", "", '');
 
       getClustersGetByEmail();
@@ -499,7 +506,7 @@ class SalesCycleVm extends GetxController {
 
   Future<void> refreshList() async {
     pageNumber = 0;
-    getsalesCycleData(pageNumber, "", "", '');
+    getsalesCycleData(pageNumber, "", "salesPage", '');
   }
 
   void toggleCheckbox(int index) {
@@ -694,8 +701,8 @@ class SalesCycleVm extends GetxController {
             if (response != null &&
                 response.length > 0 &&
                 response[0].condition == "True") {
-              print('listSize.....${saleCycleList.length}');
               loading.value = false;
+              print('listSize.....${saleCycleList.length}');
               if (page_no == 0) {
                 saleCycleList.clear();
               }
@@ -760,12 +767,12 @@ class SalesCycleVm extends GetxController {
                   ischangesolutionAccepted.value = false;
                 }
               }
-              if (saleCycleList[0].salesCycleStatus == "Suspect") {
+              if (flag!='salesPage' && saleCycleList[0].salesCycleStatus == "Suspect") {
                 itemCategorySelectedlist.value = [];
                 getItemCategoryMstApi(saleCycleList[0].salesCycleId??"", saleCycleList[0].taskId??"","");
                 ProductCategoryWiseAmtGet(0, saleCycleList[0].salesCycleId??"");
               }
-              if (saleCycleList[0].salesCycleStatus == "Propose") {
+              if (flag!='salesPage' && saleCycleList[0].salesCycleStatus == "Propose") {
                 print("Sales cycle status..${saleCycleList[0].salesCycleId}");
                 pageNumberForQuote = 0;
                 getQuoteHeaderData(pageNumberForQuote, saleCycleList[0].salesCycleId??"", '');
@@ -790,7 +797,7 @@ class SalesCycleVm extends GetxController {
       );
     } catch (e) {
       loading.value = false;
-      print(e);
+      print('Exception..$e');
     }
   }
 
@@ -829,7 +836,7 @@ class SalesCycleVm extends GetxController {
   }
   SalesCycleMstDelete(int index) {
     Map data = {
-      "account_code": saleCycleList[index].salesCycleId,
+      'sales_cycle_id': saleCycleList[index].salesCycleId,
       "created_by": email
     };
     print(data);
@@ -1121,14 +1128,14 @@ class SalesCycleVm extends GetxController {
             createdOnStartToEnd.value.isEmpty ? "" : createdOnStartToEnd.value,
         "filter_frontliner_value": "",
         "filter_branch_head_value":
-            RegionName_controller.value.text.isEmpty
+        quoteFilterRegionController.value.text.isEmpty
                 ? ""
-                : RegionName_controller.value.text,
+                : quoteFilterRegionController.value.text,
         "filter_zone_head_value": "",
         "filter_clusture_head_value":
-            clusterName_controller.value.text.isEmpty
+        quoteFilterClusterController.value.text.isEmpty
                 ? ""
-                : clusterName_controller.value.text,
+                : quoteFilterClusterController.value.text,
         "row_per_page": rowsPerPage,
         "page_number": pageNumberForQuote
       }; /*{
@@ -4773,14 +4780,14 @@ class SalesCycleVm extends GetxController {
     // frontliner_controller.value.clear();
     //RegionName_controller.value.clear();
     //zone_head_value_controller.value.clear();
-    clusterName_controller.value.clear();
+    quoteFilterClusterController.value.clear();
+    quoteFilterRegionController.value.clear();
     createdOnStartToEnd.value = "";
     extClosureStartToEnd.value = "";
     quoteValidityStartToEnd.value = "";
     SelectedCluster_list.value=[];
     SelectedRegion_list.value=[];
-    RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join('|');
-    clusterName_controller.value.text = clusterGetByEmailList.map((e) => e.geoValue).join('|');
+
   }
 
   getSalesCycleMstRejectReopen(String salesCycleId, String remarks) {
@@ -5930,7 +5937,7 @@ class SalesCycleVm extends GetxController {
     }
 
     pageNumber=0;
-    getsalesCycleData(pageNumber,"","","");
+    getsalesCycleData(pageNumber,'',"","");
   }
 
   void clearFilterData() {

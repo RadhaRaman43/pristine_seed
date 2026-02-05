@@ -28,8 +28,6 @@ class SalesCycleScreen extends StatelessWidget{
   SalesCycleScreen({super.key});
   ScrollController scrollController = ScrollController();
   SalesCycleVm salesCycleController=Get.put(SalesCycleVm());
-  final account_vm_controller = Get.put(Accountmastervm());
-  final contact_vm_controller = Get.put(ContactMasterVM());
 
   static String _displaySaleCycleStatusForOption(String option) =>
       option;
@@ -79,174 +77,198 @@ class SalesCycleScreen extends StatelessWidget{
             )
         ),
         drawer: CustomDrawer(),
-        body: Obx((){
-           if(salesCycleController.loading.value)
-            return const FullScreenLoader();
-           return  RefreshIndicator(
-             onRefresh:salesCycleController.refreshList,
-             child: Container(
-               width: double.infinity,
-               height: double.infinity,
-               child: Column(
-                 children: [
-                   /*Obx((){
-                     return Visibility(
-                       visible:salesCycleController.loading.value ,
-                       child: LinearProgressIndicator(
-                         backgroundColor: AllColors.primaryDark1,
-                         color: AllColors.textColor,
-                       ),
-                     );
-                   }),*/
-                   SingleChildScrollView(
-                     scrollDirection: Axis.horizontal,
-                     child: ConstrainedBox(
-                       constraints: BoxConstraints(minWidth: MediaQuery.of(context).size.width),
-                       child: Container(
-                         padding: EdgeInsets.symmetric(horizontal: 8), // optional spacing
-                         child: Row(
-                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                           children: [
-                             Obx(() {
-                               return ActionChip(
-                                 elevation: 2,
-                                 padding: EdgeInsets.symmetric(horizontal: 30, vertical: 2),
-                                 backgroundColor:
-                                 salesCycleController.quoteAcceptedForFilterOnSaleCycle.value=="Open"
-                                     ? AllColors.primaryDark1
-                                     : AllColors.grayColor,
-                                 shadowColor: Colors.black,
-                                 shape: StadiumBorder(
-                                   side: BorderSide(color: AllColors.grayColor),
-                                 ),
-                                 label: Text(
-                                   'Open',
-                                   style: GoogleFonts.poppins(
-                                     color: salesCycleController.quoteAcceptedForFilterOnSaleCycle.value=="Open"
-                                         ? AllColors.whiteColor
-                                         : AllColors.primaryDark1,
-                                     fontSize: AllFontSize.fourtine,
-                                     fontWeight: FontWeight.w500,
-                                   ),
-                                 ),
-                                 onPressed: () {
-                                   salesCycleController.filterQuoteAcceptedFlag.value = 'Open';
-                                   salesCycleController.quoteAcceptedForFilterOnSaleCycle.value="Open";
-                                   salesCycleController.pageNumber=0;
-                                   salesCycleController.getsalesCycleData(salesCycleController.pageNumber, "", "",'',);
-                                 },
-                               );
-                             }),
-                             SizedBox(width: 8),
-                             Obx(() {
-                               return ActionChip(
-                                 elevation: 2,
-                                 padding: EdgeInsets.symmetric(horizontal: 35, vertical: 2),
-                                 backgroundColor:salesCycleController.quoteAcceptedForFilterOnSaleCycle.value=="Won"
+        body:  RefreshIndicator(
+        onRefresh:salesCycleController.refreshList,
+        child: Container(
+          width: double.infinity,
+          height: double.infinity,
+          child: Column(
+            children: [
+              Obx((){
+                return Visibility(
+                  visible:salesCycleController.loading.value ,
+                  child: LinearProgressIndicator(
+                    backgroundColor: AllColors.primaryDark1,
+                    color: AllColors.textColor,
+                  ),
+                );
+              }),
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(minWidth: MediaQuery.of(context).size.width),
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 8), // optional spacing
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Obx(() {
+                          return ActionChip(
+                            elevation: 2,
+                            padding: EdgeInsets.symmetric(horizontal: 30, vertical: 2),
+                            backgroundColor:
+                            salesCycleController.quoteAcceptedForFilterOnSaleCycle.value=="Open"
+                                ? AllColors.primaryDark1
+                                : AllColors.grayColor,
+                            shadowColor: Colors.black,
+                            shape: StadiumBorder(
+                              side: BorderSide(color: AllColors.grayColor),
+                            ),
+                            label: Text(
+                              'Open',
+                              style: TextStyle(
+                                color: salesCycleController.quoteAcceptedForFilterOnSaleCycle.value=="Open"
+                                    ? AllColors.whiteColor
+                                    : AllColors.primaryDark1,
+                                fontSize: AllFontSize.fourtine,
+                                fontWeight: FontWeight.w500,
+                              )
+                            /*  style: GoogleFonts.poppins(
+                                color: salesCycleController.quoteAcceptedForFilterOnSaleCycle.value=="Open"
+                                    ? AllColors.whiteColor
+                                    : AllColors.primaryDark1,
+                                fontSize: AllFontSize.fourtine,
+                                fontWeight: FontWeight.w500,
+                              ),*/
+                            ),
+                            onPressed: () {
+                              salesCycleController.filterQuoteAcceptedFlag.value = 'Open';
+                              salesCycleController.quoteAcceptedForFilterOnSaleCycle.value="Open";
+                              salesCycleController.pageNumber=0;
+                              salesCycleController.getsalesCycleData(salesCycleController.pageNumber, "", "salesPage",'',);
+                            },
+                          );
+                        }),
+                        SizedBox(width: 8),
+                        Obx(() {
+                          return ActionChip(
+                            elevation: 2,
+                            padding: EdgeInsets.symmetric(horizontal: 35, vertical: 2),
+                            backgroundColor:salesCycleController.quoteAcceptedForFilterOnSaleCycle.value=="Won"
 
-                                     ? AllColors.primaryDark1
-                                     : AllColors.grayColor,
-                                 shadowColor: Colors.black,
-                                 shape: StadiumBorder(
-                                   side: BorderSide(color: AllColors.grayColor),
-                                 ),
-                                 label: Text(
-                                   'Won',
-                                   style: GoogleFonts.poppins(
-                                     color: salesCycleController.quoteAcceptedForFilterOnSaleCycle.value=="Won"
-                                         ? AllColors.whiteColor
-                                         : AllColors.primaryDark1,
-                                     fontSize: AllFontSize.fourtine,
-                                     fontWeight: FontWeight.w500,
-                                   ),
-                                 ),
-                                 onPressed: () {
-                                   salesCycleController.filterQuoteAcceptedFlag.value = 'Won';
-                                   salesCycleController.quoteAcceptedForFilterOnSaleCycle.value = "Won";
-                                   salesCycleController.pageNumber=0;
-                                   salesCycleController.getsalesCycleData(salesCycleController.pageNumber, "", "",'',);
-                                 },
-                               );
-                             }),
-                             SizedBox(width: 8), // optional spacing between chips
-                             Obx(() {
-                               return ActionChip(
-                                 elevation: 2,
-                                 padding: EdgeInsets.symmetric(horizontal: 35, vertical: 2),
-                                 backgroundColor:salesCycleController.quoteAcceptedForFilterOnSaleCycle.value=="Loss"
-                                     ? AllColors.primaryDark1
-                                     : AllColors.grayColor,
-                                 shadowColor: Colors.black,
-                                 shape: StadiumBorder(
-                                   side: BorderSide(color: AllColors.grayColor),
-                                 ),
-                                 label: Text(
-                                   'Loss',
-                                   style: GoogleFonts.poppins(
-                                     color: salesCycleController.quoteAcceptedForFilterOnSaleCycle.value=="Loss"
-                                         ? AllColors.whiteColor
-                                         : AllColors.primaryDark1,
-                                     fontSize: AllFontSize.fourtine,
-                                     fontWeight: FontWeight.w500,
-                                   ),
-                                 ),
-                                 onPressed: () {
-                                   salesCycleController.filterQuoteAcceptedFlag.value = 'Loss';
-                                   salesCycleController.quoteAcceptedForFilterOnSaleCycle.value="Loss";
-                                   salesCycleController.pageNumber=0;
-                                   salesCycleController.getsalesCycleData(salesCycleController.pageNumber, "", "",'',);
-                                 },
-                               );
-                             }),
-                             SizedBox(width: 8),
-                             Obx(() {
-                               return ActionChip(
-                                 elevation: 2,
-                                 padding: EdgeInsets.symmetric(horizontal: 30, vertical: 2),
-                                 backgroundColor:salesCycleController.quoteAcceptedForFilterOnSaleCycle.value==""
-                                     ? AllColors.primaryDark1
-                                     : AllColors.grayColor,
-                                 shadowColor: Colors.black,
-                                 shape: StadiumBorder(
-                                   side: BorderSide(color: AllColors.grayColor),
-                                 ),
-                                 label: Text(
-                                   'All',
-                                   style: GoogleFonts.poppins(
-                                     color: salesCycleController.quoteAcceptedForFilterOnSaleCycle.value==""
-                                         ? AllColors.whiteColor
-                                         : AllColors.primaryDark1,
-                                     fontSize: AllFontSize.fourtine,
-                                     fontWeight: FontWeight.w500,
-                                   ),
-                                 ),
-                                 onPressed: () {
-                                   salesCycleController.quoteAcceptedForFilterOnSaleCycle.value="";
-                                   salesCycleController.filterQuoteAcceptedFlag.value = '';
-                                   salesCycleController.pageNumber=0;
-                                   salesCycleController.getsalesCycleData(salesCycleController.pageNumber, "", "",'',);
-                                 },
-                               );
-                             }),
-                             SizedBox(width: 8),
-                           ],
-                         ),
-                       ),
-                     ),
-                   ),
-                   Flexible(
-                     fit: FlexFit.loose,
-                     child: Container(
-                       child: Obx(() {
-                         return BindCustomerListView(context);
-                       }),
-                     ),
-                   )
-                 ],
-               ),
-             ),
-           );
-        })
+                                ? AllColors.primaryDark1
+                                : AllColors.grayColor,
+                            shadowColor: Colors.black,
+                            shape: StadiumBorder(
+                              side: BorderSide(color: AllColors.grayColor),
+                            ),
+                            label: Text(
+                              'Won',
+                            style: TextStyle(
+                              color: salesCycleController.quoteAcceptedForFilterOnSaleCycle.value=="Won"
+                                  ? AllColors.whiteColor
+                                  : AllColors.primaryDark1,
+                              fontSize: AllFontSize.fourtine,
+                              fontWeight: FontWeight.w500,
+                            ),
+                            /*  style: GoogleFonts.poppins(
+                                color: salesCycleController.quoteAcceptedForFilterOnSaleCycle.value=="Won"
+                                    ? AllColors.whiteColor
+                                    : AllColors.primaryDark1,
+                                fontSize: AllFontSize.fourtine,
+                                fontWeight: FontWeight.w500,
+                              ),*/
+                            ),
+                            onPressed: () {
+                              salesCycleController.filterQuoteAcceptedFlag.value = 'Won';
+                              salesCycleController.quoteAcceptedForFilterOnSaleCycle.value = "Won";
+                              salesCycleController.pageNumber=0;
+                              salesCycleController.getsalesCycleData(salesCycleController.pageNumber, "", "salesPage",'',);
+                            },
+                          );
+                        }),
+                        SizedBox(width: 8), // optional spacing between chips
+                        Obx(() {
+                          return ActionChip(
+                            elevation: 2,
+                            padding: EdgeInsets.symmetric(horizontal: 35, vertical: 2),
+                            backgroundColor:salesCycleController.quoteAcceptedForFilterOnSaleCycle.value=="Loss"
+                                ? AllColors.primaryDark1
+                                : AllColors.grayColor,
+                            shadowColor: Colors.black,
+                            shape: StadiumBorder(
+                              side: BorderSide(color: AllColors.grayColor),
+                            ),
+                            label: Text(
+                              'Loss',
+                              style: TextStyle(
+                                color: salesCycleController.quoteAcceptedForFilterOnSaleCycle.value=="Loss"
+                                    ? AllColors.whiteColor
+                                    : AllColors.primaryDark1,
+                                fontSize: AllFontSize.fourtine,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            /*  style: GoogleFonts.poppins(
+                                color: salesCycleController.quoteAcceptedForFilterOnSaleCycle.value=="Loss"
+                                    ? AllColors.whiteColor
+                                    : AllColors.primaryDark1,
+                                fontSize: AllFontSize.fourtine,
+                                fontWeight: FontWeight.w500,
+                              ),*/
+                            ),
+                            onPressed: () {
+                              salesCycleController.filterQuoteAcceptedFlag.value = 'Loss';
+                              salesCycleController.quoteAcceptedForFilterOnSaleCycle.value="Loss";
+                              salesCycleController.pageNumber=0;
+                              salesCycleController.getsalesCycleData(salesCycleController.pageNumber, "", "salesPage",'',);
+                            },
+                          );
+                        }),
+                        SizedBox(width: 8),
+                        Obx(() {
+                          return ActionChip(
+                            elevation: 2,
+                            padding: EdgeInsets.symmetric(horizontal: 30, vertical: 2),
+                            backgroundColor:salesCycleController.quoteAcceptedForFilterOnSaleCycle.value==""
+                                ? AllColors.primaryDark1
+                                : AllColors.grayColor,
+                            shadowColor: Colors.black,
+                            shape: StadiumBorder(
+                              side: BorderSide(color: AllColors.grayColor),
+                            ),
+                            label: Text(
+                              'All',
+                             style: TextStyle(
+                               color: salesCycleController.quoteAcceptedForFilterOnSaleCycle.value==""
+                                   ? AllColors.whiteColor
+                                   : AllColors.primaryDark1,
+                               fontSize: AllFontSize.fourtine,
+                               fontWeight: FontWeight.w500,
+                             ),
+                             /* style: GoogleFonts.poppins(
+                                color: salesCycleController.quoteAcceptedForFilterOnSaleCycle.value==""
+                                    ? AllColors.whiteColor
+                                    : AllColors.primaryDark1,
+                                fontSize: AllFontSize.fourtine,
+                                fontWeight: FontWeight.w500,
+                              ),*/
+                            ),
+                            onPressed: () {
+                              salesCycleController.quoteAcceptedForFilterOnSaleCycle.value="";
+                              salesCycleController.filterQuoteAcceptedFlag.value = '';
+                              salesCycleController.pageNumber=0;
+                              salesCycleController.getsalesCycleData(salesCycleController.pageNumber, "", "salesPage",'',);
+                            },
+                          );
+                        }),
+                        SizedBox(width: 8),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              Flexible(
+                fit: FlexFit.loose,
+                child: Container(
+                  child: Obx(() {
+                    return BindCustomerListView(context);
+                  }),
+                ),
+              )
+            ],
+          ),
+        ),
+      )
 
 
       ),
@@ -258,7 +280,6 @@ class SalesCycleScreen extends StatelessWidget{
       scrollController.addListener(() {
         if (scrollController.position.pixels ==
             scrollController.position.maxScrollExtent) {
-            // You have reached the end of the list
           int total_page = (salesCycleController.total_rows_sales /
               salesCycleController.rowsPerPage)
               .toInt();
@@ -266,12 +287,12 @@ class SalesCycleScreen extends StatelessWidget{
 
           print("last index ${salesCycleController.pageNumber} ${salesCycleController.total_rows_sales} ${salesCycleController.rowsPerPage} ${total_page}");
 
-          if (salesCycleController.pageNumber + 1 != total_page) {
-            salesCycleController.getsalesCycleData(salesCycleController.pageNumber +1, "", "", "Sales");
+          if (salesCycleController.pageNumber + 1 < total_page) {
+            salesCycleController.getsalesCycleData(salesCycleController.pageNumber +1, "", "salesPage", "Sales");
             salesCycleController.pageNumber += 1;
           }
 
-          /*if (salesCycleController.pageNumber + 1 < total_page) {
+          /*if (salesCycleController.pageNumber + 1 != total_page) {
             salesCycleController.getsalesCycleData(salesCycleController.pageNumber + 1, "", "", "Sales");
             salesCycleController.pageNumber += 1;
           }*/
@@ -340,10 +361,10 @@ class SalesCycleScreen extends StatelessWidget{
           salesCycleController.itemCategorySelectedlist.value = [];
           salesCycleController.getPurchaseProcessApi();
           salesCycleController.getPurchaseTimeFrameApi();
-          salesCycleController.getItemCategoryMstApi(salesCycleController.saleCycleList[position].salesCycleId! ,salesCycleController.saleCycleList[position].taskId!,"" );
+          salesCycleController.getItemCategoryMstApi(salesCycleController.saleCycleList[position].salesCycleId! ,salesCycleController.saleCycleList[position].taskId??"","" );
           salesCycleController.ProductCategoryWiseAmtGet(0, salesCycleController.saleCycleList[position].salesCycleId!);
           salesCycleController.pageNumber=0;
-          salesCycleController.getSaleCycleProductByIdList(salesCycleController.pageNumber,salesCycleController.saleCycleList[position].salesCycleId!);
+          salesCycleController.getSaleCycleProductByIdList(salesCycleController.pageNumber,salesCycleController.saleCycleList[position].salesCycleId??"");
           //salesCycleController.getsalesCycleCompetitorProductGetBySalesCycleId(salesCycleController.pageNumber,salesCycleController.saleCycleList[position].salesCycleId!);
           salesCycleController.clearAllFieldOfQuoteFilter();
 
@@ -402,10 +423,12 @@ class SalesCycleScreen extends StatelessWidget{
                 value: salesCycleController.saleCycleList[position].accountName,
                 width: size.width * 0.4,
                 onTap: () {
+                  final account_vm_controller = Get.put(Accountmastervm());
+                  final contact_vm_controller = Get.put(ContactMasterVM());
                   account_vm_controller.view = 'FromSaleCycleMainScreen';
                   contact_vm_controller.view = 'FromSaleCycleMainScreen';
                   account_vm_controller.getAccMasterBuyCodeApi(
-                    salesCycleController.saleCycleList[position].accountCode!,
+                    salesCycleController.saleCycleList[position].accountCode??"",
                   );
                 },
               ),

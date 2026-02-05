@@ -83,6 +83,7 @@ class AddNewAccountMaster extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
+    String headerTitle = Get.arguments??"";
     return WillPopScope(
         onWillPop: () async {
           if(accountMaster_page_controller.view == 'FromDraft'){
@@ -119,9 +120,9 @@ class AddNewAccountMaster extends StatelessWidget{
           children: [
             Flexible(
               child: Tooltip(
-                message: 'Create Account',
+                message: '${headerTitle} Account',
                 child: Text(
-                  'Create Account',
+                  '${headerTitle} Account',
                   style: GoogleFonts.poppins(
                     color: AllColors.whiteColor,
                     fontSize: 20,
@@ -224,7 +225,7 @@ class AddNewAccountMaster extends StatelessWidget{
               }
 
               if(accountMaster_page_controller.account_cat_type_controller.text.isEmpty || accountMaster_page_controller.account_cat_type_controller == null){
-                Utils.sanckBarError('Customer Category Type!', "Please Enter Customer Category Type");
+                Utils.sanckBarError('Customer Category Type!', "Please Enter Account Category Type");
                 return  ;
               }
               if(accountMaster_page_controller.comp_prof_type_controller.text.isEmpty || accountMaster_page_controller.comp_prof_type_controller == null){
@@ -285,7 +286,7 @@ class AddNewAccountMaster extends StatelessWidget{
 
               accountMaster_page_controller.AccountMstUploaderApiHit('Create', "", accountMaster_page_controller.SalesRepresentativeEmail, accountMaster_page_controller.RegionalHeadEmail);
             },
-            text: "Create Account",
+            text: "${headerTitle} Account",
           ),
         ),
       ),
@@ -363,7 +364,7 @@ class AddNewAccountMaster extends StatelessWidget{
                           child: Container(
                             decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10)
                             ),
-                            child: bindInputData("Phone No.",accountMaster_page_controller.PhoneNo_Controller, context),
+                            child: bindInputData("Phone No. *",accountMaster_page_controller.PhoneNo_Controller, context),
 
                           ),
                         ),
@@ -378,7 +379,7 @@ class AddNewAccountMaster extends StatelessWidget{
                                 color: Colors.white,
                                 borderRadius: BorderRadius.circular(10)
                             ),
-                            child: bindInputData("Email Id*",accountMaster_page_controller.EmailId_Controller, context),
+                            child: bindInputData("Email Id",accountMaster_page_controller.EmailId_Controller, context),
                           ),
                         ),
 
@@ -976,7 +977,7 @@ class AddNewAccountMaster extends StatelessWidget{
     else if (hintData == "Full address") {
       maxLines = 3;
     }
-    else if(hintData == "Phone No."){
+    else if(hintData == "Phone No. *"){
       maxLength = 10;
     }
     else if(hintData == "GST No.*"){
@@ -1004,15 +1005,19 @@ class AddNewAccountMaster extends StatelessWidget{
         maxLength: maxLength,
         maxLines: maxLines,
         readOnly: readonly,
-        keyboardType:hintData == "Phone No." || hintData == "Alternate Phone No."?TextInputType.phone: TextInputType.text,
+        keyboardType:hintData == "Phone No. *" || hintData == "Alternate Phone No."?TextInputType.phone:
+        TextInputType.text,
+        inputFormatters: (hintData == "Phone No. *")
+            ? [FilteringTextInputFormatter.digitsOnly]
+            : [],
         validator: (value) {
           if (value == null || value.isEmpty) {
             return null;
           }
-          else if (hintData == "Phone No." && value.length != 10) {
+          else if (hintData == "Phone No. *" && value.length != 10) {
             return 'Phone No. should be exactly 10 digits';
           }
-          else if (hintData == "Email Id*" && !EmailValidator.validate(value)) {
+          else if (hintData == "Email Id" && !EmailValidator.validate(value)) {
             return 'Please Enter A Valid Email Id';
           }
           else if(hintData == "GST No.*"){
@@ -1032,10 +1037,10 @@ class AddNewAccountMaster extends StatelessWidget{
           return null;
         },
         onChanged: (value) {
-          if(hintData == "Phone No."){
+          if(hintData == "Phone No. *"){
             _formKey.currentState?.validate();
           }
-          else if(hintData == "Email Id*"){
+          else if(hintData == "Email Id"){
             _formKeyEmail.currentState?.validate();
           }
           else if(hintData == "GST No.*"){
@@ -1209,7 +1214,7 @@ class AddNewAccountMaster extends StatelessWidget{
         width: size.width-55,
         controller:  accountMaster_page_controller.account_type_controller,
         label: Text(
-          "Customer Type",
+          "Account Type *",
           style: GoogleFonts.poppins(
               color: AllColors.primaryDark1,
               fontSize: 15,
@@ -1298,8 +1303,8 @@ class AddNewAccountMaster extends StatelessWidget{
               ),
               contentPadding: EdgeInsets.symmetric(
                   vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-              hintText: 'Customer Category Type*',
-              labelText: 'Customer Category Type*',
+              hintText: 'Account Category Type',
+              labelText: 'Account Category Type',
               border: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(10))
               ),
@@ -1413,8 +1418,8 @@ class AddNewAccountMaster extends StatelessWidget{
               ),
               contentPadding: EdgeInsets.symmetric(
                   vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-              hintText: 'Company Profile Type',
-              labelText: 'Company Profile Type',
+              hintText: 'Company Profile Type *',
+              labelText: 'Company Profile Type *',
 
               border: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(10))

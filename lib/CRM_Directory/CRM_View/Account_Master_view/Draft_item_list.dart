@@ -188,7 +188,8 @@ class DraftItemList extends StatelessWidget{
           accountMaster_page_controller.getShippingStateMasterApi('','city');
           accountMaster_page_controller.getShippingStateMasterApi('','district');
           accountMaster_page_controller.fillDraftDetails(accountMaster_page_controller.Account_Master_Draft_list1, position);
-          Get.toNamed(RoutesName.add_New_AccountMaster_screen);
+          Get.toNamed(RoutesName.add_New_AccountMaster_screen,
+              arguments:'Update');
          // accountMaster_page_controller.getCompanyProfileSubTypeApi(accountMaster_page_controller.Account_Master_list[position].companyProfileType);
         },
         title: Row(

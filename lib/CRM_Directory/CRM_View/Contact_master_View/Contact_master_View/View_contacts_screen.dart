@@ -218,8 +218,8 @@ class ViewContactsScreen extends StatelessWidget{
                       fontSize: AllFontSize.fourtine,
                       fontWeight: FontWeight.w700),
                 ),
-                Container(
-                  width: size.width * .55,
+                Flexible(
+                 // width: size.width * .55,
                   child: Tooltip(
                     message: accountMaster_page_controller
                         .view_contract_list[position]
@@ -250,8 +250,8 @@ class ViewContactsScreen extends StatelessWidget{
                       fontSize: AllFontSize.fourtine,
                       fontWeight: FontWeight.w500),
                 ),
-                Container(
-                  width: size.width * .55,
+                Flexible(
+                  //width: size.width * .55,
                   child: Tooltip(
                     message: accountMaster_page_controller
                         .view_contract_list[position]
@@ -321,8 +321,8 @@ class ViewContactsScreen extends StatelessWidget{
                       fontSize: AllFontSize.fourtine,
                       fontWeight: FontWeight.w500),
                 ),
-                Container(
-                  width: size.width * .55,
+                Flexible(
+                  //width: size.width * .55,
                   child: Tooltip(
                     message: accountMaster_page_controller
                         .view_contract_list[position]
@@ -354,8 +354,8 @@ class ViewContactsScreen extends StatelessWidget{
                       fontSize: AllFontSize.fourtine,
                       fontWeight: FontWeight.w500),
                 ),
-                Container(
-                  width: size.width * .55,
+                Flexible(
+                  //width: size.width * .55,
                   child: Text(
                     accountMaster_page_controller
                         .view_contract_list[position]
@@ -380,8 +380,8 @@ class ViewContactsScreen extends StatelessWidget{
                       fontSize: AllFontSize.fourtine,
                       fontWeight: FontWeight.w500),
                 ),
-                Container(
-                  width: size.width * .46,
+                Flexible(
+                  //width: size.width * .46,
                   child: Tooltip(
                     message: accountMaster_page_controller
                         .view_contract_list[position]
@@ -411,8 +411,8 @@ class ViewContactsScreen extends StatelessWidget{
                       fontSize: AllFontSize.fourtine,
                       fontWeight: FontWeight.w500),
                 ),
-                Container(
-                  width: size.width * .46,
+                Flexible(
+                 // width: size.width * .46,
                   child: Tooltip(
                     message: accountMaster_page_controller
                         .view_contract_list[position]

@@ -2477,7 +2477,7 @@ class Accountmastervm extends GetxController{
                                 press: (){
                                   try{
                                     print("selected data..${selectedItem.value}");
-                                    if(selectedItem.value>0){
+                                    if(selectedItem.value>=0){
                                       isChecked.value=false;
                                       Shipping_Address_controller.value.text=address_master_list[selectedItem.value].address??"";
                                       Shipping_Address2_Controller.value.text=address_master_list[selectedItem.value].address2??"";

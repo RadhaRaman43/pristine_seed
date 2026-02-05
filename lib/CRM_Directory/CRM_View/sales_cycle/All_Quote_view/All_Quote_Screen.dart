@@ -27,8 +27,7 @@ class AllQuoteScreen extends StatelessWidget{
   PendingDraftQuoteVm pendingDraftQuoteController=Get.put(PendingDraftQuoteVm());
   SalesCycleVm saleCycleController=Get.put(SalesCycleVm());
   Size size=Get.size;
-  final account_vm_controller = Get.put(Accountmastervm());
-  final contact_vm_controller = Get.put(ContactMasterVM());
+
 
   static String _displayQuoteStatusForOption(String option) =>
       option;
@@ -199,7 +198,19 @@ class AllQuoteScreen extends StatelessWidget{
                   ),
                 ],
               ),
-              Icon(Icons.remove_red_eye_outlined,  color: Colors.blue,),
+              Row(
+                children: [
+                  Visibility(
+                   visible:pendingDraftQuoteController.isAdminWritePermission=='1',
+                    child: IconButton(
+                        onPressed: () {
+                          showConfirmCompleteDialog(context, pendingDraftQuoteController.PendingDraftQuoteList[position].quoteId?? "" );
+                        }, icon: Icon(Icons.delete, color: Colors.red,)),
+                  ),
+
+                  Icon(Icons.remove_red_eye_outlined,  color: Colors.blue,),
+                ],
+              ),
             ],
           ),
           subtitle: Column(
@@ -216,6 +227,8 @@ class AllQuoteScreen extends StatelessWidget{
                 },),
               _buildLabelOnTap(label: "Customer Name: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].accountName ?? "",color:Colors.blueAccent,
                 onTap: (){
+                  final account_vm_controller = Get.put(Accountmastervm());
+                  final contact_vm_controller = Get.put(ContactMasterVM());
                   account_vm_controller.view = 'FromAllQuotePage';
                   contact_vm_controller.view = 'FromAllQuotePage';
                   account_vm_controller.getAccMasterBuyCodeApi(
@@ -546,6 +559,72 @@ class AllQuoteScreen extends StatelessWidget{
             );
           },
 
+        );
+      },
+    );
+  }
+
+
+  showConfirmCompleteDialog(BuildContext context, String quoteId){
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: Colors.red.shade100, // light red background
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(
+                  Icons.delete,
+                  color: Colors.red,
+                  size: 28,
+                ),
+              ),
+              SizedBox(width: 20,),
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("Delete",
+                      style: GoogleFonts.poppins(
+                          color: AllColors.primaryDark1,
+                          fontSize: AllFontSize.sisxteen,
+                          fontWeight: FontWeight.w700),
+                    ),
+                    Text("Do You Want to Delete This Account?",
+                      style: GoogleFonts.poppins(
+                          color: AllColors.primaryDark1,
+                          fontSize: AllFontSize.fourtine,
+                          fontWeight: FontWeight.w500),
+                      softWrap: true,
+                    ),
+                  ],
+                ),
+              ),
+
+            ],
+          ),
+
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text("Cancel",style: TextStyle(color: AllColors.redColor),),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+                pendingDraftQuoteController.QuoteMstDelete(quoteId);
+              },
+              child: Text("Delete",style: TextStyle(color: AllColors.greenblue),),
+            ),
+          ],
         );
       },
     );
