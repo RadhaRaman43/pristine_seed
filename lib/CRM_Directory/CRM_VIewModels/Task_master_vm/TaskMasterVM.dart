@@ -1313,8 +1313,7 @@ class Taskmastervm extends GetxController{
         print("GetList");
         await sessionManagement.getUserGeoHierarchy().then((userGeoHierarchy) {
             userGeoHierarchyy.value = userGeoHierarchy;
-                print("Ghdf ${userGeoHierarchy[0].geoValue}");
-                print("Ghdf ${userGeoHierarchy.length}");
+
 
         });
     }

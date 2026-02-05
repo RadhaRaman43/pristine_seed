@@ -1234,6 +1234,7 @@ class SalesCycleVm extends GetxController {
   }
 
   getApprovalPersonList(String QuoteId) {
+    loading.value = true;
     approvalPersonList.value=[];
     Map data = {
       "filter_quote_id": QuoteId,
@@ -1249,7 +1250,7 @@ class SalesCycleVm extends GetxController {
       "row_per_page": 0,
       "page_number": 0
     };
-    loading.value = true;
+
     _api.quoteHeaderGetApiHit(data, sessionManagement).then(
       (onValue) {
         try {
@@ -1287,9 +1288,9 @@ class SalesCycleVm extends GetxController {
           }
         } catch (e) {
           print(e);
-        } finally {
+        } /*finally {
           loading.value = false;
-        }
+        }*/
       },
     ).onError(
       (error, stackTrace) {
@@ -1493,12 +1494,13 @@ class SalesCycleVm extends GetxController {
   }
 
   void getQuoteHeaderInformation(String? quoteId, String flag,) {
+    loading.value = true;
     try {
       Map<String, String> data = {
         "quote_id": quoteId.toString(),
         "created_by": email
       };
-      loading.value = true;
+
       _api.quoteHeaderGetByQuoteIdApiHit(data, sessionManagement).then(
         (onValue) {
           final jsonResponse = json.decode(onValue);
@@ -1588,7 +1590,9 @@ class SalesCycleVm extends GetxController {
         (error, stackTrace) {
           print(error);
         },
-      );
+      ).whenComplete(() {
+        loading.value = false;
+      },);
     } catch (e) {
       loading.value = false;
       print(e);
@@ -2693,6 +2697,8 @@ class SalesCycleVm extends GetxController {
         print("Failed to download file: ${response.statusCode}");
       }
     } catch (e) {
+      Utils.sanckBarError("Error downloading file:  ", "${e.toString()}");
+      print("Failed to download file: ${e.toString()}");
       print("Error downloading file: $e");
     }
   }
@@ -2723,7 +2729,8 @@ class SalesCycleVm extends GetxController {
       title,
       'Report downloaded successfully',
       platformDetails,
-      payload: 'filePath=$path',
+      //payload: 'filePath=$path',
+      payload: path,
     );
   }
 
@@ -2872,7 +2879,8 @@ class SalesCycleVm extends GetxController {
         "company_id": company_id.toString(),
         "quote_id": quoteId.toString(),
         "spr_no": quoteHeaderdata[0].sprNo.toString(),
-        "user_name": "",
+        "user_name": email,
+        "user_type_name": userType,
       };
       print(data);
       loading.value = true;
@@ -2891,8 +2899,7 @@ class SalesCycleVm extends GetxController {
               // Utils.sanckBarSuccess("Message !", response[0].message.toString());
               loading.value = false;
               itemQuoteReportList.value = response;
-              fileDownload(itemQuoteReportList[0].quoteSpecialPriceReportUrl!,
-                  "reportSpr");
+              fileDownload(itemQuoteReportList[0].quoteSpecialPriceReportUrl!, "reportSpr");
 
               //fileDownload(itemQuoteReportList.value);
             } else {
@@ -4854,8 +4861,7 @@ class SalesCycleVm extends GetxController {
               // Utils.sanckBarSuccess("Message !", response[0].message.toString());
               loading.value = false;
               itemQuoteReportList.value = response;
-              fileDownload(
-                  itemQuoteReportList[0].quoteReportUrl!, "quoteWithReport");
+              fileDownload(itemQuoteReportList[0].quoteReportUrl!, "quoteWithReport");
             } else {
               print("Else....");
               Utils.sanckBarError(

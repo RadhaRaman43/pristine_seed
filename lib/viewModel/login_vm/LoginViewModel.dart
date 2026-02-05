@@ -18,7 +18,6 @@ class LoginViewModel extends GetxController{
   final passFocusNode=FocusNode().obs;
 
   RxBool loading=false.obs;
-
   SessionManagement sessionManagement=SessionManagement();
 
   Future<void> loginApi() async{
@@ -35,6 +34,7 @@ class LoginViewModel extends GetxController{
 
         if(loginResponse!=null &&  loginResponse[0].condition=="True"){
           loading.value=false;
+
           /*if(loginResponse[0].isHo=='1'){
             sessionManagement.clearSession();
            Get.offAllNamed(RoutesName.loginScreen);

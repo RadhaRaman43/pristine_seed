@@ -925,18 +925,11 @@ class AddNewConsigneeadd extends StatelessWidget{
   Widget bindPostalCodeDropDown(context){
     return Autocomplete<PostalCodeModel>(
       displayStringForOption: _displayPostalCodeListForOption,
-      optionsBuilder: (TextEditingValue textEditingValue) {
+      optionsBuilder: (TextEditingValue textEditingValue) async {
         if (textEditingValue.text.isEmpty) {
-          return address_vm_controller.geoPostal_Code_list;
-          // return const Iterable<VehicleTypeResponse>.empty();
+          await accountMaster_page_controller.getGeoPostalCodeApi(50,textEditingValue.text);
         }
-        return address_vm_controller.geoPostal_Code_list
-            .where((PostalCodeModel option) {
-          return option.pincode
-              .toString()
-              .toLowerCase()
-              .contains(textEditingValue.text.toLowerCase());
-        }).toList();
+        return await accountMaster_page_controller.getGeoPostalCodeApi(50,textEditingValue.text);
       },
       onSelected: (PostalCodeModel selection) {
         print(selection.pincode);

@@ -61,7 +61,6 @@ class TaskApprovalListScreen extends StatelessWidget{
         ),
         drawer: CustomDrawer(),
         body: Obx((){
-          print("Loading show conti ${TaskMaster_page_controller.loading.value}");
           if(TaskMaster_page_controller.loading.value){
             print("show loading.......");
             return const FullScreenLoader();
