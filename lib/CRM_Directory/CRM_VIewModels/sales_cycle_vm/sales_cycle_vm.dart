@@ -5154,7 +5154,7 @@ class SalesCycleVm extends GetxController {
     deliveryWeeksController.value.text = quoteHeaderdata[0].deliveryInWeeks ?? "";
     advncPaymentPerController.value.text = quoteHeaderdata[0].advancePaymentPer.toString() ?? "";
     advncPaymentAmountController.value.text = quoteHeaderdata[0].advancePaymentAmt.toString() ?? "";
-    termConditionController.value.text = quoteHeaderdata[0].termsAndCondition.toString() ?? "";
+    termConditionController.value.text = quoteHeaderdata[0].termsAndCondition??"";
 
 
   }

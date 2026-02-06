@@ -3564,7 +3564,13 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                   ),
                 ),
                 IgnorePointer(
-                  ignoring: (/*flag == "Update" ||*/
+                  ignoring: ((saleCycleController.isAdminWritePermission == "1" ||
+                      saleCycleController.userType.toLowerCase() == "branch head" ||
+                      saleCycleController.saleCycleList[0].createdBy?.toLowerCase() == saleCycleController.email.toLowerCase()) &&
+                      saleCycleController.saleCycleList[0].quoteAccepted?.toLowerCase() == 'open') &&
+                      !(saleCycleController.saleCycleList[0].actualSalesCycleApprovalStatus?.toLowerCase() == 'rejected') &&
+                      !(saleCycleController.FromPage.value == "FromDashboard")?false:true,
+                 /* ignoring: (
                       saleCycleController
                               .saleCycleList[0].actualSalesCycleApprovalStatus
                               ?.toLowerCase() ==
@@ -3572,39 +3578,53 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                       saleCycleController.saleCycleList[0].quoteAccepted
                               ?.toLowerCase() !=
                           "open") || saleCycleController.saleCycleList[0].isMarkRateContract==1
-                  || saleCycleController.isHeadofficePermission=='1'
-                  ,
+                  || saleCycleController.isHeadofficePermission=='1',*/
                   child: InkWell(
                     onTap: () {
                       saleCycleController.qtyUpdateLineController.value.text =
                           saleCycleController.get_SalesCycleProductById_List[index].qty == null ?
-                          "0" : saleCycleController.get_SalesCycleProductById_List[index].qty.toString();
+                          "0" : (saleCycleController.get_SalesCycleProductById_List[index].qty?.toInt()).toString();
                       updateQtySalesCycleProduct(context, index);
                     },
-                    child: Text(
-                      (saleCycleController.get_SalesCycleProductById_List[index].qty?.toInt()).toString(),
-                      style: GoogleFonts.poppins(
-                        color: AllColors.textColor,
-                        fontSize: AllFontSize.twelve,
-                        fontWeight: FontWeight.w500,
-                        decoration: (/*flag == "Update" ||*/
-                                saleCycleController.saleCycleList[0]
-                                        .actualSalesCycleApprovalStatus
-                                        ?.toLowerCase() ==
-                                    "rejected" ||
-                                saleCycleController
-                                        .saleCycleList[0].quoteAccepted
-                                        ?.toLowerCase() !=
-                                    "open"  ) && (saleCycleController.saleCycleList[0].createdBy
-                            ?.toLowerCase() ==
-                            saleCycleController.email.toLowerCase() ||
-                            saleCycleController.userType.toLowerCase() ==
-                                "branch head" ||
-                            saleCycleController.isAdminWritePermission == "1"
-                        )|| saleCycleController.saleCycleList[0].isMarkRateContract==1
-                            ? TextDecoration.none
-                            : TextDecoration.underline,
-                      ),
+                    child: Row(
+                      children: [
+                        Text(
+                          (saleCycleController.get_SalesCycleProductById_List[index].qty?.toInt()).toString(),
+                          style: GoogleFonts.poppins(
+                            color: AllColors.textColor,
+                            fontSize: AllFontSize.twelve,
+                            fontWeight: FontWeight.w500,
+                            decoration: ((saleCycleController.isAdminWritePermission == "1" ||
+                                saleCycleController.userType.toLowerCase() == "branch head" ||
+                                saleCycleController.saleCycleList[0].createdBy?.toLowerCase() == saleCycleController.email.toLowerCase()) &&
+                                saleCycleController.saleCycleList[0].quoteAccepted?.toLowerCase() == 'open') &&
+                                !(saleCycleController.saleCycleList[0].actualSalesCycleApprovalStatus?.toLowerCase() == 'rejected') &&
+                                !(saleCycleController.FromPage.value == "FromDashboard")
+                                ? TextDecoration.underline
+                                : TextDecoration.none,
+                          ),
+                        ),
+
+                        Visibility(
+                          visible:((saleCycleController.isAdminWritePermission == "1" ||
+                              saleCycleController.userType.toLowerCase() == "branch head" ||
+                              saleCycleController.saleCycleList[0].createdBy?.toLowerCase() == saleCycleController.email.toLowerCase()) &&
+                              saleCycleController.saleCycleList[0].quoteAccepted?.toLowerCase() == 'open') &&
+                              !(saleCycleController.saleCycleList[0].actualSalesCycleApprovalStatus?.toLowerCase() == 'rejected') &&
+                              !(saleCycleController.FromPage.value == "FromDashboard"),
+
+                          child: Row(
+                            children: [
+                              const SizedBox(
+                                width: 6,
+                              ),
+                              Icon(Icons.edit, size: 13,)
+                            ],
+                          ),
+                        )
+
+
+                      ],
                     ),
                   ),
                 ),
@@ -7118,7 +7138,25 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                         padding:
                             const EdgeInsets.only(top: 10, left: 10, right: 10),
                         child: Text('₹ ${saleCycleController.numberFormatWithComma(user.estimatedAmount).toString() }',
-                          style: TextStyle(color: AllColors.primaryDark1),
+                          style: TextStyle(
+                              color: AllColors.primaryDark1,
+                              decoration:(saleCycleController.userType.toLowerCase() ==
+                                  "branch head" ||
+                                  saleCycleController.isAdminWritePermission ==
+                                      "1" ||
+                                  saleCycleController.saleCycleList[0].createdBy
+                                      ?.toLowerCase() ==
+                                      saleCycleController.email.toLowerCase()) &&
+                                  (saleCycleController.saleCycleList[0].quoteAccepted
+                                      ?.toUpperCase() ==
+                                      "OPEN" &&
+                                      saleCycleController.saleCycleList[0]
+                                          .actualSalesCycleApprovalStatus
+                                          ?.toLowerCase() !=
+                                          "rejected") &&
+                                  (saleCycleController.FromPage.value == "Sales" ||
+                                      saleCycleController.FromPage.value=='FromSCPendingForApproval') &&  saleCycleController.saleCycleList[0].isMarkRateContract==0? TextDecoration.underline:TextDecoration.none,
+                          ),
                         ),
                       ),
                       onTap: () {
@@ -9395,9 +9433,9 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                       .productTotalQty ==
                                       null
                                       ? "0"
-                                      : saleCycleController
+                                      : (saleCycleController
                                       .get_SalesCycleProductById_List[0]
-                                      .productTotalQty
+                                      .productTotalQty?.toInt())
                                       .toString())
                                       : "",
                                   style: GoogleFonts.poppins(

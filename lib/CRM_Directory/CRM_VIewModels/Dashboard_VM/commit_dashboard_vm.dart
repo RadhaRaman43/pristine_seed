@@ -92,7 +92,7 @@ class CommitDashboardVm extends GetxController{
       // selectedSalesStageStatusList.value = ["All"];
       QuoteAccepted_controller.value.text = "OPEN";
       StageName_controller.value.text = "All";
-      IsCommit_controller.value.text = 'All';
+      IsCommit_controller.value.text = 'Yes';
       DateRange("monthly");
       filterCustomDateController.value.text =
       '${formattedStartDate} - ${formattedEndDate}';
@@ -734,7 +734,7 @@ class CommitDashboardVm extends GetxController{
     typeOfCall_controller.value.clear();
     ProductCategory_controller.value.clear();
     QuoteAccepted_controller.value.text = "OPEN";
-    IsCommit_controller.value.text = 'All';
+    IsCommit_controller.value.text = 'Yes';
     StageName_controller.value.text="All";
   //  clusterName_controller.value.clear();
     CustomerName_controller.value.clear();

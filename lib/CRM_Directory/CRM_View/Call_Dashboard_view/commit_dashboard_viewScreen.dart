@@ -1581,7 +1581,7 @@ class CommitDashboardViewscreen extends StatelessWidget{
               children: allItems.map((item) {
                 final isChecked = selectedItems.contains(item);
                 return CheckboxListTile(
-                  dense: true, // makes it compact
+                  dense: true,
                   visualDensity: VisualDensity(horizontal: 0, vertical: -4), // reduce height
                   contentPadding: EdgeInsets.zero, // remove side padding
                   title: Text(item),
@@ -1599,7 +1599,7 @@ class CommitDashboardViewscreen extends StatelessWidget{
                     } else {
                       selectedItems.remove(item);
                       if (selectedItems.isEmpty) {
-                        selectedItems.add("All");
+                        selectedItems.add("OPEN");
                       }
                     }
 
