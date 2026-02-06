@@ -98,7 +98,7 @@ class FunnelDashboardVm extends GetxController{
           await sessionManagement.getIsAdminPermission() ?? '';
       //SalesCycleStageStatusList.value = ['All','Suspect', 'Prospect', 'Propose'];
       //selectedSalesStageStatusList.value = ["All"];
-      QuoteAccepted_controller.value.text = "All";
+      QuoteAccepted_controller.value.text = "OPEN";
       StageName_controller.value.text = "All";
       IsCommit_controller.value.text = 'ALL';
       DateRange("monthly");
@@ -176,7 +176,8 @@ class FunnelDashboardVm extends GetxController{
           .join('|');
     }
     QuoteAcceptedForApi = '';
-    if (QuoteAccepted_controller.value.text.isNotEmpty) {
+    if (QuoteAccepted_controller.value.text.isNotEmpty &&
+        !(QuoteAccepted_controller.value.text).toUpperCase().contains('ALL')) {
       QuoteAcceptedForApi = QuoteAccepted_controller.value.text
           .split(',')
           .map((e) => e.trim())
@@ -766,7 +767,7 @@ class FunnelDashboardVm extends GetxController{
     AccountOwner_controller.value.clear();
     typeOfCall_controller.value.clear();
     ProductCategory_controller.value.clear();
-    QuoteAccepted_controller.value.text = "All";
+    QuoteAccepted_controller.value.text = "OPEN";
     IsCommit_controller.value.text = 'ALL';
     StageName_controller.value.text='All';
     filter_created_on_cont.value.clear();
