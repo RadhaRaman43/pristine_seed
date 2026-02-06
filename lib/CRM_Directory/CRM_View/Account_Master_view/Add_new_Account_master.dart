@@ -167,12 +167,12 @@ class AddNewAccountMaster extends StatelessWidget{
                       // await insertAccountData();
                       accountMaster_page_controller.DraftAccountMstUploaderApiHit('Create');
                       accountMaster_page_controller.clearController();
-                      Get.toNamed(RoutesName.accountMaster_screen);
+                      //Get.toNamed(RoutesName.accountMaster_screen);
                     }else{
                       // await updateAccountData(accountMaster_page_controller.DraftId);
                       accountMaster_page_controller.DraftAccountMstUploaderApiHit('Update');
                       accountMaster_page_controller.clearController();
-                      Get.toNamed(RoutesName.Draft_item_list);
+                      //Get.toNamed(RoutesName.Draft_item_list);
                     }
                     try {
                       // accountMaster_page_controller.Account_Master_Draft_list  = await crmDatabase.getItems();

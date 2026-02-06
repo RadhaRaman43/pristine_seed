@@ -78,11 +78,7 @@ class ContactMasterScreen extends StatelessWidget{
 
       ),
       drawer: CustomDrawer(),
-      body:Obx((){
-        if(contact_vm_controller.loading.value || account_vm_controller.loading.value){
-          return FullScreenLoader();
-        }
-        return RefreshIndicator(
+      body:RefreshIndicator(
           onRefresh:contact_vm_controller.refreshList,
           child: Container(
             width: double.infinity,
@@ -91,7 +87,7 @@ class ContactMasterScreen extends StatelessWidget{
               children: [
                 Obx((){
                   return Visibility(
-                    visible:contact_vm_controller.loading.value ,
+                    visible:contact_vm_controller.loading.value || account_vm_controller.loading.value ,
                     child: LinearProgressIndicator(
                       backgroundColor: AllColors.primaryDark1,
                       color: AllColors.textColor,
@@ -110,8 +106,7 @@ class ContactMasterScreen extends StatelessWidget{
               ],
             ),
           ),
-        );
-      })
+        )
 
 
     ),
@@ -191,11 +186,9 @@ class ContactMasterScreen extends StatelessWidget{
                     ),
                   ),
                 ),
-
               Container(
                 padding: EdgeInsets.only(left: 10, right: 10, bottom: 10),
                 child: Row(
-                  //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Expanded(child: _buildButton(
                       text: 'Clear',
@@ -447,7 +440,6 @@ class ContactMasterScreen extends StatelessWidget{
                         contact_vm_controller.view='VIEW';
                         contact_vm_controller.FromPage.value ='Contact';
                         account_vm_controller.getAccMasterBuyCodeApi(contact_vm_controller.contact_master_list[position].accountCode);
-                        print('accout code.....${contact_vm_controller.contact_master_list[position].accountCode}');
 
                       },
                       child: Text(

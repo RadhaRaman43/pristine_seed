@@ -320,198 +320,130 @@ class DraftItemList extends StatelessWidget{
       context: context,
       isScrollControlled: true,
       builder: (BuildContext context) {
-        return DraggableScrollableSheet(
-          expand: false,
-          initialChildSize: 0.85,
-          minChildSize: 0.5,
-          maxChildSize: 0.95,
-          builder: (_, scrollController) {
-            return Padding(
-              padding: EdgeInsets.only(
-                bottom: MediaQuery.of(context).viewInsets.bottom,
-              ),
-              child: Column(
-                //mainAxisSize: MainAxisSize.min, // Ensure minimal height
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Icon(Icons.shield_moon_rounded, color: AllColors.primaryDark1,),
-                        SizedBox(width: 5,),
-                        Text(
-                          "Filter ",
-                          style: GoogleFonts.poppins(
-                            color: AllColors.primaryDark1,
-                            fontSize: AllFontSize.twentee,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                        Spacer(),
-                        InkWell(
-                          onTap: () {
-                            Navigator.pop(context);
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.only(right: 18.0),
-                            child: Icon(
-                              Icons.cancel,
-                              color: AllColors.primaryDark1,
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                  Center(
-                      child: Divider(
-                        height: 1,
+        return SingleChildScrollView(
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Icon(Icons.shield_moon_rounded, color: AllColors.primaryDark1,),
+                    SizedBox(width: 5,),
+                    Text(
+                      "Filter ",
+                      style: GoogleFonts.poppins(
                         color: AllColors.primaryDark1,
-                      )),
-                  Expanded(
-                    child: SingleChildScrollView(
-                      child: Container(
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              SizedBox(height: 5,),
-                              bindData(context,'Customer Code',accountMaster_page_controller.account_code_controller),
-                              SizedBox(height: 10,),
-                              bindData(context,'Customer Name',accountMaster_page_controller.account_name_controller),
-                              SizedBox(height: 10,),
-                              bindAccountTypeDropDown(),
+                        fontSize: AllFontSize.twentee,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    Spacer(),
+                    InkWell(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 18.0),
+                        child: Icon(
+                          Icons.cancel,
+                          color: AllColors.primaryDark1,
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              Center(
+                  child: Divider(
+                    height: 1,
+                    color: AllColors.primaryDark1,
+                  )),
+              SingleChildScrollView(
+                  child: Container(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          SizedBox(height: 5,),
+                          bindData(context,'Customer Code',accountMaster_page_controller.account_code_controller),
+                          SizedBox(height: 10,),
+                          bindData(context,'Customer Name',accountMaster_page_controller.account_name_controller),
+                          SizedBox(height: 10,),
+                          bindAccountTypeDropDown(),
 
-                              SizedBox(height: 10,),
-                              bindData(context,'Email Id',accountMaster_page_controller.EmailId_Controller),
-                              SizedBox(height: 10,),
-                              bindData(context,'Phone No.',accountMaster_page_controller.PhoneNo_Controller),
-                              SizedBox(height: 10,),
-                              bindCompProfileTypeDropDown(context),
-                              SizedBox(height: 10,),
-                              bindData(context,'State Name',accountMaster_page_controller.stateName_controller),
-                              SizedBox(height: 10,),
-                              bindData(context,'Pin Code',accountMaster_page_controller.postal_code_controller.value),
-                              SizedBox(height: 10,),
-                              bindData(context,'District',accountMaster_page_controller.district_controller.value),
-                              SizedBox(height: 10,),
-                             /* bindCreatedBy(),
+                          SizedBox(height: 10,),
+                          bindData(context,'Email Id',accountMaster_page_controller.EmailId_Controller),
+                          SizedBox(height: 10,),
+                          bindData(context,'Phone No.',accountMaster_page_controller.PhoneNo_Controller),
+                          SizedBox(height: 10,),
+                          bindCompProfileTypeDropDown(context),
+                          SizedBox(height: 10,),
+                          bindData(context,'State Name',accountMaster_page_controller.stateName_controller),
+                          SizedBox(height: 10,),
+                          bindData(context,'Pin Code',accountMaster_page_controller.postal_code_controller.value),
+                          SizedBox(height: 10,),
+                          bindData(context,'District',accountMaster_page_controller.district_controller.value),
+                          /* bindCreatedBy(),
                               SizedBox(height: 10,),*/
 
-                            ],
-                          ),
-                        ),
+                        ],
                       ),
                     ),
                   ),
-                  Container(
-                    padding: EdgeInsets.only(left: 10, right: 10, bottom: 10),
-                    child: Row(
-                      //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(child: _buildButton(
-                          text: 'Clear',
-                          borderColor: AllColors.redColor,
-                          textColor: AllColors.redColor,
-                          onTap: () {
-                            accountMaster_page_controller.filterDataChecker.value='';
-                            accountMaster_page_controller.cleardraftFilterData();
-                            accountMaster_page_controller.clearFilterController();
-                            accountMaster_page_controller.pageNumber=0;
-                            accountMaster_page_controller.getDraftAccountMaster(accountMaster_page_controller.pageNumber,'All');
-                            Get.back();
-                          },
-                        )),
-                        const SizedBox(width: 3,),
-                        Expanded(child: _buildButton(
-                          text: 'Apply',
-                          borderColor: AllColors.primaryDark,
-                          textColor: AllColors.primaryDark1,
-                          onTap: () {
-                            accountMaster_page_controller.pageNumber = 0;
-                            accountMaster_page_controller.getDraftAccountMaster(accountMaster_page_controller.pageNumber, accountMaster_page_controller.IsActive_controller.text);
-                            Get.back();
-                          },
-                        )),
-                        const SizedBox(width: 3,),
-                        Expanded(child: _buildButton(
-                          text: 'Save Filters',
-                          borderColor: AllColors.green,
-                          textColor: AllColors.green,
-                          onTap: () {
-
-                            accountMaster_page_controller.filterDataChecker.value='';
-                            accountMaster_page_controller.SavedraftFilterData();
-                            Get.back();
-                          },
-                        )),
-                      ],
-                    ),
-                  ),
-                  /*Container(
-                    padding: EdgeInsets.only(left: 10, right: 10, bottom: 10),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          width: size.width * 0.4,
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                foregroundColor: AllColors.lightgreyColor, backgroundColor: AllColors.whiteColor, shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15),
-                              side: BorderSide(
-                                  color: AllColors.primaryDark,
-                                  width: 1),
-                            )),
-                            onPressed: () {
-                              Get.back();
-                              accountMaster_page_controller.pageNumber = 0;
-                              accountMaster_page_controller.getDraftAccountMaster(accountMaster_page_controller.pageNumber, accountMaster_page_controller.IsActive_controller.text);
-                            },
-                            child: Text(
-                              'Submit',
-                              style: GoogleFonts.poppins(
-                                  color: AllColors.primaryDark1,
-                                  fontSize: AllFontSize.sisxteen,
-                                  fontWeight: FontWeight.w700),
-                            ),
-                          ),
-                        ),
-                        Container(
-                          width: size.width * 0.4,
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                foregroundColor: AllColors.lightgreyColor, backgroundColor: AllColors.whiteColor, shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15),
-                              side: BorderSide(
-                                  color: AllColors.redColor, width: 1),
-                            )),
-                            onPressed: () {
-                              Get.back();
-                              accountMaster_page_controller.clearFilterController();
-                              accountMaster_page_controller.pageNumber=0;
-                              accountMaster_page_controller.getDraftAccountMaster(accountMaster_page_controller.pageNumber,'All');
-
-                            },
-                            child: Text(
-                              'Reset',
-                              style: GoogleFonts.poppins(
-                                  color: AllColors.redColor,
-                                  fontSize: AllFontSize.sisxteen,
-                                  fontWeight: FontWeight.w700),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),*/
-                ],
               ),
-            );
-          },
 
+              Container(
+                padding: EdgeInsets.only(left: 10, right: 10, bottom: 10),
+                child: Row(
+                  //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(child: _buildButton(
+                      text: 'Clear',
+                      borderColor: AllColors.redColor,
+                      textColor: AllColors.redColor,
+                      onTap: () {
+                        accountMaster_page_controller.filterDataChecker.value='';
+                        accountMaster_page_controller.cleardraftFilterData();
+                        accountMaster_page_controller.clearFilterController();
+                        accountMaster_page_controller.pageNumber=0;
+                        accountMaster_page_controller.getDraftAccountMaster(accountMaster_page_controller.pageNumber,'All');
+                        Get.back();
+                      },
+                    )),
+                    const SizedBox(width: 3,),
+                    Expanded(child: _buildButton(
+                      text: 'Apply',
+                      borderColor: AllColors.primaryDark,
+                      textColor: AllColors.primaryDark1,
+                      onTap: () {
+                        accountMaster_page_controller.pageNumber = 0;
+                        accountMaster_page_controller.getDraftAccountMaster(accountMaster_page_controller.pageNumber, accountMaster_page_controller.IsActive_controller.text);
+                        Get.back();
+                      },
+                    )),
+                    const SizedBox(width: 3,),
+                    Expanded(child: _buildButton(
+                      text: 'Save Filters',
+                      borderColor: AllColors.green,
+                      textColor: AllColors.green,
+                      onTap: () {
+
+                        accountMaster_page_controller.filterDataChecker.value='';
+                        accountMaster_page_controller.SavedraftFilterData();
+                        Get.back();
+                      },
+                    )),
+                  ],
+                ),
+              ),
+            ],
+          ),
         );
       },
     );

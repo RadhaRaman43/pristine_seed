@@ -697,12 +697,12 @@ class Accountmastervm extends GetxController{
 
   }
 
-  getAccCategoryApi() {
-    this.loading.value = true;
+  getAccCategoryApi() async{
+    try {
     Map<String, String> data = {};
+    this.loading.value = true;
+    String value = await _api.getAccountCategoryTypeApiHit(data, sessionManagement);
 
-    _api.getAccountCategoryTypeApiHit(data, sessionManagement).then((value) {
-      try {
         List<GetMasterTypeModel> emp_masterResponse =
         (json.decode(value) as List<dynamic>)
             .map((i) => GetMasterTypeModel.fromJson(i as Map<String, dynamic>))
@@ -719,13 +719,10 @@ class Accountmastervm extends GetxController{
         get_Acc_category_list.value = [];
         print('catch....${e.toString()}');
       }
-    }).onError((error, stackTrace) {
-      get_Acc_category_list.value = [];
-      Utils.sanckBarError('Api Exception onError', error.toString());
-      print('catchEx....${error.toString()}');
-    }).whenComplete(() {
-      this.loading.value = false;
-    });
+      finally{
+        loading.value = false;
+      }
+
 
   }
   /*getAccCategoryApi() async{
@@ -1184,7 +1181,7 @@ class Accountmastervm extends GetxController{
         jsonResponse.map((data) => AccountMasterGetByCodeModel.fromJson(data)).toList();
 
         if (responseData.isNotEmpty && responseData[0].condition == 'True') {
-          loading.value = false;
+
           Navigator.of(context).pop();
           UploadImageType_controller.clear();
           UploadImage.value = false;
@@ -1192,25 +1189,27 @@ class Accountmastervm extends GetxController{
           await getAccMasterBuyCodeApi(AccountCode);
           Get.toNamed(RoutesName.update_AccountMaster_screen);
         } else {
-          loading.value = false;
           Utils.sanckBarError('Failed!', responseData[0].message.toString());
         }
       } else {
-        loading.value = false;
         Utils.sanckBarError('API Error', jsonResponse["message"] ?? 'Invalid response format');
       }
     } catch (error) {
       print("API Error: $error");
-      loading.value = false;
+
       Utils.sanckBarError('Error!', "API Response Error");
+    }
+    finally{
+      loading.value = false;
     }
   }
 
 
 
   getSateListApi() async{
-    Map<String, String> data = {};
     try {
+    Map<String, String> data = {};
+
       this.loading.value = true;
     String value = await _api.getStateMasterApiHit(data, sessionManagement);
 
@@ -1229,6 +1228,9 @@ class Accountmastervm extends GetxController{
       } catch (e) {
         StateMaster_list.value = [];
         print('catch....${e.toString()}');
+      }
+      finally{
+      loading.value=false;
       }
 
   }
@@ -1251,27 +1253,26 @@ class Accountmastervm extends GetxController{
             if (response != null &&
                 response.length > 0 &&
                 response[0].condition == "True") {
-              loading.value = false;
               TatResponseMaster_list.value=response;
               //Get.toNamed(RoutesName.create_preventive_calender_view_screen);
 
             } else {
-              loading.value = false;
               TatResponseMaster_list.value=[];
               Utils.sanckBarError(
                   "Error!", "No Calender Date Found");
               //service_installation_details_list.value=[];
             }
           } else {
-            loading.value = false;
             // service_indent_header_list.value = [];
             Utils.sanckBarException("Api Error!", JsonResponse);
           }
 
     } catch (e) {
-      loading.value = false;
       TatResponseMaster_list.value = [];
       print(e);
+    }
+    finally{
+      loading.value = false;
     }
   }
 
@@ -1301,8 +1302,7 @@ class Accountmastervm extends GetxController{
 
               } else {
                 AccountMasterGetCode_list.value=[];
-                Utils.sanckBarError(
-                    "Error!", "No Data Found");
+                Utils.sanckBarError("Error!", "No Data Found");
                 //service_installation_details_list.value=[];
               }
             } else {
@@ -1311,8 +1311,11 @@ class Accountmastervm extends GetxController{
               Utils.sanckBarException("Api Error!", JsonResponse);
             }
           }catch(e){
-            loading.value = false;
+
             print(e);
+          }
+          finally{
+            loading.value = false;
           }
   }
 
@@ -1513,10 +1516,7 @@ class Accountmastervm extends GetxController{
       if (JsonResponse is List) {
         List<AccountMasterGetByCodeModel> response =
         JsonResponse.map((e) => AccountMasterGetByCodeModel.fromJson(e)).toList();
-        if (response != null &&
-            response.length > 0 &&
-            response[0].condition == "True") {
-          loading.value = false;
+        if (response != null && response.length > 0 && response[0].condition == "True") {
           if(flag == 'Create'){
             print("ttttttttttt");
             Utils.sanckBarSuccess("Success!", "Account is Save In Draft Successful");
@@ -1539,20 +1539,21 @@ class Accountmastervm extends GetxController{
           //Get.toNamed(RoutesName.update_AccountMaster_screen);
           //viewRequestDetails(response);
         } else {
-          loading.value = false;
           Utils.sanckBarError("Error!", response[0].message??"");
         }
       } else {
-        loading.value = false;
         Utils.sanckBarException("Response Error!", JsonResponse);
       }
     } catch (error, stackTrace) {
       print(error);
       print(stackTrace);
       print("Exce3ption....${error}");
-      loading.value = false;
+
       Utils.sanckBarException("Api Error!", error.toString());
       //service_indent_header_list.value = [];
+    }
+    finally{
+      loading.value = false;
     }
 
   }
@@ -1808,7 +1809,7 @@ class Accountmastervm extends GetxController{
     }
   }
 
-  void getContactMasterList(int pageNumber, String account_name, String contName, String account_Code) {
+  void getContactMasterList(int pageNumber, String account_name, String contName, String account_Code) async {
     try{
       Map<String, String> data={
         "filter_contact_name": contName,
@@ -1820,7 +1821,7 @@ class Accountmastervm extends GetxController{
       };
       loading.value=true;
       print("data is ${data}");
-      _api.contactMstGetList(data, sessionManagement).then((onValue){
+      String onValue = await _api.contactMstGetList(data, sessionManagement);
         print(onValue);
         final jsonResponse = json.decode(onValue);
         if(jsonResponse is List){
@@ -1845,19 +1846,13 @@ class Accountmastervm extends GetxController{
            // Utils.sanckBarSuccess('No Data Found', 'No Data Found');
 
           }
-        } else {
-          loading.value = false;
-
         }
-      },
-      ).onError(
-            (error, stackTrace) {
-          print(error);
-        },
-      );
     }catch(e){
-      loading.value = false;
+
       print(e);
+    }
+    finally{
+      loading.value = false;
     }
   }
 
@@ -1911,7 +1906,7 @@ class Accountmastervm extends GetxController{
 
 
 
-  void getAccountDashboardCount(int pageNumber, String account_Code) {
+  void getAccountDashboardCount(int pageNumber, String account_Code) async {
     try{
       Map<String, String> data={
         "account_code": account_Code,
@@ -1920,13 +1915,12 @@ class Accountmastervm extends GetxController{
       };
       loading.value=true;
       print("data is ${data}");
-      _api.AccountDashboardCount(data, sessionManagement).then((onValue){
+      String onValue = await _api.AccountDashboardCount(data, sessionManagement);
         print(onValue);
         final jsonResponse = json.decode(onValue);
         if(jsonResponse is List){
           List<AccountDashboardCountModel> response = jsonResponse.map((e) => AccountDashboardCountModel.fromJson(e)).toList();
           if(response!= null && response.length>0 && response[0].condition=="True"){
-            loading.value = false;
             accountDashBoardCount.value=[];
             accountDashBoardCount.value=response;
             accountDashBoardTaskCount.value=[];
@@ -1940,31 +1934,23 @@ class Accountmastervm extends GetxController{
             Get.toNamed(RoutesName.AccountDashboardCount_Screen);
 
           }else {
-            loading.value = false;
             view_contract_list.value=[];
             Get.toNamed(RoutesName.AccountDashboardCount_Screen);
             Utils.sanckBarSuccess('No Data Found', 'No Data Found');
 
 
           }
-        } else {
-          loading.value = false;
-
         }
-      },
-      ).onError(
-            (error, stackTrace) {
-          print(error);
-        },
-      );
     }catch(e){
-      loading.value = false;
       print(e);
+    }
+    finally{
+      loading.value = false;
     }
   }
 
 
-  getAccountTaskHistory(int page_no, String accountCode){
+  getAccountTaskHistory(int page_no, String accountCode) async{
     try{
       Map<String, String> data={
         "account_code": accountCode,
@@ -1972,12 +1958,11 @@ class Accountmastervm extends GetxController{
         "page_number": page_no.toString()
       };
       loading.value=true;
-      _api.AccountTaskHistory(data, sessionManagement).then((onValue){
+      String onValue = await _api.AccountTaskHistory(data, sessionManagement);
         final jsonResponse = json.decode(onValue);
         if(jsonResponse is List){
           List<AccountTaskHistoryModel> response = jsonResponse.map((e) => AccountTaskHistoryModel.fromJson(e)).toList();
           if(response!= null && response.length>0 && response[0].condition=="True"){
-            loading.value = false;
             if(page_no==0){
               AccountTaskHistoryList.clear();
             }
@@ -1985,27 +1970,20 @@ class Accountmastervm extends GetxController{
             total_rows=int.parse(AccountTaskHistoryList[0].totalRows!);
 
           }else {
-            loading.value = false;
             AccountTaskHistoryList.value=[];
 
           }
-        } else {
-          loading.value = false;
-
         }
-      },
-      ).onError(
-            (error, stackTrace) {
-          print(error);
-        },
-      );
     }catch(e){
-      loading.value = false;
       print(e);
+    }
+    finally{
+      loading.value = false;
     }
   }
 
-  getAccountDashboardData(int page_no,String IsActive, String accountCode, String flag, String day_flag){
+  getAccountDashboardData(int page_no,String IsActive, String accountCode, String flag, String day_flag) async{
+    try{
     if(TaskMaster_page_controller.isInfraLeadFilterController.text=="All"){
       TaskMaster_page_controller.infraLeadValue.value=-1;
     }
@@ -2026,7 +2004,7 @@ class Accountmastervm extends GetxController{
     }else if(IsActive == 'No'){
       is_Active = 0;
     }
-    try{
+
       Map<String, String> data={
           "filter_flag": flag,
           "filter_task_id": "",
@@ -2049,12 +2027,11 @@ class Accountmastervm extends GetxController{
           "pageNumber": page_no.toString()
       };
       loading.value=true;
-      _api.AccountDashboardDataGet(data, sessionManagement).then((onValue){
+      String onValue = await _api.AccountDashboardDataGet(data, sessionManagement);
         final jsonResponse = json.decode(onValue);
         if(jsonResponse is List){
           List<AccountDashboardDataModel> response = jsonResponse.map((e) => AccountDashboardDataModel.fromJson(e)).toList();
           if(response!= null && response.length>0 && response[0].condition=="True"){
-            loading.value = false;
             if(page_no==0){
               AccountDashboardDataList.clear();
             }
@@ -2064,29 +2041,22 @@ class Accountmastervm extends GetxController{
             Get.toNamed(RoutesName.AccountDashboardData_Screen);
 
           }else {
-            loading.value = false;
             AccountDashboardDataList.value=[];
             print('Nodatafound');
             Utils.sanckBarSuccess('No date', 'No Data Found');
 
           }
-        } else {
-          loading.value = false;
-
         }
-      },
-      ).onError(
-            (error, stackTrace) {
-          print(error);
-        },
-      );
+
     }catch(e){
-      loading.value = false;
       print(e);
+    }
+    finally{
+      loading.value = false;
     }
   }
 
-  getAccountDashboardDataSales(int page_no,String IsActive, String accountCode, String flag, String day_flag, String WonLoss){
+  getAccountDashboardDataSales(int page_no,String IsActive, String accountCode, String flag, String day_flag, String WonLoss) async{
     /*if(isInfraLeadFilterController.text=="All"){
       infraLeadValue.value=-1;
     }
@@ -2129,12 +2099,11 @@ class Accountmastervm extends GetxController{
         "pageNumber": page_no.toString()
       };
       loading.value=true;
-      _api.AccountDashboardDataGet(data, sessionManagement).then((onValue){
+     String onValue = await _api.AccountDashboardDataGet(data, sessionManagement);
         final jsonResponse = json.decode(onValue);
         if(jsonResponse is List){
           List<AccountdashboarddatasaleModelsModel> response = jsonResponse.map((e) => AccountdashboarddatasaleModelsModel.fromJson(e)).toList();
           if(response!= null && response.length>0 && response[0].condition=="True"){
-            loading.value = false;
             if(page_no==0){
               AccountDashboardDataSalesList.clear();
             }
@@ -2144,30 +2113,22 @@ class Accountmastervm extends GetxController{
             Get.toNamed(RoutesName.AccountDashboardDataSales_Screen);
 
           }else {
-            loading.value = false;
             AccountDashboardDataSalesList.value=[];
             print('NodatafoundSales');
             Utils.sanckBarSuccess('No date', 'No Data Found');
 
           }
-        } else {
-          loading.value = false;
-
         }
-      },
-      ).onError(
-            (error, stackTrace) {
-          print(error);
-        },
-      );
     }catch(e){
-      loading.value = false;
       print(e);
+    }
+    finally{
+      loading.value = false;
     }
   }
 
 
-  getAccountDashboardDataQuotation(int page_no,String IsActive, String accountCode, String flag, String day_flag){
+  getAccountDashboardDataQuotation(int page_no,String IsActive, String accountCode, String flag, String day_flag) async{
     try{
       Map<String, String> data={
         "filter_flag": flag,
@@ -2191,12 +2152,11 @@ class Accountmastervm extends GetxController{
         "pageNumber": page_no.toString()
       };
       loading.value=true;
-      _api.AccountDashboardDataGet(data, sessionManagement).then((onValue){
+      String onValue = await _api.AccountDashboardDataGet(data, sessionManagement);
         final jsonResponse = json.decode(onValue);
         if(jsonResponse is List){
           List<SalesCycleQuoteHeaderModal> response = jsonResponse.map((e) => SalesCycleQuoteHeaderModal.fromJson(e)).toList();
           if(response!= null && response.length>0 && response[0].condition=="True"){
-            loading.value = false;
             if(page_no==0){
               AccountDashboardDataQuotationList.clear();
             }
@@ -2206,25 +2166,17 @@ class Accountmastervm extends GetxController{
             Get.toNamed(RoutesName.AccountDashboardDataQuotation_Screen);
 
           }else {
-            loading.value = false;
             AccountDashboardDataQuotationList.value=[];
             print('NodatafoundSales');
             Utils.sanckBarSuccess('No date', 'No Data Found');
 
           }
-        } else {
-          loading.value = false;
-
         }
-      },
-      ).onError(
-            (error, stackTrace) {
-          print(error);
-        },
-      );
     }catch(e){
-      loading.value = false;
       print(e);
+    }
+    finally{
+      loading.value = false;
     }
   }
 
@@ -2360,9 +2312,10 @@ class Accountmastervm extends GetxController{
     } catch (e) {
       print('Failed to delete data: $e');
     }
+
   }
 
-  void getAddressMasterList(int pageNumber, String account_Code, String account_name, String contactName) {
+  void getAddressMasterList(int pageNumber, String account_Code, String account_name, String contactName) async{
     try{
       Map data={
         "consignee_id": "",
@@ -2376,14 +2329,12 @@ class Accountmastervm extends GetxController{
       };
       loading.value=true;
       print("data is ${data}");
-      _api.ConsigneeAddMstGet(data, sessionManagement).then((onValue){
+      String onValue = await _api.ConsigneeAddMstGet(data, sessionManagement);
         print('value...${onValue}');
         final jsonResponse = json.decode(onValue);
         if(jsonResponse is List){
           List<AddressMasterModel> response = jsonResponse.map((e) => AddressMasterModel.fromJson(e)).toList();
           if(response.length>0 && response[0].condition=="True"){
-            loading.value = false;
-
             if(pageNumber==0){
               address_master_list.clear();
             }
@@ -2395,25 +2346,18 @@ class Accountmastervm extends GetxController{
             // Get.toNamed(RoutesName.viewAddress_screen);
 
           }else {
-            loading.value = false;
             address_master_list.value=[];
             // Get.toNamed(RoutesName.viewAddress_screen);
            // Utils.sanckBarSuccess('No date Found', 'No Data Found');
 
           }
-        } else {
-          loading.value = false;
-
         }
-      },
-      ).onError(
-            (error, stackTrace) {
-          print(error);
-        },
-      );
     }catch(e){
-      loading.value = false;
+
       print(e);
+    }
+    finally{
+      loading.value = false;
     }
   }
 

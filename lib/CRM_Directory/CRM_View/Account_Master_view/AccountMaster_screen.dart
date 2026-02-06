@@ -691,8 +691,8 @@ class AccountmasterScreen extends StatelessWidget{
           hintText: labelText,
           hintStyle: GoogleFonts.poppins(
               color: AllColors.lightblackColor,
-              fontWeight: FontWeight.w300,
-              fontSize: AllFontSize.ten),
+              fontWeight: FontWeight.w500,
+              fontSize: AllFontSize.sisxteen),
           labelStyle: GoogleFonts.poppins(
               color: AllColors.primaryDark1,
               fontWeight: FontWeight.w500,
@@ -732,6 +732,10 @@ class AccountmasterScreen extends StatelessWidget{
             filled: false,
             labelText: accountMaster_page_controller.selected_company_type_list.isNotEmpty ? "Company Profile Type" : null,
             hintText: "Company Profile Type",
+            labelStyle:GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontSize: AllFontSize.sisxteen,
+              fontWeight: FontWeight.w500),
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
           ),
         ),
