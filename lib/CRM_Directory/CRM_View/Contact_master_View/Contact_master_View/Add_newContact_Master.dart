@@ -83,8 +83,7 @@ class AddNewcontactMasterContact extends StatelessWidget{
           ),
           title:Row(
             children: [
-              Text(
-                contact_vm_controller.updateContact?'Update Contact':"Create Contact",
+              Text(contact_vm_controller.updateContact?'Update Contact':"Create Contact",
                 style: GoogleFonts.poppins(
                   color: AllColors.whiteColor,
                   fontSize: 20.0,
@@ -131,20 +130,23 @@ class AddNewcontactMasterContact extends StatelessWidget{
       drawer: CustomDrawer(),
       floatingActionButton:  Container(
         margin: EdgeInsets.only(left: 30),
-        child: DefaultButton(
-          press: (){
-            if(contact_vm_controller.updateContact){
-              contact_vm_controller.createNewContactMstApi("Update");
-            }
-            else{
-              contact_vm_controller.contact_code="";
-              contact_vm_controller.createNewContactMstApi("Create");
-            }
+        child: Obx((){
+          return  DefaultButton(
+            loading: contact_vm_controller.loading.value,
+            press: (){
+              if(contact_vm_controller.updateContact){
+                contact_vm_controller.createNewContactMstApi("Update");
+              }
+              else{
+                contact_vm_controller.contact_code="";
+                contact_vm_controller.createNewContactMstApi("Create");
+              }
 
-          },
-          text: contact_vm_controller.updateContact?'Update Contact':'Create Contact',
-        ),
-      ),
+            },
+            text: contact_vm_controller.updateContact?'Update Contact':'Create Contact',
+
+          );
+        })),
       body: Container(
         padding: EdgeInsets.only(bottom: 70),
           height: size.height,
@@ -189,19 +191,15 @@ class AddNewcontactMasterContact extends StatelessWidget{
               SizedBox(height: 15,),
 
               Container(
-                padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                height: 50,
+                padding: EdgeInsets.only(left: 15.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Container(
                       decoration: BoxDecoration(
-                        //color: AllColors.whiteColor,
                           borderRadius: BorderRadius.circular(10)
                       ),
-                      //height: size.height*10,
                       width: contact_vm_controller.updateContact?size.width*.92:size.width*.7,
-                      //padding: EdgeInsets.only(left: 15.0, right: 15.0),
                       child: bindAccountOwnerDropDown(context),
                     ),
                     Visibility(
@@ -511,20 +509,12 @@ class AddNewcontactMasterContact extends StatelessWidget{
           }
           if (textEditingValue.text.isEmpty) {
             return contact_vm_controller.Account_Master_list;
-            // return const Iterable<VehicleTypeResponse>.empty();
+
           }
-          /*return contact_vm_controller.Account_Master_list
-              .where((AccountMasterModel option) {
-            return option.accountName
-                .toString()
-                .toLowerCase()
-                .contains(textEditingValue.text.toLowerCase());
-          }).toList();*/
           return await contact_vm_controller.getAccountMaster(textEditingValue.text);
         },
         onSelected: (AccountMasterModel selection) {
           print(selection.accountName);
-          // Update the TextField with the selected
           contact_vm_controller.account_name_controller.text =
               _displayAccNameForOption(selection).toString();
           contact_vm_controller.accountName.value=selection.accountName??"";
@@ -543,7 +533,6 @@ class AddNewcontactMasterContact extends StatelessWidget{
             onTapOutside: (value){
               FocusNode().unfocus();
             },
-
             decoration: InputDecoration(
               suffixIcon: IconButton(
                 color: AllColors.primaryDark1,
@@ -615,16 +604,6 @@ class AddNewcontactMasterContact extends StatelessWidget{
                             ),
                             softWrap: true,
                           )
-
-                        /*Text(
-                          option.accountName! + " (${option.accountCode!})",
-                          style: GoogleFonts.poppins(
-                              color: AllColors.blackColor,
-                              fontWeight: FontWeight.w300,
-                              fontSize: AllFontSize
-                                  .sisxteen // Change the text color here
-                          ),
-                        ),*/
                       ),
                     );
                   },

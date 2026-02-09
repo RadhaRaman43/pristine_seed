@@ -1,3 +1,4 @@
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -14,6 +15,7 @@ import '../../CRM_Models/AccountMaster_model/CompanyTypeModel.dart';
 import '../../CRM_Models/AccountMaster_model/cluster_modal.dart';
 import '../../CRM_Models/AccountMaster_model/getMasterTypeModel.dart';
 import '../../CRM_Models/AccountMaster_model/region_with_cluster_filter_modal.dart';
+import '../../CRM_Models/TaskMaster_model/company_type_modal.dart';
 import '../../CRM_VIewModels/account_master_vm/accountMasterVM.dart';
 
 class DraftItemList extends StatelessWidget{
@@ -62,11 +64,7 @@ class DraftItemList extends StatelessWidget{
 
       ),
       drawer: CustomDrawer(),
-      body: Obx((){
-        if(accountMaster_page_controller.loading.value) {
-          return const FullScreenLoader();
-        }
-        return    RefreshIndicator(
+      body: RefreshIndicator(
           onRefresh: accountMaster_page_controller.refreshDraftList,
           child: Container(
             width: double.infinity,
@@ -96,9 +94,7 @@ class DraftItemList extends StatelessWidget{
               ],
             ),
           ),
-        );
-      })
-
+        )
 
     ),
     );
@@ -324,193 +320,130 @@ class DraftItemList extends StatelessWidget{
       context: context,
       isScrollControlled: true,
       builder: (BuildContext context) {
-        return DraggableScrollableSheet(
-          expand: false,
-          initialChildSize: 0.85,
-          minChildSize: 0.5,
-          maxChildSize: 0.95,
-          builder: (_, scrollController) {
-            return Padding(
-              padding: EdgeInsets.only(
-                bottom: MediaQuery.of(context).viewInsets.bottom,
-              ),
-              child: Column(
-                //mainAxisSize: MainAxisSize.min, // Ensure minimal height
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Icon(Icons.shield_moon_rounded, color: AllColors.primaryDark1,),
-                        SizedBox(width: 5,),
-                        Text(
-                          "Filter ",
-                          style: GoogleFonts.poppins(
-                            color: AllColors.primaryDark1,
-                            fontSize: AllFontSize.twentee,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                        Spacer(),
-                        InkWell(
-                          onTap: () {
-                            Navigator.pop(context);
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.only(right: 18.0),
-                            child: Icon(
-                              Icons.cancel,
-                              color: AllColors.primaryDark1,
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                  Center(
-                      child: Divider(
-                        height: 1,
+        return SingleChildScrollView(
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Icon(Icons.shield_moon_rounded, color: AllColors.primaryDark1,),
+                    SizedBox(width: 5,),
+                    Text(
+                      "Filter ",
+                      style: GoogleFonts.poppins(
                         color: AllColors.primaryDark1,
-                      )),
-                  Expanded(
-                    child: SingleChildScrollView(
-                      child: Container(
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              SizedBox(height: 5,),
-                              bindData(context,'Customer/Draft Code',accountMaster_page_controller.account_code_controller),
-                              SizedBox(height: 10,),
-                              bindData(context,'Customer Name',accountMaster_page_controller.account_name_controller),
-                              SizedBox(height: 10,),
-                              bindAccountTypeDropDown(),
-                              SizedBox(height: 10,),
-                              bindData(context,'Company Profile Type',accountMaster_page_controller.comp_prof_type_controller),
-                              SizedBox(height: 10,),
-                              bindData(context,'State Name',accountMaster_page_controller.stateName_controller),
-                              SizedBox(height: 10,),
-                              bindData(context,'Pin Code',accountMaster_page_controller.postal_code_controller.value),
-                              SizedBox(height: 10,),
-                              bindData(context,'District',accountMaster_page_controller.district_controller.value),
-                              SizedBox(height: 10,),
-                              bindCreatedBy(),
-                              SizedBox(height: 10,),
-
-                            ],
-                          ),
+                        fontSize: AllFontSize.twentee,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    Spacer(),
+                    InkWell(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 18.0),
+                        child: Icon(
+                          Icons.cancel,
+                          color: AllColors.primaryDark1,
                         ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              Center(
+                  child: Divider(
+                    height: 1,
+                    color: AllColors.primaryDark1,
+                  )),
+              SingleChildScrollView(
+                  child: Container(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          SizedBox(height: 5,),
+                          bindData(context,'Customer Code',accountMaster_page_controller.account_code_controller),
+                          SizedBox(height: 10,),
+                          bindData(context,'Customer Name',accountMaster_page_controller.account_name_controller),
+                          SizedBox(height: 10,),
+                          bindAccountTypeDropDown(),
+
+                          SizedBox(height: 10,),
+                          bindData(context,'Email Id',accountMaster_page_controller.EmailId_Controller),
+                          SizedBox(height: 10,),
+                          bindData(context,'Phone No.',accountMaster_page_controller.PhoneNo_Controller),
+                          SizedBox(height: 10,),
+                          bindCompProfileTypeDropDown(context),
+                          SizedBox(height: 10,),
+                          bindData(context,'State Name',accountMaster_page_controller.stateName_controller),
+                          SizedBox(height: 10,),
+                          bindData(context,'Pin Code',accountMaster_page_controller.postal_code_controller.value),
+                          SizedBox(height: 10,),
+                          bindData(context,'District',accountMaster_page_controller.district_controller.value),
+                          /* bindCreatedBy(),
+                              SizedBox(height: 10,),*/
+
+                        ],
                       ),
                     ),
                   ),
-                  Container(
-                    padding: EdgeInsets.only(left: 10, right: 10, bottom: 10),
-                    child: Row(
-                      //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(child: _buildButton(
-                          text: 'Clear',
-                          borderColor: AllColors.redColor,
-                          textColor: AllColors.redColor,
-                          onTap: () {
-                            accountMaster_page_controller.filterDataChecker.value='';
-                            accountMaster_page_controller.cleardraftFilterData();
-                            accountMaster_page_controller.clearFilterController();
-                            accountMaster_page_controller.pageNumber=0;
-                            accountMaster_page_controller.getDraftAccountMaster(accountMaster_page_controller.pageNumber,'All');
-                            Get.back();
-                          },
-                        )),
-                        const SizedBox(width: 3,),
-                        Expanded(child: _buildButton(
-                          text: 'Apply',
-                          borderColor: AllColors.primaryDark,
-                          textColor: AllColors.primaryDark1,
-                          onTap: () {
-                            accountMaster_page_controller.pageNumber = 0;
-                            accountMaster_page_controller.getDraftAccountMaster(accountMaster_page_controller.pageNumber, accountMaster_page_controller.IsActive_controller.text);
-                            Get.back();
-                          },
-                        )),
-                        const SizedBox(width: 3,),
-                        Expanded(child: _buildButton(
-                          text: 'Save Filters',
-                          borderColor: AllColors.green,
-                          textColor: AllColors.green,
-                          onTap: () {
-
-                            accountMaster_page_controller.filterDataChecker.value='';
-                            accountMaster_page_controller.SavedraftFilterData();
-                            Get.back();
-                          },
-                        )),
-                      ],
-                    ),
-                  ),
-                  /*Container(
-                    padding: EdgeInsets.only(left: 10, right: 10, bottom: 10),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          width: size.width * 0.4,
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                foregroundColor: AllColors.lightgreyColor, backgroundColor: AllColors.whiteColor, shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15),
-                              side: BorderSide(
-                                  color: AllColors.primaryDark,
-                                  width: 1),
-                            )),
-                            onPressed: () {
-                              Get.back();
-                              accountMaster_page_controller.pageNumber = 0;
-                              accountMaster_page_controller.getDraftAccountMaster(accountMaster_page_controller.pageNumber, accountMaster_page_controller.IsActive_controller.text);
-                            },
-                            child: Text(
-                              'Submit',
-                              style: GoogleFonts.poppins(
-                                  color: AllColors.primaryDark1,
-                                  fontSize: AllFontSize.sisxteen,
-                                  fontWeight: FontWeight.w700),
-                            ),
-                          ),
-                        ),
-                        Container(
-                          width: size.width * 0.4,
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                foregroundColor: AllColors.lightgreyColor, backgroundColor: AllColors.whiteColor, shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15),
-                              side: BorderSide(
-                                  color: AllColors.redColor, width: 1),
-                            )),
-                            onPressed: () {
-                              Get.back();
-                              accountMaster_page_controller.clearFilterController();
-                              accountMaster_page_controller.pageNumber=0;
-                              accountMaster_page_controller.getDraftAccountMaster(accountMaster_page_controller.pageNumber,'All');
-
-                            },
-                            child: Text(
-                              'Reset',
-                              style: GoogleFonts.poppins(
-                                  color: AllColors.redColor,
-                                  fontSize: AllFontSize.sisxteen,
-                                  fontWeight: FontWeight.w700),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),*/
-                ],
               ),
-            );
-          },
 
+              Container(
+                padding: EdgeInsets.only(left: 10, right: 10, bottom: 10),
+                child: Row(
+                  //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(child: _buildButton(
+                      text: 'Clear',
+                      borderColor: AllColors.redColor,
+                      textColor: AllColors.redColor,
+                      onTap: () {
+                        accountMaster_page_controller.filterDataChecker.value='';
+                        accountMaster_page_controller.cleardraftFilterData();
+                        accountMaster_page_controller.clearFilterController();
+                        accountMaster_page_controller.pageNumber=0;
+                        accountMaster_page_controller.getDraftAccountMaster(accountMaster_page_controller.pageNumber,'All');
+                        Get.back();
+                      },
+                    )),
+                    const SizedBox(width: 3,),
+                    Expanded(child: _buildButton(
+                      text: 'Apply',
+                      borderColor: AllColors.primaryDark,
+                      textColor: AllColors.primaryDark1,
+                      onTap: () {
+                        accountMaster_page_controller.pageNumber = 0;
+                        accountMaster_page_controller.getDraftAccountMaster(accountMaster_page_controller.pageNumber, accountMaster_page_controller.IsActive_controller.text);
+                        Get.back();
+                      },
+                    )),
+                    const SizedBox(width: 3,),
+                    Expanded(child: _buildButton(
+                      text: 'Save Filters',
+                      borderColor: AllColors.green,
+                      textColor: AllColors.green,
+                      onTap: () {
+
+                        accountMaster_page_controller.filterDataChecker.value='';
+                        accountMaster_page_controller.SavedraftFilterData();
+                        Get.back();
+                      },
+                    )),
+                  ],
+                ),
+              ),
+            ],
+          ),
         );
       },
     );
@@ -581,35 +514,76 @@ class DraftItemList extends StatelessWidget{
     );
   }
 
-  bindPostalCode() {
-    return TextField(
-      controller: accountMaster_page_controller.postal_code_controller.value,
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(
-              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-          labelText: 'Postal Code',
-          hintText: 'Postal Code',
-          hintStyle: GoogleFonts.poppins(
-              color: AllColors.lightblackColor,
-              fontWeight: FontWeight.w300,
-              fontSize: AllFontSize.ten),
-          labelStyle: GoogleFonts.poppins(
-              color: AllColors.primaryDark1,
-              fontWeight: FontWeight.w500,
-              fontSize: AllFontSize.sisxteen),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
+  bindCompProfileTypeDropDown(BuildContext context) {
+    return Obx(() {
+      if (accountMaster_page_controller.comp_prof_type_controller.value.text.isNotEmpty && accountMaster_page_controller.filterDataChecker.value=='1') {
+        List<String> nameList = accountMaster_page_controller.comp_prof_type_controller.value.text.split('|');
+
+        accountMaster_page_controller.selected_company_type_list.value =
+            List.generate(nameList.length, (index) {
+              return CompanyTypeModal(
+                description: nameList[index].trim(),
+              );
+            });
+      }
+      return DropdownSearch<CompanyTypeModal>.multiSelection(
+        items: accountMaster_page_controller.company_profile_type_list,
+        itemAsString: (CompanyTypeModal u) => u.description ?? "",
+        selectedItems: accountMaster_page_controller.selected_company_type_list,
+        dropdownDecoratorProps: DropDownDecoratorProps(
+          baseStyle: TextStyle(color: Colors.black),
+          dropdownSearchDecoration: InputDecoration(
+            filled: false,
+            labelText: accountMaster_page_controller.selected_company_type_list.isNotEmpty ? "Company Profile Type" : null,
+            hintText: "Company Profile Type",
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
           ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          )
-      ),
-      cursorColor: AllColors.primaryDark1,
-      onChanged: (value) {
-        // Handle the text field value changes if needed
-      },
-    );
+        ),
+        dropdownBuilder: (context, selectedItems) {
+          // Custom builder to just show comma-separated names
+          if (selectedItems.isEmpty) {
+            return Text(
+              "Company Profile Type",
+              style: GoogleFonts.poppins(
+                color: AllColors.primaryDark1, // Match your hint color
+                fontSize: AllFontSize.sisxteen,
+                fontWeight: FontWeight.w500,
+              ),
+            );
+          }
+          return SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Text(
+              selectedItems.map((e) => e.description).join(', '),
+              style: TextStyle(color: Colors.black), // Only black text
+            ),
+          );
+        },
+        onChanged: (List<CompanyTypeModal> selectedList) {
+          accountMaster_page_controller.selected_company_type_list.value = selectedList;
+          accountMaster_page_controller.comp_prof_type_controller.value.text =
+              selectedList.map((e) => e.description).join('|');
+        },
+        popupProps: PopupPropsMultiSelection.dialog(
+          showSearchBox: true,
+          searchFieldProps: TextFieldProps(
+            decoration: InputDecoration(
+              contentPadding: EdgeInsets.only(top: 20, left: 12, right: 12),
+              // Top margin here
+              hintText: "Search...",
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+          ),
+          itemBuilder: (context, item, isSelected) => ListTile(
+            title: Text(item.description ?? ""),
+          ),
+        ),
+      );
+    });
   }
+
 
   Widget bindClusterNameFilter(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -1079,38 +1053,6 @@ class DraftItemList extends StatelessWidget{
   }
 
 
-  bindCreatedBy() {
-    return  TextField(
-      controller: accountMaster_page_controller.created_by_controller.value,
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(
-              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-          labelText: 'Created By',
-          hintText: 'Created By',
-          hintStyle: GoogleFonts.poppins(
-              color: AllColors.lightblackColor,
-              fontWeight: FontWeight.w300,
-              fontSize: AllFontSize.ten),
-          labelStyle: GoogleFonts.poppins(
-              color: AllColors.primaryDark1,
-              fontWeight: FontWeight.w500,
-              fontSize: AllFontSize.sisxteen),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          )
-      ),
-      cursorColor: AllColors.primaryDark1,
-      onChanged: (value) {
-        // Handle the text field value changes if needed
-      },
-    );
-  }
-
-
-
   Widget bindAccountTypeDropDown() {
     return Container(
       //margin: const EdgeInsets.only(right: 15.0),
@@ -1163,109 +1105,5 @@ class DraftItemList extends StatelessWidget{
     );
   }
 
-  Widget bindCompProfileTypeDropDown(context){
-    return Autocomplete<CompanyTypeModel>(
-      displayStringForOption: _displayCompProfileTypeForOption,
-      optionsBuilder: (TextEditingValue textEditingValue) {
-        if (textEditingValue.text.isEmpty) {
-          return accountMaster_page_controller.get_Comp_Profile_type_list;
-          // return const Iterable<VehicleTypeResponse>.empty();
-        }
-        return accountMaster_page_controller.get_Comp_Profile_type_list
-            .where((CompanyTypeModel option) {
-          return option.description
-              .toString()
-              .toLowerCase()
-              .contains(textEditingValue.text.toLowerCase());
-        }).toList();
-      },
-      onSelected: (CompanyTypeModel selection) {
-        print(selection.description);
-        // Update the TextField with the selected
-        accountMaster_page_controller.comp_prof_type_controller.text =
-            _displayCompProfileTypeForOption(selection).toString();
-      },
-      fieldViewBuilder: (BuildContext context, TextEditingController controller,
-          FocusNode focusNode, VoidCallback onFieldSubmitted) {
-        return TextField(
-          cursorColor: AllColors.primaryDark1,
-          controller: controller
-            ..text = accountMaster_page_controller.comp_prof_type_controller
-                .text,
-          focusNode: focusNode,
-          //onSubmitted: onFieldSubmitted,
-          decoration: InputDecoration(
-              suffixIcon: IconButton(
-                color: AllColors.primaryDark1,
-                onPressed: (){
-                  if(focusNode.hasFocus){
-                    focusNode.unfocus();
-                  }else{
-                    focusNode.requestFocus();
-                  }
-                },
-                icon: Icon(Icons.arrow_drop_down),
-              ),
-              contentPadding: EdgeInsets.symmetric(
-                  vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-              hintText: 'Company Profile Type',
-              labelText: 'Company Profile Type',
-              hintStyle: GoogleFonts.poppins(
-                  color: AllColors.lightblackColor,
-                  fontWeight: FontWeight.w300,
-                  fontSize: AllFontSize.ten),
-              labelStyle: GoogleFonts.poppins(
-                  color: AllColors.primaryDark1,
-                  fontWeight: FontWeight.w500,
-                  fontSize: AllFontSize.sisxteen),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-              ),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-              )
-          ),
-        );
-      },
-      optionsViewBuilder: (BuildContext context,
-          AutocompleteOnSelected<CompanyTypeModel> onSelected,
-          Iterable<CompanyTypeModel> suggestions) {
-        return Align(
-          alignment: Alignment.topLeft,
-          child: Material(
-            elevation: 4.0,
-            child: Container(
-              constraints: BoxConstraints(maxHeight: 200),
-              child: ListView.builder(
-                shrinkWrap: true,
-                itemCount: suggestions.length,
-                itemBuilder: (context, index) {
-                  final CompanyTypeModel option =
-                  suggestions.elementAt(index);
-                  return GestureDetector(
-                    onTap: () {
-                      onSelected(option);
-                    },
-                    child: Container(
-                      padding: EdgeInsets.all(8.0),
-                      child: Text(
-                        option.description.toString(),
-                        style: GoogleFonts.poppins(
-                            color: AllColors.blackColor,
-                            fontWeight: FontWeight.w300,
-                            fontSize: AllFontSize
-                                .sisxteen // Change the text color here
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
-          ),
-        );
-      },
-    );
-  }
 
 }

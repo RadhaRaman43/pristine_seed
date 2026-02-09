@@ -194,6 +194,8 @@ class SalesCycleVm extends GetxController {
   var salesCycleOwnerController = TextEditingController().obs;
   var updatesalesCycleBudgetAmountController = TextEditingController().obs;
 
+  var updateQuoteShippingAddressConfirmation = TextEditingController().obs;
+  RxBool isVisibiltyShippingAddressQuote=false.obs;
 
   //todo quotation won controller
   var quotationWonLossController=TextEditingController().obs;
@@ -5146,6 +5148,11 @@ class SalesCycleVm extends GetxController {
     Shipping_phone_Controller.value.text = quoteHeaderdata[0].shippingPhoneNo ?? "";
     Shipping_email_Controller.value.text = quoteHeaderdata[0].shippingEmailId ?? "";
 
+    (quoteHeaderdata[0].shippingStateName==null )?updateQuoteShippingAddressConfirmation.value.text='No':'Yes';
+    isVisibiltyShippingAddressQuote.value =updateQuoteShippingAddressConfirmation.value.text == 'Yes';
+    print('address...${quoteHeaderdata[0].shippingStateName}');
+
+
     //todo by radha raman
     installationChargesController.value.text = quoteHeaderdata[0].installationCharges.toString() ?? "";
     otherChargesController.value.text = quoteHeaderdata[0].otherCharges.toString() ?? "";
@@ -5153,7 +5160,7 @@ class SalesCycleVm extends GetxController {
     deliveryWeeksController.value.text = quoteHeaderdata[0].deliveryInWeeks ?? "";
     advncPaymentPerController.value.text = quoteHeaderdata[0].advancePaymentPer.toString() ?? "";
     advncPaymentAmountController.value.text = quoteHeaderdata[0].advancePaymentAmt.toString() ?? "";
-    termConditionController.value.text = quoteHeaderdata[0].termsAndCondition.toString() ?? "";
+    termConditionController.value.text = quoteHeaderdata[0].termsAndCondition??"";
 
 
   }

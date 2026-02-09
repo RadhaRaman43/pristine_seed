@@ -252,9 +252,9 @@ class TaskApprovalListScreen extends StatelessWidget{
               _buildLabelWithValue(label: "Task Owner: ", value: TaskMaster_page_controller.Task_Master_list[position].taskOwner??"",),
               _buildLabelWithValue(label: "Task Due Date: ", value: StaticMethod.convertDateFormat1(TaskMaster_page_controller.Task_Master_list[position].taskDueDate??""),),
               _buildLabelWithValue(label: "Type Of Call: ", value: TaskMaster_page_controller.Task_Master_list[position].typeOfCall??"",),
-              _buildLabelWithValue(label: "Type Of Mode of Call: ", value: TaskMaster_page_controller.Task_Master_list[position].methodOfCall??"",),
+              _buildLabelWithValue(label: "Mode of Call: ", value: TaskMaster_page_controller.Task_Master_list[position].methodOfCall??"",),
               _buildLabelWithValue(label: "Last Activity Status: ", value: TaskMaster_page_controller.Task_Master_list[position].lastActivityStatus??"",),
-              _buildLabelWithValue(label: "Sale Cycle Id: ", value: TaskMaster_page_controller.Task_Master_list[position].salesCycleId??"",),
+              _buildLabelWithValue(label: "Sales Cycle Id: ", value: TaskMaster_page_controller.Task_Master_list[position].salesCycleId??"",),
               _buildLabelWithValue(label: "Product Category: ", value: TaskMaster_page_controller.Task_Master_list[position].productCategory??"",),
               _buildLabelWithValue(label: "Company Profile Type: ", value: TaskMaster_page_controller.Task_Master_list[position].companyProfileType??"",),
               //_buildLabelWithValue(label: "Account Category Type: ", value: TaskMaster_page_controller.Task_Master_list[position].acc??"",),
@@ -843,7 +843,7 @@ class TaskApprovalListScreen extends StatelessWidget{
       width: MediaQuery.of(context).size.width - 15,
       controller: TaskMaster_page_controller.SaleCycleActive_Controller,
       label: Text(
-        "Sale Cycle Active",
+        "Sales Cycle Active",
         style: GoogleFonts.poppins(
             color: AllColors.primaryDark1,
             fontSize: AllFontSize.sisxteen,

@@ -162,12 +162,9 @@ class AddNewTaskScreen extends StatelessWidget{
                   children: [
                     Container(
                       decoration: BoxDecoration(
-                        //color: AllColors.whiteColor,
                           borderRadius: BorderRadius.circular(10)
                       ),
-                      //height: size.height*10,
                       width: size.width*.7,
-                      //padding: EdgeInsets.only(left: 15.0, right: 15.0),
                       child: bindAccountNameDropDown(context),
                     ),
                     Container(
@@ -469,17 +466,11 @@ class AddNewTaskScreen extends StatelessWidget{
       displayStringForOption: _displayAccountNameForOption,
       optionsBuilder: (TextEditingValue textEditingValue) {
         if (textEditingValue.text.isEmpty) {
-          return taskMaster_page_controller.Account_Master_list;
-          // return const Iterable<VehicleTypeResponse>.empty();
+          return taskMaster_page_controller.getAccountMaster(taskMaster_page_controller.rowsPerPage,"");
         }
-        return taskMaster_page_controller.Account_Master_list.where((AccountMasterModel option) {
-          return option.accountName.toString().toLowerCase().contains(textEditingValue.text.toLowerCase());
-        }).toList();
+        return taskMaster_page_controller.getAccountMaster(taskMaster_page_controller.rowsPerPage,textEditingValue.text);
       },
       onSelected: (AccountMasterModel selection) {
-        //print(selection.loginEmailId);
-        // Update the TextField with the selected
-
         taskMaster_page_controller.account_Name_controller.text =
             _displayAccountNameForOption(selection).toString();
         taskMaster_page_controller.account_code.value=selection.accountCode!;
@@ -488,15 +479,10 @@ class AddNewTaskScreen extends StatelessWidget{
             taskMaster_page_controller.pageNumber = 0;
         print('I select account name');
             taskMaster_page_controller.getSaleIDByAccountCode(taskMaster_page_controller.pageNumber);
-        //taskMaster_page_controller.AccountOwner = selection.loginEmailId!;
       },
       fieldViewBuilder: (BuildContext context, TextEditingController controller,
           FocusNode focusNode, VoidCallback onFieldSubmitted) {
-
         return TextField(
-          onTap: (){
-            controller.clear();
-          },
           cursorColor: AllColors.primaryDark1,
           controller: controller
             ..text = taskMaster_page_controller.account_Name_controller

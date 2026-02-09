@@ -90,9 +90,9 @@ class CommitDashboardVm extends GetxController{
           await sessionManagement.getIsAdminPermission() ?? '';
       //SalesCycleStageStatusList.value = ['ALL','Suspect', 'Prospect', 'Propose'];
       // selectedSalesStageStatusList.value = ["All"];
-      QuoteAccepted_controller.value.text = "All";
+      QuoteAccepted_controller.value.text = "OPEN";
       StageName_controller.value.text = "All";
-      IsCommit_controller.value.text = 'All';
+      IsCommit_controller.value.text = 'Yes';
       DateRange("monthly");
       filterCustomDateController.value.text =
       '${formattedStartDate} - ${formattedEndDate}';
@@ -214,7 +214,8 @@ class CommitDashboardVm extends GetxController{
           .join('|');
     }
     QuoteAcceptedForApi = '';
-    if (QuoteAccepted_controller.value.text.isNotEmpty) {
+    if (QuoteAccepted_controller.value.text.isNotEmpty &&
+        !(QuoteAccepted_controller.value.text).toUpperCase().contains('ALL') ) {
       QuoteAcceptedForApi = QuoteAccepted_controller.value.text
           .split(',')
           .map((e) => e.trim())
@@ -732,8 +733,8 @@ class CommitDashboardVm extends GetxController{
     AccountOwner_controller.value.clear();
     typeOfCall_controller.value.clear();
     ProductCategory_controller.value.clear();
-    QuoteAccepted_controller.value.text = "All";
-    IsCommit_controller.value.text = 'All';
+    QuoteAccepted_controller.value.text = "OPEN";
+    IsCommit_controller.value.text = 'Yes';
     StageName_controller.value.text="All";
   //  clusterName_controller.value.clear();
     CustomerName_controller.value.clear();

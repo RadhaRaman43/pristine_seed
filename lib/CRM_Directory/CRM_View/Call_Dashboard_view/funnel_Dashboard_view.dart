@@ -2095,7 +2095,7 @@ class FunnelDashboardView extends StatelessWidget{
     List<String> selectedItems =
     textController.value.text.split(',').map((e) => e.trim()).where((e) => e.isNotEmpty).toList();
     if (selectedItems.isEmpty) {
-      selectedItems = ["All"];
+      selectedItems = ["OPEN"];
     }
 
     showDialog(
@@ -2150,7 +2150,7 @@ class FunnelDashboardView extends StatelessWidget{
                     } else {
                       selectedItems.remove(item);
                       if (selectedItems.isEmpty) {
-                        selectedItems.add("All");
+                        selectedItems.add("OPEN");
                       }
                     }
                     (context as Element).markNeedsBuild();

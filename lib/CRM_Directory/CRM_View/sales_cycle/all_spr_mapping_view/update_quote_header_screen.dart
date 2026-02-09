@@ -19,6 +19,8 @@ class UpdateQuoteHeaderScreen extends StatelessWidget{
   Size size = Get.size;
   static String _displayCustomerNeedIdentityStatusForOption(String option) => option;
 
+  static String _displayDecisionMakerForOption(String option) => option;
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -538,170 +540,186 @@ class UpdateQuoteHeaderScreen extends StatelessWidget{
             borderRadius: BorderRadius.circular(10.0),
           ),
         ),
-        child: Column(
-          children: [
-            bindShippinbAddressData(context,"Address",saleCycleController.shippingController.value),
-            /*  Container(
-              decoration: BoxDecoration(
-                  color: Colors.white, borderRadius: BorderRadius.circular(10)),
-              //padding: EdgeInsets.only(left: 15.0, right: 15.0),
-              child: TextFormField(
-                readOnly: true,
-                controller: saleCycleController.shippingController.value,
-                decoration: InputDecoration(
-                    hintText: "Address",
-                    labelText: "Address",
-                    //suffixIcon: Icon(Icons.email),
-                    contentPadding: EdgeInsets.symmetric(
-                        vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-                    focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.blue)),
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10))),
-              ),
-            ),*/
-            const SizedBox(height: 15,),
-            Container(
-              decoration: BoxDecoration(
-                  color: Colors.white, borderRadius: BorderRadius.circular(10)),
-              //padding: EdgeInsets.only(left: 15.0, right: 15.0),
-              child: TextFormField(
-                readOnly: true,
-                controller:
-                saleCycleController.shippingAddress2Controller.value,
-                decoration: InputDecoration(
-                    hintText: "Address 2",
-                    labelText: "Address 2",
-                    //suffixIcon: Icon(Icons.email),
-                    contentPadding: EdgeInsets.symmetric(
-                        vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-                    focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.blue)),
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10))),
-              ),
-            ),
-            const SizedBox(height: 15,),
-            Container(
-              decoration: BoxDecoration(
-                  color: Colors.white, borderRadius: BorderRadius.circular(10)),
-              //padding: EdgeInsets.only(left: 15.0, right: 15.0),
-              child: TextFormField(
-                readOnly: true,
-                keyboardType: TextInputType.number,
-                controller:
-                saleCycleController.Shipping_PostCode_Controller.value,
-                decoration: InputDecoration(
-                    hintText: "Pin Code",
-                    labelText: "Pin Code",
-                    //suffixIcon: Icon(Icons.email),
-                    contentPadding: EdgeInsets.symmetric(
-                        vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-                    focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.blue)),
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10))),
-              ),
-            ),
-            const SizedBox(height: 15,),
-            Container(
-              decoration: BoxDecoration(
-                  color: Colors.white, borderRadius: BorderRadius.circular(10)),
-              //padding: EdgeInsets.only(left: 15.0, right: 15.0),
-              child: TextFormField(
-                readOnly: true,
-                controller: saleCycleController.Shipping_City_Controller.value,
-                decoration: InputDecoration(
-                    hintText: "City",
-                    labelText: "City",
-                    //suffixIcon: Icon(Icons.email),
-                    contentPadding: EdgeInsets.symmetric(
-                        vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-                    focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.blue)),
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10))),
-              ),
-            ),
-            const SizedBox(height: 15,),
-            Container(
-              decoration: BoxDecoration(
-                  color: Colors.white, borderRadius: BorderRadius.circular(10)),
-              //padding: EdgeInsets.only(left: 15.0, right: 15.0),
-              child: TextFormField(
-                readOnly: true,
-                controller:
-                saleCycleController.Shipping_District_Controller.value,
-                decoration: InputDecoration(
-                    hintText: "District",
-                    labelText: "District",
-                    //suffixIcon: Icon(Icons.email),
-                    contentPadding: EdgeInsets.symmetric(
-                        vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-                    focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.blue)),
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10))),
-              ),
-            ),
-            const SizedBox(height: 15,),
-            Container(
-              decoration: BoxDecoration(
-                  color: Colors.white, borderRadius: BorderRadius.circular(10)),
-              //padding: EdgeInsets.only(left: 15.0, right: 15.0),
-              child: TextFormField(
-                readOnly: true,
-                controller: saleCycleController.Shipping_State_Controller.value,
-                decoration: InputDecoration(
-                    hintText: "State",
-                    labelText: "State",
-                    //suffixIcon: Icon(Icons.email),
-                    contentPadding: EdgeInsets.symmetric(
-                        vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-                    focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.blue)),
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10))),
-              ),
-            ),
-            const SizedBox(height: 10,),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  child: DefaultButton(
-                    press:(){
-                      address_vm_controller.FromPage.value="SalesCycleQuotation";
-                      address_vm_controller.clearController();
-                      address_vm_controller.account_code_controller.text=saleCycleController.quoteHeaderdata[0].accountCode??"";
-                      address_vm_controller.account_name_controller.text=saleCycleController.quoteHeaderdata[0].accountName??"";
-                      address_vm_controller.gst_registration_type_controller.value.text = 'UnRegistered';
-                      address_vm_controller.getGeoPostalCodeApi(50, '');
-                      Get.toNamed(RoutesName.addNewAddress_screen);
-                    },
-                    text:
-                    'Add New',
-                  ),
+        child:Obx((){
+         return  Column(
+            children: [
+              bindShippingAddressConfirmation(context),
+              const  SizedBox(height: 15,),
+             Visibility(
+                  visible: saleCycleController.isVisibiltyShippingAddressQuote.value,
+                  child: Column(
+                    children: [
+                      bindShippinbAddressData(context,"Address",saleCycleController.shippingController.value),
+                      /*  Container(
+                decoration: BoxDecoration(
+                    color: Colors.white, borderRadius: BorderRadius.circular(10)),
+                //padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                child: TextFormField(
+                  readOnly: true,
+                  controller: saleCycleController.shippingController.value,
+                  decoration: InputDecoration(
+                      hintText: "Address",
+                      labelText: "Address",
+                      //suffixIcon: Icon(Icons.email),
+                      contentPadding: EdgeInsets.symmetric(
+                          vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+                      focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.blue)),
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10))),
                 ),
-                SizedBox(width: 5,),
-                Expanded(
-                  child: DefaultButton(
-                    press: (){
-                      saleCycleController.pageNumber = 0;
-                      saleCycleController.getAddressMasterList(
-                          saleCycleController.pageNumber,
-                          saleCycleController.accountCode.value);
-                      saleCycleController.showConsigneeAddressList(
-                          context, saleCycleController.address_master_list,saleCycleController.accountCode.value);
-                    },
-                    text: 'Change ',
+                            ),*/
+                      const SizedBox(height: 15,),
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white, borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: TextFormField(
+                          readOnly: true,
+                          controller:
+                          saleCycleController.shippingAddress2Controller.value,
+                          decoration: InputDecoration(
+                              hintText: "Address 2",
+                              labelText: "Address 2",
+                              //suffixIcon: Icon(Icons.email),
+                              contentPadding: EdgeInsets.symmetric(
+                                  vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+                              focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.blue)),
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10))),
+                        ),
+                      ),
+                      const SizedBox(height: 15,),
+                      Container(
+                        decoration: BoxDecoration(
+                            color: Colors.white, borderRadius: BorderRadius.circular(10)),
+                        //padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                        child: TextFormField(
+                          readOnly: true,
+                          keyboardType: TextInputType.number,
+                          controller:
+                          saleCycleController.Shipping_PostCode_Controller.value,
+                          decoration: InputDecoration(
+                              hintText: "Pin Code",
+                              labelText: "Pin Code",
+                              //suffixIcon: Icon(Icons.email),
+                              contentPadding: EdgeInsets.symmetric(
+                                  vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+                              focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.blue)),
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10))),
+                        ),
+                      ),
+                      const SizedBox(height: 15,),
+                      Container(
+                        decoration: BoxDecoration(
+                            color: Colors.white, borderRadius: BorderRadius.circular(10)),
+                        //padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                        child: TextFormField(
+                          readOnly: true,
+                          controller: saleCycleController.Shipping_City_Controller.value,
+                          decoration: InputDecoration(
+                              hintText: "City",
+                              labelText: "City",
+                              //suffixIcon: Icon(Icons.email),
+                              contentPadding: EdgeInsets.symmetric(
+                                  vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+                              focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.blue)),
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10))),
+                        ),
+                      ),
+                      const SizedBox(height: 15,),
+                      Container(
+                        decoration: BoxDecoration(
+                            color: Colors.white, borderRadius: BorderRadius.circular(10)),
+                        //padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                        child: TextFormField(
+                          readOnly: true,
+                          controller:
+                          saleCycleController.Shipping_District_Controller.value,
+                          decoration: InputDecoration(
+                              hintText: "District",
+                              labelText: "District",
+                              //suffixIcon: Icon(Icons.email),
+                              contentPadding: EdgeInsets.symmetric(
+                                  vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+                              focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.blue)),
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10))),
+                        ),
+                      ),
+                      const SizedBox(height: 15,),
+                      Container(
+                        decoration: BoxDecoration(
+                            color: Colors.white, borderRadius: BorderRadius.circular(10)),
+                        //padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                        child: TextFormField(
+                          readOnly: true,
+                          controller: saleCycleController.Shipping_State_Controller.value,
+                          decoration: InputDecoration(
+                              hintText: "State",
+                              labelText: "State",
+                              //suffixIcon: Icon(Icons.email),
+                              contentPadding: EdgeInsets.symmetric(
+                                  vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+                              focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.blue)),
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10))),
+                        ),
+                      ),
+                      const SizedBox(height: 10,),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            child: DefaultButton(
+                              press:(){
+                                address_vm_controller.FromPage.value="SalesCycleQuotation";
+                                address_vm_controller.clearController();
+                                address_vm_controller.account_code_controller.text=saleCycleController.quoteHeaderdata[0].accountCode??"";
+                                address_vm_controller.account_name_controller.text=saleCycleController.quoteHeaderdata[0].accountName??"";
+                                address_vm_controller.gst_registration_type_controller.value.text = 'UnRegistered';
+                                address_vm_controller.getGeoPostalCodeApi(50, '');
+                                Get.toNamed(RoutesName.addNewAddress_screen);
+                              },
+                              text:
+                              'Add New',
+                            ),
+                          ),
+                          SizedBox(width: 5,),
+                          Expanded(
+                            child: DefaultButton(
+                              press: (){
+                                saleCycleController.pageNumber = 0;
+                                saleCycleController.getAddressMasterList(
+                                    saleCycleController.pageNumber,
+                                    saleCycleController.accountCode.value);
+                                saleCycleController.showConsigneeAddressList(
+                                    context, saleCycleController.address_master_list,saleCycleController.accountCode.value);
+                              },
+                              text: 'Change ',
 
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
-                ),
-              ],
-            ),
-          ],
-        ),
+                )
+
+
+
+            ],
+          );
+        })
+
+
       ),
     );
   }
@@ -723,6 +741,51 @@ class UpdateQuoteHeaderScreen extends StatelessWidget{
                 borderSide: BorderSide(color: Colors.blue)),
             border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10))),
+      ),
+    );
+  }
+
+  bindShippingAddressConfirmation(BuildContext context) {
+    return Container(
+      child: DropdownMenu<String>(
+        width: size.width,
+        controller: saleCycleController.updateQuoteShippingAddressConfirmation.value,
+        inputDecorationTheme: const InputDecorationTheme(
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+            borderSide: BorderSide(
+              color: AllColors.primaryDark1,
+            ),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+                color: AllColors.primaryDark1), // Change the color to green
+          ),
+          border: OutlineInputBorder(
+            borderSide: BorderSide(
+                color: AllColors.primaryDark1), // Change the color to green
+          ),
+          filled: false,
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.two, horizontal: AllFontSize.ten),
+        ),
+        onSelected: (String? selection) {
+          print(selection);
+          saleCycleController.updateQuoteShippingAddressConfirmation.value.text =
+              _displayDecisionMakerForOption(selection!).toString();
+          saleCycleController.isVisibiltyShippingAddressQuote.value =
+              selection == 'Yes';
+        },
+        dropdownMenuEntries: saleCycleController.customerNeedIdentityList
+            .map<DropdownMenuEntry<String>>((String e) {
+          return DropdownMenuEntry<String>(
+              value: e,
+              label: e!,
+              style: ButtonStyle(
+                foregroundColor:
+                MaterialStateProperty.all<Color>(AllColors.primaryDark1),
+              ));
+        }).toList(),
       ),
     );
   }

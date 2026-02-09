@@ -253,7 +253,7 @@ class UpdateAccountMaster extends StatelessWidget{
                     Utils.sanckBarError('Account Category Type!', "Please Enter Account Category Type");
                     return  ;
                   }*/
-                  if(accountMaster_page_controller.comp_prof_type_controller.text.isEmpty || accountMaster_page_controller.comp_prof_type_controller == null){
+                  if(accountMaster_page_controller.comp_prof_type_controller.value.text.isEmpty || accountMaster_page_controller.comp_prof_type_controller.value.text == null){
                     Utils.sanckBarError('Company profile Type!', "Please Enter Company profile Type");
                     return  ;
                   }
@@ -622,53 +622,12 @@ class UpdateAccountMaster extends StatelessWidget{
                       ),
 
                       SizedBox(height: 15,),
-
-                      Obx(() => Visibility(
-                        visible: accountMaster_page_controller.view=='Account'?true:false,
-                        child: CheckboxListTile(
-                          controlAffinity: ListTileControlAffinity.leading,
-                          enabled: accountMaster_page_controller.view=='Account'?true:false,
-                          title: Text("Shipping address same as billing address",
-                              style: GoogleFonts.poppins(
-                                color: AllColors.primaryDark1,
-                                fontWeight: FontWeight.w400,
-                                fontSize: AllFontSize.twelve,
-                              )
-                          ),
-                          value: accountMaster_page_controller.isChecked.value,
-                          onChanged: (bool? value) {
-                            accountMaster_page_controller.toggleCheckbox();
-                            if(value == true){
-                              accountMaster_page_controller.Shipping_Address_controller.value.text=accountMaster_page_controller.Address_controller.value.text;
-                              accountMaster_page_controller.Shipping_Address2_Controller.value.text=accountMaster_page_controller.Address2_Controller.value.text;
-                              accountMaster_page_controller.Shipping_PostCode_Controller.value.text=accountMaster_page_controller.PostCode_Controller.value.text;
-                              accountMaster_page_controller.Shipping_City_Controller.value.text=accountMaster_page_controller.City_Controller.value.text ;
-                              accountMaster_page_controller.Shipping_State_Controller.value.text = accountMaster_page_controller.State_Controller.value.text;
-                              accountMaster_page_controller.Shipping_District_Controller.value.text = accountMaster_page_controller.District_Controller.value.text;
-                              accountMaster_page_controller.Shipping_FullAddress_Controller.value.text = accountMaster_page_controller.FullAddress_Controller.value.text;
-                              accountMaster_page_controller.ShowState.value=false;
-                              accountMaster_page_controller.ShowState.value=true;
-                            }else{
-                              accountMaster_page_controller.Shipping_Address_controller.value.clear();
-                              accountMaster_page_controller.Shipping_Address2_Controller.value.clear();
-                              accountMaster_page_controller.Shipping_PostCode_Controller.value.clear();
-                              accountMaster_page_controller.Shipping_City_Controller.value.clear();
-                              accountMaster_page_controller.Shipping_State_Controller.value.clear();
-                              accountMaster_page_controller.Shipping_District_Controller.value.clear();
-                              accountMaster_page_controller.Shipping_FullAddress_Controller.value.clear();
-                              accountMaster_page_controller.ShowState.value=false;
-                              accountMaster_page_controller.ShowState.value=true;
-                            }
-                          },
-                        ),
-                      )),
-
                       Container(
                         margin: EdgeInsets.only(left: 15.0, right: 15.0),
                         decoration: BoxDecoration(
                           border: Border.all(
-                            color: AllColors.grayColor,
-                            width: 1.0,
+                            color: AllColors.grayColor, // Set the border color here
+                            width: 1.0, // Adjust the border width if necessary
                           ),
                           borderRadius: BorderRadius.circular(10.0),
                         ),
@@ -688,254 +647,288 @@ class UpdateAccountMaster extends StatelessWidget{
                           ),
                           child: Column(
                             children: [
-
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Visibility(
-                                    child: InkWell(
-                                      child: Icon(Icons.add),
-                                      onTap: (){
-                                        accountMaster_page_controller.pageNumber = 0;
-                                        accountMaster_page_controller.getAddressMasterList(accountMaster_page_controller.pageNumber,accountMaster_page_controller.account_code_controller.text, accountMaster_page_controller.account_name_controller.text, "");
-                                        accountMaster_page_controller.showConsigneeAddressList(context, accountMaster_page_controller.address_master_list);
-
-
+                                  Flexible(
+                                    child: DropdownButtonFormField<String>(
+                                      value: accountMaster_page_controller.yesNoValue.value,
+                                      decoration: InputDecoration(
+                                        contentPadding: EdgeInsets.symmetric(
+                                          vertical: 0,   // 👈 top & bottom padding (increase/decrease)
+                                          horizontal: 6,
+                                        ),
+                                        border: OutlineInputBorder(
+                                          borderRadius: BorderRadius.circular(10),
+                                        ),
+                                      ),
+                                      items: ["Yes", "No"].map((value) {
+                                        return DropdownMenuItem(
+                                          value: value,
+                                          child: Text(value),
+                                        );
+                                      }).toList(),
+                                      onChanged: (value) {
+                                        accountMaster_page_controller.yesNoValue.value = value!;
                                       },
                                     ),
-                                    visible:accountMaster_page_controller.view=='Account'?true:false ,
                                   ),
-                                  SizedBox(width: 15,),
-                                  Visibility(
-                                    visible:accountMaster_page_controller.view=='Account'?true:false ,
-                                    child: InkWell(
-                                      onTap: (){
-                                        /*accountMaster_page_controller.selectedItem.value = -1;
-                                   accountMaster_page_controller.Shipping_Address_controller.value.text=accountMaster_page_controller.AccountMasterGetCode_list[0].shippingAddress??"";
-                                   accountMaster_page_controller.Shipping_Address2_Controller.value.text=accountMaster_page_controller.AccountMasterGetCode_list[0].shippingAddress2??"";
-                                   accountMaster_page_controller.Shipping_PostCode_Controller.value.text=accountMaster_page_controller.AccountMasterGetCode_list[0].shippingPostCode??"";
-                                   accountMaster_page_controller.Shipping_City_Controller.value.text=accountMaster_page_controller.AccountMasterGetCode_list[0].shippingCity??"" ;
-                                   accountMaster_page_controller.Shipping_State_Controller.value.text=accountMaster_page_controller.AccountMasterGetCode_list[0].shippingStateName??"";
-                                   accountMaster_page_controller.ShowState.value=false;
-                                   accountMaster_page_controller.ShowState.value=true;
-                                   accountMaster_page_controller.Shipping_District_Controller.value.text=accountMaster_page_controller.AccountMasterGetCode_list[0].shippingDistrict??"";
-                                   accountMaster_page_controller.consigneeId = '';*/
-                                        accountMaster_page_controller.selectedItem.value = -1;
-                                        accountMaster_page_controller.Shipping_Address_controller.value.text="";
-                                        accountMaster_page_controller.Shipping_Address2_Controller.value.text="";
-                                        accountMaster_page_controller.Shipping_PostCode_Controller.value.text="";
-                                        accountMaster_page_controller.Shipping_City_Controller.value.text="" ;
-                                        accountMaster_page_controller.Shipping_State_Controller.value.clear();
-                                        accountMaster_page_controller.ShowState.value=false;
-                                        accountMaster_page_controller.ShowState.value=true;
-                                        accountMaster_page_controller.Shipping_District_Controller.value.text="";
-                                        accountMaster_page_controller.consigneeId = '';
-                                        accountMaster_page_controller.isChecked.value=false;
-                                        accountMaster_page_controller.Shipping_FullAddress_Controller.value.clear();
+                                  Flexible(
+                                    flex: 2,
+                                    child: Obx(() => CheckboxListTile(
+                                      controlAffinity: ListTileControlAffinity.leading,
+                                      title: Text(
+                                        "Same as Billing",
+                                        style: GoogleFonts.poppins(
+                                          color: AllColors.primaryDark1,
+                                          fontWeight: FontWeight.w400,
+                                          fontSize: AllFontSize.twelve,
+                                        ),
+                                      ),
+                                      value: accountMaster_page_controller.isChecked.value,
+                                      onChanged: (bool? value) {
+
+                                        accountMaster_page_controller.toggleCheckbox();
+                                        if(value == true){
+                                          accountMaster_page_controller.Shipping_Address_controller.value.text=accountMaster_page_controller.Address_controller.value.text;
+                                          accountMaster_page_controller.Shipping_Address2_Controller.value.text=accountMaster_page_controller.Address2_Controller.value.text;
+                                          accountMaster_page_controller.Shipping_PostCode_Controller.value.text=accountMaster_page_controller.PostCode_Controller.value.text;
+                                          accountMaster_page_controller.Shipping_City_Controller.value.text=accountMaster_page_controller.City_Controller.value.text ;
+                                          accountMaster_page_controller.Shipping_State_Controller.value.text = accountMaster_page_controller.State_Controller.value.text;
+                                          accountMaster_page_controller.Shipping_District_Controller.value.text = accountMaster_page_controller.District_Controller.value.text;
+                                          accountMaster_page_controller.Shipping_FullAddress_Controller.value.text = accountMaster_page_controller.FullAddress_Controller.value.text;
+                                          accountMaster_page_controller.ShowState.value=false;
+                                          accountMaster_page_controller.ShowState.value=true;
+                                        }else{
+                                          accountMaster_page_controller.Shipping_Address_controller.value.clear();
+                                          accountMaster_page_controller.Shipping_Address2_Controller.value.clear();
+                                          accountMaster_page_controller.Shipping_PostCode_Controller.value.clear();
+                                          accountMaster_page_controller.Shipping_City_Controller.value.clear();
+                                          accountMaster_page_controller.Shipping_State_Controller.value.clear();
+                                          accountMaster_page_controller.Shipping_District_Controller.value.clear();
+                                          accountMaster_page_controller.Shipping_FullAddress_Controller.value.clear();
+                                          accountMaster_page_controller.ShowState.value=false;
+                                          accountMaster_page_controller.ShowState.value=true;
+                                        }
                                       },
-                                      child: Icon(Icons.update),
-                                    ),
-                                  )
+                                    )),
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      InkWell(
+                                        child: Icon(Icons.add),
+                                        onTap: (){
+                                          accountMaster_page_controller.pageNumber = 0;
+                                          accountMaster_page_controller.getAddressMasterList(accountMaster_page_controller.pageNumber,"","", "");
+                                          accountMaster_page_controller.showConsigneeAddressList(context, accountMaster_page_controller.address_master_list);
+
+                                        },
+                                      ),
+
+                                      SizedBox(width: 10,),
+                                      InkWell(
+                                        onTap: (){
+                                          accountMaster_page_controller.selectedItem.value = -1;
+                                          accountMaster_page_controller.Shipping_Address_controller.value.text="";
+                                          accountMaster_page_controller.Shipping_Address2_Controller.value.text="";
+                                          accountMaster_page_controller.Shipping_PostCode_Controller.value.text="";
+                                          accountMaster_page_controller.Shipping_City_Controller.value.text="" ;
+                                          accountMaster_page_controller.Shipping_State_Controller.value.clear();
+                                          accountMaster_page_controller.ShowState.value=false;
+                                          accountMaster_page_controller.ShowState.value=true;
+                                          accountMaster_page_controller.Shipping_District_Controller.value.text="";
+                                          accountMaster_page_controller.consigneeId = '';
+                                          accountMaster_page_controller.isChecked.value=false;
+                                          accountMaster_page_controller.Shipping_FullAddress_Controller.value.clear();
+
+                                        },
+                                        child: Icon(Icons.update),
+                                      )
+                                    ],
+                                  ),
                                 ],
                               ),
                               SizedBox(height: 15,),
-
-                              Container(
-                                decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(10)
-                                ),
-                                //padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                                child: TextFormField(
-                                  //maxLength: 150,
-                                  readOnly:  accountMaster_page_controller.view=='Account'?false:true,
-                                  controller: accountMaster_page_controller
-                                      .Shipping_Address_controller.value,
-                                  onChanged: (value){
-                                    final parts = [
-                                      value,
-                                      accountMaster_page_controller.Shipping_Address2_Controller.value.text,
-                                      accountMaster_page_controller.Shipping_City_Controller.value.text,
-                                      accountMaster_page_controller.Shipping_District_Controller.value.text,
-                                      accountMaster_page_controller.Shipping_State_Controller.value.text,
-                                      accountMaster_page_controller.Shipping_PostCode_Controller.value.text,
-                                    ];
-
-                                    // Filter out empty strings and join with commas
-                                    final fullAddress = parts.where((part) => part.trim().isNotEmpty).join(", ");
-
-                                    accountMaster_page_controller.Shipping_FullAddress_Controller.value.text = fullAddress;
-                                  },
-                                  maxLength: 500,
-                                  decoration: InputDecoration(
-                                      hintText: "Address",
-                                      labelText: "Address",
-                                      //suffixIcon: Icon(Icons.email),
-                                      contentPadding: EdgeInsets.symmetric(
-                                          vertical: AllFontSize.ten,
-                                          horizontal: AllFontSize.ten),
-
-                                      focusedBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(color: Colors.blue)
-                                      ),
-                                      border: OutlineInputBorder(
-                                          borderRadius: BorderRadius.circular(10)
-                                      )
-                                  ),
-
-                                ),
-                              ),
-
-                              SizedBox(height: 15,),
-
-                              Container(
-                                decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(10)
-                                ),
-                                //padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                                child: TextFormField(
-                                  readOnly:  accountMaster_page_controller.view=='Account'?false:true,
-                                  //maxLength: 150,
-                                  controller: accountMaster_page_controller
-                                      .Shipping_Address2_Controller.value,
-                                  onChanged: (value){
-                                    final parts = [
-                                      accountMaster_page_controller.Shipping_Address_controller.value.text,
-                                      value,
-                                      accountMaster_page_controller.Shipping_City_Controller.value.text,
-                                      accountMaster_page_controller.Shipping_District_Controller.value.text,
-                                      accountMaster_page_controller.Shipping_State_Controller.value.text,
-                                      accountMaster_page_controller.Shipping_PostCode_Controller.value.text,
-                                    ];
-
-                                    // Filter out empty strings and join with commas
-                                    final fullAddress = parts.where((part) => part.trim().isNotEmpty).join(", ");
-
-                                    accountMaster_page_controller.Shipping_FullAddress_Controller.value.text = fullAddress;
-                                  },
-                                  maxLength: 500,
-                                  decoration: InputDecoration(
-                                      hintText: "Address2",
-                                      labelText: "Address2",
-                                      //suffixIcon: Icon(Icons.email),
-                                      contentPadding: EdgeInsets.symmetric(
-                                          vertical: AllFontSize.ten,
-                                          horizontal: AllFontSize.ten),
-
-                                      focusedBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(color: Colors.blue)
-                                      ),
-                                      border: OutlineInputBorder(
-                                          borderRadius: BorderRadius.circular(10)
-                                      )
-                                  ),
-
-                                ),
-                              ),
-
-                              SizedBox(height: 15,),
-
                               Obx((){
+                                if(accountMaster_page_controller.Shipping_FullAddress_Controller.value.text.isNotEmpty ||
+                                    accountMaster_page_controller.Shipping_FullAddress_Controller.value.text == null){
+                                  accountMaster_page_controller.yesNoValue.value="Yes";
+                                }
                                 return Visibility(
-                                  visible:accountMaster_page_controller.ShowState.value,
-                                  child: Container(
-                                      child: bindShippingPostalCodeDropDown(context)
-                                  ),
-                                );
-                              }),
+                                  visible:accountMaster_page_controller.yesNoValue.value=="Yes",
+                                  child:  Column(
+                                    children: [
+                                      Container(
+                                        decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius: BorderRadius.circular(10)
+                                        ),
+                                        //padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                                        child: TextFormField(
+                                          controller: accountMaster_page_controller.Shipping_Address_controller.value,
+                                          //maxLength: 150,
+                                          onChanged: (value){
+                                            print('valus....$value');
+                                            final parts = [
+                                              value,
+                                              accountMaster_page_controller.Shipping_Address2_Controller.value.text,
+                                              accountMaster_page_controller.Shipping_City_Controller.value.text,
+                                              accountMaster_page_controller.Shipping_District_Controller.value.text,
+                                              accountMaster_page_controller.Shipping_State_Controller.value.text,
+                                              accountMaster_page_controller.Shipping_PostCode_Controller.value.text,
+                                            ];
 
+                                            // Filter out empty strings and join with commas
+                                            final fullAddress = parts.where((part) => part.trim().isNotEmpty).join(", ");
 
-                              SizedBox(height: 15,),
+                                            accountMaster_page_controller.Shipping_FullAddress_Controller.value.text = fullAddress;
+                                          },
+                                          maxLength: 500,
+                                          decoration: InputDecoration(
+                                              hintText: "Address",
+                                              labelText: "Address",
+                                              //suffixIcon: Icon(Icons.email),
+                                              contentPadding: EdgeInsets.symmetric(
+                                                  vertical: AllFontSize.ten,
+                                                  horizontal: AllFontSize.ten),
 
-                              Obx(() {
-                                return Visibility(
-                                  visible:accountMaster_page_controller.ShowState.value,
-                                  child: Container(
-                                    //padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                                    child: bindShippingStateDropDown(context),
-                                  ),
-                                );
-                              }
+                                              focusedBorder: OutlineInputBorder(
+                                                  borderSide: BorderSide(color: Colors.blue)
+                                              ),
+                                              border: OutlineInputBorder(
+                                                  borderRadius: BorderRadius.circular(10)
+                                              )
+                                          ),
 
-                              ),
-
-                              SizedBox(height: 15,),
-
-                              Obx(() {
-                                return Visibility(
-                                  visible:accountMaster_page_controller.ShowState.value,
-                                  child: Container(
-                                      child: bindShippingCityDropDown(context)
-                                  ),
-                                );
-                              }
-
-                              ),
-
-                              SizedBox(height: 15,),
-
-                              Obx(() {
-                                return Visibility(
-                                  visible:accountMaster_page_controller.ShowState.value,
-                                  child: Container(
-                                      child: bindShippingDistrictDropDown(context)
-                                  ),
-                                );
-                              }
-
-                              ),
-
-                              SizedBox(height: 15,),
-
-                              Container(
-                                decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(10)
-                                ),
-                                //padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                                child: TextFormField(
-                                  //maxLength: 500,
-                                  readOnly: true,
-                                  maxLines: 3,
-                                  controller: accountMaster_page_controller
-                                      .Shipping_FullAddress_Controller.value,
-                                  decoration: InputDecoration(
-                                      hintText: "Full Address",
-                                      labelText: "Full Address",
-                                      //suffixIcon: Icon(Icons.email),
-                                      contentPadding: EdgeInsets.symmetric(
-                                          vertical: AllFontSize.ten,
-                                          horizontal: AllFontSize.ten),
-
-                                      focusedBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(color: Colors.blue)
+                                        ),
                                       ),
-                                      border: OutlineInputBorder(
-                                          borderRadius: BorderRadius.circular(10)
-                                      )
-                                  ),
 
-                                ),
-                              ),
+                                      SizedBox(height: 15,),
+                                      Container(
+                                        decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius: BorderRadius.circular(10)
+                                        ),
+                                        //padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                                        child: TextFormField(
+                                          controller: accountMaster_page_controller.Shipping_Address2_Controller.value,
+                                          //maxLength: 150,
+                                          onChanged: (value){
+                                            final parts = [
+                                              accountMaster_page_controller.Shipping_Address_controller.value.text,
+                                              value,
+                                              accountMaster_page_controller.Shipping_City_Controller.value.text,
+                                              accountMaster_page_controller.Shipping_District_Controller.value.text,
+                                              accountMaster_page_controller.Shipping_State_Controller.value.text,
+                                              accountMaster_page_controller.Shipping_PostCode_Controller.value.text,
+                                            ];
 
+                                            // Filter out empty strings and join with commas
+                                            final fullAddress = parts.where((part) => part.trim().isNotEmpty).join(", ");
 
+                                            accountMaster_page_controller.Shipping_FullAddress_Controller.value.text = fullAddress;
+                                          },
+                                          maxLength: 500,
+                                          decoration: InputDecoration(
+                                              hintText: "Address2",
+                                              labelText: "Address2",
+                                              //suffixIcon: Icon(Icons.email),
+                                              contentPadding: EdgeInsets.symmetric(
+                                                  vertical: AllFontSize.ten,
+                                                  horizontal: AllFontSize.ten),
+
+                                              focusedBorder: OutlineInputBorder(
+                                                  borderSide: BorderSide(color: Colors.blue)
+                                              ),
+                                              border: OutlineInputBorder(
+                                                  borderRadius: BorderRadius.circular(10)
+                                              )
+                                          ),
+
+                                        ),
+                                      ),
+                                      SizedBox(height: 15,),
+                                      Obx((){
+                                        return Visibility(
+                                          visible:accountMaster_page_controller.ShowState.value,
+                                          child: Container(
+                                              child: bindShippingPostalCodeDropDown(context)
+                                          ),
+                                        );
+                                      }),
+                                      SizedBox(height: 15,),
+                                      Obx(() {
+                                        return Visibility(
+                                          visible:accountMaster_page_controller.ShowState.value,
+                                          child: Container(
+                                            //padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                                            child: bindShippingStateDropDown(context),
+                                          ),
+                                        );
+                                      }),
+                                      SizedBox(height: 15,),
+                                      Obx(() {
+                                        return Visibility(
+                                          visible:accountMaster_page_controller.ShowState.value,
+                                          child: Container(
+                                              child: bindShippingCityDropDown(context)
+                                          ),
+                                        );
+                                      }),
+                                      SizedBox(height: 15,),
+                                      Obx(() {
+                                        return Visibility(
+                                          visible:accountMaster_page_controller.ShowState.value,
+                                          child: Container(
+                                              child: bindShippingDistrictDropDown(context)
+                                          ),
+                                        );
+                                      }),
+                                      SizedBox(height: 15,),
+                                      Container(
+                                        decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius: BorderRadius.circular(10)
+                                        ),
+                                        child: TextFormField(
+                                          readOnly: true,
+                                          maxLines: 3,
+                                          controller: accountMaster_page_controller.Shipping_FullAddress_Controller.value,
+                                          decoration: InputDecoration(
+                                              hintText: "Full Address",
+                                              labelText: "Full Address",
+                                              contentPadding: EdgeInsets.symmetric(
+                                                  vertical: AllFontSize.ten,
+                                                  horizontal: AllFontSize.ten),
+
+                                              focusedBorder: OutlineInputBorder(
+                                                  borderSide: BorderSide(color: Colors.blue)
+                                              ),
+                                              border: OutlineInputBorder(
+                                                  borderRadius: BorderRadius.circular(10)
+                                              )
+                                          ),
+
+                                        ),
+                                      ),
+                                    ],
+                                  ),);
+                              }),
                             ],
                           ),
                         ),
                       ),
 
+
                       SizedBox(height: 15,),
 
                       Container(
                         margin: EdgeInsets.only(left: 15.0, right: 15.0),
-                        //color: AllColors.Card1Color,
-                        //padding: EdgeInsets.only(left: 15.0, right: 15.0),
                         decoration: BoxDecoration(
-                          //color: AllColors.Card3Color, // Set the inside color here
                           border: Border.all(
-                            color: AllColors.grayColor, // Set the border color here
-                            width: 1.0, // Adjust the border width if necessary
+                            color: AllColors.grayColor,
+                            width: 1.0,
                           ),
                           borderRadius: BorderRadius.circular(10.0),
                         ),
@@ -961,20 +954,13 @@ class UpdateAccountMaster extends StatelessWidget{
                                     color: Colors.white,
                                     borderRadius: BorderRadius.circular(10)
                                 ),
-                                //padding: EdgeInsets.only(left: 15.0, right: 15.0),
                                 child: TextFormField(
-                                  /* readOnly: accountMaster_page_controller.view=='FromTaskMainScreen'
-                                 || accountMaster_page_controller.view=='VIEW' ||
-                                 accountMaster_page_controller.view=='Task'||
-                                 accountMaster_page_controller.view=='FromSaleCycleMainScreen'
-                                 || accountMaster_page_controller.view=="FromQuoteApproval"?true:false,*/
                                   readOnly:  accountMaster_page_controller.view=='Account'?false:true,
                                   keyboardType: TextInputType.number,
                                   controller: accountMaster_page_controller.No_Of_Emp_Controller,
                                   decoration: InputDecoration(
                                       hintText: "No. Of Employees",
                                       labelText: "No. Of Employees",
-                                      //suffixIcon: Icon(Icons.email),
                                       contentPadding: EdgeInsets.symmetric(vertical: AllFontSize.ten,horizontal: AllFontSize.ten ),
 
                                       focusedBorder: OutlineInputBorder(
@@ -997,11 +983,6 @@ class UpdateAccountMaster extends StatelessWidget{
                                 ),
                                 //padding: EdgeInsets.only(left: 15.0, right: 15.0),
                                 child: TextFormField(
-                                  /*readOnly: accountMaster_page_controller.view=='FromTaskMainScreen'
-                                 || accountMaster_page_controller.view=='VIEW' ||
-                                 accountMaster_page_controller.view=='Task'||
-                                 accountMaster_page_controller.view=='FromSaleCycleMainScreen'
-                                  || accountMaster_page_controller.view=="FromQuoteApproval"?true:false,*/
                                   readOnly:  accountMaster_page_controller.view=='Account'?false:true,
                                   keyboardType: TextInputType.number,
                                   controller: accountMaster_page_controller.Annual_Revenue_Controller,
@@ -1012,7 +993,6 @@ class UpdateAccountMaster extends StatelessWidget{
                                   decoration: InputDecoration(
                                       hintText: "Customer Annual Turnover",
                                       labelText: "Customer Annual Turnover",
-                                      //suffixIcon: Icon(Icons.email),
                                       contentPadding: EdgeInsets.symmetric(vertical: AllFontSize.ten,horizontal: AllFontSize.ten ),
 
                                       focusedBorder: OutlineInputBorder(
@@ -1030,78 +1010,7 @@ class UpdateAccountMaster extends StatelessWidget{
 
                               bindTatResponseTypeDropDown(context),
 
-
                               SizedBox(height: 15,),
-
-                              /*Container(
-                           decoration: BoxDecoration(
-                               color: Colors.white,
-                               borderRadius: BorderRadius.circular(10)
-                           ),
-                           //padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                           child: TextFormField(
-                           *//*  readOnly:accountMaster_page_controller.view=='FromTaskMainScreen'
-                                 || accountMaster_page_controller.view=='VIEW' ||
-                                 accountMaster_page_controller.view=='Task'||
-                                 accountMaster_page_controller.view=='FromSaleCycleMainScreen'
-                                 || accountMaster_page_controller.view=="FromQuoteApproval"?true:false,*//*
-                             readOnly:  accountMaster_page_controller.view=='Account'?false:true,
-                             controller: accountMaster_page_controller.Sale_Representative_Controller.value,
-                             decoration: InputDecoration(
-                                 hintText: "Sale Representative",
-                                 labelText: "Sale Representative",
-                                 //suffixIcon: Icon(Icons.email),
-                                 contentPadding: EdgeInsets.symmetric(vertical: AllFontSize.ten,horizontal: AllFontSize.ten ),
-
-                                 focusedBorder: OutlineInputBorder(
-                                     borderSide: BorderSide(color: Colors.blue)
-                                 ),
-                                 border: OutlineInputBorder(
-                                     borderRadius: BorderRadius.circular(10)
-                                 )
-                             ),
-
-                           ),
-                         ),
-
-                         SizedBox(height: 15,),*/
-
-                              /* Container(
-                             decoration: BoxDecoration(
-                                 color: Colors.white,
-                                 borderRadius: BorderRadius.circular(10)
-                             ),
-                             //padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                             child: TextFormField(
-                               *//* readOnly: accountMaster_page_controller.view=='FromTaskMainScreen'
-                                 || accountMaster_page_controller.view=='VIEW' ||
-                                 accountMaster_page_controller.view=='Task'||
-                                 accountMaster_page_controller.view=='FromSaleCycleMainScreen'
-                                 || accountMaster_page_controller.view=="FromQuoteApproval"?true:false,*//*
-                               readOnly:  true,
-                               controller: accountMaster_page_controller.Regional_service_head_Controller.value,
-                               decoration: InputDecoration(
-                                   hintText: "Reporting manager",
-                                   labelText: "Reporting manager",
-                                   //suffixIcon: Icon(Icons.email),
-                                   contentPadding: EdgeInsets.symmetric(vertical: AllFontSize.ten,horizontal: AllFontSize.ten ),
-
-                                   focusedBorder: OutlineInputBorder(
-                                       borderSide: BorderSide(color: Colors.blue)
-                                   ),
-                                   border: OutlineInputBorder(
-                                       borderRadius: BorderRadius.circular(10)
-                                   )
-                               ),
-
-                             ),
-                           ),*/
-
-
-
-
-
-
 
                             ],
                           ),
@@ -1113,12 +1022,9 @@ class UpdateAccountMaster extends StatelessWidget{
 
                       Container(
                         margin: EdgeInsets.only(left: 15.0, right: 15.0),
-                        //color: AllColors.Card1Color,
-                        //padding: EdgeInsets.only(left: 15.0, right: 15.0),
                         decoration: BoxDecoration(
-                          //color: AllColors.Card3Color, // Set the inside color here
                           border: Border.all(
-                            color: AllColors.grayColor, // Set the border color here
+                            color: AllColors.grayColor,
                             width: 1.0, // Adjust the border width if necessary
                           ),
                           borderRadius: BorderRadius.circular(10.0),
@@ -2159,7 +2065,7 @@ class UpdateAccountMaster extends StatelessWidget{
   Widget bindComProfTypeDropDown(context){
     return Autocomplete<CompanyTypeModel>(
       initialValue: TextEditingValue(
-        text: accountMaster_page_controller.comp_prof_type_controller.text,
+        text: accountMaster_page_controller.comp_prof_type_controller.value.text,
       ),
       displayStringForOption: _displayCompProfileTypeForOption,
       optionsBuilder: (TextEditingValue textEditingValue) async {
@@ -2185,7 +2091,7 @@ class UpdateAccountMaster extends StatelessWidget{
       onSelected: (CompanyTypeModel selection) {
         print(selection.description);
         // Update the TextField with the selected
-        accountMaster_page_controller.comp_prof_type_controller.text =
+        accountMaster_page_controller.comp_prof_type_controller.value.text =
             _displayCompProfileTypeForOption(selection).toString();
         if(accountMaster_page_controller.comp_prof_type_controller.value.text == 'Others'){
           accountMaster_page_controller.compProfileRemrk.value = true;

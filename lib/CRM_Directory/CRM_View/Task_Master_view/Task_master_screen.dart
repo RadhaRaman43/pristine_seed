@@ -92,9 +92,6 @@ class TaskMasterScreen extends StatelessWidget {
                     }, icon: Icon(Icons.add)),
                   );
                 }),
-
-
-
                 IconButton(onPressed: () {
                   /*TaskMaster_page_controller.Task_status_controller.text = "All";
                   //TaskMaster_page_controller.isInfraLeadFilterController.text = "All";
@@ -108,10 +105,7 @@ class TaskMasterScreen extends StatelessWidget {
             )
         ),
         drawer: CustomDrawer(),
-        body: Obx((){
-          if(TaskMaster_page_controller.loading.value)
-            return const FullScreenLoader();
-          return Visibility(child: RefreshIndicator(
+        body: RefreshIndicator(
             onRefresh: TaskMaster_page_controller.refreshList,
             child: Container(
               width: double.infinity,
@@ -510,8 +504,7 @@ class TaskMasterScreen extends StatelessWidget {
                 ],
               ),
             ),
-          ));
-        })
+          ),
 
       ),
     );
@@ -737,13 +730,13 @@ class TaskMasterScreen extends StatelessWidget {
               _buildLabelWithValue(label: "Task Owner: ", value: TaskMaster_page_controller.Task_Master_list[position].createdFullName??"",),
               _buildLabelWithValue(label: "Task Due Date: ", value: StaticMethod.convertDateFormat1(TaskMaster_page_controller.Task_Master_list[position].taskDueDate??""),),
               _buildLabelWithValue(label: "Type Of Call: ", value: TaskMaster_page_controller.Task_Master_list[position].typeOfCall??"",),
-              _buildLabelWithValue(label: "Type Of Mode of Call: ", value: TaskMaster_page_controller.Task_Master_list[position].methodOfCall??"",),
+              _buildLabelWithValue(label: "Mode of Call: ", value: TaskMaster_page_controller.Task_Master_list[position].methodOfCall??"",),
               _buildLabelWithValue(label: "Last Activity Status: ", value: TaskMaster_page_controller.Task_Master_list[position].lastActivityStatus??"",),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    "Sale Cycle ID : ",
+                    "Sales Cycle Id : ",
                     style: GoogleFonts.poppins(
                         color: AllColors.primaryDark1,
                         fontSize: AllFontSize.fourtine,
@@ -1407,7 +1400,7 @@ class TaskMasterScreen extends StatelessWidget {
                               SizedBox(height: 10,),
                               bindLastActivityStatus(context),
                               SizedBox(height: 10,),
-                              bindFilterData(context,'Sale Cycle Id',TaskMaster_page_controller.Sale_cycle_Id_controller),
+                              bindFilterData(context,'Sales Cycle Id',TaskMaster_page_controller.Sale_cycle_Id_controller),
                               SizedBox(height: 10,),
                               bindCompProfileTypeDropDown(context),
                               SizedBox(height: 10,),
@@ -2253,7 +2246,7 @@ class TaskMasterScreen extends StatelessWidget {
       width: MediaQuery.of(context).size.width - 15,
       controller: TaskMaster_page_controller.SaleCycleActive_Controller,
       label: Text(
-        "Is Sale Cycle Active",
+        "Is Sales Cycle Active",
         style: GoogleFonts.poppins(
             color: AllColors.primaryDark1,
             fontSize: AllFontSize.sisxteen,
