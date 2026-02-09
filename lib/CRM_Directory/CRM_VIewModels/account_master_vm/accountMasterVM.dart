@@ -1848,7 +1848,6 @@ class Accountmastervm extends GetxController{
           }
         }
     }catch(e){
-
       print(e);
     }
     finally{

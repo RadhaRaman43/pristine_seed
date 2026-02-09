@@ -316,9 +316,19 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                           );
                         }
 
-                        if(saleCycleController.userType.toLowerCase()=="branch head" && saleCycleController.saleCycleList[0].salesCycleStatus?.toLowerCase()=="prospect" &&
+
+                        //todo comment by nirupma
+                       /* saleCycleController.userType.toLowerCase()=="branch head" &&
+                            saleCycleController.saleCycleList[0].salesCycleStatus?.toLowerCase()=="prospect" &&
                             saleCycleController.get_SalesCycleProductById_List.length>0 &&
-                            saleCycleController.saleCycleList[0].salesCycleApprovalStatus?.toLowerCase()=="approved" && saleCycleController.solutionAcceptedController.value.text=="Yes"){
+                            saleCycleController.saleCycleList[0].salesCycleApprovalStatus?.toLowerCase()=="approved"
+                            && saleCycleController.solutionAcceptedController.value.text=="Yes"*/
+
+                        if(saleCycleController.userType.toLowerCase()!="frontliner" &&
+                            saleCycleController.saleCycleList[0].salesCycleStatus?.toLowerCase()=="propose" &&
+                            saleCycleController.saleCycleList[0].quoteAccepted?.toLowerCase()=='open' &&
+                            saleCycleController.saleCycleList[0].isMarkRateContract==0
+                        ){
                           items.add(
                             PopupMenuItem(
                               child: Row(

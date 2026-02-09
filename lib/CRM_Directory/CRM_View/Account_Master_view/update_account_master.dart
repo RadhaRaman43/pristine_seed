@@ -189,6 +189,7 @@ class UpdateAccountMaster extends StatelessWidget{
                     accountMaster_page_controller.pageNumber = 0;
                     contact_vm_controller.accountCode.value = accountMaster_page_controller.account_code_controller.value.text;
                     contact_vm_controller.FromPage.value="AccountUpdate";
+                    contact_vm_controller.account_name_controller.text=accountMaster_page_controller.accountName;
                     accountMaster_page_controller.getContactMasterList(accountMaster_page_controller.pageNumber,accountMaster_page_controller.accountName, '', accountMaster_page_controller.account_code_controller.text);
 
                   },

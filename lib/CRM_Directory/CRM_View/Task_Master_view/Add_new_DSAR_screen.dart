@@ -169,8 +169,9 @@ class AddNewDsarScreen extends StatelessWidget{
           text: "Create DSAR",
           press: (){
             if(TaskMaster_page_controller.DSAR_Status_type_controller.value.text == ""){
-              Utils.sanckBarError("Message", "Please select DSAR Status");
+               return Utils.sanckBarError("Message", "Please select DSAR Status");
             }
+
             /*else if(TaskMaster_page_controller.isInfraLeadValueSubmit.value) {
               //Utils.sanckBarError("Message", "Created");
             //  TaskMaster_page_controller.TaskSaleCatCreateApiHit("DSAR");
@@ -178,18 +179,16 @@ class AddNewDsarScreen extends StatelessWidget{
 
             }
             else if(TaskMaster_page_controller.ItemCateDropDown.value && TaskMaster_page_controller.isInfraLeadValue.value){
-
               Utils.sanckBarError("Message", "Is Infra Lead is Yes Please Add Infra Details");
-
             }*/
-            else{
-              if(TaskMaster_page_controller.ItemCat_type_controller
-                  .text.isNotEmpty){
+
+              if(/*TaskMaster_page_controller.ItemCat_type_controller
+                  .text.isNotEmpty &&*/ TaskMaster_page_controller.DSAR_Status_type_controller.value.text?.toLowerCase()=='sales cycle'){
                 TaskMaster_page_controller.TaskSaleCatCreateApiHit('DSAR');
               }else{
                 TaskMaster_page_controller.TaskDSARMasterCreate();
               }
-            }
+
           },
         ),
       ),
@@ -1365,8 +1364,6 @@ class AddNewDsarScreen extends StatelessWidget{
           TaskMaster_page_controller.Contact_Name_controller.text =
               _displayContactNameForOption(selection!).toString();
           TaskMaster_page_controller.contact_code_for_dsar.value=selection.contactCode??"";
-
-          //FocusScope.of(context).unfocus();
         },
         enableFilter: true,
         enableSearch: true,

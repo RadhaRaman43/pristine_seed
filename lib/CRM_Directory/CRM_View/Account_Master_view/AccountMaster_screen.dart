@@ -755,7 +755,9 @@ class AccountmasterScreen extends StatelessWidget{
             scrollDirection: Axis.horizontal,
             child: Text(
               selectedItems.map((e) => e.description).join(', '),
-              style: TextStyle(color: Colors.black), // Only black text
+              style: TextStyle(color: AllColors.primaryDark1,
+                  fontSize: AllFontSize.sisxteen,
+                  fontWeight: FontWeight.w400), // Only black text
             ),
           );
         },
@@ -854,6 +856,7 @@ class AccountmasterScreen extends StatelessWidget{
           baseStyle: TextStyle(color: Colors.black),
           dropdownSearchDecoration: InputDecoration(
             filled: false,
+
             labelText: accountMaster_page_controller.SelectedEmployee_Member_list.isNotEmpty?"Account Owner":null,
             hintText: "Account Owner Name",
             labelStyle: GoogleFonts.poppins(
@@ -867,7 +870,7 @@ class AccountmasterScreen extends StatelessWidget{
           // Custom builder to just show comma-separated names
           if (selectedItems.isEmpty) {
             return Text(
-              " Account Owner Name",
+              "Account Owner Name",
               style: GoogleFonts.poppins(
                 color: AllColors.primaryDark1, // Match your hint color
                 fontSize: AllFontSize.sisxteen,
@@ -879,7 +882,11 @@ class AccountmasterScreen extends StatelessWidget{
             scrollDirection: Axis.horizontal,
             child: Text(
               selectedItems.map((e) => e.fullName).join(', '),
-              style: TextStyle(color: Colors.black), // Only black text
+              style: TextStyle(
+              color: AllColors.primaryDark1,
+              fontWeight: FontWeight.w500,
+              fontSize: AllFontSize.sisxteen,
+            ), // Only black text
             ),
           );
         },
@@ -906,7 +913,8 @@ class AccountmasterScreen extends StatelessWidget{
 
           itemBuilder: (context, item, isSelected) =>
               ListTile(
-                title: Text(item.fullName??""),
+                title: Text(item.fullName??"",
+                ),
               ),
         ),
       );
@@ -1042,6 +1050,11 @@ class AccountmasterScreen extends StatelessWidget{
       child: DropdownMenu<String>(
         width: size.width-18,
         controller:  accountMaster_page_controller.IsActive_controller,
+        textStyle: TextStyle(
+          color: AllColors.primaryDark1,
+          fontWeight: FontWeight.w400,
+          fontSize: AllFontSize.sisxteen,
+        ),
         label: Text(
           "Active",
           style: GoogleFonts.poppins(
@@ -1077,12 +1090,15 @@ class AccountmasterScreen extends StatelessWidget{
           accountMaster_page_controller.IsActive_controller.text =
               _displayIsActiveForOption(selection!).toString();
 
-
         },
 
         dropdownMenuEntries: accountMaster_page_controller.IsActiveTypeAllList.map<DropdownMenuEntry<String>>((String e) {
-          return DropdownMenuEntry<String>(value: e, label: e!,style: ButtonStyle(
-            foregroundColor: MaterialStateProperty.all<Color>(AllColors.primaryDark1),));
+          return DropdownMenuEntry<String>(
+              value: e,
+              label: e!,style:
+          ButtonStyle(
+            foregroundColor: MaterialStateProperty.all<Color>(AllColors.primaryDark1),
+          ));
         }).toList(),
       ),
     );
@@ -1384,13 +1400,16 @@ class AccountmasterScreen extends StatelessWidget{
                                 child: Text(
                                   'Select Clusters',
                                   style: GoogleFonts.poppins(
-                                      fontSize: 16, fontWeight: FontWeight.w600,color: AllColors.primaryDark1),
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w600,
+                                      color: AllColors.primaryDark1),
                                 ),
                               ),
 
                               IconButton(onPressed: () {
                                 Navigator.of(context).pop();
-                              }, icon: Icon(Icons.close,color: AllColors.primaryDark1,weight: 700,))
+                              }, icon: Icon(Icons.close,
+                                color: AllColors.primaryDark1,weight: 700,))
 
 
                             ],
@@ -1515,7 +1534,7 @@ class AccountmasterScreen extends StatelessWidget{
             labelStyle: GoogleFonts.poppins(
                 color: AllColors.primaryDark1,
                 fontWeight: FontWeight.w500,
-                fontSize: AllFontSize.sisxteen),// 👈 Label restored here
+                fontSize: AllFontSize.sisxteen),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
             ),
@@ -1529,15 +1548,19 @@ class AccountmasterScreen extends StatelessWidget{
                     ? Text(
                   "Select Cluster",
                   style: GoogleFonts.poppins(
-                    color: Colors.black,
-                    fontSize: AllFontSize.sisxteen,
+                      color: AllColors.primaryDark1,
+                      fontWeight: FontWeight.w500,
+                      fontSize: AllFontSize.sisxteen
                   ),
                 )
                     : SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Text(
                     selectedText,
-                    style: const TextStyle(color: Colors.black),
+                      style: GoogleFonts.poppins(
+                          color: AllColors.primaryDark1,
+                          fontWeight: FontWeight.w400,
+                          fontSize: AllFontSize.sisxteen),
                   ),
                 ),
               ),
@@ -1622,7 +1645,8 @@ class AccountmasterScreen extends StatelessWidget{
                                 child: Text(
                                   'Select Regions',
                                   style: GoogleFonts.poppins(
-                                      fontSize: 16, fontWeight: FontWeight.w600, color: AllColors.primaryDark1),
+                                      fontSize: 16, fontWeight: FontWeight.w600,
+                                      color: AllColors.primaryDark1),
                                 ),
                               ),
                               IconButton(onPressed: () {
@@ -1753,7 +1777,7 @@ class AccountmasterScreen extends StatelessWidget{
             labelText: "Region Name",
             labelStyle: GoogleFonts.poppins(
                 color: AllColors.primaryDark1,
-                fontWeight: FontWeight.w500,
+                fontWeight: FontWeight.w400,
                 fontSize: AllFontSize.sisxteen),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
@@ -1768,15 +1792,19 @@ class AccountmasterScreen extends StatelessWidget{
                     ? Text(
                   "Select Region",
                   style: GoogleFonts.poppins(
-                    color: Colors.grey.shade600,
-                    fontSize: AllFontSize.sisxteen,
+                      color: AllColors.primaryDark1,
+                      fontWeight: FontWeight.w500,
+                      fontSize: AllFontSize.sisxteen
                   ),
                 )
                     : SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Text(
                     selectedText,
-                    style: const TextStyle(color: Colors.black),
+                      style: GoogleFonts.poppins(
+                          color: AllColors.primaryDark1,
+                          fontWeight: FontWeight.w500,
+                          fontSize: AllFontSize.sisxteen)
                   ),
                 ),
               ),

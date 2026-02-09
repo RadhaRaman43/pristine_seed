@@ -764,6 +764,9 @@ class QuoteInformationScreen extends StatelessWidget {
   Widget bindPendingListView(BuildContext context, int index) {
     int srNo = index + 1;
     //String? dateCreatedOn=StaticMethod.dateTimeToDate(saleCycleController.quoteList[index].createdOn??"");
+    int gstPer=(saleCycleController.quoteLinedata[index].sgstPer?.toInt()??0)+
+        (saleCycleController.quoteLinedata[index].cgstPer?.toInt()??0)+
+        (saleCycleController.quoteLinedata[index].igstAmt?.toInt()??0);
     return InkWell(
       child: Card(
         child: ListTile(
@@ -944,7 +947,7 @@ class QuoteInformationScreen extends StatelessWidget {
                           );
                         }),
 
-                        bindData("GST % : ",(saleCycleController.quoteLinedata[index].sgstPer?.toInt()).toString(),context),
+                        bindData("GST % : ",(gstPer.toInt()).toString(),context),
                         bindData( "GST Amt.: ","₹ ${saleCycleController.numberFormatWithComma(saleCycleController.quoteLinedata[index].gstAmount).toString()}" ,context),
                         bindData( "Total Amt.: ","₹ ${saleCycleController.numberFormatWithComma(saleCycleController.quoteLinedata[index].grossAmount).toString()}" ,context),
                         bindData("Item Desc : ",saleCycleController.quoteLinedata[index].itemDescription ?? "",context),

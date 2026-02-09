@@ -386,9 +386,11 @@ class DraftItemList extends StatelessWidget{
                           SizedBox(height: 10,),
                           bindData(context,'State Name',accountMaster_page_controller.stateName_controller),
                           SizedBox(height: 10,),
-                          bindData(context,'Pin Code',accountMaster_page_controller.postal_code_controller.value),
-                          SizedBox(height: 10,),
                           bindData(context,'District',accountMaster_page_controller.district_controller.value),
+                          SizedBox(height: 10,),
+                          bindData(context,'Pin Code',accountMaster_page_controller.postal_code_controller.value),
+
+
                           /* bindCreatedBy(),
                               SizedBox(height: 10,),*/
 
