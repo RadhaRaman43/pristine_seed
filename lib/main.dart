@@ -1,4 +1,5 @@
 //import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -12,6 +13,7 @@ import 'dart:io';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 FlutterLocalNotificationsPlugin();
+final navigatorKey=GlobalKey<NavigatorState>();
 void main() async{
   /*AwesomeNotifications().initialize(
     null,
@@ -42,6 +44,7 @@ void main() async{
   );*/
   // todo for Trust all certificates for network requests (for testing only).
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);//todo lock landscape mode
   HttpOverrides.global = MyHttpOverrides();
   await _initLocalNotifications();

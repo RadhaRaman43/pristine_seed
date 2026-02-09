@@ -12,6 +12,7 @@ class AppUrl {
   static const String getCollectionList = "$BASE_URL/api/Collection/GetCollectionData";
   static const String profile_upload="$BASE_URL/api/UserLogin/ProfileUpload";
   static const String notification_list="$BASE_URL/api/PushNofication/GetNotificationList";
+  static const String userFireBaseTokenUpdate="$BASE_URL/api/UserLogin/UserFireBaseTokenUpdate";
 
   //todo for installation......
   static const String serviceInstallationData = "$BASE_URL/api/ServiceActivity/ServiceMstGetDashbord";
