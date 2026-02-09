@@ -1214,6 +1214,9 @@ class AddNewDsarScreen extends StatelessWidget{
     );
   }
 
+
+
+
   Widget bindIsInfraLead(BuildContext context) {
     return Container(
       child: DropdownMenu<String>(
@@ -1268,6 +1271,61 @@ class AddNewDsarScreen extends StatelessWidget{
 
   }
 
+ /* Widget bindContactNameDropDown(BuildContext context) {
+    TaskMaster_page_controller.selectedContact.value?.contactName= TaskMaster_page_controller.Contact_Name_controller.text;
+    return DropdownButtonFormField<ContactMstGetListModal>(
+
+      value: TaskMaster_page_controller.selectedContact.value,
+
+      decoration: InputDecoration(
+        labelText: "Select Contact Name",
+        labelStyle: GoogleFonts.poppins(
+          color: AllColors.primaryDark1,
+          fontSize: AllFontSize.sisxteen,
+          fontWeight: FontWeight.w400,
+        ),
+        enabledBorder: const OutlineInputBorder(
+          borderSide: BorderSide(color: AllColors.primaryDark1),
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+        ),
+        focusedBorder: const OutlineInputBorder(
+          borderSide: BorderSide(color: AllColors.primaryDark1),
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+        ),
+        contentPadding: const EdgeInsets.symmetric(
+            vertical: AllFontSize.two, horizontal: AllFontSize.ten),
+      ),
+
+      hint: const Text("Select Contact Name"),
+
+      items: TaskMaster_page_controller.contact_master_list
+          .map((ContactMstGetListModal e) {
+
+        return DropdownMenuItem<ContactMstGetListModal>(
+          value: e,
+          child: Text(
+            e.contactName ?? "",
+            style: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+            ),
+          ),
+        );
+
+      }).toList(),
+
+      onChanged: (ContactMstGetListModal? selection) {
+
+        if (selection == null) return;
+        TaskMaster_page_controller.Contact_Name_controller.text =
+            _displayContactNameForOption(selection!).toString();
+        TaskMaster_page_controller.contact_code_for_dsar.value=selection.contactCode??"";
+
+        TaskMaster_page_controller.selectedContact.value = selection;
+
+      },
+    );
+
+  }*/
 
   Widget bindContactNameDropDown(context){
     return Container(
@@ -1311,6 +1369,7 @@ class AddNewDsarScreen extends StatelessWidget{
           //FocusScope.of(context).unfocus();
         },
         enableFilter: true,
+        enableSearch: true,
         requestFocusOnTap: true,
         dropdownMenuEntries: TaskMaster_page_controller.contact_master_list
             .map<DropdownMenuEntry<ContactMstGetListModal>>((ContactMstGetListModal e) {
