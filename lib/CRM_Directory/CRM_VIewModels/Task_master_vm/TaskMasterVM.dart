@@ -70,6 +70,7 @@ class Taskmastervm extends GetxController{
 
     int Active = 0;
     String IsSaleCycleActive= '';
+    var selectedContact = Rxn<ContactMstGetListModal>();
 
     var Task_status_controller = TextEditingController();
     var account_code_controller = TextEditingController();
