@@ -126,6 +126,8 @@ class FunnelDashboardView extends StatelessWidget{
                                           fontWeight: FontWeight.w700,
                                         ),
                                       ),
+
+
                                       Spacer(),
                                       InkWell(
                                         onTap: (){
@@ -133,10 +135,40 @@ class FunnelDashboardView extends StatelessWidget{
                                         },
                                         child: Icon(Icons.refresh),
                                       ),
-                                      SizedBox(width: 10,)
+                                      const SizedBox(width: 10,)
                                     ],
                                   ),
-                                  SizedBox(height: 10,),
+
+
+                                  Obx((){
+                                    return  Text(
+                                      'Date Ranges : ${dashboard_view_Controller.formattedStartDate} - '
+                                      '${dashboard_view_Controller.formattedEndDate}',
+                                      style: GoogleFonts.poppins(
+                                        color: AllColors.lightblackColor,
+                                        fontSize: AllFontSize.fourtine,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    );
+                                  }),
+
+                                   Obx((){
+                                     return  Tooltip(
+                                       message:  'Quote Accep. ${dashboard_view_Controller.QuoteAccepted_controller.value.text}',
+                                       child: Text(
+                                         'Quote Accep. :  ${dashboard_view_Controller.QuoteAccepted_controller.value.text} ',
+                                         style: GoogleFonts.poppins(
+                                           color: AllColors.lightblackColor,
+                                           fontSize: AllFontSize.fourtine,
+                                           fontWeight: FontWeight.w700,
+                                         ),
+                                         overflow: TextOverflow.ellipsis,
+                                       ),
+                                     );
+                                   }),
+
+                                const  SizedBox(height: 10,),
+
                                   Obx((){
                                     return Container(
                                       //width: 90,

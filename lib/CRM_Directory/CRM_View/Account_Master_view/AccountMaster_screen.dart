@@ -68,6 +68,7 @@ class AccountmasterScreen extends StatelessWidget{
                  //visible:accountMaster_page_controller.isAdminWritePermission=="0"  ? true:false ,
                  visible:accountMaster_page_controller.isHeadofficePermission!="1"|| accountMaster_page_controller.UserCode?.toLowerCase() == 'cce'  ?true:false ,
                  child: IconButton(onPressed: () {
+                   accountMaster_page_controller.yesNoValue.value="No";
                    accountMaster_page_controller.DraftId = '';
                    accountMaster_page_controller.account_type_controller.text='New Account';
                    accountMaster_page_controller.clearController();

@@ -180,7 +180,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                 Obx(() {
                   return Visibility(
                     visible: (saleCycleController.FromPage.value == "Sales" || saleCycleController.FromPage.value == "FromTaskScreen" ||
-                            saleCycleController.FromPage.value == "Task") &&
+                            saleCycleController.FromPage.value == "Task" ||saleCycleController.FromPage.value == "FromSCPendingForApproval" ) &&
                         saleCycleController.saleCycleList[0].salesCycleApprovalStatus?.toLowerCase() != "rejected" &&
                         (saleCycleController.saleCycleList[0].salesCycleOwner?.toLowerCase() ==
                                 saleCycleController.email.toLowerCase() || saleCycleController.userType.toLowerCase() == 'branch head' ||
@@ -290,8 +290,8 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                 saleCycleController
                                     .updateQuoteAccetedCycleController.value
                                     .clear();
-                                saleCycleController.saleCycleController.value
-                                    .clear();
+                               /* saleCycleController.saleCycleController.value
+                                    .clear();*/
                                 saleCycleController.isChooseQuote.value = false;
                                 saleCycleController.isApprove.value = false;
                                 saleCycleController.isReject.value = false;
@@ -3590,7 +3590,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                       saleCycleController.saleCycleList[0].createdBy?.toLowerCase() == saleCycleController.email.toLowerCase()) &&
                       saleCycleController.saleCycleList[0].quoteAccepted?.toLowerCase() == 'open') &&
                       !(saleCycleController.saleCycleList[0].actualSalesCycleApprovalStatus?.toLowerCase() == 'rejected') &&
-                      !(saleCycleController.FromPage.value == "FromDashboard")?false:true,
+                      !(saleCycleController.FromPage.value == "FromDashboard") && saleCycleController.saleCycleList[0].isMarkRateContract==0?false:true,
                  /* ignoring: (
                       saleCycleController
                               .saleCycleList[0].actualSalesCycleApprovalStatus
@@ -3620,7 +3620,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                 saleCycleController.saleCycleList[0].createdBy?.toLowerCase() == saleCycleController.email.toLowerCase()) &&
                                 saleCycleController.saleCycleList[0].quoteAccepted?.toLowerCase() == 'open') &&
                                 !(saleCycleController.saleCycleList[0].actualSalesCycleApprovalStatus?.toLowerCase() == 'rejected') &&
-                                !(saleCycleController.FromPage.value == "FromDashboard")
+                                !(saleCycleController.FromPage.value == "FromDashboard") &&  saleCycleController.saleCycleList[0].isMarkRateContract==0
                                 ? TextDecoration.underline
                                 : TextDecoration.none,
                           ),
@@ -3632,7 +3632,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                               saleCycleController.saleCycleList[0].createdBy?.toLowerCase() == saleCycleController.email.toLowerCase()) &&
                               saleCycleController.saleCycleList[0].quoteAccepted?.toLowerCase() == 'open') &&
                               !(saleCycleController.saleCycleList[0].actualSalesCycleApprovalStatus?.toLowerCase() == 'rejected') &&
-                              !(saleCycleController.FromPage.value == "FromDashboard"),
+                              !(saleCycleController.FromPage.value == "FromDashboard")  && saleCycleController.saleCycleList[0].isMarkRateContract==0,
 
                           child: Row(
                             children: [
@@ -6817,8 +6817,8 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                           ?.toLowerCase() !=
                       "rejected") &&
               (saleCycleController.FromPage.value == "Sales"||saleCycleController.FromPage.value ==
-                  "FromSCPendingForApproval" ) &&
-          saleCycleController.saleCycleList[0].isMarkRateContract==0
+                  "FromSCPendingForApproval" ) /*&&
+          saleCycleController.saleCycleList[0].isMarkRateContract==0*/
           ? false
           : true,
 /*      saleCycleController.saleCycleList[0].quoteAccepted
@@ -6964,7 +6964,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                           ?.toLowerCase() !=
                       "rejected") &&
               (saleCycleController.FromPage.value == "Sales"||saleCycleController.FromPage.value ==
-                  "FromSCPendingForApproval" ) &&  saleCycleController.saleCycleList[0].isMarkRateContract==0
+                  "FromSCPendingForApproval" ) /*&&  saleCycleController.saleCycleList[0].isMarkRateContract==0*/
           ? false
           : true,
       /* ignoring:
@@ -7176,7 +7176,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                           ?.toLowerCase() !=
                                           "rejected") &&
                                   (saleCycleController.FromPage.value == "Sales" ||
-                                      saleCycleController.FromPage.value=='FromSCPendingForApproval') &&  saleCycleController.saleCycleList[0].isMarkRateContract==0? TextDecoration.underline:TextDecoration.none,
+                                      saleCycleController.FromPage.value=='FromSCPendingForApproval') /*&&  saleCycleController.saleCycleList[0].isMarkRateContract==0*/? TextDecoration.underline:TextDecoration.none,
                           ),
                         ),
                       ),
@@ -7196,7 +7196,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                         ?.toLowerCase() !=
                                     "rejected") &&
                             (saleCycleController.FromPage.value == "Sales" ||
-                                saleCycleController.FromPage.value=='FromSCPendingForApproval') &&  saleCycleController.saleCycleList[0].isMarkRateContract==0)
+                                saleCycleController.FromPage.value=='FromSCPendingForApproval')/* &&  saleCycleController.saleCycleList[0].isMarkRateContract==0*/)
                         /*  if (!(saleCycleController.FromPage.value ==
                                     "FromDashboard" ||saleCycleController.FromPage.value == "QuotePendingPage" || saleCycleController.FromPage.value == "ApprovedRejectedQuotePage" || saleCycleController.FromPage.value == "FromAllQuotePage" || saleCycleController.FromPage.value == "FromALLQuoteLineItems") &&
                                 saleCycleController
@@ -7236,7 +7236,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                       ?.toLowerCase() !=
                                   "rejected") &&
                          ( saleCycleController.FromPage.value == "Sales" ||
-                             saleCycleController.FromPage.value=='FromSCPendingForApproval')  &&  saleCycleController.saleCycleList[0].isMarkRateContract==0,
+                             saleCycleController.FromPage.value=='FromSCPendingForApproval') /* &&  saleCycleController.saleCycleList[0].isMarkRateContract==0*/,
                       /*saleCycleController.saleCycleList[0]
                                               .salesCycleApprovalStatus
                                               ?.toLowerCase() ==
@@ -8012,7 +8012,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                               .actualSalesCycleApprovalStatus
                                               ?.toLowerCase() !=
                                           "rejected") &&
-                                  (saleCycleController.FromPage.value == "Sales" || saleCycleController.FromPage.value == "FromSCPendingForApproval") && saleCycleController.saleCycleList[0].isMarkRateContract==0,
+                                  (saleCycleController.FromPage.value == "Sales" || saleCycleController.FromPage.value == "FromSCPendingForApproval") /*&& saleCycleController.saleCycleList[0].isMarkRateContract==0*/,
                               /* saleCycleController.userType.toLowerCase()!="branch head"|| saleCycleController.isAdminWritePermission!="1"||
                               saleCycleController
                                               .saleCycleList[0].quoteAccepted!

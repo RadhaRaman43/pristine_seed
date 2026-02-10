@@ -808,7 +808,7 @@ class QuoteInformationScreen extends StatelessWidget {
                 return Visibility(
                   visible:(saleCycleController.showBranchHead.value ||
                       saleCycleController.showClusterHead.value ||
-                      saleCycleController.showGeneralManager.value) && saleCycleController
+                      saleCycleController.showGeneralManager.value || saleCycleController.isAdminWritePermission=='1') && saleCycleController
                       .quoteHeaderdata[0].quoteStatus?.toLowerCase()=="pending for approval" && saleCycleController
                       .quoteHeaderdata[0].quoteAccepted?.toLowerCase()=="open",
                   child: GestureDetector(

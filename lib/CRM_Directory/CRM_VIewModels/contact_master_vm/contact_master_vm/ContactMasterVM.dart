@@ -323,12 +323,12 @@ class ContactMasterVM extends GetxController{
   }
 
   createNewContactMstApi(String flag) async{
-    if(account_name_controller.text.isEmpty){
-      Utils.sanckBarError('Account Name!', "Please Select Account Name");
+    if(account_name_controller.text.isEmpty || account_name_controller.text==null){
+      Utils.sanckBarError('Account Name!', "Please Select Customer Name");
       return ;
     }
     if(contact_name_controller.text.isEmpty){
-      Utils.sanckBarError('Contact Name!', "Please Fill Contact Name");
+      Utils.sanckBarError('Contact Name!', "Please Enter Contact Name");
       return ;
     }
     if(phone_no_controller.text.isNotEmpty ){

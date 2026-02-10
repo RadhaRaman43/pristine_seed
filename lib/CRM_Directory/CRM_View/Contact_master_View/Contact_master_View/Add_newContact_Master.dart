@@ -528,6 +528,7 @@ class AddNewcontactMasterContact extends StatelessWidget{
           return TextFormField(
             onTap: (){
               controller.clear();
+              contact_vm_controller.account_name_controller.clear();
             },
             readOnly: contact_vm_controller.updateContact || contact_vm_controller.insideOut == false,
             cursorColor: AllColors.primaryDark1,
@@ -552,8 +553,8 @@ class AddNewcontactMasterContact extends StatelessWidget{
               ),
               contentPadding: EdgeInsets.symmetric(
                   vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-              hintText: 'Customer Name',
-              labelText: 'Customer Name',
+              hintText: 'Customer Name *',
+              labelText: 'Customer Name *',
               border: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(10))
               ),
