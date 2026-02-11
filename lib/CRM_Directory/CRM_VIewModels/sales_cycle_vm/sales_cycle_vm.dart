@@ -88,6 +88,15 @@ class SalesCycleVm extends GetxController {
   int pageNumberSalesAdvise = 0;
   RxString routingSalesAdvise="".obs;
 
+
+  //todo nirupma code
+  RxList<bool> readMoreList = <bool>[].obs;
+
+  void initReadMoreList(int length) {
+    readMoreList.assignAll(List.generate(length, (_) => false));
+  }
+
+
   int rowsPerPage = 10;
   int total_rows = 0;
   int total_rows_items = 0;
@@ -1517,6 +1526,7 @@ class SalesCycleVm extends GetxController {
               loading.value = false;
               quoteHeaderdata.value = response;
               quoteLinedata.value = quoteHeaderdata[0].quoteItems ?? [];
+              initReadMoreList(quoteLinedata.value.length);
               if (quoteLinedata.length > 0) {
 
                 updateItemDescriptionController.value.text =

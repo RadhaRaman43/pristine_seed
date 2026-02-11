@@ -854,110 +854,158 @@ class QuoteInformationScreen extends StatelessWidget {
           ),
           subtitle: Column(
             children: [
+              SizedBox(height: 6,),
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Expanded(
-                      child: Container(
-                    width: size.width / 2,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        bindData("Qty : ",(saleCycleController.quoteLinedata[index].qty?.toInt()).toString(),context),
-                        bindData( "LSP :","₹ ${saleCycleController.numberFormatWithComma(saleCycleController.quoteLinedata[index].listSellingPrice).toString()}",context),
-                        Obx(() {
-                          return Visibility(
-                            visible: saleCycleController.userType?.toLowerCase()=='branch head' ||
-                                saleCycleController.userType?.toLowerCase()=='cluster head'||
-                                saleCycleController.isAdminWritePermission=="1" ||
-                                saleCycleController.userType?.toLowerCase()=='general manager',
-                            child: bindData("MAP : ","₹ ${saleCycleController.numberFormatWithComma(saleCycleController
-                                .quoteLinedata[index].minimalAcceptablePrice).toString()}",context),
-                          );
-                        }),
-                        /*Obx(() {
-                          return Visibility(
-                            visible:
-                                saleCycleController.showGeneralManager.value,
-                            child: bindData( "MAP:","₹ ${
-                                saleCycleController.numberFormatWithComma(saleCycleController.quoteLinedata[index].minimalAcceptablePrice).toString()}",context),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          bindData("Qty : ",(saleCycleController.quoteLinedata[index].qty?.toInt()).toString(),context),
+                          bindData( "LSP :","₹ ${saleCycleController.numberFormatWithComma(saleCycleController.quoteLinedata[index].listSellingPrice).toString()}",context),
+                          Obx(() {
+                            return Visibility(
+                              visible: saleCycleController.userType?.toLowerCase()=='branch head' ||
+                                  saleCycleController.userType?.toLowerCase()=='cluster head'||
+                                  saleCycleController.isAdminWritePermission=="1" ||
+                                  saleCycleController.userType?.toLowerCase()=='general manager',
+                              child: bindData("MAP : ","₹ ${saleCycleController.numberFormatWithComma(saleCycleController
+                                  .quoteLinedata[index].minimalAcceptablePrice).toString()}",context),
+                            );
+                          }),
+                          /*Obx(() {
+                            return Visibility(
+                              visible:
+                                  saleCycleController.showGeneralManager.value,
+                              child: bindData( "MAP:","₹ ${
+                                  saleCycleController.numberFormatWithComma(saleCycleController.quoteLinedata[index].minimalAcceptablePrice).toString()}",context),
 
-                          );
-                        }),*/
-                        bindData( "Seeking % : ",(saleCycleController.quoteLinedata[index].discountPer?.toInt()).toString(),context),
-                        bindData( "Seeking Amt P/U : ","₹ ${saleCycleController.numberFormatWithComma(saleCycleController.quoteLinedata[index].discountAmtPerUnit).toString()}",context),
-                        Obx((){
-                          return Visibility(
-                            visible: saleCycleController.userType?.toLowerCase()=='branch head' ||
-                                saleCycleController.userType?.toLowerCase()=='cluster head'||
-                                saleCycleController.userType?.toLowerCase()=='general manager'||
-                                saleCycleController.isAdminWritePermission.value=="1",
-                          /*  visible: saleCycleController.showBranchHead.value ||
-                                saleCycleController.showClusterHead.value || saleCycleController.isAdminWritePermission.value=="1",*/
-                            child:  bindData( "BTP : ","₹ ${saleCycleController.numberFormatWithComma(saleCycleController.
-                            quoteLinedata[index].branchTransferPrice).toString()}",context),
-                          );
-                        }),
-                        Obx(() {
-                          return Visibility(
-                            visible:
-                            saleCycleController.userType?.toLowerCase()=='general manager' || saleCycleController.isAdminWritePermission=="1",
-                            child:  bindData( "Std Cost : ","₹ ${
-                                saleCycleController.numberFormatWithComma(saleCycleController.quoteLinedata[index].standardCost).toString()}",context),
-                          );
-                        }),
-                        bindData( "Approved Dis. % :",saleCycleController.quoteLinedata[index].approvedDiscountPer.toString(),context),
-                        bindData( "Appr. Amt P/U : ","₹ ${saleCycleController.numberFormatWithComma(saleCycleController.quoteLinedata[index].approvedAmountPerUnit).toString()}",context),
-                        bindData( "Sales Credit % : ",saleCycleController.quoteLinedata[index].salesCredit.toString(),context),
+                            );
+                          }),*/
+                          bindData( "Seeking % : ",(saleCycleController.quoteLinedata[index].discountPer?.toInt()).toString(),context),
+                          bindData( "Seeking Amt P/U : ","₹ ${saleCycleController.numberFormatWithComma(saleCycleController.quoteLinedata[index].discountAmtPerUnit).toString()}",context),
+                          Obx((){
+                            return Visibility(
+                              visible: saleCycleController.userType?.toLowerCase()=='branch head' ||
+                                  saleCycleController.userType?.toLowerCase()=='cluster head'||
+                                  saleCycleController.userType?.toLowerCase()=='general manager'||
+                                  saleCycleController.isAdminWritePermission.value=="1",
+                            /*  visible: saleCycleController.showBranchHead.value ||
+                                  saleCycleController.showClusterHead.value || saleCycleController.isAdminWritePermission.value=="1",*/
+                              child:  bindData( "BTP : ","₹ ${saleCycleController.numberFormatWithComma(saleCycleController.
+                              quoteLinedata[index].branchTransferPrice).toString()}",context),
+                            );
+                          }),
+                          Obx(() {
+                            return Visibility(
+                              visible:
+                              saleCycleController.userType?.toLowerCase()=='general manager' || saleCycleController.isAdminWritePermission=="1",
+                              child:  bindData( "Std Cost : ","₹ ${
+                                  saleCycleController.numberFormatWithComma(saleCycleController.quoteLinedata[index].standardCost).toString()}",context),
+                            );
+                          }),
+                          bindData( "Approved Dis. % :",saleCycleController.quoteLinedata[index].approvedDiscountPer.toString(),context),
+                          bindData( "Appr. Amt P/U : ","₹ ${saleCycleController.numberFormatWithComma(saleCycleController.quoteLinedata[index].approvedAmountPerUnit).toString()}",context),
+                          bindData( "Sales Credit % : ",saleCycleController.quoteLinedata[index].salesCredit.toString(),context),
+                          Obx((){
+                            return Visibility(
+                              visible: saleCycleController.readMoreList[index],
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Visibility(
+                                      visible: saleCycleController.userType?.toLowerCase()=='general manager' || saleCycleController.isAdminWritePermission=="1",
+                                      child: Column(
+                                        children: [
+                                          bindData( "Gm % : ",saleCycleController.quoteLinedata[index].gmDiscountPer.toString(),context),
+                                          bindData( "Gm Amt : ","₹ ${saleCycleController.numberFormatWithComma(saleCycleController.quoteLinedata[index].gmDiscountAmount).toString()}",context),
+                                          bindData( "Gm Total Amt : ","₹ ${saleCycleController.numberFormatWithComma(saleCycleController.quoteLinedata[index].gmTotalDiscountAmount).toString()}",context),
+                                        ],
+                                      ),
+                                    ),
+
+                                  bindData("Total App. Price : ",saleCycleController.quoteLinedata[index].approvedAmount == null ? "0"
+                                      : "₹ ${saleCycleController.numberFormatWithComma(saleCycleController.quoteLinedata[index].approvedAmount).toString()
+                                  }",context),
+                                  bindData("Price P/U : ","₹ ${saleCycleController.numberFormatWithComma(saleCycleController.quoteLinedata[index].quoteLinePrice).toString()}",context),
+                                  bindData("Total Seeking Price : ","₹ ${saleCycleController.numberFormatWithComma(saleCycleController.quoteLinedata[index].discountAmt).toString()}",context),
+                                   Visibility(
+                                      visible: saleCycleController.userType?.toLowerCase()=='branch head' ||
+                                          saleCycleController.userType?.toLowerCase()=='cluster head'||
+                                          saleCycleController.isAdminWritePermission.value=="1",
+                                      child:  bindData( "Bm % : ",saleCycleController.quoteLinedata[index].bmDiscountPer.toString(),context),
+                                    ),
 
 
-                      ],
-                    ),
-                  )),
-                  SizedBox(width: 5,),
-                  Expanded(
-                      child: Container(
-                    width: size.width / 2,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Obx(() {
-                          return Visibility(
-                            visible: saleCycleController.userType?.toLowerCase()=='general manager' || saleCycleController.isAdminWritePermission=="1",
-                            child: Column(
+                                  bindData("GST % : ",(gstPer.toInt()).toString(),context),
+                                  bindData( "GST Amt.: ","₹ ${saleCycleController.numberFormatWithComma(saleCycleController.quoteLinedata[index].gstAmount).toString()}" ,context),
+                                  bindData( "Total Amt.: ","₹ ${saleCycleController.numberFormatWithComma(saleCycleController.quoteLinedata[index].grossAmount).toString()}" ,context),
+                                  bindData("Item Desc : ",saleCycleController.quoteLinedata[index].itemDescription ?? "",context),
+                                  bindData("Category Name : ",saleCycleController.quoteLinedata[index].categoryName ?? "",context),
+                                ],
+                              ),
+                            );
+                          }),
+
+
+
+
+                          Obx((){
+                           return Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
                               children: [
-                                bindData( "Gm % : ",saleCycleController.quoteLinedata[index].gmDiscountPer.toString(),context),
-                                bindData( "Gm Amt : ","₹ ${saleCycleController.numberFormatWithComma(saleCycleController.quoteLinedata[index].gmDiscountAmount).toString()}",context),
-                                bindData( "Gm Total Amt : ","₹ ${saleCycleController.numberFormatWithComma(saleCycleController.quoteLinedata[index].gmTotalDiscountAmount).toString()}",context),
-                              ],
-                            ),
-                          );
-                        }),
-                        bindData("Total App. Price : ",saleCycleController.quoteLinedata[index].approvedAmount == null ? "0"
-                            : "₹ ${saleCycleController.numberFormatWithComma(saleCycleController.quoteLinedata[index].approvedAmount).toString()
-                        }",context),
-                        bindData("Price P/U : ","₹ ${saleCycleController.numberFormatWithComma(saleCycleController.quoteLinedata[index].quoteLinePrice).toString()}",context),
-                        bindData("Total Seeking Price : ","₹ ${saleCycleController.numberFormatWithComma(saleCycleController.quoteLinedata[index].discountAmt).toString()}",context),
-                        Obx(() {
-                          return Visibility(
-                            visible: saleCycleController.userType?.toLowerCase()=='branch head' ||
-                                saleCycleController.userType?.toLowerCase()=='cluster head'||
-                                saleCycleController.isAdminWritePermission.value=="1",
-                            child:  bindData( "Bm % : ",saleCycleController.quoteLinedata[index].bmDiscountPer.toString(),context),
-                          );
-                        }),
+                                Visibility(
+                                    visible: !saleCycleController.readMoreList[index],
+                                    child: GestureDetector(
+                                      onTap: (){
+                                        saleCycleController.readMoreList[index] = true;
+                                      },
+                                      child: Row(
+                                        children: [
+                                          Text('Read More ',
+                                            style: GoogleFonts.poppins(
+                                              color: Colors.blue,
+                                              fontSize: AllFontSize.fourtine,
+                                              fontWeight: FontWeight.w700,
+                                            ),
+                                          ),
+                                          Icon(Icons.keyboard_arrow_down,   color: Colors.red,),
+                                        ],
+                                      ),
+                                    )),
 
-                        bindData("GST % : ",(gstPer.toInt()).toString(),context),
-                        bindData( "GST Amt.: ","₹ ${saleCycleController.numberFormatWithComma(saleCycleController.quoteLinedata[index].gstAmount).toString()}" ,context),
-                        bindData( "Total Amt.: ","₹ ${saleCycleController.numberFormatWithComma(saleCycleController.quoteLinedata[index].grossAmount).toString()}" ,context),
-                        bindData("Item Desc : ",saleCycleController.quoteLinedata[index].itemDescription ?? "",context),
-                        bindData("Category Name : ",saleCycleController.quoteLinedata[index].categoryName ?? "",context),
-                      ],
-                    ),
-                  )),
+
+                                Visibility(
+                                    visible: saleCycleController.readMoreList[index],
+                                    child: GestureDetector(
+                                      onTap: (){
+                                        saleCycleController.readMoreList[index] = false;
+                                      },
+                                      child: Row(
+                                        children: [
+                                          Text('Read Less ',
+                                            style: GoogleFonts.poppins(
+                                              color: Colors.blue,
+                                              fontSize: AllFontSize.fourtine,
+                                              fontWeight: FontWeight.w700,
+                                            ),
+                                          ),
+                                          Icon(Icons.keyboard_arrow_up,   color: Colors.red,)
+                                        ],
+                                      ),
+                                    ))
+                              ],
+                            );
+                          })
+
+
+                        ],
+                      )),
+
+                  SizedBox(width: 5,),
+
                 ],
               ),
-              SizedBox(height: 6,),
               Obx(() {
                 return Visibility(
                   //visible:saleCycleController.quoteHeaderdata[0].createdBy==saleCycleController.email && saleCycleController.quoteHeaderdata[0].quoteStatus=="Pending"?true:false,
@@ -1096,29 +1144,33 @@ class QuoteInformationScreen extends StatelessWidget {
     );
   }
   Widget bindData(String fixData,String value,BuildContext context){
-    return  Row(
-      children: [
-        Text(fixData,
-          style: GoogleFonts.poppins(
-            color: AllColors.primaryDark1,
-            fontSize: AllFontSize.twelve,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-        Flexible(
-          child: Tooltip(
-            message: value,
-            child: Text(value,
-              style: GoogleFonts.poppins(
-                color: AllColors.textColor,
-                fontSize: AllFontSize.twelve,
-                fontWeight: FontWeight.w500,
-              ),
-              overflow: TextOverflow.ellipsis,
+    return Padding(
+      padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(fixData,
+            style: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontSize: AllFontSize.twelve,
+              fontWeight: FontWeight.w500,
             ),
           ),
-        ),
-      ],
+          Flexible(
+            child: Tooltip(
+              message: value,
+              child: Text(value,
+                style: GoogleFonts.poppins(
+                  color: AllColors.textColor,
+                  fontSize: AllFontSize.twelve,
+                  fontWeight: FontWeight.w500,
+                ),
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 

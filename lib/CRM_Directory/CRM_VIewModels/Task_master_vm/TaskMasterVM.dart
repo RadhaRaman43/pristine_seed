@@ -875,21 +875,22 @@ class Taskmastervm extends GetxController{
                 "row_per_page": rowsPerPage,
                 "page_number": 0
             };
-
+            loading.value = true;
             String onValue = await _api.AccountMasterGetApiHit(data, sessionManagement);
                 final jsonResponse = json.decode(onValue);
                 if(jsonResponse is List){
+                  loading.value = false;
                     List<AccountMasterModel> response = jsonResponse.map((e) => AccountMasterModel.fromJson(e)).toList();
                     if(response!= null && response.length>0 && response[0].condition=="True"){
                         Account_Master_list.value=response;
 
                     }else {
                         Account_Master_list.value=[];
-
                     }
                 }
 
         }catch(e){
+          loading.value = false;
             print(e);
         }
         return Account_Master_list;
@@ -900,11 +901,12 @@ class Taskmastervm extends GetxController{
             Map<String, String> data={
                 "filter_type_of_call": flag,
             };
-
+            loading.value = true;
             String onValue = await _api.CallStatusMasterGetApiHit(data, sessionManagement);
                 print(onValue);
                 final jsonResponse = json.decode(onValue);
                 if(jsonResponse is List){
+                  loading.value = false;
                     List<CallStatusMasterModel> response = jsonResponse.map((e) => CallStatusMasterModel.fromJson(e)).toList();
                     if(response!= null && response.length>0 && response[0].condition=="True"){
                       CallStatus_Master_list.value=[];
@@ -919,9 +921,12 @@ class Taskmastervm extends GetxController{
                         CallStatus_Master_list.value=[];
                         Selection_CallStatus_Master_list.value=[];
                     }
+                }else{
+                  loading.value = false;
                 }
 
         }catch(e){
+          loading.value = false;
             print(e);
         }
 

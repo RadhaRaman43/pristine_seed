@@ -145,9 +145,9 @@ class FunnelDashboardView extends StatelessWidget{
                                       'Date Ranges : ${dashboard_view_Controller.formattedStartDate} - '
                                       '${dashboard_view_Controller.formattedEndDate}',
                                       style: GoogleFonts.poppins(
-                                        color: AllColors.lightblackColor,
-                                        fontSize: AllFontSize.fourtine,
-                                        fontWeight: FontWeight.w700,
+                                        color: AllColors.blackColor,
+                                        fontSize: AllFontSize.twelve,
+                                        fontWeight: FontWeight.w500,
                                       ),
                                     );
                                   }),
@@ -158,9 +158,9 @@ class FunnelDashboardView extends StatelessWidget{
                                        child: Text(
                                          'Quote Accep. :  ${dashboard_view_Controller.QuoteAccepted_controller.value.text} ',
                                          style: GoogleFonts.poppins(
-                                           color: AllColors.lightblackColor,
-                                           fontSize: AllFontSize.fourtine,
-                                           fontWeight: FontWeight.w700,
+                                           color: AllColors.blackColor,
+                                           fontSize: AllFontSize.twelve,
+                                           fontWeight: FontWeight.w500,
                                          ),
                                          overflow: TextOverflow.ellipsis,
                                        ),
