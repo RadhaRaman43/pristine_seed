@@ -95,17 +95,24 @@ class Addressmastervm extends GetxController{
       return ;
     }
     if(contact_name_controller.text.isEmpty){
-      Utils.sanckBarError('Address Name!', "Please Fill Address Name");
+      Utils.sanckBarError('Address Name!', "Please Enter Address Name");
       return ;
     }
+    if(phone_no_controller.text.isEmpty){
+      Utils.sanckBarError('Phone No. ', "Please Enter Phone");
+      return ;
+    }
+
+    if(emailId_controller.text.isEmpty){
+      Utils.sanckBarError('Email Id. ', "Please Enter Email Id");
+      return ;
+    }
+
     if(phone_no_controller.text.isNotEmpty ){
-      if(phone_no_controller.text.length>9){
-      }
-      else{
+      if(phone_no_controller.text.length<9){
         Utils.sanckBarError('Phone No!', "Please Enter 10 Digit Phone No");
         return  ;
       }
-
     }
 
     if(emailId_controller.text.isNotEmpty && EmailValidator.validate(emailId_controller.text) == false){

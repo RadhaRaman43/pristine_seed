@@ -1927,6 +1927,7 @@ class SalesCycleVm extends GetxController {
         },
       ).onError(
         (error, stackTrace) {
+          loading.value = false;
           print(error);
         },
       );
@@ -1974,6 +1975,9 @@ class SalesCycleVm extends GetxController {
         },
       ).onError(
         (error, stackTrace) {
+          Utils.sanckBarError(
+              "Error", error.toString());
+          loading.value = false;
           print(error);
         },
       );

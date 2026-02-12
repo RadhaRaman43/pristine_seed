@@ -164,7 +164,7 @@ class QuoteInformationScreen extends StatelessWidget {
                                   Icons.download,
                                   color: Colors.black,
                                 ),
-                                Text('Quote Srp Report'),
+                                Text('Quote Spr Report'),
                               ],
                             ),
                             onTap: () {
@@ -969,7 +969,7 @@ class QuoteInformationScreen extends StatelessWidget {
                                               fontWeight: FontWeight.w700,
                                             ),
                                           ),
-                                          Icon(Icons.keyboard_arrow_down,   color: Colors.red,),
+                                          Icon(Icons.keyboard_arrow_down,   color: Colors.blue,),
                                         ],
                                       ),
                                     )),
@@ -990,7 +990,7 @@ class QuoteInformationScreen extends StatelessWidget {
                                               fontWeight: FontWeight.w700,
                                             ),
                                           ),
-                                          Icon(Icons.keyboard_arrow_up,   color: Colors.red,)
+                                          Icon(Icons.keyboard_arrow_up,   color: Colors.blue,)
                                         ],
                                       ),
                                     ))
@@ -1996,7 +1996,7 @@ class QuoteInformationScreen extends StatelessWidget {
   }
 
 
-  Future showDialogForHeaderUpdate(BuildContext context) {
+ /* Future showDialogForHeaderUpdate(BuildContext context) {
     return showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -2049,7 +2049,7 @@ class QuoteInformationScreen extends StatelessWidget {
                               address_vm_controller.clearController();
                               address_vm_controller.account_code_controller.text=saleCycleController.quoteHeaderdata[0].accountCode??"";
                               address_vm_controller.account_name_controller.text=saleCycleController.quoteHeaderdata[0].accountName??"";
-                              address_vm_controller.gst_registration_type_controller.value.text = 'UnRegistered';
+                              //address_vm_controller.gst_registration_type_controller.value.text = 'UnRegistered';
                               address_vm_controller.getGeoPostalCodeApi(50, '');
                               Get.toNamed(RoutesName.addNewAddress_screen);
                             },
@@ -2110,7 +2110,7 @@ class QuoteInformationScreen extends StatelessWidget {
         );
       },
     );
-  }
+  }*/
 
 
   bindInputData(BuildContext context,String levelText, TextEditingController controller, Widget suffixIcon) {

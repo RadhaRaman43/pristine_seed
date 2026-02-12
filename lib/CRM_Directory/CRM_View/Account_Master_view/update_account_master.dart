@@ -1657,109 +1657,114 @@ class UpdateAccountMaster extends StatelessWidget{
 
 
   Widget bindAccountOwnerDropDown(context){
-    return Autocomplete<EmployeeMemberModel>(
-      displayStringForOption: _displayEmpMemberForOption,
-      optionsBuilder: (TextEditingValue textEditingValue) {
-        if(accountMaster_page_controller.view=='VIEW'){
-          accountMaster_page_controller.employee_Member_list.value=[];
-          return accountMaster_page_controller.employee_Member_list;
-        }
-        if (textEditingValue.text.isEmpty) {
-          return accountMaster_page_controller.employee_Member_list;
-          // return const Iterable<VehicleTypeResponse>.empty();
-        }
-        return accountMaster_page_controller.employee_Member_list
-            .where((EmployeeMemberModel option) {
-          return option.fullName
-              .toString()
-              .toLowerCase()
-              .contains(textEditingValue.text.toLowerCase());
-        }).toList();
-      },
-      onSelected: (EmployeeMemberModel selection) {
-        print(selection.loginEmailId);
-        // Update the TextField with the selected
-        accountMaster_page_controller.account_owner_Controller.text =
-            _displayEmpMemberForOption(selection).toString();
-        accountMaster_page_controller.AccountOwner = selection.loginEmailId!;
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          accountMaster_page_controller.getEmployee(accountMaster_page_controller.AccountOwner);
-        });
-      },
-      fieldViewBuilder: (BuildContext context, TextEditingController controller,
-          FocusNode focusNode, VoidCallback onFieldSubmitted) {
-        return TextField(
-          readOnly: accountMaster_page_controller.Account_Master_list != null &&
-              accountMaster_page_controller.Account_Master_list.isNotEmpty && accountMaster_page_controller.Account_Master_list[0].isManager == 1 &&
-              accountMaster_page_controller.view=='Account'?false:true,
-          cursorColor: AllColors.primaryDark1,
-          controller: controller
-            ..text = accountMaster_page_controller.account_owner_Controller.text,
-          focusNode: focusNode,
-          //onSubmitted: onFieldSubmitted,
-          decoration: InputDecoration(
-            suffixIcon: IconButton(
-              color: AllColors.primaryDark1,
-              onPressed: (){
-                if(focusNode.hasFocus){
-                  focusNode.unfocus();
-                }else{
-                  focusNode.requestFocus();
-                }
-              },
-              icon: Icon(Icons.arrow_drop_down),
-            ),
-            contentPadding: EdgeInsets.symmetric(
-                vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-            hintText: 'Account Owner*',
-            labelText: 'Account Owner*',
-
-            border: OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(10))
-            ),
-          ),
-        );
-      },
-      optionsViewBuilder: (BuildContext context,
-          AutocompleteOnSelected<EmployeeMemberModel> onSelected,
-          Iterable<EmployeeMemberModel> suggestions) {
-        return Align(
-          alignment: Alignment.topLeft,
-          child: Material(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-            elevation: 4.0,
-            child: Container(
-              width: size.width*.9,
-              constraints: BoxConstraints(maxHeight: 200),
-              child: ListView.builder(
-                shrinkWrap: true,
-                itemCount: suggestions.length,
-                itemBuilder: (context, index) {
-                  final EmployeeMemberModel option =
-                  suggestions.elementAt(index);
-                  return GestureDetector(
-                    onTap: () {
-                      onSelected(option);
-                    },
-                    child: Container(
-                      padding: EdgeInsets.all(8.0),
-                      child: Text(
-                        option.fullName.toString(),
-                        style: GoogleFonts.poppins(
-                            color: AllColors.blackColor,
-                            fontWeight: FontWeight.w300,
-                            fontSize: AllFontSize
-                                .sisxteen // Change the text color here
-                        ),
-                      ),
-                    ),
-                  );
+    return IgnorePointer(
+      ignoring:  accountMaster_page_controller.Account_Master_list != null &&
+          accountMaster_page_controller.Account_Master_list.isNotEmpty && accountMaster_page_controller.Account_Master_list[0].isManager == 1 &&
+          accountMaster_page_controller.view=='Account'?false:true,
+      child: Autocomplete<EmployeeMemberModel>(
+        displayStringForOption: _displayEmpMemberForOption,
+        optionsBuilder: (TextEditingValue textEditingValue) {
+          if(accountMaster_page_controller.view=='VIEW'){
+            accountMaster_page_controller.employee_Member_list.value=[];
+            return accountMaster_page_controller.employee_Member_list;
+          }
+          if (textEditingValue.text.isEmpty) {
+            return accountMaster_page_controller.employee_Member_list;
+            // return const Iterable<VehicleTypeResponse>.empty();
+          }
+          return accountMaster_page_controller.employee_Member_list
+              .where((EmployeeMemberModel option) {
+            return option.fullName
+                .toString()
+                .toLowerCase()
+                .contains(textEditingValue.text.toLowerCase());
+          }).toList();
+        },
+        onSelected: (EmployeeMemberModel selection) {
+          print(selection.loginEmailId);
+          // Update the TextField with the selected
+          accountMaster_page_controller.account_owner_Controller.text =
+              _displayEmpMemberForOption(selection).toString();
+          accountMaster_page_controller.AccountOwner = selection.loginEmailId!;
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            accountMaster_page_controller.getEmployee(accountMaster_page_controller.AccountOwner);
+          });
+        },
+        fieldViewBuilder: (BuildContext context, TextEditingController controller,
+            FocusNode focusNode, VoidCallback onFieldSubmitted) {
+          return TextField(
+            /*readOnly: accountMaster_page_controller.Account_Master_list != null &&
+                accountMaster_page_controller.Account_Master_list.isNotEmpty && accountMaster_page_controller.Account_Master_list[0].isManager == 1 &&
+                accountMaster_page_controller.view=='Account'?false:true,*/
+            cursorColor: AllColors.primaryDark1,
+            controller: controller
+              ..text = accountMaster_page_controller.account_owner_Controller.text,
+            focusNode: focusNode,
+            //onSubmitted: onFieldSubmitted,
+            decoration: InputDecoration(
+              suffixIcon: IconButton(
+                color: AllColors.primaryDark1,
+                onPressed: (){
+                  if(focusNode.hasFocus){
+                    focusNode.unfocus();
+                  }else{
+                    focusNode.requestFocus();
+                  }
                 },
+                icon: Icon(Icons.arrow_drop_down),
+              ),
+              contentPadding: EdgeInsets.symmetric(
+                  vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+              hintText: 'Account Owner*',
+              labelText: 'Account Owner*',
+
+              border: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(10))
               ),
             ),
-          ),
-        );
-      },
+          );
+        },
+        optionsViewBuilder: (BuildContext context,
+            AutocompleteOnSelected<EmployeeMemberModel> onSelected,
+            Iterable<EmployeeMemberModel> suggestions) {
+          return Align(
+            alignment: Alignment.topLeft,
+            child: Material(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+              elevation: 4.0,
+              child: Container(
+                width: size.width*.9,
+                constraints: BoxConstraints(maxHeight: 200),
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: suggestions.length,
+                  itemBuilder: (context, index) {
+                    final EmployeeMemberModel option =
+                    suggestions.elementAt(index);
+                    return GestureDetector(
+                      onTap: () {
+                        onSelected(option);
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text(
+                          option.fullName.toString(),
+                          style: GoogleFonts.poppins(
+                              color: AllColors.blackColor,
+                              fontWeight: FontWeight.w300,
+                              fontSize: AllFontSize
+                                  .sisxteen // Change the text color here
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
+          );
+        },
+      ),
     );
   }
 
@@ -2064,122 +2069,124 @@ class UpdateAccountMaster extends StatelessWidget{
   }
 
   Widget bindComProfTypeDropDown(context){
-    return Autocomplete<CompanyTypeModel>(
-      initialValue: TextEditingValue(
-        text: accountMaster_page_controller.comp_prof_type_controller.value.text,
-      ),
-      displayStringForOption: _displayCompProfileTypeForOption,
-      optionsBuilder: (TextEditingValue textEditingValue) async {
-        if(accountMaster_page_controller.view=='VIEW'){
-          accountMaster_page_controller.get_Comp_Profile_type_list.value=[];
-          return accountMaster_page_controller.get_Comp_Profile_type_list;
-        }
-        if (textEditingValue.text.isEmpty) {
+    return IgnorePointer(
+      ignoring: accountMaster_page_controller.view=='Account'?false:true,
+      child: Autocomplete<CompanyTypeModel>(
+        initialValue: TextEditingValue(
+          text: accountMaster_page_controller.comp_prof_type_controller.value.text,
+        ),
+        displayStringForOption: _displayCompProfileTypeForOption,
+        optionsBuilder: (TextEditingValue textEditingValue) async {
+          if(accountMaster_page_controller.view=='VIEW'){
+            accountMaster_page_controller.get_Comp_Profile_type_list.value=[];
+            return accountMaster_page_controller.get_Comp_Profile_type_list;
+          }
+          if (textEditingValue.text.isEmpty) {
+            return await accountMaster_page_controller.getCompanyProfileTypeApi(textEditingValue.text);
+            //return accountMaster_page_controller.get_Comp_Profile_type_list;
+            // return const Iterable<VehicleTypeResponse>.empty();
+          }
+          /*return accountMaster_page_controller.get_Comp_Profile_type_list
+              .where((CompanyTypeModel option) {
+            return option.description
+                .toString()
+                .toLowerCase()
+                .contains(textEditingValue.text.toLowerCase());
+          }).toList();*/
+
           return await accountMaster_page_controller.getCompanyProfileTypeApi(textEditingValue.text);
-          //return accountMaster_page_controller.get_Comp_Profile_type_list;
-          // return const Iterable<VehicleTypeResponse>.empty();
-        }
-        /*return accountMaster_page_controller.get_Comp_Profile_type_list
-            .where((CompanyTypeModel option) {
-          return option.description
-              .toString()
-              .toLowerCase()
-              .contains(textEditingValue.text.toLowerCase());
-        }).toList();*/
+        },
+        onSelected: (CompanyTypeModel selection) {
+          print(selection.description);
+          // Update the TextField with the selected
+          accountMaster_page_controller.comp_prof_type_controller.value.text =
+              _displayCompProfileTypeForOption(selection).toString();
+          if(accountMaster_page_controller.comp_prof_type_controller.value.text == 'Others'){
+            accountMaster_page_controller.compProfileRemrk.value = true;
+          }else{
+            accountMaster_page_controller.compProfileRemrk.value = false;
+            //accountMaster_page_controller.getCompanyProfileSubTypeApi(/*accountMaster_page_controller.comp_prof_type_controller.value.text*/);
 
-        return await accountMaster_page_controller.getCompanyProfileTypeApi(textEditingValue.text);
-      },
-      onSelected: (CompanyTypeModel selection) {
-        print(selection.description);
-        // Update the TextField with the selected
-        accountMaster_page_controller.comp_prof_type_controller.value.text =
-            _displayCompProfileTypeForOption(selection).toString();
-        if(accountMaster_page_controller.comp_prof_type_controller.value.text == 'Others'){
-          accountMaster_page_controller.compProfileRemrk.value = true;
-        }else{
-          accountMaster_page_controller.compProfileRemrk.value = false;
-          //accountMaster_page_controller.getCompanyProfileSubTypeApi(/*accountMaster_page_controller.comp_prof_type_controller.value.text*/);
+          }
+          //accountMaster_page_controller.getCompanyProfileSubTypeApi();
+        },
+        fieldViewBuilder: (BuildContext context, TextEditingController controller,
+            FocusNode focusNode, VoidCallback onFieldSubmitted) {
+          return Container(
+            decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10)
+            ),
+            child: TextField(
+              cursorColor: AllColors.primaryDark1,
+              controller: controller,
+              focusNode: focusNode,
+              //onSubmitted: onFieldSubmitted,
+              decoration: InputDecoration(
+                suffixIcon: IconButton(
+                  color: AllColors.primaryDark1,
+                  onPressed: (){
+                    if(focusNode.hasFocus){
+                      focusNode.unfocus();
+                    }else{
+                      focusNode.requestFocus();
+                    }
+                  },
+                  icon: Icon(Icons.arrow_drop_down),
+                ),
+                contentPadding: EdgeInsets.symmetric(
+                    vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+                hintText: 'Company Profile Type*',
+                labelText: 'Company Profile Type*',
 
-        }
-        //accountMaster_page_controller.getCompanyProfileSubTypeApi();
-      },
-      fieldViewBuilder: (BuildContext context, TextEditingController controller,
-          FocusNode focusNode, VoidCallback onFieldSubmitted) {
-        return Container(
-          decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(10)
-          ),
-          child: TextField(
-            readOnly: accountMaster_page_controller.view=='Account'?false:true,
-            cursorColor: AllColors.primaryDark1,
-            controller: controller,
-            focusNode: focusNode,
-            //onSubmitted: onFieldSubmitted,
-            decoration: InputDecoration(
-              suffixIcon: IconButton(
-                color: AllColors.primaryDark1,
-                onPressed: (){
-                  if(focusNode.hasFocus){
-                    focusNode.unfocus();
-                  }else{
-                    focusNode.requestFocus();
-                  }
-                },
-                icon: Icon(Icons.arrow_drop_down),
-              ),
-              contentPadding: EdgeInsets.symmetric(
-                  vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-              hintText: 'Company Profile Type*',
-              labelText: 'Company Profile Type*',
-
-              border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(10))
+                border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(10))
+                ),
               ),
             ),
-          ),
-        );
-      },
-      optionsViewBuilder: (BuildContext context,
-          AutocompleteOnSelected<CompanyTypeModel> onSelected,
-          Iterable<CompanyTypeModel> suggestions) {
-        return Align(
-          alignment: Alignment.topLeft,
-          child: Material(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-            elevation: 4.0,
-            child: Container(
-              width: size.width*.75,
-              constraints: BoxConstraints(maxHeight: 200),
-              child: ListView.builder(
-                shrinkWrap: true,
-                itemCount: suggestions.length,
-                itemBuilder: (context, index) {
-                  final CompanyTypeModel option =
-                  suggestions.elementAt(index);
-                  return GestureDetector(
-                    onTap: () {
-                      onSelected(option);
-                    },
-                    child: Container(
-                      padding: EdgeInsets.all(8.0),
-                      child: Text(
-                        option.description.toString(),
-                        style: GoogleFonts.poppins(
-                            color: AllColors.blackColor,
-                            fontWeight: FontWeight.w300,
-                            fontSize: AllFontSize
-                                .sisxteen // Change the text color here
+          );
+        },
+        optionsViewBuilder: (BuildContext context,
+            AutocompleteOnSelected<CompanyTypeModel> onSelected,
+            Iterable<CompanyTypeModel> suggestions) {
+          return Align(
+            alignment: Alignment.topLeft,
+            child: Material(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+              elevation: 4.0,
+              child: Container(
+                width: size.width*.75,
+                constraints: BoxConstraints(maxHeight: 200),
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: suggestions.length,
+                  itemBuilder: (context, index) {
+                    final CompanyTypeModel option =
+                    suggestions.elementAt(index);
+                    return GestureDetector(
+                      onTap: () {
+                        onSelected(option);
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text(
+                          option.description.toString(),
+                          style: GoogleFonts.poppins(
+                              color: AllColors.blackColor,
+                              fontWeight: FontWeight.w300,
+                              fontSize: AllFontSize
+                                  .sisxteen // Change the text color here
+                          ),
                         ),
                       ),
-                    ),
-                  );
-                },
+                    );
+                  },
+                ),
               ),
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 
