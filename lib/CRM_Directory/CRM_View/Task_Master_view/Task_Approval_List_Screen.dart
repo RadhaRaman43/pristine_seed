@@ -60,46 +60,36 @@ class TaskApprovalListScreen extends StatelessWidget{
             )
         ),
         drawer: CustomDrawer(),
-        body: Obx((){
-          print("Loading show conti ${TaskMaster_page_controller.loading.value}");
-          if(TaskMaster_page_controller.loading.value){
-            print("show loading.......");
-            return const FullScreenLoader();
-          }else{
-            print("no.....show loading.......");
-            return Visibility(child: RefreshIndicator(
-              onRefresh: TaskMaster_page_controller.refreshList,
-              child: Container(
-                width: double.infinity,
-                height: double.infinity,
-                child: Column(
-                  children: [
-                    Obx(() {
-                      return Visibility(
-                        visible: TaskMaster_page_controller.loading.value,
-                        child: LinearProgressIndicator(
-                          backgroundColor: AllColors.primaryDark1,
-                          color: AllColors.textColor,
-                        ),
-                      );
+        body: RefreshIndicator(
+          onRefresh: TaskMaster_page_controller.refreshList,
+          child: Container(
+            width: double.infinity,
+            height: double.infinity,
+            child: Column(
+              children: [
+                Obx(() {
+                  return Visibility(
+                    visible: TaskMaster_page_controller.loading.value,
+                    child: LinearProgressIndicator(
+                      backgroundColor: AllColors.primaryDark1,
+                      color: AllColors.textColor,
+                    ),
+                  );
+                }),
+                Flexible(
+                  fit: FlexFit.loose,
+                  child: Container(
+                    padding: EdgeInsets.only(
+                        left: 2.0, top: 8.0, right: 2.0, bottom: 8.0),
+                    child: Obx(() {
+                      return BindCustomerListView(context);
                     }),
-                    Flexible(
-                      fit: FlexFit.loose,
-                      child: Container(
-                        padding: EdgeInsets.only(
-                            left: 2.0, top: 8.0, right: 2.0, bottom: 8.0),
-                        child: Obx(() {
-                          return BindCustomerListView(context);
-                        }),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            ),);
-          }
-
-        })
+                  ),
+                )
+              ],
+            ),
+          ),
+        )
       ),
 
     );

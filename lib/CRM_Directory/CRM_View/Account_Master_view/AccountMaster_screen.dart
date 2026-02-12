@@ -17,6 +17,7 @@ import '../../CRM_Models/AccountMaster_model/Employee_Member_Model.dart';
 import '../../CRM_Models/AccountMaster_model/cluster_modal.dart';
 import '../../CRM_Models/AccountMaster_model/getMasterTypeModel.dart';
 import '../../CRM_Models/AccountMaster_model/region_with_cluster_filter_modal.dart';
+import '../../CRM_Models/TaskMaster_model/company_type_modal.dart';
 import '../../CRM_VIewModels/account_master_vm/accountMasterVM.dart';
 
 class AccountmasterScreen extends StatelessWidget{
@@ -67,13 +68,14 @@ class AccountmasterScreen extends StatelessWidget{
                  //visible:accountMaster_page_controller.isAdminWritePermission=="0"  ? true:false ,
                  visible:accountMaster_page_controller.isHeadofficePermission!="1"|| accountMaster_page_controller.UserCode?.toLowerCase() == 'cce'  ?true:false ,
                  child: IconButton(onPressed: () {
+                   accountMaster_page_controller.yesNoValue.value="No";
                    accountMaster_page_controller.DraftId = '';
                    accountMaster_page_controller.account_type_controller.text='New Account';
                    accountMaster_page_controller.clearController();
                    accountMaster_page_controller.getCompanyProfileSubTypeApi();
                    accountMaster_page_controller.getCompanyProfileTypeApi("");
                    accountMaster_page_controller.getGeoPostalCodeApi(50,'');
-                   Get.toNamed(RoutesName.add_New_AccountMaster_screen, arguments: 'Create');
+                   Get.toNamed(RoutesName.add_New_AccountMaster_screen,arguments: 'Create');
                  }, icon: Icon(Icons.add)),
                );
               }),
@@ -86,11 +88,7 @@ class AccountmasterScreen extends StatelessWidget{
 
       ),
       drawer: CustomDrawer(),
-      body: Obx((){
-        if(accountMaster_page_controller.loading.value){
-          return const FullScreenLoader();
-        }
-        return RefreshIndicator(
+      body: RefreshIndicator(
           onRefresh: accountMaster_page_controller.refreshList,
           child: Container(
             width: double.infinity,
@@ -120,9 +118,7 @@ class AccountmasterScreen extends StatelessWidget{
               ],
             ),
           ),
-        );
-      })
-
+        ),
 
       ),
     );
@@ -519,7 +515,8 @@ class AccountmasterScreen extends StatelessWidget{
                               SizedBox(height: 10,),
                               bindData(context,'Phone No.',accountMaster_page_controller.PhoneNo_Controller),
                               SizedBox(height: 10,),
-                              bindData(context,'Company Profile Type',accountMaster_page_controller.comp_prof_type_controller),
+                              //bindData(context,'Company Profile Type',accountMaster_page_controller.comp_prof_type_controller),
+                              bindCompProfileTypeDropDown(context),
                               SizedBox(height: 10,),
                               bindData(context,'State Name',accountMaster_page_controller.stateName_controller),
                               SizedBox(height: 10,),
@@ -695,8 +692,8 @@ class AccountmasterScreen extends StatelessWidget{
           hintText: labelText,
           hintStyle: GoogleFonts.poppins(
               color: AllColors.lightblackColor,
-              fontWeight: FontWeight.w300,
-              fontSize: AllFontSize.ten),
+              fontWeight: FontWeight.w500,
+              fontSize: AllFontSize.sisxteen),
           labelStyle: GoogleFonts.poppins(
               color: AllColors.primaryDark1,
               fontWeight: FontWeight.w500,
@@ -714,7 +711,81 @@ class AccountmasterScreen extends StatelessWidget{
       },
     );
   }
+  bindCompProfileTypeDropDown(BuildContext context) {
+    return Obx(() {
+      if (accountMaster_page_controller.comp_prof_type_controller.value.text.isNotEmpty && accountMaster_page_controller.filterDataChecker.value=='1') {
+        List<String> nameList = accountMaster_page_controller.comp_prof_type_controller.value.text.split('|');
 
+        accountMaster_page_controller.selected_company_type_list.value =
+            List.generate(nameList.length, (index) {
+              return CompanyTypeModal(
+                description: nameList[index].trim(),
+              );
+            });
+      }
+      return DropdownSearch<CompanyTypeModal>.multiSelection(
+        items: accountMaster_page_controller.company_profile_type_list,
+        itemAsString: (CompanyTypeModal u) => u.description ?? "",
+        selectedItems: accountMaster_page_controller.selected_company_type_list,
+        dropdownDecoratorProps: DropDownDecoratorProps(
+          baseStyle: TextStyle(color: Colors.black),
+          dropdownSearchDecoration: InputDecoration(
+            filled: false,
+            labelText: accountMaster_page_controller.selected_company_type_list.isNotEmpty ? "Company Profile Type" : null,
+            hintText: "Company Profile Type",
+            labelStyle:GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontSize: AllFontSize.sisxteen,
+              fontWeight: FontWeight.w500),
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+          ),
+        ),
+        dropdownBuilder: (context, selectedItems) {
+          // Custom builder to just show comma-separated names
+          if (selectedItems.isEmpty) {
+            return Text(
+              "Company Profile Type",
+              style: GoogleFonts.poppins(
+                color: AllColors.primaryDark1, // Match your hint color
+                fontSize: AllFontSize.sisxteen,
+                fontWeight: FontWeight.w500,
+              ),
+            );
+          }
+          return SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Text(
+              selectedItems.map((e) => e.description).join(', '),
+              style: TextStyle(color: AllColors.primaryDark1,
+                  fontSize: AllFontSize.sisxteen,
+                  fontWeight: FontWeight.w400), // Only black text
+            ),
+          );
+        },
+        onChanged: (List<CompanyTypeModal> selectedList) {
+          accountMaster_page_controller.selected_company_type_list.value = selectedList;
+          accountMaster_page_controller.comp_prof_type_controller.value.text =
+              selectedList.map((e) => e.description).join('|');
+        },
+        popupProps: PopupPropsMultiSelection.dialog(
+          showSearchBox: true,
+          searchFieldProps: TextFieldProps(
+            decoration: InputDecoration(
+              contentPadding: EdgeInsets.only(top: 20, left: 12, right: 12),
+              // Top margin here
+              hintText: "Search...",
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+          ),
+          itemBuilder: (context, item, isSelected) => ListTile(
+            title: Text(item.description ?? ""),
+          ),
+        ),
+      );
+    });
+  }
 
   Widget bindAccountTypeDropDown(context) {
     return Container(
@@ -786,8 +857,13 @@ class AccountmasterScreen extends StatelessWidget{
           baseStyle: TextStyle(color: Colors.black),
           dropdownSearchDecoration: InputDecoration(
             filled: false,
+
             labelText: accountMaster_page_controller.SelectedEmployee_Member_list.isNotEmpty?"Account Owner":null,
             hintText: "Account Owner Name",
+            labelStyle: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontWeight: FontWeight.w500,
+              fontSize: AllFontSize.sisxteen),
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
           ),
         ),
@@ -795,7 +871,7 @@ class AccountmasterScreen extends StatelessWidget{
           // Custom builder to just show comma-separated names
           if (selectedItems.isEmpty) {
             return Text(
-              " Account Owner Name",
+              "Account Owner Name",
               style: GoogleFonts.poppins(
                 color: AllColors.primaryDark1, // Match your hint color
                 fontSize: AllFontSize.sisxteen,
@@ -807,7 +883,11 @@ class AccountmasterScreen extends StatelessWidget{
             scrollDirection: Axis.horizontal,
             child: Text(
               selectedItems.map((e) => e.fullName).join(', '),
-              style: TextStyle(color: Colors.black), // Only black text
+              style: TextStyle(
+              color: AllColors.primaryDark1,
+              fontWeight: FontWeight.w500,
+              fontSize: AllFontSize.sisxteen,
+            ), // Only black text
             ),
           );
         },
@@ -834,7 +914,8 @@ class AccountmasterScreen extends StatelessWidget{
 
           itemBuilder: (context, item, isSelected) =>
               ListTile(
-                title: Text(item.fullName??""),
+                title: Text(item.fullName??"",
+                ),
               ),
         ),
       );
@@ -970,6 +1051,11 @@ class AccountmasterScreen extends StatelessWidget{
       child: DropdownMenu<String>(
         width: size.width-18,
         controller:  accountMaster_page_controller.IsActive_controller,
+        textStyle: TextStyle(
+          color: AllColors.primaryDark1,
+          fontWeight: FontWeight.w400,
+          fontSize: AllFontSize.sisxteen,
+        ),
         label: Text(
           "Active",
           style: GoogleFonts.poppins(
@@ -1005,12 +1091,15 @@ class AccountmasterScreen extends StatelessWidget{
           accountMaster_page_controller.IsActive_controller.text =
               _displayIsActiveForOption(selection!).toString();
 
-
         },
 
         dropdownMenuEntries: accountMaster_page_controller.IsActiveTypeAllList.map<DropdownMenuEntry<String>>((String e) {
-          return DropdownMenuEntry<String>(value: e, label: e!,style: ButtonStyle(
-            foregroundColor: MaterialStateProperty.all<Color>(AllColors.primaryDark1),));
+          return DropdownMenuEntry<String>(
+              value: e,
+              label: e!,style:
+          ButtonStyle(
+            foregroundColor: MaterialStateProperty.all<Color>(AllColors.primaryDark1),
+          ));
         }).toList(),
       ),
     );
@@ -1312,13 +1401,16 @@ class AccountmasterScreen extends StatelessWidget{
                                 child: Text(
                                   'Select Clusters',
                                   style: GoogleFonts.poppins(
-                                      fontSize: 16, fontWeight: FontWeight.w600,color: AllColors.primaryDark1),
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w600,
+                                      color: AllColors.primaryDark1),
                                 ),
                               ),
 
                               IconButton(onPressed: () {
                                 Navigator.of(context).pop();
-                              }, icon: Icon(Icons.close,color: AllColors.primaryDark1,weight: 700,))
+                              }, icon: Icon(Icons.close,
+                                color: AllColors.primaryDark1,weight: 700,))
 
 
                             ],
@@ -1356,7 +1448,7 @@ class AccountmasterScreen extends StatelessWidget{
                           padding:
                           const EdgeInsets.symmetric(horizontal: 8.0),
                           child: CheckboxListTile(
-                            title: const Text('Select All'),
+                            title: Text(allSelected?'UnSelect All':"Select All"),
                             value: allSelected,
                             onChanged: (val) {
                               setState(() {
@@ -1439,7 +1531,11 @@ class AccountmasterScreen extends StatelessWidget{
         },
         child: InputDecorator(
           decoration: InputDecoration(
-            labelText: "Cluster Name", // 👈 Label restored here
+            labelText: "Cluster Name",
+            labelStyle: GoogleFonts.poppins(
+                color: AllColors.primaryDark1,
+                fontWeight: FontWeight.w500,
+                fontSize: AllFontSize.sisxteen),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
             ),
@@ -1453,15 +1549,19 @@ class AccountmasterScreen extends StatelessWidget{
                     ? Text(
                   "Select Cluster",
                   style: GoogleFonts.poppins(
-                    color: Colors.black,
-                    fontSize: AllFontSize.sisxteen,
+                      color: AllColors.primaryDark1,
+                      fontWeight: FontWeight.w500,
+                      fontSize: AllFontSize.sisxteen
                   ),
                 )
                     : SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Text(
                     selectedText,
-                    style: const TextStyle(color: Colors.black),
+                      style: GoogleFonts.poppins(
+                          color: AllColors.primaryDark1,
+                          fontWeight: FontWeight.w400,
+                          fontSize: AllFontSize.sisxteen),
                   ),
                 ),
               ),
@@ -1546,7 +1646,8 @@ class AccountmasterScreen extends StatelessWidget{
                                 child: Text(
                                   'Select Regions',
                                   style: GoogleFonts.poppins(
-                                      fontSize: 16, fontWeight: FontWeight.w600, color: AllColors.primaryDark1),
+                                      fontSize: 16, fontWeight: FontWeight.w600,
+                                      color: AllColors.primaryDark1),
                                 ),
                               ),
                               IconButton(onPressed: () {
@@ -1588,7 +1689,7 @@ class AccountmasterScreen extends StatelessWidget{
                           padding:
                           const EdgeInsets.symmetric(horizontal: 8.0),
                           child: CheckboxListTile(
-                            title: const Text('Select All'),
+                            title: Text(allSelected?'UnSelect All':"Select All"),
                             value: allSelected,
                             onChanged: (val) {
                               setState(() {
@@ -1674,7 +1775,11 @@ class AccountmasterScreen extends StatelessWidget{
         },
         child: InputDecorator(
           decoration: InputDecoration(
-            labelText: "Region Name", // 👈 Label like before
+            labelText: "Region Name",
+            labelStyle: GoogleFonts.poppins(
+                color: AllColors.primaryDark1,
+                fontWeight: FontWeight.w400,
+                fontSize: AllFontSize.sisxteen),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
             ),
@@ -1688,15 +1793,19 @@ class AccountmasterScreen extends StatelessWidget{
                     ? Text(
                   "Select Region",
                   style: GoogleFonts.poppins(
-                    color: Colors.grey.shade600,
-                    fontSize: AllFontSize.sisxteen,
+                      color: AllColors.primaryDark1,
+                      fontWeight: FontWeight.w500,
+                      fontSize: AllFontSize.sisxteen
                   ),
                 )
                     : SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Text(
                     selectedText,
-                    style: const TextStyle(color: Colors.black),
+                      style: GoogleFonts.poppins(
+                          color: AllColors.primaryDark1,
+                          fontWeight: FontWeight.w500,
+                          fontSize: AllFontSize.sisxteen)
                   ),
                 ),
               ),

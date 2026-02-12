@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:navigation_drawer_flutter/component/circular_loading.dart';
 import '../../../constants/app_colors.dart';
 import '../../../constants/app_font_size.dart';
 import '../../../constants/static_methods.dart';
@@ -144,80 +145,87 @@ class BusinessTourPlanDeatil extends StatelessWidget {
                 ],
               )),
           drawer: CustomDrawer(),
-          body: Column(
-            children: [
-              Obx(() {
-                return Visibility(
-                  visible: businessTourPlanController.loading.value,
-                  child: LinearProgressIndicator(
-                    backgroundColor: AllColors.primaryDark1,
-                    color: AllColors.textColor,
-                  ),
-                );
-              }),
-              Expanded(
-                  child: ListView(
-                children: [
-                  Obx(() {
-                    return BindHeaderData(context);
-                  }),
-                  Padding(
-                    padding:
-                        const EdgeInsets.only(left: 10.0, right: 10, top: 10),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          body: Obx((){
+            if(businessTourPlanController.loading.value){
+              return const FullScreenLoader();
+            }
+            return  Column(
+              children: [
+                Obx(() {
+                  return Visibility(
+                    visible: businessTourPlanController.loading.value,
+                    child: LinearProgressIndicator(
+                      backgroundColor: AllColors.primaryDark1,
+                      color: AllColors.textColor,
+                    ),
+                  );
+                }),
+                Expanded(
+                    child: ListView(
                       children: [
-                        Text(
-                          "Tour Lines",
-                          style: GoogleFonts.poppins(
-                            color: AllColors.primaryDark1,
-                            fontSize: AllFontSize.eighteen,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                        Visibility(
-                          visible: businessTourPlanController.isHeadOfficePermission!="1"&& businessTourPlanController.BusinessTourPlanDetails_list[0].status?.toUpperCase() ==  'PENDING',
-                          child: GestureDetector(
-                            onTap: () {
-                              businessTourPlanController.clearAllCreateLinePlanController();
-                              businessTourPlanController.getEmpMstEmailByApi();
-                              businessTourPlanController.getTourPlanDistrictTypeApi('');
-                              businessTourPlanController.getTourTypeApi();
-                              businessTourPlanController.getTourPlanAccountTypeApi("");
-                              Get.toNamed(RoutesName.AddTourLinesPage);
-                            },
-                            child: Container(
-                              child: Padding(
-                                padding: const EdgeInsets.all(7.0),
-                                child: Icon(
-                                  Icons.add,
+                        Obx(() {
+                          return BindHeaderData(context);
+                        }),
+                        Padding(
+                          padding:
+                          const EdgeInsets.only(left: 10.0, right: 10, top: 10),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "Tour Lines",
+                                style: GoogleFonts.poppins(
                                   color: AllColors.primaryDark1,
+                                  fontSize: AllFontSize.eighteen,
+                                  fontWeight: FontWeight.w700,
                                 ),
                               ),
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(30),
-                                  border:
-                                      Border.all(color: AllColors.primaryDark1)),
-                            ),
+                              Visibility(
+                                visible: businessTourPlanController.isHeadOfficePermission!="1"&& businessTourPlanController.BusinessTourPlanDetails_list[0].status?.toUpperCase() ==  'PENDING',
+                                child: GestureDetector(
+                                  onTap: () {
+                                    businessTourPlanController.clearAllCreateLinePlanController();
+                                    businessTourPlanController.getEmpMstEmailByApi();
+                                    businessTourPlanController.getTourPlanDistrictTypeApi('');
+                                    businessTourPlanController.getTourTypeApi();
+                                    businessTourPlanController.getTourPlanAccountTypeApi("");
+                                    Get.toNamed(RoutesName.AddTourLinesPage);
+                                  },
+                                  child: Container(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(7.0),
+                                      child: Icon(
+                                        Icons.add,
+                                        color: AllColors.primaryDark1,
+                                      ),
+                                    ),
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(30),
+                                        border:
+                                        Border.all(color: AllColors.primaryDark1)),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Divider(
+                          height: 1,
+                          color: AllColors.bluegrayColor,
+                        ),
+                        Obx(() {
+                          return bindTourLinesData(context);
+                        }),
                       ],
-                    ),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Divider(
-                    height: 1,
-                    color: AllColors.bluegrayColor,
-                  ),
-                  Obx(() {
-                    return bindTourLinesData(context);
-                  }),
-                ],
-              ))
-            ],
-          ),
+                    ))
+              ],
+            );
+          }),
+
+
         ));
   }
 

@@ -136,14 +136,27 @@ class PendingDsarDashboardViewscreen extends StatelessWidget{
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 Text(
-                                  'Task Due ${dashboard_view_Controller.character.value}',
+                                  'Pending DSAR ${dashboard_view_Controller.character.value}',
                                   style: GoogleFonts.poppins(
                                     color: AllColors.primaryDark1,
                                     fontSize: AllFontSize.fourtine,
                                     fontWeight: FontWeight.w700,
                                   ),
                                 ),
-                                SizedBox(width: 10,),
+                                const SizedBox(width: 10,),
+                               Obx((){
+                                  return  Text(
+                                    'Date Ranges : ${dashboard_view_Controller.formattedStartDate} - '
+                                        '${dashboard_view_Controller.formattedEndDate}',
+                                    style: GoogleFonts.poppins(
+                                      color: AllColors.blackColor,
+                                      fontSize: AllFontSize.twelve,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  );
+                                }),
+                                const SizedBox(width: 10,),
+
                                 Text(
                                   '${dashboard_view_Controller.character.value} : Type Of Calls (R)',
                                   style: GoogleFonts.poppins(

@@ -65,7 +65,6 @@ class Utils{
         context: Get.overlayContext!,
         title: Text(title, style: TextStyle(color: AllColors.whiteColor,),),
         description: Text(message, style: TextStyle(color: AllColors.whiteColor,),),
-
         backgroundColor: AllColors.green,
         autoCloseDuration: const Duration(seconds: 5),
         icon:Icon(Icons.check, color: AllColors.whiteColor,),

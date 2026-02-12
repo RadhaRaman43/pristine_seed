@@ -29,7 +29,6 @@ class AppUrl {
 
 
   //todo for service indent....
-
   static const String serviceIndentGet = "$BASE_URL/api/ServiceIndent/IndentHeaderListGet";
   static const String serviceIndentHeaderCreate = "$BASE_URL/api/ServiceIndent/IndentHeaderCreate";
   static const String serviceIndentLineCreate = "$BASE_URL/api/ServiceIndent/IndentLineAdd";

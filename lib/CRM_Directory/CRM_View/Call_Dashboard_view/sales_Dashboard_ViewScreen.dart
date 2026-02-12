@@ -129,7 +129,7 @@ class SalesDashboardViewscreen extends StatelessWidget{
 
                         ),
                       ),
-                      SizedBox(height: 10,),
+                      const  SizedBox(height: 10,),
                       Container(
                         decoration: BoxDecoration(
                           border: Border.all(
@@ -158,7 +158,7 @@ class SalesDashboardViewscreen extends StatelessWidget{
                         ),
                       ),
 
-                      SizedBox(height: 10,),
+                      const SizedBox(height: 10,),
 
                       Card(
                         color: AllColors.whiteColor,
@@ -214,7 +214,7 @@ class SalesDashboardViewscreen extends StatelessWidget{
                           ],
                         ),
                       ),
-                      SizedBox(height: 10,),
+                      const SizedBox(height: 10,),
 
                       Card(
                         color: AllColors.whiteColor,
@@ -274,7 +274,7 @@ class SalesDashboardViewscreen extends StatelessWidget{
                         ),
                       ),
 
-                      SizedBox(height: 10,),
+                     const SizedBox(height: 10,),
 
                       Card(
                         color: AllColors.whiteColor,
@@ -345,7 +345,7 @@ class SalesDashboardViewscreen extends StatelessWidget{
                         ),
                       ),
 
-                      SizedBox(height: 10,),
+                      const SizedBox(height: 10,),
 
                       Card(
                         color: AllColors.whiteColor,
@@ -409,6 +409,24 @@ class SalesDashboardViewscreen extends StatelessWidget{
                           ],
                         ),
                       ),
+
+                      const SizedBox(height: 10,),
+
+
+                     Obx((){
+                       return Visibility(
+                         visible: dashboard_view_Controller.messageVisibilty.value,
+                         child: Text(
+                           "Please Select Filter for View data.....",
+                           style: GoogleFonts.poppins(
+                             color: AllColors.redColor,
+                             fontSize: AllFontSize.twentee,
+                             fontWeight: FontWeight.w600,
+                           ),),
+                       );
+                     })
+
+
 
                     ],
                   ),
@@ -546,7 +564,7 @@ class SalesDashboardViewscreen extends StatelessWidget{
                           return ActionChip(
                             elevation: 2,
                             padding: EdgeInsets.symmetric(horizontal: 30, vertical: 2),
-                            backgroundColor:dashboard_view_Controller.FilterFunnel.value=="All"
+                            backgroundColor:dashboard_view_Controller.FilterFunnel.value==""
                                 ? AllColors.primaryDark1
                                 : AllColors.grayColor,
                             shadowColor: Colors.black,
@@ -556,7 +574,7 @@ class SalesDashboardViewscreen extends StatelessWidget{
                             label: Text(
                               'All',
                               style: GoogleFonts.poppins(
-                                color: dashboard_view_Controller.FilterFunnel.value=="All"
+                                color: dashboard_view_Controller.FilterFunnel.value==""
                                     ? AllColors.whiteColor
                                     : AllColors.primaryDark1,
                                 fontSize: AllFontSize.fourtine,
@@ -564,7 +582,7 @@ class SalesDashboardViewscreen extends StatelessWidget{
                               ),
                             ),
                             onPressed: () {
-                              dashboard_view_Controller.FilterFunnel.value="All";
+                              dashboard_view_Controller.FilterFunnel.value="";
                               dashboard_view_Controller.salesDashboardData();
                             },
                           );

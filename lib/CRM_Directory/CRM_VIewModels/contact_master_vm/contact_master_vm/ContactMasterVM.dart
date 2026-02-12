@@ -85,12 +85,12 @@ class ContactMasterVM extends GetxController{
 
   }
 
-  getDecisionRoleMaster() {
-    this.loading.value = true;
+  getDecisionRoleMaster() async{
+    try {
     Map<String, String> data = {'flag': "decision_role"};
+    this.loading.value = true;
+    String value = await _api.getMasterTypeApiHit(data, sessionManagement);
 
-    _api.getMasterTypeApiHit(data, sessionManagement).then((value) {
-      try {
         List<GetMasterTypeModel> emp_masterResponse =
         (json.decode(value) as List<dynamic>)
             .map((i) => GetMasterTypeModel.fromJson(i as Map<String, dynamic>))
@@ -98,26 +98,26 @@ class ContactMasterVM extends GetxController{
 
         if (emp_masterResponse.isNotEmpty && emp_masterResponse[0]?.condition.toString() == "True") {
           isHeDecisionMakerList.value = emp_masterResponse[0].list!;
+          loading.value = false;
           print('RoleList.....${isHeDecisionMakerList.length.toString()}');
         } else {
+          loading.value = false;
           isHeDecisionMakerList.value = [];
           print('RoleList2.....${isHeDecisionMakerList.length.toString()}');
         }
       } catch (e) {
+       loading.value = false;
         isHeDecisionMakerList.value = [];
         print('catch....${e.toString()}');
       }
-    }).onError((error, stackTrace) {
-      isHeDecisionMakerList.value = [];
-      Utils.sanckBarError('Api Exception onError', error.toString());
-      print('catchEx....${error.toString()}');
-    }).whenComplete(() {
-      this.loading.value = false;
-    });
+      /*finally{
+        loading.value=false;
+      }*/
+
   }
 
-  void getContactMasterList(int pageNumber, String account_name, String contact_name, String depart_name) {
-
+  void getContactMasterList(int pageNumber, String account_name, String contact_name, String depart_name) async{
+    try{
       Map<String, String> data={
         "filter_contact_name": contact_name,
         "filter_account_code":account_code_controller.text.isEmpty?"":account_code_controller.value.text,
@@ -129,40 +129,38 @@ class ContactMasterVM extends GetxController{
         "row_per_page": rowsPerPage.toString(),
         "page_number": pageNumber.toString()
       };
-      loading.value=true;
       print("data is ${data}");
-      _api.contactMstGetList(data, sessionManagement).then((onValue){
+      loading.value=true;
+      String onValue = await _api.contactMstGetList(data, sessionManagement);
         final jsonResponse = json.decode(onValue);
-        try{
+
           if(jsonResponse is List){
             List<ContactMstGetListModal> response = jsonResponse.map((e) => ContactMstGetListModal.fromJson(e)).toList();
             if(response!= null && response.length>0 && response[0].condition=="True"){
+
               if(pageNumber==0){
                 contact_master_list.clear();
               }
               contact_master_list.addAll(response);
               total_rows=int.parse(contact_master_list[0].totalRows!);
               print('Total rows ${total_rows}');
+              loading.value = false;
             }else {
+              loading.value = false;
               contact_master_list.value=[];
 
             }
           } else {
+            loading.value = false;
             Utils.showErrorToastification("Api Response!", jsonResponse);
           }
         }catch(e){
+      loading.value = false;
           print(e);
-        }finally{
-          loading.value = false;
         }
-
-      },
-      ).onError((error, stackTrace) {
-          print(error);
-        },
-      ).whenComplete(() {
-        loading.value = false;
-      },);
+        /*finally{
+          loading.value=false;
+        }*/
 
   }
 
@@ -170,7 +168,7 @@ class ContactMasterVM extends GetxController{
     /*if (text == '') {
       return const Iterable<CompanyTypeModel>.empty();
     }*/
-    loading.value=true;
+    try {
     Map data = {
       "filter_account_name": text,
       "filter_account_owner": "",
@@ -190,11 +188,9 @@ class ContactMasterVM extends GetxController{
       "filter_email_id": "",
       "filter_phone_no": ""
     };
-    print("Complany Data....${data}");
-    String customer_response =await  _api.AccountMasterGetApiHit(data, sessionManagement);
-    try {
-      final jsonResponse = json.decode(customer_response);
 
+    String customer_response =await  _api.AccountMasterGetApiHit(data, sessionManagement);
+      final jsonResponse = json.decode(customer_response);
       if (jsonResponse is List) {
         print(jsonResponse);
         List<AccountMasterModel> response =
@@ -203,9 +199,7 @@ class ContactMasterVM extends GetxController{
         if (response[0].condition == 'True') {
           print("Complany type....${jsonResponse}");
           Account_Master_list.value = response;
-
         } else {
-
           Account_Master_list.value= [];
         }
       } else {
@@ -216,23 +210,20 @@ class ContactMasterVM extends GetxController{
       Utils.sanckBarException('Exception!', e.toString());
       Account_Master_list.value = [];
     }
-    finally{
-      loading.value=false;
-    }
     return  Account_Master_list.value;
   }
 
-  getAccMasterBuyCodeApi(String? accountCode) {
+  getAccMasterBuyCodeApi(String? accountCode) async {
+    try{
     Map<String , String> data = {
       "account_code": accountCode.toString()
     };
     print(data);
     loading.value = true;
-    _api.getAccountMasterGetByCodeApiHit(data, sessionManagement).then(
-          (value) {
+    String value = await _api.getAccountMasterGetByCodeApiHit(data, sessionManagement);
         print(value);
         final JsonResponse = json.decode(value);
-        try{
+
           if (JsonResponse is List) {
             List<AccountMasterGetByCodeModel> response =
             JsonResponse.map((e) => AccountMasterGetByCodeModel.fromJson(e))
@@ -240,6 +231,7 @@ class ContactMasterVM extends GetxController{
             if (response != null &&
                 response.length > 0 &&
                 response[0].condition == "True") {
+              loading.value = false;
               AccountMasterGetCode_list.value=response;
               if(AccountMasterGetCode_list[0].permanentAddress != null){
                 FullAddress_Controller.value.text = AccountMasterGetCode_list[0].permanentAddress!.address! + ", "
@@ -252,101 +244,91 @@ class ContactMasterVM extends GetxController{
               }
 
             } else {
+              loading.value = false;
               AccountMasterGetCode_list.value=[];
               Utils.showErrorToastification(
                   "Error!", "No Data Found");
               //service_installation_details_list.value=[];
             }
           } else {
-
+            loading.value = false;
             // service_indent_header_list.value = [];
             Utils.showExceptionToastification("Api Error!", JsonResponse);
           }
         }catch(e){
-          print(e);
-        }finally{
           loading.value = false;
-
+          print(e);
         }
-      },
-    ).onError(
-          (error, stackTrace) {
-        loading.value = false;
-        print(error);
-        //service_indent_header_list.value = [];
-      },
-    ).whenComplete(() {
-      loading.value = false;
-    },);
+       /* finally{
+          loading.value=false;
+        }*/
+
   }
 
 
 
-  getDepartNameList(){
+  getDepartNameList() async{
     try{
       Map<String, String> data={
         "flag": "Get",
         "created_by": email
       };
       loading.value=true;
-      _api.departmentGetInsert(data, sessionManagement).then((onValue){
+      String onValue = await _api.departmentGetInsert(data, sessionManagement);
         final jsonResponse = json.decode(onValue);
         if(jsonResponse is List){
           List<DepartNameModal> response = jsonResponse.map((e) => DepartNameModal.fromJson(e)).toList();
           if(response!= null && response.length>0 && response[0].condition=="True"){
             loading.value = false;
             department_name_list.value=response;
-
           }else {
             loading.value = false;
             Account_Master_list.value=[];
-
           }
-        } else {
-          loading.value = false;
-
         }
-      },
-      ).onError(
-            (error, stackTrace) {
-          print(error);
-        },
-      );
     }catch(e){
       loading.value = false;
       print(e);
     }
+   /* finally{
+      loading.value = false;
+    }*/
   }
 
   resetAllContactCreativeField(String flag){
     updateContact=false;
     pageNumber=0;
-    if(flag == 'Card'){
-      //print('Account name....${account_vm_controller.view_contract_list[0].accountName??""}');
-      account_name_controller.text = account_vm_controller.account_name_controller.text;
-    }else if(flag == 'Icon'){
-      account_name_controller.clear();
+    try {
+      if (flag == 'Card') {
+        account_name_controller.text = account_vm_controller.account_name_controller.text;
+      } else if (flag == 'Icon') {
+
+        account_name_controller.clear();
+      }
+      //account_name_controller.clear();
+      FullAddress_Controller.value.clear();
+      contact_name_controller.clear();
+      depart_name_controller.clear();
+      phone_no_controller.clear();
+      emailId_controller.clear();
+      alternate_no_controller.clear();
+      reporting_person_controller.clear();
+      contact_title_controller.clear();
+      designation_name_controller.clear();
+      IsHeDecisionMakerController.value.clear();
     }
-    //account_name_controller.clear();
-    FullAddress_Controller.value.clear();
-    contact_name_controller.clear();
-    depart_name_controller.clear();
-    phone_no_controller.clear();
-    emailId_controller.clear();
-    alternate_no_controller.clear();
-    reporting_person_controller.clear();
-    contact_title_controller.clear();
-    designation_name_controller.clear();
-    IsHeDecisionMakerController.value.clear();
+    catch(e){
+      print('reset field error ${e.toString()}');
+    }
   }
 
-  createNewContactMstApi(String flag){
-    if(account_name_controller.text.isEmpty){
-      Utils.sanckBarError('Account Name!', "Please Select Account Name");
+  createNewContactMstApi(String flag) async{
+    if(account_name_controller.text.isEmpty || account_name_controller.text==null){
+      Utils.sanckBarError('Account Name!', "Please Select Customer Name");
       return ;
     }
     if(contact_name_controller.text.isEmpty){
-      Utils.sanckBarError('Contact Name!', "Please Fill Contact Name");
+      Utils.sanckBarError('Contact Name!', "Please Enter Contact Name");
       return ;
     }
     if(phone_no_controller.text.isNotEmpty ){
@@ -388,12 +370,12 @@ class ContactMasterVM extends GetxController{
       print('fuul add ${FullAddress_Controller.value.text}');
       print("creative data is ${data}");
       loading.value=true;
-      _api.ContactMstUploader(data, sessionManagement).then((onValue){
+      String onValue = await _api.ContactMstUploader(data, sessionManagement);
         final jsonResponse = json.decode(onValue);
         if(jsonResponse is List){
           List<ContactMstGetListModal> response = jsonResponse.map((e) => ContactMstGetListModal.fromJson(e)).toList();
           if(response!= null && response.length>0 && response[0].condition=="True"){
-            loading.value = false;
+
             contact_master_list.value=response;
 
             resetAllContactCreativeField('Icon');
@@ -406,41 +388,36 @@ class ContactMasterVM extends GetxController{
               account_vm_controller.getContactMasterList(0, account_name_controller.text.toString(), '', accountCode.value.toString());
             }
 
+            loading.value = false;
+
             Utils.showToastification('Success!', response[0].message!);
             //Get.offAllNamed(RoutesName.contactMaster_screen);
 
           }else {
             print("${response[0].message}");
-            loading.value = false;
             contact_master_list.value=[];
             Utils.showErrorToastification('Error', response[0].message.toString());
             pageNumber=0;
             getContactMasterList(pageNumber,"","","");
-
+            loading.value = false;
           }
         } else {
           Utils.sanckBarError('Error!', jsonResponse);
           loading.value = false;
-
         }
-      },
-      ).onError(
-            (error, stackTrace) {
-              loading.value = false;
-          print('Api error is ${error}');
-          Utils.sanckBarError('Api error!', error.toString());
-        },
-      );
     }catch(e){
       loading.value = false;
       print(e);
     }
+   /* finally{
+      loading.value = false;
+    }*/
   }
+
   upDateContact(String flag, int index){
     updateContact=true;
     designation_dropDown.value=true;
-    if(flag == 'OutSide'){
-      print('Flage...${flag}');
+    if(flag == 'OutSide'){print('Flage...${flag}');
       contact_code=contact_master_list[index].contactCode?? "";
       account_name_controller.text=contact_master_list[index].accountName?? "";
       accountCode.value=contact_master_list[index].accountCode??"";
@@ -455,7 +432,8 @@ class ContactMasterVM extends GetxController{
     contact_code_controller.text=contact_master_list[index].contactCode ?? "";
     FullAddress_Controller.value.text=contact_master_list[index].fullAddress ?? "";
     IsHeDecisionMakerController.value.text=contact_master_list[index].contactRole??"";
-    }else if(flag == 'Inside'){
+    }
+    else if(flag == 'Inside'){
       contact_code=account_vm_controller.view_contract_list[index].contactCode?? "";
       account_name_controller.text=account_vm_controller.view_contract_list[index].accountName?? "";
       contact_name_controller.text=account_vm_controller.view_contract_list[index].contactName?? "";
@@ -477,7 +455,7 @@ class ContactMasterVM extends GetxController{
     Get.toNamed(RoutesName.addNewContactMaster_screen);
   }
 
-  getDesignationList(){
+  getDesignationList() async{
     try{
       Map<String, String> data={
         "dept_name": depart_name_controller.text,
@@ -485,36 +463,31 @@ class ContactMasterVM extends GetxController{
       };
       print('designation payload ${data}');
       loading.value=true;
-      _api.DesignationGet(data, sessionManagement).then((onValue){
+      String onValue = await _api.DesignationGet(data, sessionManagement);
         final jsonResponse = json.decode(onValue);
         print('value is ${onValue}');
         if(jsonResponse is List){
           List<DesignationModal> response = jsonResponse.map((e) => DesignationModal.fromJson(e)).toList();
           if(response!= null && response.length>0 && response[0].condition=="True"){
-            loading.value = false;
             designation_name_list.value=response;
-
-          }else {
             loading.value = false;
+          }else {
             designation_name_list.value=[];
-
+            loading.value = false;
           }
         } else {
           loading.value = false;
           designation_name_list.value=[];
           Utils.showErrorToastification("Error!", jsonResponse);
         }
-      },
-      ).onError((error, stackTrace) {
-        loading.value = false;
-          print('Api Error $error');
-          Utils.showExceptionToastification("Api Error!", error.toString());
-        },
-      );
+
     }catch(e){
       loading.value = false;
       print(e);
     }
+    /*finally{
+      loading.value = false;
+    }*/
   }
 
 
@@ -528,7 +501,8 @@ class ContactMasterVM extends GetxController{
     phone_no_controller.clear();
   }
 
-  ContactMstDelete(int index) {
+  ContactMstDelete(int index) async{
+    try {
     Map data = {
       "account_code": contact_master_list[index].accountCode,
       "contact_code": contact_master_list[index].contactCode,
@@ -536,8 +510,7 @@ class ContactMasterVM extends GetxController{
     };
     print(data);
     loading.value = true;
-    try {
-      _api.ContactMstDelete(data, sessionManagement).then((value) {
+      String value = await _api.ContactMstDelete(data, sessionManagement);
         print(value);
         final JsonResponse = json.decode(value);
         if (JsonResponse is List) {
@@ -555,20 +528,16 @@ class ContactMasterVM extends GetxController{
           }
         } else {
           loading.value = false;
-          // service_indent_header_list.value = [];
           Utils.showExceptionToastification("Api Error!", JsonResponse);
         }
-      },
-      ).onError(
-            (error, stackTrace) {
-          print(error);
-          //service_indent_header_list.value = [];
-        },
-      );
+
     } catch (e) {
       loading.value = false;
       print(e);
     }
+   /* finally{
+      loading.value = false;
+    }*/
   }
 
 

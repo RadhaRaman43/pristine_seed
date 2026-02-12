@@ -79,7 +79,8 @@ class TaskMasterScreen extends StatelessWidget {
                 Obx((){
                   return  Visibility(
                     //visible: TaskMaster_page_controller.isAdminWritePermission.value == '0'?true:false,
-                    visible:TaskMaster_page_controller.isHeadofficePermission.value!="1"  ? true:false ,
+                    visible:TaskMaster_page_controller.isHeadofficePermission.value!="1" &&
+                        TaskMaster_page_controller.isAdminWritePermission.value=="0"? true:false ,
                     child: IconButton(onPressed: () {
                       //TaskMaster_page_controller.clearCreateTaskController();
                       TaskMaster_page_controller.resetAllFieldOfFilter();
@@ -91,9 +92,6 @@ class TaskMasterScreen extends StatelessWidget {
                     }, icon: Icon(Icons.add)),
                   );
                 }),
-
-
-
                 IconButton(onPressed: () {
                   /*TaskMaster_page_controller.Task_status_controller.text = "All";
                   //TaskMaster_page_controller.isInfraLeadFilterController.text = "All";
@@ -107,10 +105,7 @@ class TaskMasterScreen extends StatelessWidget {
             )
         ),
         drawer: CustomDrawer(),
-        body: Obx((){
-          if(TaskMaster_page_controller.loading.value)
-            return const FullScreenLoader();
-          return Visibility(child: RefreshIndicator(
+        body: RefreshIndicator(
             onRefresh: TaskMaster_page_controller.refreshList,
             child: Container(
               width: double.infinity,
@@ -509,8 +504,7 @@ class TaskMasterScreen extends StatelessWidget {
                 ],
               ),
             ),
-          ));
-        })
+          ),
 
       ),
     );

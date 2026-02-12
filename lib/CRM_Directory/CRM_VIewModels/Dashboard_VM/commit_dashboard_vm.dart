@@ -233,7 +233,7 @@ class CommitDashboardVm extends GetxController{
     if (IsCommit_controller.value.text.isNotEmpty) {
       if(IsCommit_controller.value.text == 'ALL'){
         isCommitForApi = '-1';
-      }else if(IsCommit_controller.value.text == 'YES'){
+      }else if(IsCommit_controller.value.text.toUpperCase() == 'YES'){
         isCommitForApi = '1';
       }else if(IsCommit_controller.value.text == 'NO'){
         isCommitForApi = '0';

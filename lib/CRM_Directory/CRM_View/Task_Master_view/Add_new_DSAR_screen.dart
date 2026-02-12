@@ -169,8 +169,9 @@ class AddNewDsarScreen extends StatelessWidget{
           text: "Create DSAR",
           press: (){
             if(TaskMaster_page_controller.DSAR_Status_type_controller.value.text == ""){
-              Utils.sanckBarError("Message", "Please select DSAR Status");
+               return Utils.sanckBarError("Message", "Please select DSAR Status");
             }
+
             /*else if(TaskMaster_page_controller.isInfraLeadValueSubmit.value) {
               //Utils.sanckBarError("Message", "Created");
             //  TaskMaster_page_controller.TaskSaleCatCreateApiHit("DSAR");
@@ -178,18 +179,16 @@ class AddNewDsarScreen extends StatelessWidget{
 
             }
             else if(TaskMaster_page_controller.ItemCateDropDown.value && TaskMaster_page_controller.isInfraLeadValue.value){
-
               Utils.sanckBarError("Message", "Is Infra Lead is Yes Please Add Infra Details");
-
             }*/
-            else{
-              if(TaskMaster_page_controller.ItemCat_type_controller
-                  .text.isNotEmpty){
+
+              if(/*TaskMaster_page_controller.ItemCat_type_controller
+                  .text.isNotEmpty &&*/ TaskMaster_page_controller.DSAR_Status_type_controller.value.text?.toLowerCase()=='sales cycle'){
                 TaskMaster_page_controller.TaskSaleCatCreateApiHit('DSAR');
               }else{
                 TaskMaster_page_controller.TaskDSARMasterCreate();
               }
-            }
+
           },
         ),
       ),
@@ -1214,6 +1213,9 @@ class AddNewDsarScreen extends StatelessWidget{
     );
   }
 
+
+
+
   Widget bindIsInfraLead(BuildContext context) {
     return Container(
       child: DropdownMenu<String>(
@@ -1268,10 +1270,64 @@ class AddNewDsarScreen extends StatelessWidget{
 
   }
 
+ /* Widget bindContactNameDropDown(BuildContext context) {
+    TaskMaster_page_controller.selectedContact.value?.contactName= TaskMaster_page_controller.Contact_Name_controller.text;
+    return DropdownButtonFormField<ContactMstGetListModal>(
+
+      value: TaskMaster_page_controller.selectedContact.value,
+
+      decoration: InputDecoration(
+        labelText: "Select Contact Name",
+        labelStyle: GoogleFonts.poppins(
+          color: AllColors.primaryDark1,
+          fontSize: AllFontSize.sisxteen,
+          fontWeight: FontWeight.w400,
+        ),
+        enabledBorder: const OutlineInputBorder(
+          borderSide: BorderSide(color: AllColors.primaryDark1),
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+        ),
+        focusedBorder: const OutlineInputBorder(
+          borderSide: BorderSide(color: AllColors.primaryDark1),
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+        ),
+        contentPadding: const EdgeInsets.symmetric(
+            vertical: AllFontSize.two, horizontal: AllFontSize.ten),
+      ),
+
+      hint: const Text("Select Contact Name"),
+
+      items: TaskMaster_page_controller.contact_master_list
+          .map((ContactMstGetListModal e) {
+
+        return DropdownMenuItem<ContactMstGetListModal>(
+          value: e,
+          child: Text(
+            e.contactName ?? "",
+            style: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+            ),
+          ),
+        );
+
+      }).toList(),
+
+      onChanged: (ContactMstGetListModal? selection) {
+
+        if (selection == null) return;
+        TaskMaster_page_controller.Contact_Name_controller.text =
+            _displayContactNameForOption(selection!).toString();
+        TaskMaster_page_controller.contact_code_for_dsar.value=selection.contactCode??"";
+
+        TaskMaster_page_controller.selectedContact.value = selection;
+
+      },
+    );
+
+  }*/
 
   Widget bindContactNameDropDown(context){
     return Container(
-      padding: const EdgeInsets.only(right: 15),
       child: DropdownMenu<ContactMstGetListModal>(
         width: MediaQuery.of(context).size.width - 25,
         controller: TaskMaster_page_controller.Contact_Name_controller,
@@ -1307,10 +1363,10 @@ class AddNewDsarScreen extends StatelessWidget{
         onSelected: (ContactMstGetListModal? selection) {
           TaskMaster_page_controller.Contact_Name_controller.text =
               _displayContactNameForOption(selection!).toString();
-          TaskMaster_page_controller.contact_code_for_dsar.value=selection.contactCode!;
-          FocusScope.of(context).unfocus();
+          TaskMaster_page_controller.contact_code_for_dsar.value=selection.contactCode??"";
         },
         enableFilter: true,
+        enableSearch: true,
         requestFocusOnTap: true,
         dropdownMenuEntries: TaskMaster_page_controller.contact_master_list
             .map<DropdownMenuEntry<ContactMstGetListModal>>((ContactMstGetListModal e) {

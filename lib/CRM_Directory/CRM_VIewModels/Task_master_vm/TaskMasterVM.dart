@@ -70,6 +70,7 @@ class Taskmastervm extends GetxController{
 
     int Active = 0;
     String IsSaleCycleActive= '';
+    var selectedContact = Rxn<ContactMstGetListModal>();
 
     var Task_status_controller = TextEditingController();
     var account_code_controller = TextEditingController();
@@ -219,7 +220,7 @@ class Taskmastervm extends GetxController{
         bindFinancialYear();
         product_category_type_Controller.value.text = "Contains";
         getClustersGetByEmail();
-        getAccountMaster(pageNumber);
+        getAccountMaster(pageNumber,"");
         getItemCategoryMstWithoutTaskIdApi();
         getCompanyTypeMasterGet();
         CallStatusMasterApiHit('Call');
@@ -270,6 +271,7 @@ class Taskmastervm extends GetxController{
             'rowsPerPage': 50,
             'pageNumber': 0,
         };
+        loading.value = true;
         String employee_response =await _api.EmployeeMatserGetApiHit(data, sessionManagement);
         try {
             final jsonResponse = json.decode(employee_response);
@@ -294,6 +296,9 @@ class Taskmastervm extends GetxController{
         } catch (e) {
             Utils.sanckBarException('Exception!', e.toString());
             employee_Member_list.value = [];
+        }
+        finally{
+          loading.value = false;
         }
         return employee_Member_list.value;
     }
@@ -347,8 +352,7 @@ class Taskmastervm extends GetxController{
 
 
     Future<void>refreshList() async{
-        //getTaskMaster(pageNumber, is_Active.toString(), '', '','',date_filter, is_done.value);
-
+        getTaskMaster(pageNumber, is_Active.toString(), '', '','',date_filter, is_done.value);
 
     }
 
@@ -374,14 +378,14 @@ class Taskmastervm extends GetxController{
 
     RxInt infraLeadValue=0.obs;
 
-    void getClustersGetByEmail() {
+    void getClustersGetByEmail() async {
       try{
         Map<String, String> data={
           "email_id":email
         };
         loading.value=true;
         print("data is ${data}");
-        _api.clustersGetByEmailApiHit(data, sessionManagement).then((onValue){
+        String onValue = await _api.clustersGetByEmailApiHit(data, sessionManagement);
           print(onValue);
           final jsonResponse = json.decode(onValue);
           if(jsonResponse is List){
@@ -398,34 +402,30 @@ class Taskmastervm extends GetxController{
               clusterGetByEmailList.value=[];
             }
           }
-        },
-        ).onError(
-              (error, stackTrace) {
-            print(error);
-          },
-        );
       }catch(e){
         print(e);
       }finally{
         loading.value = false;
       }
     }
-    void getRegionsWithClusterFilterGetByEmail() {
+
+    void getRegionsWithClusterFilterGetByEmail() async {
       var selectedCluster="";
+      try{
       if(clusterName_controller.value.text.isNotEmpty){
         selectedCluster = clusterName_controller.value.text
             .split('|')
             .map((e) => e.trim())
             .join('|');
       }
-      try{
+
         Map<String, String> data={
           "email_id":email,
           "cluster_filter":selectedCluster.isEmpty?"":selectedCluster
         };
         loading.value=true;
         print("data is ${data}");
-        _api.RegionsWithClusterFilterGetByEmailApiHit(data, sessionManagement).then((onValue){
+        String onValue = await _api.RegionsWithClusterFilterGetByEmailApiHit(data, sessionManagement);
           print(onValue);
           final jsonResponse = json.decode(onValue);
           if(jsonResponse is List){
@@ -441,11 +441,6 @@ class Taskmastervm extends GetxController{
               regionwithclusterGetByEmailList.value=[];
             }
           }
-        },
-        ).onError((error, stackTrace) {
-            print(error);
-          },
-        );
       }catch(e){
         print(e);
       }finally{
@@ -453,8 +448,7 @@ class Taskmastervm extends GetxController{
       }
     }
     
-    getTaskMaster(int page_no, String IsActive, String? taskId,
-        String flag, String status, RxString date_filter, int is_done, ) async {
+    getTaskMaster(int page_no, String IsActive, String? taskId, String flag, String status, RxString date_filter, int is_done, ) async {
         if(isInfraLeadFilterController.text=="All"){
             infraLeadValue.value=-1;
         }
@@ -561,7 +555,8 @@ class Taskmastervm extends GetxController{
         }
     }
 
-    TaskMasterCreate(){
+    TaskMasterCreate() async {
+      try{
         DateTime selectDate = DateFormat('dd-MM-yyyy').parseStrict(DataOFVisitController.value.text);
         String todayDate = DateFormat('yyyy-MM-dd').format(selectDate);
         List<TaskSalesProductCategoryLinesModel> lines = Item_Category_Selected_list.map((item) => TaskSalesProductCategoryLinesModel(productCategoryCode: item.categoryCode!)).toList();
@@ -575,8 +570,7 @@ class Taskmastervm extends GetxController{
           apiTime = DateFormat('HH:mm').format(parsedTime);
         }
 
-        try{
-            Map<String, dynamic> data={
+        Map<String, dynamic> data={
                 "account_name": account_name.value.isNotEmpty?account_name.value:"",
                 "account_code": account_code.value.isNotEmpty?account_code.value:"",
                 "contact_name": Contact_Name_controller.text.isEmpty?'':Contact_Name_controller.text,
@@ -596,7 +590,7 @@ class Taskmastervm extends GetxController{
             };
             print('Jason Date....${data}');
             loading.value=true;
-            _api.TaskMasterCreateApiHit(data, sessionManagement).then((onValue){
+            String onValue = await _api.TaskMasterCreateApiHit(data, sessionManagement);
                 final jsonResponse = json.decode(onValue);
                 if(jsonResponse is List){
                     List<TaskMasterGetModel> response = jsonResponse.map((e) => TaskMasterGetModel.fromJson(e)).toList();
@@ -620,13 +614,7 @@ class Taskmastervm extends GetxController{
                     }
                 } else {
                     print('execption2...r}');
-
                 }
-            },
-            ).onError((error, stackTrace) {
-                        print('execption3...${error}');
-                },
-            );
         }catch(e){
             print('execption4...${e}');
         }
@@ -635,7 +623,8 @@ class Taskmastervm extends GetxController{
         }
     }
 
-    TaskDSARMasterCreate(){
+    TaskDSARMasterCreate() async {
+      try{
         String EstClosureDate = "";
         String NextInterDate ="";
         if(DSARStatus.value && NextInterdate_controller.value.text.isNotEmpty){
@@ -657,7 +646,6 @@ class Taskmastervm extends GetxController{
           apiTime = DateFormat('HH:mm').format(parsedTime);
         }
 
-        try{
             Map data={
                 "task_id": TaskID,
                 // "is_infra_lead": isInfraLead.value.text=="Yes"?1:0,
@@ -678,7 +666,7 @@ class Taskmastervm extends GetxController{
             };
 
             loading.value=true;
-            _api.TaskDSARMstCreateApiHit(data, sessionManagement).then((onValue){
+            String onValue = await _api.TaskDSARMstCreateApiHit(data, sessionManagement);
                 final jsonResponse = json.decode(onValue);
                 print(onValue);
                 if(jsonResponse is List){
@@ -710,19 +698,13 @@ class Taskmastervm extends GetxController{
 
                     }
                 }
-            },
-            ).onError(
-                    (error, stackTrace) {
-                    print(error);
-                },
-            );
         }catch(e){
             loading.value = false;
             print(e);
         }
     }
 
-    ApproveRejectApiHit(String? taskId){
+    ApproveRejectApiHit(String? taskId) async{
         try{
             Map<String, String> data={
                 "task_id": taskId!,
@@ -733,7 +715,7 @@ class Taskmastervm extends GetxController{
 
             };
             loading.value=true;
-            _api.TaskMstApproveRejectApiHit(data, sessionManagement).then((onValue){
+            String onValue = await _api.TaskMstApproveRejectApiHit(data, sessionManagement);
                 final jsonResponse = json.decode(onValue);
                 if(jsonResponse is List){
                     List<TaskMasterGetModel> response = jsonResponse.map((e) => TaskMasterGetModel.fromJson(e)).toList();
@@ -755,12 +737,6 @@ class Taskmastervm extends GetxController{
                     print('APi Not hit');
 
                 }
-            },
-            ).onError(
-                    (error, stackTrace) {
-                    print(error);
-                },
-            );
         }catch(e){
             print(e);
         }
@@ -769,16 +745,15 @@ class Taskmastervm extends GetxController{
         }
     }
 
-    taskReopenApiHit(String? taskId){
+    taskReopenApiHit(String? taskId) async {
         try{
             Map<String, String> data={
                 "task_id": taskId!,
                 "created_by": email,
                 "reopen_remarks": taskReopenRemarksController.value.text.isEmpty?'':taskReopenRemarksController.value.text,
-
             };
             loading.value=true;
-            _api.TaskMstRejectReopenApiHit(data, sessionManagement).then((onValue){
+            String onValue = await _api.TaskMstRejectReopenApiHit(data, sessionManagement);
                 final jsonResponse = json.decode(onValue);
                 if(jsonResponse is List){
                     List<TaskMasterGetModel> response = jsonResponse.map((e) => TaskMasterGetModel.fromJson(e)).toList();
@@ -790,31 +765,25 @@ class Taskmastervm extends GetxController{
                         pageNumber=0;
                         getTaskMaster(pageNumber, 'All', TaskID, "",'', date_filter, is_done.value);
                         Get.toNamed(RoutesName.taskMasterDetails_screen);
-
+                        loading.value = false;
                     }else {
                         Utils.sanckBarError('Error!', response[0].message.toString());
                         print(response[0].message.toString());
                         //Task_Master_list.value=[];
-
+                        loading.value = false;
                     }
                 }
-            },
-            ).onError(
-                    (error, stackTrace) {
-                    print(error);
-                    loading.value = false;
-                },
-            );
+
         }catch(e){
             print(e);
         }
-        finally{
+       /* finally{
           loading.value = false;
-        }
+        }*/
     }
 
 
-    getContactMasterList(String accountCode, String accountName) {
+    getContactMasterList(String accountCode, String accountName) async {
         try{
             Map<String, String> data={
                 "filter_contact_name": '',
@@ -824,9 +793,9 @@ class Taskmastervm extends GetxController{
                 "row_per_page": rowsPerPage.toString(),
                 "page_number": '0'
             };
-            loading.value=true;
+
             print("data is ${data}");
-            _api.contactMstGetList(data, sessionManagement).then((onValue){
+            String onValue = await _api.contactMstGetList(data, sessionManagement);
                 final jsonResponse = json.decode(onValue);
                 print(onValue);
                 if(jsonResponse is List){
@@ -842,122 +811,102 @@ class Taskmastervm extends GetxController{
 
                     }else {
                         contact_master_list.value=[];
-
                     }
                 }
-            },
-            ).onError(
-                    (error, stackTrace) {
-                    print(error);
-                    loading.value = false;
-                },
-            );
+
         }catch(e){
             print(e);
         }
-        finally{
-          loading.value = false;
-        }
+
     }
 
-    getTaskMstDSARList(String? taskId) {
+    getTaskMstDSARList(String? taskId) async  {
         TaskID = taskId!;
-        try{
-            Map<String, String> data={
-                "filter_dsar_status": '',
-                "filter_task_id": taskId,
-                "row_per_page": rowsPerPage.toString(),
-                "page_number": '0'
-            };
-            loading.value=true;
-            print("data is ${data}");
-            _api.TaskDSARMstGetApiHit(data, sessionManagement).then((onValue){
-                final jsonResponse = json.decode(onValue);
-                print(onValue);
-                if(jsonResponse is List){
-                    List<TaskDSARModel> response = jsonResponse.map((e) => TaskDSARModel.fromJson(e)).toList();
-                    if(response!= null && response.length>0 && response[0].condition=="True"){
-
-                        TaskDSAR_Master_list.value=response;
-                        print("Success...1 ${response.toString()}");
-
-                    }else {
-                        TaskDSAR_Master_list.value=[];
-                        print("UnSuccess... ${response.toString()}");
-
-                    }
-                }
-            },
-            ).onError(
-                    (error, stackTrace) {
-                    print(error);
-                    loading.value = false;
-                },
-            );
-        }catch(e){
-            print("jdsdhud...${e}");
-        }
-        finally{
-          loading.value = false;
-        }
+        Map<String, String> data={
+          "filter_dsar_status": '',
+          "filter_task_id": taskId,
+          "row_per_page": rowsPerPage.toString(),
+          "page_number": '0'
+        };
+        loading.value=true;
+        print("data is ${data}");
+         await _api.TaskDSARMstGetApiHit(data, sessionManagement).then((onValue){
+          try {
+            List<TaskDSARModel> response = (json.decode(onValue) as List<dynamic>)
+                .map((i) => TaskDSARModel.fromJson(i as Map<String, dynamic>))
+                .toList();
+            if(response!= null && response.length>0 && response[0].condition=="True"){
+              TaskDSAR_Master_list.value=response;
+            } else {
+              TaskDSAR_Master_list.value=[];
+            }
+          } catch (e) {
+            print('catch....${e.toString()}');
+          }
+        }).whenComplete((){
+           loading.value=false;
+         });
     }
 
-    getAccountMaster(int page_no){
+
+
+
+    Future<Iterable<AccountMasterModel>> getAccountMaster(int page_no, String accont_name) async{
         try{
-            Map<String, String> data={
-                "filter_account_name": "",
-                "filter_account_owner": "",
+            Map<String, dynamic> data={
+                "filter_account_code": "",
+                "filter_account_name": accont_name,
                 "filter_account_type": "",
-                "filter_account_category_type": "",
+                "filter_email_id": "",
+                "filter_phone_no": "",
                 "filter_company_profile_type": "",
-                "filter_address": "",
                 "filter_state_name": "",
+                "filter_postal_code": "",
+                "filter_district": "",
+                "filter_created_by": "",
+                "filter_account_owner":email,
+                "filter_frontliner_value": "",
+                "filter_branch_head_value": "",
+                "filter_zone_head_value": "",
+                "filter_clusture_head_value": "",
                 "filter_is_active": "-1",
-                "filter_created_by": email,
-                "row_per_page": rowsPerPage.toString(),
-                "page_number": page_no.toString()
+                "filter_created_on": "",
+                "filter_account_owner_new": "",
+                "row_per_page": rowsPerPage,
+                "page_number": 0
             };
-            loading.value=true;
-            _api.AccountMasterGetApiHit(data, sessionManagement).then((onValue){
+            loading.value = true;
+            String onValue = await _api.AccountMasterGetApiHit(data, sessionManagement);
                 final jsonResponse = json.decode(onValue);
                 if(jsonResponse is List){
+                  loading.value = false;
                     List<AccountMasterModel> response = jsonResponse.map((e) => AccountMasterModel.fromJson(e)).toList();
                     if(response!= null && response.length>0 && response[0].condition=="True"){
-                        if(page_no==0){
-                            Account_Master_list.clear();
-                        }
-                        Account_Master_list.addAll(response);
+                        Account_Master_list.value=response;
 
                     }else {
                         Account_Master_list.value=[];
-
                     }
                 }
-            },
-            ).onError(
-                    (error, stackTrace) {
-                    print(error);
-                    loading.value = false;
-                },
-            );
+
         }catch(e){
+          loading.value = false;
             print(e);
         }
-        finally{
-          loading.value = false;
-        }
+        return Account_Master_list;
     }
 
-    CallStatusMasterApiHit(String flag,{String? filter}){
+    CallStatusMasterApiHit(String flag,{String? filter}) async {
         try{
             Map<String, String> data={
                 "filter_type_of_call": flag,
             };
-            loading.value=true;
-            _api.CallStatusMasterGetApiHit(data, sessionManagement).then((onValue){
+            loading.value = true;
+            String onValue = await _api.CallStatusMasterGetApiHit(data, sessionManagement);
                 print(onValue);
                 final jsonResponse = json.decode(onValue);
                 if(jsonResponse is List){
+                  loading.value = false;
                     List<CallStatusMasterModel> response = jsonResponse.map((e) => CallStatusMasterModel.fromJson(e)).toList();
                     if(response!= null && response.length>0 && response[0].condition=="True"){
                       CallStatus_Master_list.value=[];
@@ -972,61 +921,53 @@ class Taskmastervm extends GetxController{
                         CallStatus_Master_list.value=[];
                         Selection_CallStatus_Master_list.value=[];
                     }
+                }else{
+                  loading.value = false;
                 }
-            },).onError((error, stackTrace) {
-              print('call list...${error}');
-              loading.value = false;
-              },
-            );
+
         }catch(e){
+          loading.value = false;
             print(e);
         }
-        finally{
-          loading.value = false;
-        }
+
     }
 
-    CallDSARsMasterApiHit(){
+    CallDSARsMasterApiHit() async {
         try{
             Map<String, String> data={
                 "filter_type_of_call": "dsar",
             };
             loading.value=true;
-            _api.CallStatusMasterGetApiHit(data, sessionManagement).then((onValue){
+            String onValue = await _api.CallStatusMasterGetApiHit(data, sessionManagement);
                 final jsonResponse = json.decode(onValue);
                 if(jsonResponse is List){
                     List<CallStatusMasterModel> response = jsonResponse.map((e) => CallStatusMasterModel.fromJson(e)).toList();
                     if(response!= null && response.length>0 && response[0].condition=="True"){
-
+                      loading.value = false;
                         DSARStatus_Master_list.addAll(response);
 
                     }else {
+                      loading.value = false;
                         DSARStatus_Master_list.value=[];
 
                     }
                 }
-            },
-            ).onError(
-                    (error, stackTrace) {
-                    print(error);
-                    loading.value = false;
-                },
-            );
-        }catch(e){
+        }catch(e){loading.value = false;
+
             print(e);
         }
-        finally{
+        /*finally{
           loading.value = false;
-        }
+        }*/
     }
 
-    MethodOfCallMasterApiHit({String? filter}){
+    MethodOfCallMasterApiHit({String? filter})async{
         try{
             Map<String, String> data={
                 "filter_type_of_call": "method",
             };
             loading.value=true;
-            _api.CallStatusMasterGetApiHit(data, sessionManagement).then((onValue){
+            String onValue = await _api.CallStatusMasterGetApiHit(data, sessionManagement);
                 final jsonResponse = json.decode(onValue);
                 if(jsonResponse is List){
                     List<CallStatusMasterModel> response = jsonResponse.map((e) => CallStatusMasterModel.fromJson(e)).toList();
@@ -1038,79 +979,69 @@ class Taskmastervm extends GetxController{
                         Selection_MethodOfCall_Master_list.add(CallStatusMasterModel(taskStatus: "All"));
                       }
                         MethodOfCall_Master_list.addAll(response);
-
+                      loading.value = false;
 
                     }else {
                         MethodOfCall_Master_list.value=[];
                         Selection_MethodOfCall_Master_list.value=[];
-
+                        loading.value = false;
                     }
                 }
-            },
-            ).onError(
-                    (error, stackTrace) {
-                    print(error);
-                    loading.value = false;
-                },
-            );
+
         }catch(e){
+          loading.value = false;
             print(e);
         }
-        finally{
+       /* finally{
           loading.value = false;
-        }
+        }*/
     }
 
-    TaskMstDelete(int index) {
-        Map data = {
+    TaskMstDelete(int index) async{
+      try {
+      Map data = {
             "task_id": Task_Master_list[index].taskId,
             "created_by": email
         };
         print(data);
         loading.value = true;
-        try {
-            _api.TaskMstDelete(data, sessionManagement).then((value) {
+           String value = await _api.TaskMstDelete(data, sessionManagement);
                     print(value);
                     final JsonResponse = json.decode(value);
                     if (JsonResponse is List) {
                         List<SalesCycleUpdateStatusModal> response =
                         JsonResponse.map((e) => SalesCycleUpdateStatusModal.fromJson(e)).toList();
                         if (response != null && response.length > 0 && response[0].condition == "True") {
-                            loading.value = false;
                             Task_Master_list.removeAt(index);
                             Utils.sanckBarSuccess('Success Message!',response[0].message.toString());
-
-                        } else {
                             loading.value = false;
+                        } else {
                             Utils.sanckBarError("False Message !", response[0].message.toString());
                             //Account_Master_list.value=[];
+                            loading.value = false;
                         }
                     } else {
-                        loading.value = false;
-                        // service_indent_header_list.value = [];
                         Utils.sanckBarException("Api Error!", JsonResponse);
                     }
-                },
-            ).onError(
-                    (error, stackTrace) {
-                    print(error);
-                    //service_indent_header_list.value = [];
-                },
-            );
+
         } catch (e) {
-            loading.value = false;
+        loading.value = false;
             print(e);
         }
+       /* finally{
+          loading.value = false;
+        }*/
+
     }
-    getItemCategoryMstApi(String? taskId) {
-        this.loading.value = true;
+    getItemCategoryMstApi(String? taskId) async {
+        try {
         Map<String, String> data = {
             'task_id': taskId! ,
             'filter_category': ""
         };
+        this.loading.value = true;
+        String value = await _api.getItemCategoryMstApiHit(data, sessionManagement);
 
-        _api.getItemCategoryMstApiHit(data, sessionManagement).then((value) {
-            try {
                 List<ItemCategoryMstModel> Response =
                 (json.decode(value) as List<dynamic>)
                     .map((i) => ItemCategoryMstModel.fromJson(i as Map<String, dynamic>))
@@ -1118,33 +1049,24 @@ class Taskmastervm extends GetxController{
 
                 if (Response.isNotEmpty && Response[0].condition.toString() == "True") {
                     Item_Category_master_list.value = Response;
-
-                    /*Item_Category_Selected_list.value = [];
-                    for (int i = 0; i < Item_Category_master_list.length; i++) {
-                        if (Item_Category_master_list[i].isSelected == 1) {
-                            Item_Category_Selected_list.add(
-                                Item_Category_master_list[i]);
-                        }}*/
-                    print('master list1....${Item_Category_Selected_list.length.toString()}');
+                    loading.value = false;
                 } else {
                     Item_Category_master_list.value = [];
-                    //print('master listelsse1....${Item_Category_Selected_list.length.toString()}');
+                    loading.value = false;
                 }
             } catch (e) {
                 Item_Category_master_list.value = [];
                 print('catch....${e.toString()}');
+                loading.value = false;
             }
-        }).onError((error, stackTrace) {
-            Item_Category_master_list.value = [];
-            Utils.sanckBarError('Api Exception onError', error.toString());
-            print('catchEx....${error.toString()}');
-        }).whenComplete(() {
-            this.loading.value = false;
-        });
+           /* finally{
+                loading.value=false;
+            }*/
+
     }
 
-    getItemCategoryMstApiHit(String? taskId, String? InfraId, String saleCycleId) {
-        this.loading.value = true;
+    getItemCategoryMstApiHit(String? taskId, String? InfraId, String saleCycleId) async {
+      try {
         Map<String, String> data = {
             'task_id': taskId! ,
             'filter_category': "",
@@ -1152,14 +1074,11 @@ class Taskmastervm extends GetxController{
             'quote_id': "",
             'infra_lead_no': InfraId==null?"":InfraId
         };
-
-        _api.getItemCategoryInfraMstApiHit(data, sessionManagement).then((value) {
+        this.loading.value = true;
+        String value = await _api.getItemCategoryInfraMstApiHit(data, sessionManagement);
             print(value);
-            try {
-                List<ItemCategoryMstModel> Response =
-                (json.decode(value) as List<dynamic>)
-                    .map((i) => ItemCategoryMstModel.fromJson(i as Map<String, dynamic>))
-                    .toList();
+                List<ItemCategoryMstModel> Response = (json.decode(value) as List<dynamic>)
+                    .map((i) => ItemCategoryMstModel.fromJson(i as Map<String, dynamic>)).toList();
 
                 if (Response.isNotEmpty && Response[0].condition?.toLowerCase() == "true") {
                     Item_Category_Infra_list.value = Response;
@@ -1171,107 +1090,93 @@ class Taskmastervm extends GetxController{
                                 Item_Category_Infra_list[i]);
                         }}
                     print('master list1....${Item_Category_Infra_list.length.toString()}');
+                    loading.value = false;
                 } else {
                     Item_Category_Infra_list.value = [];
                     Item_Category_Selected_Infra_list.value = [];
+                    loading.value = false;
                     //print('master listelsse1....${Item_Category_Selected_list.length.toString()}');
                 }
-            } catch (e) {
-                print('catch....${e.toString()}');
             }
-        }).onError((error, stackTrace) {
-            Item_Category_Infra_list.value = [];
-            Item_Category_Selected_Infra_list.value = [];
-            Utils.sanckBarError('Api Exception onError', error.toString());
-            print('catchEx....${error.toString()}');
-        }).whenComplete(() {
-            this.loading.value = false;
-        });
+            catch (e) {
+              print('catch....${e.toString()}');
+              loading.value = false;
+            }
+            /*finally{
+                loading .value=true;
+            }*/
     }
 
-    getCompanyTypeMasterGet() {
-      this.loading.value = true;
+    getCompanyTypeMasterGet() async {
+      try {
       Map<String, dynamic> data = {
         "filter_description": "",
         "row_per_page": 999,
         "page_number": 0
       };
-
-      _api.getCompanyTypeMasterGet(data, sessionManagement).then((value) {
+      this.loading.value = true;
+      String value = await _api.getCompanyTypeMasterGet(data, sessionManagement);
         print("company profile...${value}");
-        try {
-          List<CompanyTypeModal> Response =
-          (json.decode(value) as List<dynamic>)
-              .map((i) => CompanyTypeModal.fromJson(i as Map<String, dynamic>))
-              .toList();
+
+          List<CompanyTypeModal> Response = (json.decode(value) as List<dynamic>)
+              .map((i) => CompanyTypeModal.fromJson(i as Map<String, dynamic>)).toList();
 
           if (Response.isNotEmpty && Response[0].condition?.toLowerCase() == "true") {
             company_profile_type_list.value=Response;
+            loading.value = false;
           } else {
             company_profile_type_list.value=[];
+            loading.value = false;
           }
         } catch (e) {
+        loading.value = false;
           print('catch....${e.toString()}');
         }
-      }).onError((error, stackTrace) {
-        Utils.sanckBarError('Api Exception onError', error.toString());
-        print('catchEx....${error.toString()}');
-      }).whenComplete(() {
-        this.loading.value = false;
-      });
+        /*finally{
+          loading.value=true;
+        }*/
+
     }
 
 
-    getItemCategoryMstWithoutTaskIdApi() {
-        this.loading.value = true;
+    getItemCategoryMstWithoutTaskIdApi() async{
+      try {
         Map<String, String> data = {
 
         };
-
-        _api.getItemCategoryMstWithoutTaskIdApiHit(data, sessionManagement).then((value) {
-            try {
-                List<ItemCategoryMstModel> Response =
-                (json.decode(value) as List<dynamic>)
-                    .map((i) => ItemCategoryMstModel.fromJson(i as Map<String, dynamic>))
-                    .toList();
-
+        this.loading.value = true;
+        String value = await _api.getItemCategoryMstWithoutTaskIdApiHit(data, sessionManagement);
+                List<ItemCategoryMstModel> Response = (json.decode(value) as List<dynamic>).map((i) =>
+                    ItemCategoryMstModel.fromJson(i as Map<String, dynamic>)).toList();
                 if (Response.isNotEmpty && Response[0]?.condition.toString() == "True") {
                     Item_Category_master_list_without_task.value = Response!;
-
-                    // print('master list....${get_Acc_type_list.length.toString()}');
+                    loading.value = false;
                 } else {
                     Item_Category_master_list_without_task.value = [];
-                    //print('master listelsse....${get_Acc_type_list.length.toString()}');
+                    loading.value = false;
                 }
             } catch (e) {
                 Item_Category_master_list_without_task.value = [];
                 print('catch....${e.toString()}');
+                loading.value = false;
             }
-        }).onError((error, stackTrace) {
-            Item_Category_master_list_without_task.value = [];
-            Utils.sanckBarError('Api Exception onError', error.toString());
-            print('catchEx....${error.toString()}');
-        }).whenComplete(() {
-            this.loading.value = false;
-        });
+            /*finally{
+                loading.value=true;
+            }*/
+
     }
 
     TaskSaleCatCreateApiHit(String flag) async {
-        print('selectlist...${Item_Category_Selected_list.length}');
+      try {
         List<TaskSalesProductCategoryLinesModel> lines = Item_Category_Selected_list.map((item) => TaskSalesProductCategoryLinesModel(productCategoryCode: item.categoryCode!)).toList();
-
-
         Map<String, dynamic> data = {
             "created_by": email,
             "task_id": TaskID,
             "sales_cycle_id": "",
             "lines": lines.map((line) => line.toJson()).toList(),
         };
-
         print(data);
         loading.value = true;
-
-        try {
             final value = await _api.TaskSaleCatCreateApiHit(data, sessionManagement);
             print(value);
             final JsonResponse = json.decode(value);
@@ -1281,7 +1186,7 @@ class Taskmastervm extends GetxController{
                 JsonResponse.map((e) => TaskMasterGetModel.fromJson(e)).toList();
 
                 if (response != null && response.isNotEmpty && response[0].condition == "True") {
-                    loading.value = false;
+                  loading.value = false;
                     Utils.sanckBarSuccess("Success!", response[0].message.toString());
 
                     if(flag == 'Details'){
@@ -1293,18 +1198,22 @@ class Taskmastervm extends GetxController{
                       TaskDSARMasterCreate();
                     }
                 } else {
-                    loading.value = false;
+                  loading.value = false;
                     Utils.sanckBarError("Error!", "${response[0].message}");
                 }
             } else {
-                loading.value = false;
+              loading.value = false;
                 Utils.sanckBarException("Api Error!", JsonResponse.toString());
             }
         } catch (error, stackTrace) {
+        loading.value = false;
             print(error);
             print(stackTrace);
             print("Exception....");
         }
+       /* finally{
+          loading.value = false;
+        }*/
     }
 
 
@@ -1313,13 +1222,11 @@ class Taskmastervm extends GetxController{
         print("GetList");
         await sessionManagement.getUserGeoHierarchy().then((userGeoHierarchy) {
             userGeoHierarchyy.value = userGeoHierarchy;
-                print("Ghdf ${userGeoHierarchy[0].geoValue}");
-                print("Ghdf ${userGeoHierarchy.length}");
 
         });
     }
 
-    getSaleIDByAccountCode(int page_no){
+    getSaleIDByAccountCode(int page_no) async {
         try{
             Map<String, String> data={
                 "sales_cycle_id": "",
@@ -1329,12 +1236,12 @@ class Taskmastervm extends GetxController{
             };
             print('sale id map data${data}');
             loading.value=true;
-            _api.SalesCycleMstGetByAccountCodeApiHit(data, sessionManagement).then((onValue){
+           String onValue = await _api.SalesCycleMstGetByAccountCodeApiHit(data, sessionManagement);
                 final jsonResponse = json.decode(onValue);
                 if(jsonResponse is List){
                     List<SalesCycleModal> response = jsonResponse.map((e) => SalesCycleModal.fromJson(e)).toList();
                     if(response!= null && response.length>0 && response[0].condition=="True"){
-
+                      loading.value = false;
                         if(page_no==0){
                             Sales_Id_list.clear();
                         }
@@ -1342,39 +1249,30 @@ class Taskmastervm extends GetxController{
                         total_rows=int.parse(Sales_Id_list[0].totalRows!);
 
                     }else {
+                      loading.value = false;
                         Sales_Id_list.value=[];
 
                     }
                 }
-            },
-            ).onError(
-                    (error, stackTrace) {
-                    print(error);
-                    loading.value = false;
-                },
-            );
         }catch(e){
+          loading.value = false;
             print(e);
         }
-        finally{
+        /*finally{
           loading.value = false;
-        }
+        }*/
     }
 
     TaskPersonMstCreateAPI(String flag) async {
-
+      try {
         List<Selectedalongwithpersonnamemodel> personName = SelectedAlongPersonWith_list.map((item) => Selectedalongwithpersonnamemodel(empId: item.empId!)).toList();
-
         Map<String, dynamic> data = {
             "created_by": email,
             "task_id": TaskID,
             "lines": personName.map((line) => line.toJson()).toList(),
         };
-
         print(data);
         loading.value = true;
-
-        try {
             final value = await _api.TaskPersonMstCreate(data, sessionManagement);
             print(value);
             final JsonResponse = json.decode(value);
@@ -1384,40 +1282,44 @@ class Taskmastervm extends GetxController{
                 JsonResponse.map((e) => TaskMasterGetModel.fromJson(e)).toList();
 
                 if (response != null && response.isNotEmpty && response[0].condition == "True") {
-                    loading.value = false;
                     Utils.sanckBarSuccess("Success!", response[0].message.toString());
 
                     if(flag == 'Details'){
                         getTaskMaster(0, 'All', TaskID, "",'', date_filter, is_done.value);
                         //todo by raman
                         getTaskPersonMstByTaskIdApi(TaskID);
-
+                        loading.value = false;
                         Get.toNamed(RoutesName.taskMasterDetails_screen);
                     } else if(flag == 'DSAR'){
+                      loading.value = false;
                         getTaskMaster(0, 'All', TaskID, "",'', date_filter, is_done.value);
                         getTaskPersonMstByTaskIdApi(TaskID);
                     }
 
                 } else {
-                    loading.value = false;
+                  loading.value = false;
                     Utils.sanckBarError("Error!", "Please select at least single product category");
                 }
             } else {
-                loading.value = false;
+              loading.value = false;
                 Utils.sanckBarException("Api Error!", JsonResponse.toString());
             }
         } catch (error, stackTrace) {
             print(error);
             print(stackTrace);
             print("Exception....");
+            loading.value = false;
         }
+        /*finally{
+          loading.value = false;
+        }*/
     }
 
 
 
     //todo nirupma code
-    gettaskMstInfraUpdate(String InfraNo, String flag) {
-        this.loading.value = true;
+    gettaskMstInfraUpdate(String InfraNo, String flag) async {
+      try {
         String? expOrderDate=StaticMethod.convertDateFormat(expectedDateOfOrderUpdateController.text);
         String? inaugurationDate=StaticMethod.convertDateFormat(inaugrationDateUpdateController.text);
         String? expDateOfCompletion=StaticMethod.convertDateFormat(dateofcompletioneUpdateController.text);
@@ -1459,10 +1361,9 @@ class Taskmastervm extends GetxController{
             "inaugration_date_of_project": inaugurationDate??"",
             "created_by": email
         };
-            try {
+        this.loading.value = true;
                 print(data);
-                _api.taskMstInfraUpdateApiHit(data, sessionManagement).then((
-                    onValue) {
+               String onValue = await  _api.taskMstInfraUpdateApiHit(data, sessionManagement);
                     final jsonResponse = json.decode(onValue);
                     print(onValue);
                     if (jsonResponse is List) {
@@ -1470,54 +1371,40 @@ class Taskmastervm extends GetxController{
                             .toList();
                         if (response[0].condition == "True") {
                             Utils.sanckBarSuccess("Message !", response[0].message.toString());
-                            getTaskMaster(0,
-                                is_Active.toString(),
-                               Task_Master_list[0].taskId, '', 'GET FROM TASK ID', date_filter, is_done.value);
-
+                            getTaskMaster(0, is_Active.toString(), Task_Master_list[0].taskId, '', 'GET FROM TASK ID', date_filter, is_done.value);
+                            loading.value = false;
                             if(flag == 'FromDSARPage'){
                                 isInfraLeadValueSubmit.value = true;
                                 Get.toNamed(RoutesName.addNewDSARTask_screen);
                             }else if(flag == 'FromDetailsPage'){
                                 Get.toNamed(RoutesName.taskMasterDetails_screen);
                             }
-
                             clearInfraUpdateController();
-                            loading.value = false;
                         } else {
-                            loading.value = false;
+                          loading.value = false;
                             Utils.sanckBarError("False Message !", response[0].message.toString());
                         }
-                    } else {
-                        loading.value = false;
                     }
-                },
-                ).onError(
-                        (error, stackTrace) {
-                        loading.value = false;
-                        print(error);
-                    },
-                );
             } catch (e) {
                 Utils.sanckBarException("Message !", e.toString());
-                loading.value = false;
                 print(e);
-            }
-            finally{
                 loading.value = false;
             }
+            /*finally{
+                loading.value = false;
+            }*/
         }
 
-    getEmpMstEmailByApi() {
+    getEmpMstEmailByApi() async{
+      try{
         Map<String , String> data = {
             "email_id": email
         };
         print(data);
         loading.value = true;
-        _api.EmpMstEmailByGet(data, sessionManagement).then(
-                (value) {
+        String value = await _api.EmpMstEmailByGet(data, sessionManagement);
                 print(value);
                 final JsonResponse = json.decode(value);
-                try{
                     if (JsonResponse is List) {
                         List<AlongWithPersonModel> response =
                         JsonResponse.map((e) => AlongWithPersonModel.fromJson(e))
@@ -1525,38 +1412,27 @@ class Taskmastervm extends GetxController{
                         if (response != null &&
                             response.length > 0 &&
                             response[0].condition == "True") {
+                          loading.value = false;
                             AlongPersonWith_list.value=response;
                         } else {
+                          loading.value = false;
                             AlongPersonWith_list.value=[];
                             Utils.sanckBarError("Error!", "No Data Found");
                             //service_installation_details_list.value=[];
                         }
                     } else {
-
-                        // service_indent_header_list.value = [];
+                      loading.value = false;
                         Utils.sanckBarException("Api Error!", JsonResponse);
                     }
                 }catch(e){
+        loading.value = false;
                     print(e);
-                }finally{
+                }/*finally{
                     loading.value = false;
-
-                }
-
-
-            },
-        ).onError(
-                (error, stackTrace) {
-                loading.value = false;
-                print(error);
-                //service_indent_header_list.value = [];
-            },
-        ).whenComplete(() {
-            loading.value = false;
-        },);
+                }*/
     }
 
-    getTaskPersonMstByTaskIdApi(String TaskID){
+    getTaskPersonMstByTaskIdApi(String TaskID) async {
         try{
             Map<String, String> data={
                 "task_id": TaskID,
@@ -1565,7 +1441,7 @@ class Taskmastervm extends GetxController{
 
             };
             loading.value=true;
-            _api.TaskPersonMstGetByTaskId(data, sessionManagement).then((onValue){
+            String onValue = await _api.TaskPersonMstGetByTaskId(data, sessionManagement);
                 print(onValue);
                 final jsonResponse = json.decode(onValue);
                 if(jsonResponse is List){
@@ -1573,85 +1449,22 @@ class Taskmastervm extends GetxController{
                     if(response!= null && response.length>0 && response[0].condition=="True"){
                         AlongPersonWith_list.value = response;
                         print('asjhdgsau1 ${AlongPersonWith_list.length}');
-
+                        loading.value = false;
                     }else {
                         AlongPersonWith_list.value=[];
-
+                        loading.value = false;
                     }
                 }
-            },
-            ).onError(
-                    (error, stackTrace) {
-                        print('asjhdgsau5 ${error}');
-                        loading.value = false;
-                },
-            );
+
         }catch(e){
+          loading.value = false;
             print(e);
         }
-        finally{
+        /*finally{
           loading.value = false;
-        }
+        }*/
     }
 
-   /* getTaskPersonMstByTaskIdApi(String TaskID) {
-        Map<String , String> data = {
-            "task_id": TaskID,
-            "along_with_person_name": "",
-            "email_id": email,
-
-        };
-        print(data);
-        loading.value = true;
-        _api.TaskPersonMstGetByTaskId(data, sessionManagement).then(
-                (value) {
-                print(value);
-                final JsonResponse = json.decode(value);
-                try{
-                    if (JsonResponse is List) {
-                        List<AlongWithPersonModel> response =
-                        JsonResponse.map((e) => AlongWithPersonModel.fromJson(e))
-                            .toList();
-                        if (response != null &&
-                            response.length > 0 &&
-                            response[0].condition == "True") {
-                            AlongPersonWith_list.value=response;
-                            print('asjhdgsau1${AlongPersonWith_list.length}');
-
-
-                        } else {
-                            AlongPersonWith_list.value=[];
-                            print('asjhdgsau2${AlongPersonWith_list.length}');
-                            Utils.sanckBarError(
-                                "Error!", "No Data Found");
-                            //service_installation_details_list.value=[];
-                        }
-                    } else {
-
-                        // service_indent_header_list.value = [];
-                        print('asjhdgsau3 ${JsonResponse}');
-                        Utils.sanckBarException("Api Error!", JsonResponse);
-                    }
-                }catch(e){
-                    print('asjhdgsau4 ${e}');
-                }finally{
-                    loading.value = false;
-
-                }
-
-            },
-        ).onError(
-                (error, stackTrace) {
-                loading.value = false;
-                print('asjhdgsau5 ${error}');
-                //service_indent_header_list.value = [];
-            },
-        ).whenComplete(() {
-            print('asjhdgsau6 when complete');
-            loading.value = false;
-        },);
-    }
-*/
     void clearInfraUpdateController(){
          projectValueUpdateController.clear();
          expectedDateOfOrderUpdateController.clear();
@@ -1740,7 +1553,7 @@ class Taskmastervm extends GetxController{
 
     }
 
-  void resetAllFieldOfFilter() {
+    void resetAllFieldOfFilter() {
 
     Selection_CallStatus_Master_list.value=[];
     Selection_MethodOfCall_Master_list.value=[];

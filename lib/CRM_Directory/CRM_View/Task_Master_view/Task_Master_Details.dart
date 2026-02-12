@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:navigation_drawer_flutter/component/circular_loading.dart';
 
 import '../../../component/back_button.dart';
 import '../../../constants/app_colors.dart';
@@ -180,238 +181,242 @@ class TaskMasterDetails extends StatelessWidget{
           )
       ),
       drawer: CustomDrawer(),
-      body: Container(
-      width: double.infinity,
-      height: size.height,
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            SizedBox(height: 10),
-            Card(
-              color: AllColors.whiteColor,
-              elevation: 10,
-              margin: EdgeInsets.only(left: 10, right: 10, bottom: 5),
-              child: Column(
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      /*border: Border.all(
+      body:Obx((){
+        if(TaskMaster_page_controller.loading.value){
+          return FullScreenLoader();
+        }
+        return Container(
+          width: double.infinity,
+          height: size.height,
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                SizedBox(height: 10),
+                Card(
+                  color: AllColors.whiteColor,
+                  elevation: 10,
+                  margin: EdgeInsets.only(left: 10, right: 10, bottom: 5),
+                  child: Column(
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          /*border: Border.all(
                         color: AllColors.blackColor, // Set the border color here
                       ),*/
-                      borderRadius: BorderRadius.circular(10.0),
-                      color: AllColors.textColor,
-                    ),
-                    child:Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(left: 10),
-                          child: Icon(Icons.border_color_outlined, color: AllColors.whiteColor,),
+                          borderRadius: BorderRadius.circular(10.0),
+                          color: AllColors.textColor,
                         ),
-                        Text(
-                          "Task/Sales Info",
-                          style: GoogleFonts.poppins(
-                            color: AllColors.whiteColor,
-                            fontSize: AllFontSize.twentee,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        Obx(
-                              () {
-                            return IconButton(
-                              onPressed: () {
-                                TaskMaster_page_controller.toggle();
-                                if (TaskMaster_page_controller
-                                    .isExpandDetails.value ==
-                                    true) {
-                                  print(
-                                      "If......${TaskMaster_page_controller.isExpandDetails.value}");
-                                } else {
-                                  print(
-                                      "else......${TaskMaster_page_controller.isExpandDetails.value}");
-                                }
-                              },
-                              icon: Icon(
-                                TaskMaster_page_controller
-                                    .isExpandDetails.value
-                                    ? Icons.arrow_drop_down
-                                    : Icons.arrow_drop_up,
-                                size: 25,
+                        child:Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(left: 10),
+                              child: Icon(Icons.border_color_outlined, color: AllColors.whiteColor,),
+                            ),
+                            Text(
+                              "Task/Sale Info",
+                              style: GoogleFonts.poppins(
                                 color: AllColors.whiteColor,
+                                fontSize: AllFontSize.twentee,
+                                fontWeight: FontWeight.w600,
                               ),
-                            );
-                          },
-                        )
-        
-                      ],
-                    ),
-                  ),
-                 // Divider(color: Colors.black,),
-                  Obx(() {
-                    if(TaskMaster_page_controller.Task_Master_list.length>0 &&
-                        TaskMaster_page_controller.Task_Master_list.isNotEmpty){
-                      return viewTasketails(context);
-                    }else{
-                      return SizedBox();
-                    }
+                            ),
+                            Obx(
+                                  () {
+                                return IconButton(
+                                  onPressed: () {
+                                    TaskMaster_page_controller.toggle();
+                                    if (TaskMaster_page_controller
+                                        .isExpandDetails.value ==
+                                        true) {
+                                      print(
+                                          "If......${TaskMaster_page_controller.isExpandDetails.value}");
+                                    } else {
+                                      print(
+                                          "else......${TaskMaster_page_controller.isExpandDetails.value}");
+                                    }
+                                  },
+                                  icon: Icon(
+                                    TaskMaster_page_controller
+                                        .isExpandDetails.value
+                                        ? Icons.arrow_drop_down
+                                        : Icons.arrow_drop_up,
+                                    size: 25,
+                                    color: AllColors.whiteColor,
+                                  ),
+                                );
+                              },
+                            )
 
-                  }),
-                ],
-              ),
-            ),
-        
-        
-            SizedBox(height: 5,),
-        
-            Card(
-              color: AllColors.whiteColor,
-              elevation: 10,
-              margin: EdgeInsets.only(left: 10, right: 10, bottom: 5),
-              child: Column(
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      /*border: Border.all(
+                          ],
+                        ),
+                      ),
+                      // Divider(color: Colors.black,),
+                      Obx(() {
+                        if(TaskMaster_page_controller.Task_Master_list.length>0 &&
+                            TaskMaster_page_controller.Task_Master_list.isNotEmpty){
+                          return viewTasketails(context);
+                        }else{
+                          return SizedBox();
+                        }
+
+                      }),
+                    ],
+                  ),
+                ),
+
+
+                SizedBox(height: 5,),
+
+                Card(
+                  color: AllColors.whiteColor,
+                  elevation: 10,
+                  margin: EdgeInsets.only(left: 10, right: 10, bottom: 5),
+                  child: Column(
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          /*border: Border.all(
                         color: AllColors.blackColor, // Set the border color here
                       ),*/
-                      borderRadius: BorderRadius.circular(10.0),
-                        color: AllColors.textColor
-                    ),
-                    child:Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(left: 10),
-                          child: Icon(Icons.person, color: AllColors.whiteColor,),
+                            borderRadius: BorderRadius.circular(10.0),
+                            color: AllColors.textColor
                         ),
-                        Text(
-                          "Created Manager Info",
-                          style: GoogleFonts.poppins(
-                            color: AllColors.whiteColor,
-                            fontSize: AllFontSize.twentee,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        Obx(
-                              () {
-                            return IconButton(
-                              onPressed: () {
-                                TaskMaster_page_controller.toggleCrtd();
-                                if (TaskMaster_page_controller
-                                    .isExpandCrtd.value ==
-                                    true) {
-                                  print(
-                                      "If......${TaskMaster_page_controller.isExpandCrtd.value}");
-                                } else {
-                                  print(
-                                      "else......${TaskMaster_page_controller.isExpandCrtd.value}");
-                                }
-                              },
-                              icon: Icon(
-                                TaskMaster_page_controller
-                                    .isExpandCrtd.value
-                                    ? Icons.arrow_drop_down
-                                    : Icons.arrow_drop_up,
-                                size: 25,
+                        child:Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(left: 10),
+                              child: Icon(Icons.person, color: AllColors.whiteColor,),
+                            ),
+                            Text(
+                              "Created Manager Info",
+                              style: GoogleFonts.poppins(
                                 color: AllColors.whiteColor,
+                                fontSize: AllFontSize.twentee,
+                                fontWeight: FontWeight.w600,
                               ),
-                            );
-                          },
-                        )
-        
-                      ],
-                    ),
-                  ),
-                  Obx(() {
-                    if(TaskMaster_page_controller.Task_Master_list.length>0 &&
-                        TaskMaster_page_controller.Task_Master_list.isNotEmpty){
-                      return viewCreatorManagerDetail(context);
-                    }else{
-                      return SizedBox();
-                    }
-                   // return viewCreatorManagerDetail(context);
-                  }),
-                ],
-              ),
-            ),
-        
-            SizedBox(height: 5,),
+                            ),
+                            Obx(
+                                  () {
+                                return IconButton(
+                                  onPressed: () {
+                                    TaskMaster_page_controller.toggleCrtd();
+                                    if (TaskMaster_page_controller
+                                        .isExpandCrtd.value ==
+                                        true) {
+                                      print(
+                                          "If......${TaskMaster_page_controller.isExpandCrtd.value}");
+                                    } else {
+                                      print(
+                                          "else......${TaskMaster_page_controller.isExpandCrtd.value}");
+                                    }
+                                  },
+                                  icon: Icon(
+                                    TaskMaster_page_controller
+                                        .isExpandCrtd.value
+                                        ? Icons.arrow_drop_down
+                                        : Icons.arrow_drop_up,
+                                    size: 25,
+                                    color: AllColors.whiteColor,
+                                  ),
+                                );
+                              },
+                            )
 
-            Card(
-              color: AllColors.whiteColor,
-              elevation: 10,
-              margin: EdgeInsets.only(left: 10, right: 10, bottom: 5),
-              child: Column(
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      /*border: Border.all(
+                          ],
+                        ),
+                      ),
+                      Obx(() {
+                        if(TaskMaster_page_controller.Task_Master_list.length>0 &&
+                            TaskMaster_page_controller.Task_Master_list.isNotEmpty){
+                          return viewCreatorManagerDetail(context);
+                        }else{
+                          return SizedBox();
+                        }
+                        // return viewCreatorManagerDetail(context);
+                      }),
+                    ],
+                  ),
+                ),
+
+                SizedBox(height: 5,),
+
+                Card(
+                  color: AllColors.whiteColor,
+                  elevation: 10,
+                  margin: EdgeInsets.only(left: 10, right: 10, bottom: 5),
+                  child: Column(
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          /*border: Border.all(
                         color: AllColors.blackColor, // Set the border color here
                       ),*/
-                        borderRadius: BorderRadius.circular(10.0),
-                        color: AllColors.textColor
-                    ),
-                    child:Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(left: 10),
-                          child: Icon(Icons.person, color: AllColors.whiteColor,),
+                            borderRadius: BorderRadius.circular(10.0),
+                            color: AllColors.textColor
                         ),
-                        Text(
-                          "Geo Info",
-                          style: GoogleFonts.poppins(
-                            color: AllColors.whiteColor,
-                            fontSize: AllFontSize.twentee,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        Obx(
-                              () {
-                            return IconButton(
-                              onPressed: () {
-                                TaskMaster_page_controller.toggleGeoInfoCrtd();
-                                if (TaskMaster_page_controller
-                                    .isExpandGeoInfo.value ==
-                                    true) {
-                                  print(
-                                      "If......${TaskMaster_page_controller.isExpandGeoInfo.value}");
-                                } else {
-                                  print(
-                                      "else......${TaskMaster_page_controller.isExpandGeoInfo.value}");
-                                }
-                              },
-                              icon: Icon(
-                                TaskMaster_page_controller
-                                    .isExpandGeoInfo.value
-                                    ? Icons.arrow_drop_down
-                                    : Icons.arrow_drop_up,
-                                size: 25,
+                        child:Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(left: 10),
+                              child: Icon(Icons.person, color: AllColors.whiteColor,),
+                            ),
+                            Text(
+                              "Geo Info",
+                              style: GoogleFonts.poppins(
                                 color: AllColors.whiteColor,
+                                fontSize: AllFontSize.twentee,
+                                fontWeight: FontWeight.w600,
                               ),
-                            );
-                          },
-                        )
+                            ),
+                            Obx(
+                                  () {
+                                return IconButton(
+                                  onPressed: () {
+                                    TaskMaster_page_controller.toggleGeoInfoCrtd();
+                                    if (TaskMaster_page_controller
+                                        .isExpandGeoInfo.value ==
+                                        true) {
+                                      print(
+                                          "If......${TaskMaster_page_controller.isExpandGeoInfo.value}");
+                                    } else {
+                                      print(
+                                          "else......${TaskMaster_page_controller.isExpandGeoInfo.value}");
+                                    }
+                                  },
+                                  icon: Icon(
+                                    TaskMaster_page_controller
+                                        .isExpandGeoInfo.value
+                                        ? Icons.arrow_drop_down
+                                        : Icons.arrow_drop_up,
+                                    size: 25,
+                                    color: AllColors.whiteColor,
+                                  ),
+                                );
+                              },
+                            )
 
-                      ],
-                    ),
+                          ],
+                        ),
+                      ),
+                      Obx(() {
+                        if(TaskMaster_page_controller.Task_Master_list.length>0 &&
+                            TaskMaster_page_controller.Task_Master_list.isNotEmpty){
+                          return viewGeoInfoDetail(context);
+                        }else{
+                          return SizedBox();
+                        }
+                        // return viewGeoInfoDetail(context);
+                      }),
+                    ],
                   ),
-                  Obx(() {
-                    if(TaskMaster_page_controller.Task_Master_list.length>0 &&
-                        TaskMaster_page_controller.Task_Master_list.isNotEmpty){
-                      return viewGeoInfoDetail(context);
-                    }else{
-                      return SizedBox();
-                    }
-                   // return viewGeoInfoDetail(context);
-                  }),
-                ],
-              ),
-            ),
+                ),
 
-            SizedBox(height: 5,),
-        
-           /* Card(
+                SizedBox(height: 5,),
+
+                /* Card(
               color: AllColors.whiteColor,
               elevation: 10,
               margin: EdgeInsets.only(left: 10, right: 10, bottom: 5),
@@ -463,7 +468,7 @@ class TaskMasterDetails extends StatelessWidget{
                             );
                           },
                         )
-        
+
                       ],
                     ),
                   ),
@@ -476,81 +481,84 @@ class TaskMasterDetails extends StatelessWidget{
 
             SizedBox(height: 5,),*/
 
-            Card(
-              color: AllColors.whiteColor,
-              elevation: 10,
-              margin: EdgeInsets.only(left: 10, right: 10, bottom: 5),
-              child: Column(
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      /*border: Border.all(
+                Card(
+                  color: AllColors.whiteColor,
+                  elevation: 10,
+                  margin: EdgeInsets.only(left: 10, right: 10, bottom: 5),
+                  child: Column(
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          /*border: Border.all(
                         color: AllColors.blackColor, // Set the border color here
                       ),*/
-                        borderRadius: BorderRadius.circular(10.0),
-                        color: AllColors.textColor
-                    ),
-                    child:Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(left: 10),
-                          child: Icon(Icons.library_books_sharp, color: AllColors.whiteColor),
+                            borderRadius: BorderRadius.circular(10.0),
+                            color: AllColors.textColor
                         ),
-                        Text(
-                          "DSAR Details",
-                          style: GoogleFonts.poppins(
-                            color: AllColors.whiteColor,
-                            fontSize: AllFontSize.twentee,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        Obx(
-                              () {
-                            return IconButton(
-                              onPressed: () {
-                                TaskMaster_page_controller.toggleDsar();
-                                if (TaskMaster_page_controller
-                                    .isExpandDSAR.value ==
-                                    true) {
-                                  print(
-                                      "If......${TaskMaster_page_controller.isExpandDSAR.value}");
-                                } else {
-                                  print(
-                                      "else......${TaskMaster_page_controller.isExpandDSAR.value}");
-                                }
-                              },
-                              icon: Icon(
-                                TaskMaster_page_controller
-                                    .isExpandDSAR.value
-                                    ? Icons.arrow_drop_down
-                                    : Icons.arrow_drop_up,
-                                size: 25,
+                        child:Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(left: 10),
+                              child: Icon(Icons.library_books_sharp, color: AllColors.whiteColor),
+                            ),
+                            Text(
+                              "DSAR Details",
+                              style: GoogleFonts.poppins(
                                 color: AllColors.whiteColor,
+                                fontSize: AllFontSize.twentee,
+                                fontWeight: FontWeight.w600,
                               ),
-                            );
-                          },
-                        )
+                            ),
+                            Obx(
+                                  () {
+                                return IconButton(
+                                  onPressed: () {
+                                    TaskMaster_page_controller.toggleDsar();
+                                    if (TaskMaster_page_controller
+                                        .isExpandDSAR.value ==
+                                        true) {
+                                      print(
+                                          "If......${TaskMaster_page_controller.isExpandDSAR.value}");
+                                    } else {
+                                      print(
+                                          "else......${TaskMaster_page_controller.isExpandDSAR.value}");
+                                    }
+                                  },
+                                  icon: Icon(
+                                    TaskMaster_page_controller
+                                        .isExpandDSAR.value
+                                        ? Icons.arrow_drop_down
+                                        : Icons.arrow_drop_up,
+                                    size: 25,
+                                    color: AllColors.whiteColor,
+                                  ),
+                                );
+                              },
+                            )
 
-                      ],
-                    ),
+                          ],
+                        ),
+                      ),
+                      Obx(() {
+                        if(TaskMaster_page_controller.Task_Master_list.length>0){
+                          return viewDsarDetails(context);
+                        }else{
+                          return SizedBox();
+                        }
+
+                      }),
+                    ],
                   ),
-                  Obx(() {
-                    if(TaskMaster_page_controller.Task_Master_list.length>0){
-                      return viewDsarDetails(context);
-                    }else{
-                      return SizedBox();
-                    }
+                ),
 
-                  }),
-                ],
-              ),
+              ],
             ),
+          ),
+        );
+      })
 
-          ],
-        ),
-      ),
-              ),
+
     ),
     );
   }
@@ -1115,7 +1123,30 @@ class TaskMasterDetails extends StatelessWidget{
 
             _buildLabelWithValue(label: "Sales Cycle Activated On: ", value: StaticMethod.onlyDate(TaskMaster_page_controller.Task_Master_list[0].salesCycleActivatedOn??""),),
 
-            _buildLabelWithValue(label: "Sales Cycle ID: ", value: TaskMaster_page_controller.Task_Master_list[0].salesCycleId ?? "",),
+            _buildLabelWithValue(label: "Sales Cycle ID: ", value: TaskMaster_page_controller.Task_Master_list[0].salesCycleId ?? "",
+            onTap: (){
+              salesCycleController.pageNumber = 0;
+              salesCycleController.clearSaleProductListController();
+              salesCycleController.filterQuoteAcceptedFlag.value="";
+              salesCycleController.pageNumber=0;
+              salesCycleController.clearAllFieldOfFilter();
+              salesCycleController.getsalesCycleData( salesCycleController.pageNumber, TaskMaster_page_controller.Task_Master_list[0].salesCycleId!, "ViewHeader", 'Task');
+              salesCycleController.getSaleCycleProductByIdList(salesCycleController.pageNumber, TaskMaster_page_controller
+                  .Task_Master_list[0].salesCycleId??"" );
+
+              /*  salesCycleController.getsalesCycleCompetitorProductGetBySalesCycleId(
+                        salesCycleController.pageNumber ,
+                        TaskMaster_page_controller
+                            .Task_Master_list[0].salesCycleId??"");*/
+
+              salesCycleController.itemCategorySelectedlist.value = [];
+              salesCycleController.getPurchaseProcessApi();
+              salesCycleController.getPurchaseTimeFrameApi();
+              salesCycleController.getItemCategoryMstApi(TaskMaster_page_controller.Task_Master_list[0].salesCycleId??"" ,
+                  TaskMaster_page_controller.Task_Master_list[0].taskId??"","" );
+              salesCycleController.ProductCategoryWiseAmtGet(0, TaskMaster_page_controller.Task_Master_list[0].salesCycleId!);
+
+            }),
 
             _buildLabelWithValue(label: "Along With Person Name: ", value: TaskMaster_page_controller.Task_Master_list[0].alongWithPersonName ?? "",),
 

@@ -8,6 +8,7 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:navigation_drawer_flutter/component/circular_loading.dart';
 import 'package:navigation_drawer_flutter/reources/routes/routes_name.dart';
 
 import '../../../../constants/app_colors.dart';
@@ -71,38 +72,36 @@ class SaleCyclePendingForApprovalList extends StatelessWidget{
        ),
        drawer: CustomDrawer(),
        body: RefreshIndicator(
-         onRefresh:salesCyclePendingForApprovalController.refreshList,
-         child: Container(
-           width: double.infinity,
-           height: double.infinity,
-           child: Column(
-             children: [
-               Obx((){
-                 return Visibility(
-                   visible:salesCyclePendingForApprovalController.loading.value ,
-                   child: LinearProgressIndicator(
-                     backgroundColor: AllColors.primaryDark1,
-                     color: AllColors.textColor,
+           onRefresh:salesCyclePendingForApprovalController.refreshList,
+           child: Container(
+             width: double.infinity,
+             height: double.infinity,
+             child: Column(
+               children: [
+                 Obx((){
+                   return Visibility(
+                     visible:salesCyclePendingForApprovalController.loading.value ,
+                     child: LinearProgressIndicator(
+                       backgroundColor: AllColors.primaryDark1,
+                       color: AllColors.textColor,
+                     ),
+                   );
+                 }),
+                 Flexible(
+                   fit: FlexFit.loose,
+                   child: Container(
+                     child: Obx(() {
+                       return BindCustomerListView(context);
+                     }),
                    ),
-                 );
-               }),
-               Flexible(
-                 fit: FlexFit.loose,
-                 child: Container(
-                   child: Obx(() {
-                     return BindCustomerListView(context);
-                   }),
-                 ),
-               )
-             ],
+                 )
+               ],
+             ),
            ),
          ),
-       ),
+
      ),);
   }
-
-
-
 
   Widget BindCustomerListView(context) {
     if (salesCyclePendingForApprovalController.saleCyclePendingForApprovalList.value.isNotEmpty && salesCyclePendingForApprovalController.saleCyclePendingForApprovalList.value.length > 0) {
@@ -115,12 +114,9 @@ class SaleCyclePendingForApprovalList extends StatelessWidget{
               salesCyclePendingForApprovalController.rowsPerPage)
               .toInt();
           if ((salesCyclePendingForApprovalController.total_rows %
-              salesCyclePendingForApprovalController.rowsPerPage) >
-              0) total_page += 1;
+              salesCyclePendingForApprovalController.rowsPerPage) > 0) total_page += 1;
 
-          print(
-              "last index ${salesCyclePendingForApprovalController.pageNumber} ${salesCyclePendingForApprovalController.total_rows} ${salesCyclePendingForApprovalController.rowsPerPage} ${total_page}");
-
+          print("last index ${salesCyclePendingForApprovalController.pageNumber} ${salesCyclePendingForApprovalController.total_rows} ${salesCyclePendingForApprovalController.rowsPerPage} ${total_page}");
 
           if (salesCyclePendingForApprovalController.pageNumber + 1 < total_page) {
             salesCyclePendingForApprovalController.getsalesCycleData(salesCyclePendingForApprovalController.pageNumber + 1,);
