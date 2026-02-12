@@ -15,33 +15,6 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 FlutterLocalNotificationsPlugin();
 final navigatorKey=GlobalKey<NavigatorState>();
 void main() async{
-  /*AwesomeNotifications().initialize(
-    null,
-    [
-      NotificationChannel(
-        channelKey: 'basic_channel',
-        channelName: 'Basic notifications',
-        channelDescription: 'Notification channel for basic tests',
-        playSound: true,
-        importance: NotificationImportance.High,
-
-      )
-    ],
-    //debug: true
-  );
-
-  AwesomeNotifications().setListeners(
-      onActionReceivedMethod: (receivedNotification) async {
-        print("Received Notification Action: ${receivedNotification.buttonKeyPressed}");
-        if (receivedNotification.buttonKeyPressed == 'OPEN_FILE') {
-          final filePath = receivedNotification.payload?['filePath'];
-          if (filePath != null) {
-            await OpenFile.open(filePath);
-          }
-        }
-        return;
-      }
-  );*/
   // todo for Trust all certificates for network requests (for testing only).
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
