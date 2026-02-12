@@ -88,6 +88,15 @@ class SalesCycleVm extends GetxController {
   int pageNumberSalesAdvise = 0;
   RxString routingSalesAdvise="".obs;
 
+
+  //todo nirupma code
+  RxList<bool> readMoreList = <bool>[].obs;
+
+  void initReadMoreList(int length) {
+    readMoreList.assignAll(List.generate(length, (_) => false));
+  }
+
+
   int rowsPerPage = 10;
   int total_rows = 0;
   int total_rows_items = 0;
@@ -1517,6 +1526,7 @@ class SalesCycleVm extends GetxController {
               loading.value = false;
               quoteHeaderdata.value = response;
               quoteLinedata.value = quoteHeaderdata[0].quoteItems ?? [];
+              initReadMoreList(quoteLinedata.value.length);
               if (quoteLinedata.length > 0) {
 
                 updateItemDescriptionController.value.text =
@@ -2949,13 +2959,7 @@ class SalesCycleVm extends GetxController {
     }
     double totAmount = finalAmount! - advcAmount;
     pendingAmountController.value.text = totAmount.toString();
-    print('Installationchagr..${installationChargesController.value.text}');
-    print('OthersC..${otherChargesController.value.text}');
-    print('quoteAmtInt..${quoteAmtInt}');
-    print('finalAmt..${finalAmount}');
-    print('advcAmt..${advncPaymentAmountController.value.text}');
-    print('advc..${advcAmount}');
-    print('PendingAmt..${pendingAmountController.value.text}');
+
   }
 
   SetBusinessTerm() {
@@ -3006,7 +3010,6 @@ class SalesCycleVm extends GetxController {
     SalesCycleModal saleCycleList,
   ) {
     showDialog(
-        // barrierDismissible: false,
         context: context,
         builder: (context) {
           return AlertDialog(
@@ -3032,7 +3035,7 @@ class SalesCycleVm extends GetxController {
                 child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                bindUpdateSalesCycle(context),
+                bindUpdateSalesCycle(context,),
                 SizedBox(
                   height: 10,
                 ),
@@ -3916,9 +3919,6 @@ class SalesCycleVm extends GetxController {
           return TextField(
             readOnly:
                 saleCycleList[0].salesCycleStatus != "Propose" ? true : false,
-            onTap: () {
-              updateQuoteAccetedCycleController.value.clear();
-            },
             onChanged: (value) {
               if (updateQuoteAccetedCycleController.value.text == "WON") {
                 selectedQuotationIdController.value.clear();
@@ -5152,7 +5152,8 @@ class SalesCycleVm extends GetxController {
     isVisibiltyShippingAddressQuote.value =updateQuoteShippingAddressConfirmation.value.text == 'Yes';
     print('address...${quoteHeaderdata[0].shippingStateName}');
 
-
+    finalAmountController.value.text=quoteHeaderdata[0].quoteTotalAmount.toString();
+    pendingAmountController.value.text='0';
     //todo by radha raman
     installationChargesController.value.text = quoteHeaderdata[0].installationCharges.toString() ?? "";
     otherChargesController.value.text = quoteHeaderdata[0].otherCharges.toString() ?? "";

@@ -624,7 +624,6 @@ class Taskmastervm extends GetxController{
     }
 
     TaskDSARMasterCreate() async {
-
       try{
         String EstClosureDate = "";
         String NextInterDate ="";
@@ -766,21 +765,21 @@ class Taskmastervm extends GetxController{
                         pageNumber=0;
                         getTaskMaster(pageNumber, 'All', TaskID, "",'', date_filter, is_done.value);
                         Get.toNamed(RoutesName.taskMasterDetails_screen);
-
+                        loading.value = false;
                     }else {
                         Utils.sanckBarError('Error!', response[0].message.toString());
                         print(response[0].message.toString());
                         //Task_Master_list.value=[];
-
+                        loading.value = false;
                     }
                 }
 
         }catch(e){
             print(e);
         }
-        finally{
+       /* finally{
           loading.value = false;
-        }
+        }*/
     }
 
 
@@ -794,7 +793,7 @@ class Taskmastervm extends GetxController{
                 "row_per_page": rowsPerPage.toString(),
                 "page_number": '0'
             };
-            loading.value=true;
+
             print("data is ${data}");
             String onValue = await _api.contactMstGetList(data, sessionManagement);
                 final jsonResponse = json.decode(onValue);
@@ -812,55 +811,47 @@ class Taskmastervm extends GetxController{
 
                     }else {
                         contact_master_list.value=[];
-
                     }
                 }
 
         }catch(e){
             print(e);
         }
-        finally{
-          loading.value = false;
-        }
+
     }
 
     getTaskMstDSARList(String? taskId) async  {
         TaskID = taskId!;
-        try{
-            Map<String, String> data={
-                "filter_dsar_status": '',
-                "filter_task_id": taskId,
-                "row_per_page": rowsPerPage.toString(),
-                "page_number": '0'
-            };
-            loading.value=true;
-            print("data is ${data}");
-            String onValue = await _api.TaskDSARMstGetApiHit(data, sessionManagement);
-                final jsonResponse = json.decode(onValue);
-                print(onValue);
-                if(jsonResponse is List){
-                    List<TaskDSARModel> response = jsonResponse.map((e) => TaskDSARModel.fromJson(e)).toList();
-                    if(response!= null && response.length>0 && response[0].condition=="True"){
-
-                        TaskDSAR_Master_list.value=response;
-                        print("Success...1 ${response.toString()}");
-
-                    }else {
-                        TaskDSAR_Master_list.value=[];
-                        print("UnSuccess... ${response.toString()}");
-
-                    }
-                }
-
-        }catch(e){
-            print("jdsdhud...${e}");
-        }
-        finally{
-          loading.value = false;
-        }
+        Map<String, String> data={
+          "filter_dsar_status": '',
+          "filter_task_id": taskId,
+          "row_per_page": rowsPerPage.toString(),
+          "page_number": '0'
+        };
+        loading.value=true;
+        print("data is ${data}");
+         await _api.TaskDSARMstGetApiHit(data, sessionManagement).then((onValue){
+          try {
+            List<TaskDSARModel> response = (json.decode(onValue) as List<dynamic>)
+                .map((i) => TaskDSARModel.fromJson(i as Map<String, dynamic>))
+                .toList();
+            if(response!= null && response.length>0 && response[0].condition=="True"){
+              TaskDSAR_Master_list.value=response;
+            } else {
+              TaskDSAR_Master_list.value=[];
+            }
+          } catch (e) {
+            print('catch....${e.toString()}');
+          }
+        }).whenComplete((){
+           loading.value=false;
+         });
     }
 
-    Future<Iterable<AccountMasterModel>> getAccountMaster(int page_no, String accont_name)async{
+
+
+
+    Future<Iterable<AccountMasterModel>> getAccountMaster(int page_no, String accont_name) async{
         try{
             Map<String, dynamic> data={
                 "filter_account_code": "",
@@ -884,10 +875,11 @@ class Taskmastervm extends GetxController{
                 "row_per_page": rowsPerPage,
                 "page_number": 0
             };
-            loading.value=true;
+            loading.value = true;
             String onValue = await _api.AccountMasterGetApiHit(data, sessionManagement);
                 final jsonResponse = json.decode(onValue);
                 if(jsonResponse is List){
+                  loading.value = false;
                     List<AccountMasterModel> response = jsonResponse.map((e) => AccountMasterModel.fromJson(e)).toList();
                     if(response!= null && response.length>0 && response[0].condition=="True"){
                         Account_Master_list.value=response;
@@ -898,10 +890,8 @@ class Taskmastervm extends GetxController{
                 }
 
         }catch(e){
-            print(e);
-        }
-        finally{
           loading.value = false;
+            print(e);
         }
         return Account_Master_list;
     }
@@ -911,11 +901,12 @@ class Taskmastervm extends GetxController{
             Map<String, String> data={
                 "filter_type_of_call": flag,
             };
-            loading.value=true;
+            loading.value = true;
             String onValue = await _api.CallStatusMasterGetApiHit(data, sessionManagement);
                 print(onValue);
                 final jsonResponse = json.decode(onValue);
                 if(jsonResponse is List){
+                  loading.value = false;
                     List<CallStatusMasterModel> response = jsonResponse.map((e) => CallStatusMasterModel.fromJson(e)).toList();
                     if(response!= null && response.length>0 && response[0].condition=="True"){
                       CallStatus_Master_list.value=[];
@@ -930,14 +921,15 @@ class Taskmastervm extends GetxController{
                         CallStatus_Master_list.value=[];
                         Selection_CallStatus_Master_list.value=[];
                     }
+                }else{
+                  loading.value = false;
                 }
 
         }catch(e){
+          loading.value = false;
             print(e);
         }
-        finally{
-          loading.value = false;
-        }
+
     }
 
     CallDSARsMasterApiHit() async {
@@ -951,20 +943,22 @@ class Taskmastervm extends GetxController{
                 if(jsonResponse is List){
                     List<CallStatusMasterModel> response = jsonResponse.map((e) => CallStatusMasterModel.fromJson(e)).toList();
                     if(response!= null && response.length>0 && response[0].condition=="True"){
-
+                      loading.value = false;
                         DSARStatus_Master_list.addAll(response);
 
                     }else {
+                      loading.value = false;
                         DSARStatus_Master_list.value=[];
 
                     }
                 }
-        }catch(e){
+        }catch(e){loading.value = false;
+
             print(e);
         }
-        finally{
+        /*finally{
           loading.value = false;
-        }
+        }*/
     }
 
     MethodOfCallMasterApiHit({String? filter})async{
@@ -985,21 +979,22 @@ class Taskmastervm extends GetxController{
                         Selection_MethodOfCall_Master_list.add(CallStatusMasterModel(taskStatus: "All"));
                       }
                         MethodOfCall_Master_list.addAll(response);
-
+                      loading.value = false;
 
                     }else {
                         MethodOfCall_Master_list.value=[];
                         Selection_MethodOfCall_Master_list.value=[];
-
+                        loading.value = false;
                     }
                 }
 
         }catch(e){
+          loading.value = false;
             print(e);
         }
-        finally{
+       /* finally{
           loading.value = false;
-        }
+        }*/
     }
 
     TaskMstDelete(int index) async{
@@ -1019,22 +1014,23 @@ class Taskmastervm extends GetxController{
                         if (response != null && response.length > 0 && response[0].condition == "True") {
                             Task_Master_list.removeAt(index);
                             Utils.sanckBarSuccess('Success Message!',response[0].message.toString());
-
+                            loading.value = false;
                         } else {
                             Utils.sanckBarError("False Message !", response[0].message.toString());
                             //Account_Master_list.value=[];
+                            loading.value = false;
                         }
                     } else {
                         Utils.sanckBarException("Api Error!", JsonResponse);
                     }
 
         } catch (e) {
-
+        loading.value = false;
             print(e);
         }
-        finally{
+       /* finally{
           loading.value = false;
-        }
+        }*/
 
     }
     getItemCategoryMstApi(String? taskId) async {
@@ -1053,16 +1049,19 @@ class Taskmastervm extends GetxController{
 
                 if (Response.isNotEmpty && Response[0].condition.toString() == "True") {
                     Item_Category_master_list.value = Response;
+                    loading.value = false;
                 } else {
                     Item_Category_master_list.value = [];
+                    loading.value = false;
                 }
             } catch (e) {
                 Item_Category_master_list.value = [];
                 print('catch....${e.toString()}');
+                loading.value = false;
             }
-            finally{
+           /* finally{
                 loading.value=false;
-            }
+            }*/
 
     }
 
@@ -1091,18 +1090,21 @@ class Taskmastervm extends GetxController{
                                 Item_Category_Infra_list[i]);
                         }}
                     print('master list1....${Item_Category_Infra_list.length.toString()}');
+                    loading.value = false;
                 } else {
                     Item_Category_Infra_list.value = [];
                     Item_Category_Selected_Infra_list.value = [];
+                    loading.value = false;
                     //print('master listelsse1....${Item_Category_Selected_list.length.toString()}');
                 }
             }
             catch (e) {
               print('catch....${e.toString()}');
+              loading.value = false;
             }
-            finally{
+            /*finally{
                 loading .value=true;
-            }
+            }*/
     }
 
     getCompanyTypeMasterGet() async {
@@ -1121,15 +1123,18 @@ class Taskmastervm extends GetxController{
 
           if (Response.isNotEmpty && Response[0].condition?.toLowerCase() == "true") {
             company_profile_type_list.value=Response;
+            loading.value = false;
           } else {
             company_profile_type_list.value=[];
+            loading.value = false;
           }
         } catch (e) {
+        loading.value = false;
           print('catch....${e.toString()}');
         }
-        finally{
+        /*finally{
           loading.value=true;
-        }
+        }*/
 
     }
 
@@ -1145,16 +1150,19 @@ class Taskmastervm extends GetxController{
                     ItemCategoryMstModel.fromJson(i as Map<String, dynamic>)).toList();
                 if (Response.isNotEmpty && Response[0]?.condition.toString() == "True") {
                     Item_Category_master_list_without_task.value = Response!;
+                    loading.value = false;
                 } else {
                     Item_Category_master_list_without_task.value = [];
+                    loading.value = false;
                 }
             } catch (e) {
                 Item_Category_master_list_without_task.value = [];
                 print('catch....${e.toString()}');
+                loading.value = false;
             }
-            finally{
+            /*finally{
                 loading.value=true;
-            }
+            }*/
 
     }
 
@@ -1178,7 +1186,7 @@ class Taskmastervm extends GetxController{
                 JsonResponse.map((e) => TaskMasterGetModel.fromJson(e)).toList();
 
                 if (response != null && response.isNotEmpty && response[0].condition == "True") {
-
+                  loading.value = false;
                     Utils.sanckBarSuccess("Success!", response[0].message.toString());
 
                     if(flag == 'Details'){
@@ -1190,19 +1198,22 @@ class Taskmastervm extends GetxController{
                       TaskDSARMasterCreate();
                     }
                 } else {
+                  loading.value = false;
                     Utils.sanckBarError("Error!", "${response[0].message}");
                 }
             } else {
+              loading.value = false;
                 Utils.sanckBarException("Api Error!", JsonResponse.toString());
             }
         } catch (error, stackTrace) {
+        loading.value = false;
             print(error);
             print(stackTrace);
             print("Exception....");
         }
-        finally{
+       /* finally{
           loading.value = false;
-        }
+        }*/
     }
 
 
@@ -1230,7 +1241,7 @@ class Taskmastervm extends GetxController{
                 if(jsonResponse is List){
                     List<SalesCycleModal> response = jsonResponse.map((e) => SalesCycleModal.fromJson(e)).toList();
                     if(response!= null && response.length>0 && response[0].condition=="True"){
-
+                      loading.value = false;
                         if(page_no==0){
                             Sales_Id_list.clear();
                         }
@@ -1238,16 +1249,18 @@ class Taskmastervm extends GetxController{
                         total_rows=int.parse(Sales_Id_list[0].totalRows!);
 
                     }else {
+                      loading.value = false;
                         Sales_Id_list.value=[];
 
                     }
                 }
         }catch(e){
+          loading.value = false;
             print(e);
         }
-        finally{
+        /*finally{
           loading.value = false;
-        }
+        }*/
     }
 
     TaskPersonMstCreateAPI(String flag) async {
@@ -1275,29 +1288,31 @@ class Taskmastervm extends GetxController{
                         getTaskMaster(0, 'All', TaskID, "",'', date_filter, is_done.value);
                         //todo by raman
                         getTaskPersonMstByTaskIdApi(TaskID);
-
+                        loading.value = false;
                         Get.toNamed(RoutesName.taskMasterDetails_screen);
                     } else if(flag == 'DSAR'){
+                      loading.value = false;
                         getTaskMaster(0, 'All', TaskID, "",'', date_filter, is_done.value);
                         getTaskPersonMstByTaskIdApi(TaskID);
                     }
 
                 } else {
-
+                  loading.value = false;
                     Utils.sanckBarError("Error!", "Please select at least single product category");
                 }
             } else {
-
+              loading.value = false;
                 Utils.sanckBarException("Api Error!", JsonResponse.toString());
             }
         } catch (error, stackTrace) {
             print(error);
             print(stackTrace);
             print("Exception....");
+            loading.value = false;
         }
-        finally{
+        /*finally{
           loading.value = false;
-        }
+        }*/
     }
 
 
@@ -1357,7 +1372,7 @@ class Taskmastervm extends GetxController{
                         if (response[0].condition == "True") {
                             Utils.sanckBarSuccess("Message !", response[0].message.toString());
                             getTaskMaster(0, is_Active.toString(), Task_Master_list[0].taskId, '', 'GET FROM TASK ID', date_filter, is_done.value);
-
+                            loading.value = false;
                             if(flag == 'FromDSARPage'){
                                 isInfraLeadValueSubmit.value = true;
                                 Get.toNamed(RoutesName.addNewDSARTask_screen);
@@ -1366,16 +1381,18 @@ class Taskmastervm extends GetxController{
                             }
                             clearInfraUpdateController();
                         } else {
+                          loading.value = false;
                             Utils.sanckBarError("False Message !", response[0].message.toString());
                         }
                     }
             } catch (e) {
                 Utils.sanckBarException("Message !", e.toString());
                 print(e);
-            }
-            finally{
                 loading.value = false;
             }
+            /*finally{
+                loading.value = false;
+            }*/
         }
 
     getEmpMstEmailByApi() async{
@@ -1395,20 +1412,24 @@ class Taskmastervm extends GetxController{
                         if (response != null &&
                             response.length > 0 &&
                             response[0].condition == "True") {
+                          loading.value = false;
                             AlongPersonWith_list.value=response;
                         } else {
+                          loading.value = false;
                             AlongPersonWith_list.value=[];
                             Utils.sanckBarError("Error!", "No Data Found");
                             //service_installation_details_list.value=[];
                         }
                     } else {
+                      loading.value = false;
                         Utils.sanckBarException("Api Error!", JsonResponse);
                     }
                 }catch(e){
+        loading.value = false;
                     print(e);
-                }finally{
+                }/*finally{
                     loading.value = false;
-                }
+                }*/
     }
 
     getTaskPersonMstByTaskIdApi(String TaskID) async {
@@ -1428,19 +1449,20 @@ class Taskmastervm extends GetxController{
                     if(response!= null && response.length>0 && response[0].condition=="True"){
                         AlongPersonWith_list.value = response;
                         print('asjhdgsau1 ${AlongPersonWith_list.length}');
-
+                        loading.value = false;
                     }else {
                         AlongPersonWith_list.value=[];
-
+                        loading.value = false;
                     }
                 }
 
         }catch(e){
+          loading.value = false;
             print(e);
         }
-        finally{
+        /*finally{
           loading.value = false;
-        }
+        }*/
     }
 
     void clearInfraUpdateController(){

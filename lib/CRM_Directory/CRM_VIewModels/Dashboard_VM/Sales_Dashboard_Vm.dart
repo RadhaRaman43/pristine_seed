@@ -21,7 +21,7 @@ class SalesDashboardVm extends GetxController{
   String email = "";
   String userType = "";
   var selectedOption = 'Employee'.obs;
-  var FilterFunnel = 'All'.obs;
+  var FilterFunnel = ''.obs;
   RxString formattedStartDate = "".obs;
   RxString formattedEndDate = "".obs;
   RxString ClusterName = "".obs;
@@ -38,6 +38,8 @@ class SalesDashboardVm extends GetxController{
   RxBool isExpandCollection = false.obs;
 
   String isAdminWritePermission = "";
+
+  RxBool messageVisibilty=true.obs;
 
   int pageNumber = 0;
   int rowsPerPage = 10;
@@ -86,7 +88,7 @@ class SalesDashboardVm extends GetxController{
     isAdminWritePermission = await sessionManagement.getIsAdminPermission() ?? '';
     DateRange("financial");
     filterCustomDateController.value.text = '${formattedStartDate} - ${formattedEndDate}';
-    salesDashboardData();
+    //salesDashboardData();
     getClustersGetByEmail();
     getDepartmentList();
     if(this.isAdminWritePermission==1){
@@ -95,7 +97,7 @@ class SalesDashboardVm extends GetxController{
     else{
       getEmployeeTeamMemberGetByClusterRegionApi();
     }
-    getFilterData();
+    //getFilterData();
 
   }
 
@@ -245,8 +247,8 @@ class SalesDashboardVm extends GetxController{
     try {
       Map<String, String> data = {
         "email_id": email,
-        "cluster_name": ClusterNameForApi.isEmpty?"All":ClusterNameForApi,
-        "region_name": RegionNameForApi.isEmpty?"All":RegionNameForApi,
+        "cluster_name": ClusterNameForApi.isEmpty?"":ClusterNameForApi,
+        "region_name": RegionNameForApi.isEmpty?"":RegionNameForApi,
         "start_date": formattedStartDate.value,
         "end_date": formattedEndDate.value,
         "funnel_filter": FilterFunnel.value,
@@ -267,6 +269,7 @@ class SalesDashboardVm extends GetxController{
             .toList();
 
         if (response.isNotEmpty && response[0].condition?.toLowerCase() == "true") {
+          messageVisibilty.value=false;
           salesDashboardList.value = response;
           monthWiseTotalFunnelList.value = response[0].monthwisetotalfunnel ?? [];
           print('length.....${monthWiseTotalFunnelList.length}');
@@ -275,8 +278,8 @@ class SalesDashboardVm extends GetxController{
           monthWiseCollectionCommitmentList.value = response[0].monthwisecollectioncommitmentvsactualcollectionachive ?? [];
           monthWiseAoVsBookingList.value = response[0].monthwiseaovsbookingachive ?? [];
           monthWiseFinalBookingList.value = response[0].monthwisefinalbookingcommitment ?? [];
-          clusterName_controller.value.text = response[0].clusterhead??"";
-          RegionName_controller.value.text = response[0].regionhead??"";
+          /*clusterName_controller.value.text = response[0].clusterhead??"";
+          RegionName_controller.value.text = response[0].regionhead??"";*/
           SalesPersonName_Controller.value.text = response[0].salepersonname??"";
           SalesPersonER_Code_Controller.value.text = response[0].salepersonempcode??"";
           PeriodFrom_Controller.value.text = response[0].periodfrom??"";
@@ -535,13 +538,15 @@ class SalesDashboardVm extends GetxController{
       loading.value=true;
       print("data is ${data}");
       _api.RegionsWithClusterFilterGetByEmailApiHit(data, sessionManagement).then((onValue){
-        print(onValue);
+        print('$onValue');
         final jsonResponse = json.decode(onValue);
         if(jsonResponse is List){
           List<RegionWithClusterFilterModal> response = jsonResponse.map((e) => RegionWithClusterFilterModal.fromJson(e)).toList();
           if(response.length>0 && response[0].condition=="True"){
             loading.value = false;
             regionwithclusterGetByEmailList.value=response;
+            print('av..${RegionName_controller.value.text}');
+            getFilterData();
           }else {
             loading.value = false;
             regionwithclusterGetByEmailList.value=[];
@@ -569,8 +574,8 @@ class SalesDashboardVm extends GetxController{
     RegionNameForApi = '';
     EmployeeNameForApi = '';
     DepartNameForApi = '';
-    clusterName_controller.value.clear();
-    RegionName_controller.value.clear();
+    //clusterName_controller.value.clear();
+    //RegionName_controller.value.clear();
     filterCustomDateController.value.clear();
     EmployeeNameFilter_controller.value.clear();
     DepartmentNameFilter_controller.value.clear();
@@ -579,11 +584,12 @@ class SalesDashboardVm extends GetxController{
     SelectDepartment_List.value = [];
     SelectedEmployee_Member_list.value = [];
     DateRange("financial");
+    print("cgf${regionwithclusterGetByEmailList.length}");
     filterCustomDateController.value.text = '${formattedStartDate} - ${formattedEndDate}';
     RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join(',');
     clusterName_controller.value.text = clusterGetByEmailList.map((e) => e.geoValue).join(',');
-    RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join(',');
-    clusterName_controller.value.text = clusterGetByEmailList.map((e) => e.geoValue).join(',');
+   /* RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join(',');
+    clusterName_controller.value.text = clusterGetByEmailList.map((e) => e.geoValue).join(',');*/
 
   }
 
@@ -641,7 +647,9 @@ class SalesDashboardVm extends GetxController{
     }
 
     print("filter data save ${getFilterData}");
-    salesDashboardData();
+    if(isAdminWritePermission=='0'){
+      salesDashboardData();
+    }
   }
 
   void clearFilterData() {
