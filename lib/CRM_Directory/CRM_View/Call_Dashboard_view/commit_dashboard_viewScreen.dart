@@ -134,15 +134,30 @@ class CommitDashboardViewscreen extends StatelessWidget{
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-                                Text(
-                                  'Commit Due ${dashboard_view_Controller.character.value}',
-                                  style: GoogleFonts.poppins(
-                                    color: AllColors.primaryDark1,
-                                    fontSize: AllFontSize.fourtine,
-                                    fontWeight: FontWeight.w700,
-                                  ),
+                                Row(
+                                  children: [
+                                    Text(
+                                      'Commitment',
+                                      style: GoogleFonts.poppins(
+                                        color: AllColors.primaryDark1,
+                                        fontSize: AllFontSize.fourtine,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                    Obx((){
+                                      return  Text(
+                                        ' ( Date Ranges : ${dashboard_view_Controller.formattedStartDate} - '
+                                            '${dashboard_view_Controller.formattedEndDate})',
+                                        style: GoogleFonts.poppins(
+                                          color: AllColors.blackColor,
+                                          fontSize: AllFontSize.twelve,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      );
+                                    }),
+                                  ],
                                 ),
-                                SizedBox(width: 10,),
+                               const SizedBox(width: 10,),
                                 Text(
                                   '${dashboard_view_Controller.character.value} : Type Of Calls (R)',
                                   style: GoogleFonts.poppins(
@@ -151,6 +166,22 @@ class CommitDashboardViewscreen extends StatelessWidget{
                                     fontWeight: FontWeight.w500,
                                   ),
                                 ),
+
+
+                                Obx((){
+                                  return  Tooltip(
+                                    message:  'Quote Accep. ${dashboard_view_Controller.QuoteAccepted_controller.value.text}',
+                                    child: Text(
+                                      'Quote Accep. :  ${dashboard_view_Controller.QuoteAccepted_controller.value.text} ',
+                                      style: GoogleFonts.poppins(
+                                        color: AllColors.blackColor,
+                                        fontSize: AllFontSize.twelve,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  );
+                                }),
                               ],
                             );
                           })
@@ -1392,13 +1423,13 @@ class CommitDashboardViewscreen extends StatelessWidget{
       width: MediaQuery.of(context).size.width*.96,
       controller: dashboard_view_Controller.IsCommit_controller.value,
       label: Text(
-        "is Commit",
+        "Is Commit",
         style: GoogleFonts.poppins(
             color: AllColors.primaryDark1,
             fontSize: AllFontSize.fourtine,
             fontWeight: FontWeight.w600),
       ),
-      initialSelection: 'ALL',
+      initialSelection: dashboard_view_Controller.IsCommit_controller.value.text,
       inputDecorationTheme: const InputDecorationTheme(
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.all(Radius.circular(10)),

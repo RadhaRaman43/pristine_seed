@@ -98,18 +98,21 @@ class ContactMasterVM extends GetxController{
 
         if (emp_masterResponse.isNotEmpty && emp_masterResponse[0]?.condition.toString() == "True") {
           isHeDecisionMakerList.value = emp_masterResponse[0].list!;
+          loading.value = false;
           print('RoleList.....${isHeDecisionMakerList.length.toString()}');
         } else {
+          loading.value = false;
           isHeDecisionMakerList.value = [];
           print('RoleList2.....${isHeDecisionMakerList.length.toString()}');
         }
       } catch (e) {
+       loading.value = false;
         isHeDecisionMakerList.value = [];
         print('catch....${e.toString()}');
       }
-      finally{
+      /*finally{
         loading.value=false;
-      }
+      }*/
 
   }
 
@@ -134,28 +137,30 @@ class ContactMasterVM extends GetxController{
           if(jsonResponse is List){
             List<ContactMstGetListModal> response = jsonResponse.map((e) => ContactMstGetListModal.fromJson(e)).toList();
             if(response!= null && response.length>0 && response[0].condition=="True"){
-              print("finally1....");
+
               if(pageNumber==0){
                 contact_master_list.clear();
               }
               contact_master_list.addAll(response);
               total_rows=int.parse(contact_master_list[0].totalRows!);
               print('Total rows ${total_rows}');
+              loading.value = false;
             }else {
-              print("finally2....");
+              loading.value = false;
               contact_master_list.value=[];
 
             }
           } else {
-            print("finally3....");
+            loading.value = false;
             Utils.showErrorToastification("Api Response!", jsonResponse);
           }
         }catch(e){
+      loading.value = false;
           print(e);
         }
-        finally{
+        /*finally{
           loading.value=false;
-        }
+        }*/
 
   }
 
@@ -183,12 +188,9 @@ class ContactMasterVM extends GetxController{
       "filter_email_id": "",
       "filter_phone_no": ""
     };
-    print("Complany Data....${data}");
-    loading.value=true;
+
     String customer_response =await  _api.AccountMasterGetApiHit(data, sessionManagement);
-
       final jsonResponse = json.decode(customer_response);
-
       if (jsonResponse is List) {
         print(jsonResponse);
         List<AccountMasterModel> response =
@@ -197,9 +199,7 @@ class ContactMasterVM extends GetxController{
         if (response[0].condition == 'True') {
           print("Complany type....${jsonResponse}");
           Account_Master_list.value = response;
-
         } else {
-
           Account_Master_list.value= [];
         }
       } else {
@@ -209,9 +209,6 @@ class ContactMasterVM extends GetxController{
     } catch (e) {
       Utils.sanckBarException('Exception!', e.toString());
       Account_Master_list.value = [];
-    }
-    finally{
-      loading.value=false;
     }
     return  Account_Master_list.value;
   }
@@ -234,6 +231,7 @@ class ContactMasterVM extends GetxController{
             if (response != null &&
                 response.length > 0 &&
                 response[0].condition == "True") {
+              loading.value = false;
               AccountMasterGetCode_list.value=response;
               if(AccountMasterGetCode_list[0].permanentAddress != null){
                 FullAddress_Controller.value.text = AccountMasterGetCode_list[0].permanentAddress!.address! + ", "
@@ -246,22 +244,24 @@ class ContactMasterVM extends GetxController{
               }
 
             } else {
+              loading.value = false;
               AccountMasterGetCode_list.value=[];
               Utils.showErrorToastification(
                   "Error!", "No Data Found");
               //service_installation_details_list.value=[];
             }
           } else {
-
+            loading.value = false;
             // service_indent_header_list.value = [];
             Utils.showExceptionToastification("Api Error!", JsonResponse);
           }
         }catch(e){
+          loading.value = false;
           print(e);
         }
-        finally{
+       /* finally{
           loading.value=false;
-        }
+        }*/
 
   }
 
@@ -279,17 +279,20 @@ class ContactMasterVM extends GetxController{
         if(jsonResponse is List){
           List<DepartNameModal> response = jsonResponse.map((e) => DepartNameModal.fromJson(e)).toList();
           if(response!= null && response.length>0 && response[0].condition=="True"){
+            loading.value = false;
             department_name_list.value=response;
           }else {
+            loading.value = false;
             Account_Master_list.value=[];
           }
         }
     }catch(e){
+      loading.value = false;
       print(e);
     }
-    finally{
+   /* finally{
       loading.value = false;
-    }
+    }*/
   }
 
   resetAllContactCreativeField(String flag){
@@ -320,12 +323,12 @@ class ContactMasterVM extends GetxController{
   }
 
   createNewContactMstApi(String flag) async{
-    if(account_name_controller.text.isEmpty){
-      Utils.sanckBarError('Account Name!', "Please Select Account Name");
+    if(account_name_controller.text.isEmpty || account_name_controller.text==null){
+      Utils.sanckBarError('Account Name!', "Please Select Customer Name");
       return ;
     }
     if(contact_name_controller.text.isEmpty){
-      Utils.sanckBarError('Contact Name!', "Please Fill Contact Name");
+      Utils.sanckBarError('Contact Name!', "Please Enter Contact Name");
       return ;
     }
     if(phone_no_controller.text.isNotEmpty ){
@@ -385,6 +388,8 @@ class ContactMasterVM extends GetxController{
               account_vm_controller.getContactMasterList(0, account_name_controller.text.toString(), '', accountCode.value.toString());
             }
 
+            loading.value = false;
+
             Utils.showToastification('Success!', response[0].message!);
             //Get.offAllNamed(RoutesName.contactMaster_screen);
 
@@ -394,19 +399,19 @@ class ContactMasterVM extends GetxController{
             Utils.showErrorToastification('Error', response[0].message.toString());
             pageNumber=0;
             getContactMasterList(pageNumber,"","","");
-
+            loading.value = false;
           }
         } else {
           Utils.sanckBarError('Error!', jsonResponse);
-
+          loading.value = false;
         }
     }catch(e){
-
+      loading.value = false;
       print(e);
     }
-    finally{
+   /* finally{
       loading.value = false;
-    }
+    }*/
   }
 
   upDateContact(String flag, int index){
@@ -465,22 +470,24 @@ class ContactMasterVM extends GetxController{
           List<DesignationModal> response = jsonResponse.map((e) => DesignationModal.fromJson(e)).toList();
           if(response!= null && response.length>0 && response[0].condition=="True"){
             designation_name_list.value=response;
-
+            loading.value = false;
           }else {
             designation_name_list.value=[];
-
+            loading.value = false;
           }
         } else {
+          loading.value = false;
           designation_name_list.value=[];
           Utils.showErrorToastification("Error!", jsonResponse);
         }
 
     }catch(e){
+      loading.value = false;
       print(e);
     }
-    finally{
+    /*finally{
       loading.value = false;
-    }
+    }*/
   }
 
 
@@ -510,24 +517,27 @@ class ContactMasterVM extends GetxController{
           List<SalesCycleUpdateStatusModal> response =
           JsonResponse.map((e) => SalesCycleUpdateStatusModal.fromJson(e)).toList();
           if (response != null && response.length > 0 && response[0].condition == "True") {
+            loading.value = false;
             contact_master_list.removeAt(index);
             Utils.sanckBarSuccess('Success Message!',response[0].message.toString());
 
           } else {
+            loading.value = false;
             Utils.sanckBarError("False Message !", response[0].message.toString());
             //Account_Master_list.value=[];
           }
         } else {
-          // service_indent_header_list.value = [];
+          loading.value = false;
           Utils.showExceptionToastification("Api Error!", JsonResponse);
         }
 
     } catch (e) {
+      loading.value = false;
       print(e);
     }
-    finally{
+   /* finally{
       loading.value = false;
-    }
+    }*/
   }
 
 

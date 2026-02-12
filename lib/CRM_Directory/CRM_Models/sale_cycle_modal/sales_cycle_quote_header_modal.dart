@@ -2,7 +2,7 @@ class SalesCycleQuoteHeaderModal {
   String? condition;
   String? totalRows;
   String? quoteId;
-  double? quoteVersion;
+  dynamic? quoteVersion;
   String? salesCycleId;
   String? accountCode;
   String? accountName;

@@ -162,7 +162,8 @@ class AddNewAccountMaster extends StatelessWidget{
                 ),
                 onPressed: () async {
 
-                  if(accountMaster_page_controller.account_name_controller.value.text.isNotEmpty || accountMaster_page_controller.account_name_controller.value.text != ''){
+                  if(accountMaster_page_controller.account_name_controller.value.text.isNotEmpty
+                      || accountMaster_page_controller.account_name_controller.value.text != ''){
                     if(accountMaster_page_controller.DraftId.isEmpty || accountMaster_page_controller.DraftId == ''){
                       // await insertAccountData();
                       accountMaster_page_controller.DraftAccountMstUploaderApiHit('Create');
@@ -610,29 +611,33 @@ class AddNewAccountMaster extends StatelessWidget{
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Flexible(
-                              child: DropdownButtonFormField<String>(
-                                value: accountMaster_page_controller.yesNoValue.value,
-                                decoration: InputDecoration(
-                                  contentPadding: EdgeInsets.symmetric(
-                                    vertical: 0,   // 👈 top & bottom padding (increase/decrease)
-                                    horizontal: 6,
+                            Obx((){
+                              return Flexible(
+                                child: DropdownButtonFormField<String>(
+                                  value: accountMaster_page_controller.yesNoValue.value,
+                                  decoration: InputDecoration(
+                                    contentPadding: EdgeInsets.symmetric(
+                                      vertical: 0,   // 👈 top & bottom padding (increase/decrease)
+                                      horizontal: 6,
+                                    ),
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
                                   ),
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
+                                  items: ["Yes", "No"].map((value) {
+                                    return DropdownMenuItem(
+                                      value: value,
+                                      child: Text(value),
+                                    );
+                                  }).toList(),
+                                  onChanged: (value) {
+                                    accountMaster_page_controller.yesNoValue.value = value!;
+                                  },
                                 ),
-                                items: ["Yes", "No"].map((value) {
-                                  return DropdownMenuItem(
-                                    value: value,
-                                    child: Text(value),
-                                  );
-                                }).toList(),
-                                onChanged: (value) {
-                                  accountMaster_page_controller.yesNoValue.value = value!;
-                                },
-                              ),
-                            ),
+                              );
+                            }),
+
+
                             Flexible(
                               flex: 2,
                               child: Obx(() => CheckboxListTile(
@@ -1069,9 +1074,9 @@ class AddNewAccountMaster extends StatelessWidget{
         maxLength: maxLength,
         maxLines: maxLines,
         readOnly: readonly,
-        keyboardType:hintData == "Phone No.*" || hintData == "Alternate Phone No."?TextInputType.phone:
+        keyboardType:hintData == "Phone No.*" || hintData == "Alternate Phone No." || hintData=='No. Of Employees'?TextInputType.phone:
         TextInputType.text,
-        inputFormatters: (hintData == "Phone No.*")
+        inputFormatters: (hintData == "Phone No.*" || hintData=='No. Of Employees' )
             ? [FilteringTextInputFormatter.digitsOnly]
             : [],
         validator: (value) {
