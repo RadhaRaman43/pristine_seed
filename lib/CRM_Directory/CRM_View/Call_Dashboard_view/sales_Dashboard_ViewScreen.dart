@@ -417,7 +417,7 @@ class SalesDashboardViewscreen extends StatelessWidget{
                        return Visibility(
                          visible: dashboard_view_Controller.messageVisibilty.value,
                          child: Text(
-                           "Please Select Filter for View data.....",
+                           "Please Select Filter for View data....",
                            style: GoogleFonts.poppins(
                              color: AllColors.redColor,
                              fontSize: AllFontSize.twentee,
