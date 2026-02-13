@@ -280,4 +280,8 @@ class SalesCycleRepository{
     return _apiService.postApi(data,AppUrl.QuoteHeaderUpdateMarkWon, sessionManagement);
   }
 
+  Future<String> contactMstGetList(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.ContactMstGet,sessionManagement);
+  }
+
 }

@@ -20,8 +20,10 @@ import '../../../../constants/app_font_size.dart';
 import '../../../../reources/routes/routes_name.dart';
 import '../../../../utils/app_utils.dart';
 import '../../../../view/custom_drawer.dart';
+import '../../../CRM_Models/AccountMaster_model/Account_Master_model.dart';
 import '../../../CRM_Models/AccountMaster_model/cluster_modal.dart';
 import '../../../CRM_Models/AccountMaster_model/region_with_cluster_filter_modal.dart';
+import '../../../CRM_Models/Contact_Master_modal/Contact_Master_modal/conract_master_modal.dart';
 import '../../../CRM_Models/TaskMaster_model/Item_Category_Mast_model.dart';
 import '../../../CRM_Models/sale_cycle_modal/sales_cycle_modal.dart';
 import '../../../CRM_VIewModels/Task_master_vm/TaskMasterVM.dart';
@@ -53,6 +55,9 @@ class ViewSaleHeaderScreen extends StatelessWidget {
       option.value!;
 
   static String _displayDecisionMakerForOption(String option) => option;
+
+  static String _displayAccNameForOption(ContactMstGetListModal option) =>
+      option.contactName??"";
 
   Size size = Get.size;
 
@@ -221,6 +226,9 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                 saleCycleController.salesCycleOwnerController.value.text = "${saleCycleController.saleCycleList[0].createdFullName}(${saleCycleController.saleCycleList[0].salesCycleOwner})";
                                 saleCycleController.updatesalesCycleBudgetAmountController.value.text = saleCycleController.saleCycleList[0].budgetAmount.toString();
                                 saleCycleController.saleCycleOwnerSelected.value = saleCycleController.saleCycleList[0].salesCycleOwner ?? "";
+                                saleCycleController.getContactMaster('',
+                                  saleCycleController.saleCycleList[0].accountCode??"",
+                                  saleCycleController.saleCycleList[0].accountName??"",);
                                 showDialogForSalesCyclePurchaseUpdate(context, saleCycleController.saleCycleList[0]);
                               },
                             ),
@@ -4797,7 +4805,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
               ],
             ),
             Row(
-              mainAxisAlignment: MainAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
                   "Is Active : ",
@@ -8663,6 +8671,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
     BuildContext context,
     SalesCycleModal saleCycleList,
   ) {
+    saleCycleController.contact_name_controller.value.text=saleCycleList.contactName??"";
     showDialog(
         // barrierDismissible: false,
         context: context,
@@ -8702,6 +8711,8 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                   bindUpdateSalesClosureDate(context),
                   const SizedBox(height: 10,),
                   bindUpdateSalesBudgetAmount(context),
+                  const SizedBox(height: 10,),
+                  bindUpdateContactName(context,saleCycleList),
                   const SizedBox(height: 10,),
                   bindUpdateSalesIdentifyDecisionMaker(context),
                   const SizedBox(height: 10,),
@@ -8751,82 +8762,79 @@ class ViewSaleHeaderScreen extends StatelessWidget {
   }
 
   Widget bindUpdateSalesClosureDate(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 10, right: 10),
-      child: TextField(
-        cursorColor: AllColors.primaryDark1,
-        /* readOnly: saleCycleController.saleCycleList[0]
-            .isReadySendForApproval == 0
-            (saleCycleController.FromPage.value == 'Sales'
-                || saleCycleController.FromPage.value == 'FromTaskScreen' ||
-                saleCycleController.FromPage.value == 'Task')
-            ? true
-            : false,*/
-        controller: saleCycleController.closureDateController.value,
-        decoration: InputDecoration(
-            suffixIcon: Icon(Icons.calendar_month),
-            contentPadding: EdgeInsets.symmetric(
-                vertical: AllFontSize.two, horizontal: AllFontSize.ten),
-            hintText: 'Select Estimated Closure Date',
-            labelText: 'Estimated Closure Date',
-            hintStyle: GoogleFonts.poppins(
-                color: AllColors.lightblackColor,
-                fontWeight: FontWeight.w300,
-                fontSize: AllFontSize.ten),
-            labelStyle: GoogleFonts.poppins(
-                color: AllColors.primaryDark1,
-                fontWeight: FontWeight.w500,
-                fontSize: AllFontSize.fourtine),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-            )),
-        onTap: () async {
-          /*if (saleCycleController.saleCycleList[0].isReadySendForApproval ==
-              1) {*/
-          DateTime? initialDate;
-          if (saleCycleController.closureDateController.value.text.isNotEmpty) {
-            initialDate = DateFormat('yyyy-MM-dd').parse(
-              saleCycleController.closureDateController.value.text,
-            );
-            // Ensure initialDate is not before firstDate
-            if (initialDate.isBefore(DateTime.now())) {
-              initialDate = DateTime.now();
-            }
-          } else {
+    return TextField(
+      cursorColor: AllColors.primaryDark1,
+      /* readOnly: saleCycleController.saleCycleList[0]
+          .isReadySendForApproval == 0
+          (saleCycleController.FromPage.value == 'Sales'
+              || saleCycleController.FromPage.value == 'FromTaskScreen' ||
+              saleCycleController.FromPage.value == 'Task')
+          ? true
+          : false,*/
+      controller: saleCycleController.closureDateController.value,
+      decoration: InputDecoration(
+          suffixIcon: Icon(Icons.calendar_month),
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.two, horizontal: AllFontSize.ten),
+          hintText: 'Select Estimated Closure Date',
+          labelText: 'Estimated Closure Date',
+          hintStyle: GoogleFonts.poppins(
+              color: AllColors.lightblackColor,
+              fontWeight: FontWeight.w300,
+              fontSize: AllFontSize.ten),
+          labelStyle: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontWeight: FontWeight.w500,
+              fontSize: AllFontSize.fourtine),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          )),
+      onTap: () async {
+        /*if (saleCycleController.saleCycleList[0].isReadySendForApproval ==
+            1) {*/
+        DateTime? initialDate;
+        if (saleCycleController.closureDateController.value.text.isNotEmpty) {
+          initialDate = DateFormat('yyyy-MM-dd').parse(
+            saleCycleController.closureDateController.value.text,
+          );
+          // Ensure initialDate is not before firstDate
+          if (initialDate.isBefore(DateTime.now())) {
             initialDate = DateTime.now();
           }
+        } else {
+          initialDate = DateTime.now();
+        }
 
-          DateTime ending_date = new DateTime(2200);
-          FocusScope.of(context).requestFocus(new FocusNode());
-          DateTime? date = await showDatePicker(
-            context: context,
-            initialDate: initialDate,
-            firstDate: DateTime.now(),
-            lastDate: ending_date,
-            builder: (BuildContext context, Widget? child) {
-              return Theme(
-                data: ThemeData.light().copyWith(
-                  primaryColor: AllColors.primaryDark1,
-                  // Header background color
-                  //accentColor: AllColors.primaryDark1, // Color of the buttons
-                  colorScheme:
-                      ColorScheme.light(primary: AllColors.primaryDark1),
-                  buttonTheme:
-                      ButtonThemeData(textTheme: ButtonTextTheme.primary),
-                ),
-                child: child!,
-              );
-            },
-          );
-          var outputFormat = DateFormat('yyyy-MM-dd');
-          if (date != null && date != "")
-            saleCycleController.closureDateController.value.text =
-                outputFormat.format(date);
-        },
-      ),
+        DateTime ending_date = new DateTime(2200);
+        FocusScope.of(context).requestFocus(new FocusNode());
+        DateTime? date = await showDatePicker(
+          context: context,
+          initialDate: initialDate,
+          firstDate: DateTime.now(),
+          lastDate: ending_date,
+          builder: (BuildContext context, Widget? child) {
+            return Theme(
+              data: ThemeData.light().copyWith(
+                primaryColor: AllColors.primaryDark1,
+                // Header background color
+                //accentColor: AllColors.primaryDark1, // Color of the buttons
+                colorScheme:
+                    ColorScheme.light(primary: AllColors.primaryDark1),
+                buttonTheme:
+                    ButtonThemeData(textTheme: ButtonTextTheme.primary),
+              ),
+              child: child!,
+            );
+          },
+        );
+        var outputFormat = DateFormat('yyyy-MM-dd');
+        if (date != null && date != "")
+          saleCycleController.closureDateController.value.text =
+              outputFormat.format(date);
+      },
     );
   }
 
@@ -8838,55 +8846,50 @@ class ViewSaleHeaderScreen extends StatelessWidget {
           saleCycleController.FromPage.value == 'Task'))
           || saleCycleController.FromPage.value == 'Task' ||
           saleCycleController.FromPage.value == 'FromTaskScreen' ? true : false,*/
-    return Container(
-      padding: EdgeInsets.only(left: 10.0, right: 10.0),
-      // margin: const EdgeInsets.only(left: 15.0,),
-      // width: double.infinity,
-      child: DropdownMenu<String>(
-        width: size.width - 150,
-        controller: saleCycleController.identifyDecisionMakerController.value,
-        label: Text(
-          "Identify Decision Maker",
-          style: GoogleFonts.poppins(
-              color: AllColors.primaryDark1,
-              fontSize: AllFontSize.fourtine,
-              fontWeight: FontWeight.w500),
-        ),
-        inputDecorationTheme: const InputDecorationTheme(
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-            borderSide: BorderSide(
-              color: AllColors.primaryDark1,
-            ),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-                color: AllColors.primaryDark1), // Change the color to green
-          ),
-          border: OutlineInputBorder(
-            borderSide: BorderSide(
-                color: AllColors.primaryDark1), // Change the color to green
-          ),
-          filled: false,
-          contentPadding: EdgeInsets.symmetric(
-              vertical: AllFontSize.two, horizontal: AllFontSize.ten),
-        ),
-        onSelected: (String? selection) {
-          print(selection);
-          saleCycleController.identifyDecisionMakerController.value.text =
-              _displayDecisionMakerForOption(selection!).toString();
-        },
-        dropdownMenuEntries: saleCycleController.customerNeedIdentityList
-            .map<DropdownMenuEntry<String>>((String e) {
-          return DropdownMenuEntry<String>(
-              value: e,
-              label: e!,
-              style: ButtonStyle(
-                foregroundColor:
-                    MaterialStateProperty.all<Color>(AllColors.primaryDark1),
-              ));
-        }).toList(),
+    return DropdownMenu<String>(
+      width: size.width - 130,
+      controller: saleCycleController.identifyDecisionMakerController.value,
+      label: Text(
+        "Identify Decision Maker",
+        style: GoogleFonts.poppins(
+            color: AllColors.primaryDark1,
+            fontSize: AllFontSize.fourtine,
+            fontWeight: FontWeight.w500),
       ),
+      inputDecorationTheme: const InputDecorationTheme(
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+          borderSide: BorderSide(
+            color: AllColors.primaryDark1,
+          ),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+              color: AllColors.primaryDark1), // Change the color to green
+        ),
+        border: OutlineInputBorder(
+          borderSide: BorderSide(
+              color: AllColors.primaryDark1), // Change the color to green
+        ),
+        filled: false,
+        contentPadding: EdgeInsets.symmetric(
+            vertical: AllFontSize.two, horizontal: AllFontSize.ten),
+      ),
+      onSelected: (String? selection) {
+        print(selection);
+        saleCycleController.identifyDecisionMakerController.value.text =
+            _displayDecisionMakerForOption(selection!).toString();
+      },
+      dropdownMenuEntries: saleCycleController.customerNeedIdentityList
+          .map<DropdownMenuEntry<String>>((String e) {
+        return DropdownMenuEntry<String>(
+            value: e,
+            label: e!,
+            style: ButtonStyle(
+              foregroundColor:
+                  MaterialStateProperty.all<Color>(AllColors.primaryDark1),
+            ));
+      }).toList(),
     );
   }
 
@@ -8958,7 +8961,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
           )) || saleCycleController.FromPage.value == 'Task' ||
           saleCycleController.FromPage.value == 'FromTaskScreen' ? true : false,*/
     return Container(
-      padding: const EdgeInsets.only(left: 10, right: 10),
+      //padding: const EdgeInsets.only(left: 10, right: 10),
       child: Autocomplete<CustomList>(
         displayStringForOption: _displayPurchaseProcessForOption,
         optionsBuilder: (TextEditingValue textEditingValue) {
@@ -9080,150 +9083,144 @@ class ViewSaleHeaderScreen extends StatelessWidget {
               saleCycleController.FromPage.value == 'FromTaskScreen'
           )) || saleCycleController.FromPage.value == 'Task' ||
           saleCycleController.FromPage.value == 'FromTaskScreen' ? true : false,*/
-    return Container(
-      padding: const EdgeInsets.only(left: 10, right: 10),
-      child: Autocomplete<CustomList>(
-        displayStringForOption: _displayPurchaseTimeFrameForOption,
-        optionsBuilder: (TextEditingValue textEditingValue) {
-          if (textEditingValue.text.isEmpty) {
-            return saleCycleController.get_PurchaseTimeFrame_list.value;
-            // return const Iterable<VehicleTypeResponse>.empty();
-          }
-          return saleCycleController.get_PurchaseTimeFrame_list
-              .where((CustomList option) {
-            return option.value
-                .toString()
-                .toLowerCase()
-                .contains(textEditingValue.text.toLowerCase());
-          }).toList();
-        },
-        onSelected: (CustomList selection) {
-          saleCycleController.purchasTimeFrameController.value.text =
-              _displayPurchaseTimeFrameForOption(selection).toString();
-          saleCycleController.purchasTimeFrameController.value.text =
-              selection.value ?? "";
-        },
-        fieldViewBuilder: (BuildContext context,
-            TextEditingController controller,
-            FocusNode focusNode,
-            VoidCallback onFieldSubmitted) {
-          return TextField(
-            /*readOnly: saleCycleController.saleCycleList[0]
-                  .isReadySendForApproval == 0 &&
-                  (saleCycleController.FromPage.value == 'Sales' ||
-                      saleCycleController.FromPage.value == 'FromTaskScreen'
-                  )) || saleCycleController.FromPage.value == 'Task' ||
-                  saleCycleController.FromPage.value == 'FromTaskScreen'
-                  ? true
-                  : false,*/
+    return Autocomplete<CustomList>(
+      displayStringForOption: _displayPurchaseTimeFrameForOption,
+      optionsBuilder: (TextEditingValue textEditingValue) {
+        if (textEditingValue.text.isEmpty) {
+          return saleCycleController.get_PurchaseTimeFrame_list.value;
+          // return const Iterable<VehicleTypeResponse>.empty();
+        }
+        return saleCycleController.get_PurchaseTimeFrame_list
+            .where((CustomList option) {
+          return option.value
+              .toString()
+              .toLowerCase()
+              .contains(textEditingValue.text.toLowerCase());
+        }).toList();
+      },
+      onSelected: (CustomList selection) {
+        saleCycleController.purchasTimeFrameController.value.text =
+            _displayPurchaseTimeFrameForOption(selection).toString();
+        saleCycleController.purchasTimeFrameController.value.text =
+            selection.value ?? "";
+      },
+      fieldViewBuilder: (BuildContext context,
+          TextEditingController controller,
+          FocusNode focusNode,
+          VoidCallback onFieldSubmitted) {
+        return TextField(
+          /*readOnly: saleCycleController.saleCycleList[0]
+                .isReadySendForApproval == 0 &&
+                (saleCycleController.FromPage.value == 'Sales' ||
+                    saleCycleController.FromPage.value == 'FromTaskScreen'
+                )) || saleCycleController.FromPage.value == 'Task' ||
+                saleCycleController.FromPage.value == 'FromTaskScreen'
+                ? true
+                : false,*/
 
-            cursorColor: AllColors.primaryDark1,
-            controller: controller
-              ..text =
-                  saleCycleController.purchasTimeFrameController.value.text,
-            focusNode: focusNode,
-            decoration: InputDecoration(
-                suffixIcon: IconButton(
+          cursorColor: AllColors.primaryDark1,
+          controller: controller
+            ..text =
+                saleCycleController.purchasTimeFrameController.value.text,
+          focusNode: focusNode,
+          decoration: InputDecoration(
+              suffixIcon: IconButton(
+                color: AllColors.primaryDark1,
+                onPressed: () {
+                  if (focusNode.hasFocus) {
+                    focusNode.unfocus();
+                  } else {
+                    focusNode.requestFocus();
+                  }
+                },
+                icon: Icon(Icons.arrow_drop_down),
+              ),
+              contentPadding: EdgeInsets.symmetric(
+                  vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+              hintText: 'Purchase Time Frame',
+              labelText: 'Purchase Time Frame',
+              hintStyle: GoogleFonts.poppins(
+                  color: AllColors.lightblackColor,
+                  fontWeight: FontWeight.w300,
+                  fontSize: AllFontSize.ten),
+              labelStyle: GoogleFonts.poppins(
                   color: AllColors.primaryDark1,
-                  onPressed: () {
-                    if (focusNode.hasFocus) {
-                      focusNode.unfocus();
-                    } else {
-                      focusNode.requestFocus();
-                    }
-                  },
-                  icon: Icon(Icons.arrow_drop_down),
-                ),
-                contentPadding: EdgeInsets.symmetric(
-                    vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-                hintText: 'Purchase Time Frame',
-                labelText: 'Purchase Time Frame',
-                hintStyle: GoogleFonts.poppins(
-                    color: AllColors.lightblackColor,
-                    fontWeight: FontWeight.w300,
-                    fontSize: AllFontSize.ten),
-                labelStyle: GoogleFonts.poppins(
-                    color: AllColors.primaryDark1,
-                    fontWeight: FontWeight.w500,
-                    fontSize: AllFontSize.fourtine),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(10)),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(10)),
-                )),
-          );
-        },
-        optionsViewBuilder: (BuildContext context,
-            AutocompleteOnSelected<CustomList> onSelected,
-            Iterable<CustomList> suggestions) {
-          return Align(
-            alignment: Alignment.topLeft,
-            child: Material(
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-              elevation: 4.0,
-              child: Container(
-                width: size.width * .6,
-                constraints: BoxConstraints(maxHeight: 200),
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: suggestions.length,
-                  itemBuilder: (context, index) {
-                    final CustomList option = suggestions.elementAt(index);
-                    return GestureDetector(
-                      onTap: () {
-                        onSelected(option);
-                      },
-                      child: Container(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text(
-                          option.value.toString(),
-                          style: GoogleFonts.poppins(
-                              color: AllColors.blackColor,
-                              fontWeight: FontWeight.w300,
-                              fontSize: AllFontSize
-                                  .sisxteen // Change the text color here
-                              ),
-                        ),
+                  fontWeight: FontWeight.w500,
+                  fontSize: AllFontSize.fourtine),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+              )),
+        );
+      },
+      optionsViewBuilder: (BuildContext context,
+          AutocompleteOnSelected<CustomList> onSelected,
+          Iterable<CustomList> suggestions) {
+        return Align(
+          alignment: Alignment.topLeft,
+          child: Material(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+            elevation: 4.0,
+            child: Container(
+              width: size.width * .6,
+              constraints: BoxConstraints(maxHeight: 200),
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: suggestions.length,
+                itemBuilder: (context, index) {
+                  final CustomList option = suggestions.elementAt(index);
+                  return GestureDetector(
+                    onTap: () {
+                      onSelected(option);
+                    },
+                    child: Container(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text(
+                        option.value.toString(),
+                        style: GoogleFonts.poppins(
+                            color: AllColors.blackColor,
+                            fontWeight: FontWeight.w300,
+                            fontSize: AllFontSize
+                                .sisxteen // Change the text color here
+                            ),
                       ),
-                    );
-                  },
-                ),
+                    ),
+                  );
+                },
               ),
             ),
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 
   bindSalesCycleOwner(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.only(left: 10, right: 10),
-      child: TextField(
-        readOnly: true,
-        cursorColor: AllColors.primaryDark1,
-        controller: saleCycleController.salesCycleOwnerController.value,
-        decoration: InputDecoration(
-            contentPadding: EdgeInsets.symmetric(
-                vertical: AllFontSize.seven, horizontal: AllFontSize.ten),
-            hintText: 'Sales Cycle Owner',
-            labelText: 'Sales Cycle Owner',
-            hintStyle: GoogleFonts.poppins(
-                color: AllColors.lightblackColor,
-                fontWeight: FontWeight.w300,
-                fontSize: AllFontSize.ten),
-            labelStyle: GoogleFonts.poppins(
-                color: AllColors.primaryDark1,
-                fontWeight: FontWeight.w700,
-                fontSize: AllFontSize.sisxteen),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-            ),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-            )),
-      ),
+    return TextField(
+      readOnly: true,
+      cursorColor: AllColors.primaryDark1,
+      controller: saleCycleController.salesCycleOwnerController.value,
+      decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.seven, horizontal: AllFontSize.ten),
+          hintText: 'Sales Cycle Owner',
+          labelText: 'Sales Cycle Owner',
+          hintStyle: GoogleFonts.poppins(
+              color: AllColors.lightblackColor,
+              fontWeight: FontWeight.w300,
+              fontSize: AllFontSize.ten),
+          labelStyle: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontWeight: FontWeight.w700,
+              fontSize: AllFontSize.sisxteen),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          )),
     );
   }
 
@@ -9235,41 +9232,38 @@ class ViewSaleHeaderScreen extends StatelessWidget {
               saleCycleController.FromPage.value == 'FromTaskScreen'
           )) || saleCycleController.FromPage.value == 'Task' ||
           saleCycleController.FromPage.value == 'FromTaskScreen' ? true : false,*/
-    return Container(
-      padding: EdgeInsets.only(left: 10, right: 10),
-      child: TextField(
-        keyboardType: TextInputType.number,
-        /*readOnly: saleCycleController.saleCycleList[0]
-              .isReadySendForApproval == 0 &&
-              (saleCycleController.FromPage.value == 'Sales' ||
-                  saleCycleController.FromPage.value == 'FromTaskScreen'
-              )) || saleCycleController.FromPage.value == 'Task' ||
-              saleCycleController.FromPage.value == 'FromTaskScreen'
-              ? true
-              : false,*/
-        cursorColor: AllColors.primaryDark1,
-        controller:
-            saleCycleController.updatesalesCycleBudgetAmountController.value,
-        decoration: InputDecoration(
-            contentPadding: EdgeInsets.symmetric(
-                vertical: AllFontSize.seven, horizontal: AllFontSize.ten),
-            hintText: 'Budget Amount',
-            labelText: 'Budget Amount',
-            hintStyle: GoogleFonts.poppins(
-                color: AllColors.lightblackColor,
-                fontWeight: FontWeight.w300,
-                fontSize: AllFontSize.ten),
-            labelStyle: GoogleFonts.poppins(
-                color: AllColors.primaryDark1,
-                fontWeight: FontWeight.w300,
-                fontSize: AllFontSize.sisxteen),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-            ),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-            )),
-      ),
+    return TextField(
+      keyboardType: TextInputType.number,
+      /*readOnly: saleCycleController.saleCycleList[0]
+            .isReadySendForApproval == 0 &&
+            (saleCycleController.FromPage.value == 'Sales' ||
+                saleCycleController.FromPage.value == 'FromTaskScreen'
+            )) || saleCycleController.FromPage.value == 'Task' ||
+            saleCycleController.FromPage.value == 'FromTaskScreen'
+            ? true
+            : false,*/
+      cursorColor: AllColors.primaryDark1,
+      controller:
+          saleCycleController.updatesalesCycleBudgetAmountController.value,
+      decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.seven, horizontal: AllFontSize.ten),
+          hintText: 'Budget Amount',
+          labelText: 'Budget Amount',
+          hintStyle: GoogleFonts.poppins(
+              color: AllColors.lightblackColor,
+              fontWeight: FontWeight.w300,
+              fontSize: AllFontSize.ten),
+          labelStyle: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontWeight: FontWeight.w300,
+              fontSize: AllFontSize.sisxteen),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          )),
     );
   }
 
@@ -12240,6 +12234,114 @@ class ViewSaleHeaderScreen extends StatelessWidget {
           );
         });
   }
+
+  bindUpdateContactName(BuildContext context, SalesCycleModal saleCycleList) {
+    return Autocomplete<ContactMstGetListModal>(
+      displayStringForOption: _displayAccNameForOption,
+      optionsBuilder: (TextEditingValue textEditingValue) async {
+        /*if(textEditingValue.text.isEmpty){
+          return saleCycleController.contact_master_list.value;
+        }*/
+        return await saleCycleController.getContactMaster(textEditingValue.text,
+          saleCycleList.accountCode??"",
+          saleCycleList.accountName??"", );
+      },
+      onSelected: (ContactMstGetListModal selection) {
+        print(selection.accountName);
+        saleCycleController.contact_name_controller.value.text =
+            _displayAccNameForOption(selection).toString();
+        saleCycleController.contactName.value=selection.contactName??"";
+        saleCycleController.contactCode.value=selection.contactCode??"";
+      },
+      fieldViewBuilder: (BuildContext context, TextEditingController controller,
+          FocusNode focusNode, VoidCallback onFieldSubmitted) {
+        return TextFormField(
+          onTap: (){
+            controller.clear();
+            saleCycleController.contact_name_controller.value.clear();
+          },
+          cursorColor: AllColors.primaryDark1,
+          controller: controller
+            ..text = saleCycleController.contact_name_controller.value.text,
+          focusNode: focusNode,
+          onTapOutside: (value){
+            FocusNode().unfocus();
+          },
+
+          decoration: InputDecoration(
+            suffixIcon: IconButton(
+              color: AllColors.primaryDark1,
+              onPressed: (){
+                if(focusNode.hasFocus){
+                  focusNode.unfocus();
+                }else{
+                  focusNode.requestFocus();
+                }
+              },
+              icon: Icon(Icons.arrow_drop_down),
+            ),
+            contentPadding: EdgeInsets.symmetric(
+                vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+            hintText: 'Contact Name ',
+            labelText: 'Contact Name ',
+            border: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10))
+            ),
+          ),
+        );
+      },
+      optionsViewBuilder: (BuildContext context,
+          AutocompleteOnSelected<ContactMstGetListModal> onSelected,
+          Iterable<ContactMstGetListModal> suggestions) {
+        return Align(
+          alignment: Alignment.topLeft,
+          child: Material(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+            elevation: 4.0,
+            child: Container(
+              //width: size.width*.9,
+              constraints: BoxConstraints(maxHeight: 200),
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: suggestions.length,
+                itemBuilder: (context, index) {
+                  final ContactMstGetListModal option =
+                  suggestions.elementAt(index);
+                  return GestureDetector(
+                    onTap: () {
+                      onSelected(option);
+                    },
+                    child: Container(
+                        padding: EdgeInsets.all(8.0),
+                        child:
+                        RichText(
+                          text: TextSpan(
+                            children: [
+                              TextSpan(
+                                text:  option.contactName??"",
+                                style: GoogleFonts.poppins(
+                                    color: AllColors.blackColor,
+                                    fontWeight: FontWeight.w300,
+                                    fontSize: AllFontSize
+                                        .sisxteen // Change the text color here
+                                ),
+                              ),
+                            ],
+                          ),
+                          softWrap: true,
+                        )
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+
 
 
 
