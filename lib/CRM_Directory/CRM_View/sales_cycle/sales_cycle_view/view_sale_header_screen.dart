@@ -369,13 +369,13 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                     Obx(() {
                       return BindSalesData(context);
                     }),
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                     ),
                     Obx(() {
                       return bindsaleStatus(context);
                     }),
-                    SizedBox(
+                    const  SizedBox(
                       height: 10,
                     ),
                     Obx(() {
@@ -419,21 +419,21 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                             child: Column(
                               children: [
                                 bindClosureDate(context),
-                                SizedBox(
+                                const SizedBox(
                                   height: 10,
                                 ),
                                 bindIdentifyDecisionMaker(context),
-                                SizedBox(
+                                const SizedBox(
                                   height: 10,
                                 ),
                                 /* bindSaleCycleCommit(context),
                                 SizedBox(height: 10,),*/
                                 bindPurchaseProcessDropDown(context),
-                                SizedBox(
+                                const SizedBox(
                                   height: 10,
                                 ),
                                 bindPurchaseTimeFrameDropDown(context),
-                                SizedBox(
+                                const SizedBox(
                                   height: 10,
                                 ),
                                 Visibility(
@@ -447,7 +447,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                       ? true : false,
                                   child: Column(
                                     children: [
-                                      SizedBox(
+                                      const SizedBox(
                                         height: 10,
                                       ),
                                       Container(
@@ -466,7 +466,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                   ),
                                 ),
                                 bindProductCategoryDropDown(context),
-                                SizedBox(
+                                const SizedBox(
                                   height: 10,
                                 ),
                                 Row(
@@ -538,7 +538,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                     )
                                   ],
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 10,
                                 ),
                                 Container(
@@ -669,13 +669,13 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                   width: size.width * 0.02,
                                 ),
                                 Visibility(
-                                  visible: ((saleCycleController.isAdminWritePermission == "1" ||
+                                  visible: ((
                                               saleCycleController.userType.toLowerCase() == "branch head" ||
                                               saleCycleController.saleCycleList[0].createdBy?.toLowerCase() == saleCycleController.email.toLowerCase()) &&
                                           saleCycleController.filter.value == 'Sales cycle' &&
                                           saleCycleController.saleCycleList[0].quoteAccepted?.toLowerCase() == 'open') &&
                                       !(saleCycleController.saleCycleList[0].actualSalesCycleApprovalStatus?.toLowerCase() == 'rejected') &&
-                                      !(saleCycleController.FromPage.value == "FromDashboard"),
+                                      !(saleCycleController.FromPage.value == "FromDashboard") ,
                                   child: CircleAvatar(
                                     child: InkWell(
                                       onTap: () {
@@ -709,7 +709,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                         ),
                       );
                     }),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     Obx(() {
@@ -1076,7 +1076,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                                         AllColors.primaryDark1)),
                                           ),
                                         ),
-                                        SizedBox(
+                                        const SizedBox(
                                           width: 10,
                                         ),
                                         Visibility(
@@ -1156,7 +1156,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                   ],
                                 ),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 10,
                               ),
                               Divider(
@@ -1474,7 +1474,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
 
                 ),
               ),
-              SizedBox(width: 20,),
+              const SizedBox(width: 20,),
               Expanded(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -1602,7 +1602,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 2,
                 ),
                 Text(
@@ -1652,7 +1652,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 2,
                 ),
                 Text(
@@ -1835,7 +1835,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                   Icons.delete_forever,
                   color: AllColors.lightredColor,
                 )),
-                SizedBox(
+                const SizedBox(
                   width: 5,
                 ),
                 Text('Delete !',
@@ -1858,7 +1858,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                       fontWeight: FontWeight.w500,
                       color: AllColors.primaryDark1,
                     )),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Container(
                   width: size.width,
                   child: Row(
@@ -1888,7 +1888,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 10,
                       ),
                       Expanded(
@@ -1945,7 +1945,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                   Icons.check_circle,
                   color: AllColors.lightredColor,
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 5,
                 ),
                 Text('Confirmation !',
@@ -1968,13 +1968,13 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                       fontWeight: FontWeight.w500,
                       color: AllColors.primaryDark1,
                     )),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Obx(() {
                   return Visibility(
                       visible: payloadMessage == "Rejected" ? true : false,
                       child: bindRejectreason(context));
                 }),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Container(
                   width: size.width,
                   child: Row(
@@ -2004,7 +2004,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 10,
                       ),
                       Expanded(
@@ -2453,7 +2453,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                   Icons.check_circle,
                   color: AllColors.lightredColor,
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 5,
                 ),
                 Text('Send!',
@@ -2473,7 +2473,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                         fontWeight: FontWeight.w500,
                         color: AllColors.primaryDark1,
                       )),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
@@ -2738,7 +2738,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
       width: double.infinity,
       child: Column(
         children: [
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           Container(
             margin: EdgeInsets.only(left: 15.0, right: 15.0),
             decoration: BoxDecoration(
@@ -2763,7 +2763,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
               child: Column(
                 children: [
                   bindData("Task ID : ",saleCycleController.saleCycleList[0].taskId ?? ""),
-                  SizedBox(height: 3,),
+                  const SizedBox(height: 3,),
                   Row(
                     children: [
                       Text("Customer Name : ",
@@ -2801,9 +2801,9 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-                  SizedBox(height: 3,),
+                  const SizedBox(height: 3,),
                   bindData("Contact Name : ",saleCycleController.saleCycleList[0].contactName ?? ""),
-                  SizedBox(height: 3,),
+                  const SizedBox(height: 3,),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -2831,7 +2831,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-                      SizedBox(width: 5,),
+                      const SizedBox(width: 5,),
                       Visibility(
                         visible: (saleCycleController.saleCycleList[0].salesCycleOwner
                             ?.toLowerCase() == saleCycleController.email.toLowerCase() ||
@@ -2863,13 +2863,13 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-                  SizedBox(height: 3,),
+                  const SizedBox(height: 3,),
                   bindData("Cluster Name : ",saleCycleController.saleCycleList[0].clustureHeadValue ?? ""),
-                  SizedBox(height: 3,),
+                  const SizedBox(height: 3,),
                   bindData("Region Name : ",saleCycleController.saleCycleList[0].branchHeadValue ?? ""),
-                  SizedBox(height: 3,),
+                  const SizedBox(height: 3,),
                   bindData("Sales Cycle Stage : ",saleCycleController.saleCycleList[0].salesCycleStatus ?? ""),
-                  SizedBox(height: 3,),
+                  const SizedBox(height: 3,),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -2897,24 +2897,24 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-                  SizedBox(height: 3,),
+                  const SizedBox(height: 3,),
                   bindData("Sales Cycle Remarks : ",saleCycleController.saleCycleList[0].salesCycleRemarks ?? ""),
-                  SizedBox(height: 3,),
+                  const SizedBox(height: 3,),
                   bindData("Created By : ",saleCycleController.saleCycleList[0].createdFullName ?? ""),
-                  SizedBox(height: 3,),
+                  const SizedBox(height: 3,),
                   bindData("Created on : ",dateTimeCreatedOn.toString()),
-                  SizedBox(height: 3,),
+                  const SizedBox(height: 3,),
                   bindData("Sales Cycle Owner : ",saleCycleController.saleCycleList[0].salesCycleOwnerName ?? ""),
-                  SizedBox(height: 3,),
+                  const SizedBox(height: 3,),
                   bindData("Reporting Manager : ",saleCycleController.saleCycleList[0].approvedFullName ?? ''),
-                  SizedBox(height: 3,),
+                  const SizedBox(height: 3,),
                   bindData("Approved/Rejected By : ",saleCycleController.saleCycleList[0].finalApprovedFullName ?? ''),
-                  SizedBox(height: 3,),
+                  const SizedBox(height: 3,),
                   bindData("Approved/Rejected On : ",dateTimeApprovedOn.toString()),
-                  SizedBox(height: 3,),
+                  const SizedBox(height: 3,),
                   bindData("Reject Reason",saleCycleController.saleCycleList[0].rejectReason ?? ""),
 
-                  SizedBox(height: 3,),
+                  const SizedBox(height: 3,),
                  // bindData("Budget Amount",saleCycleController.saleCycleList[0].budgetAmount.toString()),
                   bindData("Budget Amount : ",saleCycleController
                       .numberFormatWithComma(saleCycleController
@@ -2922,16 +2922,16 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                       .budgetAmount)
                       .toString()),
 
-                  SizedBox(height: 3,),
+                  const SizedBox(height: 3,),
                   bindData("Expected Amount : ",saleCycleController.budgetAmountList.isEmpty
                       ? saleCycleController
                       .numberFormatWithComma(saleCycleController.saleCycleList[0].estBudgetAmount).toString()
                       : saleCycleController
                       .numberFormatWithComma(saleCycleController.budgetAmountList[0].totalEstimatedAmount ?? "")),
 
-                  SizedBox(height: 3,),
+                  const SizedBox(height: 3,),
                   bindData("Est. Closure Date : ",expClosureDate.toString()),
-                  SizedBox(height: 3,),
+                  const SizedBox(height: 3,),
                   Row(
                     children: [
                       Text(
@@ -2957,15 +2957,15 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-                  SizedBox(height: 3,),
+                  const SizedBox(height: 3,),
                   bindData("Purchase Process : ", saleCycleController.saleCycleList[0].purchaseProcess == null ? ""
                       : saleCycleController.saleCycleList[0].purchaseProcess.toString()),
 
-                  SizedBox(height: 3,),
+                  const SizedBox(height: 3,),
                   bindData("Purchase Time Frame : ",saleCycleController.saleCycleList[0].purchaseTimeFrame == null ? " "
                       : saleCycleController.saleCycleList[0].purchaseTimeFrame.toString()),
 
-                  SizedBox(height: 3,),
+                  const SizedBox(height: 3,),
                   Row(
                     children: [
                       Text(
@@ -2991,7 +2991,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-                  SizedBox(height: 3,),
+                  const SizedBox(height: 3,),
                   Row(
                         children: [
                           Text(
@@ -3016,9 +3016,9 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                         ],
                       ),
 
-                  SizedBox(height: 3,),
+                  const SizedBox(height: 3,),
                   bindData("Reopen Remarks : ",saleCycleController.saleCycleList[0].reopenRemarks ?? ""),
-                  SizedBox(height: 3,),
+                  const SizedBox(height: 3,),
                   Visibility(
                     // visible: saleCycleController.saleCycleList[0].salesCycleStatus!.toUpperCase()=="PROSPECT" || saleCycleController.saleCycleList[0].salesCycleStatus!.toUpperCase()=="PROPOSE"?true:false,
                     visible: true,
@@ -3054,7 +3054,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                       ],
                     ),
                   ),
-                  SizedBox(height: 3,),
+                  const SizedBox(height: 3,),
                   Visibility(
                     visible: saleCycleController
                                 .saleCycleList[0].salesCycleStatus!
@@ -3070,7 +3070,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                             fontWeight: FontWeight.w500,
                           ),
                         ),
-                        Spacer(),
+                        const Spacer(),
                         InkWell(
                           onTap: () {
                             saleCycleController
@@ -3103,7 +3103,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                       ],
                     ),
                   ),
-                  SizedBox(height: 3,),
+                  const SizedBox(height: 3,),
                   Row(
                     children: [
                       Text(
@@ -3114,7 +3114,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                           fontWeight: FontWeight.w500,
                         ),
                       ),
-                      Spacer(),
+                      const Spacer(),
                       Text(
                         saleCycleController
                                     .saleCycleList[0].isCustomerNeedIdentify ==
@@ -3131,7 +3131,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-                  SizedBox(height: 3,),
+                  const SizedBox(height: 3,),
                   Row(
                     children: [
                       Text(
@@ -3160,7 +3160,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                     ],
                   ),
 
-                  SizedBox(height: 3,),
+                  const SizedBox(height: 3,),
                   Row(
                     children: [
                       Text(
@@ -3199,7 +3199,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-                  SizedBox(height: 3,),
+                  const SizedBox(height: 3,),
                   Visibility(
                     visible:
                         saleCycleController.saleCycleList[0].salesCycleStatus == 'Propose' ? true : false,
@@ -3234,7 +3234,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                             ),
                           ],
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 3,
                         ),
                         Row(
@@ -3266,16 +3266,16 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                             ),
                           ],
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 3,
                         ),
                       ],
                     ),
                   ),
                   bindData("Competitor Name : ", saleCycleController.saleCycleList[0].competitorName == null ? "" : saleCycleController.saleCycleList[0].competitorName.toString(),),
-                  SizedBox(height: 3,),
+                  const SizedBox(height: 3,),
                   bindData("Quote Reject Reason : ",saleCycleController.saleCycleList[0].quoteRejectedReason == null ? "" : saleCycleController.saleCycleList[0].quoteRejectedReason.toString()),
-                  SizedBox(height: 3,),
+                  const SizedBox(height: 3,),
 
                 ],
               ),
@@ -4136,7 +4136,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 10,
                   ),
                   InkWell(
@@ -4157,7 +4157,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                         size: 30,
                       )),
 
-                  SizedBox(
+                  const SizedBox(
                     width: 10,
                   ),
                   Visibility(
@@ -4182,7 +4182,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
         subtitle: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             Row(
@@ -4837,7 +4837,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-                SizedBox(width: 10),
+                const SizedBox(width: 10),
                 Text(
                   saleCycleController.quoteList[index].isActive == 0
                       ? "No"
@@ -4986,7 +4986,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                   size: 28,
                 ),
               ),
-              SizedBox(width: 20,),
+              const SizedBox(width: 20,),
               Expanded(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -5459,7 +5459,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                   Icons.check_circle,
                   color: AllColors.lightredColor,
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 5,
                 ),
                 Text('Update!',
@@ -5480,7 +5480,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                         fontWeight: FontWeight.w500,
                         color: AllColors.primaryDark1,
                       )),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
@@ -5553,7 +5553,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                   Icons.check_circle,
                   color: AllColors.lightredColor,
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 5,
                 ),
                 Text('Delete!',
@@ -5573,7 +5573,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                         fontWeight: FontWeight.w500,
                         color: AllColors.primaryDark1,
                       )),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
@@ -7324,7 +7324,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
               color: AllColors.lightgreyColor,
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 5,
           )
 
@@ -7984,7 +7984,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                     child: Column(
                       children: [
                         bindProductCategoryDropDown(context),
-                        SizedBox(
+                        const SizedBox(
                           height: 10,
                         ),
                         Row(
@@ -8075,7 +8075,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                             ),
                           ],
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 10,
                         ),
                         SingleChildScrollView(
@@ -8088,7 +8088,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                             }),
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 10,
                         ),
                       ],
@@ -8192,11 +8192,11 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                     height: 1,
                     thickness: 1,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 15,
                   ),
                   bindProductCategoryDropDown(context),
-                  SizedBox(
+                  const SizedBox(
                     height: 15,
                   ),
                   Row(
@@ -8288,7 +8288,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                     height: 1,
                     thickness: 1,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 15,
                   ),
                   Container(
@@ -8314,7 +8314,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                               borderRadius: BorderRadius.circular(10))),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 15,
                   ),
                   Row(
@@ -8407,7 +8407,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                     height: 1,
                     thickness: 1,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 15,
                   ),
                   Container(
@@ -8433,7 +8433,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                               borderRadius: BorderRadius.circular(10))),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 15,
                   ),
                   Row(
@@ -8524,7 +8524,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
               child: Wrap(
                 children: [
                   bindItemCategoryDropDown(context),
-                  SizedBox(
+                  const SizedBox(
                     height: 65,
                   ),
                   Obx(() {
@@ -8545,7 +8545,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                       ),
                     );
                   }),
-                  SizedBox(
+                  const SizedBox(
                     height: 15,
                   ),
                   Row(
@@ -8705,7 +8705,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                   Icons.check_circle,
                   color: AllColors.lightredColor,
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 5,
                 ),
                 Container(
@@ -9387,7 +9387,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                     );
                   }),
 */
-                      /* SizedBox(width: 5,),
+                      const SizedBox(width: 5,),
                   Padding(
                     padding: const EdgeInsets.only(right: 10.0),
                     child: CircleAvatar(
@@ -9398,7 +9398,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                         child: Icon(Icons.filter_alt_rounded),
                       ),
                     ),
-                  ),*/
+                  ),
 
                     ],
                   ),
@@ -9803,7 +9803,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                   Icons.check_circle,
                                   color: AllColors.lightredColor,
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   width: 5,
                                 ),
                                 Text('Filter List ',
@@ -9811,30 +9811,31 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                       fontSize: AllFontSize.sisxteen,
                                       fontWeight: FontWeight.w700,
                                       color: AllColors.primaryDark1,
-                                    ))
+                                    ),
+                                 )
                               ],
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 10,
                             ),
                             filterWithItemCode(context),
-                            SizedBox(
+                            const SizedBox(
                               height: 5,
                             ),
                             filterItemDescription(context),
-                            SizedBox(
+                            const SizedBox(
                               height: 5,
                             ),
                             filterWithCategoryName(context),
-                            SizedBox(
+                            const SizedBox(
                               height: 5,
                             ),
-                            EditCompetitorName(context),
-                            SizedBox(
+                             EditCompetitorName(context),
+                            const SizedBox(
                               height: 5,
                             ),
                             EditLossReason(context),
-                            SizedBox(
+                            const SizedBox(
                               height: 5,
                             ),
                             Row(
@@ -9929,7 +9930,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                   Icons.check_circle,
                   color: AllColors.lightredColor,
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 5,
                 ),
                 Text(
@@ -9946,17 +9947,17 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   EditCompetitorName(context),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   EditCompetitorPrice(context),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   EditLossReason(context),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   EditMethodExPrice(context),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   ElevatedButton(
@@ -10092,7 +10093,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                       Icons.shield_moon_rounded,
                       color: AllColors.primaryDark1,
                     ),
-                    SizedBox(
+                    const  SizedBox(
                       width: 5,
                     ),
                     Text(
@@ -10131,25 +10132,25 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                     child: Column(
                       children: [
                         filterWithItemCode(context),
-                        SizedBox(
+                        const SizedBox(
                           height: 5,
                         ),
                         filterItemDescription(context),
-                        SizedBox(
+                        const SizedBox(
                           height: 5,
                         ),
                         filterWithCategoryName(context),
-                        SizedBox(
+                        const SizedBox(
                           height: 10,
                         ),
-                        EditCompetitorName(context),
+                        /*EditCompetitorName(context),
                         SizedBox(
                           height: 10,
                         ),
                         EditLossReason(context),
                         SizedBox(
                           height: 10,
-                        ),
+                        ),*/
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -10436,7 +10437,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                     height: 1,
                     thickness: 1,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 15,
                   ),
                   Container(
@@ -10465,7 +10466,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                               borderRadius: BorderRadius.circular(10))),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 15,
                   ),
                   Row(
@@ -10562,7 +10563,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                           Icons.shield_moon_rounded,
                           color: AllColors.primaryDark1,
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 5,
                         ),
                         Text(
@@ -10603,17 +10604,17 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              SizedBox(
+                              const SizedBox(
                                 height: 5,
                               ),
                               filterWithQuoteId(context),
-                              SizedBox(height: 10),
+                              const  SizedBox(height: 10),
                               filterWithQuoteStatus(context),
-                              SizedBox(height: 10),
+                              const SizedBox(height: 10),
                               filterWithQuoteValidity(context),
-                              SizedBox(height: 10),
+                              const  SizedBox(height: 10),
                               filterWithQuoteClosureDate(context),
-                              SizedBox(height: 10),
+                              const  SizedBox(height: 10),
                               TextField(
                                 controller: saleCycleController
                                     .accountNameController.value,
@@ -10644,7 +10645,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                   // Handle the text field value changes if needed
                                 },
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 10,
                               ),
                               TextField(
@@ -10677,27 +10678,27 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                   // Handle the text field value changes if needed
                                 },
                               ),
-                              SizedBox(
+                              const  SizedBox(
                                 height: 10,
                               ),
                               filterWithQuoteRhApproval(),
-                              SizedBox(
+                              const  SizedBox(
                                 height: 10,
                               ),
                               filterWithQuotecnhApproval(),
-                              SizedBox(
+                              const  SizedBox(
                                 height: 10,
                               ),
                               filterWithQuoteCategoryApproval(),
-                              SizedBox(
+                              const SizedBox(
                                 height: 10,
                               ),
                               filterWithQuoteGmApproval(),
-                              SizedBox(
+                              const SizedBox(
                                 height: 10,
                               ),
                               filterWithQuoteProductCategory(),
-                              SizedBox(
+                              const SizedBox(
                                 height: 10,
                               ),
                               /* filterWithQuoteFrontLinerValue(),
@@ -10706,7 +10707,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                               ),*/
                               filterWithQuoteBranchHead(),
                              // bindRegionNameFilter(context),
-                              SizedBox(
+                              const SizedBox(
                                 height: 10,
                               ),
                               /* filterWithQuoteZoneHead(),
@@ -10716,12 +10717,12 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                               filterWithQuoteClusterHead(),
                              // bindClusterNameFilter(context),
 
-                              SizedBox(
+                              const SizedBox(
                                 height: 10,
                               ),
                               filterWithQuoteCreatedOn(context),
 
-                              SizedBox(
+                              const  SizedBox(
                                 height: 10,
                               ),
                             ],
@@ -11540,7 +11541,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                   Icons.check_circle,
                   color: AllColors.lightredColor,
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 5,
                 ),
                 Container(
@@ -11562,7 +11563,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   bindOpenRemarks(context),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   ElevatedButton(
@@ -11636,7 +11637,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                   Icons.check_circle,
                   color: AllColors.lightredColor,
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 5,
                 ),
                 Text('Re-Open',
@@ -11656,7 +11657,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                         fontWeight: FontWeight.w500,
                         color: AllColors.primaryDark1,
                       )),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
@@ -11732,7 +11733,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                   Icons.check_circle,
                   color: AllColors.lightredColor,
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 5,
                 ),
                 Text('Clear',
@@ -11752,7 +11753,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                         fontWeight: FontWeight.w500,
                         color: AllColors.primaryDark1,
                       )),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
@@ -11765,7 +11766,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                           },
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 5,
                       ),
                       Expanded(
@@ -11829,7 +11830,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                   Icons.info_outline_rounded,
                   color: AllColors.lightredColor,
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 5,
                 ),
                 Text('Fetch',
@@ -11849,7 +11850,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                         fontWeight: FontWeight.w500,
                         color: AllColors.primaryDark1,
                       )),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
@@ -11862,7 +11863,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                           },
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 5,
                       ),
                       Expanded(
@@ -12082,7 +12083,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(width: 10,),
+            const SizedBox(width: 10,),
             Visibility(
               visible: saleCycleController
                   .saleCycleList[0].salesCycleStatus
@@ -12175,7 +12176,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                   Icons.check_circle,
                                   color: AllColors.lightredColor,
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   width: 5,
                                 ),
                                 Text('Filter Quotation ',
@@ -12186,17 +12187,17 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                     ))
                               ],
                             ),
-                            SizedBox(height: 10,),
+                            const SizedBox(height: 10,),
                             filterWithQuoteId(context),
-                            SizedBox(height: 10,),
+                            const SizedBox(height: 10,),
                             filterWithQuoteProductCategory(),
-                            SizedBox(height: 10,),
+                            const SizedBox(height: 10,),
                             filterWithQuoteStatus(context),
-                            SizedBox(height: 10,),
+                            const SizedBox(height: 10,),
                             filterWithQuoteValidity(context),
-                            SizedBox(height: 10,),
+                            const SizedBox(height: 10,),
                             filterWithQuoteClosureDate(context),
-                            SizedBox(height: 10,),
+                            const SizedBox(height: 10,),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -12283,7 +12284,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                   Icons.check_circle,
                   color: AllColors.lightredColor,
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 5,
                 ),
                 Text('Mark FC!',
@@ -12303,7 +12304,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                         fontWeight: FontWeight.w500,
                         color: AllColors.primaryDark1,
                       )),
-                  SizedBox(height: 20),
+                  const  SizedBox(height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
