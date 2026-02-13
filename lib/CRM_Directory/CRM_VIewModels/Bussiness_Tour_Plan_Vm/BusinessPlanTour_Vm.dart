@@ -252,7 +252,7 @@ class BusinessPlanTourViewModel extends GetxController{
         "start_date": StartDate_filter_controller.value.text.isEmpty?"":StartDate_filter_controller.value.text,
         "end_date": EndDate_filter_controller.value.text.isEmpty?"":EndDate_filter_controller.value.text,
         "filter_created_on": createdOn_filter_controller.value.text.isEmpty?"":createdOn_filter_controller.value.text,
-        "status": filterStatusFlag.value,
+        "status": filterStatusFlag.value=='All'?'':filterStatusFlag.value,
         "rowsPerPage": rowsPerPage,
         "pageNumber": page_no
       };

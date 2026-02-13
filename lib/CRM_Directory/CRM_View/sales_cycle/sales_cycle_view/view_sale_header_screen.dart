@@ -263,7 +263,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                             PopupMenuItem(
                               child: Row(
                                 children: [
-                                  Icon(Icons.info_outline, color: AllColors.blackColor,),
+                                  Icon(Icons.mark_chat_read, color: AllColors.blackColor,),
                                   Text(' Mark Rate Contract'),
                                 ],
                               ),
@@ -274,7 +274,6 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                           );
                         }
 
-
                         if (saleCycleController.saleCycleList[0].quoteAccepted?.toLowerCase() == "open"
                         /*&& saleCycleController.saleCycleList[0].quoteAccepted?.toLowerCase() != "rejected"*/
                             ) {
@@ -283,7 +282,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                               child: Row(
                                 children: [
                                   Icon(Icons.contacts, color: Colors.black),
-                                  Text(' Update Sales Cycles'),
+                                  Text(' Won/Loss'),
                                 ],
                               ),
                               onTap: () {
@@ -315,35 +314,6 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                             ),
                           );
                         }
-
-
-                        //todo comment by nirupma
-                       /* saleCycleController.userType.toLowerCase()=="branch head" &&
-                            saleCycleController.saleCycleList[0].salesCycleStatus?.toLowerCase()=="prospect" &&
-                            saleCycleController.get_SalesCycleProductById_List.length>0 &&
-                            saleCycleController.saleCycleList[0].salesCycleApprovalStatus?.toLowerCase()=="approved"
-                            && saleCycleController.solutionAcceptedController.value.text=="Yes"*/
-
-                        if(saleCycleController.userType.toLowerCase()!="frontliner" &&
-                            saleCycleController.saleCycleList[0].salesCycleStatus?.toLowerCase()=="propose" &&
-                            saleCycleController.saleCycleList[0].quoteAccepted?.toLowerCase()=='open' &&
-                            saleCycleController.saleCycleList[0].isMarkRateContract==0
-                        ){
-                          items.add(
-                            PopupMenuItem(
-                              child: Row(
-                                children: [
-                                  Icon(Icons.mark_chat_read, color: Colors.black),
-                                  Text(' Mark RC'),
-                                ],
-                              ),
-                              onTap: () {
-                                showMarkFCDialog(context, saleCycleController.saleCycleList[0].salesCycleId??"",);
-                              },
-                            ),
-                          );
-                        }
-
                         return items;
                       },
                     ),
@@ -12272,96 +12242,6 @@ class ViewSaleHeaderScreen extends StatelessWidget {
   }
 
 
-  showMarkFCDialog(context, String SalesId) {
-    showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Icon(
-                  Icons.check_circle,
-                  color: AllColors.lightredColor,
-                ),
-                const SizedBox(
-                  width: 5,
-                ),
-                Text('Mark FC!',
-                    style: GoogleFonts.poppins(
-                      fontSize: AllFontSize.sisxteen,
-                      fontWeight: FontWeight.w700,
-                      color: AllColors.primaryDark1,
-                    ))
-              ],
-            ),
-            content: Wrap(children: [
-              Column(
-                children: [
-                  Text('Do you want to Mark FC this sales cycle ?',
-                      style: GoogleFonts.poppins(
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500,
-                        color: AllColors.primaryDark1,
-                      )),
-                  const  SizedBox(height: 20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      ElevatedButton(
-                        style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all<Color>(
-                            AllColors.lightredColor,
-                          ),
-                        ),
-                        onPressed: () {
-                          Navigator.pop(context);
-                          //Get.back();
-                        },
-                        child: Container(
-                          width: 60,
-                          alignment: Alignment.center,
-                          child: Text(
-                            'Cancel',
-                            style: GoogleFonts.poppins(
-                              color: AllColors.blackColor,
-                              fontSize: AllFontSize.twelve,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ),
-                      ),
-                      ElevatedButton(
-                        style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all<Color>(
-                            AllColors.greenblue,
-                          ),
-                        ),
-                        onPressed: () {
-                          saleCycleController.getSalesCycleMstMarkRateContract(SalesId);
-                          Navigator.pop(context);
-                          //et.back();
-                        },
-                        child: Container(
-                          width: 60,
-                          alignment: Alignment.center,
-                          child: Text(
-                            'Confirm',
-                            style: GoogleFonts.poppins(
-                              color: AllColors.blackColor,
-                              fontSize: AllFontSize.twelve,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ),
-                      )
-                    ],
-                  )
-                ],
-              ),
-            ]),
-          );
-        });
-  }
+
 
 }
