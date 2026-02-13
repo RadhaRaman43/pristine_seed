@@ -1,6 +1,7 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -127,7 +128,7 @@ class AddNewConsigneeadd extends StatelessWidget{
         ),
         drawer: CustomDrawer(),
         floatingActionButton:  Visibility(
-          visible: accountMaster_page_controller.isAdminWritePermission=="1"?false:true,
+          visible: accountMaster_page_controller.isHeadofficePermission=="1"?false:true,
           child: Container(
             margin: EdgeInsets.only(left: 30),
             child: DefaultButton(
@@ -151,7 +152,7 @@ class AddNewConsigneeadd extends StatelessWidget{
           height: double.infinity,
           child: SingleChildScrollView(
             child: IgnorePointer(
-              ignoring: accountMaster_page_controller.isAdminWritePermission=="1"?true:false,
+              ignoring: accountMaster_page_controller.isHeadofficePermission=="1"?true:false,
               child: Column(
                 children: [
                   SizedBox(height: 10),
@@ -308,15 +309,17 @@ class AddNewConsigneeadd extends StatelessWidget{
                                   return null;
                                 },
                                 onChanged: (value) {
-                                  // Trigger validation when the value changes
                                   _formKey.currentState?.validate();
                                 },
                                 keyboardType: TextInputType.number,
+                                inputFormatters: [
+                                  FilteringTextInputFormatter.digitsOnly
+                                ],
                                 controller: address_vm_controller
                                     .phone_no_controller,
                                 decoration: InputDecoration(
-                                    hintText: "Phone No.",
-                                    labelText: "Phone No.",
+                                    hintText: "Phone No. * ",
+                                    labelText: "Phone No. *" ,
                                     //suffixIcon: Icon(Icons.email),
                                     contentPadding: EdgeInsets.symmetric(
                                         vertical: AllFontSize.ten,
@@ -394,8 +397,8 @@ class AddNewConsigneeadd extends StatelessWidget{
                                 controller: address_vm_controller
                                     .emailId_controller,
                                 decoration: InputDecoration(
-                                    hintText: "Email Id",
-                                    labelText: "Email Id",
+                                    hintText: "Email Id *",
+                                    labelText: "Email Id *",
                                     //suffixIcon: Icon(Icons.email),
                                     contentPadding: EdgeInsets.symmetric(
                                         vertical: AllFontSize.ten,
@@ -871,7 +874,7 @@ class AddNewConsigneeadd extends StatelessWidget{
       width: double.infinity,
       child: DropdownMenu<CustomList>(
         width: size.width-55,
-        controller:  accountMaster_page_controller.gst_registration_type_controller.value,
+        controller:  address_vm_controller.gst_registration_type_controller.value,
         label: Text(
           "GST Type*",
           style: GoogleFonts.poppins(
@@ -879,7 +882,7 @@ class AddNewConsigneeadd extends StatelessWidget{
               fontSize: AllFontSize.sisxteen,
               fontWeight: FontWeight.w300),
         ),
-        initialSelection: accountMaster_page_controller.get_Gst_Registration_list[1],
+        //initialSelection: accountMaster_page_controller.get_Gst_Registration_list[1],
         inputDecorationTheme: const InputDecorationTheme(
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(10)),

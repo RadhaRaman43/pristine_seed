@@ -68,19 +68,19 @@ class SalesCycleCreateQuoteScreen extends StatelessWidget{
             child: Column(
               children: [
                 bindAccountName(context),
-                SizedBox(height: 10,),
+                const SizedBox(height: 10,),
                 bindContactName(context),
-                SizedBox(height: 10,),
+                const SizedBox(height: 10,),
                 bindApprovalStatus(context),
-                SizedBox(height: 10,),
+                const SizedBox(height: 10,),
                 bindQuotevalidity(context),
-                SizedBox(height: 10,),
+                const SizedBox(height: 10,),
                 bindExpectedClosureDate(context),
-                SizedBox(height: 10,),
+                const SizedBox(height: 10,),
                 bindKindAttention(context),
-                SizedBox(height: 10,),
+                const  SizedBox(height: 10,),
                 bindProductCategoryDropDown(context),
-                SizedBox(height: 10,),
+                const SizedBox(height: 10,),
 
                 Obx(() {
                   return
@@ -97,11 +97,11 @@ class SalesCycleCreateQuoteScreen extends StatelessWidget{
                     );
 
                 }),
-                SizedBox(height: 10,),
+                const  SizedBox(height: 10,),
                /* bindQuoteCommitName(context),
                 SizedBox(height: 10,),*/
                 bindShippingAddress(context),
-                SizedBox(height: 10,),
+                const SizedBox(height: 10,),
                 Container(
                   margin: EdgeInsets.only(left: 15, right: 15, top: 15),
                   child: Row(
@@ -113,14 +113,14 @@ class SalesCycleCreateQuoteScreen extends StatelessWidget{
                             address_vm_controller.clearController();
                             address_vm_controller.account_code_controller.text=saleCycleController.saleCycleList[0].accountCode??"";
                             address_vm_controller.account_name_controller.text=saleCycleController.saleCycleList[0].accountName??"";
-                            address_vm_controller.gst_registration_type_controller.value.text = 'UnRegistered';
+                            //address_vm_controller.gst_registration_type_controller.value.text = 'UnRegistered';
                             address_vm_controller.getGeoPostalCodeApi(50, '');
                             Get.toNamed(RoutesName.addNewAddress_screen);
                           },
                           text: "Add New Address",
                         ),
                       ),
-                      SizedBox(width: 5,),
+                      const SizedBox(width: 5,),
                       Expanded(
                         child: DefaultButton(
                           press: (){
@@ -135,7 +135,7 @@ class SalesCycleCreateQuoteScreen extends StatelessWidget{
                     ],
                   ),
                 ),
-                SizedBox(height: 5,),
+                const SizedBox(height: 5,),
                  Container(
                   margin: EdgeInsets.only(left: 15, right: 15, top: 15),
                   child: DefaultButton(
@@ -356,7 +356,7 @@ class SalesCycleCreateQuoteScreen extends StatelessWidget{
               ),
             ),
 
-            SizedBox(height: 15,),
+            const SizedBox(height: 15,),
 
             Container(
               decoration: BoxDecoration(
@@ -387,7 +387,7 @@ class SalesCycleCreateQuoteScreen extends StatelessWidget{
               ),
             ),
 
-            SizedBox(height: 15,),
+            const SizedBox(height: 15,),
 
             Container(
               decoration: BoxDecoration(
@@ -419,7 +419,7 @@ class SalesCycleCreateQuoteScreen extends StatelessWidget{
               ),
             ),
 
-            SizedBox(height: 15,),
+            const SizedBox(height: 15,),
 
             Container(
               decoration: BoxDecoration(
@@ -450,7 +450,7 @@ class SalesCycleCreateQuoteScreen extends StatelessWidget{
               ),
             ),
 
-            SizedBox(height: 15,),
+            const SizedBox(height: 15,),
 
             Container(
               decoration: BoxDecoration(
@@ -481,7 +481,7 @@ class SalesCycleCreateQuoteScreen extends StatelessWidget{
               ),
             ),
 
-            SizedBox(height: 15,),
+            const SizedBox(height: 15,),
 
             Container(
               decoration: BoxDecoration(
