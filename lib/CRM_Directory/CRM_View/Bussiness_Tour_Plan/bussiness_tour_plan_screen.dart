@@ -115,7 +115,7 @@ class BussinessTourPlanScreen extends StatelessWidget{
                               ),
                               label: Text(
                                 'Pending',
-                                style: GoogleFonts.poppins(
+                                style: TextStyle(
                                   color: businessTourPlanController.filterStatusFlag.value == 'PENDING'
                                       ? AllColors.whiteColor
                                       : AllColors.primaryDark1,
@@ -130,7 +130,7 @@ class BussinessTourPlanScreen extends StatelessWidget{
                               },
                             );
                           }),
-                          SizedBox(width: 8),
+                          const SizedBox(width: 8),
                           Obx(() {
                             return ActionChip(
                               elevation: 2,
@@ -145,7 +145,7 @@ class BussinessTourPlanScreen extends StatelessWidget{
                               ),
                               label: Text(
                                 'Pending For Approval',
-                                style: GoogleFonts.poppins(
+                                style: TextStyle(
                                   color: businessTourPlanController.filterStatusFlag.value == 'PENDING FOR APPROVAL'
                                       ? AllColors.whiteColor
                                       : AllColors.primaryDark1,
@@ -160,7 +160,7 @@ class BussinessTourPlanScreen extends StatelessWidget{
                               },
                             );
                           }),
-                          SizedBox(width: 8), // optional spacing between chips
+                          const SizedBox(width: 8), // optional spacing between chips
                           Obx(() {
                             return ActionChip(
                               elevation: 2,
@@ -175,7 +175,7 @@ class BussinessTourPlanScreen extends StatelessWidget{
                               ),
                               label: Text(
                                 'Approved / Reject',
-                                style: GoogleFonts.poppins(
+                                style: TextStyle(
                                   color: businessTourPlanController.filterStatusFlag.value == 'APPROVED'
                                       ? AllColors.whiteColor
                                       : AllColors.primaryDark1,
@@ -190,7 +190,38 @@ class BussinessTourPlanScreen extends StatelessWidget{
                               },
                             );
                           }),
-                          SizedBox(width: 8),
+                          const SizedBox(width: 8),
+
+                          Obx(() {
+                            return ActionChip(
+                              elevation: 2,
+                              padding: EdgeInsets.symmetric(horizontal: 35, vertical: 2),
+                              backgroundColor:
+                              businessTourPlanController.filterStatusFlag.value == 'All'
+                                  ? AllColors.primaryDark1
+                                  : AllColors.grayColor,
+                              shadowColor: Colors.black,
+                              shape: StadiumBorder(
+                                side: BorderSide(color: AllColors.grayColor),
+                              ),
+                              label: Text(
+                                'All',
+                                style: TextStyle(
+                                  color: businessTourPlanController.filterStatusFlag.value == 'All'
+                                      ? AllColors.whiteColor
+                                      : AllColors.primaryDark1,
+                                  fontSize: AllFontSize.fourtine,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              onPressed: () {
+                                businessTourPlanController.filterStatusFlag.value = 'All';
+                                businessTourPlanController.pageNumber=0;
+                                businessTourPlanController.getBusinessTourPlanData(businessTourPlanController.pageNumber);
+                              },
+                            );
+                          }),
+                          const SizedBox(width: 8),
                         ],
                       ),
                     ),
