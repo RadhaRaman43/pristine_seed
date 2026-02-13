@@ -923,6 +923,21 @@ class SessionManagement {
     }
   }
 
+  Future<void> setFirebaseToken(String token) async {
+    print("Set Firebase ");
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('token', token);
+  }
+  Future<String> getFirebaseToken() async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      var token = prefs.getString('token');
+      if (token == null || token == "") return '';
+      return token;
+    } catch (e) {
+      return '';
+    }
+  }
 
 
 

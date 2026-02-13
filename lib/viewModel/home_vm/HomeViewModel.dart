@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:navigation_drawer_flutter/models/logoutModel/logout_model.dart';
 import 'package:navigation_drawer_flutter/repository/home_repository/home_repository.dart';
+import '../../firebase/firebase_api.dart';
 import '../../models/recently_open_menu_model.dart';
 import '../../reources/routes/routes_name.dart';
 import '../../utils/app_utils.dart';
@@ -86,21 +87,24 @@ class HomeViewModel extends GetxController{
         if (loginResponse[0].condition.toString() == "True") {
           Utils.showToastification('Message', loginResponse[0].action.toString());
           sessionManagement.clearSession();
-
+          FirebaseApi().deleteToken();
           Get.offAllNamed(RoutesName.splashscreen);
           print("Success");
 
         } else {
+
           print("false");
           Utils.showErrorToastification('Message', loginResponse[0].action.toString());
 
         }
       }catch(e){
+        FirebaseApi().deleteToken();
         print("Exception"+e.toString());
 
       }
     }).onError((error, stackTrace) {
       loading.value=false;
+      FirebaseApi().deleteToken();
       print("FAil");
 
     });

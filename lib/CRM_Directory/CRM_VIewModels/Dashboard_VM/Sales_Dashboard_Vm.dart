@@ -98,6 +98,7 @@ class SalesDashboardVm extends GetxController{
       getEmployeeTeamMemberGetByClusterRegionApi();
     }
     //getFilterData();
+    debugPrint("filterCustomDateController.value.text = ${formattedStartDate} - ${formattedEndDate}");
 
   }
 
@@ -221,6 +222,8 @@ class SalesDashboardVm extends GetxController{
           .join('|');
     }
     RegionNameForApi = '';
+    debugPrint("print region cont ${RegionName_controller.value.text}");
+
     if(RegionName_controller.value.text.isNotEmpty){
       RegionNameForApi = RegionName_controller.value.text
           .split(',')
@@ -545,6 +548,7 @@ class SalesDashboardVm extends GetxController{
           if(response.length>0 && response[0].condition=="True"){
             loading.value = false;
             regionwithclusterGetByEmailList.value=response;
+            RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join('|');
             print('av..${RegionName_controller.value.text}');
             getFilterData();
           }else {
@@ -614,8 +618,6 @@ class SalesDashboardVm extends GetxController{
 
   void getFilterData() async{
     Map getFilterData=await sessionManagement.getSalesDashboardData();
-
-    print("object......${getFilterData["filter_region_name"].toString()} and ${getFilterData["filter_cluster_name"].toString()} ");
 
     if(getFilterData.isNotEmpty){
       filterDataChecker.value='1';

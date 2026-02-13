@@ -23,9 +23,6 @@ class ProfileViewModel extends GetxController{
     email=await sessionManagement.getEmail() ?? '';
     name=await sessionManagement.getName() ?? '';
     company_id=await sessionManagement.getCompanyId() ?? '';
-
-
-
     print(email);
 
 

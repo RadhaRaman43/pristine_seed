@@ -17,6 +17,8 @@ class DashBoardRepository{
   }
 
 
-
+  Future<String> sendPushNotificationToServer(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.userFireBaseTokenUpdate,sessionManagement);
+  }
 
 }

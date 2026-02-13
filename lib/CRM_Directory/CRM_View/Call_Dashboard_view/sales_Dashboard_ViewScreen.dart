@@ -68,11 +68,9 @@ class SalesDashboardViewscreen extends StatelessWidget{
                   child: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: ConstrainedBox(
-                      constraints: BoxConstraints(
-                          minWidth: MediaQuery.of(context).size.width),
+                      constraints: BoxConstraints(minWidth: MediaQuery.of(context).size.width),
                       child: Container(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 8), // optional spacing
+                        padding: EdgeInsets.symmetric(horizontal: 8), // optional spacing
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -415,7 +413,7 @@ class SalesDashboardViewscreen extends StatelessWidget{
 
                      Obx((){
                        return Visibility(
-                         visible: dashboard_view_Controller.messageVisibilty.value,
+                         visible: dashboard_view_Controller.messageVisibilty.value && dashboard_view_Controller.isAdminWritePermission=="1",
                          child: Text(
                            "Please Select Filter for View data....",
                            style: GoogleFonts.poppins(
@@ -1644,8 +1642,8 @@ class SalesDashboardViewscreen extends StatelessWidget{
                           dashboard_view_Controller.filterCustomDateController.value.text =
                           '${dashboard_view_Controller.formattedStartDate} - ${dashboard_view_Controller.formattedEndDate}';
                           dashboard_view_Controller.pageNumber = 0;
-                          dashboard_view_Controller.salesDashboardData();
-                          Get.back();
+                          /*dashboard_view_Controller.salesDashboardData();
+                          Get.back();*/
                         },
                       );
                     }),
@@ -1665,8 +1663,8 @@ class SalesDashboardViewscreen extends StatelessWidget{
                           dashboard_view_Controller.filterCustomDateController.value.text =
                           '${dashboard_view_Controller.formattedStartDate} - ${dashboard_view_Controller.formattedEndDate}';
                           dashboard_view_Controller.pageNumber = 0;
-                          dashboard_view_Controller.salesDashboardData();
-                          Get.back();
+                          /*dashboard_view_Controller.salesDashboardData();
+                          Get.back();*/
                         },
                       );
                     }),
@@ -1687,8 +1685,8 @@ class SalesDashboardViewscreen extends StatelessWidget{
                               .filterCustomDateController.value.text =
                           '${dashboard_view_Controller.formattedStartDate} - ${dashboard_view_Controller.formattedEndDate}';
                           dashboard_view_Controller.pageNumber = 0;
-                          dashboard_view_Controller.salesDashboardData();
-                          Get.back();
+                          /*dashboard_view_Controller.salesDashboardData();
+                          Get.back();*/
                         },
                       );
                     }),
@@ -1708,8 +1706,8 @@ class SalesDashboardViewscreen extends StatelessWidget{
                           dashboard_view_Controller.filterCustomDateController.value.text =
                           '${dashboard_view_Controller.formattedStartDate} - ${dashboard_view_Controller.formattedEndDate}';
                           dashboard_view_Controller.pageNumber = 0;
-                          dashboard_view_Controller.salesDashboardData();
-                          Get.back();
+                          /*dashboard_view_Controller.salesDashboardData();
+                          Get.back();*/
                         },
                       );
                     }),
@@ -1729,8 +1727,8 @@ class SalesDashboardViewscreen extends StatelessWidget{
                           dashboard_view_Controller.filterCustomDateController.value.text =
                           '${dashboard_view_Controller.formattedStartDate} - ${dashboard_view_Controller.formattedEndDate}';
                           dashboard_view_Controller.pageNumber = 0;
-                          dashboard_view_Controller.salesDashboardData();
-                          Get.back();
+                          /*dashboard_view_Controller.salesDashboardData();
+                          Get.back();*/
                         },
                       );
                     }),
@@ -1750,8 +1748,8 @@ class SalesDashboardViewscreen extends StatelessWidget{
                           dashboard_view_Controller.filterCustomDateController.value.text =
                           '${dashboard_view_Controller.formattedStartDate} - ${dashboard_view_Controller.formattedEndDate}';
                           dashboard_view_Controller.pageNumber = 0;
-                          dashboard_view_Controller.salesDashboardData();
-                          Get.back();
+                          /*dashboard_view_Controller.salesDashboardData();
+                          Get.back();*/
                         },
                       );
                     }),
@@ -1771,8 +1769,8 @@ class SalesDashboardViewscreen extends StatelessWidget{
                           dashboard_view_Controller.filterCustomDateController.value.text =
                           '${dashboard_view_Controller.formattedStartDate} - ${dashboard_view_Controller.formattedEndDate}';
                           dashboard_view_Controller.pageNumber = 0;
-                          dashboard_view_Controller.salesDashboardData();
-                          Get.back();
+                          /*dashboard_view_Controller.salesDashboardData();
+                          Get.back();*/
                         },
                       );
                     }),
