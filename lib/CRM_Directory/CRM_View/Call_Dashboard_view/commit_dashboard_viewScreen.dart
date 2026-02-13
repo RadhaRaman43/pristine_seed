@@ -134,8 +134,7 @@ class CommitDashboardViewscreen extends StatelessWidget{
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-                                Row(
-                                  children: [
+
                                     Text(
                                       'Commitment',
                                       style: GoogleFonts.poppins(
@@ -146,8 +145,8 @@ class CommitDashboardViewscreen extends StatelessWidget{
                                     ),
                                     Obx((){
                                       return  Text(
-                                        ' ( Date Ranges : ${dashboard_view_Controller.formattedStartDate} - '
-                                            '${dashboard_view_Controller.formattedEndDate})',
+                                        'Date Ranges : ${dashboard_view_Controller.formattedStartDate} - '
+                                            '${dashboard_view_Controller.formattedEndDate}',
                                         style: GoogleFonts.poppins(
                                           color: AllColors.blackColor,
                                           fontSize: AllFontSize.twelve,
@@ -155,8 +154,7 @@ class CommitDashboardViewscreen extends StatelessWidget{
                                         ),
                                       );
                                     }),
-                                  ],
-                                ),
+
                                const SizedBox(width: 10,),
                                 Text(
                                   '${dashboard_view_Controller.character.value} : Type Of Calls (R)',
