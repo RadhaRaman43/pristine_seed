@@ -408,7 +408,7 @@ class AddNewTaskScreen extends StatelessWidget{
                       Utils.sanckBarError('Account Name!', "Please Enter Customer Name");
                       return  ;
                     }
-                    if(taskMaster_page_controller.Type_of_call_controller.value.text!="New Call" &&
+                    if(taskMaster_page_controller.Type_of_call_controller.value.text.toLowerCase()!="new call" &&
                        ( taskMaster_page_controller.Contact_Name_controller.text.isEmpty ||
                            taskMaster_page_controller.Contact_Name_controller == null) ){
                       Utils.sanckBarError('Contact Name!', "Please Enter Contact Name");
@@ -508,8 +508,8 @@ class AddNewTaskScreen extends StatelessWidget{
             ),
             contentPadding: EdgeInsets.symmetric(
                 vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-            hintText: 'Customer Name',
-            labelText: 'Customer Name',
+            hintText: 'Customer Name*',
+            labelText: 'Customer Name*',
             border: OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(10))
             ),

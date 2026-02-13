@@ -685,6 +685,7 @@ class AccountmasterScreen extends StatelessWidget{
   bindData(BuildContext context, String labelText, TextEditingController controller,) {
     return TextField(
       controller: controller,
+      keyboardType:labelText=='Phone No.'? TextInputType.phone:TextInputType.text,
       decoration: InputDecoration(
           contentPadding: EdgeInsets.symmetric(
               vertical: AllFontSize.ten, horizontal: AllFontSize.ten),

@@ -604,7 +604,7 @@ class TaskMasterScreen extends StatelessWidget {
               child: Row(
                 children: [
                   Text(
-                    "Task Id : ",
+                    "Task Id: ",
                     style: GoogleFonts.poppins(
                         color: AllColors.primaryDark1,
                         fontSize: AllFontSize.fourtine,
@@ -685,7 +685,7 @@ class TaskMasterScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    "Customer Name : ",
+                    "Customer Name: ",
                     style: GoogleFonts.poppins(
                         color: AllColors.primaryDark1,
                         fontSize: AllFontSize.fourtine,
@@ -736,7 +736,7 @@ class TaskMasterScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    "Sales Cycle Id : ",
+                    "Sales Cycle Id: ",
                     style: GoogleFonts.poppins(
                         color: AllColors.primaryDark1,
                         fontSize: AllFontSize.fourtine,

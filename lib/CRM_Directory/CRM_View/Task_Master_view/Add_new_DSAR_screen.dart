@@ -633,8 +633,8 @@ class AddNewDsarScreen extends StatelessWidget{
             ),
             contentPadding: EdgeInsets.symmetric(
                 vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-            hintText: 'DSAR Status',
-            labelText: 'DSAR Status',
+            hintText: 'DSAR Status*',
+            labelText: 'DSAR Status*',
 
             border: OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(10))

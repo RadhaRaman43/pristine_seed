@@ -3016,4 +3016,13 @@ class Accountmastervm extends GetxController{
     sessionManagement.clearDraftAccountMasterData();
   }
 
+  bool isValidPan(String pan) {
+    final panRegex = RegExp(r'^[A-Z]{5}[0-9]{4}[A-Z]{1}$');
+    return panRegex.hasMatch(pan);
+  }
+  bool isValidIFSC(String ifsc) {
+    final ifscRegex = RegExp(r'^[A-Z]{4}0[A-Z0-9]{6}$');
+    return ifscRegex.hasMatch(ifsc);
+  }
+
 }

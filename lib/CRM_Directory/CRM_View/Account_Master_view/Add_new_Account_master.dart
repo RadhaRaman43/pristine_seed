@@ -170,6 +170,12 @@ class AddNewAccountMaster extends StatelessWidget{
                       accountMaster_page_controller.clearController();
                       //Get.toNamed(RoutesName.accountMaster_screen);
                     }else{
+                      if(accountMaster_page_controller.PhoneNo_Controller.text.isNotEmpty){
+                        if(accountMaster_page_controller.PhoneNo_Controller.text.length < 10){
+                          Utils.sanckBarError('Phone No.!', "Please Enter 10 Digit Phone No");
+                          return  ;
+                        }
+                      }
                       // await updateAccountData(accountMaster_page_controller.DraftId);
                       accountMaster_page_controller.DraftAccountMstUploaderApiHit('Update');
                       accountMaster_page_controller.clearController();
@@ -267,15 +273,27 @@ class AddNewAccountMaster extends StatelessWidget{
                 return  ;
               }
 
-              if(accountMaster_page_controller.gst_registration_type_controller.value.text == 'UnRegistered' && accountMaster_page_controller.PanNo_Controller.value.text.length !=10 && accountMaster_page_controller.PanNo_Controller.value.text.isNotEmpty){
+              debugPrint("${accountMaster_page_controller.gst_registration_type_controller.value.text}");
+              debugPrint("${accountMaster_page_controller.PanNo_Controller.value.text.length }");
+              if(accountMaster_page_controller.gst_registration_type_controller.value.text == 'UnRegistered' &&
+                  accountMaster_page_controller.PanNo_Controller.value.text.length !=10 &&
+                  accountMaster_page_controller.PanNo_Controller.value.text.isNotEmpty){
                 Utils.sanckBarError('Pan No!', "Pan No Should be in 10 digits");
                 return  ;
+              }
+              if(accountMaster_page_controller.PanNo_Controller.value.text.isNotEmpty && !accountMaster_page_controller.isValidPan(accountMaster_page_controller.PanNo_Controller.value.text)){
+                Utils.sanckBarError('Pan No!', "Please Enter valid PAN No.");
+                return ;
               }
 
               if(accountMaster_page_controller.IfscCode_Controller.text.isNotEmpty){
                 if(accountMaster_page_controller.IfscCode_Controller.text.length < 11){
                   Utils.sanckBarError('IFSC Code!', "IFSC Code Should be in 11 digits");
                   return  ;
+                }
+                if (!accountMaster_page_controller.isValidIFSC(accountMaster_page_controller.IfscCode_Controller.text)) {
+                  Utils.sanckBarError('IFSC Code!', "Please Enter valid IFSC Code");
+                  return ;
                 }
               }
               if(accountMaster_page_controller.Account_Master_list != null &&
@@ -1055,6 +1073,9 @@ class AddNewAccountMaster extends StatelessWidget{
     else if(hintData == "Customer IFSC Code"){
       maxLength = 11;
     }
+    else if(hintData == "Customer PAN No."){
+      maxLength = 10;
+    }
     else if(hintData == "Address" || hintData == "Address2"){
       maxLength = 500;
     }
@@ -1098,11 +1119,20 @@ class AddNewAccountMaster extends StatelessWidget{
             }
           }
           else if(hintData == "Customer PAN No.") {
+            if (!accountMaster_page_controller.isValidPan(value)) {
+              return 'Invalid PAN No. (Format: ABCDE1234F)';
+            }
             if (accountMaster_page_controller.gst_registration_type_controller
                 .value.text == 'Registered' && value != accountMaster_page_controller.GstPanNo.value) {
               return 'Please Enter Valid Pan No.';
             }
           }
+          else if (hintData == "Customer IFSC Code") {
+            if (!accountMaster_page_controller.isValidIFSC(value)) {
+              return 'Invalid IFSC Code (Format: ABCD0XXXXXX)';
+            }
+          }
+
           return null;
         },
         onChanged: (value) {
@@ -1168,6 +1198,8 @@ class AddNewAccountMaster extends StatelessWidget{
       ),
     ) ;
   }
+
+
 
   Widget bindAccountOwnerDropDown(context){
     //print("accountMaster_page_controller.Account_Master_list.length ${accountMaster_page_controller.Account_Master_list.length} and ${accountMaster_page_controller.Account_Master_list[0].isManager}");
