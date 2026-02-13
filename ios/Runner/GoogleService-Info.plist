@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>API_KEY</key>
+	<string>AIzaSyD0qxjcc3O6VgFNDMiAnGf_NrTB7vahJW8</string>
+	<key>GCM_SENDER_ID</key>
+	<string>527318396886</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.pristinefulfil.serviceManagment</string>
+	<key>PROJECT_ID</key>
+	<string>pristinecrmservicemanagement</string>
+	<key>STORAGE_BUCKET</key>
+	<string>pristinecrmservicemanagement.firebasestorage.app</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:527318396886:ios:fd5a6026db3748e924fe77</string>
+</dict>
+</plist>

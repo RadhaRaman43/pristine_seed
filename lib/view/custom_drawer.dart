@@ -31,6 +31,7 @@ import '../CRM_Directory/CRM_VIewModels/sales_cycle_vm/sales_cycle_vm.dart';
 import '../constants/app_colors.dart';
 import '../constants/app_font_size.dart';
 import '../constants/static_methods.dart';
+import '../firebase/firebase_api.dart';
 import '../locat_database/databaseHelper.dart';
 import '../models/loginModel/login_model.dart';
 import '../reources/routes/routes_name.dart';
@@ -723,6 +724,7 @@ class _Drawer extends State<CustomDrawer> {
                   onPressed:() {
                     home_vm.logOut();
                     crmDatabase.deleteMyLocalDatabase();
+
                   },
 
                   child: const Text("Yes",

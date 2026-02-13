@@ -18,8 +18,11 @@ import 'package:signalr_netcore/hub_connection.dart';
 import 'package:http/http.dart' as http;
 import '../../../current_location/background_task.dart';
 
+
+import '../../../firebase/firebase_api.dart';
 import '../../../locat_database/databaseHelper.dart';
 import '../../../main.dart';
+import '../../../models/common_response/common_response.dart';
 import '../../../models/employeeDetail/employee_details_model.dart';
 import '../../../models/location/LocationData.dart';
 import '../../../models/profile_upload_model/profile_upload_model.dart';
@@ -96,7 +99,18 @@ class DashBoardViewModel extends GetxController with WidgetsBindingObserver{
     } else {
       imageUrl.value = '';
     }
-
+    //todo firebase token update
+    String firebase_token = await FirebaseApi().initNotification();
+    String session_firebase_token = await sessionManagement.getFirebaseToken();
+    try{
+      if (session_firebase_token != firebase_token) {
+        print("Sessionctocket.....${session_firebase_token}");
+        print("Fiorebasetocket.....${firebase_token}");
+        await sendPushNotification(firebase_token);
+      }
+    }catch(e){
+      print(e);
+    }
     //ConnectivityResult connectivityResult = await Connectivity().checkConnectivity();
     var connectivityResult =  Connectivity();
     if (connectivityResult == ConnectivityResult.none) {
@@ -592,6 +606,34 @@ class DashBoardViewModel extends GetxController with WidgetsBindingObserver{
         print('application is paused');
         break;
     }
+  }
+
+
+  Future<void> sendPushNotification(String firebase_token_id) async {
+    loading.value = true;
+    Map data = {
+      "email_id": email,
+      "user_token": firebase_token_id,
+    };
+    await _api
+        .sendPushNotificationToServer(data, sessionManagement)
+        .then((value) async {
+      try {
+        loading.value = false;
+        List<CommonResponse> response = (json.decode(value) as List)
+            .map((i) => CommonResponse.fromJson(i))
+            .toList();
+        if (response.isNotEmpty && response[0].condition.toString() == "True") {
+          await sessionManagement.setFirebaseToken(firebase_token_id);
+        } else {
+          Utils.sanckBarError('False Message!', response[0].message.toString());
+        }
+      } catch (e) {
+        Utils.sanckBarException('Exception Message!', e.toString());
+      }
+    }).onError((error, stackTrace) {
+      loading.value = false;
+    });
   }
 
 }
