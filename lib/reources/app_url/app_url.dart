@@ -1,9 +1,9 @@
 class AppUrl {
 
    //todo testing url...
-     static const String BASE_URL = "https://devlogin.pristinefulfil.com";
+     //static const String BASE_URL = "https://devlogin.pristinefulfil.com";
     //todo live url....
-       //static const String BASE_URL = "https://care.pristinefulfil.com";
+       static const String BASE_URL = "https://care.pristinefulfil.com";
 
   static const String login_url = "$BASE_URL/api/UserLogin/Login";
   static const String logout_url = "$BASE_URL/api/UserLogin/Logout";
@@ -346,4 +346,7 @@ class AppUrl {
      static const String PendingDsarDashboardUserWiseData="$BASE_URL/api/CRM/Dashboard/PendingDsarDashboardUserWiseData";
      static const String SalesDashboardReportGet="$BASE_URL/api/CRM/SalesCycle/SalesDashboardReportGet";
      static const String EmployeeTeamMemberGetByClusterRegion="$BASE_URL/api/Employee/EmployeeTeamMemberGetByClusterRegion";
+
+     //todo Item master
+     static const String ItemMstSalesCycleGet="$BASE_URL/api/ItemMaster/ItemMstSalesCycleGet";
 }

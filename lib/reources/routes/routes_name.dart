@@ -166,6 +166,9 @@ class RoutesName{
   static const salesDashboardViewScreen="/sales_Dashboard_ViewScreen";
   static const pendingDSARDashboardViewScreen="/pending_DSAR_Dashboard_ViewScreen.dart";
 
+  //todo item master screen
+  static const nonStandardItemList="/non_standard_item_list.dart";
+
 
   //todo image not found...
 

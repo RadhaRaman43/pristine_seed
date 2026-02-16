@@ -3,6 +3,7 @@ import 'package:get/get_navigation/src/routes/transitions_type.dart';
 import 'package:navigation_drawer_flutter/CRM_Directory/CRM_View/Contact_master_View/Contact_master_View/all_contact_master_screen.dart';
 import 'package:navigation_drawer_flutter/CRM_Directory/CRM_View/Task_Master_view/Task_Approval_List_Screen.dart';
 import 'package:navigation_drawer_flutter/CRM_Directory/CRM_View/Task_Master_view/task_master_approval_details.dart';
+import 'package:navigation_drawer_flutter/CRM_Directory/CRM_View/item_master/non_standard_item_list.dart';
 import 'package:navigation_drawer_flutter/CRM_Directory/CRM_View/pageNotFound.dart';
 import 'package:navigation_drawer_flutter/component/default_button.dart';
 import 'package:navigation_drawer_flutter/component/error_404.dart';
@@ -840,6 +841,12 @@ class AppRoutes{
 
     GetPage(name: RoutesName.pendingDSARDashboardViewScreen,
         page: ()=>PendingDsarDashboardViewscreen(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
+
+    GetPage(name: RoutesName.nonStandardItemList,
+        page: ()=>NonStandardItemsScreen(),
         transitionDuration: Duration(microseconds: 180),
         transition: Transition.rightToLeftWithFade
     ),
