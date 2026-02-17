@@ -95,23 +95,26 @@ class SalesCycleProductList extends StatelessWidget{
               Obx((){
                 bool allSelected = saleCycleController.salesCycleProductCheckedList
                   .every((element) => element == true);
-                return Container(
-                  alignment: Alignment.centerRight,
-                  padding: EdgeInsets.only(right: 10),
-                  child: ActionChip(
-                    label: Text(
-                      allSelected ? "Unselect All" : "Select All",
-                      style: GoogleFonts.poppins(
-                        color: AllColors.whiteColor,
-                        fontWeight: FontWeight.w500,
+                return Visibility(
+                  visible: saleCycleController.quoteLinedata.length>0,
+                  child: Container(
+                    alignment: Alignment.centerRight,
+                    padding: EdgeInsets.only(right: 10),
+                    child: ActionChip(
+                      label: Text(
+                        allSelected ? "Unselect All" : "Select All",
+                        style: GoogleFonts.poppins(
+                          color: AllColors.whiteColor,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
-                    ),
-                    onPressed: () {
-                      saleCycleController.selectAllSalesCycleProducts(!allSelected);
-                    },
-                    backgroundColor: AllColors.primaryDark1,
-                    shape: StadiumBorder(
-                      side: BorderSide.none,
+                      onPressed: () {
+                        saleCycleController.selectAllSalesCycleProducts(!allSelected);
+                      },
+                      backgroundColor: AllColors.primaryDark1,
+                      shape: StadiumBorder(
+                        side: BorderSide.none,
+                      ),
                     ),
                   ),
                 );
@@ -235,11 +238,11 @@ class SalesCycleProductList extends StatelessWidget{
                 children: [
                   Expanded(
                       child: Container(
-                        width: size.width / 2,
+                       // width: size.width / 2,
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            Row(
+                          /*  Row(
                               children: [
                                 Text(
                                   "Item Desc: ",
@@ -269,7 +272,7 @@ class SalesCycleProductList extends StatelessWidget{
                                   ),
                                 ),
                               ],
-                            ),
+                            ),*/
                             Row(
                               children: [
                                 Text(
@@ -325,7 +328,7 @@ class SalesCycleProductList extends StatelessWidget{
                             Row(
                               children: [
                                 Text(
-                                  "Price Per Unit : ",
+                                  "Unit Price : ",
                                   style: GoogleFonts.poppins(
                                     color: AllColors.primaryDark1,
                                     fontSize: AllFontSize.twelve,
@@ -359,7 +362,87 @@ class SalesCycleProductList extends StatelessWidget{
                                 ),
                               ],
                             ),
-                            Obx(() {
+
+                            Row(
+                              children: [
+                                Text(
+                                  "Approved Price :",
+                                  style: GoogleFonts.poppins(
+                                    color: AllColors.primaryDark1,
+                                    fontSize: AllFontSize.twelve,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+
+                                Flexible(
+                                  //width: size.width * .12,
+                                  child: Tooltip(
+                                    message:  "₹ ${
+                                        saleCycleController
+                                            .numberFormatWithComma(
+                                            saleCycleController
+                                                .quoteLinedata[index]
+                                                .approvedAmount)}",
+                                    child: Text(
+                                      "₹ ${
+                                          saleCycleController
+                                              .numberFormatWithComma(
+                                              saleCycleController
+                                                  .quoteLinedata[index]
+                                                  .approvedAmount)}",
+                                      overflow: TextOverflow.ellipsis,
+                                      style: GoogleFonts.poppins(
+                                        color: AllColors.textColor,
+                                        fontSize: AllFontSize.twelve,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Text(
+                                  "Total Amt :",
+                                  style: GoogleFonts.poppins(
+                                    color: AllColors.primaryDark1,
+                                    fontSize: AllFontSize.twelve,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+
+                                Flexible(
+                                  //width: size.width * .12,
+                                  child: Tooltip(
+                                    message:  "₹ ${
+                                        saleCycleController
+                                            .numberFormatWithComma(
+                                            saleCycleController
+                                                .quoteLinedata[index]
+                                                .grossAmount)}",
+                                    child: Text(
+                                      "₹ ${
+                                          saleCycleController
+                                              .numberFormatWithComma(
+                                              saleCycleController
+                                                  .quoteLinedata[index]
+                                                  .grossAmount)}",
+                                      overflow: TextOverflow.ellipsis,
+                                      style: GoogleFonts.poppins(
+                                        color: AllColors.textColor,
+                                        fontSize: AllFontSize.twelve,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+
+                              ],
+                            ),
+
+                           /* Obx(() {
                               return Visibility(
                                 visible: saleCycleController.showBranchHead.value ||
                                     saleCycleController.showClusterHead.value|| saleCycleController.isAdminWritePermission=="1",
@@ -659,7 +742,7 @@ class SalesCycleProductList extends StatelessWidget{
                                   ),
                                 ),
                               ],
-                            ),
+                            ),*/
 
                           ],
                         ),
@@ -667,7 +750,7 @@ class SalesCycleProductList extends StatelessWidget{
                   SizedBox(
                     width: 5,
                   ),
-                  Expanded(
+                /*  Expanded(
                       child: Container(
                         width: size.width / 2,
                         child: Column(
@@ -847,45 +930,6 @@ class SalesCycleProductList extends StatelessWidget{
                               ],
                             ),
 
-                            Row(
-                              children: [
-                                Text(
-                                  "Appr. Price :",
-                                  style: GoogleFonts.poppins(
-                                    color: AllColors.primaryDark1,
-                                    fontSize: AllFontSize.twelve,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-
-                                Flexible(
-                                  //width: size.width * .12,
-                                  child: Tooltip(
-                                    message:  "₹ ${
-                                        saleCycleController
-                                            .numberFormatWithComma(
-                                            saleCycleController
-                                                .quoteLinedata[index]
-                                                .approvedAmount)}",
-                                    child: Text(
-                                      "₹ ${
-                                          saleCycleController
-                                              .numberFormatWithComma(
-                                              saleCycleController
-                                                  .quoteLinedata[index]
-                                                  .approvedAmount)}",
-                                      overflow: TextOverflow.ellipsis,
-                                      style: GoogleFonts.poppins(
-                                        color: AllColors.textColor,
-                                        fontSize: AllFontSize.twelve,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-
-                              ],
-                            ),
 
                             Row(
                               children: [
@@ -1013,7 +1057,7 @@ class SalesCycleProductList extends StatelessWidget{
                             ),
                           ],
                         ),
-                      )),
+                      )),*/
                 ],
               ),
               SizedBox(

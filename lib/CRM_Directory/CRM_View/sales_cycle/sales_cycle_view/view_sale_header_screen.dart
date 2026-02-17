@@ -290,7 +290,8 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                               child: Row(
                                 children: [
                                   Icon(Icons.contacts, color: Colors.black),
-                                  Text(' Won/Loss'),
+                                  Text(saleCycleController.saleCycleList[0].salesCycleStatus?.toLowerCase()=='propose'?
+                                      ' Won/Loss':' Update Sales Cycle'),
                                 ],
                               ),
                               onTap: () {
@@ -8394,6 +8395,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                         borderRadius: BorderRadius.circular(10)),
                     //padding: EdgeInsets.only(left: 10.0, right: 10.0),
                     child: TextFormField(
+                      keyboardType: TextInputType.number,
                       controller:
                           saleCycleController.expectedAmountController.value,
                       decoration: InputDecoration(

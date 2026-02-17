@@ -1178,7 +1178,7 @@ class SalesCycleVm extends GetxController {
             if (response != null &&
                 response.length > 0 &&
                 response[0].condition?.toLowerCase() == "true") {
-              loading.value = false;
+               loading.value = false;
               if (pageNumberForQuote == 0) {
                 quoteList.clear();
               }
@@ -3096,6 +3096,7 @@ class SalesCycleVm extends GetxController {
                               }
                             }
                             pageNumberForQuote = 0;
+                            quoteList.value=[];
                            // getSalesAdviseData(pageNumberSalesAdvise, saleCycleList.salesCycleId??"", "", "completed");
                             getQuoteHeaderData(pageNumberForQuote,
                                 saleCycleList.salesCycleId!, "Approved");
@@ -3115,9 +3116,8 @@ class SalesCycleVm extends GetxController {
                       ),
                       Obx(() {
                         return Visibility(
-                          visible:
-                              (isApprove.value && Quote_Selected_list.isNotEmpty && saleCycleList.isMarkRateContract==1)
-                          && isAdminWritePermission=='1'
+                          visible: (isApprove.value && Quote_Selected_list.isNotEmpty && saleCycleList.isMarkRateContract==1)
+                          || (isAdminWritePermission=='1' && updateQuoteAccetedCycleController.value.text == "WON")
                                   ? true
                                   : false,
                           // visible: saleCycleController.selectedQuotationIdController.value.text == '' ? false:true,
