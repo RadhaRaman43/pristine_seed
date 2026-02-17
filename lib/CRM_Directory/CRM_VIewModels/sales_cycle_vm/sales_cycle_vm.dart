@@ -26,11 +26,13 @@ import '../../../main.dart';
 import '../../../models/service_managment_model_directory/bulk_indent_model/bulk_item_master_model.dart';
 import '../../../reources/routes/routes_name.dart';
 import '../../../viewModel/SessionManagment/session_managment.dart';
+import '../../CRM_Models/AccountMaster_model/Account_Master_model.dart';
 import '../../CRM_Models/AccountMaster_model/Employee_Member_Model.dart';
 import '../../CRM_Models/AccountMaster_model/cluster_modal.dart';
 import '../../CRM_Models/AccountMaster_model/getMasterTypeModel.dart';
 import '../../CRM_Models/AccountMaster_model/region_with_cluster_filter_modal.dart';
 import '../../CRM_Models/Address_Master_Model/address_master_model.dart';
+import '../../CRM_Models/Contact_Master_modal/Contact_Master_modal/conract_master_modal.dart';
 import '../../CRM_Models/TaskMaster_model/Item_Category_Mast_model.dart';
 import '../../CRM_Models/TaskMaster_model/Task_Master_model.dart';
 import '../../CRM_Models/TaskMaster_model/company_type_modal.dart';
@@ -54,13 +56,11 @@ import '../../CRM_Models/sale_cycle_modal/sales_cycle_quote_information_modal.da
     as salesCycle;
 import '../../CRM_Models/sales_advise_modal/sales_advise_header_line_modal.dart'
     as advise;
-import '../address_master_vm/AddressMasterVM.dart';
 
 class SalesCycleVm extends GetxController {
 
 
   static String _displayCustomerNeedIdentityStatusForOption(String option) => option;
-  //Addressmastervm address_vm_controller = Get.find();
   Size size = Get.size;
 
   final _api = SalesCycleRepository();
@@ -69,6 +69,7 @@ class SalesCycleVm extends GetxController {
   RxString routingForQuoteUpdate="Quote".obs;
   RxString accountCode = "".obs;
   RxString contactCode = "".obs;
+  RxString contactName = "".obs;
   RxString ProductCategoryCode = "".obs;
   RxString Total_Budget_Amount = "0".obs;
   RxString Total_Expected_Amount = "0".obs;
@@ -127,11 +128,10 @@ class SalesCycleVm extends GetxController {
   RxList<ItemMasterBySalesId_Model> itemMstGetBySalesIdList = <ItemMasterBySalesId_Model>[].obs;
   RxList<SalesCycleUpdateStatusModal> quoteLineCreate = <SalesCycleUpdateStatusModal>[].obs;
   RxList<SalesCycleQuoteHeaderModal> Quote_Selected_list = <SalesCycleQuoteHeaderModal>[].obs;
+  RxList<ContactMstGetListModal> contact_master_list=<ContactMstGetListModal>[].obs;
 
 
 
- /* RxList<SalesAdviseHeaderModal> selection_sales_advise_won_list =
-      <SalesAdviseHeaderModal>[].obs;*/
   RxList<ItemCategoryMstModel> productCategoryList =
       <ItemCategoryMstModel>[].obs;
   RxList<ItemCategoryMstModel> itemCategorySelectedlist =
@@ -210,6 +210,9 @@ class SalesCycleVm extends GetxController {
   var quotationWonLossController=TextEditingController().obs;
   var quotationReasonController=TextEditingController().obs;
   RxBool reasonQuotationVisibilty=false.obs;
+
+  var contact_name_controller=TextEditingController().obs;
+
 
   RxString saleCycleOwnerSelected = "".obs;
   RxBool showUpdateBtnApproveQuoteItem = false.obs;
@@ -1175,7 +1178,7 @@ class SalesCycleVm extends GetxController {
             if (response != null &&
                 response.length > 0 &&
                 response[0].condition?.toLowerCase() == "true") {
-              loading.value = false;
+               loading.value = false;
               if (pageNumberForQuote == 0) {
                 quoteList.clear();
               }
@@ -3093,14 +3096,15 @@ class SalesCycleVm extends GetxController {
                               }
                             }
                             pageNumberForQuote = 0;
+                            quoteList.value=[];
                            // getSalesAdviseData(pageNumberSalesAdvise, saleCycleList.salesCycleId??"", "", "completed");
                             getQuoteHeaderData(pageNumberForQuote,
                                 saleCycleList.salesCycleId!, "Approved");
                             Get.toNamed(RoutesName.approvedQuotationListScreen);
                           },
                           child: Container(
-                            child: Text(updateQuoteAccetedCycleController.value.text == "WON"? "WON":
-                              'Select Quotation',
+                            //child: Text(updateQuoteAccetedCycleController.value.text == "WON"? "WON":
+                            child: Text('Select Quotation',
                               style: GoogleFonts.poppins(
                                 color: AllColors.blackColor,
                                 fontSize: AllFontSize.fourtine,
@@ -3112,8 +3116,8 @@ class SalesCycleVm extends GetxController {
                       ),
                       Obx(() {
                         return Visibility(
-                          visible:
-                              isApprove.value && Quote_Selected_list.isNotEmpty
+                          visible: (isApprove.value && Quote_Selected_list.isNotEmpty && saleCycleList.isMarkRateContract==1)
+                          || (isAdminWritePermission=='1' && updateQuoteAccetedCycleController.value.text == "WON")
                                   ? true
                                   : false,
                           // visible: saleCycleController.selectedQuotationIdController.value.text == '' ? false:true,
@@ -3130,7 +3134,7 @@ class SalesCycleVm extends GetxController {
                             },
                             child: Container(
                               child: Text(
-                                'Approve Quotation',
+                                'WON',
                                 style: GoogleFonts.poppins(
                                   color: AllColors.blackColor,
                                   fontSize: AllFontSize.fourtine,
@@ -6009,4 +6013,45 @@ class SalesCycleVm extends GetxController {
     });
   }
 
+
+  Future<List<ContactMstGetListModal>> getContactMaster(String text, String accountCode, String accountName) async {
+    try {
+      Map<String, String> data={
+        "filter_contact_name": text,
+        "filter_account_code":accountCode,
+        "filter_account_name":accountName ,
+        "filter_department_name": '',
+        "email_id": '',
+        "phone_no": '',
+        "created_by": isAdminWritePermission.value == "0"?email:"",
+        "row_per_page":'50',
+        "page_number": '0'
+      };
+
+      String customer_response =await  _api.contactMstGetList(data, sessionManagement);
+      final jsonResponse = json.decode(customer_response);
+      if (jsonResponse is List) {
+        print(jsonResponse);
+        List<ContactMstGetListModal> response =
+        jsonResponse.map((data) => ContactMstGetListModal.fromJson(data)).toList();
+        if (response[0].condition?.toLowerCase() == 'true') {
+           contact_master_list.value = response;
+           print('List...${contact_master_list[0].accountName}');
+        } else {
+          contact_master_list.value= [];
+        }
+      } else {
+        Utils.sanckBarException('False!', jsonResponse.message);
+        contact_master_list.value = [];
+      }
+    } catch (e) {
+      Utils.sanckBarException('Exception!', e.toString());
+      contact_master_list.value = [];
+    }
+    return  contact_master_list.value;
+  }
+
 }
+
+
+
