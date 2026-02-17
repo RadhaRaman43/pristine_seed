@@ -1248,6 +1248,7 @@ class MarkVisit extends StatelessWidget {
                                                 installation_indent_page_controller
                                                     .indent_remark_controller
                                                     .clear();
+                                                installation_indent_page_controller.visit_charge_controller.clear();
                                                 remarkDialog(context);
 
                                                 // Your onPressed logic here
@@ -1642,6 +1643,7 @@ class MarkVisit extends StatelessWidget {
   }
 
   void remarkDialog(BuildContext context) {
+
     showDialog(
       context: context,
       builder: (context) {
@@ -1668,14 +1670,33 @@ class MarkVisit extends StatelessWidget {
             ],
           ),
           content: Container(
-            height: size.height * .17,
+            //height: size.height * .17,
             child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
                 TextFormField(
                   controller: installation_indent_page_controller
                       .indent_remark_controller,
                   decoration: InputDecoration(
                     labelText: "Enter Remark ",
+                    labelStyle: TextStyle(color: AllColors.primaryDark1),
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: AllColors.primaryDark1),
+                    ),
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: AllColors.primaryDark1),
+                    ),
+                  ),
+                ),
+
+
+                TextFormField(
+                  keyboardType: TextInputType.number,
+                  readOnly: installation_indent_page_controller.service_installation_details_list[0].isWarranty==0?false:true,
+                  controller: installation_indent_page_controller
+                      .visit_charge_controller,
+                  decoration: InputDecoration(
+                    labelText: "Visit Charge ",
                     labelStyle: TextStyle(color: AllColors.primaryDark1),
                     enabledBorder: UnderlineInputBorder(
                       borderSide: BorderSide(color: AllColors.primaryDark1),

@@ -80,6 +80,7 @@ class InstallationViewModel extends GetxController {
   var discount_controller = TextEditingController();
   var consumer_quantity_controller=TextEditingController();
   var bad_quantity_controller=TextEditingController();
+  var visit_charge_controller=TextEditingController();
   var indent_remark_controller=TextEditingController();
   var globle_search_controller = TextEditingController();
   var customer_no_search_controller = TextEditingController();
@@ -934,7 +935,7 @@ class InstallationViewModel extends GetxController {
     Map data = {
       "service_id": service_id,
       "user_remark":indent_remark_controller.text,
-      "visit_charges": "0",
+      "visit_charges": visit_charge_controller.text.isNotEmpty?visit_charge_controller.text:"0",
       "from_latitude": currentLat.value,
       "from_longitude": currentLng.value,
       "email_id": email
@@ -957,6 +958,7 @@ class InstallationViewModel extends GetxController {
               Utils.showToastification(
                   "Success!", response[0].message.toString());
               indent_remark_controller.clear();
+              visit_charge_controller.clear();
               getServiceInstallationList(is_done.value, pageNumber,date_filter.value);
               Get.toNamed(RoutesName.installation_screen);
 
