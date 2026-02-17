@@ -218,6 +218,7 @@ class Accountmastervm extends GetxController{
   var zone_head__value_controller = TextEditingController().obs;
   var clusterName_controller = TextEditingController().obs;
   var created_on_controller = TextEditingController().obs;
+  var filterCreated_from_to_Controller = TextEditingController().obs;
 
 
   var AccountOwnerForApi;
@@ -247,7 +248,7 @@ class Accountmastervm extends GetxController{
       getGstRegistrationTypeApi();
 
       getEmployeeMemberApi();
-      getGeoPostalCodeApi(50,'');
+      getGeoPostalCodeApi(50,'',email);
       getSateListApi();
       getTatResponseMasterApi();
       if (this.isAdminWritePermission == 1) {
@@ -1033,7 +1034,7 @@ class Accountmastervm extends GetxController{
     return  get_Comp_Profile_type_list.value;
   }
 
-  Future<Iterable<PostalCodeModel>> getGeoPostalCodeApi(int rowPerPage,String text) async {
+  Future<Iterable<PostalCodeModel>> getGeoPostalCodeApi(int rowPerPage,String text, String email) async {
     try {
     Map data = {
       "email_id": email,
@@ -1043,6 +1044,7 @@ class Accountmastervm extends GetxController{
 
     };
     loading.value=true;
+    print(data);
     String customer_response =await  _api.GeoGetPincodeHierarchy(data, sessionManagement);
 
       final jsonResponse = json.decode(customer_response);
@@ -1327,7 +1329,6 @@ class Accountmastervm extends GetxController{
       //print(accountMaster_page_controller.InActive);
     }
     String message = account_cat_type_controller.text;
-
     String accountCatTypeCode = message.substring(0,1);
     Map<String, dynamic> data = {
       "created_by": email,
@@ -1414,6 +1415,10 @@ class Accountmastervm extends GetxController{
               //deleteAccountData(DraftId);
               IsActive_controller.text = 'All';
               pageNumber=0;
+
+              clusterName_controller.value.text = clusterGetByEmailList.value.map((e) => e.geoValue).join('|');
+              RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join('|');
+              account_code_controller.text="";
               getAccountMaster(pageNumber ,is_Active.toString());
               getDraftAccountMaster(pageNumber,is_Active.toString());
               Get.toNamed(RoutesName.accountMaster_screen);
@@ -1523,7 +1528,7 @@ class Accountmastervm extends GetxController{
             pageNumber=0;
             getAccountMaster(pageNumber ,is_Active.toString());
             getDraftAccountMaster(pageNumber,is_Active.toString());
-            Get.toNamed(RoutesName.accountMaster_screen);
+            Get.toNamed(RoutesName.Draft_item_list);
           }else if(flag == 'Update'){
             print("Update....");
             Utils.sanckBarSuccess("Success!", "Draft Account is Update Successful");
@@ -1687,6 +1692,7 @@ class Accountmastervm extends GetxController{
     SelectedEmployee_Member_list.value = [];
 
     created_on_controller.value.clear();
+    filterCreated_from_to_Controller.value.clear();
     account_code_controller.clear();
     account_name_controller.clear();
     account_type_controller.clear();
@@ -1704,6 +1710,7 @@ class Accountmastervm extends GetxController{
     //clusterName_controller.value.clear();
     pageNumber=0;
 
+    selected_company_type_list.value=[];
     SelectedRegion_list.value=[];
     SelectedCluster_list.value =[];
     RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join(',');
@@ -1777,7 +1784,7 @@ class Accountmastervm extends GetxController{
       PanNo_Controller.clear();
       IfscCode_Controller.clear();
       IsActive_controller.text = 'All';
-      ReferralBy_Controller.text="No";
+      //ReferralBy_Controller.text="No";
       Address_controller.clear();
       Address2_Controller.clear();
       PostCode_Controller.clear();
@@ -2920,6 +2927,7 @@ class Accountmastervm extends GetxController{
       "filter_region_name":RegionName_controller.value.text,
       "filter_cluster_name": clusterName_controller.value.text,
       "created_on_controller": created_on_controller.value.text,
+      "filterCreated_from_to_Controller": filterCreated_from_to_Controller.value.text,
     });
     pageNumber = 0;
     getAccountMaster(pageNumber, IsActive_controller.text);
@@ -2943,6 +2951,7 @@ class Accountmastervm extends GetxController{
       IsActive_controller.text=getFilterData["IsActive_controller"];
       AccountOwner_controller.value.text=getFilterData["filter_owner_name"];
       created_on_controller.value.text=getFilterData["created_on_controller"];
+      filterCreated_from_to_Controller.value.text=getFilterData["filterCreated_from_to_Controller"];
       pageNumber=0;
 
       if(getFilterData["filter_region_name"].toString().isNotEmpty && getFilterData["filter_region_name"].toString()!=""){

@@ -610,7 +610,11 @@ class QuoteInformationScreen extends StatelessWidget {
                         Obx(() {
                           final bool showGM =
                               saleCycleController.isAdminWritePermission == "1" ||
-                                  saleCycleController.userType.toLowerCase() == "gm";
+                                  saleCycleController.userType.toLowerCase() == "general manager";
+                          final bool showbh=saleCycleController.userType?.toLowerCase()=='branch head' ||
+                              saleCycleController.userType?.toLowerCase()=='cluster head'||
+                              saleCycleController.userType?.toLowerCase()=='general manager'||
+                              saleCycleController.isAdminWritePermission.value=="1";
 
                           final data = saleCycleController.quoteHeaderdata[0];
 
@@ -629,7 +633,9 @@ class QuoteInformationScreen extends StatelessWidget {
                                 TableRow(
                                   children: [
                                     tableHeaderCell("Qty"),
-                                    tableHeaderCell("BM %"),
+
+                                    if(showbh)tableHeaderCell("BM %"),
+
                                     tableHeaderCell("Appr Amt Per Unit"),
                                     tableHeaderCell("Sales Credit"),
                                     tableHeaderCell("Total Approved Price"),
@@ -646,7 +652,7 @@ class QuoteInformationScreen extends StatelessWidget {
                                 TableRow(
                                   children: [
                                     tableValueCell(data.quoteTotalQty?.toInt()),
-                                    tableValueCell(data.quoteTotalBmPerAverage),
+                                    if(showbh)tableValueCell(data.quoteTotalBmPerAverage),
                                     tableValueCell(
                                       "₹ ${saleCycleController.numberFormatWithComma(
                                         data.quoteApprovedAmtPerUnit,
@@ -971,6 +977,7 @@ class QuoteInformationScreen extends StatelessWidget {
                                    Visibility(
                                       visible: saleCycleController.userType?.toLowerCase()=='branch head' ||
                                           saleCycleController.userType?.toLowerCase()=='cluster head'||
+                                          saleCycleController.userType?.toLowerCase()=='general manager'||
                                           saleCycleController.isAdminWritePermission.value=="1",
                                       child:  bindData( "Bm % : ",saleCycleController.quoteLinedata[index].bmDiscountPer.toString(),context),
                                     ),

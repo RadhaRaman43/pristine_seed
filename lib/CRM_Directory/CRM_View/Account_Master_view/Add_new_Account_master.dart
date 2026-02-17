@@ -166,6 +166,8 @@ class AddNewAccountMaster extends StatelessWidget{
                       || accountMaster_page_controller.account_name_controller.value.text != ''){
                     if(accountMaster_page_controller.DraftId.isEmpty || accountMaster_page_controller.DraftId == ''){
                       // await insertAccountData();
+                      accountMaster_page_controller.RegionName_controller.value.text="";
+                      accountMaster_page_controller.clusterName_controller.value.text="";
                       accountMaster_page_controller.DraftAccountMstUploaderApiHit('Create');
                       accountMaster_page_controller.clearController();
                       //Get.toNamed(RoutesName.accountMaster_screen);
@@ -219,8 +221,7 @@ class AddNewAccountMaster extends StatelessWidget{
                 Utils.sanckBarError('Account Type!', "Please Enter Account Type");
                 return  ;
               }
-              if(accountMaster_page_controller.PhoneNo_Controller.text.isEmpty ||
-                  accountMaster_page_controller.PhoneNo_Controller == null){
+              if(accountMaster_page_controller.PhoneNo_Controller.text.isEmpty || accountMaster_page_controller.PhoneNo_Controller == null){
                 Utils.sanckBarError('Phone No.!', "Please Enter Phone No.");
                 if(accountMaster_page_controller.PhoneNo_Controller.text.isNotEmpty){
                   if(accountMaster_page_controller.PhoneNo_Controller.text.length < 10){
@@ -247,8 +248,7 @@ class AddNewAccountMaster extends StatelessWidget{
               }
 
 
-              if(!accountMaster_page_controller.compProfileRemrk.value  &&
-                  accountMaster_page_controller.comp_prof_sub_type_controller.value.text.isEmpty || accountMaster_page_controller.comp_prof_sub_type_controller == null){
+              if(!accountMaster_page_controller.compProfileRemrk.value  && accountMaster_page_controller.comp_prof_sub_type_controller.value.text.isEmpty || accountMaster_page_controller.comp_prof_sub_type_controller == null){
                 Utils.sanckBarError('Company profile sub Type!', "Please Enter Company profile sub Type");
                 return  ;
               }
@@ -273,8 +273,8 @@ class AddNewAccountMaster extends StatelessWidget{
                 return  ;
               }
 
-              debugPrint("${accountMaster_page_controller.gst_registration_type_controller.value.text}");
-              debugPrint("${accountMaster_page_controller.PanNo_Controller.value.text.length }");
+              //debugPrint("${accountMaster_page_controller.gst_registration_type_controller.value.text}");
+              //debugPrint("${accountMaster_page_controller.PanNo_Controller.value.text.length }");
               if(accountMaster_page_controller.gst_registration_type_controller.value.text == 'UnRegistered' &&
                   accountMaster_page_controller.PanNo_Controller.value.text.length !=10 &&
                   accountMaster_page_controller.PanNo_Controller.value.text.isNotEmpty){
@@ -789,10 +789,8 @@ class AddNewAccountMaster extends StatelessWidget{
                                        color: Colors.white,
                                        borderRadius: BorderRadius.circular(10)
                                    ),
-                                   //padding: EdgeInsets.only(left: 15.0, right: 15.0),
                                    child: TextFormField(
                                      controller: accountMaster_page_controller.Shipping_Address2_Controller.value,
-                                     //maxLength: 150,
                                      onChanged: (value){
                                        final parts = [
                                          accountMaster_page_controller.Shipping_Address_controller.value.text,
@@ -802,10 +800,7 @@ class AddNewAccountMaster extends StatelessWidget{
                                          accountMaster_page_controller.Shipping_State_Controller.value.text,
                                          accountMaster_page_controller.Shipping_PostCode_Controller.value.text,
                                        ];
-
-                                       // Filter out empty strings and join with commas
                                        final fullAddress = parts.where((part) => part.trim().isNotEmpty).join(", ");
-
                                        accountMaster_page_controller.Shipping_FullAddress_Controller.value.text = fullAddress;
                                      },
                                      maxLength: 500,
@@ -1632,8 +1627,8 @@ class AddNewAccountMaster extends StatelessWidget{
               ),
               contentPadding: EdgeInsets.symmetric(
                   vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-              hintText: 'Company Profile Type *',
-              labelText: 'Company Profile Type *',
+              hintText: 'Company Profile Type*',
+              labelText: 'Company Profile Type*',
 
               border: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(10))
@@ -1978,7 +1973,7 @@ class AddNewAccountMaster extends StatelessWidget{
               fontSize: AllFontSize.sisxteen,
               fontWeight: FontWeight.w300),
         ),
-        initialSelection: "No",
+        //initialSelection: "No",
         inputDecorationTheme: const InputDecorationTheme(
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -2001,8 +1996,7 @@ class AddNewAccountMaster extends StatelessWidget{
         ),
         onSelected: (String? selection) {
           print(selection);
-          accountMaster_page_controller.ReferralBy_Controller.text =
-              _displayIsActiveForOption(selection!).toString();
+          accountMaster_page_controller.ReferralBy_Controller.text = _displayIsActiveForOption(selection!).toString();
           if(accountMaster_page_controller.ReferralBy_Controller.text == 'Yes'){
             accountMaster_page_controller.isReferral.value = true;
           }else{
@@ -2024,9 +2018,9 @@ class AddNewAccountMaster extends StatelessWidget{
       displayStringForOption: _displayPostalCodeListForOption,
       optionsBuilder: (TextEditingValue textEditingValue) async {
         if (textEditingValue.text.isEmpty) {
-          await accountMaster_page_controller.getGeoPostalCodeApi(50,textEditingValue.text);
+          await accountMaster_page_controller.getGeoPostalCodeApi(50,textEditingValue.text,accountMaster_page_controller.email);
         }
-        return await accountMaster_page_controller.getGeoPostalCodeApi(50,textEditingValue.text);
+        return await accountMaster_page_controller.getGeoPostalCodeApi(50,textEditingValue.text,accountMaster_page_controller.email);
       },
       onSelected: (PostalCodeModel selection) {
         print(selection.pincode);
@@ -2157,14 +2151,13 @@ class AddNewAccountMaster extends StatelessWidget{
       displayStringForOption: _displayPostalCodeListForOption,
       optionsBuilder: (TextEditingValue textEditingValue) async {
         if (textEditingValue.text.isEmpty) {
-          await accountMaster_page_controller.getGeoPostalCodeApi(50,textEditingValue.text);
+          await accountMaster_page_controller.getGeoPostalCodeApi(50,textEditingValue.text,"rajesh.kumar1@methodexsystems.com");
         }
-        return await accountMaster_page_controller.getGeoPostalCodeApi(50,textEditingValue.text);
+        return await accountMaster_page_controller.getGeoPostalCodeApi(50,textEditingValue.text,"rajesh.kumar1@methodexsystems.com");
       },
       onSelected: (PostalCodeModel selection) {
         print(selection.pincode);
-        accountMaster_page_controller.Shipping_PostCode_Controller.value.text =
-            _displayPostalCodeListForOption(selection).toString();
+        accountMaster_page_controller.Shipping_PostCode_Controller.value.text = _displayPostalCodeListForOption(selection).toString();
         accountMaster_page_controller.getShippingStateMasterApi(accountMaster_page_controller.Shipping_PostCode_Controller.value.text,'state');
         accountMaster_page_controller.getShippingStateMasterApi(accountMaster_page_controller.Shipping_PostCode_Controller.value.text,'city');
         accountMaster_page_controller.getShippingStateMasterApi(accountMaster_page_controller.Shipping_PostCode_Controller.value.text,'district');

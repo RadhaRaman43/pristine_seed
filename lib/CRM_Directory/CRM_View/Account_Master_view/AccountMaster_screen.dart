@@ -74,7 +74,8 @@ class AccountmasterScreen extends StatelessWidget{
                    accountMaster_page_controller.clearController();
                    accountMaster_page_controller.getCompanyProfileSubTypeApi();
                    accountMaster_page_controller.getCompanyProfileTypeApi("");
-                   accountMaster_page_controller.getGeoPostalCodeApi(50,'');
+                   accountMaster_page_controller.getGeoPostalCodeApi(50,'',accountMaster_page_controller.email);
+                   accountMaster_page_controller.ReferralBy_Controller.text= "";
                    Get.toNamed(RoutesName.add_New_AccountMaster_screen,arguments: 'Create');
                  }, icon: Icon(Icons.add)),
                );
@@ -214,7 +215,7 @@ class AccountmasterScreen extends StatelessWidget{
             accountMaster_page_controller.getEmployeeMemberApi();
             accountMaster_page_controller.getAccMasterBuyCodeApi(accountMaster_page_controller.Account_Master_list[position].accountCode);
             accountMaster_page_controller.getCompanyProfileSubTypeApi();
-            accountMaster_page_controller.getGeoPostalCodeApi(50, '');
+            accountMaster_page_controller.getGeoPostalCodeApi(50, '',accountMaster_page_controller.email);
 
           },
         title: Row(
@@ -1817,9 +1818,67 @@ class AccountmasterScreen extends StatelessWidget{
       );
     });
   }
-  
-  
+
   bindCreatedOn(BuildContext context) {
+    return TextField(
+      cursorColor: AllColors.primaryDark1,
+      controller:accountMaster_page_controller.filterCreated_from_to_Controller.value,
+      readOnly: true,
+      decoration: InputDecoration(
+        contentPadding: EdgeInsets.symmetric(
+            vertical: AllFontSize.two, horizontal: AllFontSize.ten),
+        suffixIcon: Icon(Icons.calendar_month),
+        hintText: 'Select Start Date -End Date',
+        labelText: 'Created On',
+        hintStyle: GoogleFonts.poppins(
+            color: AllColors.lightblackColor,
+            fontWeight: FontWeight.w300,
+            fontSize: AllFontSize.ten),
+        labelStyle: GoogleFonts.poppins(
+            color: AllColors.primaryDark1,
+            fontWeight: FontWeight.w500,
+            fontSize: AllFontSize.sisxteen),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+        ),
+      ),
+      onTap: () async {
+        FocusScope.of(context).requestFocus(FocusNode()); // hide keyboard
+        DateTimeRange? picked = await showDateRangePicker(
+          context: context,
+          firstDate: DateTime(1900),
+          lastDate: DateTime(2200),
+          builder: (BuildContext context, Widget? child) {
+            return Theme(
+              data: ThemeData.light().copyWith(
+                primaryColor: AllColors.primaryDark1,
+                colorScheme: ColorScheme.light(primary: AllColors.primaryDark1),
+                buttonTheme: ButtonThemeData(
+                  textTheme: ButtonTextTheme.primary,
+                ),
+              ),
+              child: child!,
+            );
+          },
+        );
+
+        if (picked != null) {
+          final startDate = DateFormat('yyyy-MM-dd').format(picked.start);
+          final endDate = DateFormat('yyyy-MM-dd').format(picked.end);
+          accountMaster_page_controller.created_on_controller.value.text="$startDate@$endDate";
+          accountMaster_page_controller.filterCreated_from_to_Controller.value.text = '$startDate - $endDate';
+        } else {
+          accountMaster_page_controller.filterCreated_from_to_Controller.value.text = '';
+          accountMaster_page_controller.created_on_controller.value.text="";
+        }
+      },
+    );
+  }
+  
+  /*bindCreatedOn(BuildContext context) {
     return TextField(
         cursorColor: AllColors.primaryDark1,
         controller: accountMaster_page_controller.created_on_controller.value,
@@ -1878,6 +1937,6 @@ class AccountmasterScreen extends StatelessWidget{
         }
 
     );
-  }
+  }*/
   
 }
