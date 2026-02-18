@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -2018,6 +2019,9 @@ class QuoteInformationScreen extends StatelessWidget {
       cursorColor: AllColors.primaryDark1,
       maxLines: 2,
       maxLength: 500,
+      inputFormatters: [
+        LengthLimitingTextInputFormatter(500),
+      ],
       controller: saleCycleController.rejectreasonQuoteController.value,
       decoration: InputDecoration(
           contentPadding: EdgeInsets.symmetric(

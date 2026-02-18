@@ -21,6 +21,7 @@ import '../../../../reources/routes/routes_name.dart';
 import '../../../../utils/app_utils.dart';
 import '../../../../view/custom_drawer.dart';
 import '../../../CRM_Models/AccountMaster_model/Account_Master_model.dart';
+import '../../../CRM_Models/AccountMaster_model/Employee_Member_Model.dart';
 import '../../../CRM_Models/AccountMaster_model/cluster_modal.dart';
 import '../../../CRM_Models/AccountMaster_model/region_with_cluster_filter_modal.dart';
 import '../../../CRM_Models/Contact_Master_modal/Contact_Master_modal/conract_master_modal.dart';
@@ -58,6 +59,10 @@ class ViewSaleHeaderScreen extends StatelessWidget {
 
   static String _displayAccNameForOption(ContactMstGetListModal option) =>
       option.contactName??"";
+
+
+  static String _displayEmployeeForOption(EmployeeMemberModel option) =>
+      option.fullName??'';
 
   Size size = Get.size;
 
@@ -229,6 +234,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                 saleCycleController.getContactMaster('',
                                   saleCycleController.saleCycleList[0].accountCode??"",
                                   saleCycleController.saleCycleList[0].accountName??"",);
+                                 saleCycleController.getEmployeeMemberApi();
                                 showDialogForSalesCyclePurchaseUpdate(context, saleCycleController.saleCycleList[0]);
                               },
                             ),
@@ -3657,8 +3663,8 @@ class ViewSaleHeaderScreen extends StatelessWidget {
             Visibility(
               visible: flagView=='View',
                 child:  Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
                 Text(
                   "LSP : ",
                   style: GoogleFonts.poppins(
@@ -3674,9 +3680,11 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-              ],
-            )
+                              ],
+                            )
             ),
+
+
 
 
             Row(
@@ -3698,6 +3706,30 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                   ),
                 ),
               ],
+            ),
+            //todo approved Price will be bind when backend will gives
+            Visibility(
+                visible: flagView=='View',
+                child:  Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Approved Price : ",
+                      style: GoogleFonts.poppins(
+                        color: AllColors.primaryDark1,
+                        fontSize: AllFontSize.twelve,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    Text("",
+                      style: GoogleFonts.poppins(
+                        color: AllColors.textColor,
+                        fontSize: AllFontSize.twelve,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
+                )
             ),
 
             Visibility(
@@ -8512,7 +8544,80 @@ class ViewSaleHeaderScreen extends StatelessWidget {
     );
   }
 
-  bindSalesCycleOwner(BuildContext context) {
+
+  Widget bindSalesCycleOwner(context) {
+  return DropdownMenu<EmployeeMemberModel>(
+      controller: saleCycleController.salesCycleOwnerController.value,
+      width: size.width-130,
+      label: Text(
+        "Sales Cycle Owner",
+        style: GoogleFonts.poppins(
+            color: AllColors.primaryDark1,
+            fontSize: AllFontSize.fourtine,
+            fontWeight: FontWeight.w700),
+      ),
+      inputDecorationTheme: const InputDecorationTheme(
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+          borderSide: BorderSide(
+            color: AllColors.primaryDark1,
+          ),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+              color: AllColors.primaryDark1), // Change the color to green
+        ),
+        border: OutlineInputBorder(
+          borderSide: BorderSide(
+              color: AllColors.primaryDark1), // Change the color to green
+        ),
+        filled: false,
+        contentPadding: EdgeInsets.symmetric(
+            vertical: AllFontSize.two, horizontal: AllFontSize.ten),
+      ),
+      onSelected: (EmployeeMemberModel? selection) {
+        print(selection);
+        saleCycleController.salesCycleOwnerController.value.text =
+            _displayEmployeeForOption(selection!).toString();
+        saleCycleController.saleCycleOwnerSelected.value=selection.empId??"";
+      },
+      menuHeight: 400,
+      dropdownMenuEntries: saleCycleController.employee_Member_list
+          .map<DropdownMenuEntry<EmployeeMemberModel>>((EmployeeMemberModel e) {
+        return DropdownMenuEntry<EmployeeMemberModel>(
+            value: e,
+          labelWidget: RichText(
+            text: TextSpan(
+              children: [
+                TextSpan(
+                  text: e.fullName ?? '',
+                  style: GoogleFonts.poppins(
+                    color: AllColors.primaryDark1,
+                    fontSize: AllFontSize.fourtine,
+                  ),
+                ),
+                TextSpan(
+                  text: ' (${e.empId ?? ''})',
+                  style: GoogleFonts.poppins(
+                    color: Colors.red,
+                    fontSize: AllFontSize.twelve,
+                    fontWeight: FontWeight.w300,
+                  ),
+                ),
+              ],
+            ),
+          ),
+            label: '${e!.fullName??''} (${e!.empId??''})',
+            style: ButtonStyle(
+              foregroundColor:
+              MaterialStateProperty.all<Color>(AllColors.primaryDark1),
+            ));
+      }).toList(),
+    );
+  }
+
+
+ /* bindSalesCycleOwner(BuildContext context) {
     return TextField(
       readOnly: true,
       cursorColor: AllColors.primaryDark1,
@@ -8537,7 +8642,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
             borderRadius: BorderRadius.all(Radius.circular(10)),
           )),
     );
-  }
+  }*/
 
   bindUpdateSalesBudgetAmount(BuildContext context) {
     // return IgnorePointer(
@@ -10698,8 +10803,8 @@ class ViewSaleHeaderScreen extends StatelessWidget {
       decoration: InputDecoration(
           contentPadding: EdgeInsets.symmetric(
               vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-          labelText: 'Rh Approval',
-          hintText: 'Rh Approval',
+          labelText: 'RH Approval',
+          hintText: 'RH Approval',
           hintStyle: GoogleFonts.poppins(
               color: AllColors.lightblackColor,
               fontWeight: FontWeight.w300,
@@ -10785,8 +10890,8 @@ class ViewSaleHeaderScreen extends StatelessWidget {
       decoration: InputDecoration(
           contentPadding: EdgeInsets.symmetric(
               vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-          labelText: 'Gm Approval',
-          hintText: 'Gm Approval',
+          labelText: 'GM Approval',
+          hintText: 'GM Approval',
           hintStyle: GoogleFonts.poppins(
               color: AllColors.lightblackColor,
               fontWeight: FontWeight.w300,

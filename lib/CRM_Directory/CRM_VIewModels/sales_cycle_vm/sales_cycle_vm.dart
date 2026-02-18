@@ -4741,7 +4741,6 @@ class SalesCycleVm extends GetxController {
     //ApprovalStatusController.value.clear();
     accountNameController.value.clear();
     accountCodeController.value.clear();
-    salesCycleOwnerController.value.clear();
     productCategoryController.value.clear();
     purchaseProcessController.value.clear();
     companyProfileTypeController.value.clear();

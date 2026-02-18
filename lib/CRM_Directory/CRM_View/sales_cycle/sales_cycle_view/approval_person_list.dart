@@ -393,7 +393,7 @@ class ApprovalPersonList extends StatelessWidget{
               detailRow("Quote Status", item.quoteStatus ?? "", ),
               detailRow("Approved By", item.approvedFullName ?? "", ),
               detailRow("Approved On", dateApprovedOn ?? "", ),
-              //detailRow("Manager Remarks", item.managerRemarks ?? "",),
+              detailRow("Manager Remarks", item.managerRemarks ?? "",),
               detailRow("Reject Reason", item.rejectReason ?? "",),
             ],
           ),

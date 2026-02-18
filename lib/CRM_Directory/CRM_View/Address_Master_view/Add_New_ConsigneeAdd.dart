@@ -318,8 +318,8 @@ class AddNewConsigneeadd extends StatelessWidget{
                                 controller: address_vm_controller
                                     .phone_no_controller,
                                 decoration: InputDecoration(
-                                    hintText: "Phone No. * ",
-                                    labelText: "Phone No. *" ,
+                                    hintText: "Phone No.* ",
+                                    labelText: "Phone No.*" ,
                                     //suffixIcon: Icon(Icons.email),
                                     contentPadding: EdgeInsets.symmetric(
                                         vertical: AllFontSize.ten,
