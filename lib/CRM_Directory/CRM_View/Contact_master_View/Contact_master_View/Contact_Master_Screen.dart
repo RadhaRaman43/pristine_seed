@@ -177,7 +177,7 @@ class ContactMasterScreen extends StatelessWidget{
                           SizedBox(height: 5,),
                           bindFilterData(context,'Email Id',contact_vm_controller.emailId_controller),
                           SizedBox(height: 5,),
-                          bindFilterData(context,'Phone No',contact_vm_controller.phone_no_controller),
+                          bindFilterData(context,'Phone No.',contact_vm_controller.phone_no_controller),
                           SizedBox(height: 5,),
                           bindFilterData(context,'Department Name',contact_vm_controller.depart_name_controller),
                           SizedBox(height: 5,),

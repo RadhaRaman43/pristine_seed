@@ -107,6 +107,10 @@ class Addressmastervm extends GetxController{
       Utils.sanckBarError('Email Id. ', "Please Enter Email Id");
       return ;
     }
+    if(emailId_controller.text.isNotEmpty && EmailValidator.validate(emailId_controller.text) == false){
+      Utils.sanckBarError('Email ID!', "Please Enter A valid Email ID");
+      return  ;
+    }
 
     if(phone_no_controller.text.isNotEmpty ){
       if(phone_no_controller.text.length<9){
@@ -115,10 +119,7 @@ class Addressmastervm extends GetxController{
       }
     }
 
-    if(emailId_controller.text.isNotEmpty && EmailValidator.validate(emailId_controller.text) == false){
-      Utils.sanckBarError('Email ID!', "Please Enter A valid Email ID");
-      return  ;
-    }
+
     if(gst_registration_type_controller.value.text.isEmpty || gst_registration_type_controller == null){
       Utils.sanckBarError('GST Registration Type!', "Please Enter GST Registration Type");
       return  ;
@@ -156,11 +157,26 @@ class Addressmastervm extends GetxController{
 
     }
 
+    if(PostCode_Controller.text.isEmpty || PostCode_Controller == null){
+      Utils.sanckBarError('Pin Code!', "Please Enter Pin Code");
+      return  ;
+    }
+
     if(State_Controller.text.isEmpty || State_Controller == null){
       Utils.sanckBarError('State!', "Please Enter State");
       return  ;
     }else if(gst_registration_type_controller.value.text == 'Registered' && GovtStateCode.value != GstStateCode.value){
       Utils.sanckBarError('Wrong State!', "Please Enter Valid State");
+      return  ;
+    }
+
+    if(City_Controller.text.isEmpty || City_Controller == null){
+      Utils.sanckBarError('City!', "Please Enter City");
+      return  ;
+    }
+
+    if(District_Controller.text.isEmpty || District_Controller == null){
+      Utils.sanckBarError('District!', "Please Enter District");
       return  ;
     }
 

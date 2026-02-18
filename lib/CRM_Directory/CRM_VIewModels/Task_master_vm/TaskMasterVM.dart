@@ -101,6 +101,7 @@ class Taskmastervm extends GetxController{
     var isSalesNecessaryController=TextEditingController().obs;
     var filterTaskDuedateController=TextEditingController().obs;
     var filterTaskCreationOnController=TextEditingController().obs;
+    var filterTaskCreationOn_from_to_date_Controller=TextEditingController().obs;
     var DataOFVisitController=TextEditingController().obs;
     var VisitTime_controller=TextEditingController().obs;
 
@@ -557,8 +558,12 @@ class Taskmastervm extends GetxController{
 
     TaskMasterCreate() async {
       try{
-        DateTime selectDate = DateFormat('dd-MM-yyyy').parseStrict(DataOFVisitController.value.text);
-        String todayDate = DateFormat('yyyy-MM-dd').format(selectDate);
+        String todayDate="";
+        if(DataOFVisitController.value.text.isNotEmpty && DataOFVisitController.value.text !=null && DataOFVisitController.value.text!=""){
+          DateTime selectDate = DateFormat('dd-MM-yyyy').parseStrict(DataOFVisitController.value.text);
+          todayDate = DateFormat('yyyy-MM-dd').format(selectDate);
+        }
+
         List<TaskSalesProductCategoryLinesModel> lines = Item_Category_Selected_list.map((item) => TaskSalesProductCategoryLinesModel(productCategoryCode: item.categoryCode!)).toList();
         List<Selectedalongwithpersonnamemodel> personName = SelectedAlongPersonWith_list.map((item) => Selectedalongwithpersonnamemodel(empId: item.empId!)).toList();
 
@@ -595,7 +600,7 @@ class Taskmastervm extends GetxController{
                 if(jsonResponse is List){
                     List<TaskMasterGetModel> response = jsonResponse.map((e) => TaskMasterGetModel.fromJson(e)).toList();
                     if(response!= null && response.length>0 && response[0].condition=="True"){
-
+                      Type_of_call_controller.value.text="";
                         //Task_Master_list.addAll(response);
                         Utils.sanckBarSuccess('Success!', response[0].message.toString());
                        // Get.offAllNamed(RoutesName.taskMaster_screen);
@@ -915,7 +920,11 @@ class Taskmastervm extends GetxController{
                         CallStatus_Master_list.add(CallStatusMasterModel(taskStatus: "All",),);
                         Selection_CallStatus_Master_list.add(CallStatusMasterModel(taskStatus: "All"));
                       }
+
                       CallStatus_Master_list.addAll(response);
+                      if(filter!='0' && flag=="Call"){
+                        Type_of_call_controller.value.text=CallStatus_Master_list[0].taskStatus??"";
+                      }
 
                     }else {
                         CallStatus_Master_list.value=[];
@@ -975,7 +984,7 @@ class Taskmastervm extends GetxController{
                       MethodOfCall_Master_list.value=[];
                       Selection_MethodOfCall_Master_list.value=[];
                       if(filter=="0"){
-                        MethodOfCall_Master_list.add(CallStatusMasterModel(taskStatus: "All"));
+                        //MethodOfCall_Master_list.add(CallStatusMasterModel(taskStatus: "All"));
                         Selection_MethodOfCall_Master_list.add(CallStatusMasterModel(taskStatus: "All"));
                       }
                         MethodOfCall_Master_list.addAll(response);
@@ -1586,6 +1595,7 @@ class Taskmastervm extends GetxController{
        //Task_status_controller.clear();
        filterTaskDuedateController.value.clear();
        filterTaskCreationOnController.value.clear();
+       filterTaskCreationOn_from_to_date_Controller.value.clear();
        createdOnStartToEnd.value = "";
        Task_status_controller.text = "All";
        SaleCycleActive_Controller.text = "All";
@@ -1622,6 +1632,7 @@ class Taskmastervm extends GetxController{
         'cluster_name': clusterName_controller.value.text,
         'account_owner': AccountOwner_controller.value.text,
         'filterTaskCreationOnController': filterTaskCreationOnController.value.text,
+        'filterTaskCreationOn_from_to_date_Controller': filterTaskCreationOn_from_to_date_Controller.value.text,
         'product_category': product_category_controller.value.text,
         'product_category_type': product_category_type_Controller.value.text,
         'approved_by_controller': approved_by_controller.value.text,
@@ -1653,6 +1664,7 @@ class Taskmastervm extends GetxController{
         district_controller.value.text=getFilterData["district"]??"";
         AccountOwner_controller.value.text=getFilterData["account_owner"]??"";
         filterTaskCreationOnController.value.text=getFilterData["filterTaskCreationOnController"]??"";
+        filterTaskCreationOn_from_to_date_Controller.value.text=getFilterData["filterTaskCreationOn_from_to_date_Controller"]??"";
         product_category_controller.value.text=getFilterData["product_category"]??"";
         product_category_type_Controller.value.text=getFilterData["product_category_type"]??"";
         approved_by_controller.value.text=getFilterData["approved_by_controller"]??"";

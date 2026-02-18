@@ -907,6 +907,22 @@ class SessionManagement {
     prefs.remove("AllContactMaster_data");
   }
 
+  //todo non standard item master
+  Future<void> saveitemMasterData(Map<String, dynamic> data) async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString("itemMaster_data", jsonEncode(data));
+  }
+  Future<Map<String, dynamic>> getitemMasterData() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? data = prefs.getString("itemMaster_data");
+    return data != null ? jsonDecode(data) : {};
+  }
+
+  Future<void> clearitemMasterData() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.remove("itemMaster_data");
+  }
+
   void setfilterRouting(String pageName) async{
     final prefs = await SharedPreferences.getInstance();
     prefs.setString("pageName",pageName );

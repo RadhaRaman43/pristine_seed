@@ -45,15 +45,19 @@ class ViewAddressScreen extends StatelessWidget{
               ],
               title:Row(
                 children: [
-                  Text(
-                    'View Addresses',
-                    style: GoogleFonts.poppins(
-                      color: AllColors.whiteColor,
-                      fontSize: 20.0,
-                      fontWeight: FontWeight.w700,
+                  Flexible(
+                    child: Tooltip(
+                      message: 'Addresses List(${accountMaster_page_controller.account_name_controller.text})',
+                      child: Text(
+                        'Addresses List(${accountMaster_page_controller.account_name_controller.text})',
+                        style: GoogleFonts.poppins(
+                          color: AllColors.whiteColor,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
                     ),
                   ),
-                  Spacer(),
                 ],
               )
 
@@ -177,7 +181,6 @@ class ViewAddressScreen extends StatelessWidget{
           });
     } else {
       return Center(
-        //child: Image.asset("assests/images/no_record_found.gif",),
         child: Image.asset("assests/images/no_data_remove.png",width: 300,height: 180,),
       );
     }
@@ -189,10 +192,7 @@ class ViewAddressScreen extends StatelessWidget{
 
     return Card(
       margin: EdgeInsets.all(5),
-      /* decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.all(Radius.circular(10))
-      ),*/
+
       child: ListTile(
         onTap: () {
           if(accountMaster_page_controller.FromPage.value == 'Account'){
@@ -206,179 +206,59 @@ class ViewAddressScreen extends StatelessWidget{
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-
-              children: [
-                Text(
-                  "Consignee Id : ",
-                  style: GoogleFonts.poppins(
-                      color: AllColors.primaryDark1,
-                      fontSize: AllFontSize.fourtine,
-                      fontWeight: FontWeight.w700),
-                ),
-                Container(
-                  width: size.width * .55,
-                  child: Tooltip(
-                    message:address_vm_controller.address_master_list[position]
-                        .consigneeId?? "",
-                    child: Text(
-                      address_vm_controller.address_master_list[position]
-                          .consigneeId?? "",
-                      overflow: TextOverflow.ellipsis,
-                      style: GoogleFonts.poppins(
-                          color: AllColors.textColor,
-                          fontSize: AllFontSize.fourtine,
-                          fontWeight: FontWeight.w700),
-                    ),
-                  ),
-                ),
-
-              ],
-            ),
-            SizedBox(height: 3),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  "Address Name : ",
-                  style: GoogleFonts.poppins(
-                      color: AllColors.primaryDark1,
-                      fontSize: AllFontSize.fourtine,
-                      fontWeight: FontWeight.w500),
-                ),
-                Container(
-                  width: size.width * .55,
-                  child: Tooltip(
-                    message: address_vm_controller.address_master_list[position]
-                        .contactName?? "",
-                    child: Text(
-                      address_vm_controller.address_master_list[position]
-                          .contactName?? "",
-                      overflow: TextOverflow.ellipsis,
-                      style:GoogleFonts.poppins(
-                          color: AllColors.textColor,
-                          fontSize: AllFontSize.fourtine,
-                          fontWeight: FontWeight.w500),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 2,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  "Email Id : ",
-                  style: GoogleFonts.poppins(
-                      color: AllColors.primaryDark1,
-                      fontSize: AllFontSize.fourtine,
-                      fontWeight: FontWeight.w500),
-                ),
-                Container(
-                  width: size.width * .55,
-                  child: Tooltip(
-                    message: address_vm_controller.address_master_list[position]
-                        .emailId?? "",
-                    child: Text(
-                      address_vm_controller.address_master_list[position]
-                          .emailId?? "",
-                      overflow: TextOverflow.ellipsis,
-                      style: GoogleFonts.poppins(
-                          color: AllColors.textColor,
-                          fontSize: AllFontSize.fourtine,
-                          fontWeight: FontWeight.w500),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: 3),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  "Phone No. : ",
-                  style: GoogleFonts.poppins(
-                      color: AllColors.primaryDark1,
-                      fontSize: AllFontSize.fourtine,
-                      fontWeight: FontWeight.w500),
-                ),
-                Container(
-                  width: size.width * .55,
-                  child: Text(
-                    address_vm_controller.address_master_list[position]
-                        .phoneNo ?? "",
-                    overflow: TextOverflow.ellipsis,
-                    style: GoogleFonts.poppins(
-                        color: AllColors.textColor,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: 3),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  "Ifsc Code : ",
-                  style: GoogleFonts.poppins(
-                      color: AllColors.primaryDark1,
-                      fontSize: AllFontSize.fourtine,
-                      fontWeight: FontWeight.w500),
-                ),
-                Container(
-                  width: size.width * .55,
-                  child: Text(
-                    address_vm_controller.address_master_list[position].ifscCode ?? "",
-                    overflow: TextOverflow.ellipsis,
-                    style: GoogleFonts.poppins(
-                        color: AllColors.textColor,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: 3),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  "Address : ",
-                  style: GoogleFonts.poppins(
-                      color: AllColors.primaryDark1,
-                      fontSize: AllFontSize.fourtine,
-                      fontWeight: FontWeight.w500),
-                ),
-                Container(
-                  width: size.width * .55,
-                  child: Text("${address_vm_controller.address_master_list[position].address ??""} "
-                      "${address_vm_controller.address_master_list[position].city??""} "
-                      "${address_vm_controller.address_master_list[position].stateName??""} "
-                      "${address_vm_controller.address_master_list[position].postCode??""}",
-                    overflow: TextOverflow.ellipsis,
-                    style: GoogleFonts.poppins(
-                        color: AllColors.textColor,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: 3),
+            _buildLabelWithValue(label: "Consignee Id : ", value: address_vm_controller.address_master_list[position].consigneeId?? "", ),
+            const SizedBox(height: 3),
+            _buildLabelWithValue(label: "Address Name : ", value: address_vm_controller.address_master_list[position].contactName?? "", ),
+            const SizedBox(height: 3,),
+            _buildLabelWithValue(label: "Email Id : ", value: address_vm_controller.address_master_list[position].emailId?? "", ),
+            const SizedBox(height: 3),
+            _buildLabelWithValue(label: "Phone No. : ", value: address_vm_controller.address_master_list[position].phoneNo?? "", ),
+            const SizedBox(height: 3),
+            _buildLabelWithValue(label: "IFSC Code : ", value: address_vm_controller.address_master_list[position].ifscCode?? "", ),
+            const SizedBox(height: 3),
+            _buildLabelWithValue(label: "Address : ", value: "${address_vm_controller.address_master_list[position].address ??""} "
+                "${address_vm_controller.address_master_list[position].city??""} "
+                "${address_vm_controller.address_master_list[position].stateName??""}"
+                " ${address_vm_controller.address_master_list[position].postCode??""} "),
+            const SizedBox(height: 3),
 
           ],
         ),
-
-
-
       ),
+    );
+  }
+
+  Widget _buildLabelWithValue({
+    required String label,
+    required String? value,
+    Color color = AllColors.textColor,
+  }) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          label,
+          style: GoogleFonts.poppins(
+            color: AllColors.primaryDark1,
+            fontSize: AllFontSize.fourtine,
+            fontWeight:label=="Consignee Id : "? FontWeight.w700:FontWeight.w500,
+          ),
+        ),
+        Flexible(
+          child: Tooltip(
+            message: value??"",
+            child: Text(
+              value ?? "",
+              overflow: TextOverflow.ellipsis,
+              style: GoogleFonts.poppins(
+                color: color,
+                fontSize: AllFontSize.fourtine,
+                fontWeight: label=="Consignee Id : "? FontWeight.w700:FontWeight.w500,
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 
@@ -437,135 +317,15 @@ class ViewAddressScreen extends StatelessWidget{
                     padding: const EdgeInsets.all(8.0),
                     child: Column(
                       children: [
-                        SizedBox(
-                          height: 5,
-                        ),
-                        TextField(
-                          cursorColor:AllColors.primaryDark1,
-                          controller: address_vm_controller.Consignee_controller.value,
-                          decoration: InputDecoration(
-                              contentPadding: EdgeInsets.symmetric(
-                                  vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-                              labelText: 'Consignee Id',
-                              hintText: 'Consignee Id',
-                              hintStyle: GoogleFonts.poppins(
-                                  color: AllColors.lightblackColor,
-                                  fontWeight: FontWeight.w300,
-                                  fontSize: AllFontSize.ten),
-                              labelStyle: GoogleFonts.poppins(
-                                  color: AllColors.primaryDark1,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: AllFontSize.sisxteen),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.all(Radius.circular(10)),
-                              ),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.all(Radius.circular(10)),
-                              )
-                          ),
-                          onChanged: (value) {
-                            // Handle the text field value changes if needed
-                          },
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-
-                        TextField(
-                          controller: address_vm_controller.contact_name_controller,
-                          decoration: InputDecoration(
-                              contentPadding: EdgeInsets.symmetric(
-                                  vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-                              labelText: 'Address Name',
-                              hintText: 'Address Name',
-                              hintStyle: GoogleFonts.poppins(
-                                  color: AllColors.lightblackColor,
-                                  fontWeight: FontWeight.w300,
-                                  fontSize: AllFontSize.ten),
-                              labelStyle: GoogleFonts.poppins(
-                                  color: AllColors.primaryDark1,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: AllFontSize.sisxteen),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.all(Radius.circular(10)),
-                              ),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.all(Radius.circular(10)),
-                              )
-                          ),
-                          cursorColor: AllColors.primaryDark1,
-                          onChanged: (value) {
-                            // Handle the text field value changes if needed
-                          },
-                        ),
-
-                        SizedBox(
-                          height: 10,
-                        ),
-
-                        TextField(
-                          controller: address_vm_controller.phone_no_controller,
-                          decoration: InputDecoration(
-                              contentPadding: EdgeInsets.symmetric(
-                                  vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-                              labelText: 'Phone No.',
-                              hintText: 'Phone No.',
-                              hintStyle: GoogleFonts.poppins(
-                                  color: AllColors.lightblackColor,
-                                  fontWeight: FontWeight.w300,
-                                  fontSize: AllFontSize.ten),
-                              labelStyle: GoogleFonts.poppins(
-                                  color: AllColors.primaryDark1,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: AllFontSize.sisxteen),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.all(Radius.circular(10)),
-                              ),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.all(Radius.circular(10)),
-                              )
-                          ),
-                          cursorColor: AllColors.primaryDark1,
-                          onChanged: (value) {
-                            // Handle the text field value changes if needed
-                          },
-                        ),
-
-                        SizedBox(
-                          height: 10,
-                        ),
-
-                        TextField(
-                          controller: address_vm_controller.emailId_controller,
-                          decoration: InputDecoration(
-                              contentPadding: EdgeInsets.symmetric(
-                                  vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-                              labelText: 'Email Id',
-                              hintText: 'Email Id',
-                              hintStyle: GoogleFonts.poppins(
-                                  color: AllColors.lightblackColor,
-                                  fontWeight: FontWeight.w300,
-                                  fontSize: AllFontSize.ten),
-                              labelStyle: GoogleFonts.poppins(
-                                  color: AllColors.primaryDark1,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: AllFontSize.sisxteen),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.all(Radius.circular(10)),
-                              ),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.all(Radius.circular(10)),
-                              )
-                          ),
-                          cursorColor: AllColors.primaryDark1,
-                          onChanged: (value) {
-                            // Handle the text field value changes if needed
-                          },
-                        ),
-
-                        SizedBox(
-                          height: 10,
-                        ),
+                        const SizedBox(height: 5,),
+                        bindFilterInputData('Consignee Id',address_vm_controller.Consignee_controller.value),
+                        const SizedBox(height: 10,),
+                        bindFilterInputData('Address Name',address_vm_controller.contact_name_controller),
+                        const SizedBox(height: 10,),
+                        bindFilterInputData('Phone No.',address_vm_controller.phone_no_controller),
+                        const SizedBox(height: 10,),
+                        bindFilterInputData('Email Id',address_vm_controller.emailId_controller),
+                        const SizedBox(height: 10,),
 
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -635,6 +395,35 @@ class ViewAddressScreen extends StatelessWidget{
         );
       },
     );
+  }
+  Widget bindFilterInputData(String hintData, TextEditingController controller){
+    return TextField(
+      cursorColor:AllColors.primaryDark1,
+      controller: controller,
+      decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+          labelText: hintData,
+          hintText: hintData,
+          hintStyle: GoogleFonts.poppins(
+              color: AllColors.lightblackColor,
+              fontWeight: FontWeight.w300,
+              fontSize: AllFontSize.ten),
+          labelStyle: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontWeight: FontWeight.w500,
+              fontSize: AllFontSize.sisxteen),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          )
+      ),
+      onChanged: (value) {
+        // Handle the text field value changes if needed
+      },
+    ) ;
   }
 
 }
