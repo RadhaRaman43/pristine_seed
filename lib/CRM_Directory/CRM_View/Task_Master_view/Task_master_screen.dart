@@ -604,7 +604,7 @@ class TaskMasterScreen extends StatelessWidget {
               child: Row(
                 children: [
                   Text(
-                    "Task Id : ",
+                    "Task Id: ",
                     style: GoogleFonts.poppins(
                         color: AllColors.primaryDark1,
                         fontSize: AllFontSize.fourtine,
@@ -685,7 +685,7 @@ class TaskMasterScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    "Customer Name : ",
+                    "Customer Name: ",
                     style: GoogleFonts.poppins(
                         color: AllColors.primaryDark1,
                         fontSize: AllFontSize.fourtine,
@@ -736,7 +736,7 @@ class TaskMasterScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    "Sales Cycle Id : ",
+                    "Sales Cycle Id: ",
                     style: GoogleFonts.poppins(
                         color: AllColors.primaryDark1,
                         fontSize: AllFontSize.fourtine,
@@ -2137,8 +2137,16 @@ class TaskMasterScreen extends StatelessWidget {
           baseStyle: TextStyle(color: Colors.black),
           dropdownSearchDecoration: InputDecoration(
             filled: false,
-            labelText: TaskMaster_page_controller.SelectedEmployee_Member_list.isNotEmpty?"Account Owner":null,
+            labelText: TaskMaster_page_controller.SelectedEmployee_Member_list.isNotEmpty?"Task Owner":null,
             hintText: "Task Owner",
+            hintStyle: GoogleFonts.poppins(
+                color: AllColors.lightblackColor,
+                fontWeight: FontWeight.w300,
+                fontSize: AllFontSize.ten),
+            labelStyle: GoogleFonts.poppins(
+                color: AllColors.primaryDark1,
+                fontWeight: FontWeight.w500,
+                fontSize: AllFontSize.sisxteen),
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
           ),
         ),
@@ -2146,7 +2154,7 @@ class TaskMasterScreen extends StatelessWidget {
           // Custom builder to just show comma-separated names
           if (selectedItems.isEmpty) {
             return Text(
-              " Task Owner",
+              "Task Owner",
               style: GoogleFonts.poppins(
                 color: AllColors.primaryDark1, // Match your hint color
                 fontSize: AllFontSize.sisxteen,
@@ -2404,8 +2412,8 @@ class TaskMasterScreen extends StatelessWidget {
         contentPadding: EdgeInsets.symmetric(
             vertical: AllFontSize.two, horizontal: AllFontSize.ten),
         suffixIcon: Icon(Icons.calendar_month),
-        hintText: 'Due Date',
-        labelText: 'Due Date',
+        hintText: 'Task Due Date',
+        labelText: 'Task Due Date',
         hintStyle: GoogleFonts.poppins(
             color: AllColors.lightblackColor,
             fontWeight: FontWeight.w300,
@@ -2455,7 +2463,7 @@ class TaskMasterScreen extends StatelessWidget {
   }
 
 
-  bindCreatedOn(BuildContext context) {
+  /*bindCreatedOn(BuildContext context) {
     return TextField(
         cursorColor: AllColors.primaryDark1,
         controller: TaskMaster_page_controller.filterTaskCreationOnController.value,
@@ -2514,7 +2522,71 @@ class TaskMasterScreen extends StatelessWidget {
         }
 
     );
+  }*/
+  bindCreatedOn(BuildContext context) {
+    return TextField(
+      cursorColor: AllColors.primaryDark1,
+      controller:TaskMaster_page_controller.filterTaskCreationOn_from_to_date_Controller.value,
+      readOnly: true,
+      decoration: InputDecoration(
+        contentPadding: EdgeInsets.symmetric(
+            vertical: AllFontSize.two, horizontal: AllFontSize.ten),
+        suffixIcon: Icon(Icons.calendar_month),
+        hintText: 'Select Start Date -End Date',
+        labelText: 'Created On',
+        hintStyle: GoogleFonts.poppins(
+            color: AllColors.lightblackColor,
+            fontWeight: FontWeight.w300,
+            fontSize: AllFontSize.ten),
+        labelStyle: GoogleFonts.poppins(
+            color: AllColors.primaryDark1,
+            fontWeight: FontWeight.w500,
+            fontSize: AllFontSize.sisxteen),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+        ),
+      ),
+      onTap: () async {
+        FocusScope.of(context).requestFocus(FocusNode()); // hide keyboard
+        DateTimeRange? picked = await showDateRangePicker(
+          context: context,
+          firstDate: DateTime(1900),
+          lastDate: DateTime(2200),
+          /* initialDateRange: DateTimeRange(
+            start: DateTime.now(),
+            end: DateTime.now().add(Duration(days: 7)),
+          ),*/
+          builder: (BuildContext context, Widget? child) {
+            return Theme(
+              data: ThemeData.light().copyWith(
+                primaryColor: AllColors.primaryDark1,
+                colorScheme: ColorScheme.light(primary: AllColors.primaryDark1),
+                buttonTheme: ButtonThemeData(
+                  textTheme: ButtonTextTheme.primary,
+                ),
+              ),
+              child: child!,
+            );
+          },
+        );
+
+        if (picked != null) {
+          final startDate = DateFormat('yyyy-MM-dd').format(picked.start);
+          final endDate = DateFormat('yyyy-MM-dd').format(picked.end);
+          TaskMaster_page_controller.filterTaskCreationOnController.value.text="$startDate@$endDate";
+          TaskMaster_page_controller.filterTaskCreationOn_from_to_date_Controller.value.text = '$startDate - $endDate';
+        } else {
+          TaskMaster_page_controller.filterTaskCreationOnController.value.text = '';
+          TaskMaster_page_controller.filterTaskCreationOn_from_to_date_Controller.value.text="";
+        }
+      },
+    );
   }
+
+
   bindTypeOfCallDropDown(BuildContext context) {
     return Obx(() {
       if (TaskMaster_page_controller.Type_of_call_controller.value.text.isNotEmpty && TaskMaster_page_controller.filterDataChecker.value=='1') {
@@ -2569,8 +2641,7 @@ class TaskMasterScreen extends StatelessWidget {
         },
         onChanged: (List<CallStatusMasterModel> selectedList) {
           TaskMaster_page_controller.Selection_CallStatus_Master_list.value = selectedList;
-          TaskMaster_page_controller.Type_of_call_controller.value.text =
-              selectedList.where((e) => e.taskStatus?.toLowerCase() != 'all').map((e) => e.taskStatus).join('|');
+          TaskMaster_page_controller.Type_of_call_controller.value.text = selectedList.where((e) => e.taskStatus?.toLowerCase() != 'all').map((e) => e.taskStatus).join('|');
         },
         popupProps: PopupPropsMultiSelection.dialog(
           showSearchBox: true,

@@ -229,7 +229,7 @@ class AddNewcontactMasterContact extends StatelessWidget{
                                 accountMaster_page_controller.clearController();
                                 accountMaster_page_controller.getEmployeeMemberApi();
                                 accountMaster_page_controller.getCompanyProfileTypeApi("");
-                                accountMaster_page_controller.getGeoPostalCodeApi(50,'');
+                                accountMaster_page_controller.getGeoPostalCodeApi(50,'',accountMaster_page_controller.email);
                                 Get.toNamed(RoutesName.add_New_AccountMaster_screen);
                               }, icon: Icon(Icons.add)),
                         ),
@@ -553,8 +553,8 @@ class AddNewcontactMasterContact extends StatelessWidget{
               ),
               contentPadding: EdgeInsets.symmetric(
                   vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-              hintText: 'Customer Name *',
-              labelText: 'Customer Name *',
+              hintText: 'Customer Name*',
+              labelText: 'Customer Name*',
               border: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(10))
               ),

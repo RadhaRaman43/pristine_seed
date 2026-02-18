@@ -223,9 +223,9 @@ class UpdateQuoteLineDataScreen extends StatelessWidget{
         cursorColor:AllColors.primaryDark1 ,
         controller: saleCycleController.updateDiscountPerController.value,
         keyboardType: TextInputType.number,
-        inputFormatters: [
+       /* inputFormatters: [
           FilteringTextInputFormatter.digitsOnly,
-        ],
+        ],*/
         decoration: InputDecoration(
             contentPadding: EdgeInsets.symmetric(
                 vertical: AllFontSize.two, horizontal: AllFontSize.ten),

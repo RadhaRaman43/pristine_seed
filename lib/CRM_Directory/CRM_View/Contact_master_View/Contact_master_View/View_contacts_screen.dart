@@ -111,8 +111,10 @@ class ViewContactsScreen extends StatelessWidget{
                                 contact_vm_controller.insideOut = false;
                                 contact_vm_controller.resetAllContactCreativeField('Card');
                                 // contact_vm_controller.IsHeDecisionMakerController.value.text = "No";
+
                                 contact_vm_controller.getAccountMaster("");
                                 contact_vm_controller.getDecisionRoleMaster();
+                                contact_vm_controller.account_name_controller.text=accountMaster_page_controller.accountName;
                                 Get.toNamed(RoutesName.addNewContactMaster_screen);
                               },
                                 icon: Icon(Icons.add, size: 40, color: AllColors.textColor,),
@@ -501,7 +503,6 @@ class ViewContactsScreen extends StatelessWidget{
                             ),
                             hintText: "Contact Name",
                             labelText: "Contact Name",
-                            //suffixIcon: Icon(Icons.email),
                             contentPadding: EdgeInsets.symmetric(
                                 vertical: AllFontSize.ten,
                                 horizontal: AllFontSize.ten),

@@ -548,7 +548,7 @@ class QuoteInformationScreen extends StatelessWidget {
                               thickness: 1,
                               color: AllColors.lightgreyColor,
                             ),
-                            Obx(() {
+                            /*Obx(() {
                               return Table(
                                 defaultVerticalAlignment:
                                     TableCellVerticalAlignment.middle,
@@ -578,9 +578,10 @@ class QuoteInformationScreen extends StatelessWidget {
                                       tableHeaderCell("Appr Amt Per Unit"),
                                       tableHeaderCell("Sales Credit"),
                                       tableHeaderCell("Total Approved Price"),
-                                      tableHeaderCell("GM %"),
-                                      tableHeaderCell("GM Amt"),
-                                      tableHeaderCell("GM Total Amt"),
+                                      Visibility(visible:saleCycleController.isAdminWritePermission=="1"|| saleCycleController.userType.toLowerCase()=="GM",child: tableHeaderCell("GM %")),
+                                      Visibility(visible:saleCycleController.isAdminWritePermission=="1"|| saleCycleController.userType.toLowerCase()=="GM",child:  tableHeaderCell("GM Amt"),),
+                                      Visibility(visible:saleCycleController.isAdminWritePermission=="1"|| saleCycleController.userType.toLowerCase()=="GM",child: tableHeaderCell("GM Total Amt"),),
+
                                       tableHeaderCell("Gst Amount"),
                                       tableHeaderCell("Total Amount"),
                                     ],
@@ -588,71 +589,115 @@ class QuoteInformationScreen extends StatelessWidget {
                                   // Value Row
                                   TableRow(
                                     children: [
-                                      tableValueCell(saleCycleController
-                                          .quoteHeaderdata[0].quoteTotalQty?.toInt()),
-                                      tableValueCell(saleCycleController
-                                          .quoteHeaderdata[0].quoteTotalBmPerAverage
-                                          ),
-                                      tableValueCell("₹ ${
-                                        saleCycleController
-                                            .numberFormatWithComma(
-                                            saleCycleController
-                                                .quoteHeaderdata[0]
-                                                .quoteApprovedAmtPerUnit)}"),
-                                      tableValueCell(saleCycleController
-                                          .quoteHeaderdata[0].quoteSalesCreditAverage),
-                                     /* tableValueCell(saleCycleController
-                                          .quoteHeaderdata[0].quoteTotalApprovedDiscountAmount),*/
-                                      tableValueCell("₹ ${
-                                          saleCycleController
-                                              .numberFormatWithComma(
-                                              saleCycleController
-                                                  .quoteHeaderdata[0]
-                                                  .quoteTotalApprovedDiscountAmount)}"),
-                                      tableValueCell(saleCycleController
-                                          .quoteHeaderdata[0].quoteTotalGmPerAverage),
+                                      tableValueCell(saleCycleController.quoteHeaderdata[0].quoteTotalQty?.toInt()),
+                                      tableValueCell(saleCycleController.quoteHeaderdata[0].quoteTotalBmPerAverage),
+                                      tableValueCell("₹ ${saleCycleController.numberFormatWithComma(saleCycleController.quoteHeaderdata[0].quoteApprovedAmtPerUnit)}"),
+                                      tableValueCell(saleCycleController.quoteHeaderdata[0].quoteSalesCreditAverage),
+                                      tableValueCell("₹ ${saleCycleController.numberFormatWithComma(saleCycleController.quoteHeaderdata[0].quoteTotalApprovedDiscountAmount)}"),
 
-                                      /*tableValueCell(saleCycleController
-                                          .quoteHeaderdata[0]
-                                          .quoteTotalGmDiscountAmount),*/
-                                      tableValueCell("₹ ${
-                                          saleCycleController
-                                              .numberFormatWithComma(
-                                              saleCycleController
-                                                  .quoteHeaderdata[0]
-                                                  .quoteTotalGmDiscountAmount)}"),
-                                     /* tableValueCell(saleCycleController
-                                          .quoteHeaderdata[0].quoteNewTotalGmDiscountAmount),*/
+                                      Visibility(visible:saleCycleController.isAdminWritePermission=="1"|| saleCycleController.userType.toLowerCase()=="GM",child:tableValueCell(saleCycleController.quoteHeaderdata[0].quoteTotalGmPerAverage),),
+                                      Visibility(visible:saleCycleController.isAdminWritePermission=="1"|| saleCycleController.userType.toLowerCase()=="GM",child:  tableValueCell("₹ ${saleCycleController.numberFormatWithComma(saleCycleController.quoteHeaderdata[0].quoteTotalGmDiscountAmount)}"),),
+                                      Visibility(visible:saleCycleController.isAdminWritePermission=="1"|| saleCycleController.userType.toLowerCase()=="GM",child: tableValueCell("₹ ${saleCycleController.numberFormatWithComma(saleCycleController.quoteHeaderdata[0].quoteNewTotalGmDiscountAmount)}"),),
 
-                                      tableValueCell("₹ ${
-                                          saleCycleController
-                                              .numberFormatWithComma(
-                                              saleCycleController
-                                                  .quoteHeaderdata[0]
-                                                  .quoteNewTotalGmDiscountAmount)}"),
 
-                                     /* tableValueCell(saleCycleController
-                                          .quoteHeaderdata[0].quoteGstAmount),*/
-                                      tableValueCell("₹ ${
-                                          saleCycleController
-                                              .numberFormatWithComma(
-                                              saleCycleController
-                                                  .quoteHeaderdata[0]
-                                                  .quoteGstAmount)}"),
-                                      /*tableValueCell(saleCycleController
-                                          .quoteHeaderdata[0].quoteGrossAmount),*/
-                                      tableValueCell("₹ ${
-                                          saleCycleController
-                                              .numberFormatWithComma(
-                                              saleCycleController
-                                                  .quoteHeaderdata[0]
-                                                  .quoteGrossAmount)}"),
+                                      tableValueCell("₹ ${saleCycleController.numberFormatWithComma(saleCycleController.quoteHeaderdata[0].quoteGstAmount)}"),
+                                      tableValueCell("₹ ${saleCycleController.numberFormatWithComma(saleCycleController.quoteHeaderdata[0].quoteGrossAmount)}"),
                                     ],
                                   ),
                                 ],
                               );
-                            })
-                          ],
+                            })*/
+                        Obx(() {
+                          final bool showGM =
+                              saleCycleController.isAdminWritePermission == "1" ||
+                                  saleCycleController.userType.toLowerCase() == "general manager";
+                          final bool showbh=saleCycleController.userType?.toLowerCase()=='branch head' ||
+                              saleCycleController.userType?.toLowerCase()=='cluster head'||
+                              saleCycleController.userType?.toLowerCase()=='general manager'||
+                              saleCycleController.isAdminWritePermission.value=="1";
+
+                          final data = saleCycleController.quoteHeaderdata[0];
+
+                          return SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Table(
+                              defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+                              defaultColumnWidth: const FixedColumnWidth(130),
+                              border: TableBorder.symmetric(
+                                inside: BorderSide(
+                                  width: 1,
+                                  color: AllColors.lightgreyColor,
+                                ),
+                              ),
+                              children: [
+                                TableRow(
+                                  children: [
+                                    tableHeaderCell("Qty"),
+
+                                    if(showbh)tableHeaderCell("BM %"),
+
+                                    tableHeaderCell("Appr Amt Per Unit"),
+                                    tableHeaderCell("Sales Credit"),
+                                    tableHeaderCell("Total Approved Price"),
+
+                                    if (showGM) tableHeaderCell("GM %"),
+                                    if (showGM) tableHeaderCell("GM Amt"),
+                                    if (showGM) tableHeaderCell("GM Total Amt"),
+
+                                    tableHeaderCell("GST Amount"),
+                                    tableHeaderCell("Total Amount"),
+                                  ],
+                                ),
+
+                                TableRow(
+                                  children: [
+                                    tableValueCell(data.quoteTotalQty?.toInt()),
+                                    if(showbh)tableValueCell(data.quoteTotalBmPerAverage),
+                                    tableValueCell(
+                                      "₹ ${saleCycleController.numberFormatWithComma(
+                                        data.quoteApprovedAmtPerUnit,
+                                      )}",
+                                    ),
+                                    tableValueCell(data.quoteSalesCreditAverage),
+                                    tableValueCell(
+                                      "₹ ${saleCycleController.numberFormatWithComma(
+                                        data.quoteTotalApprovedDiscountAmount,
+                                      )}",
+                                    ),
+
+                                    if (showGM)
+                                      tableValueCell(data.quoteTotalGmPerAverage),
+                                    if (showGM)
+                                      tableValueCell(
+                                        "₹ ${saleCycleController.numberFormatWithComma(
+                                          data.quoteTotalGmDiscountAmount,
+                                        )}",
+                                      ),
+                                    if (showGM)
+                                      tableValueCell(
+                                        "₹ ${saleCycleController.numberFormatWithComma(
+                                          data.quoteNewTotalGmDiscountAmount,
+                                        )}",
+                                      ),
+
+                                    tableValueCell(
+                                      "₹ ${saleCycleController.numberFormatWithComma(
+                                        data.quoteGstAmount,
+                                      )}",
+                                    ),
+                                    tableValueCell(
+                                      "₹ ${saleCycleController.numberFormatWithComma(
+                                        data.quoteGrossAmount,
+                                      )}",
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          );
+                        }),
+
+                        ],
                         ),
                       ),
                     ),
@@ -932,6 +977,7 @@ class QuoteInformationScreen extends StatelessWidget {
                                    Visibility(
                                       visible: saleCycleController.userType?.toLowerCase()=='branch head' ||
                                           saleCycleController.userType?.toLowerCase()=='cluster head'||
+                                          saleCycleController.userType?.toLowerCase()=='general manager'||
                                           saleCycleController.isAdminWritePermission.value=="1",
                                       child:  bindData( "Bm % : ",saleCycleController.quoteLinedata[index].bmDiscountPer.toString(),context),
                                     ),

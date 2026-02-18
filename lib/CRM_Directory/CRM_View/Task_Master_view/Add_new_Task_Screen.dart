@@ -186,7 +186,7 @@ class AddNewTaskScreen extends StatelessWidget{
                             accountMaster_page_controller.getEmployeeMemberApi();
                             accountMaster_page_controller.getCompanyProfileTypeApi("");
                             accountMaster_page_controller.getCompanyProfileSubTypeApi();
-                            accountMaster_page_controller.getGeoPostalCodeApi(50,'');
+                            accountMaster_page_controller.getGeoPostalCodeApi(50,'',accountMaster_page_controller.email);
                             Get.toNamed(RoutesName.add_New_AccountMaster_screen);
                           }, icon: Icon(Icons.add)),
                     )
@@ -237,10 +237,22 @@ class AddNewTaskScreen extends StatelessWidget{
 
 
               SizedBox(height: 15,),
-              Container(
+          Obx(() {
+            if (taskMaster_page_controller.CallStatus_Master_list.length<=0 ) {
+              return Container(
                 padding: EdgeInsets.only(left: 15.0, right: 15.0),
                 child: bindTypeOfCallDropDown(context),
-              ),
+              );
+            }
+            return Container(
+              padding: EdgeInsets.only(left: 15.0, right: 15.0),
+              child: bindTypeOfCallDropDown(context),
+            );
+          }),
+             /* Container(
+                padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                child: bindTypeOfCallDropDown(context),
+              ),*/
 
               Obx(() {
                 return
@@ -408,7 +420,7 @@ class AddNewTaskScreen extends StatelessWidget{
                       Utils.sanckBarError('Account Name!', "Please Enter Customer Name");
                       return  ;
                     }
-                    if(taskMaster_page_controller.Type_of_call_controller.value.text!="New Call" &&
+                    if(taskMaster_page_controller.Type_of_call_controller.value.text.toLowerCase()!="new call" &&
                        ( taskMaster_page_controller.Contact_Name_controller.text.isEmpty ||
                            taskMaster_page_controller.Contact_Name_controller == null) ){
                       Utils.sanckBarError('Contact Name!', "Please Enter Contact Name");
@@ -423,7 +435,10 @@ class AddNewTaskScreen extends StatelessWidget{
                       return  ;
                     }
 
-                    if(taskMaster_page_controller.Type_of_call_controller.value.text == "Payment Call" && taskMaster_page_controller.Sale_cycle_Id_controller.text.isEmpty){
+
+                    if((taskMaster_page_controller.Type_of_call_controller.value.text.toLowerCase().trim() == "payment call"
+                        ||taskMaster_page_controller.Type_of_call_controller.value.text.toLowerCase().trim() == "follow-up call")
+                        &&taskMaster_page_controller.isSalesNecessaryController.value.text =="Yes"  &&taskMaster_page_controller.Sale_cycle_Id_controller.text.isEmpty){
                       Utils.sanckBarError('Sales Id!', "Please Enter Sales Id");
                       return  ;
                     }
@@ -438,10 +453,11 @@ class AddNewTaskScreen extends StatelessWidget{
                       return  ;
                     }*/
 
-                    if(taskMaster_page_controller.DataOFVisitController.value.text.isEmpty || taskMaster_page_controller.DataOFVisitController == null){
-                      Utils.sanckBarError('Date Of Visit!', "Please Enter Date Of Visit");
+                    if(taskMaster_page_controller.VisitTime_controller.value.text.isEmpty || taskMaster_page_controller.VisitTime_controller.value == null){
+                      Utils.sanckBarError('Time Of Visit!', "Please Enter Time Of Visit");
                       return  ;
                     }
+
 
                     if(taskMaster_page_controller.Method_of_call_controller.text == 'Physical Meeting' && taskMaster_page_controller.PusposeOfVisit_controller.text.isEmpty){
                       Utils.sanckBarError('Purpose Of Visit!', "Please Enter Purpose of Visit");
@@ -508,8 +524,8 @@ class AddNewTaskScreen extends StatelessWidget{
             ),
             contentPadding: EdgeInsets.symmetric(
                 vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-            hintText: 'Customer Name',
-            labelText: 'Customer Name',
+            hintText: 'Customer Name*',
+            labelText: 'Customer Name*',
             border: OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(10))
             ),
@@ -667,9 +683,7 @@ class AddNewTaskScreen extends StatelessWidget{
         }
         return taskMaster_page_controller.CallStatus_Master_list
             .where((CallStatusMasterModel option) {
-          return option.taskStatus
-              .toString()
-              .toLowerCase()
+          return option.taskStatus.toString().toLowerCase()
               .contains(textEditingValue.text.toLowerCase());
         }).toList();
       },
@@ -678,7 +692,9 @@ class AddNewTaskScreen extends StatelessWidget{
             _displayTypeOfCallForOption(selection).toString();
         taskMaster_page_controller.isSalesNecessaryController.value.clear();
         if( taskMaster_page_controller.Type_of_call_controller.value.text == 'Payment Call' || taskMaster_page_controller.Type_of_call_controller.value.text == 'Follow-Up Call'){
+          taskMaster_page_controller.isSalesNecessaryController.value.text='No';
           taskMaster_page_controller.PaymentCall.value = true;
+
         }else{
           taskMaster_page_controller.PaymentCall.value = false;
           taskMaster_page_controller.IsSalesId.value = false;
@@ -687,9 +703,9 @@ class AddNewTaskScreen extends StatelessWidget{
       fieldViewBuilder: (BuildContext context, TextEditingController controller,
           FocusNode focusNode, VoidCallback onFieldSubmitted) {
         return TextField(
-          onTap: (){
+         /* onTap: (){
             controller.clear();
-          },
+          },*/
           cursorColor: AllColors.primaryDark1,
           controller: controller
             ..text = taskMaster_page_controller.Type_of_call_controller.value.text,
@@ -711,13 +727,6 @@ class AddNewTaskScreen extends StatelessWidget{
                 vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
             hintText: 'Type Of Call*',
             labelText: 'Type Of Call*',
-            /*hintStyle: GoogleFonts.poppins(
-                color: AllColors.lightblackColor,
-            ),*/
-            /*focusedBorder: UnderlineInputBorder(
-              borderSide: BorderSide(
-                  color: AllColors.primaryDark1), // Change the color to green
-            ),*/
             border: OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(10))
             ),
@@ -1018,7 +1027,7 @@ class AddNewTaskScreen extends StatelessWidget{
               fontSize: AllFontSize.sisxteen,
               fontWeight: FontWeight.w300),
         ),
-        initialSelection: "No",
+        //initialSelection: "No",
         inputDecorationTheme: const InputDecorationTheme(
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -1276,8 +1285,8 @@ class AddNewTaskScreen extends StatelessWidget{
               vertical: AllFontSize.two, horizontal: AllFontSize.ten
           ),
           //contentPadding: EdgeInsets.symmetric(vertical:5,horizontal:5),
-          hintText: "Time Of Visit",
-          labelText: 'Time Of Visit',
+          hintText: "Time Of Visit*",
+          labelText: 'Time Of Visit*',
           hintStyle: TextStyle(color: AllColors.blackColor),
           labelStyle: TextStyle(color: AllColors.blackColor),
           suffixIcon: Icon(

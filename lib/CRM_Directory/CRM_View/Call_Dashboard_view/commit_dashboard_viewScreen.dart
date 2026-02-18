@@ -155,17 +155,23 @@ class CommitDashboardViewscreen extends StatelessWidget{
                                       );
                                     }),
 
-                               const SizedBox(width: 10,),
-                                Text(
-                                  '${dashboard_view_Controller.character.value} : Type Of Calls (R)',
-                                  style: GoogleFonts.poppins(
-                                    color: AllColors.blackColor,
-                                    fontSize: AllFontSize.twelve,
-                                    fontWeight: FontWeight.w500,
+                              /* const SizedBox(width: 10,),
+                                Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                  decoration: BoxDecoration(
+                                    color: Colors.orange.shade100, // 🌤 light orange
+                                    borderRadius: BorderRadius.circular(6),
+                                  ),
+                                  child: Text(
+                                    '${dashboard_view_Controller.character.value} : Type Of Calls (R)',
+                                    style: GoogleFonts.poppins(
+                                      color: AllColors.blackColor,
+                                      fontSize: AllFontSize.twelve,
+                                      fontWeight: FontWeight.w500,
+                                    ),
                                   ),
                                 ),
-
-
+*/
                                 Obx((){
                                   return  Tooltip(
                                     message:  'Quote Accep. ${dashboard_view_Controller.QuoteAccepted_controller.value.text}',

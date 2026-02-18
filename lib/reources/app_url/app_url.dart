@@ -346,4 +346,7 @@ class AppUrl {
      static const String PendingDsarDashboardUserWiseData="$BASE_URL/api/CRM/Dashboard/PendingDsarDashboardUserWiseData";
      static const String SalesDashboardReportGet="$BASE_URL/api/CRM/SalesCycle/SalesDashboardReportGet";
      static const String EmployeeTeamMemberGetByClusterRegion="$BASE_URL/api/Employee/EmployeeTeamMemberGetByClusterRegion";
+
+     //todo Item master
+     static const String ItemMstSalesCycleGet="$BASE_URL/api/ItemMaster/ItemMstSalesCycleGet";
 }

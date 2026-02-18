@@ -930,9 +930,9 @@ class AddNewConsigneeadd extends StatelessWidget{
       displayStringForOption: _displayPostalCodeListForOption,
       optionsBuilder: (TextEditingValue textEditingValue) async {
         if (textEditingValue.text.isEmpty) {
-          await accountMaster_page_controller.getGeoPostalCodeApi(50,textEditingValue.text);
+          await accountMaster_page_controller.getGeoPostalCodeApi(50,textEditingValue.text,accountMaster_page_controller.email);
         }
-        return await accountMaster_page_controller.getGeoPostalCodeApi(50,textEditingValue.text);
+        return await accountMaster_page_controller.getGeoPostalCodeApi(50,textEditingValue.text,accountMaster_page_controller.email);
       },
       onSelected: (PostalCodeModel selection) {
         print(selection.pincode);

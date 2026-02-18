@@ -432,39 +432,39 @@ class SalesCycleScreen extends StatelessWidget{
                   );
                 },
               ),
-              _buildLabelWithValue(label: "Customer Code : ", value: salesCycleController.saleCycleList[position].accountCode,),
-              _buildLabelWithValue(label: "Sales Cycle Owner : ", value: salesCycleController.saleCycleList[position].salesCycleOwnerName,),
-              _buildLabelWithValue(label: "Exp. Closure Date : ", value: salesCycleController.saleCycleList[position].estClosureDate,),
+              _buildLabelWithValue(label: "Customer Code: ", value: salesCycleController.saleCycleList[position].accountCode,),
+              _buildLabelWithValue(label: "Sales Cycle Owner: ", value: salesCycleController.saleCycleList[position].salesCycleOwnerName,),
+              _buildLabelWithValue(label: "Exp. Closure Date: ", value: salesCycleController.saleCycleList[position].estClosureDate,),
               //_buildLabelWithValue(label: "Expected Amount: ", value: '₹ ${salesCycleController.saleCycleList[position].estBudgetAmount}',),
               _buildLabelWithValue(label: "Expected Amount: ", value: "₹ ${
                   salesCycleController
                       .numberFormatWithComma(salesCycleController.saleCycleList[position].estBudgetAmount)
                       .toString()
               }",color:AllColors.textColor),
-              _buildLabelWithValue(label: "Is Commit : ", value: salesCycleController.saleCycleList[position].commit==1?"Yes":"No",),
+              _buildLabelWithValue(label: "Is Commit: ", value: salesCycleController.saleCycleList[position].commit==1?"Yes":"No",),
               _buildLabelWithValue(label: "Sales Cycle Status: ", value: salesCycleController.saleCycleList[position].salesCycleStatus,),
               _buildLabelWithValue(label: "Quote Accepted: ", value: salesCycleController.saleCycleList[position].quoteAccepted, color: getQouteAcceptedColor(saleQuoteAccepted),),
-              _buildLabelWithValue(label: "Product Category : ", value: salesCycleController.saleCycleList[position].productCategory,),
+              _buildLabelWithValue(label: "Product Category: ", value: salesCycleController.saleCycleList[position].productCategory,),
               _buildLabelWithValue(label: "Budget Amount: ", value: "₹ ${
                   salesCycleController
                       .numberFormatWithComma(salesCycleController.saleCycleList[position].budgetAmount)
                       .toString()
               }",color:AllColors.textColor),
              // _buildLabelWithValue(label: "Budget Amount : ", value: "₹ ${salesCycleController.saleCycleList[position].budgetAmount.toString()}",),
-              _buildLabelWithValue(label: "Contact Name : ", value: salesCycleController.saleCycleList[position].contactName,),
-              _buildLabelWithValue(label: "Purchase Process : ", value: salesCycleController.saleCycleList[position].purchaseProcess,),
-              _buildLabelWithValue(label: "Company Pro. Type : ", value: salesCycleController.saleCycleList[position].companyProfileType,),
-              _buildLabelWithValue(label: "Is Solution Accepted : ", value: salesCycleController.saleCycleList[position].isSolutionAccepted.toString()=="1"?"Yes":"No",),
-              _buildLabelWithValue(label: "Task Id : ", value: salesCycleController.saleCycleList[position].taskId,),
-              _buildLabelWithValue(label: "Pin Code : ", value: salesCycleController.saleCycleList[position].postCode,),
-              _buildLabelWithValue(label: "District : ", value: salesCycleController.saleCycleList[position].district,),
-              _buildLabelWithValue(label: "Cluster Name : ", value: salesCycleController.saleCycleList[position].clustureHeadValue,),
-              _buildLabelWithValue(label: "Region Name : ", value: salesCycleController.saleCycleList[position].branchHeadValue,),
-              _buildLabelWithValue(label: "Created By : ", value: salesCycleController.saleCycleList[position].createdFullName,),
+              _buildLabelWithValue(label: "Contact Name: ", value: salesCycleController.saleCycleList[position].contactName,),
+              _buildLabelWithValue(label: "Purchase Process: ", value: salesCycleController.saleCycleList[position].purchaseProcess,),
+              _buildLabelWithValue(label: "Company Pro. Type: ", value: salesCycleController.saleCycleList[position].companyProfileType,),
+              _buildLabelWithValue(label: "Is Solution Accepted: ", value: salesCycleController.saleCycleList[position].isSolutionAccepted.toString()=="1"?"Yes":"No",),
+              _buildLabelWithValue(label: "Task Id: ", value: salesCycleController.saleCycleList[position].taskId,),
+              _buildLabelWithValue(label: "Pin Code: ", value: salesCycleController.saleCycleList[position].postCode,),
+              _buildLabelWithValue(label: "District: ", value: salesCycleController.saleCycleList[position].district,),
+              _buildLabelWithValue(label: "Cluster Name: ", value: salesCycleController.saleCycleList[position].clustureHeadValue,),
+              _buildLabelWithValue(label: "Region Name: ", value: salesCycleController.saleCycleList[position].branchHeadValue,),
+              _buildLabelWithValue(label: "Created By: ", value: salesCycleController.saleCycleList[position].createdFullName,),
               _buildLabelWithValue(label: "Created On: ", value: createdOn,),
-              _buildLabelWithValue(label: "Reporting Manager : ", value: salesCycleController.saleCycleList[position].approvedFullName,),
+              _buildLabelWithValue(label: "Reporting Manager: ", value: salesCycleController.saleCycleList[position].approvedFullName,),
               _buildLabelWithValue(label: "Approved On: ", value: approvedOn,),
-              _buildLabelWithValue(label: "Reject Reason : ", value: salesCycleController.saleCycleList[position].rejectReason,),
+              _buildLabelWithValue(label: "Reject Reason: ", value: salesCycleController.saleCycleList[position].rejectReason,),
             ],
           ),
 
@@ -1503,64 +1503,6 @@ class SalesCycleScreen extends StatelessWidget{
     );
   }
 
- /* bindCreatedOn(BuildContext context) {
-    return TextField(
-      cursorColor: AllColors.primaryDark1,
-      controller: salesCycleController.createdOnCnontroller.value,
-      readOnly: true,
-      decoration: InputDecoration(
-        contentPadding: EdgeInsets.symmetric(
-            vertical: AllFontSize.two, horizontal: AllFontSize.ten),
-        suffixIcon: Icon(Icons.calendar_month),
-        hintText: 'Created On',
-        labelText: 'Created On',
-        hintStyle: GoogleFonts.poppins(
-            color: AllColors.lightblackColor,
-            fontWeight: FontWeight.w300,
-            fontSize: AllFontSize.ten),
-        labelStyle: GoogleFonts.poppins(
-            color: AllColors.primaryDark1,
-            fontWeight: FontWeight.w500,
-            fontSize: AllFontSize.sisxteen),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(10)),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(10)),
-        ),
-      ),
-      onTap: () async {
-        FocusScope.of(context).requestFocus(FocusNode()); // hide keyboard
-        DateTimeRange? picked = await showDateRangePicker(
-          context: context,
-          firstDate: DateTime(1900),
-          lastDate: DateTime(2200),
-          builder: (BuildContext context, Widget? child) {
-            return Theme(
-              data: ThemeData.light().copyWith(
-                primaryColor: AllColors.primaryDark1,
-                colorScheme: ColorScheme.light(primary: AllColors.primaryDark1),
-                buttonTheme: ButtonThemeData(
-                  textTheme: ButtonTextTheme.primary,
-                ),
-              ),
-              child: child!,
-            );
-          },
-        );
-
-        if (picked != null) {
-          final startDate = DateFormat('yyyy-MM-dd').format(picked.start);
-          final endDate = DateFormat('yyyy-MM-dd').format(picked.end);
-          salesCycleController.createdOnStartToEnd.value="$startDate@$endDate";
-          salesCycleController.createdOnCnontroller.value.text = '$startDate - $endDate';
-        } else {
-          salesCycleController.createdOnCnontroller.value.text = '';
-          salesCycleController.createdOnStartToEnd.value="";
-        }
-      },
-    );
-  }*/
   bindCreatedOn(BuildContext context) {
     return TextField(
         cursorColor: AllColors.primaryDark1,
