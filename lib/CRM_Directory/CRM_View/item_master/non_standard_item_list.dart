@@ -44,7 +44,8 @@ class NonStandardItemsScreen extends StatelessWidget{
                   onTap: () {
                     item_master_controller.checkForExcel='CheckForExcel';
                     item_master_controller.nonStandardListForExcel.value=[];
-                    item_master_controller.itemMstSalesCycleGet(page_no: 0,rowPerPage: item_master_controller.total_rows_items,context: context);
+                    print("click total rows ${item_master_controller.total_rows_items}");
+                    item_master_controller.itemMstSalesCycleGet(page_no: 0,row_Per_Page: 10,context: context);
                   },
                 ),);
               items.add(PopupMenuItem(
@@ -142,7 +143,7 @@ class NonStandardItemsScreen extends StatelessWidget{
               "${item_master_controller.rowsPerPage} ${total_page}");
 
           if (item_master_controller.pageNumber + 1 < total_page) {
-            item_master_controller.itemMstSalesCycleGet(page_no:  item_master_controller.pageNumber +1,rowPerPage:  item_master_controller.rowsPerPage);
+            item_master_controller.itemMstSalesCycleGet(page_no:  item_master_controller.pageNumber +1,row_Per_Page:  item_master_controller.rowsPerPage);
             item_master_controller.pageNumber += 1;
           }
         }
@@ -231,6 +232,7 @@ class NonStandardItemsScreen extends StatelessWidget{
                 onTap:(){
                   item_master_controller.getItemCategoryMstApi();
                   item_master_controller.GSTGroupGet(position);
+                  item_master_controller.updateNonStandardData(item_master_controller.nonStandardList[position]);
                   Get.toNamed(RoutesName.updateNonStandardItemList);
                 },
                 child: Icon(Icons.update,  color: Colors.blue,)),
@@ -481,7 +483,7 @@ class NonStandardItemsScreen extends StatelessWidget{
                             item_master_controller.clearFilterData();
                             item_master_controller.clearSaveFilterData();
                             item_master_controller.pageNumber = 0;
-                            item_master_controller.itemMstSalesCycleGet(page_no:  item_master_controller.pageNumber,rowPerPage:  item_master_controller.rowsPerPage);
+                            item_master_controller.itemMstSalesCycleGet(page_no:  item_master_controller.pageNumber,row_Per_Page:  item_master_controller.rowsPerPage);
                             Get.back();
                           },
                         )),
@@ -492,7 +494,7 @@ class NonStandardItemsScreen extends StatelessWidget{
                           textColor: AllColors.primaryDark1,
                           onTap: () {
                             item_master_controller.pageNumber = 0;
-                            item_master_controller.itemMstSalesCycleGet(page_no:  item_master_controller.pageNumber,rowPerPage:  item_master_controller.rowsPerPage);
+                            item_master_controller.itemMstSalesCycleGet(page_no:  item_master_controller.pageNumber,row_Per_Page:  item_master_controller.rowsPerPage);
                             Get.back();
                           },
                         )),
