@@ -52,6 +52,7 @@ import '../../CRM_Directory/CRM_View/employee_information_system_view/emp_mark_l
 import '../../CRM_Directory/CRM_View/employee_information_system_view/emp_mark_leave_request_screen.dart';
 import '../../CRM_Directory/CRM_View/employee_information_system_view/emp_mark_leave_screen.dart';
 import '../../CRM_Directory/CRM_View/employee_information_system_view/leave_request_approval_screen.dart';
+import '../../CRM_Directory/CRM_View/item_master/update_non_standard_item.dart';
 import '../../CRM_Directory/CRM_View/sales_cycle/All_Quote_Line_Item_View/All_Quote_Line_Item_Screen.dart';
 import '../../CRM_Directory/CRM_View/sales_cycle/All_Quote_view/All_Quote_Screen.dart';
 import '../../CRM_Directory/CRM_View/sales_cycle/Pending_Draft_Quote_view/pending_Draft_Quote.dart';
@@ -847,6 +848,12 @@ class AppRoutes{
 
     GetPage(name: RoutesName.nonStandardItemList,
         page: ()=>NonStandardItemsScreen(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
+
+    GetPage(name: RoutesName.updateNonStandardItemList,
+        page: ()=>UpdateNonStandardItemScreen(),
         transitionDuration: Duration(microseconds: 180),
         transition: Transition.rightToLeftWithFade
     ),

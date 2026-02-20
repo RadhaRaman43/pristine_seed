@@ -426,7 +426,9 @@ class SalesCycleScreen extends StatelessWidget{
                   final account_vm_controller = Get.put(Accountmastervm());
                   final contact_vm_controller = Get.put(ContactMasterVM());
                   account_vm_controller.view = 'FromSaleCycleMainScreen';
+                  account_vm_controller.FromPage.value = 'FromSaleCycleMainScreen';
                   contact_vm_controller.view = 'FromSaleCycleMainScreen';
+                  contact_vm_controller.FromPage.value = 'FromSaleCycleMainScreen';
                   account_vm_controller.getAccMasterBuyCodeApi(
                     salesCycleController.saleCycleList[position].accountCode??"",
                   );

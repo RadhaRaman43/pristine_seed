@@ -3083,38 +3083,72 @@ class SalesCycleVm extends GetxController {
                     children: [
                       Visibility(
                         visible: isChooseQuote.value,
-                        child: ElevatedButton(
-                          style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all<Color>(
-                              AllColors.greenblue,
-                            ),
-                          ),
-                          onPressed: () {
-                            if (Quote_Selected_list.isEmpty) {
-                              for (int i = 0; i < quoteList.length; i++) {
-                                checkBoxValues[i] = false;
-                              }
-                            }
-                            pageNumberForQuote = 0;
-                            quoteList.value=[];
-                           // getSalesAdviseData(pageNumberSalesAdvise, saleCycleList.salesCycleId??"", "", "completed");
-                            getQuoteHeaderData(pageNumberForQuote,
-                                saleCycleList.salesCycleId!, "Approved");
-                            Get.toNamed(RoutesName.approvedQuotationListScreen);
-                          },
-                          child: Container(
-                            //child: Text(updateQuoteAccetedCycleController.value.text == "WON"? "WON":
-                            child: Text('Select Quotation',
-                              style: GoogleFonts.poppins(
-                                color: AllColors.blackColor,
-                                fontSize: AllFontSize.fourtine,
-                                fontWeight: FontWeight.w700,
+                        child: Row(
+                          children: [
+                            ElevatedButton(
+                              style: ButtonStyle(
+                                backgroundColor: MaterialStateProperty.all<Color>(
+                                  AllColors.greenblue,
+                                ),
+                              ),
+                              onPressed: () {
+                                if (Quote_Selected_list.isEmpty) {
+                                  for (int i = 0; i < quoteList.length; i++) {
+                                    checkBoxValues[i] = false;
+                                  }
+                                }
+                                pageNumberForQuote = 0;
+                                quoteList.value=[];
+                               // getSalesAdviseData(pageNumberSalesAdvise, saleCycleList.salesCycleId??"", "", "completed");
+                                getQuoteHeaderData(pageNumberForQuote,
+                                    saleCycleList.salesCycleId!, "Approved");
+                                Get.toNamed(RoutesName.approvedQuotationListScreen);
+                              },
+                              child: Container(
+                                //child: Text(updateQuoteAccetedCycleController.value.text == "WON"? "WON":
+                                child: Text('Select Quotation',
+                                  style: GoogleFonts.poppins(
+                                    color: AllColors.blackColor,
+                                    fontSize: AllFontSize.fourtine,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
                               ),
                             ),
-                          ),
+                            const SizedBox(width: 10,),
+                            Visibility(
+                              visible: (isApprove.value && Quote_Selected_list.isNotEmpty && saleCycleList.isMarkRateContract==1)
+                                  || (isAdminWritePermission=='1' && updateQuoteAccetedCycleController.value.text == "WON")
+                                  ? true
+                                  : false,
+                              // visible: saleCycleController.selectedQuotationIdController.value.text == '' ? false:true,
+                              child: ElevatedButton(
+                                style: ButtonStyle(
+                                  backgroundColor: MaterialStateProperty.all<Color>(
+                                    AllColors.greenblue,
+                                  ),
+                                ),
+                                onPressed: () {
+                                  showWonLossConfirmationDialog(
+                                      context, saleCycleList, "propose");
+                                  // navigator?.pop(context);
+                                },
+                                child: Container(
+                                  child: Text(
+                                    'WON',
+                                    style: GoogleFonts.poppins(
+                                      color: AllColors.blackColor,
+                                      fontSize: AllFontSize.fourtine,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            )
+                          ],
                         ),
                       ),
-                      Obx(() {
+                      /*Obx(() {
                         return Visibility(
                           visible: (isApprove.value && Quote_Selected_list.isNotEmpty && saleCycleList.isMarkRateContract==1)
                           || (isAdminWritePermission=='1' && updateQuoteAccetedCycleController.value.text == "WON")
@@ -3144,7 +3178,7 @@ class SalesCycleVm extends GetxController {
                             ),
                           ),
                         );
-                      }),
+                      }),*/
                     ],
                   );
                 }),
@@ -4741,7 +4775,6 @@ class SalesCycleVm extends GetxController {
     //ApprovalStatusController.value.clear();
     accountNameController.value.clear();
     accountCodeController.value.clear();
-    salesCycleOwnerController.value.clear();
     productCategoryController.value.clear();
     purchaseProcessController.value.clear();
     companyProfileTypeController.value.clear();

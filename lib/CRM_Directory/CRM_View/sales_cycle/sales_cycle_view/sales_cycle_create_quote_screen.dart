@@ -35,6 +35,7 @@ class SalesCycleCreateQuoteScreen extends StatelessWidget{
         saleCycleController.shippingAddress2Controller.value.clear();
         saleCycleController.accountNameController.value.clear();
         saleCycleController.contactNameController.value.clear();
+        saleCycleController.kindAttentionController.value.clear();
         Get.toNamed(RoutesName.viewSalesCycleHeaderScreen);
         return false;
       },
@@ -593,8 +594,8 @@ class SalesCycleCreateQuoteScreen extends StatelessWidget{
                vertical: AllFontSize.two, horizontal: AllFontSize.ten
            ),
            suffixIcon: Icon(Icons.calendar_month),
-           hintText: 'Quote Validity',
-           labelText: 'Quote Validity',
+           hintText: 'Quote Validity *',
+           labelText: 'Quote Validity *',
            hintStyle: GoogleFonts.poppins(
                color: AllColors.lightblackColor,
                fontWeight: FontWeight.w300,
