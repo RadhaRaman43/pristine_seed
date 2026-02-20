@@ -129,12 +129,10 @@ class CommitDashboardViewscreen extends StatelessWidget{
                       Container(
                           padding: EdgeInsets.only(left: 15.0, bottom: 10.0, top: 10.0),
                           child:
-                          Obx((){
-                            return  Column(
+                            Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-
                                     Text(
                                       'Commitment',
                                       style: GoogleFonts.poppins(
@@ -187,8 +185,8 @@ class CommitDashboardViewscreen extends StatelessWidget{
                                   );
                                 }),
                               ],
-                            );
-                          })
+                            )
+
                       ),
 
                       Obx(() {

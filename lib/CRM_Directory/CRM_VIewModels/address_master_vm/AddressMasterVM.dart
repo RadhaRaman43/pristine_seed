@@ -99,7 +99,7 @@ class Addressmastervm extends GetxController{
       return ;
     }
     if(phone_no_controller.text.isEmpty){
-      Utils.sanckBarError('Phone No. ', "Please Enter Phone");
+      Utils.sanckBarError('Phone No. ', "Please Enter Phone No.");
       return ;
     }
 

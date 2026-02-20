@@ -2441,7 +2441,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                 const SizedBox(
                   width: 5,
                 ),
-                Text('Send!',
+                Text('Save!',
                     style: GoogleFonts.poppins(
                       fontSize: AllFontSize.sisxteen,
                       fontWeight: FontWeight.w700,
@@ -6324,6 +6324,9 @@ class ViewSaleHeaderScreen extends StatelessWidget {
           cursorColor: AllColors.primaryDark1,
           controller: saleCycleController.expectedAmountController.value,
           keyboardType: TextInputType.number,
+          inputFormatters: [
+            LengthLimitingTextInputFormatter(15)
+          ],
           decoration: InputDecoration(
               contentPadding: EdgeInsets.symmetric(
                   vertical: AllFontSize.two, horizontal: AllFontSize.ten),
@@ -7741,6 +7744,9 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                     //padding: EdgeInsets.only(left: 10.0, right: 10.0),
                     child: TextFormField(
                       keyboardType: TextInputType.number,
+                      inputFormatters: [
+                        LengthLimitingTextInputFormatter(15)
+                      ],
                       controller:
                           saleCycleController.expectedAmountController.value,
                       decoration: InputDecoration(
@@ -11444,7 +11450,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                   saleCycleController.updateCompetitorPriceProductController
                       .value.text = (saleCycleController
                               .competitorMappingSalesCycleProductList[index]
-                              .competitorPrice ??
+                              .competitorPrice?.toInt() ??
                           0)
                       .toString();
                   saleCycleController.updateLossReasonProductController.value
@@ -11456,7 +11462,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                   saleCycleController.updateMethodexPriceController.value
                       .text = (saleCycleController
                       .competitorMappingSalesCycleProductList[index]
-                      .methodexPrice ??
+                      .methodexPrice?.toInt() ??
                       0)
                       .toString();
                   showDialogSalesCycleProductModify(context, index);
