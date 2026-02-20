@@ -193,7 +193,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                             saleCycleController.FromPage.value == "Task" ||saleCycleController.FromPage.value == "FromSCPendingForApproval" ) &&
                         saleCycleController.saleCycleList[0].salesCycleApprovalStatus?.toLowerCase() != "rejected" &&
                         (saleCycleController.saleCycleList[0].salesCycleOwner?.toLowerCase() ==
-                                saleCycleController.email.toLowerCase() || saleCycleController.userType.toLowerCase() == 'branch head' ||
+                                saleCycleController.email.toLowerCase() || saleCycleController.userType.toLowerCase() == 'bh' ||
                             saleCycleController.isAdminWritePermission == "1"),
                     child: PopupMenuButton(
                       itemBuilder: (BuildContext context) {
@@ -270,7 +270,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                         //todo markrate contract
                         if (saleCycleController.saleCycleList[0].salesCycleStatus?.toLowerCase() == "propose" &&
                             saleCycleController.saleCycleList[0].quoteAccepted?.toLowerCase() == "open" &&
-                            saleCycleController.userType.toLowerCase()!="frontliners" &&
+                            saleCycleController.userType.toLowerCase()!="fl" &&
                             saleCycleController.saleCycleList[0].isMarkRateContract == 0)
                         {
                           items.add(
@@ -375,7 +375,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                           child: IgnorePointer(
                             ignoring: (saleCycleController.userType
                                                 .toLowerCase() ==
-                                            "branch head" ||
+                                            "bh" ||
                                         saleCycleController
                                                 .isAdminWritePermission ==
                                             "1" ||
@@ -427,7 +427,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                           !(saleCycleController.FromPage.value == "FromDashboard") &&
                                           (saleCycleController.email.toLowerCase() ==
                                               saleCycleController.saleCycleList[0].salesCycleOwner?.toLowerCase() ||
-                                              saleCycleController.userType?.toLowerCase()=='branch head' || saleCycleController.isAdminWritePermission=='1'
+                                              saleCycleController.userType?.toLowerCase()=='bh' || saleCycleController.isAdminWritePermission=='1'
                                           )
                                       ? true : false,
                                   child: Column(
@@ -463,7 +463,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                     Visibility(
                                       visible: ((saleCycleController.userType
                                                       .toLowerCase() ==
-                                                  "branch head") ||
+                                                  "bh") ||
                                               saleCycleController
                                                       .isAdminWritePermission ==
                                                   "1" ||
@@ -489,7 +489,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                                       .FromPage.value ==
                                                   "Task" ||saleCycleController.FromPage.value ==
                                               "FromSCPendingForApproval" ),
-                                      /*visible: saleCycleController.userType.toLowerCase()!="branch head"|| saleCycleController.isAdminWritePermission!="1"||
+                                      /*visible: saleCycleController.userType.toLowerCase()!="bh"|| saleCycleController.isAdminWritePermission!="1"||
                                       saleCycleController.saleCycleList[0].quoteAccepted?.toUpperCase() != "OPEN" ||
                                           saleCycleController.saleCycleList[0].createdBy?.toLowerCase()!=saleCycleController.email.toLowerCase()||
                                               saleCycleController.saleCycleList[0].salesCycleApprovalStatus?.toLowerCase() == "rejected" ||
@@ -655,7 +655,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                 ),
                                 Visibility(
                                   visible: ((
-                                              saleCycleController.userType.toLowerCase() == "branch head" ||
+                                              saleCycleController.userType.toLowerCase() == "bh" ||
                                               saleCycleController.saleCycleList[0].createdBy?.toLowerCase() == saleCycleController.email.toLowerCase()) &&
                                           saleCycleController.filter.value == 'Sales cycle' &&
                                           saleCycleController.saleCycleList[0].quoteAccepted?.toLowerCase() == 'open') &&
@@ -703,7 +703,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                         ?.toLowerCase() ==
                                     saleCycleController.email.toLowerCase() ||
                                 saleCycleController.userType.toLowerCase() ==
-                                    "branch head" ||
+                                    "bh" ||
                                 saleCycleController.isAdminWritePermission ==
                                     '1') &&
                             saleCycleController.saleCycleList[0].salesCycleStatus!
@@ -722,7 +722,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                           "1" ||
                                       saleCycleController.userType
                                               .toLowerCase() ==
-                                          "branch head") &&
+                                          "bh") &&
                                   (saleCycleController.saleCycleList[0]
                                               .actualSalesCycleApprovalStatus
                                               ?.toLowerCase() !=
@@ -920,7 +920,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               Visibility(
-                                  visible: (saleCycleController.userType.toLowerCase() == "branch head" ||
+                                  visible: (saleCycleController.userType.toLowerCase() == "bh" ||
                                       saleCycleController.isAdminWritePermission == "1" ||
                                       saleCycleController.saleCycleList[0].createdBy?.toLowerCase() ==
                                           saleCycleController.email.toLowerCase()),
@@ -944,7 +944,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                           Visibility(
                                             visible: (saleCycleController.userType
                                                             .toLowerCase() ==
-                                                        "branch head" ||
+                                                        "bh" ||
                                                     saleCycleController
                                                             .isAdminWritePermission ==
                                                         "1" ||
@@ -1167,7 +1167,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                   saleCycleController.isAdminWritePermission ==
                                       "1" ||
                                   saleCycleController.userType.toLowerCase() ==
-                                      "branch head") &&
+                                      "bh") &&
                               (saleCycleController
                                       .saleCycleList[0].salesCycleStatus!
                                       .toLowerCase() ==
@@ -1343,7 +1343,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                         .saleCycleList[0].salesCycleOwner
                                         ?.toLowerCase() ==
                                     saleCycleController.email.toLowerCase() ||
-                                    saleCycleController.userType?.toLowerCase()=='branch head'
+                                    saleCycleController.userType?.toLowerCase()=='bh'
                                 || saleCycleController.isAdminWritePermission=='1')
                             /*saleCycleController.saleCycleList[0]
                                         .isReadySendForApproval ==
@@ -2096,7 +2096,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
 
   Widget bindQuoteSubmitted(BuildContext context) {
     return IgnorePointer(
-      ignoring: (saleCycleController.userType.toLowerCase() == "branch head" ||
+      ignoring: (saleCycleController.userType.toLowerCase() == "bh" ||
                   saleCycleController.isAdminWritePermission == "1" ||
                   saleCycleController.saleCycleList[0].createdBy
                           ?.toLowerCase() ==
@@ -2252,7 +2252,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
   Widget bindIsCommit(BuildContext context) {
     return IgnorePointer(
         ignoring: (saleCycleController.userType.toLowerCase() ==
-                        "branch head" ||
+                        "bh" ||
                     saleCycleController.isAdminWritePermission == "1" ||
                     saleCycleController.saleCycleList[0].createdBy
                             ?.toLowerCase() ==
@@ -2338,7 +2338,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
   Widget bindConfirmExpectedRevenue(BuildContext context) {
     return IgnorePointer(
         ignoring: (saleCycleController.userType.toLowerCase() ==
-                        "branch head" ||
+                        "bh" ||
                     saleCycleController.isAdminWritePermission == "1" ||
                     saleCycleController.saleCycleList[0].createdBy
                             ?.toLowerCase() ==
@@ -2526,7 +2526,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                           saleCycleController.email.toLowerCase() ||
                       saleCycleController.isAdminWritePermission == "1" ||
                       saleCycleController.userType.toLowerCase() ==
-                          "branch head") &&
+                          "bh") &&
                   (saleCycleController
                               .saleCycleList[0].actualSalesCycleApprovalStatus
                               ?.toLowerCase() !=
@@ -2820,7 +2820,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                       Visibility(
                         visible: (saleCycleController.saleCycleList[0].salesCycleOwner
                             ?.toLowerCase() == saleCycleController.email.toLowerCase() ||
-                                saleCycleController.userType.toLowerCase() == 'branch head' ||
+                                saleCycleController.userType.toLowerCase() == 'bh' ||
                                 saleCycleController.isAdminWritePermission == "1") &&
                             (saleCycleController.FromPage.value == "Sales" || saleCycleController.FromPage.value == "FromSCPendingForApproval")  &&
                             saleCycleController.saleCycleList[0].quoteAccepted?.toLowerCase() == 'open' &&
@@ -3468,7 +3468,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                 ?.toLowerCase() ==
                             saleCycleController.email.toLowerCase() ||
                         saleCycleController.userType.toLowerCase() ==
-                            "branch head" ||
+                            "bh" ||
                         saleCycleController.isAdminWritePermission == "1") && saleCycleController.saleCycleList[0].isMarkRateContract==0,
                 child: GestureDetector(
                   onTap: () {
@@ -3571,7 +3571,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                 ),
                 IgnorePointer(
                   ignoring: ((saleCycleController.isAdminWritePermission == "1" ||
-                      saleCycleController.userType.toLowerCase() == "branch head" ||
+                      saleCycleController.userType.toLowerCase() == "bh" ||
                       saleCycleController.saleCycleList[0].createdBy?.toLowerCase() == saleCycleController.email.toLowerCase()) &&
                       saleCycleController.saleCycleList[0].quoteAccepted?.toLowerCase() == 'open') &&
                       !(saleCycleController.saleCycleList[0].actualSalesCycleApprovalStatus?.toLowerCase() == 'rejected') &&
@@ -3601,7 +3601,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                             fontSize: AllFontSize.twelve,
                             fontWeight: FontWeight.w500,
                             decoration: ((saleCycleController.isAdminWritePermission == "1" ||
-                                saleCycleController.userType.toLowerCase() == "branch head" ||
+                                saleCycleController.userType.toLowerCase() == "bh" ||
                                 saleCycleController.saleCycleList[0].createdBy?.toLowerCase() == saleCycleController.email.toLowerCase()) &&
                                 saleCycleController.saleCycleList[0].quoteAccepted?.toLowerCase() == 'open') &&
                                 !(saleCycleController.saleCycleList[0].actualSalesCycleApprovalStatus?.toLowerCase() == 'rejected') &&
@@ -3613,7 +3613,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
 
                         Visibility(
                           visible:((saleCycleController.isAdminWritePermission == "1" ||
-                              saleCycleController.userType.toLowerCase() == "branch head" ||
+                              saleCycleController.userType.toLowerCase() == "bh" ||
                               saleCycleController.saleCycleList[0].createdBy?.toLowerCase() == saleCycleController.email.toLowerCase()) &&
                               saleCycleController.saleCycleList[0].quoteAccepted?.toLowerCase() == 'open') &&
                               !(saleCycleController.saleCycleList[0].actualSalesCycleApprovalStatus?.toLowerCase() == 'rejected') &&
@@ -6128,7 +6128,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
 
   Widget bindProductCategoryDropDown(context) {
     return IgnorePointer(
-      ignoring: ((saleCycleController.userType.toLowerCase() == "branch head" ) ||
+      ignoring: ((saleCycleController.userType.toLowerCase() == "bh" ) ||
                   saleCycleController.isAdminWritePermission == "1" ||
                   saleCycleController.saleCycleList[0].createdBy
                           ?.toLowerCase() ==
@@ -6275,7 +6275,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
 
   Widget bindExpectedAmount(BuildContext context) {
     return IgnorePointer(
-      ignoring: ((saleCycleController.userType.toLowerCase() == "branch head" ) ||
+      ignoring: ((saleCycleController.userType.toLowerCase() == "bh" ) ||
                   saleCycleController.isAdminWritePermission == "1" ||
                   saleCycleController.saleCycleList[0].createdBy
                           ?.toLowerCase() ==
@@ -6486,7 +6486,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                           style: TextStyle(
                               color: AllColors.primaryDark1,
                               decoration:(saleCycleController.userType.toLowerCase() ==
-                                  "branch head" ||
+                                  "bh" ||
                                   saleCycleController.isAdminWritePermission ==
                                       "1" ||
                                   saleCycleController.saleCycleList[0].createdBy
@@ -6506,7 +6506,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                       ),
                       onTap: () {
                         if ((saleCycleController.userType.toLowerCase() ==
-                                    "branch head" ||
+                                    "bh" ||
                                 saleCycleController.isAdminWritePermission ==
                                     "1" ||
                                 saleCycleController.saleCycleList[0].createdBy
@@ -6546,7 +6546,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                     ),
                     Visibility(
                       visible: (saleCycleController.userType.toLowerCase() ==
-                                  "branch head" ||
+                                  "bh" ||
                               saleCycleController.isAdminWritePermission ==
                                   "1" ||
                               saleCycleController.saleCycleList[0].createdBy
@@ -7319,7 +7319,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                             Visibility(
                               visible: (saleCycleController.userType
                                               .toLowerCase() ==
-                                          "branch head" ||
+                                          "bh" ||
                                       saleCycleController
                                               .isAdminWritePermission ==
                                           "1" ||
@@ -7337,7 +7337,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                               ?.toLowerCase() !=
                                           "rejected") &&
                                   (saleCycleController.FromPage.value == "Sales" || saleCycleController.FromPage.value == "FromSCPendingForApproval") /*&& saleCycleController.saleCycleList[0].isMarkRateContract==0*/,
-                              /* saleCycleController.userType.toLowerCase()!="branch head"|| saleCycleController.isAdminWritePermission!="1"||
+                              /* saleCycleController.userType.toLowerCase()!="bh"|| saleCycleController.isAdminWritePermission!="1"||
                               saleCycleController
                                               .saleCycleList[0].quoteAccepted!
                                               .toLowerCase() !=
@@ -8723,7 +8723,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                         padding: EdgeInsets.only(right: 10),
                         child: Visibility(
                           visible: ((saleCycleController.isAdminWritePermission == "1" ||
-                              saleCycleController.userType.toLowerCase() == "branch head" ||
+                              saleCycleController.userType.toLowerCase() == "bh" ||
                               saleCycleController.saleCycleList[0].createdBy?.toLowerCase() == saleCycleController.email.toLowerCase()) &&
                              /* saleCycleController.filter.value == 'Sales cycle' &&*/
                               saleCycleController.saleCycleList[0].quoteAccepted?.toLowerCase() == 'open') &&

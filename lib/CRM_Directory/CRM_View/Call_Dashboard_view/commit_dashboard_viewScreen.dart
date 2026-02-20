@@ -112,7 +112,7 @@ class CommitDashboardViewscreen extends StatelessWidget{
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   Visibility(
-                                      visible: dashboard_view_Controller.userType != 'Branch Head',
+                                      visible: dashboard_view_Controller.userType?.toLowerCase() != 'bh',
                                       child: _buildActionChip("Cluster")),
                                   SizedBox(width: 8),
                                   _buildActionChip("Region"),
@@ -123,7 +123,7 @@ class CommitDashboardViewscreen extends StatelessWidget{
                             ),
                           ),
                         ),
-                        visible: dashboard_view_Controller.userType != 'Frontliners',
+                        visible: dashboard_view_Controller.userType?.toLowerCase() != 'fl',
                       ),
 
                       Container(
@@ -627,9 +627,9 @@ class CommitDashboardViewscreen extends StatelessWidget{
     return List.generate(dashboard_view_Controller.commitDashboardRecordList.length, (index) {
       final record = dashboard_view_Controller.commitDashboardRecordList[index];
       double Width = 50;
-      if(dashboard_view_Controller.userType == 'Frontliners'){
+      if(dashboard_view_Controller.userType?.toLowerCase() == 'fl'){
         Width = 85;
-      }else if(dashboard_view_Controller.userType == 'Branch Head' && dashboard_view_Controller.selectedOption == 'Region') {
+      }else if(dashboard_view_Controller.userType?.toLowerCase() == 'bh' && dashboard_view_Controller.selectedOption == 'Region') {
         Width = 85;
       }else{
         Width = 50;

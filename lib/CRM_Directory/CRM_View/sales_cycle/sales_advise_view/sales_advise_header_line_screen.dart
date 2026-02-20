@@ -63,7 +63,7 @@ class SalesAdviseHeaderLineScreen extends StatelessWidget{
                 Obx((){
                   return  Visibility(
                     visible: (saleCycleController.salesAdviseHeaderLineList[0].createdBy?.toLowerCase()==saleCycleController.email.toLowerCase()
-                    || saleCycleController.userType.toLowerCase()=="branch head")
+                    || saleCycleController.userType.toLowerCase()=="bh")
                       && saleCycleController.salesAdviseHeaderLineList[0].salesAdviceStatus?.toLowerCase()=="draft",
                     child: GestureDetector(
                         onTap: (){
@@ -124,7 +124,7 @@ class SalesAdviseHeaderLineScreen extends StatelessWidget{
                           Obx((){
                             return Visibility(
                               visible: (saleCycleController.salesAdviseHeaderLineList[0].createdBy?.toLowerCase()==saleCycleController.email.toLowerCase()
-                                  || saleCycleController.userType.toLowerCase()=="branch head")
+                                  || saleCycleController.userType.toLowerCase()=="bh")
                                   &&saleCycleController.salesAdviseHeaderLineList[0].salesAdviceStatus?.toLowerCase()=="draft",
                               child: ActionChip(
                                 label: Text(
@@ -1050,7 +1050,7 @@ class SalesAdviseHeaderLineScreen extends StatelessWidget{
               ),
               Visibility(
                 visible: (saleCycleController.salesAdviseHeaderLineList[0].createdBy?.toLowerCase()==saleCycleController.email.toLowerCase()
-                    || saleCycleController.userType.toLowerCase()=="branch head")
+                    || saleCycleController.userType.toLowerCase()=="bh")
                     &&
                 saleCycleController.salesAdviseHeaderLineList[0].salesAdviceStatus?.toLowerCase()=="draft",
                 child: Row(
