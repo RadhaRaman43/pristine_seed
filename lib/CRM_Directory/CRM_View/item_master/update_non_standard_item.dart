@@ -61,7 +61,7 @@ class UpdateNonStandardItemScreen extends StatelessWidget{
           margin: EdgeInsets.only(left: 30),
           child: DefaultButton(
             press: (){
-             //AccountMstUploaderApiHit();
+              item_master_controller.updateItemMasterCreateFromCRM(item_master_controller.item);
             },
             text: "Update",
           ),
@@ -117,7 +117,7 @@ class UpdateNonStandardItemScreen extends StatelessWidget{
                     padding: EdgeInsets.only(left: 15.0, right: 15.0),
                     child:  bindExpiryDate(context),
                   ),
-                  const SizedBox(height: 15,),
+                  const SizedBox(height: 65,),
 
 
                 ],

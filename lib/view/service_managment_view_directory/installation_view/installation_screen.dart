@@ -779,7 +779,7 @@ class InstallationScreen extends StatelessWidget {
     );
   }
 
-  Future<void> _downloadExcel(BuildContext context) async {
+  /*Future<void> _downloadExcel(BuildContext context) async {
     var excel = Excel.createExcel();
     Sheet sheetObject = excel['Sheet1'];
     sheetObject.cell(CellIndex.indexByString("A1")).value = "Sample Data";
@@ -796,7 +796,7 @@ class InstallationScreen extends StatelessWidget {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text('Excel file downloaded to $path')),
     );
-  }
+  }*/
 
   void showFilterBottomSheet(BuildContext context) {
     showModalBottomSheet(

@@ -1,4 +1,4 @@
-//import 'package:awesome_notifications/awesome_notifications.dart';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -6,7 +6,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:navigation_drawer_flutter/constants/theme.dart';
 import 'package:navigation_drawer_flutter/reources/routes/app_routes.dart';
-import 'package:open_file/open_file.dart';
+import 'package:open_filex/open_filex.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'dart:io';
 
@@ -47,7 +47,8 @@ Future<void> _initLocalNotifications() async {
     onDidReceiveNotificationResponse: (response) async {
       final payload = response.payload;
       if (payload != null) {
-        await OpenFile.open(payload);
+        //await OpenFile.open(payload);
+        await OpenFilex.open(payload);
       }
     },
   );

@@ -1153,11 +1153,8 @@ class BussinessTourPlanScreen extends StatelessWidget{
                     child: Column(
                       children: [
                         const SizedBox(height: 8),
-                        Container(
-                          width: 50,
-                          height: 4,
-                          decoration: BoxDecoration(
-                              color: Colors.grey[400],
+                        Container(width: 50, height: 4,
+                          decoration: BoxDecoration(color: Colors.grey[400],
                               borderRadius: BorderRadius.circular(2)),
                         ),
                         const SizedBox(height: 12),
@@ -1191,16 +1188,15 @@ class BussinessTourPlanScreen extends StatelessWidget{
                                   borderRadius: BorderRadius.circular(8)),
                               isDense: true,
                               suffixIcon: searchController.text.isNotEmpty
-                                  ? IconButton(
-                                icon: const Icon(Icons.clear),
+                                  ? IconButton(icon: const Icon(Icons.clear),
                                 onPressed: () {
-                                  searchController.clear();
-                                  setState(() {});
+                                 // searchController.clear();
+                                  //setState(() {});
                                 },
                               )
                                   : null,
                             ),
-                            onChanged: (v) => setState(() {}),
+                            //onChanged: (v) => setState(() {}),
                           ),
                         ),
 

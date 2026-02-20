@@ -1,9 +1,15 @@
 import 'dart:convert';
+import 'dart:io';
+
+import 'package:excel/excel.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:navigation_drawer_flutter/CRM_Directory/CRM_Repository/item_master_repo/item_master_repo.dart';
 import 'package:navigation_drawer_flutter/utils/app_utils.dart';
+import 'package:open_filex/open_filex.dart';
+import 'package:path_provider/path_provider.dart';
+
 import '../../../viewModel/SessionManagment/session_managment.dart';
 import '../../CRM_Models/TaskMaster_model/Item_Category_Mast_model.dart';
 import '../../CRM_Models/item_master_modal/non_standard_item_data_modal.dart';
@@ -62,8 +68,8 @@ class ItemMasterVm extends GetxController{
   RxList<ItemCategoryMstModel> productCategoryList = <ItemCategoryMstModel>[].obs;
   RxList<String> productTypeList = <String>["Non Standard", "Rate Contractor"].obs;
   RxList<String> IsActiveTypeList = <String>["Yes","No"].obs;
+  NonStandardItemDataModal item= NonStandardItemDataModal();
   String checkForExcel = "";
-
   @override
   void onInit() async{
     email = await sessionManagement.getEmail() ?? '';
@@ -71,11 +77,11 @@ class ItemMasterVm extends GetxController{
     isAdminWritePermission.value = await sessionManagement.getIsAdminPermission() ?? '';
     isHeadofficePermission.value = await sessionManagement.getisHeadofficePermission() ?? '';
 
-    itemMstSalesCycleGet(page_no:0,rowPerPage: rowsPerPage);
+    itemMstSalesCycleGet(page_no:0,row_Per_Page: rowsPerPage);
 
   }
 
-  itemMstSalesCycleGet({ required int page_no, required int  rowPerPage, BuildContext? context }) async{
+  itemMstSalesCycleGet({ required int page_no, required int  row_Per_Page, BuildContext? context }) async{
     try {
       Map data = {
 
@@ -96,8 +102,8 @@ class ItemMasterVm extends GetxController{
         "create_date_range":created_on_Controller.value.text.isNotEmpty? created_on_Controller.value.text:"",
         "specification": specification_Controller.value.text.isNotEmpty? specification_Controller.value.text:"",
         "expire_date_range": expired_on_Controller.value.text.isNotEmpty? expired_on_Controller.value.text:"",
-        "rowsPerPage": rowsPerPage,
-        "pageNumber": rowPerPage
+        "rowsPerPage": row_Per_Page,
+        "pageNumber": page_no
       };
       print('sale data ${data}');
       loading.value = true;
@@ -111,11 +117,11 @@ class ItemMasterVm extends GetxController{
                 nonStandardList.clear();
               }
               nonStandardList.addAll(response);
-              print('listSize.....${nonStandardList.length}');
               total_rows_items = int.parse(nonStandardList[0].totalRows!);
+              print('listSize.....${nonStandardList.length} and  total rows ${total_rows_items}');
               if(checkForExcel=="CheckForExcel" && context!= null){
                 nonStandardListForExcel.addAll(response);
-                //exportNonStandardExcelWithProgress(context);
+                exportNonStandardExcelWithProgress(context);
 
               }
           }
@@ -212,12 +218,66 @@ class ItemMasterVm extends GetxController{
 
   }
 
-  ItemMasterCreateFromCRM() async{
+  updateItemMasterCreateFromCRM(NonStandardItemDataModal nonStandardItem) async{
     try {
       Map data = {
         "items":[{
           "account_code": update_customer_code_Controller.value.text.isNotEmpty?update_customer_code_Controller.value.text:"",
           "active": is_active_Controller.value.text=="Yes"?1:0,
+          "brand_name": "",
+          "brand_code": "",
+          "base_uom": "",
+          "branch_transfer_price": Btp_Controller.value.text.isNotEmpty?Btp_Controller.value.text:0,
+          "category_code":  category_code_Controller.value.text.isNotEmpty?category_code_Controller.value.text:"",
+          "category_name": "",
+          "color_code": "",
+          "cubic_capacity": "",
+          "cost_per_unit": 0,
+          "color_name": "",
+          "component_type":component_type_Controller.value.text.isNotEmpty?component_type_Controller.value.text: "",
+          "description": update_name_Controller.value.text.toString().isNotEmpty?update_name_Controller.value.text:"",
+          "ean_code": "",
+          "expired_on": expiry_date_Controller.value.text.isNotEmpty?expiry_date_Controller.value.text:"",
+          "expiry_range": 0,
+          "gst_group_code": nonStandardItem.gstGroupCode??"",
+          "hsn_code": nonStandardItem.hsnCode??"",
+          "is_bulky": 0,
+          "is_expiry_mandatory": 0,
+          "item_code": nonStandardItem.itemCode??"",
+          "list_selling_price": LSP_Controller.value.text.isNotEmpty?LSP_Controller.value.text:0,
+          "length": 0,
+          "label": "",
+          "height": 0,
+          "name": update_name_Controller.value.text.isNotEmpty?update_name_Controller.value.text:"",
+          "manufacturer_code": "",
+          "manufacturer_name": "",
+          "mrp": 0,
+          "moq": 0,
+          "minimal_acceptable_price": Map_Controller.value.text.isNotEmpty?Map_Controller.value.text:0,
+          "product_type": product_type_Controller.value.text.isNotEmpty?product_type_Controller.value.text:"",
+          "product_group_code": "",
+          "product_group_name": "",
+          "purchase_uom": "",
+          "rate_contract_valid_date":rate_contract_validity_date_Controller.value.text.isNotEmpty?rate_contract_validity_date_Controller.value.text: "",
+          "rsp": 0,
+          "specification": update_specification_Controller.value.text.isNotEmpty?update_specification_Controller.value.text:"",
+          "sales_cycle_id": update_sale_cycle_id_Controller.value.text.isNotEmpty?update_sale_cycle_id_Controller.value.text:"",
+          "sub_product_group_code": "",
+          "sub_sub_product_group_code": "",
+          "size_code": "",
+          "style_code": "",
+          "size_name": "",
+          "style_name": "",
+          "sale_uom": "",
+          "standard_cost":standard_cost_Controller.value.text.isNotEmpty?standard_cost_Controller.value.text:0,
+          "sub_product_group_name": "",
+          "sub_sub_product_group_name": "",
+          "thikness_gsm": 0,
+          "transfer_cost": 0,
+          "tolerance": 0,
+          "tolerance_mrp": 0,
+          "weight_in_kg": 0,
+          "width": 0,
 
         }],
       };
@@ -280,8 +340,6 @@ class ItemMasterVm extends GetxController{
     final formatter = NumberFormat('#,##,##0.00', 'en_IN');
     return formatter.format(num.parse(number.toString()));
   }
-
-
   RxString filterDataChecker = ''.obs;
   void SaveFilterData() async{
     await sessionManagement.saveitemMasterData({
@@ -298,7 +356,7 @@ class ItemMasterVm extends GetxController{
 
     });
     filterDataChecker.value='';
-    itemMstSalesCycleGet(page_no:pageNumber,rowPerPage: rowsPerPage);
+    itemMstSalesCycleGet(page_no:pageNumber,row_Per_Page: rowsPerPage);
 
 
   }
@@ -320,7 +378,7 @@ class ItemMasterVm extends GetxController{
       created_on_Controller.value.text = getFilterData["created_on_Controller"] ?? "";
 
       pageNumber = 0;
-      itemMstSalesCycleGet(page_no:pageNumber,rowPerPage: rowsPerPage);
+      itemMstSalesCycleGet(page_no:pageNumber,row_Per_Page: rowsPerPage);
     }
   }
 
@@ -350,7 +408,7 @@ class ItemMasterVm extends GetxController{
     );
   }
 
-  /*Future<void> exportNonStandardExcelWithProgress(BuildContext context) async {
+  Future<void> exportNonStandardExcelWithProgress(BuildContext context) async {
     if (nonStandardListForExcel.isEmpty) return;
 
     excelLoading.value = true;
@@ -361,38 +419,37 @@ class ItemMasterVm extends GetxController{
     final excel = Excel.createExcel();
     final sheet = excel['Non Standard Items'];
 
-    /// Prepare headers
-    final firstRowMap =
-    removeExcelKeys(nonStandardListForExcel.first);
+    final firstRowMap = removeExcelKeys(nonStandardListForExcel.first);
     final headers = firstRowMap.keys.toList();
 
+    /// Headers
     for (int col = 0; col < headers.length; col++) {
       sheet
           .cell(CellIndex.indexByColumnRow(columnIndex: col, rowIndex: 0))
-          .value = headers[col];
+          .value = TextCellValue(headers[col]);
     }
 
     final totalRows = nonStandardListForExcel.length;
 
-    /// Write rows with progress
+    /// Rows with progress
     for (int row = 0; row < totalRows; row++) {
       final rowMap = removeExcelKeys(nonStandardListForExcel[row]);
 
       for (int col = 0; col < headers.length; col++) {
+        final value = rowMap[headers[col]];
+
         sheet
             .cell(CellIndex.indexByColumnRow(
             columnIndex: col, rowIndex: row + 1))
-            .value = rowMap[headers[col]]?.toString() ?? '';
+            .value = value == null
+            ?  TextCellValue('')
+            : TextCellValue(value.toString());
       }
 
-      // ✅ Update progress
       excelProgress.value = ((row + 1) / totalRows) * 100;
-
-      // 👇 allows UI to repaint
       await Future.delayed(const Duration(milliseconds: 5));
     }
 
-    /// Save file
     final dir = await getApplicationDocumentsDirectory();
     final filePath = "${dir.path}/non_standard_items.xlsx";
 
@@ -402,20 +459,37 @@ class ItemMasterVm extends GetxController{
     excelProgress.value = 100;
     excelLoading.value = false;
 
-    Get.back(); // close dialog
+    Get.back();
     await OpenFilex.open(filePath);
-  }*/
+  }
 
-  Map<String, dynamic> removeExcelKeys(
-      NonStandardItemDataModal item) {
+  Map<String, dynamic> removeExcelKeys(NonStandardItemDataModal item) {
     final map = Map<String, dynamic>.from(item.toJson());
-
-    // ❌ remove unwanted keys
     map.remove('condition');
     map.remove('message');
     map.remove('total_rows');
 
     return map;
+  }
+
+  void updateNonStandardData(NonStandardItemDataModal nonStandardItem) {
+    item=nonStandardItem;
+    update_name_Controller.value.text = nonStandardItem.name??"";
+    category_code_Controller.value.text = nonStandardItem.categoryCode??"";
+    product_type_Controller.value.text = nonStandardItem.productType??"";
+    update_GST_group_code_Controller.value.text = nonStandardItem.gstGroupCode??"";
+    update_HSN_code_Controller.value.text = nonStandardItem.hsnCode??"";
+    update_customer_code_Controller.value.text = nonStandardItem.accountCode??"";
+    update_sale_cycle_id_Controller.value.text = nonStandardItem.salesCycleId??"";
+    component_type_Controller.value.text = nonStandardItem.componentType??"";
+    update_specification_Controller.value.text = nonStandardItem.specification??"";
+    LSP_Controller.value.text = nonStandardItem.listSellingPrice.toString();
+    Btp_Controller.value.text = nonStandardItem.branchTransferPrice.toString() ??"";
+    Map_Controller.value.text = nonStandardItem.minimalAcceptablePrice.toString() ??"";
+    standard_cost_Controller.value.text = nonStandardItem.standardCost.toString() ??"";
+    is_active_Controller.value.text = nonStandardItem.active==1?"Yes":"No";
+    rate_contract_validity_date_Controller.value.text = nonStandardItem.rateContractValidDate??"";
+    expiry_date_Controller.value.text = nonStandardItem.expiredOn??"";
   }
 
 
