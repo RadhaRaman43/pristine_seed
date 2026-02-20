@@ -1275,11 +1275,13 @@ class BussinessTourPlanScreen extends StatelessWidget{
                                     ),
                                   ),
                                   onPressed: () {
-
                                     businessTourPlanController.filterDataChecker.value='';
                                     businessTourPlanController.SelectedCluster_list.assignAll(tempSelected);
                                     businessTourPlanController.clusterName_controller.value.text = tempSelected.map((e) => e.geoValue).join('| ');
+                                    businessTourPlanController.RegionName_controller.value.text="";
+                                    businessTourPlanController.SelectedRegion_list.value=[];
                                     businessTourPlanController.getRegionsWithClusterFilterGetByEmail();
+
 
                                     Navigator.of(context).pop();
                                   },

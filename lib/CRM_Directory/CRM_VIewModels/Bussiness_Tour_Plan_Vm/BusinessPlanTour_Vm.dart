@@ -160,8 +160,7 @@ class BusinessPlanTourViewModel extends GetxController{
             clusterGetByEmailList.value=response;
             if (clusterGetByEmailList.value.isNotEmpty && SelectedCluster_list.isEmpty) {
               SelectedCluster_list.assignAll(clusterGetByEmailList.value);
-              clusterName_controller.value.text =
-                  clusterGetByEmailList.value.map((e) => e.geoValue).join('|');
+              clusterName_controller.value.text = clusterGetByEmailList.value.map((e) => e.geoValue).join('|');
               getRegionsWithClusterFilterGetByEmail();
             }
           }else {
@@ -208,6 +207,7 @@ class BusinessPlanTourViewModel extends GetxController{
             loading.value = false;
             regionwithclusterGetByEmailList.value=response;
             RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join('|');
+            SelectedRegion_list.assignAll(regionwithclusterGetByEmailList);
             print('region....${RegionName_controller.value.text}');
             if(filterRouting=='Business Tour Plan Line Details'){
               getBusinessPlanLineFilterData();
@@ -1128,8 +1128,9 @@ class BusinessPlanTourViewModel extends GetxController{
 
     SelectedCluster_list.value=[];
     SelectedRegion_list.value=[];
-    RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join('|');
+    //RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join('|');
     clusterName_controller.value.text = clusterGetByEmailList.map((e) => e.geoValue).join('|');
+    getRegionsWithClusterFilterGetByEmail();
 
   }
 

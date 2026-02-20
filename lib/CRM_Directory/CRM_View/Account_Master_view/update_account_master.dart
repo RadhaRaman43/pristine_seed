@@ -1420,7 +1420,7 @@ class UpdateAccountMaster extends StatelessWidget{
                                 color: Colors.white,
                                 borderRadius: BorderRadius.circular(10)
                             ),
-                            padding: EdgeInsets.only(left: 10.0, ),
+                            //padding: EdgeInsets.only(left: 10.0, ),
                             child: TextFormField(
                               controller: accountMaster_page_controller
                                   .ImageUrl_Controller,
