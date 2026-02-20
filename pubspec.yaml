@@ -97,7 +97,7 @@ dependencies:
   #firebase_core: ^2.24.2 # for use firebase messaging
   firebase_core: ^4.2.0 # for use firebase messaging
   #excel: ^4.0.6
-  open_filex: ^4.4.0
+  #open_filex: ^4.4.0
 
 dev_dependencies:
   flutter_test:

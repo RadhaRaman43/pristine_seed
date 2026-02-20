@@ -1,16 +1,9 @@
 import 'dart:convert';
-import 'dart:io';
-
-import 'package:excel/excel.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:navigation_drawer_flutter/CRM_Directory/CRM_Repository/item_master_repo/item_master_repo.dart';
 import 'package:navigation_drawer_flutter/utils/app_utils.dart';
-import 'package:open_filex/open_filex.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:permission_handler/permission_handler.dart';
-
 import '../../../viewModel/SessionManagment/session_managment.dart';
 import '../../CRM_Models/TaskMaster_model/Item_Category_Mast_model.dart';
 import '../../CRM_Models/item_master_modal/non_standard_item_data_modal.dart';
@@ -122,7 +115,7 @@ class ItemMasterVm extends GetxController{
               total_rows_items = int.parse(nonStandardList[0].totalRows!);
               if(checkForExcel=="CheckForExcel" && context!= null){
                 nonStandardListForExcel.addAll(response);
-                exportNonStandardExcelWithProgress(context);
+                //exportNonStandardExcelWithProgress(context);
 
               }
           }
@@ -357,7 +350,7 @@ class ItemMasterVm extends GetxController{
     );
   }
 
-  Future<void> exportNonStandardExcelWithProgress(BuildContext context) async {
+  /*Future<void> exportNonStandardExcelWithProgress(BuildContext context) async {
     if (nonStandardListForExcel.isEmpty) return;
 
     excelLoading.value = true;
@@ -411,7 +404,7 @@ class ItemMasterVm extends GetxController{
 
     Get.back(); // close dialog
     await OpenFilex.open(filePath);
-  }
+  }*/
 
   Map<String, dynamic> removeExcelKeys(
       NonStandardItemDataModal item) {
