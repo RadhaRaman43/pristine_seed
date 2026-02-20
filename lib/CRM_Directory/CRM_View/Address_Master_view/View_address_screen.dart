@@ -52,7 +52,7 @@ class ViewAddressScreen extends StatelessWidget{
                         'Addresses List(${accountMaster_page_controller.account_name_controller.text})',
                         style: GoogleFonts.poppins(
                           color: AllColors.whiteColor,
-                          fontSize: 14,
+                          fontSize: 18,
                           fontWeight: FontWeight.w700,
                         ),
                       ),

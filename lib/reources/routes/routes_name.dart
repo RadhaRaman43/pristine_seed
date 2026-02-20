@@ -168,6 +168,7 @@ class RoutesName{
 
   //todo item master screen
   static const nonStandardItemList="/non_standard_item_list.dart";
+  static const updateNonStandardItemList="/update_non_standard_item.dart";
 
 
   //todo image not found...

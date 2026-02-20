@@ -23,6 +23,7 @@ import '../CRM_Directory/CRM_VIewModels/contact_master_vm/contact_master_vm/Cont
 import '../CRM_Directory/CRM_VIewModels/contact_master_vm/contact_master_vm/all_contact_master_vm.dart';
 import '../CRM_Directory/CRM_VIewModels/emp_infor_system/leave_request_approval_vm.dart';
 import '../CRM_Directory/CRM_VIewModels/emp_infor_system/mark_attendance_view_modal.dart';
+import '../CRM_Directory/CRM_VIewModels/item_master_vm/item_mater_vm.dart';
 import '../CRM_Directory/CRM_VIewModels/quote_approval_list_vm/quote_approval_list_vm.dart';
 import '../CRM_Directory/CRM_VIewModels/sales_cycle_vm/pending_Draft_Quote_vm.dart';
 import '../CRM_Directory/CRM_VIewModels/sales_cycle_vm/sales_advise_all_list_vm.dart';
@@ -593,6 +594,16 @@ class _Drawer extends State<CustomDrawer> {
                                                 Get.toNamed(RoutesName.pendingDSARDashboardViewScreen);
                                                 Navigator.of(context);
                                                 break;
+
+                                              case 'Non Standard Items':
+                                                IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
+                                                home_vm.openMenu(cTitle, iconData);
+                                                Get.delete<ItemMasterVm>();
+                                                Get.toNamed(RoutesName.nonStandardItemList);
+                                                Navigator.of(context);
+                                                break;
+
+
 
                                               default :
                                                 IconData iconData = StaticMethod.getChildIconForIndex(cTitle);

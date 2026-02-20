@@ -1187,7 +1187,6 @@ class Accountmastervm extends GetxController{
         jsonResponse.map((data) => AccountMasterGetByCodeModel.fromJson(data)).toList();
         loading.value = false;
         if (responseData.isNotEmpty && responseData[0].condition == 'True') {
-          Navigator.of(context).pop();
           UploadImageType_controller.clear();
           UploadImage.value = false;
           Utils.sanckBarSuccess('Success!', responseData[0].message.toString());

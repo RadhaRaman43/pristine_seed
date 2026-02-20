@@ -366,7 +366,6 @@ class UpdateAccountMaster extends StatelessWidget{
                           accountMaster_page_controller.view=='Account'?false:true,context),
 
                       SizedBox(height: 15,),
-
                       Container(
                         margin: EdgeInsets.only(left: 15.0, right: 15.0),
                         decoration: BoxDecoration(
@@ -540,9 +539,7 @@ class UpdateAccountMaster extends StatelessWidget{
                           ),
                         ),
                       ),
-
                       SizedBox(height: 15,),
-
                       Container(
                         margin: EdgeInsets.only(left: 15.0, right: 15.0),
                         decoration: BoxDecoration(
@@ -621,7 +618,6 @@ class UpdateAccountMaster extends StatelessWidget{
                           ),
                         ),
                       ),
-
                       SizedBox(height: 15,),
                       Container(
                         margin: EdgeInsets.only(left: 15.0, right: 15.0),
@@ -920,10 +916,7 @@ class UpdateAccountMaster extends StatelessWidget{
                           ),
                         ),
                       ),
-
-
                       SizedBox(height: 15,),
-
                       Container(
                         margin: EdgeInsets.only(left: 15.0, right: 15.0),
                         decoration: BoxDecoration(
@@ -1017,10 +1010,7 @@ class UpdateAccountMaster extends StatelessWidget{
                           ),
                         ),
                       ),
-
                       SizedBox(height: 15,),
-
-
                       Container(
                         margin: EdgeInsets.only(left: 15.0, right: 15.0),
                         decoration: BoxDecoration(
@@ -1178,11 +1168,7 @@ class UpdateAccountMaster extends StatelessWidget{
                           ),
                         ),
                       ),
-
                       SizedBox(height: 100,),
-
-
-
 
                     ],
                   ),
@@ -1364,7 +1350,6 @@ class UpdateAccountMaster extends StatelessWidget{
   }
 
   UploadImageDailog(BuildContext context){
-    //accountMaster_page_controller.UploadImageType_controller.clear();
     accountMaster_page_controller.ImageUrl_Controller.clear();
     accountMaster_page_controller.UploadImage.value = false;
     accountMaster_page_controller.ButtonText.value = 'Choose files';
@@ -1412,7 +1397,7 @@ class UpdateAccountMaster extends StatelessWidget{
                                 color: Colors.white,
                                 borderRadius: BorderRadius.circular(10)
                             ),
-                            padding: EdgeInsets.only(left: 10.0, ),
+
                             child: TextFormField(
                               controller: accountMaster_page_controller
                                   .ImageUrl_Controller,
@@ -1469,7 +1454,7 @@ class UpdateAccountMaster extends StatelessWidget{
 
                             },
                             child: Container(
-                              width: 120,
+                              //width: 120,
                               alignment: Alignment.center,
                               child: Obx((){
                                 return Text(
@@ -1484,9 +1469,8 @@ class UpdateAccountMaster extends StatelessWidget{
                             ),
                           ),
 
+
                         ],)
-
-
 
                     ],
                   ),
@@ -1496,119 +1480,17 @@ class UpdateAccountMaster extends StatelessWidget{
     );
   }
 
-  /*Widget bindTypeDropDown(context){
-    return Autocomplete<String>(
-      displayStringForOption: _displayIsActiveForOption,
-      optionsBuilder: (TextEditingValue textEditingValue) {
-        if (textEditingValue.text.isEmpty) {
-          return accountMaster_page_controller.UploadImageTypeList;
-          // return const Iterable<VehicleTypeResponse>.empty();
-        }
-        return accountMaster_page_controller.UploadImageTypeList
-            .where((String option) {
-          return option
-              .toString()
-              .toLowerCase()
-              .contains(textEditingValue.text.toLowerCase());
-        }).toList();
-      },
-      onSelected: (String selection) {
-        print(selection);
-        // Update the TextField with the selected
-        accountMaster_page_controller.UploadImageType_controller.text =
-            _displayIsActiveForOption(selection).toString();
-        accountMaster_page_controller.ImageUrl_Controller.clear();
-        if(accountMaster_page_controller.UploadImageType_controller.text == 'Url'){
-          accountMaster_page_controller.UploadImage.value = true;
-          accountMaster_page_controller.ButtonText.value = 'Upload Url';
-        }else{
-          accountMaster_page_controller.UploadImage.value = false;
-          accountMaster_page_controller.ButtonText.value = 'Choose files';
-        }
-       // print('IsActive.....${accountMaster_page_controller.UploadImageType_controller.text}');
-      },
-      fieldViewBuilder: (BuildContext context, TextEditingController controller,
-          FocusNode focusNode, VoidCallback onFieldSubmitted) {
-        return Container(
-          decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(10)
-          ),
-          child: TextField(
-            cursorColor: AllColors.primaryDark1,
-            controller: controller
-              ..text = accountMaster_page_controller.UploadImageType_controller
-                  .text,
-            focusNode: focusNode,
-            //onSubmitted: onFieldSubmitted,
-            decoration: InputDecoration(
-              suffixIcon: Icon(Icons.arrow_drop_down),
-              contentPadding: EdgeInsets.symmetric(
-                  vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-              hintText: 'Select Type',
-              labelText: 'Select Type',
-              border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(10))
-              ),
-            ),
-          ),
-        );
-      },
-      optionsViewBuilder: (BuildContext context,
-          AutocompleteOnSelected<String> onSelected,
-          Iterable<String> suggestions) {
-        return Align(
-          alignment: Alignment.topLeft,
-          child: Material(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-            elevation: 4.0,
-            child: Container(
-              width: size.width*.56,
-              constraints: BoxConstraints(maxHeight: 200),
-              child: ListView.builder(
-                shrinkWrap: true,
-                itemCount: suggestions.length,
-                itemBuilder: (context, index) {
-                  final String option =
-                  suggestions.elementAt(index);
-                  return GestureDetector(
-                    onTap: () {
-                      onSelected(option);
-                    },
-                    child: Container(
-                      padding: EdgeInsets.all(8.0),
-                      child: Text(
-                        option,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.blackColor,
-                            fontWeight: FontWeight.w300,
-                            fontSize: AllFontSize
-                                .sisxteen // Change the text color here
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
-          ),
-        );
-      },
-    );
-  }*/
-
   Widget bindTypeDropDown(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(10),
       ),
-      padding: EdgeInsets.symmetric(horizontal: AllFontSize.ten),
+      //padding: EdgeInsets.symmetric(horizontal: AllFontSize.ten),
       child: DropdownMenu<String>(
         initialSelection: accountMaster_page_controller.UploadImageType_controller.text.isNotEmpty
-            ? accountMaster_page_controller.UploadImageType_controller.text
-            : null,
-        width: MediaQuery.of(context).size.width * 0.56,
+            ? accountMaster_page_controller.UploadImageType_controller.text : null,
+        width: MediaQuery.of(context).size.width * 0.6,
         menuHeight: 200,
         hintText: 'Select Type',
         label: Text('Select Type'),
@@ -1636,8 +1518,7 @@ class UpdateAccountMaster extends StatelessWidget{
             accountMaster_page_controller.ButtonText.value = 'Choose files';
           }
         },
-        dropdownMenuEntries: accountMaster_page_controller.UploadImageTypeList
-            .map<DropdownMenuEntry<String>>(
+        dropdownMenuEntries: accountMaster_page_controller.UploadImageTypeList.map<DropdownMenuEntry<String>>(
               (String item) => DropdownMenuEntry<String>(
             value: item,
             label: item,
