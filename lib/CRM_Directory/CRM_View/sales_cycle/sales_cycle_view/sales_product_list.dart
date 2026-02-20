@@ -33,7 +33,7 @@ class SalesCycleProductList extends StatelessWidget{
             title:Row(
               children: [
                 Text(
-                  'Sales Cycle Products',
+                  'Quotation Items',
                   style: GoogleFonts.poppins(
                     color: AllColors.whiteColor,
                     fontSize: 20.0,

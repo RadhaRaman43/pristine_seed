@@ -187,6 +187,7 @@ class UpdateAccountMaster extends StatelessWidget{
                   onTap: (){
                     contact_vm_controller.getDecisionRoleMaster();
                     accountMaster_page_controller.pageNumber = 0;
+                    print('routing...${accountMaster_page_controller.FromPage.value}');
                     contact_vm_controller.accountCode.value = accountMaster_page_controller.account_code_controller.value.text;
                     contact_vm_controller.FromPage.value="AccountUpdate";
                     contact_vm_controller.account_name_controller.text=accountMaster_page_controller.accountName;
@@ -366,6 +367,7 @@ class UpdateAccountMaster extends StatelessWidget{
                           accountMaster_page_controller.view=='Account'?false:true,context),
 
                       SizedBox(height: 15,),
+
                       Container(
                         margin: EdgeInsets.only(left: 15.0, right: 15.0),
                         decoration: BoxDecoration(
@@ -539,7 +541,9 @@ class UpdateAccountMaster extends StatelessWidget{
                           ),
                         ),
                       ),
+
                       SizedBox(height: 15,),
+
                       Container(
                         margin: EdgeInsets.only(left: 15.0, right: 15.0),
                         decoration: BoxDecoration(
@@ -618,305 +622,316 @@ class UpdateAccountMaster extends StatelessWidget{
                           ),
                         ),
                       ),
+
                       SizedBox(height: 15,),
-                      Container(
-                        margin: EdgeInsets.only(left: 15.0, right: 15.0),
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: AllColors.grayColor, // Set the border color here
-                            width: 1.0, // Adjust the border width if necessary
-                          ),
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                        child: InputDecorator(
-                          decoration: InputDecoration(
-                            labelText: 'Shipping Address',
-                            labelStyle: GoogleFonts.poppins(
-                                color: AllColors.primaryDark1,
-                                fontWeight: FontWeight.w700,
-                                fontSize: AllFontSize.sisxteen),
-                            border: OutlineInputBorder(
-                              borderSide: BorderSide(
 
-                              ),
-                              borderRadius: BorderRadius.circular(10.0),
+
+                      IgnorePointer(
+                        ignoring: accountMaster_page_controller.view=='Account'?false:true,
+                        child: Container(
+                          margin: EdgeInsets.only(left: 15.0, right: 15.0),
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: AllColors.grayColor, // Set the border color here
+                              width: 1.0, // Adjust the border width if necessary
                             ),
+                            borderRadius: BorderRadius.circular(10.0),
                           ),
-                          child: Column(
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Flexible(
-                                    child: DropdownButtonFormField<String>(
-                                      value: accountMaster_page_controller.yesNoValue.value,
-                                      decoration: InputDecoration(
-                                        contentPadding: EdgeInsets.symmetric(
-                                          vertical: 0,   // 👈 top & bottom padding (increase/decrease)
-                                          horizontal: 6,
-                                        ),
-                                        border: OutlineInputBorder(
-                                          borderRadius: BorderRadius.circular(10),
-                                        ),
-                                      ),
-                                      items: ["Yes", "No"].map((value) {
-                                        return DropdownMenuItem(
-                                          value: value,
-                                          child: Text(value),
-                                        );
-                                      }).toList(),
-                                      onChanged: (value) {
-                                        accountMaster_page_controller.yesNoValue.value = value!;
-                                      },
-                                    ),
-                                  ),
-                                  Flexible(
-                                    flex: 2,
-                                    child: Obx(() => CheckboxListTile(
-                                      controlAffinity: ListTileControlAffinity.leading,
-                                      title: Text(
-                                        "Same as Billing",
-                                        style: GoogleFonts.poppins(
-                                          color: AllColors.primaryDark1,
-                                          fontWeight: FontWeight.w400,
-                                          fontSize: AllFontSize.twelve,
-                                        ),
-                                      ),
-                                      value: accountMaster_page_controller.isChecked.value,
-                                      onChanged: (bool? value) {
+                          child: InputDecorator(
+                            decoration: InputDecoration(
+                              labelText: 'Shipping Address',
+                              labelStyle: GoogleFonts.poppins(
+                                  color: AllColors.primaryDark1,
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: AllFontSize.sisxteen),
+                              border: OutlineInputBorder(
+                                borderSide: BorderSide(
 
-                                        accountMaster_page_controller.toggleCheckbox();
-                                        if(value == true){
-                                          accountMaster_page_controller.Shipping_Address_controller.value.text=accountMaster_page_controller.Address_controller.value.text;
-                                          accountMaster_page_controller.Shipping_Address2_Controller.value.text=accountMaster_page_controller.Address2_Controller.value.text;
-                                          accountMaster_page_controller.Shipping_PostCode_Controller.value.text=accountMaster_page_controller.PostCode_Controller.value.text;
-                                          accountMaster_page_controller.Shipping_City_Controller.value.text=accountMaster_page_controller.City_Controller.value.text ;
-                                          accountMaster_page_controller.Shipping_State_Controller.value.text = accountMaster_page_controller.State_Controller.value.text;
-                                          accountMaster_page_controller.Shipping_District_Controller.value.text = accountMaster_page_controller.District_Controller.value.text;
-                                          accountMaster_page_controller.Shipping_FullAddress_Controller.value.text = accountMaster_page_controller.FullAddress_Controller.value.text;
-                                          accountMaster_page_controller.ShowState.value=false;
-                                          accountMaster_page_controller.ShowState.value=true;
-                                        }else{
-                                          accountMaster_page_controller.Shipping_Address_controller.value.clear();
-                                          accountMaster_page_controller.Shipping_Address2_Controller.value.clear();
-                                          accountMaster_page_controller.Shipping_PostCode_Controller.value.clear();
-                                          accountMaster_page_controller.Shipping_City_Controller.value.clear();
-                                          accountMaster_page_controller.Shipping_State_Controller.value.clear();
-                                          accountMaster_page_controller.Shipping_District_Controller.value.clear();
-                                          accountMaster_page_controller.Shipping_FullAddress_Controller.value.clear();
-                                          accountMaster_page_controller.ShowState.value=false;
-                                          accountMaster_page_controller.ShowState.value=true;
-                                        }
-                                      },
-                                    )),
-                                  ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      InkWell(
-                                        child: Icon(Icons.add),
-                                        onTap: (){
-                                          accountMaster_page_controller.pageNumber = 0;
-                                          accountMaster_page_controller.getAddressMasterList(accountMaster_page_controller.pageNumber,"","", "");
-                                          accountMaster_page_controller.showConsigneeAddressList(context, accountMaster_page_controller.address_master_list);
-
-                                        },
-                                      ),
-
-                                      SizedBox(width: 10,),
-                                      InkWell(
-                                        onTap: (){
-                                          accountMaster_page_controller.selectedItem.value = -1;
-                                          accountMaster_page_controller.Shipping_Address_controller.value.text="";
-                                          accountMaster_page_controller.Shipping_Address2_Controller.value.text="";
-                                          accountMaster_page_controller.Shipping_PostCode_Controller.value.text="";
-                                          accountMaster_page_controller.Shipping_City_Controller.value.text="" ;
-                                          accountMaster_page_controller.Shipping_State_Controller.value.clear();
-                                          accountMaster_page_controller.ShowState.value=false;
-                                          accountMaster_page_controller.ShowState.value=true;
-                                          accountMaster_page_controller.Shipping_District_Controller.value.text="";
-                                          accountMaster_page_controller.consigneeId = '';
-                                          accountMaster_page_controller.isChecked.value=false;
-                                          accountMaster_page_controller.Shipping_FullAddress_Controller.value.clear();
-
-                                        },
-                                        child: Icon(Icons.update),
-                                      )
-                                    ],
-                                  ),
-                                ],
+                                ),
+                                borderRadius: BorderRadius.circular(10.0),
                               ),
-                              SizedBox(height: 15,),
-                              Obx((){
-                                if(accountMaster_page_controller.Shipping_FullAddress_Controller.value.text.isNotEmpty ||
-                                    accountMaster_page_controller.Shipping_FullAddress_Controller.value.text == null){
-                                  accountMaster_page_controller.yesNoValue.value="Yes";
-                                }
-                                return Visibility(
-                                  visible:accountMaster_page_controller.yesNoValue.value=="Yes",
-                                  child:  Column(
-                                    children: [
-                                      Container(
-                                        decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            borderRadius: BorderRadius.circular(10)
-                                        ),
-                                        //padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                                        child: TextFormField(
-                                          controller: accountMaster_page_controller.Shipping_Address_controller.value,
-                                          //maxLength: 150,
-                                          onChanged: (value){
-                                            print('valus....$value');
-                                            final parts = [
-                                              value,
-                                              accountMaster_page_controller.Shipping_Address2_Controller.value.text,
-                                              accountMaster_page_controller.Shipping_City_Controller.value.text,
-                                              accountMaster_page_controller.Shipping_District_Controller.value.text,
-                                              accountMaster_page_controller.Shipping_State_Controller.value.text,
-                                              accountMaster_page_controller.Shipping_PostCode_Controller.value.text,
-                                            ];
-
-                                            // Filter out empty strings and join with commas
-                                            final fullAddress = parts.where((part) => part.trim().isNotEmpty).join(", ");
-
-                                            accountMaster_page_controller.Shipping_FullAddress_Controller.value.text = fullAddress;
+                            ),
+                            child: Column(
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                     Flexible(
+                                        child: DropdownButtonFormField<String>(
+                                          value: accountMaster_page_controller.yesNoValue.value,
+                                          decoration: InputDecoration(
+                                            contentPadding: EdgeInsets.symmetric(
+                                              vertical: 0,   // 👈 top & bottom padding (increase/decrease)
+                                              horizontal: 6,
+                                            ),
+                                            border: OutlineInputBorder(
+                                              borderRadius: BorderRadius.circular(10),
+                                            ),
+                                          ),
+                                          items: ["Yes", "No"].map((value) {
+                                            return DropdownMenuItem(
+                                              value: value,
+                                              child: Text(value),
+                                            );
+                                          }).toList(),
+                                          onChanged: (value) {
+                                            accountMaster_page_controller.yesNoValue.value = value!;
                                           },
-                                          maxLength: 500,
-                                          decoration: InputDecoration(
-                                              hintText: "Address",
-                                              labelText: "Address",
-                                              //suffixIcon: Icon(Icons.email),
-                                              contentPadding: EdgeInsets.symmetric(
-                                                  vertical: AllFontSize.ten,
-                                                  horizontal: AllFontSize.ten),
-
-                                              focusedBorder: OutlineInputBorder(
-                                                  borderSide: BorderSide(color: Colors.blue)
-                                              ),
-                                              border: OutlineInputBorder(
-                                                  borderRadius: BorderRadius.circular(10)
-                                              )
-                                          ),
-
                                         ),
                                       ),
 
-                                      SizedBox(height: 15,),
-                                      Container(
-                                        decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            borderRadius: BorderRadius.circular(10)
+
+                                    Flexible(
+                                      flex: 2,
+                                      child: Obx(() => CheckboxListTile(
+                                        controlAffinity: ListTileControlAffinity.leading,
+                                        title: Text(
+                                          "Same as Billing",
+                                          style: GoogleFonts.poppins(
+                                            color: AllColors.primaryDark1,
+                                            fontWeight: FontWeight.w400,
+                                            fontSize: AllFontSize.twelve,
+                                          ),
                                         ),
-                                        //padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                                        child: TextFormField(
-                                          controller: accountMaster_page_controller.Shipping_Address2_Controller.value,
-                                          //maxLength: 150,
-                                          onChanged: (value){
-                                            final parts = [
-                                              accountMaster_page_controller.Shipping_Address_controller.value.text,
-                                              value,
-                                              accountMaster_page_controller.Shipping_City_Controller.value.text,
-                                              accountMaster_page_controller.Shipping_District_Controller.value.text,
-                                              accountMaster_page_controller.Shipping_State_Controller.value.text,
-                                              accountMaster_page_controller.Shipping_PostCode_Controller.value.text,
-                                            ];
+                                        value: accountMaster_page_controller.isChecked.value,
+                                        onChanged: (bool? value) {
+                                          accountMaster_page_controller.toggleCheckbox();
+                                          if(value == true){
+                                            accountMaster_page_controller.Shipping_Address_controller.value.text=accountMaster_page_controller.Address_controller.value.text;
+                                            accountMaster_page_controller.Shipping_Address2_Controller.value.text=accountMaster_page_controller.Address2_Controller.value.text;
+                                            accountMaster_page_controller.Shipping_PostCode_Controller.value.text=accountMaster_page_controller.PostCode_Controller.value.text;
+                                            accountMaster_page_controller.Shipping_City_Controller.value.text=accountMaster_page_controller.City_Controller.value.text ;
+                                            accountMaster_page_controller.Shipping_State_Controller.value.text = accountMaster_page_controller.State_Controller.value.text;
+                                            accountMaster_page_controller.Shipping_District_Controller.value.text = accountMaster_page_controller.District_Controller.value.text;
+                                            accountMaster_page_controller.Shipping_FullAddress_Controller.value.text = accountMaster_page_controller.FullAddress_Controller.value.text;
+                                            accountMaster_page_controller.ShowState.value=false;
+                                            accountMaster_page_controller.ShowState.value=true;
+                                          }else{
+                                            accountMaster_page_controller.Shipping_Address_controller.value.clear();
+                                            accountMaster_page_controller.Shipping_Address2_Controller.value.clear();
+                                            accountMaster_page_controller.Shipping_PostCode_Controller.value.clear();
+                                            accountMaster_page_controller.Shipping_City_Controller.value.clear();
+                                            accountMaster_page_controller.Shipping_State_Controller.value.clear();
+                                            accountMaster_page_controller.Shipping_District_Controller.value.clear();
+                                            accountMaster_page_controller.Shipping_FullAddress_Controller.value.clear();
+                                            accountMaster_page_controller.ShowState.value=false;
+                                            accountMaster_page_controller.ShowState.value=true;
+                                          }
+                                        },
+                                      )),
+                                    ),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        InkWell(
+                                          child: Icon(Icons.add),
+                                          onTap: (){
+                                            accountMaster_page_controller.pageNumber = 0;
+                                            accountMaster_page_controller.getAddressMasterList(accountMaster_page_controller.pageNumber,"","", "");
+                                            accountMaster_page_controller.showConsigneeAddressList(context, accountMaster_page_controller.address_master_list);
 
-                                            // Filter out empty strings and join with commas
-                                            final fullAddress = parts.where((part) => part.trim().isNotEmpty).join(", ");
-
-                                            accountMaster_page_controller.Shipping_FullAddress_Controller.value.text = fullAddress;
                                           },
-                                          maxLength: 500,
-                                          decoration: InputDecoration(
-                                              hintText: "Address2",
-                                              labelText: "Address2",
-                                              //suffixIcon: Icon(Icons.email),
-                                              contentPadding: EdgeInsets.symmetric(
-                                                  vertical: AllFontSize.ten,
-                                                  horizontal: AllFontSize.ten),
-
-                                              focusedBorder: OutlineInputBorder(
-                                                  borderSide: BorderSide(color: Colors.blue)
-                                              ),
-                                              border: OutlineInputBorder(
-                                                  borderRadius: BorderRadius.circular(10)
-                                              )
-                                          ),
-
                                         ),
-                                      ),
-                                      SizedBox(height: 15,),
-                                      Obx((){
-                                        return Visibility(
-                                          visible:accountMaster_page_controller.ShowState.value,
-                                          child: Container(
-                                              child: bindShippingPostalCodeDropDown(context)
-                                          ),
-                                        );
-                                      }),
-                                      SizedBox(height: 15,),
-                                      Obx(() {
-                                        return Visibility(
-                                          visible:accountMaster_page_controller.ShowState.value,
-                                          child: Container(
-                                            //padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                                            child: bindShippingStateDropDown(context),
-                                          ),
-                                        );
-                                      }),
-                                      SizedBox(height: 15,),
-                                      Obx(() {
-                                        return Visibility(
-                                          visible:accountMaster_page_controller.ShowState.value,
-                                          child: Container(
-                                              child: bindShippingCityDropDown(context)
-                                          ),
-                                        );
-                                      }),
-                                      SizedBox(height: 15,),
-                                      Obx(() {
-                                        return Visibility(
-                                          visible:accountMaster_page_controller.ShowState.value,
-                                          child: Container(
-                                              child: bindShippingDistrictDropDown(context)
-                                          ),
-                                        );
-                                      }),
-                                      SizedBox(height: 15,),
-                                      Container(
-                                        decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            borderRadius: BorderRadius.circular(10)
-                                        ),
-                                        child: TextFormField(
-                                          readOnly: true,
-                                          maxLines: 3,
-                                          controller: accountMaster_page_controller.Shipping_FullAddress_Controller.value,
-                                          decoration: InputDecoration(
-                                              hintText: "Full Address",
-                                              labelText: "Full Address",
-                                              contentPadding: EdgeInsets.symmetric(
-                                                  vertical: AllFontSize.ten,
-                                                  horizontal: AllFontSize.ten),
 
-                                              focusedBorder: OutlineInputBorder(
-                                                  borderSide: BorderSide(color: Colors.blue)
-                                              ),
-                                              border: OutlineInputBorder(
-                                                  borderRadius: BorderRadius.circular(10)
-                                              )
-                                          ),
+                                        SizedBox(width: 10,),
+                                        InkWell(
+                                          onTap: (){
+                                            accountMaster_page_controller.selectedItem.value = -1;
+                                            accountMaster_page_controller.Shipping_Address_controller.value.text="";
+                                            accountMaster_page_controller.Shipping_Address2_Controller.value.text="";
+                                            accountMaster_page_controller.Shipping_PostCode_Controller.value.text="";
+                                            accountMaster_page_controller.Shipping_City_Controller.value.text="" ;
+                                            accountMaster_page_controller.Shipping_State_Controller.value.clear();
+                                            accountMaster_page_controller.ShowState.value=false;
+                                            accountMaster_page_controller.ShowState.value=true;
+                                            accountMaster_page_controller.Shipping_District_Controller.value.text="";
+                                            accountMaster_page_controller.consigneeId = '';
+                                            accountMaster_page_controller.isChecked.value=false;
+                                            accountMaster_page_controller.Shipping_FullAddress_Controller.value.clear();
 
+                                          },
+                                          child: Icon(Icons.update),
+                                        )
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(height: 15,),
+                                Obx((){
+                                  if(accountMaster_page_controller.Shipping_FullAddress_Controller.value.text.isNotEmpty ||
+                                      accountMaster_page_controller.Shipping_FullAddress_Controller.value.text == null){
+                                    accountMaster_page_controller.yesNoValue.value="Yes";
+                                  }
+                                  return Visibility(
+                                    visible:accountMaster_page_controller.yesNoValue.value=="Yes",
+                                    child:  Column(
+                                      children: [
+                                        Container(
+                                          decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius: BorderRadius.circular(10)
+                                          ),
+                                          //padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                                          child: TextFormField(
+                                            controller: accountMaster_page_controller.Shipping_Address_controller.value,
+                                            //maxLength: 150,
+                                            onChanged: (value){
+                                              print('valus....$value');
+                                              final parts = [
+                                                value,
+                                                accountMaster_page_controller.Shipping_Address2_Controller.value.text,
+                                                accountMaster_page_controller.Shipping_City_Controller.value.text,
+                                                accountMaster_page_controller.Shipping_District_Controller.value.text,
+                                                accountMaster_page_controller.Shipping_State_Controller.value.text,
+                                                accountMaster_page_controller.Shipping_PostCode_Controller.value.text,
+                                              ];
+
+                                              // Filter out empty strings and join with commas
+                                              final fullAddress = parts.where((part) => part.trim().isNotEmpty).join(", ");
+
+                                              accountMaster_page_controller.Shipping_FullAddress_Controller.value.text = fullAddress;
+                                            },
+                                            maxLength: 500,
+                                            decoration: InputDecoration(
+                                                hintText: "Address",
+                                                labelText: "Address",
+                                                //suffixIcon: Icon(Icons.email),
+                                                contentPadding: EdgeInsets.symmetric(
+                                                    vertical: AllFontSize.ten,
+                                                    horizontal: AllFontSize.ten),
+
+                                                focusedBorder: OutlineInputBorder(
+                                                    borderSide: BorderSide(color: Colors.blue)
+                                                ),
+                                                border: OutlineInputBorder(
+                                                    borderRadius: BorderRadius.circular(10)
+                                                )
+                                            ),
+
+                                          ),
                                         ),
-                                      ),
-                                    ],
-                                  ),);
-                              }),
-                            ],
+
+                                        SizedBox(height: 15,),
+                                        Container(
+                                          decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius: BorderRadius.circular(10)
+                                          ),
+                                          //padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                                          child: TextFormField(
+                                            controller: accountMaster_page_controller.Shipping_Address2_Controller.value,
+                                            //maxLength: 150,
+                                            onChanged: (value){
+                                              final parts = [
+                                                accountMaster_page_controller.Shipping_Address_controller.value.text,
+                                                value,
+                                                accountMaster_page_controller.Shipping_City_Controller.value.text,
+                                                accountMaster_page_controller.Shipping_District_Controller.value.text,
+                                                accountMaster_page_controller.Shipping_State_Controller.value.text,
+                                                accountMaster_page_controller.Shipping_PostCode_Controller.value.text,
+                                              ];
+
+                                              // Filter out empty strings and join with commas
+                                              final fullAddress = parts.where((part) => part.trim().isNotEmpty).join(", ");
+
+                                              accountMaster_page_controller.Shipping_FullAddress_Controller.value.text = fullAddress;
+                                            },
+                                            maxLength: 500,
+                                            decoration: InputDecoration(
+                                                hintText: "Address2",
+                                                labelText: "Address2",
+                                                //suffixIcon: Icon(Icons.email),
+                                                contentPadding: EdgeInsets.symmetric(
+                                                    vertical: AllFontSize.ten,
+                                                    horizontal: AllFontSize.ten),
+
+                                                focusedBorder: OutlineInputBorder(
+                                                    borderSide: BorderSide(color: Colors.blue)
+                                                ),
+                                                border: OutlineInputBorder(
+                                                    borderRadius: BorderRadius.circular(10)
+                                                )
+                                            ),
+
+                                          ),
+                                        ),
+                                        SizedBox(height: 15,),
+                                        Obx((){
+                                          return Visibility(
+                                            visible:accountMaster_page_controller.ShowState.value,
+                                            child: Container(
+                                                child: bindShippingPostalCodeDropDown(context)
+                                            ),
+                                          );
+                                        }),
+                                        SizedBox(height: 15,),
+                                        Obx(() {
+                                          return Visibility(
+                                            visible:accountMaster_page_controller.ShowState.value,
+                                            child: Container(
+                                              //padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                                              child: bindShippingStateDropDown(context),
+                                            ),
+                                          );
+                                        }),
+                                        SizedBox(height: 15,),
+                                        Obx(() {
+                                          return Visibility(
+                                            visible:accountMaster_page_controller.ShowState.value,
+                                            child: Container(
+                                                child: bindShippingCityDropDown(context)
+                                            ),
+                                          );
+                                        }),
+                                        SizedBox(height: 15,),
+                                        Obx(() {
+                                          return Visibility(
+                                            visible:accountMaster_page_controller.ShowState.value,
+                                            child: Container(
+                                                child: bindShippingDistrictDropDown(context)
+                                            ),
+                                          );
+                                        }),
+                                        SizedBox(height: 15,),
+                                        Container(
+                                          decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius: BorderRadius.circular(10)
+                                          ),
+                                          child: TextFormField(
+                                            readOnly: true,
+                                            maxLines: 3,
+                                            controller: accountMaster_page_controller.Shipping_FullAddress_Controller.value,
+                                            decoration: InputDecoration(
+                                                hintText: "Full Address",
+                                                labelText: "Full Address",
+                                                contentPadding: EdgeInsets.symmetric(
+                                                    vertical: AllFontSize.ten,
+                                                    horizontal: AllFontSize.ten),
+
+                                                focusedBorder: OutlineInputBorder(
+                                                    borderSide: BorderSide(color: Colors.blue)
+                                                ),
+                                                border: OutlineInputBorder(
+                                                    borderRadius: BorderRadius.circular(10)
+                                                )
+                                            ),
+
+                                          ),
+                                        ),
+                                      ],
+                                    ),);
+                                }),
+                              ],
+                            ),
                           ),
                         ),
                       ),
+
+
+
                       SizedBox(height: 15,),
+
                       Container(
                         margin: EdgeInsets.only(left: 15.0, right: 15.0),
                         decoration: BoxDecoration(
@@ -1010,7 +1025,10 @@ class UpdateAccountMaster extends StatelessWidget{
                           ),
                         ),
                       ),
+
                       SizedBox(height: 15,),
+
+
                       Container(
                         margin: EdgeInsets.only(left: 15.0, right: 15.0),
                         decoration: BoxDecoration(
@@ -1168,7 +1186,11 @@ class UpdateAccountMaster extends StatelessWidget{
                           ),
                         ),
                       ),
+
                       SizedBox(height: 100,),
+
+
+
 
                     ],
                   ),
@@ -1350,6 +1372,7 @@ class UpdateAccountMaster extends StatelessWidget{
   }
 
   UploadImageDailog(BuildContext context){
+    //accountMaster_page_controller.UploadImageType_controller.clear();
     accountMaster_page_controller.ImageUrl_Controller.clear();
     accountMaster_page_controller.UploadImage.value = false;
     accountMaster_page_controller.ButtonText.value = 'Choose files';
@@ -1397,7 +1420,7 @@ class UpdateAccountMaster extends StatelessWidget{
                                 color: Colors.white,
                                 borderRadius: BorderRadius.circular(10)
                             ),
-
+                            padding: EdgeInsets.only(left: 10.0, ),
                             child: TextFormField(
                               controller: accountMaster_page_controller
                                   .ImageUrl_Controller,
@@ -1454,7 +1477,7 @@ class UpdateAccountMaster extends StatelessWidget{
 
                             },
                             child: Container(
-                              //width: 120,
+                              width: 120,
                               alignment: Alignment.center,
                               child: Obx((){
                                 return Text(
@@ -1469,8 +1492,9 @@ class UpdateAccountMaster extends StatelessWidget{
                             ),
                           ),
 
-
                         ],)
+
+
 
                     ],
                   ),
@@ -1480,17 +1504,119 @@ class UpdateAccountMaster extends StatelessWidget{
     );
   }
 
+  /*Widget bindTypeDropDown(context){
+    return Autocomplete<String>(
+      displayStringForOption: _displayIsActiveForOption,
+      optionsBuilder: (TextEditingValue textEditingValue) {
+        if (textEditingValue.text.isEmpty) {
+          return accountMaster_page_controller.UploadImageTypeList;
+          // return const Iterable<VehicleTypeResponse>.empty();
+        }
+        return accountMaster_page_controller.UploadImageTypeList
+            .where((String option) {
+          return option
+              .toString()
+              .toLowerCase()
+              .contains(textEditingValue.text.toLowerCase());
+        }).toList();
+      },
+      onSelected: (String selection) {
+        print(selection);
+        // Update the TextField with the selected
+        accountMaster_page_controller.UploadImageType_controller.text =
+            _displayIsActiveForOption(selection).toString();
+        accountMaster_page_controller.ImageUrl_Controller.clear();
+        if(accountMaster_page_controller.UploadImageType_controller.text == 'Url'){
+          accountMaster_page_controller.UploadImage.value = true;
+          accountMaster_page_controller.ButtonText.value = 'Upload Url';
+        }else{
+          accountMaster_page_controller.UploadImage.value = false;
+          accountMaster_page_controller.ButtonText.value = 'Choose files';
+        }
+       // print('IsActive.....${accountMaster_page_controller.UploadImageType_controller.text}');
+      },
+      fieldViewBuilder: (BuildContext context, TextEditingController controller,
+          FocusNode focusNode, VoidCallback onFieldSubmitted) {
+        return Container(
+          decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(10)
+          ),
+          child: TextField(
+            cursorColor: AllColors.primaryDark1,
+            controller: controller
+              ..text = accountMaster_page_controller.UploadImageType_controller
+                  .text,
+            focusNode: focusNode,
+            //onSubmitted: onFieldSubmitted,
+            decoration: InputDecoration(
+              suffixIcon: Icon(Icons.arrow_drop_down),
+              contentPadding: EdgeInsets.symmetric(
+                  vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+              hintText: 'Select Type',
+              labelText: 'Select Type',
+              border: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(10))
+              ),
+            ),
+          ),
+        );
+      },
+      optionsViewBuilder: (BuildContext context,
+          AutocompleteOnSelected<String> onSelected,
+          Iterable<String> suggestions) {
+        return Align(
+          alignment: Alignment.topLeft,
+          child: Material(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+            elevation: 4.0,
+            child: Container(
+              width: size.width*.56,
+              constraints: BoxConstraints(maxHeight: 200),
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: suggestions.length,
+                itemBuilder: (context, index) {
+                  final String option =
+                  suggestions.elementAt(index);
+                  return GestureDetector(
+                    onTap: () {
+                      onSelected(option);
+                    },
+                    child: Container(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text(
+                        option,
+                        style: GoogleFonts.poppins(
+                            color: AllColors.blackColor,
+                            fontWeight: FontWeight.w300,
+                            fontSize: AllFontSize
+                                .sisxteen // Change the text color here
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }*/
+
   Widget bindTypeDropDown(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(10),
       ),
-      //padding: EdgeInsets.symmetric(horizontal: AllFontSize.ten),
+      padding: EdgeInsets.symmetric(horizontal: AllFontSize.ten),
       child: DropdownMenu<String>(
         initialSelection: accountMaster_page_controller.UploadImageType_controller.text.isNotEmpty
-            ? accountMaster_page_controller.UploadImageType_controller.text : null,
-        width: MediaQuery.of(context).size.width * 0.6,
+            ? accountMaster_page_controller.UploadImageType_controller.text
+            : null,
+        width: MediaQuery.of(context).size.width * 0.56,
         menuHeight: 200,
         hintText: 'Select Type',
         label: Text('Select Type'),
@@ -1518,7 +1644,8 @@ class UpdateAccountMaster extends StatelessWidget{
             accountMaster_page_controller.ButtonText.value = 'Choose files';
           }
         },
-        dropdownMenuEntries: accountMaster_page_controller.UploadImageTypeList.map<DropdownMenuEntry<String>>(
+        dropdownMenuEntries: accountMaster_page_controller.UploadImageTypeList
+            .map<DropdownMenuEntry<String>>(
               (String item) => DropdownMenuEntry<String>(
             value: item,
             label: item,
@@ -1859,7 +1986,7 @@ class UpdateAccountMaster extends StatelessWidget{
               onTap: (){
                 controller.clear();
               },
-              readOnly: accountMaster_page_controller.view=='Account'?false:true,
+             // readOnly: accountMaster_page_controller.view=='Account'?false:true,
               cursorColor: AllColors.primaryDark1,
               controller: controller
                 ..text = accountMaster_page_controller.account_cat_type_controller
@@ -2072,136 +2199,139 @@ class UpdateAccountMaster extends StatelessWidget{
   }
 
   Widget bindComProfSubTypeDropDown(context){
-    return Autocomplete<CompanyProfileMstModel>(
-      displayStringForOption: _displayCompProfSubForOption,
-      optionsBuilder: (TextEditingValue textEditingValue) {
-        if(accountMaster_page_controller.view=='VIEW'){
-          accountMaster_page_controller.CompanyProfileMst_list.value=[];
-          return accountMaster_page_controller.CompanyProfileMst_list;
-        }
-        if (textEditingValue.text.isEmpty) {
-          return accountMaster_page_controller.CompanyProfileMst_list;
-          // return const Iterable<VehicleTypeResponse>.empty();
-        }
-        return accountMaster_page_controller.CompanyProfileMst_list
-            .where((CompanyProfileMstModel option) {
-          return option.description
-              .toString()
-              .toLowerCase()
-              .contains(textEditingValue.text.toLowerCase());
-        }).toList();
-      },
-      onSelected: (CompanyProfileMstModel selection) {
-        print(selection.description);
-        // Update the TextField with the selected
-        accountMaster_page_controller.comp_prof_sub_type_controller.value.text =
-            _displayCompProfSubForOption(selection).toString();
-        //accountMaster_page_controller.getCompanyProfileTypeApi();
-      },
-      fieldViewBuilder: (BuildContext context, TextEditingController controller,
-          FocusNode focusNode, VoidCallback onFieldSubmitted) {
-        return Container(
-          decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(10)
-          ),
-          child: Obx(() {
-            return
-              TextField(
-                readOnly: accountMaster_page_controller.view == 'Account'
-                    ? false
-                    : true,
-                /*  readOnly: accountMaster_page_controller.view=='FromTaskMainScreen'
-                  || accountMaster_page_controller.view=='VIEW' ||
-                  accountMaster_page_controller.view=='Task'
-                  ||accountMaster_page_controller.view=='FromSaleCycleMainScreen'
-                  || accountMaster_page_controller.view=="FromQuoteApproval"?true:false,*/
-                cursorColor: AllColors.primaryDark1,
-                controller: controller
-                  ..text = accountMaster_page_controller
-                      .comp_prof_sub_type_controller.value
-                      .text,
-                focusNode: focusNode,
-                //onSubmitted: onFieldSubmitted,
-                decoration: InputDecoration(
-                  suffixIcon: IconButton(
-                    color: AllColors.primaryDark1,
-                    onPressed: (){
-                      if(focusNode.hasFocus){
-                        focusNode.unfocus();
-                      }else{
-                        focusNode.requestFocus();
-                      }
-                    },
-                    icon: Icon(Icons.arrow_drop_down),
+    return IgnorePointer(
+      ignoring: accountMaster_page_controller.view=='Account'?false:true,
+      child: Autocomplete<CompanyProfileMstModel>(
+        displayStringForOption: _displayCompProfSubForOption,
+        optionsBuilder: (TextEditingValue textEditingValue) {
+          if(accountMaster_page_controller.view=='VIEW'){
+            accountMaster_page_controller.CompanyProfileMst_list.value=[];
+            return accountMaster_page_controller.CompanyProfileMst_list;
+          }
+          if (textEditingValue.text.isEmpty) {
+            return accountMaster_page_controller.CompanyProfileMst_list;
+            // return const Iterable<VehicleTypeResponse>.empty();
+          }
+          return accountMaster_page_controller.CompanyProfileMst_list
+              .where((CompanyProfileMstModel option) {
+            return option.description
+                .toString()
+                .toLowerCase()
+                .contains(textEditingValue.text.toLowerCase());
+          }).toList();
+        },
+        onSelected: (CompanyProfileMstModel selection) {
+          print(selection.description);
+          // Update the TextField with the selected
+          accountMaster_page_controller.comp_prof_sub_type_controller.value.text =
+              _displayCompProfSubForOption(selection).toString();
+          //accountMaster_page_controller.getCompanyProfileTypeApi();
+        },
+        fieldViewBuilder: (BuildContext context, TextEditingController controller,
+            FocusNode focusNode, VoidCallback onFieldSubmitted) {
+          return Container(
+            decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10)
+            ),
+            child: Obx(() {
+              return
+                TextField(
+                 /* readOnly: accountMaster_page_controller.view == 'Account'
+                      ? false
+                      : true,*/
+                  /*  readOnly: accountMaster_page_controller.view=='FromTaskMainScreen'
+                    || accountMaster_page_controller.view=='VIEW' ||
+                    accountMaster_page_controller.view=='Task'
+                    ||accountMaster_page_controller.view=='FromSaleCycleMainScreen'
+                    || accountMaster_page_controller.view=="FromQuoteApproval"?true:false,*/
+                  cursorColor: AllColors.primaryDark1,
+                  controller: controller
+                    ..text = accountMaster_page_controller
+                        .comp_prof_sub_type_controller.value
+                        .text,
+                  focusNode: focusNode,
+                  //onSubmitted: onFieldSubmitted,
+                  decoration: InputDecoration(
+                    suffixIcon: IconButton(
+                      color: AllColors.primaryDark1,
+                      onPressed: (){
+                        if(focusNode.hasFocus){
+                          focusNode.unfocus();
+                        }else{
+                          focusNode.requestFocus();
+                        }
+                      },
+                      icon: Icon(Icons.arrow_drop_down),
+                    ),
+                    contentPadding: EdgeInsets.symmetric(
+                        vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+                    hintText: 'Company Profile Sub Type',
+                    labelText: 'Company Profile Sub Type',
+                    /*hintStyle: GoogleFonts.poppins(
+                      color: AllColors.lightblackColor,
+                      fontWeight: FontWeight.w300,
+                      fontSize: AllFontSize.ten
+                  ),*/
+                    /*labelStyle: GoogleFonts.poppins(
+                      color: AllColors.primaryDark1,
+                      fontWeight: FontWeight.w700,
+                      fontSize: AllFontSize.sisxteen)*/
+                    /*focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(
+                        color: AllColors.primaryDark1), // Change the color to green
+                  ),*/
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(10))
+                    ),
                   ),
-                  contentPadding: EdgeInsets.symmetric(
-                      vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-                  hintText: 'Company Profile Sub Type',
-                  labelText: 'Company Profile Sub Type',
-                  /*hintStyle: GoogleFonts.poppins(
-                    color: AllColors.lightblackColor,
-                    fontWeight: FontWeight.w300,
-                    fontSize: AllFontSize.ten
-                ),*/
-                  /*labelStyle: GoogleFonts.poppins(
-                    color: AllColors.primaryDark1,
-                    fontWeight: FontWeight.w700,
-                    fontSize: AllFontSize.sisxteen)*/
-                  /*focusedBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(
-                      color: AllColors.primaryDark1), // Change the color to green
-                ),*/
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(10))
-                  ),
-                ),
-              );
-          }),
-        );
-      },
-      optionsViewBuilder: (BuildContext context,
-          AutocompleteOnSelected<CompanyProfileMstModel> onSelected,
-          Iterable<CompanyProfileMstModel> suggestions) {
-        return Align(
-          alignment: Alignment.topLeft,
-          child: Material(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-            elevation: 4.0,
-            child: Container(
-              width: size.width*.85,
-              constraints: BoxConstraints(maxHeight: 200),
+                );
+            }),
+          );
+        },
+        optionsViewBuilder: (BuildContext context,
+            AutocompleteOnSelected<CompanyProfileMstModel> onSelected,
+            Iterable<CompanyProfileMstModel> suggestions) {
+          return Align(
+            alignment: Alignment.topLeft,
+            child: Material(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+              elevation: 4.0,
+              child: Container(
+                width: size.width*.85,
+                constraints: BoxConstraints(maxHeight: 200),
 
-              child: ListView.builder(
-                shrinkWrap: true,
-                itemCount: suggestions.length,
-                itemBuilder: (context, index) {
-                  final CompanyProfileMstModel option =
-                  suggestions.elementAt(index);
-                  return GestureDetector(
-                    onTap: () {
-                      onSelected(option);
-                    },
-                    child: Container(
-                      padding: EdgeInsets.all(8.0),
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: suggestions.length,
+                  itemBuilder: (context, index) {
+                    final CompanyProfileMstModel option =
+                    suggestions.elementAt(index);
+                    return GestureDetector(
+                      onTap: () {
+                        onSelected(option);
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(8.0),
 
-                      child: Text(
-                        option.description.toString(),
-                        style: GoogleFonts.poppins(
-                            color: AllColors.blackColor,
-                            fontWeight: FontWeight.w300,
-                            fontSize: AllFontSize
-                                .sisxteen // Change the text color here
+                        child: Text(
+                          option.description.toString(),
+                          style: GoogleFonts.poppins(
+                              color: AllColors.blackColor,
+                              fontWeight: FontWeight.w300,
+                              fontSize: AllFontSize
+                                  .sisxteen // Change the text color here
+                          ),
                         ),
                       ),
-                    ),
-                  );
-                },
+                    );
+                  },
+                ),
               ),
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 
@@ -2390,136 +2520,139 @@ class UpdateAccountMaster extends StatelessWidget{
   }
 
   Widget bindIsActiveDropDown(context) {
-    return Autocomplete<String>(
-      displayStringForOption: _displayIsActiveForOption,
-      optionsBuilder: (TextEditingValue textEditingValue) {
-        if(accountMaster_page_controller.view=='VIEW'){
-          accountMaster_page_controller.IsActiveTypeList.value=[];
-          return accountMaster_page_controller.IsActiveTypeList;
-        }
-        if (textEditingValue.text.isEmpty) {
-          return accountMaster_page_controller.IsActiveTypeList;
-          // return const Iterable<VehicleTypeResponse>.empty();
-        }
-        return accountMaster_page_controller.IsActiveTypeList
-            .where((String option) {
-          return option
-              .toString()
-              .toLowerCase()
-              .contains(textEditingValue.text.toLowerCase());
-        }).toList();
-      },
-      onSelected: (String selection) {
-        print(selection);
-        // Update the TextField with the selected
-        accountMaster_page_controller.IsActive_controller.text =
-            _displayIsActiveForOption(selection).toString();
-        if(accountMaster_page_controller.IsActive_controller.text=="Yes"){
-          accountMaster_page_controller.InActive=1;
-          print(accountMaster_page_controller.InActive);
-        }else if(accountMaster_page_controller.IsActive_controller.text=="No"){
-          accountMaster_page_controller.InActive=0;
-          print(accountMaster_page_controller.InActive);
-        }
-        print('IsActive.....${accountMaster_page_controller.IsActive_controller.text}');
-      },
-      fieldViewBuilder: (BuildContext context, TextEditingController controller,
-          FocusNode focusNode, VoidCallback onFieldSubmitted) {
-        return Container(
-          decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(10)
-          ),
-          child: TextField(
-            readOnly: accountMaster_page_controller.view=='Account'?false:true,
-            /* readOnly: accountMaster_page_controller.view=='FromTaskMainScreen'
-                || accountMaster_page_controller.view=='VIEW' ||
-                accountMaster_page_controller.view=='Task'||
-                accountMaster_page_controller.view=='FromSaleCycleMainScreen'
-                || accountMaster_page_controller.view=="FromQuoteApproval"?true:false,*/
-            cursorColor: AllColors.primaryDark1,
-            controller: controller
-              ..text = accountMaster_page_controller.IsActive_controller
-                  .text,
-            focusNode: focusNode,
-            //onSubmitted: onFieldSubmitted,
-            decoration: InputDecoration(
-              suffixIcon: IconButton(
-                color: AllColors.primaryDark1,
-                onPressed: (){
-                  if(focusNode.hasFocus){
-                    focusNode.unfocus();
-                  }else{
-                    focusNode.requestFocus();
-                  }
-                },
-                icon: Icon(Icons.arrow_drop_down),
-              ),
-              contentPadding: EdgeInsets.symmetric(
-                  vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-              hintText: 'Active',
-              labelText: 'Active',
-              /*hintStyle: GoogleFonts.poppins(
-                  color: AllColors.lightblackColor,
-                  fontWeight: FontWeight.w300,
-                  fontSize: AllFontSize.ten
-              ),
-              labelStyle: GoogleFonts.poppins(
+    return IgnorePointer(
+      ignoring: accountMaster_page_controller.view=='Account'?false:true,
+      child: Autocomplete<String>(
+        displayStringForOption: _displayIsActiveForOption,
+        optionsBuilder: (TextEditingValue textEditingValue) {
+          if(accountMaster_page_controller.view=='VIEW'){
+            accountMaster_page_controller.IsActiveTypeList.value=[];
+            return accountMaster_page_controller.IsActiveTypeList;
+          }
+          if (textEditingValue.text.isEmpty) {
+            return accountMaster_page_controller.IsActiveTypeList;
+            // return const Iterable<VehicleTypeResponse>.empty();
+          }
+          return accountMaster_page_controller.IsActiveTypeList
+              .where((String option) {
+            return option
+                .toString()
+                .toLowerCase()
+                .contains(textEditingValue.text.toLowerCase());
+          }).toList();
+        },
+        onSelected: (String selection) {
+          print(selection);
+          // Update the TextField with the selected
+          accountMaster_page_controller.IsActive_controller.text =
+              _displayIsActiveForOption(selection).toString();
+          if(accountMaster_page_controller.IsActive_controller.text=="Yes"){
+            accountMaster_page_controller.InActive=1;
+            print(accountMaster_page_controller.InActive);
+          }else if(accountMaster_page_controller.IsActive_controller.text=="No"){
+            accountMaster_page_controller.InActive=0;
+            print(accountMaster_page_controller.InActive);
+          }
+          print('IsActive.....${accountMaster_page_controller.IsActive_controller.text}');
+        },
+        fieldViewBuilder: (BuildContext context, TextEditingController controller,
+            FocusNode focusNode, VoidCallback onFieldSubmitted) {
+          return Container(
+            decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10)
+            ),
+            child: TextField(
+             // readOnly: accountMaster_page_controller.view=='Account'?false:true,
+              /* readOnly: accountMaster_page_controller.view=='FromTaskMainScreen'
+                  || accountMaster_page_controller.view=='VIEW' ||
+                  accountMaster_page_controller.view=='Task'||
+                  accountMaster_page_controller.view=='FromSaleCycleMainScreen'
+                  || accountMaster_page_controller.view=="FromQuoteApproval"?true:false,*/
+              cursorColor: AllColors.primaryDark1,
+              controller: controller
+                ..text = accountMaster_page_controller.IsActive_controller
+                    .text,
+              focusNode: focusNode,
+              //onSubmitted: onFieldSubmitted,
+              decoration: InputDecoration(
+                suffixIcon: IconButton(
                   color: AllColors.primaryDark1,
-                  fontWeight: FontWeight.w700,
-                  fontSize: AllFontSize.sisxteen),
-              focusedBorder: UnderlineInputBorder(
-                borderSide: BorderSide(
-                    color: AllColors.primaryDark1), // Change the color to green
-              ),*/
+                  onPressed: (){
+                    if(focusNode.hasFocus){
+                      focusNode.unfocus();
+                    }else{
+                      focusNode.requestFocus();
+                    }
+                  },
+                  icon: Icon(Icons.arrow_drop_down),
+                ),
+                contentPadding: EdgeInsets.symmetric(
+                    vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+                hintText: 'Active',
+                labelText: 'Active',
+                /*hintStyle: GoogleFonts.poppins(
+                    color: AllColors.lightblackColor,
+                    fontWeight: FontWeight.w300,
+                    fontSize: AllFontSize.ten
+                ),
+                labelStyle: GoogleFonts.poppins(
+                    color: AllColors.primaryDark1,
+                    fontWeight: FontWeight.w700,
+                    fontSize: AllFontSize.sisxteen),
+                focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                      color: AllColors.primaryDark1), // Change the color to green
+                ),*/
 
-              border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(10))
+                border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(10))
+                ),
               ),
             ),
-          ),
-        );
-      },
-      optionsViewBuilder: (BuildContext context,
-          AutocompleteOnSelected<String> onSelected,
-          Iterable<String> suggestions) {
-        return Align(
-          alignment: Alignment.topLeft,
-          child: Material(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-            elevation: 4.0,
-            child: Container(
-              width: size.width*.85,
-              constraints: BoxConstraints(maxHeight: 200),
-              child: ListView.builder(
-                shrinkWrap: true,
-                itemCount: suggestions.length,
-                itemBuilder: (context, index) {
-                  final String option =
-                  suggestions.elementAt(index);
-                  return GestureDetector(
-                    onTap: () {
-                      onSelected(option);
-                    },
-                    child: Container(
-                      padding: EdgeInsets.all(8.0),
-                      child: Text(
-                        option,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.blackColor,
-                            fontWeight: FontWeight.w300,
-                            fontSize: AllFontSize
-                                .sisxteen // Change the text color here
+          );
+        },
+        optionsViewBuilder: (BuildContext context,
+            AutocompleteOnSelected<String> onSelected,
+            Iterable<String> suggestions) {
+          return Align(
+            alignment: Alignment.topLeft,
+            child: Material(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+              elevation: 4.0,
+              child: Container(
+                width: size.width*.85,
+                constraints: BoxConstraints(maxHeight: 200),
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: suggestions.length,
+                  itemBuilder: (context, index) {
+                    final String option =
+                    suggestions.elementAt(index);
+                    return GestureDetector(
+                      onTap: () {
+                        onSelected(option);
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text(
+                          option,
+                          style: GoogleFonts.poppins(
+                              color: AllColors.blackColor,
+                              fontWeight: FontWeight.w300,
+                              fontSize: AllFontSize
+                                  .sisxteen // Change the text color here
+                          ),
                         ),
                       ),
-                    ),
-                  );
-                },
+                    );
+                  },
+                ),
               ),
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 
@@ -2699,642 +2832,95 @@ class UpdateAccountMaster extends StatelessWidget{
   }
 
   Widget bindStateDropDown(context){
-    return Autocomplete<PincodeMasterModel>(
-      displayStringForOption: _displayStateListForOption,
-      optionsBuilder: (TextEditingValue textEditingValue) async {
-        if(accountMaster_page_controller.view=='VIEW'){
-          accountMaster_page_controller.StateMaster_list.value=[];
-          return accountMaster_page_controller.StateMasterPinCode_list;
-        }
-        if (textEditingValue.text.isEmpty) {
-          return accountMaster_page_controller.StateMasterPinCode_list;
-          // return const Iterable<PincodeMasterModel>.empty();
-        }
-        return accountMaster_page_controller.StateMasterPinCode_list
-            .where((PincodeMasterModel option) {
-          return option.stateName
-              .toString()
-              .toLowerCase()
-              .contains(textEditingValue.text.toLowerCase());
-        }).toList();
+    return IgnorePointer(
+      ignoring: accountMaster_page_controller.view=='Account'?false:true,
+      child: Autocomplete<PincodeMasterModel>(
+        displayStringForOption: _displayStateListForOption,
+        optionsBuilder: (TextEditingValue textEditingValue) async {
+          if(accountMaster_page_controller.view=='VIEW'){
+            accountMaster_page_controller.StateMaster_list.value=[];
+            return accountMaster_page_controller.StateMasterPinCode_list;
+          }
+          if (textEditingValue.text.isEmpty) {
+            return accountMaster_page_controller.StateMasterPinCode_list;
+            // return const Iterable<PincodeMasterModel>.empty();
+          }
+          return accountMaster_page_controller.StateMasterPinCode_list
+              .where((PincodeMasterModel option) {
+            return option.stateName
+                .toString()
+                .toLowerCase()
+                .contains(textEditingValue.text.toLowerCase());
+          }).toList();
 
-      },
-      onSelected: (PincodeMasterModel selection) {
-        print(selection.stateName);
-        // Update the TextField with the selected
-        accountMaster_page_controller.State_Controller.text =
-            _displayStateListForOption(selection).toString();
-        accountMaster_page_controller.GovtStateCode.value = accountMaster_page_controller.State_Controller.text.substring(0, 2);
-        // print('GstCOde...: ${accountMaster_page_controller.GovtStateCode}');
-        /* if(accountMaster_page_controller.gst_registration_type_controller.value.text == 'Registered' && accountMaster_page_controller.GstStateCode.value != selection.governmentStateCode){
-          Utils.sanckBarError("Wrong State", "Please Select Valid State");
-        }*/
+        },
+        onSelected: (PincodeMasterModel selection) {
+          print(selection.stateName);
+          // Update the TextField with the selected
+          accountMaster_page_controller.State_Controller.text =
+              _displayStateListForOption(selection).toString();
+          accountMaster_page_controller.GovtStateCode.value = accountMaster_page_controller.State_Controller.text.substring(0, 2);
+          // print('GstCOde...: ${accountMaster_page_controller.GovtStateCode}');
+          /* if(accountMaster_page_controller.gst_registration_type_controller.value.text == 'Registered' && accountMaster_page_controller.GstStateCode.value != selection.governmentStateCode){
+            Utils.sanckBarError("Wrong State", "Please Select Valid State");
+          }*/
 
-        //accountMaster_page_controller.getCompanyProfileTypeApi();
+          //accountMaster_page_controller.getCompanyProfileTypeApi();
 
-        final parts = [
-          accountMaster_page_controller.Address_controller.text,
-          accountMaster_page_controller.Address2_Controller.text,
-          accountMaster_page_controller.City_Controller.text,
-          accountMaster_page_controller.District_Controller.text,
-          accountMaster_page_controller.State_Controller.text,
-          accountMaster_page_controller.PostCode_Controller.text,
-        ];
+          final parts = [
+            accountMaster_page_controller.Address_controller.text,
+            accountMaster_page_controller.Address2_Controller.text,
+            accountMaster_page_controller.City_Controller.text,
+            accountMaster_page_controller.District_Controller.text,
+            accountMaster_page_controller.State_Controller.text,
+            accountMaster_page_controller.PostCode_Controller.text,
+          ];
 
-        // Filter out empty strings and join with commas
-        final fullAddress = parts.where((part) => part.trim().isNotEmpty).join(", ");
+          // Filter out empty strings and join with commas
+          final fullAddress = parts.where((part) => part.trim().isNotEmpty).join(", ");
 
-        accountMaster_page_controller.FullAddress_Controller.value.text = fullAddress;
+          accountMaster_page_controller.FullAddress_Controller.value.text = fullAddress;
 
-      },
-      fieldViewBuilder: (BuildContext context, TextEditingController controller,
-          FocusNode focusNode, VoidCallback onFieldSubmitted) {
-        return Container(
-          decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(10)
-          ),
-          child: TextFormField(
-            readOnly: accountMaster_page_controller.view=='Account'?false:true,
-            //maxLength: 50,
-            /*validator: (value){
-              if(value == null || value.isEmpty){
-                return null;
-              }
-              else if(value != accountMaster_page_controller.GstStateCode){
-                return 'Please select valid state';
-              }else{
-                return null;
-              }
-            },*/
-            onChanged: (value) {
-              /*for(int i = 0; i< accountMaster_page_controller.StateMaster_list.length; i++){
-                if(accountMaster_page_controller.GstStateCode == selection.governmentStateCode){
-                  accountMaster_page_controller.GovtStateCode = selection.governmentStateCode!;
-                  //accountMaster_page_controller.GstStateList.clear();
-                  //accountMaster_page_controller.GstStateList.add(accountMaster_page_controller.StateMaster_list[i]);
-                  print('GstStae....${accountMaster_page_controller.GovtStateCode}');
+        },
+        fieldViewBuilder: (BuildContext context, TextEditingController controller,
+            FocusNode focusNode, VoidCallback onFieldSubmitted) {
+          return Container(
+            decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10)
+            ),
+            child: TextFormField(
+              //readOnly: accountMaster_page_controller.view=='Account'?false:true,
+              //maxLength: 50,
+              /*validator: (value){
+                if(value == null || value.isEmpty){
+                  return null;
                 }
-              }
-              if(accountMaster_page_controller.gst_registration_type_controller.value.text == 'Registered' && accountMaster_page_controller.GstStateCode != selection.governmentStateCode){
-                Utils.sanckBarError("Wrong State", "Please Select Valid State");
-              }*/
-
-              final parts = [
-                accountMaster_page_controller.Address_controller.text,
-                accountMaster_page_controller.Address2_Controller.text,
-                accountMaster_page_controller.City_Controller.text,
-                accountMaster_page_controller.District_Controller.text,
-                value,
-                accountMaster_page_controller.PostCode_Controller.text,
-              ];
-
-              // Filter out empty strings and join with commas
-              final fullAddress = parts.where((part) => part.trim().isNotEmpty).join(", ");
-
-              accountMaster_page_controller.FullAddress_Controller.value.text = fullAddress;
-            },
-            cursorColor: AllColors.primaryDark1,
-            controller: controller
-              ..text = accountMaster_page_controller.State_Controller
-                  .text,
-            focusNode: focusNode,
-            //onSubmitted: onFieldSubmitted,
-            decoration: InputDecoration(
-              suffixIcon: IconButton(
-                color: AllColors.primaryDark1,
-                onPressed: (){
-                  if(focusNode.hasFocus){
-                    focusNode.unfocus();
-                  }else{
-                    focusNode.requestFocus();
+                else if(value != accountMaster_page_controller.GstStateCode){
+                  return 'Please select valid state';
+                }else{
+                  return null;
+                }
+              },*/
+              onChanged: (value) {
+                /*for(int i = 0; i< accountMaster_page_controller.StateMaster_list.length; i++){
+                  if(accountMaster_page_controller.GstStateCode == selection.governmentStateCode){
+                    accountMaster_page_controller.GovtStateCode = selection.governmentStateCode!;
+                    //accountMaster_page_controller.GstStateList.clear();
+                    //accountMaster_page_controller.GstStateList.add(accountMaster_page_controller.StateMaster_list[i]);
+                    print('GstStae....${accountMaster_page_controller.GovtStateCode}');
                   }
-                },
-                icon: Icon(Icons.arrow_drop_down),
-              ),
-              contentPadding: EdgeInsets.symmetric(
-                  vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-              hintText: 'State*',
-              labelText: 'State*',
-              border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(10))
-              ),
-            ),
-          ),
-        );
-      },
-      optionsViewBuilder: (BuildContext context,
-          AutocompleteOnSelected<PincodeMasterModel> onSelected,
-          Iterable<PincodeMasterModel> suggestions) {
-        return Align(
-          alignment: Alignment.topLeft,
-          child: Material(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-            elevation: 4.0,
-            child: Container(
-              width: size.width*.85,
-              constraints: BoxConstraints(maxHeight: 200),
-              child: ListView.builder(
-                shrinkWrap: true,
-                itemCount: suggestions.length,
-                itemBuilder: (context, index) {
-                  final PincodeMasterModel option =
-                  suggestions.elementAt(index);
-                  return GestureDetector(
-                    onTap: () {
-                      onSelected(option);
-                    },
-                    child: Container(
-                      padding: EdgeInsets.all(8.0),
-                      child: Text(
-                        option.stateName.toString(),
-                        style: GoogleFonts.poppins(
-                            color: AllColors.blackColor,
-                            fontWeight: FontWeight.w300,
-                            fontSize: AllFontSize
-                                .sisxteen // Change the text color here
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
-          ),
-        );
-      },
-    );
-  }
+                }
+                if(accountMaster_page_controller.gst_registration_type_controller.value.text == 'Registered' && accountMaster_page_controller.GstStateCode != selection.governmentStateCode){
+                  Utils.sanckBarError("Wrong State", "Please Select Valid State");
+                }*/
 
-  Widget bindPostalCodeDropDown(context){
-    return Autocomplete<PostalCodeModel>(
-      displayStringForOption: _displayPostalCodeListForOption,
-      optionsBuilder: (TextEditingValue textEditingValue) {
-        if (textEditingValue.text.isEmpty) {
-          return accountMaster_page_controller.geoPostal_Code_list;
-          // return const Iterable<VehicleTypeResponse>.empty();
-        }
-        return accountMaster_page_controller.geoPostal_Code_list
-            .where((PostalCodeModel option) {
-          return option.pincode
-              .toString()
-              .toLowerCase()
-              .contains(textEditingValue.text.toLowerCase());
-        }).toList();
-      },
-      onSelected: (PostalCodeModel selection) {
-        print(selection.pincode);
-        // Update the TextField with the selected
-        accountMaster_page_controller.PostCode_Controller.text =
-            _displayPostalCodeListForOption(selection).toString();
-        accountMaster_page_controller.getStateMasterApi(accountMaster_page_controller.PostCode_Controller.text, 'state');
-        accountMaster_page_controller.getStateMasterApi(accountMaster_page_controller.PostCode_Controller.text, 'city');
-        accountMaster_page_controller.getStateMasterApi(accountMaster_page_controller.PostCode_Controller.text, 'district');
-        accountMaster_page_controller.City_Controller.text = '';
-        accountMaster_page_controller.District_Controller.text = '';
-        accountMaster_page_controller.State_Controller.text = '';
-        accountMaster_page_controller.ShowState1.value = false;
-        accountMaster_page_controller.ShowState1.value = true;
-        final parts = [
-          accountMaster_page_controller.Address_controller.text,
-          accountMaster_page_controller.Address2_Controller.text,
-          accountMaster_page_controller.City_Controller.text,
-          accountMaster_page_controller.District_Controller.text,
-          accountMaster_page_controller.State_Controller.text,
-          accountMaster_page_controller.PostCode_Controller.text,
-        ];
-
-        // Filter out empty strings and join with commas
-        final fullAddress = parts.where((part) => part.trim().isNotEmpty).join(", ");
-
-        accountMaster_page_controller.FullAddress_Controller.value.text = fullAddress;
-
-      },
-      fieldViewBuilder: (BuildContext context, TextEditingController controller,
-          FocusNode focusNode, VoidCallback onFieldSubmitted) {
-        return Container(
-          decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(10)
-          ),
-          child: TextFormField(
-            readOnly:  accountMaster_page_controller.view=='Account'?false:true,
-            //maxLength: 50,
-            onChanged: (value){
-              final parts = [
-                accountMaster_page_controller.Address_controller.text,
-                accountMaster_page_controller.Address2_Controller.text,
-                accountMaster_page_controller.City_Controller.text,
-                accountMaster_page_controller.District_Controller.text,
-                accountMaster_page_controller.State_Controller.text,
-                value,
-              ];
-
-              // Filter out empty strings and join with commas
-              final fullAddress = parts.where((part) => part.trim().isNotEmpty).join(", ");
-
-              accountMaster_page_controller.FullAddress_Controller.value.text = fullAddress;
-            },
-            cursorColor: AllColors.primaryDark1,
-            controller: controller
-              ..text = accountMaster_page_controller.PostCode_Controller
-                  .text,
-            focusNode: focusNode,
-            //onSubmitted: onFieldSubmitted,
-            decoration: InputDecoration(
-              suffixIcon: IconButton(
-                color: AllColors.primaryDark1,
-                onPressed: (){
-                  if(focusNode.hasFocus){
-                    focusNode.unfocus();
-                  }else{
-                    focusNode.requestFocus();
-                  }
-                },
-                icon: Icon(Icons.arrow_drop_down),
-              ),
-              contentPadding: EdgeInsets.symmetric(
-                  vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-              hintText: 'Pin Code*',
-              labelText: 'Pin Code*',
-              border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(10))
-              ),
-            ),
-          ),
-        );
-      },
-      optionsViewBuilder: (BuildContext context,
-          AutocompleteOnSelected<PostalCodeModel> onSelected,
-          Iterable<PostalCodeModel> suggestions) {
-        return Align(
-          alignment: Alignment.topLeft,
-          child: Material(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-            elevation: 4.0,
-            child: Container(
-              width: size.width*.85,
-              constraints: BoxConstraints(maxHeight: 200),
-              child: ListView.builder(
-                shrinkWrap: true,
-                itemCount: suggestions.length,
-                itemBuilder: (context, index) {
-                  final PostalCodeModel option =
-                  suggestions.elementAt(index);
-                  return GestureDetector(
-                    onTap: () {
-                      onSelected(option);
-                    },
-                    child: Container(
-                      padding: EdgeInsets.all(8.0),
-                      child: Text(
-                        option.pincode.toString(),
-                        style: GoogleFonts.poppins(
-                            color: AllColors.blackColor,
-                            fontWeight: FontWeight.w300,
-                            fontSize: AllFontSize
-                                .sisxteen // Change the text color here
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  Widget bindShippingPostalCodeDropDown(context){
-    return Autocomplete<PostalCodeModel>(
-      displayStringForOption: _displayPostalCodeListForOption,
-      optionsBuilder: (TextEditingValue textEditingValue) {
-        if (textEditingValue.text.isEmpty) {
-          return accountMaster_page_controller.geoPostal_Code_list;
-          // return const Iterable<VehicleTypeResponse>.empty();
-        }
-        return accountMaster_page_controller.geoPostal_Code_list
-            .where((PostalCodeModel option) {
-          return option.pincode
-              .toString()
-              .toLowerCase()
-              .contains(textEditingValue.text.toLowerCase());
-        }).toList();
-      },
-      onSelected: (PostalCodeModel selection) {
-        print(selection.pincode);
-        // Update the TextField with the selected
-        accountMaster_page_controller.Shipping_PostCode_Controller.value.text =
-            _displayPostalCodeListForOption(selection).toString();
-        accountMaster_page_controller.getShippingStateMasterApi(accountMaster_page_controller.Shipping_PostCode_Controller.value.text,'state');
-        accountMaster_page_controller.getShippingStateMasterApi(accountMaster_page_controller.Shipping_PostCode_Controller.value.text,'city');
-        accountMaster_page_controller.getShippingStateMasterApi(accountMaster_page_controller.Shipping_PostCode_Controller.value.text,'district');
-        accountMaster_page_controller.Shipping_City_Controller.value.text = '';
-        accountMaster_page_controller.Shipping_District_Controller.value.text = '';
-        accountMaster_page_controller.Shipping_State_Controller.value.text = '';
-        accountMaster_page_controller.ShowState.value = false;
-        accountMaster_page_controller.ShowState.value = true;
-        final parts = [
-          accountMaster_page_controller.Shipping_Address_controller.value.text,
-          accountMaster_page_controller.Shipping_Address2_Controller.value.text,
-          accountMaster_page_controller.Shipping_City_Controller.value.text,
-          accountMaster_page_controller.Shipping_District_Controller.value.text,
-          accountMaster_page_controller.Shipping_State_Controller.value.text,
-          accountMaster_page_controller.Shipping_PostCode_Controller.value.text,
-        ];
-
-        // Filter out empty strings and join with commas
-        final fullAddress = parts.where((part) => part.trim().isNotEmpty).join(", ");
-
-        accountMaster_page_controller.Shipping_FullAddress_Controller.value.text = fullAddress;
-      },
-      fieldViewBuilder: (BuildContext context, TextEditingController controller,
-          FocusNode focusNode, VoidCallback onFieldSubmitted) {
-        return Container(
-          decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(10)
-          ),
-          child: TextFormField(
-            readOnly:  accountMaster_page_controller.view=='Account'?false:true,
-            // maxLength: 50,
-            onChanged: (value){
-              final parts = [
-                accountMaster_page_controller.Shipping_Address_controller.value.text,
-                accountMaster_page_controller.Shipping_Address2_Controller.value.text,
-                accountMaster_page_controller.Shipping_City_Controller.value.text,
-                accountMaster_page_controller.Shipping_District_Controller.value.text,
-                accountMaster_page_controller.Shipping_State_Controller.value.text,
-                value,
-              ];
-
-              // Filter out empty strings and join with commas
-              final fullAddress = parts.where((part) => part.trim().isNotEmpty).join(", ");
-
-              accountMaster_page_controller.Shipping_FullAddress_Controller.value.text = fullAddress;
-            },
-            cursorColor: AllColors.primaryDark1,
-            controller: controller
-              ..text = accountMaster_page_controller.Shipping_PostCode_Controller.value
-                  .text,
-            focusNode: focusNode,
-            //onSubmitted: onFieldSubmitted,
-            decoration: InputDecoration(
-              suffixIcon: IconButton(
-                color: AllColors.primaryDark1,
-                onPressed: (){
-                  if(focusNode.hasFocus){
-                    focusNode.unfocus();
-                  }else{
-                    focusNode.requestFocus();
-                  }
-                },
-                icon: Icon(Icons.arrow_drop_down),
-              ),
-              contentPadding: EdgeInsets.symmetric(
-                  vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-              hintText: 'Pin Code',
-              labelText: 'Pin Code',
-              border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(10))
-              ),
-            ),
-          ),
-        );
-      },
-      optionsViewBuilder: (BuildContext context,
-          AutocompleteOnSelected<PostalCodeModel> onSelected,
-          Iterable<PostalCodeModel> suggestions) {
-        return Align(
-          alignment: Alignment.topLeft,
-          child: Material(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-            elevation: 4.0,
-            child: Container(
-              width: size.width*.85,
-              constraints: BoxConstraints(maxHeight: 200),
-              child: ListView.builder(
-                shrinkWrap: true,
-                itemCount: suggestions.length,
-                itemBuilder: (context, index) {
-                  final PostalCodeModel option =
-                  suggestions.elementAt(index);
-                  return GestureDetector(
-                    onTap: () {
-                      onSelected(option);
-                    },
-                    child: Container(
-                      padding: EdgeInsets.all(8.0),
-                      child: Text(
-                        option.pincode.toString(),
-                        style: GoogleFonts.poppins(
-                            color: AllColors.blackColor,
-                            fontWeight: FontWeight.w300,
-                            fontSize: AllFontSize
-                                .sisxteen // Change the text color here
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  Widget bindShippingStateDropDown(context){
-    return Autocomplete<PincodeMasterModel>(
-      displayStringForOption: _displayStateListForOption,
-      optionsBuilder: (TextEditingValue textEditingValue) async {
-        if (textEditingValue.text.isEmpty) {
-          return accountMaster_page_controller.ShippingStateMasterPinCode_list;
-          // return const Iterable<PincodeMasterModel>.empty();
-        }
-        return accountMaster_page_controller.ShippingStateMasterPinCode_list
-            .where((PincodeMasterModel option) {
-          return option.stateName
-              .toString()
-              .toLowerCase()
-              .contains(textEditingValue.text.toLowerCase());
-        }).toList();
-
-      },
-      onSelected: (PincodeMasterModel selection) {
-        print(selection.stateName);
-        // Update the TextField with the selected
-        accountMaster_page_controller.Shipping_State_Controller.value.text =
-            _displayStateListForOption(selection).toString();
-        FocusNode().unfocus();
-        final parts = [
-          accountMaster_page_controller.Shipping_Address_controller.value.text,
-          accountMaster_page_controller.Shipping_Address2_Controller.value.text,
-          accountMaster_page_controller.Shipping_City_Controller.value.text,
-          accountMaster_page_controller.Shipping_District_Controller.value.text,
-          accountMaster_page_controller.Shipping_State_Controller.value.text,
-          accountMaster_page_controller.Shipping_PostCode_Controller.value.text,
-        ];
-
-        // Filter out empty strings and join with commas
-        final fullAddress = parts.where((part) => part.trim().isNotEmpty).join(", ");
-
-        accountMaster_page_controller.Shipping_FullAddress_Controller.value.text = fullAddress;
-      },
-      fieldViewBuilder: (BuildContext context, TextEditingController controller,
-          FocusNode focusNode, VoidCallback onFieldSubmitted) {
-        return Container(
-            decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(10)
-            ),
-            child: TextFormField(
-              readOnly:  accountMaster_page_controller.view=='Account'?false:true,
-              //maxLength: 50,
-              onChanged: (value){
-                final parts = [
-                  accountMaster_page_controller.Shipping_Address_controller.value.text,
-                  accountMaster_page_controller.Shipping_Address2_Controller.value.text,
-                  accountMaster_page_controller.Shipping_City_Controller.value.text,
-                  accountMaster_page_controller.Shipping_District_Controller.value.text,
-                  value,
-                  accountMaster_page_controller.Shipping_PostCode_Controller.value.text,
-                ];
-
-                // Filter out empty strings and join with commas
-                final fullAddress = parts.where((part) => part.trim().isNotEmpty).join(", ");
-
-                accountMaster_page_controller.Shipping_FullAddress_Controller.value.text = fullAddress;
-              },
-              cursorColor: AllColors.primaryDark1,
-              controller: controller
-                ..text = accountMaster_page_controller.Shipping_State_Controller.value
-                    .text,
-              focusNode: focusNode,
-              //onSubmitted: onFieldSubmitted,
-              decoration: InputDecoration(
-                suffixIcon: IconButton(
-                  color: AllColors.primaryDark1,
-                  onPressed: (){
-                    if(focusNode.hasFocus){
-                      focusNode.unfocus();
-                    }else{
-                      focusNode.requestFocus();
-                    }
-                  },
-                  icon: Icon(Icons.arrow_drop_down),
-                ),
-                contentPadding: EdgeInsets.symmetric(
-                    vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-                hintText: 'State',
-                labelText: 'State',
-                border: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(10))
-                ),
-              ),
-            )
-        );
-
-      },
-      optionsViewBuilder: (BuildContext context,
-          AutocompleteOnSelected<PincodeMasterModel> onSelected,
-          Iterable<PincodeMasterModel> suggestions) {
-        return Align(
-          alignment: Alignment.topLeft,
-          child: Material(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-            elevation: 4.0,
-            child: Container(
-              width: size.width*.85,
-              constraints: BoxConstraints(maxHeight: 200),
-              child: ListView.builder(
-                shrinkWrap: true,
-                itemCount: suggestions.length,
-                itemBuilder: (context, index) {
-                  final PincodeMasterModel option =
-                  suggestions.elementAt(index);
-                  return GestureDetector(
-                    onTap: () {
-                      onSelected(option);
-                    },
-                    child: Container(
-                      padding: EdgeInsets.all(8.0),
-                      child: Text(
-                        option.stateName.toString(),
-                        style: GoogleFonts.poppins(
-                            color: AllColors.blackColor,
-                            fontWeight: FontWeight.w300,
-                            fontSize: AllFontSize
-                                .sisxteen // Change the text color here
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  Widget bindCityDropDown(context){
-    return Autocomplete<PincodeMasterModel>(
-      displayStringForOption: _displayCityListForOption,
-      optionsBuilder: (TextEditingValue textEditingValue) async {
-        if (textEditingValue.text.isEmpty) {
-          return accountMaster_page_controller.CityMasterPinCode_list;
-          // return const Iterable<PincodeMasterModel>.empty();
-        }
-        return accountMaster_page_controller.CityMasterPinCode_list
-            .where((PincodeMasterModel option) {
-          return option.city
-              .toString()
-              .toLowerCase()
-              .contains(textEditingValue.text.toLowerCase());
-        }).toList();
-      },
-      onSelected: (PincodeMasterModel selection) {
-        print(selection.city);
-        // Update the TextField with the selected
-        accountMaster_page_controller.City_Controller.text =
-            _displayCityListForOption(selection).toString();
-        FocusNode().unfocus();
-        final parts = [
-          accountMaster_page_controller.Address_controller.text,
-          accountMaster_page_controller.Address2_Controller.text,
-          accountMaster_page_controller.City_Controller.text,
-          accountMaster_page_controller.District_Controller.text,
-          accountMaster_page_controller.State_Controller.text,
-          accountMaster_page_controller.PostCode_Controller.text,
-        ];
-
-        // Filter out empty strings and join with commas
-        final fullAddress = parts.where((part) => part.trim().isNotEmpty).join(", ");
-
-        accountMaster_page_controller.FullAddress_Controller.value.text = fullAddress;
-      },
-      fieldViewBuilder: (BuildContext context, TextEditingController controller,
-          FocusNode focusNode, VoidCallback onFieldSubmitted) {
-        return Container(
-            decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(10)
-            ),
-            child: TextFormField(
-              readOnly:  accountMaster_page_controller.view=='Account'?false:true,
-              //maxLength: 50,
-              onChanged: (value){
                 final parts = [
                   accountMaster_page_controller.Address_controller.text,
                   accountMaster_page_controller.Address2_Controller.text,
-                  value,
+                  accountMaster_page_controller.City_Controller.text,
                   accountMaster_page_controller.District_Controller.text,
-                  accountMaster_page_controller.State_Controller.text,
+                  value,
                   accountMaster_page_controller.PostCode_Controller.text,
                 ];
 
@@ -3345,7 +2931,7 @@ class UpdateAccountMaster extends StatelessWidget{
               },
               cursorColor: AllColors.primaryDark1,
               controller: controller
-                ..text = accountMaster_page_controller.City_Controller
+                ..text = accountMaster_page_controller.State_Controller
                     .text,
               focusNode: focusNode,
               //onSubmitted: onFieldSubmitted,
@@ -3363,248 +2949,122 @@ class UpdateAccountMaster extends StatelessWidget{
                 ),
                 contentPadding: EdgeInsets.symmetric(
                     vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-                hintText: 'City*',
-                labelText: 'City*',
+                hintText: 'State*',
+                labelText: 'State*',
                 border: OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(10))
                 ),
               ),
-            )
-        );
-
-      },
-      optionsViewBuilder: (BuildContext context,
-          AutocompleteOnSelected<PincodeMasterModel> onSelected,
-          Iterable<PincodeMasterModel> suggestions) {
-        return Align(
-          alignment: Alignment.topLeft,
-          child: Material(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-            elevation: 4.0,
-            child: Container(
-              width: size.width*.85,
-              constraints: BoxConstraints(maxHeight: 200),
-              child: ListView.builder(
-                shrinkWrap: true,
-                itemCount: suggestions.length,
-                itemBuilder: (context, index) {
-                  final PincodeMasterModel option =
-                  suggestions.elementAt(index);
-                  return GestureDetector(
-                    onTap: () {
-                      onSelected(option);
-                    },
-                    child: Container(
-                      padding: EdgeInsets.all(8.0),
-                      child: Text(
-                        option.city.toString(),
-                        style: GoogleFonts.poppins(
-                            color: AllColors.blackColor,
-                            fontWeight: FontWeight.w300,
-                            fontSize: AllFontSize
-                                .sisxteen // Change the text color here
+            ),
+          );
+        },
+        optionsViewBuilder: (BuildContext context,
+            AutocompleteOnSelected<PincodeMasterModel> onSelected,
+            Iterable<PincodeMasterModel> suggestions) {
+          return Align(
+            alignment: Alignment.topLeft,
+            child: Material(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+              elevation: 4.0,
+              child: Container(
+                width: size.width*.85,
+                constraints: BoxConstraints(maxHeight: 200),
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: suggestions.length,
+                  itemBuilder: (context, index) {
+                    final PincodeMasterModel option =
+                    suggestions.elementAt(index);
+                    return GestureDetector(
+                      onTap: () {
+                        onSelected(option);
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text(
+                          option.stateName.toString(),
+                          style: GoogleFonts.poppins(
+                              color: AllColors.blackColor,
+                              fontWeight: FontWeight.w300,
+                              fontSize: AllFontSize
+                                  .sisxteen // Change the text color here
+                          ),
                         ),
                       ),
-                    ),
-                  );
-                },
+                    );
+                  },
+                ),
               ),
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 
-  Widget bindShippingCityDropDown(context){
-    return Autocomplete<PincodeMasterModel>(
-      displayStringForOption: _displayCityListForOption,
-      optionsBuilder: (TextEditingValue textEditingValue) async {
-        if (textEditingValue.text.isEmpty) {
-          return accountMaster_page_controller.ShippingCityMasterPinCode_list;
-          // return const Iterable<PincodeMasterModel>.empty();
-        }
-        return accountMaster_page_controller.ShippingCityMasterPinCode_list
-            .where((PincodeMasterModel option) {
-          return option.city
-              .toString()
-              .toLowerCase()
-              .contains(textEditingValue.text.toLowerCase());
-        }).toList();
+  Widget bindPostalCodeDropDown(context){
+    return IgnorePointer(
+      ignoring: accountMaster_page_controller.view=='Account'?false:true,
+      child: Autocomplete<PostalCodeModel>(
+        displayStringForOption: _displayPostalCodeListForOption,
+        optionsBuilder: (TextEditingValue textEditingValue) {
+          if (textEditingValue.text.isEmpty) {
+            return accountMaster_page_controller.geoPostal_Code_list;
+            // return const Iterable<VehicleTypeResponse>.empty();
+          }
+          return accountMaster_page_controller.geoPostal_Code_list
+              .where((PostalCodeModel option) {
+            return option.pincode
+                .toString()
+                .toLowerCase()
+                .contains(textEditingValue.text.toLowerCase());
+          }).toList();
+        },
+        onSelected: (PostalCodeModel selection) {
+          print(selection.pincode);
+          // Update the TextField with the selected
+          accountMaster_page_controller.PostCode_Controller.text =
+              _displayPostalCodeListForOption(selection).toString();
+          accountMaster_page_controller.getStateMasterApi(accountMaster_page_controller.PostCode_Controller.text, 'state');
+          accountMaster_page_controller.getStateMasterApi(accountMaster_page_controller.PostCode_Controller.text, 'city');
+          accountMaster_page_controller.getStateMasterApi(accountMaster_page_controller.PostCode_Controller.text, 'district');
+          accountMaster_page_controller.City_Controller.text = '';
+          accountMaster_page_controller.District_Controller.text = '';
+          accountMaster_page_controller.State_Controller.text = '';
+          accountMaster_page_controller.ShowState1.value = false;
+          accountMaster_page_controller.ShowState1.value = true;
+          final parts = [
+            accountMaster_page_controller.Address_controller.text,
+            accountMaster_page_controller.Address2_Controller.text,
+            accountMaster_page_controller.City_Controller.text,
+            accountMaster_page_controller.District_Controller.text,
+            accountMaster_page_controller.State_Controller.text,
+            accountMaster_page_controller.PostCode_Controller.text,
+          ];
 
-      },
-      onSelected: (PincodeMasterModel selection) {
-        print(selection.city);
-        // Update the TextField with the selected
-        accountMaster_page_controller.Shipping_City_Controller.value.text =
-            _displayCityListForOption(selection).toString();
-        FocusNode().unfocus();
-        final parts = [
-          accountMaster_page_controller.Shipping_Address_controller.value.text,
-          accountMaster_page_controller.Shipping_Address2_Controller.value.text,
-          accountMaster_page_controller.Shipping_City_Controller.value.text,
-          accountMaster_page_controller.Shipping_District_Controller.value.text,
-          accountMaster_page_controller.Shipping_State_Controller.value.text,
-          accountMaster_page_controller.Shipping_PostCode_Controller.value.text,
-        ];
+          // Filter out empty strings and join with commas
+          final fullAddress = parts.where((part) => part.trim().isNotEmpty).join(", ");
 
-        // Filter out empty strings and join with commas
-        final fullAddress = parts.where((part) => part.trim().isNotEmpty).join(", ");
+          accountMaster_page_controller.FullAddress_Controller.value.text = fullAddress;
 
-        accountMaster_page_controller.Shipping_FullAddress_Controller.value.text = fullAddress;
-      },
-      fieldViewBuilder: (BuildContext context, TextEditingController controller,
-          FocusNode focusNode, VoidCallback onFieldSubmitted) {
-        return Container(
+        },
+        fieldViewBuilder: (BuildContext context, TextEditingController controller,
+            FocusNode focusNode, VoidCallback onFieldSubmitted) {
+          return Container(
             decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(10)
             ),
             child: TextFormField(
-              readOnly:  accountMaster_page_controller.view=='Account'?false:true,
               //maxLength: 50,
-              onChanged: (value){
-                final parts = [
-                  accountMaster_page_controller.Shipping_Address_controller.value.text,
-                  accountMaster_page_controller.Shipping_Address2_Controller.value.text,
-                  value,
-                  accountMaster_page_controller.Shipping_District_Controller.value.text,
-                  accountMaster_page_controller.Shipping_State_Controller.value.text,
-                  accountMaster_page_controller.Shipping_PostCode_Controller.value.text,
-                ];
-
-                // Filter out empty strings and join with commas
-                final fullAddress = parts.where((part) => part.trim().isNotEmpty).join(", ");
-
-                accountMaster_page_controller.Shipping_FullAddress_Controller.value.text = fullAddress;
-              },
-              cursorColor: AllColors.primaryDark1,
-              controller: controller
-                ..text = accountMaster_page_controller.Shipping_City_Controller.value
-                    .text,
-              focusNode: focusNode,
-              //onSubmitted: onFieldSubmitted,
-              decoration: InputDecoration(
-                suffixIcon: IconButton(
-                  color: AllColors.primaryDark1,
-                  onPressed: (){
-                    if(focusNode.hasFocus){
-                      focusNode.unfocus();
-                    }else{
-                      focusNode.requestFocus();
-                    }
-                  },
-                  icon: Icon(Icons.arrow_drop_down),
-                ),
-                contentPadding: EdgeInsets.symmetric(
-                    vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-                hintText: 'City',
-                labelText: 'City',
-                border: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(10))
-                ),
-              ),
-            )
-        );
-
-      },
-      optionsViewBuilder: (BuildContext context,
-          AutocompleteOnSelected<PincodeMasterModel> onSelected,
-          Iterable<PincodeMasterModel> suggestions) {
-        return Align(
-          alignment: Alignment.topLeft,
-          child: Material(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-            elevation: 4.0,
-            child: Container(
-              width: size.width*.85,
-              constraints: BoxConstraints(maxHeight: 200),
-              child: ListView.builder(
-                shrinkWrap: true,
-                itemCount: suggestions.length,
-                itemBuilder: (context, index) {
-                  final PincodeMasterModel option =
-                  suggestions.elementAt(index);
-                  return GestureDetector(
-                    onTap: () {
-                      onSelected(option);
-                    },
-                    child: Container(
-                      padding: EdgeInsets.all(8.0),
-                      child: Text(
-                        option.city.toString(),
-                        style: GoogleFonts.poppins(
-                            color: AllColors.blackColor,
-                            fontWeight: FontWeight.w300,
-                            fontSize: AllFontSize
-                                .sisxteen // Change the text color here
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  Widget bindDistrictDropDown(context){
-    return Autocomplete<PincodeMasterModel>(
-      displayStringForOption: _displayDistrictListForOption,
-      optionsBuilder: (TextEditingValue textEditingValue) async {
-        if (textEditingValue.text.isEmpty) {
-          return accountMaster_page_controller.DistrictMasterPinCode_list;
-          // return const Iterable<PincodeMasterModel>.empty();
-        }
-        return accountMaster_page_controller.DistrictMasterPinCode_list
-            .where((PincodeMasterModel option) {
-          return option.district
-              .toString()
-              .toLowerCase()
-              .contains(textEditingValue.text.toLowerCase());
-        }).toList();
-      },
-      onSelected: (PincodeMasterModel selection) {
-        print(selection.district);
-        // Update the TextField with the selected
-        accountMaster_page_controller.District_Controller.text =
-            _displayDistrictListForOption(selection).toString();
-        FocusNode().unfocus();
-        final parts = [
-          accountMaster_page_controller.Address_controller.text,
-          accountMaster_page_controller.Address2_Controller.text,
-          accountMaster_page_controller.City_Controller.text,
-          accountMaster_page_controller.District_Controller.text,
-          accountMaster_page_controller.State_Controller.text,
-          accountMaster_page_controller.PostCode_Controller.text,
-        ];
-
-        // Filter out empty strings and join with commas
-        final fullAddress = parts.where((part) => part.trim().isNotEmpty).join(", ");
-
-        accountMaster_page_controller.FullAddress_Controller.value.text = fullAddress;
-      },
-      fieldViewBuilder: (BuildContext context, TextEditingController controller,
-          FocusNode focusNode, VoidCallback onFieldSubmitted) {
-        return Container(
-            decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(10)
-            ),
-            child: TextFormField(
-              readOnly:  accountMaster_page_controller.view=='Account'?false:true,
-              //maxLength: 150,
               onChanged: (value){
                 final parts = [
                   accountMaster_page_controller.Address_controller.text,
                   accountMaster_page_controller.Address2_Controller.text,
                   accountMaster_page_controller.City_Controller.text,
-                  value,
+                  accountMaster_page_controller.District_Controller.text,
                   accountMaster_page_controller.State_Controller.text,
-                  accountMaster_page_controller.PostCode_Controller.text,
+                  value,
                 ];
 
                 // Filter out empty strings and join with commas
@@ -3614,7 +3074,7 @@ class UpdateAccountMaster extends StatelessWidget{
               },
               cursorColor: AllColors.primaryDark1,
               controller: controller
-                ..text = accountMaster_page_controller.District_Controller
+                ..text = accountMaster_page_controller.PostCode_Controller
                     .text,
               focusNode: focusNode,
               //onSubmitted: onFieldSubmitted,
@@ -3632,113 +3092,121 @@ class UpdateAccountMaster extends StatelessWidget{
                 ),
                 contentPadding: EdgeInsets.symmetric(
                     vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-                hintText: 'District*',
-                labelText: 'District*',
+                hintText: 'Pin Code*',
+                labelText: 'Pin Code*',
                 border: OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(10))
                 ),
               ),
-            )
-        );
-
-      },
-      optionsViewBuilder: (BuildContext context,
-          AutocompleteOnSelected<PincodeMasterModel> onSelected,
-          Iterable<PincodeMasterModel> suggestions) {
-        return Align(
-          alignment: Alignment.topLeft,
-          child: Material(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-            elevation: 4.0,
-            child: Container(
-              width: size.width*.85,
-              constraints: BoxConstraints(maxHeight: 200),
-              child: ListView.builder(
-                shrinkWrap: true,
-                itemCount: suggestions.length,
-                itemBuilder: (context, index) {
-                  final PincodeMasterModel option =
-                  suggestions.elementAt(index);
-                  return GestureDetector(
-                    onTap: () {
-                      onSelected(option);
-                    },
-                    child: Container(
-                      padding: EdgeInsets.all(8.0),
-                      child: Text(
-                        option.district.toString(),
-                        style: GoogleFonts.poppins(
-                            color: AllColors.blackColor,
-                            fontWeight: FontWeight.w300,
-                            fontSize: AllFontSize
-                                .sisxteen // Change the text color here
+            ),
+          );
+        },
+        optionsViewBuilder: (BuildContext context,
+            AutocompleteOnSelected<PostalCodeModel> onSelected,
+            Iterable<PostalCodeModel> suggestions) {
+          return Align(
+            alignment: Alignment.topLeft,
+            child: Material(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+              elevation: 4.0,
+              child: Container(
+                width: size.width*.85,
+                constraints: BoxConstraints(maxHeight: 200),
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: suggestions.length,
+                  itemBuilder: (context, index) {
+                    final PostalCodeModel option =
+                    suggestions.elementAt(index);
+                    return GestureDetector(
+                      onTap: () {
+                        onSelected(option);
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text(
+                          option.pincode.toString(),
+                          style: GoogleFonts.poppins(
+                              color: AllColors.blackColor,
+                              fontWeight: FontWeight.w300,
+                              fontSize: AllFontSize
+                                  .sisxteen // Change the text color here
+                          ),
                         ),
                       ),
-                    ),
-                  );
-                },
+                    );
+                  },
+                ),
               ),
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 
-  Widget bindShippingDistrictDropDown(context){
-    return Autocomplete<PincodeMasterModel>(
-      displayStringForOption: _displayDistrictListForOption,
-      optionsBuilder: (TextEditingValue textEditingValue) async {
-        if (textEditingValue.text.isEmpty) {
-          return accountMaster_page_controller.ShippingDistrictMasterPinCode_list;
-          // return const Iterable<PincodeMasterModel>.empty();
-        }
-        return accountMaster_page_controller.ShippingDistrictMasterPinCode_list
-            .where((PincodeMasterModel option) {
-          return option.district
-              .toString()
-              .toLowerCase()
-              .contains(textEditingValue.text.toLowerCase());
-        }).toList();
-      },
-      onSelected: (PincodeMasterModel selection) {
-        print(selection.district);
-        // Update the TextField with the selected
-        accountMaster_page_controller.Shipping_District_Controller.value.text =
-            _displayDistrictListForOption(selection).toString();
-        FocusNode().unfocus();
-        final parts = [
-          accountMaster_page_controller.Shipping_Address_controller.value.text,
-          accountMaster_page_controller.Shipping_Address2_Controller.value.text,
-          accountMaster_page_controller.Shipping_City_Controller.value.text,
-          accountMaster_page_controller.Shipping_District_Controller.value.text,
-          accountMaster_page_controller.Shipping_State_Controller.value.text,
-          accountMaster_page_controller.Shipping_PostCode_Controller.value.text,
-        ];
+  Widget bindShippingPostalCodeDropDown(context){
+    return IgnorePointer(
+      ignoring: accountMaster_page_controller.view=='Account'?false:true,
+      child: Autocomplete<PostalCodeModel>(
+        displayStringForOption: _displayPostalCodeListForOption,
+        optionsBuilder: (TextEditingValue textEditingValue) {
+          if (textEditingValue.text.isEmpty) {
+            return accountMaster_page_controller.geoPostal_Code_list;
+            // return const Iterable<VehicleTypeResponse>.empty();
+          }
+          return accountMaster_page_controller.geoPostal_Code_list
+              .where((PostalCodeModel option) {
+            return option.pincode
+                .toString()
+                .toLowerCase()
+                .contains(textEditingValue.text.toLowerCase());
+          }).toList();
+        },
+        onSelected: (PostalCodeModel selection) {
+          print(selection.pincode);
+          // Update the TextField with the selected
+          accountMaster_page_controller.Shipping_PostCode_Controller.value.text =
+              _displayPostalCodeListForOption(selection).toString();
+          accountMaster_page_controller.getShippingStateMasterApi(accountMaster_page_controller.Shipping_PostCode_Controller.value.text,'state');
+          accountMaster_page_controller.getShippingStateMasterApi(accountMaster_page_controller.Shipping_PostCode_Controller.value.text,'city');
+          accountMaster_page_controller.getShippingStateMasterApi(accountMaster_page_controller.Shipping_PostCode_Controller.value.text,'district');
+          accountMaster_page_controller.Shipping_City_Controller.value.text = '';
+          accountMaster_page_controller.Shipping_District_Controller.value.text = '';
+          accountMaster_page_controller.Shipping_State_Controller.value.text = '';
+          accountMaster_page_controller.ShowState.value = false;
+          accountMaster_page_controller.ShowState.value = true;
+          final parts = [
+            accountMaster_page_controller.Shipping_Address_controller.value.text,
+            accountMaster_page_controller.Shipping_Address2_Controller.value.text,
+            accountMaster_page_controller.Shipping_City_Controller.value.text,
+            accountMaster_page_controller.Shipping_District_Controller.value.text,
+            accountMaster_page_controller.Shipping_State_Controller.value.text,
+            accountMaster_page_controller.Shipping_PostCode_Controller.value.text,
+          ];
 
-        // Filter out empty strings and join with commas
-        final fullAddress = parts.where((part) => part.trim().isNotEmpty).join(", ");
+          // Filter out empty strings and join with commas
+          final fullAddress = parts.where((part) => part.trim().isNotEmpty).join(", ");
 
-        accountMaster_page_controller.Shipping_FullAddress_Controller.value.text = fullAddress;
-      },
-      fieldViewBuilder: (BuildContext context, TextEditingController controller,
-          FocusNode focusNode, VoidCallback onFieldSubmitted) {
-        return Container(
+          accountMaster_page_controller.Shipping_FullAddress_Controller.value.text = fullAddress;
+        },
+        fieldViewBuilder: (BuildContext context, TextEditingController controller,
+            FocusNode focusNode, VoidCallback onFieldSubmitted) {
+          return Container(
             decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(10)
             ),
             child: TextFormField(
-              readOnly:  accountMaster_page_controller.view=='Account'?false:true,
-              //maxLength: 50,
+              // maxLength: 50,
               onChanged: (value){
                 final parts = [
                   accountMaster_page_controller.Shipping_Address_controller.value.text,
                   accountMaster_page_controller.Shipping_Address2_Controller.value.text,
                   accountMaster_page_controller.Shipping_City_Controller.value.text,
-                  value,
+                  accountMaster_page_controller.Shipping_District_Controller.value.text,
                   accountMaster_page_controller.Shipping_State_Controller.value.text,
-                  accountMaster_page_controller.Shipping_PostCode_Controller.value.text,
+                  value,
                 ];
 
                 // Filter out empty strings and join with commas
@@ -3748,7 +3216,7 @@ class UpdateAccountMaster extends StatelessWidget{
               },
               cursorColor: AllColors.primaryDark1,
               controller: controller
-                ..text = accountMaster_page_controller.Shipping_District_Controller.value
+                ..text = accountMaster_page_controller.Shipping_PostCode_Controller.value
                     .text,
               focusNode: focusNode,
               //onSubmitted: onFieldSubmitted,
@@ -3766,56 +3234,744 @@ class UpdateAccountMaster extends StatelessWidget{
                 ),
                 contentPadding: EdgeInsets.symmetric(
                     vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-                hintText: 'District',
-                labelText: 'District',
+                hintText: 'Pin Code',
+                labelText: 'Pin Code',
                 border: OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(10))
                 ),
               ),
-            )
-        );
-
-      },
-      optionsViewBuilder: (BuildContext context,
-          AutocompleteOnSelected<PincodeMasterModel> onSelected,
-          Iterable<PincodeMasterModel> suggestions) {
-        return Align(
-          alignment: Alignment.topLeft,
-          child: Material(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-            elevation: 4.0,
-            child: Container(
-              width: size.width*.85,
-              constraints: BoxConstraints(maxHeight: 200),
-              child: ListView.builder(
-                shrinkWrap: true,
-                itemCount: suggestions.length,
-                itemBuilder: (context, index) {
-                  final PincodeMasterModel option =
-                  suggestions.elementAt(index);
-                  return GestureDetector(
-                    onTap: () {
-                      onSelected(option);
-                    },
-                    child: Container(
-                      padding: EdgeInsets.all(8.0),
-                      child: Text(
-                        option.district.toString(),
-                        style: GoogleFonts.poppins(
-                            color: AllColors.blackColor,
-                            fontWeight: FontWeight.w300,
-                            fontSize: AllFontSize
-                                .sisxteen // Change the text color here
+            ),
+          );
+        },
+        optionsViewBuilder: (BuildContext context,
+            AutocompleteOnSelected<PostalCodeModel> onSelected,
+            Iterable<PostalCodeModel> suggestions) {
+          return Align(
+            alignment: Alignment.topLeft,
+            child: Material(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+              elevation: 4.0,
+              child: Container(
+                width: size.width*.85,
+                constraints: BoxConstraints(maxHeight: 200),
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: suggestions.length,
+                  itemBuilder: (context, index) {
+                    final PostalCodeModel option =
+                    suggestions.elementAt(index);
+                    return GestureDetector(
+                      onTap: () {
+                        onSelected(option);
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text(
+                          option.pincode.toString(),
+                          style: GoogleFonts.poppins(
+                              color: AllColors.blackColor,
+                              fontWeight: FontWeight.w300,
+                              fontSize: AllFontSize
+                                  .sisxteen // Change the text color here
+                          ),
                         ),
                       ),
-                    ),
-                  );
-                },
+                    );
+                  },
+                ),
               ),
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
+    );
+  }
+
+  Widget bindShippingStateDropDown(context){
+    return IgnorePointer(
+      ignoring: accountMaster_page_controller.view=='Account'?false:true,
+      child: Autocomplete<PincodeMasterModel>(
+        displayStringForOption: _displayStateListForOption,
+        optionsBuilder: (TextEditingValue textEditingValue) async {
+          if (textEditingValue.text.isEmpty) {
+            return accountMaster_page_controller.ShippingStateMasterPinCode_list;
+            // return const Iterable<PincodeMasterModel>.empty();
+          }
+          return accountMaster_page_controller.ShippingStateMasterPinCode_list
+              .where((PincodeMasterModel option) {
+            return option.stateName
+                .toString()
+                .toLowerCase()
+                .contains(textEditingValue.text.toLowerCase());
+          }).toList();
+
+        },
+        onSelected: (PincodeMasterModel selection) {
+          print(selection.stateName);
+          // Update the TextField with the selected
+          accountMaster_page_controller.Shipping_State_Controller.value.text =
+              _displayStateListForOption(selection).toString();
+          FocusNode().unfocus();
+          final parts = [
+            accountMaster_page_controller.Shipping_Address_controller.value.text,
+            accountMaster_page_controller.Shipping_Address2_Controller.value.text,
+            accountMaster_page_controller.Shipping_City_Controller.value.text,
+            accountMaster_page_controller.Shipping_District_Controller.value.text,
+            accountMaster_page_controller.Shipping_State_Controller.value.text,
+            accountMaster_page_controller.Shipping_PostCode_Controller.value.text,
+          ];
+
+          // Filter out empty strings and join with commas
+          final fullAddress = parts.where((part) => part.trim().isNotEmpty).join(", ");
+
+          accountMaster_page_controller.Shipping_FullAddress_Controller.value.text = fullAddress;
+        },
+        fieldViewBuilder: (BuildContext context, TextEditingController controller,
+            FocusNode focusNode, VoidCallback onFieldSubmitted) {
+          return Container(
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10)
+              ),
+              child: TextFormField(
+                //readOnly:  accountMaster_page_controller.view=='Account'?false:true,
+                //maxLength: 50,
+                onChanged: (value){
+                  final parts = [
+                    accountMaster_page_controller.Shipping_Address_controller.value.text,
+                    accountMaster_page_controller.Shipping_Address2_Controller.value.text,
+                    accountMaster_page_controller.Shipping_City_Controller.value.text,
+                    accountMaster_page_controller.Shipping_District_Controller.value.text,
+                    value,
+                    accountMaster_page_controller.Shipping_PostCode_Controller.value.text,
+                  ];
+
+                  // Filter out empty strings and join with commas
+                  final fullAddress = parts.where((part) => part.trim().isNotEmpty).join(", ");
+
+                  accountMaster_page_controller.Shipping_FullAddress_Controller.value.text = fullAddress;
+                },
+                cursorColor: AllColors.primaryDark1,
+                controller: controller
+                  ..text = accountMaster_page_controller.Shipping_State_Controller.value
+                      .text,
+                focusNode: focusNode,
+                //onSubmitted: onFieldSubmitted,
+                decoration: InputDecoration(
+                  suffixIcon: IconButton(
+                    color: AllColors.primaryDark1,
+                    onPressed: (){
+                      if(focusNode.hasFocus){
+                        focusNode.unfocus();
+                      }else{
+                        focusNode.requestFocus();
+                      }
+                    },
+                    icon: Icon(Icons.arrow_drop_down),
+                  ),
+                  contentPadding: EdgeInsets.symmetric(
+                      vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+                  hintText: 'State',
+                  labelText: 'State',
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(10))
+                  ),
+                ),
+              )
+          );
+
+        },
+        optionsViewBuilder: (BuildContext context,
+            AutocompleteOnSelected<PincodeMasterModel> onSelected,
+            Iterable<PincodeMasterModel> suggestions) {
+          return Align(
+            alignment: Alignment.topLeft,
+            child: Material(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+              elevation: 4.0,
+              child: Container(
+                width: size.width*.85,
+                constraints: BoxConstraints(maxHeight: 200),
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: suggestions.length,
+                  itemBuilder: (context, index) {
+                    final PincodeMasterModel option =
+                    suggestions.elementAt(index);
+                    return GestureDetector(
+                      onTap: () {
+                        onSelected(option);
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text(
+                          option.stateName.toString(),
+                          style: GoogleFonts.poppins(
+                              color: AllColors.blackColor,
+                              fontWeight: FontWeight.w300,
+                              fontSize: AllFontSize
+                                  .sisxteen // Change the text color here
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget bindCityDropDown(context){
+    return IgnorePointer(
+      ignoring: accountMaster_page_controller.view=='Account'?false:true,
+      child: Autocomplete<PincodeMasterModel>(
+        displayStringForOption: _displayCityListForOption,
+        optionsBuilder: (TextEditingValue textEditingValue) async {
+          if (textEditingValue.text.isEmpty) {
+            return accountMaster_page_controller.CityMasterPinCode_list;
+            // return const Iterable<PincodeMasterModel>.empty();
+          }
+          return accountMaster_page_controller.CityMasterPinCode_list
+              .where((PincodeMasterModel option) {
+            return option.city
+                .toString()
+                .toLowerCase()
+                .contains(textEditingValue.text.toLowerCase());
+          }).toList();
+        },
+        onSelected: (PincodeMasterModel selection) {
+          print(selection.city);
+          // Update the TextField with the selected
+          accountMaster_page_controller.City_Controller.text =
+              _displayCityListForOption(selection).toString();
+          FocusNode().unfocus();
+          final parts = [
+            accountMaster_page_controller.Address_controller.text,
+            accountMaster_page_controller.Address2_Controller.text,
+            accountMaster_page_controller.City_Controller.text,
+            accountMaster_page_controller.District_Controller.text,
+            accountMaster_page_controller.State_Controller.text,
+            accountMaster_page_controller.PostCode_Controller.text,
+          ];
+
+          // Filter out empty strings and join with commas
+          final fullAddress = parts.where((part) => part.trim().isNotEmpty).join(", ");
+
+          accountMaster_page_controller.FullAddress_Controller.value.text = fullAddress;
+        },
+        fieldViewBuilder: (BuildContext context, TextEditingController controller,
+            FocusNode focusNode, VoidCallback onFieldSubmitted) {
+          return Container(
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10)
+              ),
+              child: TextFormField(
+               // readOnly:  accountMaster_page_controller.view=='Account'?false:true,
+                //maxLength: 50,
+                onChanged: (value){
+                  final parts = [
+                    accountMaster_page_controller.Address_controller.text,
+                    accountMaster_page_controller.Address2_Controller.text,
+                    value,
+                    accountMaster_page_controller.District_Controller.text,
+                    accountMaster_page_controller.State_Controller.text,
+                    accountMaster_page_controller.PostCode_Controller.text,
+                  ];
+
+                  // Filter out empty strings and join with commas
+                  final fullAddress = parts.where((part) => part.trim().isNotEmpty).join(", ");
+
+                  accountMaster_page_controller.FullAddress_Controller.value.text = fullAddress;
+                },
+                cursorColor: AllColors.primaryDark1,
+                controller: controller
+                  ..text = accountMaster_page_controller.City_Controller
+                      .text,
+                focusNode: focusNode,
+                //onSubmitted: onFieldSubmitted,
+                decoration: InputDecoration(
+                  suffixIcon: IconButton(
+                    color: AllColors.primaryDark1,
+                    onPressed: (){
+                      if(focusNode.hasFocus){
+                        focusNode.unfocus();
+                      }else{
+                        focusNode.requestFocus();
+                      }
+                    },
+                    icon: Icon(Icons.arrow_drop_down),
+                  ),
+                  contentPadding: EdgeInsets.symmetric(
+                      vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+                  hintText: 'City*',
+                  labelText: 'City*',
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(10))
+                  ),
+                ),
+              )
+          );
+
+        },
+        optionsViewBuilder: (BuildContext context,
+            AutocompleteOnSelected<PincodeMasterModel> onSelected,
+            Iterable<PincodeMasterModel> suggestions) {
+          return Align(
+            alignment: Alignment.topLeft,
+            child: Material(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+              elevation: 4.0,
+              child: Container(
+                width: size.width*.85,
+                constraints: BoxConstraints(maxHeight: 200),
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: suggestions.length,
+                  itemBuilder: (context, index) {
+                    final PincodeMasterModel option =
+                    suggestions.elementAt(index);
+                    return GestureDetector(
+                      onTap: () {
+                        onSelected(option);
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text(
+                          option.city.toString(),
+                          style: GoogleFonts.poppins(
+                              color: AllColors.blackColor,
+                              fontWeight: FontWeight.w300,
+                              fontSize: AllFontSize
+                                  .sisxteen // Change the text color here
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget bindShippingCityDropDown(context){
+    return IgnorePointer(
+      ignoring: accountMaster_page_controller.view=='Account'?false:true,
+      child: Autocomplete<PincodeMasterModel>(
+        displayStringForOption: _displayCityListForOption,
+        optionsBuilder: (TextEditingValue textEditingValue) async {
+          if (textEditingValue.text.isEmpty) {
+            return accountMaster_page_controller.ShippingCityMasterPinCode_list;
+            // return const Iterable<PincodeMasterModel>.empty();
+          }
+          return accountMaster_page_controller.ShippingCityMasterPinCode_list
+              .where((PincodeMasterModel option) {
+            return option.city
+                .toString()
+                .toLowerCase()
+                .contains(textEditingValue.text.toLowerCase());
+          }).toList();
+
+        },
+        onSelected: (PincodeMasterModel selection) {
+          print(selection.city);
+          // Update the TextField with the selected
+          accountMaster_page_controller.Shipping_City_Controller.value.text =
+              _displayCityListForOption(selection).toString();
+          FocusNode().unfocus();
+          final parts = [
+            accountMaster_page_controller.Shipping_Address_controller.value.text,
+            accountMaster_page_controller.Shipping_Address2_Controller.value.text,
+            accountMaster_page_controller.Shipping_City_Controller.value.text,
+            accountMaster_page_controller.Shipping_District_Controller.value.text,
+            accountMaster_page_controller.Shipping_State_Controller.value.text,
+            accountMaster_page_controller.Shipping_PostCode_Controller.value.text,
+          ];
+
+          // Filter out empty strings and join with commas
+          final fullAddress = parts.where((part) => part.trim().isNotEmpty).join(", ");
+
+          accountMaster_page_controller.Shipping_FullAddress_Controller.value.text = fullAddress;
+        },
+        fieldViewBuilder: (BuildContext context, TextEditingController controller,
+            FocusNode focusNode, VoidCallback onFieldSubmitted) {
+          return Container(
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10)
+              ),
+              child: TextFormField(
+                //readOnly:  accountMaster_page_controller.view=='Account'?false:true,
+                //maxLength: 50,
+                onChanged: (value){
+                  final parts = [
+                    accountMaster_page_controller.Shipping_Address_controller.value.text,
+                    accountMaster_page_controller.Shipping_Address2_Controller.value.text,
+                    value,
+                    accountMaster_page_controller.Shipping_District_Controller.value.text,
+                    accountMaster_page_controller.Shipping_State_Controller.value.text,
+                    accountMaster_page_controller.Shipping_PostCode_Controller.value.text,
+                  ];
+
+                  // Filter out empty strings and join with commas
+                  final fullAddress = parts.where((part) => part.trim().isNotEmpty).join(", ");
+
+                  accountMaster_page_controller.Shipping_FullAddress_Controller.value.text = fullAddress;
+                },
+                cursorColor: AllColors.primaryDark1,
+                controller: controller
+                  ..text = accountMaster_page_controller.Shipping_City_Controller.value
+                      .text,
+                focusNode: focusNode,
+                //onSubmitted: onFieldSubmitted,
+                decoration: InputDecoration(
+                  suffixIcon: IconButton(
+                    color: AllColors.primaryDark1,
+                    onPressed: (){
+                      if(focusNode.hasFocus){
+                        focusNode.unfocus();
+                      }else{
+                        focusNode.requestFocus();
+                      }
+                    },
+                    icon: Icon(Icons.arrow_drop_down),
+                  ),
+                  contentPadding: EdgeInsets.symmetric(
+                      vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+                  hintText: 'City',
+                  labelText: 'City',
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(10))
+                  ),
+                ),
+              )
+          );
+
+        },
+        optionsViewBuilder: (BuildContext context,
+            AutocompleteOnSelected<PincodeMasterModel> onSelected,
+            Iterable<PincodeMasterModel> suggestions) {
+          return Align(
+            alignment: Alignment.topLeft,
+            child: Material(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+              elevation: 4.0,
+              child: Container(
+                width: size.width*.85,
+                constraints: BoxConstraints(maxHeight: 200),
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: suggestions.length,
+                  itemBuilder: (context, index) {
+                    final PincodeMasterModel option =
+                    suggestions.elementAt(index);
+                    return GestureDetector(
+                      onTap: () {
+                        onSelected(option);
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text(
+                          option.city.toString(),
+                          style: GoogleFonts.poppins(
+                              color: AllColors.blackColor,
+                              fontWeight: FontWeight.w300,
+                              fontSize: AllFontSize
+                                  .sisxteen // Change the text color here
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget bindDistrictDropDown(context){
+    return IgnorePointer(
+      ignoring: accountMaster_page_controller.view=='Account'?false:true,
+      child: Autocomplete<PincodeMasterModel>(
+        displayStringForOption: _displayDistrictListForOption,
+        optionsBuilder: (TextEditingValue textEditingValue) async {
+          if (textEditingValue.text.isEmpty) {
+            return accountMaster_page_controller.DistrictMasterPinCode_list;
+            // return const Iterable<PincodeMasterModel>.empty();
+          }
+          return accountMaster_page_controller.DistrictMasterPinCode_list
+              .where((PincodeMasterModel option) {
+            return option.district
+                .toString()
+                .toLowerCase()
+                .contains(textEditingValue.text.toLowerCase());
+          }).toList();
+        },
+        onSelected: (PincodeMasterModel selection) {
+          print(selection.district);
+          // Update the TextField with the selected
+          accountMaster_page_controller.District_Controller.text =
+              _displayDistrictListForOption(selection).toString();
+          FocusNode().unfocus();
+          final parts = [
+            accountMaster_page_controller.Address_controller.text,
+            accountMaster_page_controller.Address2_Controller.text,
+            accountMaster_page_controller.City_Controller.text,
+            accountMaster_page_controller.District_Controller.text,
+            accountMaster_page_controller.State_Controller.text,
+            accountMaster_page_controller.PostCode_Controller.text,
+          ];
+
+          // Filter out empty strings and join with commas
+          final fullAddress = parts.where((part) => part.trim().isNotEmpty).join(", ");
+
+          accountMaster_page_controller.FullAddress_Controller.value.text = fullAddress;
+        },
+        fieldViewBuilder: (BuildContext context, TextEditingController controller,
+            FocusNode focusNode, VoidCallback onFieldSubmitted) {
+          return Container(
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10)
+              ),
+              child: TextFormField(
+                //readOnly:  accountMaster_page_controller.view=='Account'?false:true,
+                //maxLength: 150,
+                onChanged: (value){
+                  final parts = [
+                    accountMaster_page_controller.Address_controller.text,
+                    accountMaster_page_controller.Address2_Controller.text,
+                    accountMaster_page_controller.City_Controller.text,
+                    value,
+                    accountMaster_page_controller.State_Controller.text,
+                    accountMaster_page_controller.PostCode_Controller.text,
+                  ];
+
+                  // Filter out empty strings and join with commas
+                  final fullAddress = parts.where((part) => part.trim().isNotEmpty).join(", ");
+
+                  accountMaster_page_controller.FullAddress_Controller.value.text = fullAddress;
+                },
+                cursorColor: AllColors.primaryDark1,
+                controller: controller
+                  ..text = accountMaster_page_controller.District_Controller
+                      .text,
+                focusNode: focusNode,
+                //onSubmitted: onFieldSubmitted,
+                decoration: InputDecoration(
+                  suffixIcon: IconButton(
+                    color: AllColors.primaryDark1,
+                    onPressed: (){
+                      if(focusNode.hasFocus){
+                        focusNode.unfocus();
+                      }else{
+                        focusNode.requestFocus();
+                      }
+                    },
+                    icon: Icon(Icons.arrow_drop_down),
+                  ),
+                  contentPadding: EdgeInsets.symmetric(
+                      vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+                  hintText: 'District*',
+                  labelText: 'District*',
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(10))
+                  ),
+                ),
+              )
+          );
+
+        },
+        optionsViewBuilder: (BuildContext context,
+            AutocompleteOnSelected<PincodeMasterModel> onSelected,
+            Iterable<PincodeMasterModel> suggestions) {
+          return Align(
+            alignment: Alignment.topLeft,
+            child: Material(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+              elevation: 4.0,
+              child: Container(
+                width: size.width*.85,
+                constraints: BoxConstraints(maxHeight: 200),
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: suggestions.length,
+                  itemBuilder: (context, index) {
+                    final PincodeMasterModel option =
+                    suggestions.elementAt(index);
+                    return GestureDetector(
+                      onTap: () {
+                        onSelected(option);
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text(
+                          option.district.toString(),
+                          style: GoogleFonts.poppins(
+                              color: AllColors.blackColor,
+                              fontWeight: FontWeight.w300,
+                              fontSize: AllFontSize
+                                  .sisxteen // Change the text color here
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget bindShippingDistrictDropDown(context){
+    return IgnorePointer(
+      ignoring: accountMaster_page_controller.view=='Account'?false:true,
+
+      child: Autocomplete<PincodeMasterModel>(
+        displayStringForOption: _displayDistrictListForOption,
+        optionsBuilder: (TextEditingValue textEditingValue) async {
+          if (textEditingValue.text.isEmpty) {
+            return accountMaster_page_controller.ShippingDistrictMasterPinCode_list;
+            // return const Iterable<PincodeMasterModel>.empty();
+          }
+          return accountMaster_page_controller.ShippingDistrictMasterPinCode_list
+              .where((PincodeMasterModel option) {
+            return option.district
+                .toString()
+                .toLowerCase()
+                .contains(textEditingValue.text.toLowerCase());
+          }).toList();
+        },
+        onSelected: (PincodeMasterModel selection) {
+          print(selection.district);
+          // Update the TextField with the selected
+          accountMaster_page_controller.Shipping_District_Controller.value.text =
+              _displayDistrictListForOption(selection).toString();
+          FocusNode().unfocus();
+          final parts = [
+            accountMaster_page_controller.Shipping_Address_controller.value.text,
+            accountMaster_page_controller.Shipping_Address2_Controller.value.text,
+            accountMaster_page_controller.Shipping_City_Controller.value.text,
+            accountMaster_page_controller.Shipping_District_Controller.value.text,
+            accountMaster_page_controller.Shipping_State_Controller.value.text,
+            accountMaster_page_controller.Shipping_PostCode_Controller.value.text,
+          ];
+
+          // Filter out empty strings and join with commas
+          final fullAddress = parts.where((part) => part.trim().isNotEmpty).join(", ");
+
+          accountMaster_page_controller.Shipping_FullAddress_Controller.value.text = fullAddress;
+        },
+        fieldViewBuilder: (BuildContext context, TextEditingController controller,
+            FocusNode focusNode, VoidCallback onFieldSubmitted) {
+          return Container(
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10)
+              ),
+              child: TextFormField(
+               // readOnly:  accountMaster_page_controller.view=='Account'?false:true,
+                //maxLength: 50,
+                onChanged: (value){
+                  final parts = [
+                    accountMaster_page_controller.Shipping_Address_controller.value.text,
+                    accountMaster_page_controller.Shipping_Address2_Controller.value.text,
+                    accountMaster_page_controller.Shipping_City_Controller.value.text,
+                    value,
+                    accountMaster_page_controller.Shipping_State_Controller.value.text,
+                    accountMaster_page_controller.Shipping_PostCode_Controller.value.text,
+                  ];
+
+                  // Filter out empty strings and join with commas
+                  final fullAddress = parts.where((part) => part.trim().isNotEmpty).join(", ");
+
+                  accountMaster_page_controller.Shipping_FullAddress_Controller.value.text = fullAddress;
+                },
+                cursorColor: AllColors.primaryDark1,
+                controller: controller
+                  ..text = accountMaster_page_controller.Shipping_District_Controller.value
+                      .text,
+                focusNode: focusNode,
+                //onSubmitted: onFieldSubmitted,
+                decoration: InputDecoration(
+                  suffixIcon: IconButton(
+                    color: AllColors.primaryDark1,
+                    onPressed: (){
+                      if(focusNode.hasFocus){
+                        focusNode.unfocus();
+                      }else{
+                        focusNode.requestFocus();
+                      }
+                    },
+                    icon: Icon(Icons.arrow_drop_down),
+                  ),
+                  contentPadding: EdgeInsets.symmetric(
+                      vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+                  hintText: 'District',
+                  labelText: 'District',
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(10))
+                  ),
+                ),
+              )
+          );
+
+        },
+        optionsViewBuilder: (BuildContext context,
+            AutocompleteOnSelected<PincodeMasterModel> onSelected,
+            Iterable<PincodeMasterModel> suggestions) {
+          return Align(
+            alignment: Alignment.topLeft,
+            child: Material(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+              elevation: 4.0,
+              child: Container(
+                width: size.width*.85,
+                constraints: BoxConstraints(maxHeight: 200),
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: suggestions.length,
+                  itemBuilder: (context, index) {
+                    final PincodeMasterModel option =
+                    suggestions.elementAt(index);
+                    return GestureDetector(
+                      onTap: () {
+                        onSelected(option);
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text(
+                          option.district.toString(),
+                          style: GoogleFonts.poppins(
+                              color: AllColors.blackColor,
+                              fontWeight: FontWeight.w300,
+                              fontSize: AllFontSize
+                                  .sisxteen // Change the text color here
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
+          );
+        },
+      ),
     );
   }
 
@@ -3857,9 +4013,9 @@ class UpdateAccountMaster extends StatelessWidget{
                 borderRadius: BorderRadius.circular(10)
             ),
             child: TextField(
-              readOnly: accountMaster_page_controller.view=='Account'?false:true,
+              //readOnly: accountMaster_page_controller.view=='Account'?false:true,
               /* readOnly: accountMaster_page_controller.view=='FromTaskMainScreen'
-                  || accountMaster_page_controller.view=='VIEW' ||
+                  || accountMaster_page_controll er.view=='VIEW' ||
                   accountMaster_page_controller.view=='Task'||
                   accountMaster_page_controller.view=='FromSaleCycleMainScreen'
                   || accountMaster_page_controller.view=="FromQuoteApproval"?true:false,*/

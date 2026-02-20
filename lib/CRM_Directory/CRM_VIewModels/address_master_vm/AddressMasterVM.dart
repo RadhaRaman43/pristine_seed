@@ -108,7 +108,7 @@ class Addressmastervm extends GetxController{
       return ;
     }
     if(emailId_controller.text.isNotEmpty && EmailValidator.validate(emailId_controller.text) == false){
-      Utils.sanckBarError('Email ID!', "Please Enter A valid Email ID");
+      Utils.sanckBarError('Email ID!', "Please Enter Valid Email Format");
       return  ;
     }
 
@@ -121,7 +121,7 @@ class Addressmastervm extends GetxController{
 
 
     if(gst_registration_type_controller.value.text.isEmpty || gst_registration_type_controller == null){
-      Utils.sanckBarError('GST Registration Type!', "Please Enter GST Registration Type");
+      Utils.sanckBarError('GST Type!', "Please Enter GST Type");
       return  ;
     }
 
@@ -219,7 +219,7 @@ class Addressmastervm extends GetxController{
             loading.value = false;
             address_master_list.value=response;
            // resetAllContactCreativeField('Icon');
-            Utils.showToastification('Address add successfully', response[0].message!);
+            Utils.showToastification('Success', 'Address successfully created');
             if(FromPage.value=="SalesCycleQuotation"){
               Get.offNamed(RoutesName.quoteInformationScreen);
             }else if(FromPage.value=="AddQuote"){
