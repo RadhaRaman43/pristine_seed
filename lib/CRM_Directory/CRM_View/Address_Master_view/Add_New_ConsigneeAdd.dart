@@ -140,7 +140,6 @@ class AddNewConsigneeadd extends StatelessWidget{
                   address_vm_controller.consignee_code="";
                   address_vm_controller.createNewAddressMstApi("Create");
                 }
-
               },
               text: address_vm_controller.updateContact?'Update Contact':'Create',
             ),

@@ -349,4 +349,7 @@ class AppUrl {
 
      //todo Item master
      static const String ItemMstSalesCycleGet="$BASE_URL/api/ItemMaster/ItemMstSalesCycleGet";
+     static const String ItemMstSalesCycleDelete="$BASE_URL/api/ItemMaster/ItemMstSalesCycleDelete";
+     static const String GSTGroupGet="$BASE_URL/api/ItemMaster/GSTGroupGet";
+     static const String ItemMasterCreateFromCRM="$BASE_URL/api/ItemMaster/ItemMasterCreateFromCRM";
 }

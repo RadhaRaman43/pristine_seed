@@ -42,7 +42,9 @@ class NonStandardItemsScreen extends StatelessWidget{
                     ],
                   ),
                   onTap: () {
-
+                    item_master_controller.checkForExcel='CheckForExcel';
+                    item_master_controller.nonStandardListForExcel.value=[];
+                    item_master_controller.itemMstSalesCycleGet(page_no: 0,rowPerPage: item_master_controller.total_rows_items,context: context);
                   },
                 ),);
               items.add(PopupMenuItem(
@@ -77,13 +79,19 @@ class NonStandardItemsScreen extends StatelessWidget{
                 'Non Standard Items',
                 style: GoogleFonts.poppins(
                   color: AllColors.whiteColor,
-                  fontSize: 20.0,
+                  fontSize: 16,
                   fontWeight: FontWeight.w700,
                 ),
               ),
-              IconButton(onPressed: () {
-                showFilterBottomSheet(context);
-              }, icon: Icon(Icons.filter_alt_sharp))
+              Spacer(),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  IconButton(onPressed: () {
+                    showFilterBottomSheet(context);
+                  }, icon: Icon(Icons.filter_alt_sharp)),
+                ],
+              )
             ],
           )
 
@@ -134,7 +142,7 @@ class NonStandardItemsScreen extends StatelessWidget{
               "${item_master_controller.rowsPerPage} ${total_page}");
 
           if (item_master_controller.pageNumber + 1 < total_page) {
-            item_master_controller.itemMstSalesCycleGet(item_master_controller.pageNumber +1,);
+            item_master_controller.itemMstSalesCycleGet(page_no:  item_master_controller.pageNumber +1,rowPerPage:  item_master_controller.rowsPerPage);
             item_master_controller.pageNumber += 1;
           }
         }
@@ -219,7 +227,13 @@ class NonStandardItemsScreen extends StatelessWidget{
                 ],
               ),
             ),
-            Icon(Icons.remove_red_eye_outlined,  color: Colors.blue,),
+            InkWell(
+                onTap:(){
+                  item_master_controller.getItemCategoryMstApi();
+                  item_master_controller.GSTGroupGet(position);
+                  Get.toNamed(RoutesName.updateNonStandardItemList);
+                },
+                child: Icon(Icons.update,  color: Colors.blue,)),
             Obx(() {
               return Visibility(
                 visible: item_master_controller.isAdminWritePermission.value == "1" &&
@@ -227,7 +241,7 @@ class NonStandardItemsScreen extends StatelessWidget{
                 child:  GestureDetector(
                     onTap: (){
                       print("position sale cycle.....${position}");
-                      //showConfirmCompleteDialog(context,position!);
+                      showConfirmCompleteDialog(context,position!);
                     },
                     child: Icon(Icons.delete, color: Colors.red)),
               );
@@ -296,6 +310,73 @@ class NonStandardItemsScreen extends StatelessWidget{
     );
   }
 
+  showConfirmCompleteDialog(BuildContext context, int index){
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: Colors.red.shade100, // light red background
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(
+                  Icons.delete,
+                  color: Colors.red,
+                  size: 28,
+                ),
+              ),
+              SizedBox(width: 20,),
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("Delete",
+                      style: GoogleFonts.poppins(
+                          color: AllColors.primaryDark1,
+                          fontSize: AllFontSize.sisxteen,
+                          fontWeight: FontWeight.w700),
+                    ),
+                    Text("Do You Want to Delete This Item "
+                        "${item_master_controller.nonStandardList[index].name ??""}"
+                        "(${item_master_controller.nonStandardList[index].itemCode ??""})?",
+                      style: GoogleFonts.poppins(
+                          color: AllColors.primaryDark1,
+                          fontSize: AllFontSize.fourtine,
+                          fontWeight: FontWeight.w500),
+                      softWrap: true,
+                    ),
+                  ],
+                ),
+              ),
+
+            ],
+          ),
+
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text("Cancel",style: TextStyle(color: AllColors.redColor),),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+                item_master_controller.ItemMstSalesCycleDelete(index);
+              },
+              child: Text("Delete",style: TextStyle(color: AllColors.greenblue),),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   void showFilterBottomSheet(BuildContext context) {
     showModalBottomSheet(
       context: context,
@@ -358,16 +439,25 @@ class NonStandardItemsScreen extends StatelessWidget{
                           child: Column(
                             mainAxisSize: MainAxisSize.max,
                             children: [
-                              const SizedBox(height: 5,),
+                              const SizedBox(height: 10,),
                               bindFilterData('Item Code',item_master_controller.item_code_Controller.value),
+                              const SizedBox(height: 10,),
                               bindFilterData('Customer Code',item_master_controller.customer_code_Controller.value),
+                              const SizedBox(height: 10,),
                               bindFilterData('Sale cycle Id',item_master_controller.sale_cycle_id_Controller.value),
+                              const SizedBox(height: 10,),
                               bindFilterData('Name',item_master_controller.name_Controller.value),
+                              const SizedBox(height: 10,),
                               bindFilterData('Category',item_master_controller.category_Controller.value),
+                              const SizedBox(height: 10,),
                               bindFilterData('HSN Code',item_master_controller.HSN_code_Controller.value),
+                              const SizedBox(height: 10,),
                               bindFilterData('GST Group Code',item_master_controller.GST_group_code_Controller.value),
+                              const SizedBox(height: 10,),
                               bindFilterData('Specification',item_master_controller.specification_Controller.value),
+                              const SizedBox(height: 10,),
                               bindFilterDate(context,'Expired On',item_master_controller.expired_on_Controller.value),
+                              const SizedBox(height: 10,),
                               bindFilterDate(context,'Created/Updated On',item_master_controller.created_on_Controller.value),
                               const SizedBox(height: 10,),
 
@@ -391,7 +481,7 @@ class NonStandardItemsScreen extends StatelessWidget{
                             item_master_controller.clearFilterData();
                             item_master_controller.clearSaveFilterData();
                             item_master_controller.pageNumber = 0;
-                            item_master_controller.itemMstSalesCycleGet(item_master_controller.pageNumber);
+                            item_master_controller.itemMstSalesCycleGet(page_no:  item_master_controller.pageNumber,rowPerPage:  item_master_controller.rowsPerPage);
                             Get.back();
                           },
                         )),
@@ -402,7 +492,7 @@ class NonStandardItemsScreen extends StatelessWidget{
                           textColor: AllColors.primaryDark1,
                           onTap: () {
                             item_master_controller.pageNumber = 0;
-                            item_master_controller.itemMstSalesCycleGet(item_master_controller.pageNumber);
+                            item_master_controller.itemMstSalesCycleGet(page_no:  item_master_controller.pageNumber,rowPerPage:  item_master_controller.rowsPerPage);
                             Get.back();
                           },
                         )),

@@ -77,8 +77,7 @@ class AddNewAccountMaster extends StatelessWidget{
   static String _displayTatResponseListForOption(TatResponseModel option) =>
       option.responseType! + " (${option.responseDescription!})";
 
-  static String _displayIsActiveForOption(String option) =>
-      option;
+  static String _displayIsActiveForOption(String option) => option;
 
 
   @override
@@ -104,6 +103,7 @@ class AddNewAccountMaster extends StatelessWidget{
             Get.back();
           }
           else{
+            accountMaster_page_controller.isReferral.value=false;
             accountMaster_page_controller.clearController();
             Get.toNamed(RoutesName.accountMaster_screen);
           }
@@ -141,8 +141,7 @@ class AddNewAccountMaster extends StatelessWidget{
                 padding: EdgeInsets.all(5),
                 backgroundColor: AllColors.primaryDark1,
                 shadowColor: Colors.black,
-                shape: StadiumBorder(
-                    side: BorderSide(color: AllColors.whiteColor)),
+                shape: StadiumBorder(side: BorderSide(color: AllColors.whiteColor)),
                 //avatar: Icon(Icons.add, color: AllColors.customDarkerWhite),
                 //CircleAvatar
                 label: Row(
@@ -196,7 +195,6 @@ class AddNewAccountMaster extends StatelessWidget{
                 }, //Text
               ),
             ),
-
           ],
         ),
 
@@ -1308,8 +1306,7 @@ class AddNewAccountMaster extends StatelessWidget{
       child: DropdownMenu<CustomList>(
         width: size.width-55,
         controller:  accountMaster_page_controller.account_type_controller,
-        label: Text(
-          "Account Type *",
+        label: Text("Account Type*",
           style: GoogleFonts.poppins(
               color: AllColors.primaryDark1,
               fontSize: 15,
