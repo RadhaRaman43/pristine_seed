@@ -371,10 +371,10 @@ class UpdateQuoteHeaderScreen extends StatelessWidget{
           if(levelText=='Installation Charges' ||levelText=='Other Charges'){
             saleCycleController.calculateFinalAmt();
           }
-          if(levelText=='Advc. Payment Amount'){
+          else if(levelText=='Advc. Payment Amount'){
             calculatePer();
           }
-          if(levelText=='Advc. Payment Percentage' || levelText=='Quote Amount'){
+         else if(levelText=='Advc. Payment Percentage' || levelText=='Quote Amount'){
             checkPertageValue(context);
           }
 
@@ -414,7 +414,7 @@ class UpdateQuoteHeaderScreen extends StatelessWidget{
       Utils.showErrorToastification('Error', 'Payment Percentage cannot be greater than 100');
     } else if(percentageValue <= 100){
       final advanceAmt = (saleCycleController.quoteHeaderdata[0].quoteTotalAmount! * percentageValue) / 100;
-      saleCycleController.advncPaymentAmountController.value.text = advanceAmt.toString();
+      saleCycleController.advncPaymentAmountController.value.text = advanceAmt.toStringAsFixed(2);
       final parts=saleCycleController.advncPaymentAmountController.value.text.split('.');
       if(parts.length==2 && parts[1].length>4){
         String trimmed = '${parts[0]}.${parts[1].substring(0, 4)}';
@@ -430,8 +430,10 @@ class UpdateQuoteHeaderScreen extends StatelessWidget{
       advcAmount = 0.0;
     }
     double totAmount = finalAmount! - advcAmount;
-    saleCycleController.pendingAmountController.value.text = totAmount.toString();
+    saleCycleController.pendingAmountController.value.text = totAmount.toStringAsFixed(2);
   }
+  
+  
   Widget bindTermCondition(BuildContext context) {
     return Container(
       decoration: BoxDecoration(

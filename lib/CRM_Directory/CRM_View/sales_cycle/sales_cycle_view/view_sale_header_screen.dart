@@ -4700,7 +4700,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
 
                 Text(
                   saleCycleController
-                      .quoteList[index]
+                       .quoteList[index]
                       .createdFullName??"",
                   style: GoogleFonts.poppins(
                     color: AllColors.textColor,
@@ -6591,6 +6591,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                         onTap: () {
                           saleCycleController.ProductCategoryCode.value =
                               user.productCategory!;
+                          FocusScope.of(context).unfocus();
                           // saleCycleController.expectedAmountController.value.text = user.estimatedAmount.toString();
                           // saleCycleController.budgetAmountController.value.text = user.budgetAmount.toString();
                           openConfirmationAmtDeleteDialog(context, user.id,"FromProductCategoryTable");
