@@ -819,6 +819,10 @@ class CommitDashboardViewscreen extends StatelessWidget{
               ),
               InkWell(
                   onTap: (){
+                   /* if(dashboard_view_Controller.commitDashboardUserWiseDataList[position].salesCycleStatus.toString().toLowerCase() =="suspect"){
+                      saleCycleController.getPurchaseProcessApi();
+                      saleCycleController.getPurchaseTimeFrameApi();
+                    }*/
                     saleCycleController.ProductCategoryWiseAmtGet(0, dashboard_view_Controller.commitDashboardUserWiseDataList[position].salesCycleId!);
                     saleCycleController.pageNumber = 0;
                     saleCycleController.filterQuoteAcceptedFlag.value="";

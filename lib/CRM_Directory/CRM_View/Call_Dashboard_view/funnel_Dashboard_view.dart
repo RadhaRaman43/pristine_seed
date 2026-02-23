@@ -661,7 +661,12 @@ class FunnelDashboardView extends StatelessWidget{
               ),
               InkWell(
                   onTap: (){
-                    saleCycleController.getPurchaseProcessApi();
+
+                    if(dashboard_view_Controller.funnelDashboardUserWiseDataList[position].salesCycleStatus.toString().toLowerCase() =="suspect"){
+                      saleCycleController.getPurchaseProcessApi();
+                      saleCycleController.getPurchaseTimeFrameApi();
+                    }
+
                     saleCycleController.ProductCategoryWiseAmtGet(0, dashboard_view_Controller.funnelDashboardUserWiseDataList[position].salesCycleId!);
                     saleCycleController.pageNumber = 0;
                     saleCycleController.filterQuoteAcceptedFlag.value="";

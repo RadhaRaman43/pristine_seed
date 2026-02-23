@@ -1325,10 +1325,10 @@ class PendingDsarDashboardViewscreen extends StatelessWidget{
 
                   Obx((){
                     return RadioListTile<String>(
-                      title: const Text('Month' ,style: TextStyle(
+                      title: const Text('Monthly' ,style: TextStyle(
                           fontSize: AllFontSize.sisxteen
                       ),),
-                      value: 'Month',
+                      value: 'Monthly',
                       dense: true,
                       groupValue: dashboard_view_Controller.character.value.toString(),
                       onChanged: (value) {
