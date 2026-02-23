@@ -114,12 +114,10 @@ class BussinessTourPlanScreen extends StatelessWidget{
                               shape: StadiumBorder(
                                 side: BorderSide(color: AllColors.grayColor),
                               ),
-                              label: Text(
-                                'Pending',
+                              label: Text('Pending',
                                 style: TextStyle(
                                   color: businessTourPlanController.filterStatusFlag.value == 'PENDING'
-                                      ? AllColors.whiteColor
-                                      : AllColors.primaryDark1,
+                                      ? AllColors.whiteColor : AllColors.primaryDark1,
                                   fontSize: AllFontSize.fourtine,
                                   fontWeight: FontWeight.w500,
                                 ),
@@ -762,7 +760,7 @@ class BussinessTourPlanScreen extends StatelessWidget{
                               bindFilterEndDate(context),
                               SizedBox(height: 10,),
                               bindfilterText(context,'Created By',businessTourPlanController.filterCreatedByController.value),
-                              bindAccountOwnerFilter(context),
+                              //bindAccountOwnerFilter(context),
                               SizedBox(height: 10,),
                               bindCrteatedOn(context),
                             ],

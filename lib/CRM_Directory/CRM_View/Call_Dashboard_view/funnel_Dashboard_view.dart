@@ -1177,7 +1177,7 @@ class FunnelDashboardView extends StatelessWidget{
   bindFilterCreatedOn(BuildContext context) {
     return TextField(
       cursorColor: AllColors.primaryDark1,
-      controller: dashboard_view_Controller.filter_created_on_cont.value,
+      controller: dashboard_view_Controller.filter_created_on_star_to_cont.value,
       readOnly: true,
       decoration: InputDecoration(
         contentPadding: EdgeInsets.symmetric(
@@ -1225,8 +1225,9 @@ class FunnelDashboardView extends StatelessWidget{
           final endDate = DateFormat('yyyy-MM-dd').format(picked.end);
 
           dashboard_view_Controller.filter_created_on_cont.value.text = '$startDate @ $endDate';
+          dashboard_view_Controller.filter_created_on_star_to_cont.value.text='$startDate - $endDate';
         } else {
-
+          dashboard_view_Controller.filter_created_on_star_to_cont.value.text="";
           dashboard_view_Controller.filter_created_on_cont.value.text="";
         }
       },

@@ -549,6 +549,7 @@ class SalesDashboardVm extends GetxController{
             loading.value = false;
             regionwithclusterGetByEmailList.value=response;
             RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join('|');
+            SelectedRegion_list.assignAll(regionwithclusterGetByEmailList);
             print('av..${RegionName_controller.value.text}');
             getFilterData();
           }else {
@@ -590,10 +591,9 @@ class SalesDashboardVm extends GetxController{
     DateRange("financial");
     print("cgf${regionwithclusterGetByEmailList.length}");
     filterCustomDateController.value.text = '${formattedStartDate} - ${formattedEndDate}';
-    RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join(',');
+    //RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join(',');
     clusterName_controller.value.text = clusterGetByEmailList.map((e) => e.geoValue).join(',');
-   /* RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join(',');
-    clusterName_controller.value.text = clusterGetByEmailList.map((e) => e.geoValue).join(',');*/
+    getRegionsWithClusterFilterGetByEmail();
 
   }
 
