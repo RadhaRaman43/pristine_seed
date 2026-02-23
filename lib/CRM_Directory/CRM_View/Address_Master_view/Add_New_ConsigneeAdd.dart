@@ -909,6 +909,7 @@ class AddNewConsigneeadd extends StatelessWidget{
           if(address_vm_controller.gst_registration_type_controller.value.text == 'Registered'){
             address_vm_controller.GstRegistration.value = true;
           }else{
+            address_vm_controller.GstNo_Controller.text='';
             // accountMaster_page_controller.GstStateList.addAll(accountMaster_page_controller.StateMaster_list);
             address_vm_controller.GstRegistration.value = false;
           }

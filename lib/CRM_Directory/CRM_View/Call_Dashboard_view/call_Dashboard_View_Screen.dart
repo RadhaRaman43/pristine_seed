@@ -111,8 +111,8 @@ class CallDashboardViewScreen extends StatelessWidget {
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   Visibility(
-                                      visible: dashboard_view_Controller.userType !=
-                                          'Branch Head',
+                                      visible: dashboard_view_Controller.userType?.toLowerCase() !=
+                                          'bh',
                                       child: _buildActionChip("Cluster")),
                                   SizedBox(width: 8),
                                   _buildActionChip("Region"),
@@ -123,7 +123,7 @@ class CallDashboardViewScreen extends StatelessWidget {
                             ),
                           ),
                         ),
-                        visible: dashboard_view_Controller.userType != 'Frontliners',
+                        visible: dashboard_view_Controller.userType?.toLowerCase() != 'fl',
                       ),
                       Container(
                           padding:
@@ -666,9 +666,9 @@ class CallDashboardViewScreen extends StatelessWidget {
         dashboard_view_Controller.callDashboardRecordList.length, (index) {
       final record = dashboard_view_Controller.callDashboardRecordList[index];
       double Width = 20;
-      if (dashboard_view_Controller.userType == 'Frontliners') {
+      if (dashboard_view_Controller.userType?.toLowerCase() == 'fl') {
         Width = 100;
-      } else if (dashboard_view_Controller.userType == 'Branch Head' &&
+      } else if (dashboard_view_Controller.userType?.toLowerCase() == 'bh' &&
           dashboard_view_Controller.selectedOption == 'Region') {
         Width = 100;
       } else {

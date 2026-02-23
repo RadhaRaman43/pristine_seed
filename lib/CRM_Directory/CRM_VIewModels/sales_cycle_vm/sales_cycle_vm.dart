@@ -1137,7 +1137,7 @@ class SalesCycleVm extends GetxController {
         "filter_product_category": productCategoryController.value.text.isEmpty
             ? ""
             : productCategoryController.value.text,
-        "filter_created_by": FromPage == "QuoteApprovalPage" ? "" :( isAdminWritePermission.value=="1"?"":saleCycleList[0].salesCycleOwner),
+        "filter_created_by":"" /*FromPage == "QuoteApprovalPage" ? "" :( isAdminWritePermission.value=="1"?"":saleCycleList[0].salesCycleOwner)*/,
         "filter_created_on":
             createdOnStartToEnd.value.isEmpty ? "" : createdOnStartToEnd.value,
         "filter_frontliner_value": "",

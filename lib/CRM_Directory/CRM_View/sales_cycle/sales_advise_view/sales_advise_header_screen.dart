@@ -54,7 +54,7 @@ class SalesAdviseHeaderScreen extends StatelessWidget{
                 Obx((){
                   return Visibility(
                     visible:  saleCycleController.quoteHeaderdata[0].createdBy?.toLowerCase()==saleCycleController.email.toLowerCase()
-                        || saleCycleController.userType.toLowerCase()=="branch head",
+                        || saleCycleController.userType.toLowerCase()=="bh",
                       child: IconButton(
                           onPressed: () {
                             saleCycleController.routingForSalesAdvise.value="SalesAdvise";

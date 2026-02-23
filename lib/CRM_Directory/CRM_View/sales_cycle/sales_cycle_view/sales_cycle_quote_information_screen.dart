@@ -326,7 +326,7 @@ class QuoteInformationScreen extends StatelessWidget {
                           return Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Visibility(
-                              visible:(saleCycleController.userType?.toLowerCase()=='branch head' ||
+                              visible:(saleCycleController.userType?.toLowerCase()=='bh' ||
                                   saleCycleController.email.toLowerCase()==saleCycleController.quoteHeaderdata[0].createdBy?.toLowerCase())
                                   && saleCycleController.quoteHeaderdata[0].quoteStatus?.toLowerCase() == 'approved' &&
                                   saleCycleController.quoteHeaderdata[0].quoteStatusWon?.toLowerCase() == 'open',
@@ -366,8 +366,8 @@ class QuoteInformationScreen extends StatelessWidget {
                                     saleCycleController.quoteHeaderdata[0].quoteAccepted?.toLowerCase() == "open"&&
                                     saleCycleController.quoteHeaderdata[0].isReadySendForApproval == 1) ||
                                 saleCycleController.isAdminWritePermission=="1" ||
-                                    ((saleCycleController.userType.toLowerCase()=="cluster head"||saleCycleController.userType.toLowerCase()=="branch head"||
-                                        saleCycleController.userType.toLowerCase()=="general manager") &&
+                                    ((saleCycleController.userType.toLowerCase()=="ch"||saleCycleController.userType.toLowerCase()=="bh"||
+                                        saleCycleController.userType.toLowerCase()=="gm") &&
                                     saleCycleController.quoteHeaderdata[0].quoteStatus?.toLowerCase() == "pending for approval")) ? true : false,
                             child: GestureDetector(
                               onTap: () {
@@ -611,10 +611,10 @@ class QuoteInformationScreen extends StatelessWidget {
                         Obx(() {
                           final bool showGM =
                               saleCycleController.isAdminWritePermission == "1" ||
-                                  saleCycleController.userType.toLowerCase() == "general manager";
-                          final bool showbh=saleCycleController.userType?.toLowerCase()=='branch head' ||
-                              saleCycleController.userType?.toLowerCase()=='cluster head'||
-                              saleCycleController.userType?.toLowerCase()=='general manager'||
+                                  saleCycleController.userType.toLowerCase() == "gm";
+                          final bool showbh=saleCycleController.userType?.toLowerCase()=='bh' ||
+                              saleCycleController.userType?.toLowerCase()=='ch'||
+                              saleCycleController.userType?.toLowerCase()=='gm'||
                               saleCycleController.isAdminWritePermission.value=="1";
 
                           final data = saleCycleController.quoteHeaderdata[0];
@@ -911,10 +911,10 @@ class QuoteInformationScreen extends StatelessWidget {
                           bindData( "LSP :","₹ ${saleCycleController.numberFormatWithComma(saleCycleController.quoteLinedata[index].listSellingPrice).toString()}",context),
                           Obx(() {
                             return Visibility(
-                              visible: saleCycleController.userType?.toLowerCase()=='branch head' ||
-                                  saleCycleController.userType?.toLowerCase()=='cluster head'||
+                              visible: saleCycleController.userType?.toLowerCase()=='bh' ||
+                                  saleCycleController.userType?.toLowerCase()=='ch'||
                                   saleCycleController.isAdminWritePermission=="1" ||
-                                  saleCycleController.userType?.toLowerCase()=='general manager',
+                                  saleCycleController.userType?.toLowerCase()=='gm',
                               child: bindData("MAP : ","₹ ${saleCycleController.numberFormatWithComma(saleCycleController
                                   .quoteLinedata[index].minimalAcceptablePrice).toString()}",context),
                             );
@@ -928,13 +928,13 @@ class QuoteInformationScreen extends StatelessWidget {
 
                             );
                           }),*/
-                          bindData( "Seeking % : ",(saleCycleController.quoteLinedata[index].discountPer?.toInt()).toString(),context),
+                          bindData( "Seeking % : ",saleCycleController.quoteLinedata[index].discountPer.toString(),context),
                           bindData( "Seeking Amt P/U : ","₹ ${saleCycleController.numberFormatWithComma(saleCycleController.quoteLinedata[index].discountAmtPerUnit).toString()}",context),
                           Obx((){
                             return Visibility(
-                              visible: saleCycleController.userType?.toLowerCase()=='branch head' ||
-                                  saleCycleController.userType?.toLowerCase()=='cluster head'||
-                                  saleCycleController.userType?.toLowerCase()=='general manager'||
+                              visible: saleCycleController.userType?.toLowerCase()=='bh' ||
+                                  saleCycleController.userType?.toLowerCase()=='ch'||
+                                  saleCycleController.userType?.toLowerCase()=='gm'||
                                   saleCycleController.isAdminWritePermission.value=="1",
                             /*  visible: saleCycleController.showBranchHead.value ||
                                   saleCycleController.showClusterHead.value || saleCycleController.isAdminWritePermission.value=="1",*/
@@ -945,7 +945,7 @@ class QuoteInformationScreen extends StatelessWidget {
                           Obx(() {
                             return Visibility(
                               visible:
-                              saleCycleController.userType?.toLowerCase()=='general manager' || saleCycleController.isAdminWritePermission=="1",
+                              saleCycleController.userType?.toLowerCase()=='gm' || saleCycleController.isAdminWritePermission=="1",
                               child:  bindData( "Std Cost : ","₹ ${
                                   saleCycleController.numberFormatWithComma(saleCycleController.quoteLinedata[index].standardCost).toString()}",context),
                             );
@@ -960,7 +960,7 @@ class QuoteInformationScreen extends StatelessWidget {
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
                                   Visibility(
-                                      visible: saleCycleController.userType?.toLowerCase()=='general manager' || saleCycleController.isAdminWritePermission=="1",
+                                      visible: saleCycleController.userType?.toLowerCase()=='gm' || saleCycleController.isAdminWritePermission=="1",
                                       child: Column(
                                         children: [
                                           bindData( "Gm % : ",saleCycleController.quoteLinedata[index].gmDiscountPer.toString(),context),
@@ -976,9 +976,9 @@ class QuoteInformationScreen extends StatelessWidget {
                                   bindData("Price P/U : ","₹ ${saleCycleController.numberFormatWithComma(saleCycleController.quoteLinedata[index].quoteLinePrice).toString()}",context),
                                   bindData("Total Seeking Price : ","₹ ${saleCycleController.numberFormatWithComma(saleCycleController.quoteLinedata[index].discountAmt).toString()}",context),
                                    Visibility(
-                                      visible: saleCycleController.userType?.toLowerCase()=='branch head' ||
-                                          saleCycleController.userType?.toLowerCase()=='cluster head'||
-                                          saleCycleController.userType?.toLowerCase()=='general manager'||
+                                      visible: saleCycleController.userType?.toLowerCase()=='bh' ||
+                                          saleCycleController.userType?.toLowerCase()=='ch'||
+                                          saleCycleController.userType?.toLowerCase()=='gm'||
                                           saleCycleController.isAdminWritePermission.value=="1",
                                       child:  bindData( "Bm % : ",saleCycleController.quoteLinedata[index].bmDiscountPer.toString(),context),
                                     ),
@@ -1096,8 +1096,8 @@ class QuoteInformationScreen extends StatelessWidget {
                                     .toString();
                             saleCycleController
                                     .updateDiscountPerController.value.text =
-                                (saleCycleController
-                                    .quoteLinedata[index].discountPer?.toInt())
+                                saleCycleController
+                                    .quoteLinedata[index].discountPer
                                     .toString();
 
                             saleCycleController

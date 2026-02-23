@@ -140,9 +140,9 @@ class UpdateQuoteHeaderScreen extends StatelessWidget{
             Visibility(
               visible:
                 saleCycleController.isAdminWritePermission == "1" ||
-                saleCycleController.userType.toLowerCase() == "branch head" ||
-                saleCycleController.userType.toLowerCase() == "cluster head" ||
-                saleCycleController.userType.toLowerCase() == "general manager",
+                saleCycleController.userType.toLowerCase() == "bh" ||
+                saleCycleController.userType.toLowerCase() == "ch" ||
+                saleCycleController.userType.toLowerCase() == "gm",
               child: Column(
                 children: [
               bindInputData(context,'Installation Charges',saleCycleController.installationChargesController.value,Icon(Icons.currency_rupee)),

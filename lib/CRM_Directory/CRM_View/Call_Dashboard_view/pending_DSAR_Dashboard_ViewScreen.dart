@@ -113,7 +113,7 @@ class PendingDsarDashboardViewscreen extends StatelessWidget{
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   Visibility(
-                                      visible: dashboard_view_Controller.userType != 'Branch Head',
+                                      visible: dashboard_view_Controller.userType?.toLowerCase() != 'bh',
                                       child: _buildActionChip("Cluster")),
                                   SizedBox(width: 8),
                                   _buildActionChip("Region"),
@@ -124,7 +124,7 @@ class PendingDsarDashboardViewscreen extends StatelessWidget{
                             ),
                           ),
                         ),
-                        visible: dashboard_view_Controller.userType != 'Frontliners',
+                        visible: dashboard_view_Controller.userType?.toLowerCase() != 'fl',
                       ),
 
                       Container(
@@ -677,9 +677,9 @@ class PendingDsarDashboardViewscreen extends StatelessWidget{
     return List.generate(dashboard_view_Controller.pendingDSARDashboardRecordList.length, (index) {
       final record = dashboard_view_Controller.pendingDSARDashboardRecordList[index];
       double Width = 20;
-      if(dashboard_view_Controller.userType == 'Frontliners'){
+      if(dashboard_view_Controller.userType?.toLowerCase() == 'fl'){
         Width = 100;
-      }else if(dashboard_view_Controller.userType == 'Branch Head' && dashboard_view_Controller.selectedOption == 'Region') {
+      }else if(dashboard_view_Controller.userType?.toLowerCase() == 'bh' && dashboard_view_Controller.selectedOption == 'Region') {
         Width = 100;
       }else{
         Width = 20;
