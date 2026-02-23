@@ -788,9 +788,6 @@ class CommitDashboardViewscreen extends StatelessWidget{
       child: Container(
         width: size.width,
         child: ListTile(
-          onTap: () {
-
-          },
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

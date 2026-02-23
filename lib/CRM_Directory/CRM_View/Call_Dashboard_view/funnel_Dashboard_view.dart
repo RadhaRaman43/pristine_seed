@@ -630,9 +630,6 @@ class FunnelDashboardView extends StatelessWidget{
       child: Container(
         width: size.width,
         child: ListTile(
-          onTap: () {
-
-          },
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -664,7 +661,7 @@ class FunnelDashboardView extends StatelessWidget{
               ),
               InkWell(
                   onTap: (){
-
+                    saleCycleController.getPurchaseProcessApi();
                     saleCycleController.ProductCategoryWiseAmtGet(0, dashboard_view_Controller.funnelDashboardUserWiseDataList[position].salesCycleId!);
                     saleCycleController.pageNumber = 0;
                     saleCycleController.filterQuoteAcceptedFlag.value="";
