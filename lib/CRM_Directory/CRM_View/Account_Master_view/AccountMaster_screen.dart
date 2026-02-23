@@ -288,17 +288,9 @@ class AccountmasterScreen extends StatelessWidget{
               buildInfoRow(context,"Cluster Name", controller.clustureHeadValue??""),
               buildInfoRow(context,"Created By", controller.accountCreateFullName??""),
               buildInfoRow(context,"Created On", createdOn),
-             
-              Align(
-                alignment: Alignment.centerRight,
-                child: Text(
-                  "Is Active: $isActive",
-                  style: GoogleFonts.poppins(
-                      color: Colors.blue,
-                      fontSize: AllFontSize.twelve,
-                      fontWeight: FontWeight.w500),
-                ),
-              ),
+              buildInfoRow(context,"Cluster Name", controller.clustureHeadValue??""),
+              buildInfoRow(context,"Is Active", isActive??""),
+
             ],
           ),
 
