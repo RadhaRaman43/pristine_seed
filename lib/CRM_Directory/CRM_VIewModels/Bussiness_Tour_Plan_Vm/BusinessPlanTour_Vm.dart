@@ -186,10 +186,7 @@ class BusinessPlanTourViewModel extends GetxController{
   void getRegionsWithClusterFilterGetByEmail() {
     var selectedCluster="";
     if(clusterName_controller.value.text.isNotEmpty){
-      selectedCluster = clusterName_controller.value.text
-          .split(',')
-          .map((e) => e.trim())
-          .join('|');
+      selectedCluster = clusterName_controller.value.text.split(',').map((e) => e.trim()).join('|');
     }
     try{
       Map<String, String> data={
@@ -208,7 +205,6 @@ class BusinessPlanTourViewModel extends GetxController{
             regionwithclusterGetByEmailList.value=response;
             RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join('|');
             SelectedRegion_list.assignAll(regionwithclusterGetByEmailList);
-            print('region....${RegionName_controller.value.text}');
             if(filterRouting=='Business Tour Plan Line Details'){
               getBusinessPlanLineFilterData();
             }
