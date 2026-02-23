@@ -35,7 +35,7 @@ class AddTourLinesPage extends StatelessWidget{
       option.type!;
 
   static String _displayTourPlanAccountForOption(TourPlanAccountModel option) =>
-      option.accountName!;
+      "${option.accountName!}(${option.accountCode.toString()})";
 
   static String _displayMeetingWithForOption(TourPlanAccountModel option) =>
       option.contactName!;
@@ -568,8 +568,7 @@ class AddTourLinesPage extends StatelessWidget{
             },
             cursorColor: AllColors.primaryDark1,
             controller: controller
-              ..text = businessTourPlanController.TourPlanAccount_Controller.value
-                  .text,
+              ..text = businessTourPlanController.TourPlanAccount_Controller.value.text,
             focusNode: focusNode,
             //onSubmitted: onFieldSubmitted,
             decoration: InputDecoration(
@@ -617,13 +616,11 @@ class AddTourLinesPage extends StatelessWidget{
                       },
                       child: Container(
                         padding: EdgeInsets.all(8.0),
-                        child: Text(
-                          option.accountName.toString(),
+                        child: Text("${option.accountName.toString()}(${option.accountCode.toString()})",
                           style: GoogleFonts.poppins(
                               color: AllColors.blackColor,
                               fontWeight: FontWeight.w300,
-                              fontSize: AllFontSize
-                                  .sisxteen // Change the text color here
+                              fontSize: AllFontSize.sisxteen // Change the text color here
                           ),
                         ),
                       ),

@@ -946,16 +946,12 @@ class CallDashboardViewScreen extends StatelessWidget {
               InkWell(
                   onTap: () {
                     TaskMaster_page_controller.FromPage.value = 'from_CallDashboard';
-                    TaskMaster_page_controller.getTaskMaster(
-                        0,
-                        TaskMaster_page_controller.is_Active.toString(),
-                        dashboard_view_Controller
-                            .callDashboardUserWiseDataList[position].taskId,
-                        '',
-                        'GET FROM TASK ID',
+                    TaskMaster_page_controller.getTaskMaster(0, TaskMaster_page_controller.is_Active.toString(),
+                        dashboard_view_Controller.callDashboardUserWiseDataList[position].taskId,
+                        'task_master_detail', 'GET FROM TASK ID',
                         TaskMaster_page_controller.date_filter,
                         TaskMaster_page_controller.is_done.value);
-                    Get.toNamed(RoutesName.taskMasterDetails_screen);
+                    //Get.toNamed(RoutesName.taskMasterDetails_screen);
                   },
                   child: Icon(
                     Icons.remove_red_eye,

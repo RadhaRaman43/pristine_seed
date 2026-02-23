@@ -471,10 +471,7 @@ class Taskmastervm extends GetxController{
         }
         AccountOwnerForApi = '';
         if(AccountOwner_controller.value.text.isNotEmpty){
-            AccountOwnerForApi = AccountOwner_controller.value.text
-                .split(',')
-                .map((e) => e.trim())
-                .join('|');
+            AccountOwnerForApi = AccountOwner_controller.value.text.split(',').map((e) => e.trim()).join('|');
         }
         try{
             Map data={
@@ -539,6 +536,9 @@ class Taskmastervm extends GetxController{
                             getTaskPersonMstByTaskIdApi(taskId);
                             Get.toNamed(RoutesName.taskMasterDetails_screen);
 
+                        }
+                        if(flag=="task_master_detail"){
+                          Get.toNamed(RoutesName.taskMasterDetails_screen);
                         }
                         getTaskMstDSARList(taskId);
 

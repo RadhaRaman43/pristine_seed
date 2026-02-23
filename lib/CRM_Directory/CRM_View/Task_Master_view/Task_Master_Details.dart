@@ -80,8 +80,7 @@ class TaskMasterDetails extends StatelessWidget{
             TaskMaster_page_controller
                 .getTaskMaster(
                 TaskMaster_page_controller.pageNumber,
-                TaskMaster_page_controller.is_Active
-                    .toString(),
+                TaskMaster_page_controller.is_Active.toString(),
                 '',
                 '',
                 TaskMaster_page_controller.Task_status_controller.value.text,
@@ -123,7 +122,7 @@ class TaskMasterDetails extends StatelessWidget{
               Row(
                 children: [
                   Obx((){
-                    print("DSAR..R${TaskMaster_page_controller.Task_Master_list[0].isCreateTaskDsar??""}");
+                   // print("DSAR..R${TaskMaster_page_controller.Task_Master_list[0].isCreateTaskDsar??""}");
                     return  Visibility(
                       visible: TaskMaster_page_controller.TaskDSAR_Master_list.isEmpty
                           && TaskMaster_page_controller.Task_Master_list[0].isCreateTaskDsar == 1
@@ -1074,8 +1073,7 @@ class TaskMasterDetails extends StatelessWidget{
             _buildLabelWithValue(label: "Previous Task ID: ",
               value: TaskMaster_page_controller.Task_Master_list[0].previousTaskId ?? "",
               onTap: () {
-                print('task....${TaskMaster_page_controller
-                    .Task_Master_list[0].taskId}');
+                //print('task....${TaskMaster_page_controller.Task_Master_list[0].taskId}');
                 TaskMaster_page_controller.getTaskMaster(0,
                     TaskMaster_page_controller.is_Active
                         .toString(),
@@ -1205,9 +1203,7 @@ class TaskMasterDetails extends StatelessWidget{
   }
 
   Widget viewDsarDetails(BuildContext context) {
-    print('hcsdgyuifgy${TaskMaster_page_controller
-        .Task_Master_list[0]
-        .isReadyForApprove}');
+    //print('hcsdgyuifgy${TaskMaster_page_controller.Task_Master_list[0].isReadyForApprove}');
     return   Visibility(
       visible: TaskMaster_page_controller.isExpandDSAR.value == true ? true : false,
       child: TaskMaster_page_controller.TaskDSAR_Master_list.value.length > 0
