@@ -33,7 +33,7 @@ class BussinessTourPlanLineDetailScreen extends StatelessWidget{
             title:Tooltip(
               message: 'Business Tour Line List',
               child: Text(
-                'Business Tour Plan Line Details',
+                'Business Tour Line List',
                 style: GoogleFonts.poppins(
                   color: AllColors.whiteColor,
                   fontSize: 17.0,
@@ -59,6 +59,15 @@ class BussinessTourPlanLineDetailScreen extends StatelessWidget{
             height: double.infinity,
             child: Column(
               children: [
+                Obx(() {
+                  return Visibility(
+                    visible: businessTourPlanController.loading.value,
+                    child: LinearProgressIndicator(
+                      backgroundColor: AllColors.primaryDark1,
+                      color: AllColors.textColor,
+                    ),
+                  );
+                }),
                 Flexible(
                   fit: FlexFit.loose,
                   child: Container(
@@ -519,7 +528,7 @@ class BussinessTourPlanLineDetailScreen extends StatelessWidget{
     );
   }
 
-  Widget BindTourDate(context) {
+  /*Widget BindTourDate(context) {
     return Container(
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10)
@@ -598,6 +607,66 @@ class BussinessTourPlanLineDetailScreen extends StatelessWidget{
         },
       ),
     );
+  }*/
+  Widget BindTourDate(context) {
+    return TextField(
+      cursorColor: AllColors.primaryDark1,
+      controller: businessTourPlanController.filterTourDateController.value,
+      readOnly: true,
+      decoration: InputDecoration(
+        contentPadding: EdgeInsets.symmetric(
+            vertical: AllFontSize.two, horizontal: AllFontSize.ten),
+        suffixIcon: Icon(Icons.calendar_month),
+        hintText: 'Select Start Date -End Date',
+        labelText: 'Tour Date',
+        hintStyle: GoogleFonts.poppins(
+            color: AllColors.lightblackColor,
+            fontWeight: FontWeight.w300,
+            fontSize: AllFontSize.ten),
+        labelStyle: GoogleFonts.poppins(
+            color: AllColors.primaryDark1,
+            fontWeight: FontWeight.w500,
+            fontSize: AllFontSize.sisxteen),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+        ),
+      ),
+      onTap: () async {
+        FocusScope.of(context).requestFocus(FocusNode()); // hide keyboard
+        DateTimeRange? picked = await showDateRangePicker(
+          context: context,
+          firstDate: DateTime(1900),
+          lastDate: DateTime(2200),
+          builder: (BuildContext context, Widget? child) {
+            return Theme(
+              data: ThemeData.light().copyWith(
+                primaryColor: AllColors.primaryDark1,
+                colorScheme: ColorScheme.light(primary: AllColors.primaryDark1),
+                buttonTheme: ButtonThemeData(
+                  textTheme: ButtonTextTheme.primary,
+                ),
+              ),
+              child: child!,
+            );
+          },
+        );
+
+        if (picked != null) {
+          final startDate = DateFormat('yyyy-MM-dd').format(picked.start);
+          final endDate = DateFormat('yyyy-MM-dd').format(picked.end);
+          businessTourPlanController.filterTourDateFromToController.value.text="$startDate@$endDate";
+          businessTourPlanController.filterTourDateController.value.text = '$startDate - $endDate';
+        } else {
+          businessTourPlanController.filterTourDateFromToController.value.text = '';
+          businessTourPlanController.filterTourDateController.value.text="";
+        }
+      },
+    );
+
+
   }
 
   Widget createdOnDate(context) {

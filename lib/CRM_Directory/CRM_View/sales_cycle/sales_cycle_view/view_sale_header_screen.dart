@@ -190,7 +190,9 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                 Obx(() {
                   return Visibility(
                     visible: (saleCycleController.FromPage.value == "Sales" || saleCycleController.FromPage.value == "FromTaskScreen" ||
-                            saleCycleController.FromPage.value == "Task" ||saleCycleController.FromPage.value == "FromSCPendingForApproval" ) &&
+                            saleCycleController.FromPage.value == "Task" ||saleCycleController.FromPage.value == "FromSCPendingForApproval" ||
+                        saleCycleController.FromPage.value == "FromFunnelDashboard"||
+                        saleCycleController.FromPage.value == "FromCommitDashboard" ) &&
                         saleCycleController.saleCycleList[0].salesCycleApprovalStatus?.toLowerCase() != "rejected" &&
                         (saleCycleController.saleCycleList[0].salesCycleOwner?.toLowerCase() ==
                                 saleCycleController.email.toLowerCase() || saleCycleController.userType.toLowerCase() == 'bh' ||
