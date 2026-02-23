@@ -2964,8 +2964,8 @@ class SalesCycleVm extends GetxController {
     if (advcAmount == null) {
       advcAmount = 0.0;
     }
-    double totAmount = finalAmount! - advcAmount;
-    pendingAmountController.value.text = totAmount.toString();
+    //double totAmount = finalAmount! - advcAmount;
+    //pendingAmountController.value.text = totAmount.toString();
 
   }
 
