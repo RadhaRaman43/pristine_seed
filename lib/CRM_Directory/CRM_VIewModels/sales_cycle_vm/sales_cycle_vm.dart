@@ -1017,7 +1017,7 @@ class SalesCycleVm extends GetxController {
               pageNumber = 0;
               clearAllFieldOfFilter();
               getsalesCycleData(pageNumber, saleCycleList.salesCycleId!,
-                  "ViewHeader", 'Sales');
+                  "ViewHeader", FromPage.value);
               Get.toNamed(RoutesName.viewSalesCycleHeaderScreen);
               loading.value = false;
             } else {
@@ -1446,7 +1446,7 @@ class SalesCycleVm extends GetxController {
           filterQuoteAcceptedFlag.value = "";
           clearAllFieldOfFilter();
           pageNumber = 0;
-          getsalesCycleData(pageNumber, SalesId, "ViewHeader", 'Sales');
+          getsalesCycleData(pageNumber, SalesId, "ViewHeader", FromPage.value);
           //Get.toNamed(RoutesName.viewSalesCycleHeaderScreen);
         } else {
           Utils.sanckBarError("Error!", "Please select at least single product category");
@@ -1940,11 +1940,11 @@ class SalesCycleVm extends GetxController {
     }
   }
 
-  void ProductCategoryWiseAmtCreateApiHit(int id) {
+  void ProductCategoryWiseAmtCreateApiHit(int id, String SalesCycleID) {
     try {
       Map data = {
         "id": id,
-        "sale_cycle_id": salesCycleId.toString(),
+        "sale_cycle_id": SalesCycleID,
         "product_category":
             ProductCategoryCode.value.isEmpty ? "" : ProductCategoryCode.value,
         "estimated_amount": expectedAmountController.value.text,
@@ -1962,7 +1962,7 @@ class SalesCycleVm extends GetxController {
             if (response[0].condition == "True") {
               Utils.sanckBarSuccess("Message !", response[0].message.toString());
               pageNumber = 0;
-              ProductCategoryWiseAmtGet(pageNumber, salesCycleId.value);
+              ProductCategoryWiseAmtGet(pageNumber, SalesCycleID);
               productCategoryController.value.clear();
               budgetAmountController.value.clear();
               expectedAmountController.value.clear();
