@@ -35,14 +35,14 @@ class LoginViewModel extends GetxController{
         if(loginResponse!=null &&  loginResponse[0].condition=="True"){
           loading.value=false;
 
-          if(loginResponse[0].isHo=='1'){
+          /*if(loginResponse[0].isHo=='1'){
             sessionManagement.clearSession();
            Get.offAllNamed(RoutesName.loginScreen);
             Utils.sanckBarError('Message !', "Cluster User Can Not Access Mobile Application.");
             return;
-          }
+          }*/
 
-         // Utils.sanckBarSuccess("Success", loginResponse[0].message!);
+          // Utils.sanckBarSuccess("Success", loginResponse[0].message!);
           sessionManagement.setUserCode(loginResponse[0].userType.toString());
           sessionManagement.setCompanyId(loginResponse[0].companyId.toString());
           sessionManagement.setEmail(loginResponse[0].email.toString());
@@ -56,7 +56,7 @@ class LoginViewModel extends GetxController{
           sessionManagement.setProfile(loginResponse[0].profile.toString());
           sessionManagement.setIsCrm(loginResponse[0].isCrm.toString());
           sessionManagement.setMenuList(loginResponse[0].menu ?? []);
-         // Get.toNamed(RoutesName.homeScreen);
+          // Get.toNamed(RoutesName.homeScreen);
           Get.offAllNamed(RoutesName.homeScreen);
 
         }

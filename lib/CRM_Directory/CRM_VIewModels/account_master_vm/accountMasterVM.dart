@@ -1409,6 +1409,10 @@ class Accountmastervm extends GetxController{
               contact_vm_controller.getAccountMaster("");
               contact_vm_controller.getDecisionRoleMaster();
               Get.toNamed(RoutesName.addNewContactMaster_screen);
+            }
+            else if(FromPage == "AddTourLine"){
+              clearController();
+              Get.toNamed(RoutesName.AddTourLinesPage);
             }else{
               clearAccoundController();
               //deleteAccountData(DraftId);

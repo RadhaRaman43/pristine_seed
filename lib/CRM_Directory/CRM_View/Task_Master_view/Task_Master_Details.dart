@@ -562,7 +562,7 @@ class TaskMasterDetails extends StatelessWidget{
     );
   }
 
-  showProductCatDialog(context){
+  showProductCatDialog(BuildContext context){
     showDialog(
         context: context,
         builder: (context){
@@ -614,9 +614,8 @@ class TaskMasterDetails extends StatelessWidget{
                           ),
                         ),
                         onPressed: ()  {
-                          TaskMaster_page_controller.TaskSaleCatCreateApiHit('Details');
+                          TaskMaster_page_controller.TaskSaleCatCreateApiHit('Details',"");
                           Navigator.pop(context);
-
                         },
                         child: Container(
                           width: 100,
@@ -633,7 +632,6 @@ class TaskMasterDetails extends StatelessWidget{
                       ),
 
                     ],)
-
                 ],
               ),
             ),
@@ -845,20 +843,15 @@ class TaskMasterDetails extends StatelessWidget{
   }
 
   Widget bindItemCategoryDropDown(context){
-    return
-      Autocomplete<ItemCategoryMstModel>(
+    return Autocomplete<ItemCategoryMstModel>(
       displayStringForOption: _displayItemCatMasterForOption,
       optionsBuilder: (TextEditingValue textEditingValue) {
         if (textEditingValue.text.isEmpty) {
           return TaskMaster_page_controller.Item_Category_master_list;
           // return const Iterable<VehicleTypeResponse>.empty();
         }
-        return TaskMaster_page_controller.Item_Category_master_list
-            .where((ItemCategoryMstModel option) {
-          return option.categoryName
-              .toString()
-              .toLowerCase()
-              .contains(textEditingValue.text.toLowerCase());
+        return TaskMaster_page_controller.Item_Category_master_list.where((ItemCategoryMstModel option) {
+          return option.categoryName.toString().toLowerCase().contains(textEditingValue.text.toLowerCase());
         }).toList();
       },
       onSelected: (ItemCategoryMstModel selection) {
@@ -1109,7 +1102,7 @@ class TaskMasterDetails extends StatelessWidget{
 
             _buildLabelWithValue(label: "Task Status: ", value: TaskMaster_page_controller.Task_Master_list[0].taskStatus ?? "",color: getStatusColor(taskStatus)),
 
-            _buildLabelWithValue(label: "Product Category: ", value: TaskMaster_page_controller.Task_Master_list[0].productCategory ?? "",),
+            _buildLabelWithValue(label: "Product Category: ", value: TaskMaster_page_controller.Task_Master_list[0].productCategory ?? "",context: context),
 
             _buildLabelWithValue(label: "Date of Visit: ", value: dateTimeCreatedOn,),
 
@@ -1242,6 +1235,7 @@ class TaskMasterDetails extends StatelessWidget{
     required String? value,
     VoidCallback? onTap,
     Color color = AllColors.textColor,
+    BuildContext? context
   }) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1273,6 +1267,29 @@ class TaskMasterDetails extends StatelessWidget{
             ),
           ),
         ),
+        if (label == "Product Category: "/* &&
+            TaskMaster_page_controller.Task_Master_list[0].quoteStatus
+                .toString().toLowerCase() == "draft"*/)
+          InkWell(
+            onTap: () {
+              TaskMaster_page_controller.Item_Category_Selected_list.value=[];
+              for(int i = 0; i < TaskMaster_page_controller.Item_Category_master_list.length; i++ ){
+                if(TaskMaster_page_controller.Item_Category_master_list[i].isSelected == 1){
+                  TaskMaster_page_controller.Item_Category_Selected_list.add(TaskMaster_page_controller.Item_Category_master_list[i]);
+                  print('LIstSIze.....${TaskMaster_page_controller.Item_Category_Selected_list.length}');
+                }
+                else{
+                  print('NoLIstSIze.....${TaskMaster_page_controller.Item_Category_Selected_list.length}');
+                }
+              }
+              showProductCatDialog(context!);
+
+            },
+            child: const Padding(
+              padding: EdgeInsets.only(left: 6),
+              child: Icon(Icons.add),
+            ),
+          ),
       ],
     );
   }

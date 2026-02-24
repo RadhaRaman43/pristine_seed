@@ -1285,7 +1285,7 @@ class QuoteInformationScreen extends StatelessWidget {
                     value: saleCycleController.quoteHeaderdata[0].salesCycleId ?? "",
                     color: AllColors.textColor,
                   ),
-                  SizedBox(height: 3,),
+
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -1332,20 +1332,20 @@ class QuoteInformationScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-                  SizedBox(height: 3,),
+
                   _buildLabelWithValue(
                     label: "Customer Code",
                     value: saleCycleController.quoteHeaderdata[0].accountCode ?? "",
                     color: AllColors.textColor,
                   ),
-                  SizedBox(height: 3,),
+
                   _buildLabelWithValue(
                     label: "Contact Name",
                     value: saleCycleController.quoteHeaderdata[0].contactName ?? "",
                     color: AllColors.textColor,
                   ),
 
-                  SizedBox(height: 3,),
+
                   _buildLabelWithValue(
                     label: "Product Category",
                     value: saleCycleController.quoteHeaderdata[0].productCategory ?? "",
@@ -1353,38 +1353,43 @@ class QuoteInformationScreen extends StatelessWidget {
                     context: context
                   ),
 
-                  SizedBox(height: 3,),
+
                   _buildLabelWithValue(
                     label: "Quote Status",
                     value: saleCycleController.quoteHeaderdata[0].quoteStatus ?? "",
                     color: getStatusColor(saleCycleQuoteStatus),
                   ),
 
-                  SizedBox(height: 3,),
                   _buildLabelWithValue(
                     label: "Expected Closure Date",
                     value: expectedclosuredate.toString(),
                     color: AllColors.textColor,
                   ),
-                  SizedBox(height: 3,),
+
                   _buildLabelWithValue(
                     label: "Quote Validity",
                     value: quoteValidityDate.toString(),
                     color: AllColors.textColor,
                   ),
-                  SizedBox(height: 3,),
+
+                  _buildLabelWithValue(
+                    label: "Quote Version",
+                    value: saleCycleController.quoteHeaderdata[0].quoteVersion.toString() ?? '',
+                    color: AllColors.textColor,
+                  ),
+
                   _buildLabelWithValue(
                     label: "Kind Attention",
                     value: saleCycleController.quoteHeaderdata[0].kindAttention ?? '',
                     color: AllColors.textColor,
                   ),
-                  SizedBox(height: 3,),
+
                   _buildLabelWithValue(
                     label: "Terms & Condition",
                     value: saleCycleController.quoteHeaderdata[0].termsAndCondition ?? '',
                     color: AllColors.textColor,
                   ),
-                  SizedBox(height: 3,),
+
                   Row(
                     children: [
                       Text(
@@ -1426,38 +1431,38 @@ class QuoteInformationScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-                  SizedBox(height: 3,),
+
                   _buildLabelWithValue(
                     label: "Installation Charges",
                     value: saleCycleController.quoteHeaderdata[0].installationCharges == null ? "" : saleCycleController.quoteHeaderdata[0].installationCharges.toString(),
                     color: AllColors.textColor,
                   ),
-                  SizedBox(height: 3,),
+
                   _buildLabelWithValue(
                     label: "Other Charges",
                     value: saleCycleController.quoteHeaderdata[0].otherCharges == null ? "" : saleCycleController.quoteHeaderdata[0].otherCharges.toString(),
                     color: AllColors.textColor,
                   ),
-                  SizedBox(height: 3,),
+
                   _buildLabelWithValue(
                     label: "Warranty Period",
                     value: saleCycleController.quoteHeaderdata[0].warrantyPeriod ?? '',
                     color: AllColors.textColor,
                   ),
-                  SizedBox(height: 3,),
+
                   _buildLabelWithValue(
                     label: "Delivery In Weeks",
                     value: saleCycleController.quoteHeaderdata[0].deliveryInWeeks ?? '',
                     color: AllColors.textColor,
                   ),
-                  SizedBox(height: 3,),
+
                   _buildLabelWithValue(
                     label: "Advance Payment %",
                     value: saleCycleController.quoteHeaderdata[0].advancePaymentPer == null
                         ? "" : saleCycleController.quoteHeaderdata[0].advancePaymentPer.toString(),
                     color: AllColors.textColor,
                   ),
-                  SizedBox(height: 3,),
+
                   _buildLabelWithValue(
                     label: "Advance Payment Amt",
                     value:saleCycleController.quoteHeaderdata[0].advancePaymentAmt == null?"":" ₹ ${saleCycleController.numberFormatWithComma(
@@ -1466,26 +1471,26 @@ class QuoteInformationScreen extends StatelessWidget {
                     color: AllColors.textColor,
                   ),
 
-                  SizedBox(height: 3,),
+
                   _buildLabelWithValue(
                     label: "FrontLiner Remarks",
                     value: saleCycleController.quoteHeaderdata[0].otherRemarks ?? '',
                     color: AllColors.textColor,
                   ),
-                  SizedBox(height: 3,),
+
                   _buildLabelWithValue(
                     label: "Quote Accepted",
                     value: saleCycleController.quoteHeaderdata[0].quoteAccepted ?? '',
                     color: AllColors.textColor,
                   ),
 
-                  SizedBox(height: 3,),
+
                   _buildLabelWithValue(
                     label: "Quote Commit",
                     value: saleCycleController.quoteHeaderdata[0].quoteCommit.toString() == '1' ? 'Yes' : 'No',
                     color: saleCycleController.quoteHeaderdata[0].quoteCommit.toString() == '1'?AllColors.greenblue:AllColors.redColor,
                   ),
-                  SizedBox(height: 3,),
+
                   _buildLabelWithValue(
                     label: "Quote Total Amt.",
                     value:" ₹ ${saleCycleController.numberFormatWithComma(
@@ -1493,7 +1498,7 @@ class QuoteInformationScreen extends StatelessWidget {
                     //value: saleCycleController.quoteHeaderdata[0].quoteTotalAmount.toString() ?? '',
                     color: AllColors.textColor,
                   ),
-                  SizedBox(height: 3,),
+
                   _buildLabelWithValue(
                     label: "Quote GST Amt.",
                     value:" ₹ ${saleCycleController.numberFormatWithComma(
@@ -1501,7 +1506,7 @@ class QuoteInformationScreen extends StatelessWidget {
                     //value:  saleCycleController.quoteHeaderdata[0].quoteGstAmount.toString() ?? '',
                     color: AllColors.textColor,
                   ),
-                  SizedBox(height: 3,),
+
                   _buildLabelWithValue(
                     label: "Quote Gross Amt.",
                     value:" ₹ ${saleCycleController.numberFormatWithComma(
@@ -1509,31 +1514,31 @@ class QuoteInformationScreen extends StatelessWidget {
                     //value: saleCycleController.quoteHeaderdata[0].quoteGrossAmount.toString() ?? "",
                     color: AllColors.textColor,
                   ),
-                  SizedBox(height: 3,),
+
                   _buildLabelWithValue(
                     label: "Created By",
                     value: saleCycleController.quoteHeaderdata[0].createdFullName ?? '',
                     color: AllColors.textColor,
                   ),
-                  SizedBox(height: 3,),
+
                   _buildLabelWithValue(
                     label: "Created on",
                     value: dateTimeCreatedOn.toString(),
                     color: AllColors.textColor,
                   ),
-                  SizedBox(height: 3,),
+
                   _buildLabelWithValue(
                     label: "Cluster",
                     value: saleCycleController.quoteHeaderdata[0].clustureHeadValue ?? '',
                     color: AllColors.textColor,
                   ),
-                  SizedBox(height: 3,),
+
                   _buildLabelWithValue(
                     label: "Region",
                     value: saleCycleController.quoteHeaderdata[0].branchHeadValue ?? '',
                     color: AllColors.textColor,
                   ),
-                  SizedBox(height: 3,),
+
                   _buildLabelWithValue(
                     label: "Reject Reason",
                     value: saleCycleController.quoteHeaderdata[0].rejectReason ?? '',
@@ -1567,7 +1572,7 @@ class QuoteInformationScreen extends StatelessWidget {
                     value: saleCycleController.quoteHeaderdata[0].wonOn ?? '',
                     color: AllColors.textColor,
                   ),
-                  SizedBox(height: 3,),
+
                 ],
               ),
             ),

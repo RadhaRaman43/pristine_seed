@@ -14,11 +14,13 @@ import '../../CRM_Models/Bussiness_Tour_Plan_Model/TourPlanAccount_Model.dart';
 import '../../CRM_Models/Bussiness_Tour_Plan_Model/TouringDistrictModel.dart';
 import '../../CRM_Models/sale_cycle_modal/alongWithPersonModel.dart';
 import '../../CRM_VIewModels/Bussiness_Tour_Plan_Vm/BusinessPlanTour_Vm.dart';
+import '../../CRM_VIewModels/account_master_vm/accountMasterVM.dart';
 
 class AddTourLinesPage extends StatelessWidget{
   AddTourLinesPage({super.key});
 
   BusinessPlanTourViewModel businessTourPlanController = Get.put(BusinessPlanTourViewModel());
+  final accountMaster_page_controller=Get.put(Accountmastervm());
   Size size = Get.size;
 
   static String _displayAlongPersonForOption(AlongWithPersonModel option) =>
@@ -115,20 +117,20 @@ class AddTourLinesPage extends StatelessWidget{
                  SizedBox(height: 10),
                  Column(
                    children: [
-                     SizedBox(height: 15,),
+                     const SizedBox(height: 15,),
                      bindTouringDistrictDropDown(context),
-                     SizedBox(height: 15,),
+                     const SizedBox(height: 15,),
                      BindTourDate(context),
-                     SizedBox(height: 10,),
+                     const SizedBox(height: 10,),
                      Obx((){
                        return Visibility(
                          visible: businessTourPlanController.tourType.value,
                            child:  BindTourTypeDropDown(context));
                      }),
 
-                     SizedBox(height: 10,),
+                     const SizedBox(height: 10,),
                      bindAccompaniedWithDropDown(context),
-                     SizedBox(height: 10,),
+                     const SizedBox(height: 10,),
                      Obx(() {
                        return
                          Wrap(
@@ -149,17 +151,55 @@ class AddTourLinesPage extends StatelessWidget{
                          );
 
                      }),
-                     SizedBox(height: 10,),
-                     bindTourPlanAccountDropDown(context),
-                     SizedBox(height: 10,),
+                     const SizedBox(height: 10,),
+                     Container(
+                       padding: EdgeInsets.only( right: 15.0),
+                       height: 50,
+                       child: Row(
+                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                         children: [
+                           Expanded(
+                             child: Container(
+                               decoration: BoxDecoration(
+                                   borderRadius: BorderRadius.circular(10)
+                               ),
+                               child: bindTourPlanAccountDropDown(context),
+                             ),
+                           ),
+                            Container(
+                               margin: EdgeInsets.only(left: 10),
+                               decoration: BoxDecoration(
+                                 color: AllColors.whiteColor,
+                                 borderRadius: BorderRadius.circular(10),
+                                 border: Border.all(
+                                   color: AllColors.lightblackColor, // Set the border color to black
+                                   width: 1.0, // You can adjust the width of the border as needed
+                                 ),
+                               ),
+                               child: IconButton(
+                                   onPressed: (){
+                                     accountMaster_page_controller.FromPage.value = 'AddTourLine';
+                                     accountMaster_page_controller.DraftId = '';
+                                     accountMaster_page_controller.clearController();
+                                     accountMaster_page_controller.getEmployeeMemberApi();
+                                     accountMaster_page_controller.getCompanyProfileTypeApi("");
+                                     accountMaster_page_controller.getCompanyProfileSubTypeApi();
+                                     accountMaster_page_controller.getGeoPostalCodeApi(50,'',accountMaster_page_controller.email);
+                                     Get.toNamed(RoutesName.add_New_AccountMaster_screen);
+                                   }, icon: Icon(Icons.add)),
+                             ),
+
+                         ],
+                       ),
+                     ),
+                     const SizedBox(height: 10,),
                      Obx((){
                        print("client meeting with ${businessTourPlanController.TourType_Controller.value.text.toString().trim().toLowerCase()}");
                        return Visibility(
                            visible: businessTourPlanController.meetingWith.value && businessTourPlanController.tourType.value?true:false ,
                            child:businessTourPlanController.TourType_Controller.value.text.toString().trim().toLowerCase()=="client meeting"? bindMeetingWithDropDown(context):MeetingWithTextField(context));
                      }),
-
-                     SizedBox(height: 10,),
+                     const SizedBox(height: 10,),
                      Obx(() {
                        return
                          Wrap(
@@ -175,11 +215,11 @@ class AddTourLinesPage extends StatelessWidget{
                          );
 
                      }),
-                     SizedBox(height: 10,),
+                     const SizedBox(height: 10,),
                      BindObjectiveTextField(context),
-                     SizedBox(height: 10,),
+                     const SizedBox(height: 10,),
                      BindRemarksTextField(context),
-                     SizedBox(height: 10,),
+                     const SizedBox(height: 10,),
 
                    ],
                  ),
