@@ -732,13 +732,9 @@ class SalesCycleVm extends GetxController {
                     ? solutionAcceptedController.value.text = "No"
                     : solutionAcceptedController.value.text = "Yes";
                 proposedSolutionController.value.text =
-                    saleCycleList[0].proposedSolution == null
-                        ? ""
-                        : saleCycleList[0].proposedSolution.toString();
+                    saleCycleList[0].proposedSolution == null ? "" : saleCycleList[0].proposedSolution.toString();
                 solutionRejectedRemarkController.value.text =
-                    saleCycleList[0].rejectReason.toString().isNotEmpty
-                        ? saleCycleList[0].rejectReason.toString()
-                        : "";
+                    saleCycleList[0].rejectReason.toString().isNotEmpty ? saleCycleList[0].rejectReason.toString() : "";
                 closureDateController.value.text =
                     saleCycleList[0].estClosureDate.toString();
                 saleCycleList[0].isDecisionMaker == 0

@@ -614,8 +614,9 @@ class TaskMasterDetails extends StatelessWidget{
                           ),
                         ),
                         onPressed: ()  {
-                          TaskMaster_page_controller.TaskSaleCatCreateApiHit('Details',"");
                           Navigator.pop(context);
+                          TaskMaster_page_controller.TaskSaleCatCreateApiHit('Details',"task_master_detail");
+
                         },
                         child: Container(
                           width: 100,
@@ -1267,9 +1268,10 @@ class TaskMasterDetails extends StatelessWidget{
             ),
           ),
         ),
-        if (label == "Product Category: "/* &&
-            TaskMaster_page_controller.Task_Master_list[0].quoteStatus
-                .toString().toLowerCase() == "draft"*/)
+        if (label == "Product Category: " &&
+            TaskMaster_page_controller.Task_Master_list[0].isCreateTaskDsar==1&&
+            TaskMaster_page_controller.isHeadofficePermission!="1" &&
+            TaskMaster_page_controller.isAdminWritePermission!="1" && TaskMaster_page_controller.FromPage.value=='from_pendingDSARDashboard' )
           InkWell(
             onTap: () {
               TaskMaster_page_controller.Item_Category_Selected_list.value=[];

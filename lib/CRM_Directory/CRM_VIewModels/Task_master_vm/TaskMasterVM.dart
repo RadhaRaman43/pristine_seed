@@ -531,15 +531,16 @@ class Taskmastervm extends GetxController{
                             }else if(Active == 0){
                                 IsSaleCycleActive = 'No';
                             }
-
                             getTaskMstDSARList(taskId);
                             getItemCategoryMstApi(taskId);
                             getTaskPersonMstByTaskIdApi(taskId);
                             Get.toNamed(RoutesName.taskMasterDetails_screen);
-
                         }
                         if(flag=="task_master_detail"){
                           getItemCategoryMstApi(taskId);
+
+                        }
+                        if(FromPage.value=="from_pendingDSARDashboard"){
                           Get.toNamed(RoutesName.taskMasterDetails_screen);
                         }
                         getTaskMstDSARList(taskId);
@@ -1198,7 +1199,6 @@ class Taskmastervm extends GetxController{
                   loading.value = false;
                     Utils.sanckBarSuccess("Success!", response[0].message.toString());
                     if(flag == 'Details'){
-
                         if(from_page=="task_master_detail"){
                           getTaskMaster(0, is_Active.toString(), TaskID, 'task_master_detail', 'GET FROM TASK ID', date_filter, is_done.value);
                         }

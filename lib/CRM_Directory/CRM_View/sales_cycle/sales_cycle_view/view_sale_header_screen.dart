@@ -426,8 +426,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                   visible: (saleCycleController.saleCycleList[0].quoteAccepted?.toUpperCase() == "OPEN" &&
                                               saleCycleController.saleCycleList[0].salesCycleStatus!.toUpperCase() == "SUSPECT") &&
                                           !(saleCycleController.FromPage.value == "FromDashboard") &&
-                                          (saleCycleController.email.toLowerCase() ==
-                                              saleCycleController.saleCycleList[0].salesCycleOwner?.toLowerCase() ||
+                                          (saleCycleController.email.toLowerCase() == saleCycleController.saleCycleList[0].salesCycleOwner?.toLowerCase() ||
                                               saleCycleController.userType?.toLowerCase()=='bh' || saleCycleController.isAdminWritePermission=='1'
                                           )
                                       ? true : false,
@@ -1216,33 +1215,15 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                   onPressed: () {
                                     if (saleCycleController.filter.value ==
                                         'Customer Need Identity') {
-                                      saleCycleController
-                                          .proposedSolutionController
-                                          .value
-                                          .text = "";
-                                      saleCycleController
-                                          .solutionRejectedRemarkController
-                                          .value
-                                          .text = "";
-                                      saleCycleController
-                                          .getSalesCycleMstUpdateProposedSolution(
-                                              saleCycleController
-                                                  .saleCycleList[0],
-                                              "Update");
+                                      saleCycleController.proposedSolutionController.value.text = "";
+                                      saleCycleController.solutionRejectedRemarkController.value.text = "";
+                                      saleCycleController.getSalesCycleMstUpdateProposedSolution(saleCycleController.saleCycleList[0], "Update");
                                     } else {
-                                      saleCycleController
-                                          .purchaseProcessController
-                                          .value
-                                          .text = "";
-                                      saleCycleController
-                                          .solutionRejectedRemarkController
-                                          .value
-                                          .text = "";
+                                      saleCycleController.purchaseProcessController.value.text = "";
+                                      saleCycleController.solutionRejectedRemarkController.value.text = "";
                                       saleCycleController
                                           .getSalesCycleMstUpdateProposedSolution(
-                                              saleCycleController
-                                                  .saleCycleList[0],
-                                              "Approved");
+                                              saleCycleController.saleCycleList[0], "Approved");
                                     }
                                     /* saleCycleController.salesCycleMstUpdateApiHit(
                                       saleCycleController.saleCycleList[0],
