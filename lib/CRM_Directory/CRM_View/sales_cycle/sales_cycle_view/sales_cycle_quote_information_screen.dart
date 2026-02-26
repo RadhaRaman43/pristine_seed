@@ -850,8 +850,22 @@ class QuoteInformationScreen extends StatelessWidget {
                   ],
                 ),
               ),
-              Obx(() {
-                return Visibility(
+              Visibility(
+                visible: saleCycleController.isAdminWritePermission=='1' && saleCycleController
+                    .quoteHeaderdata[0].quoteStatus?.toLowerCase()=="pending for approval",
+                  child: InkWell(
+                    onTap: () {
+                      showDialogForDelete(context, index);
+                    },
+                    child:
+                    Icon(Icons.delete, color: Colors.red, size: 27),
+                  ),),
+
+              const SizedBox(
+                width: 10,
+              ),
+
+                 Visibility(
                   visible:(saleCycleController.showBranchHead.value ||
                       saleCycleController.showClusterHead.value ||
                       saleCycleController.showGeneralManager.value || saleCycleController.isAdminWritePermission=='1') && saleCycleController
@@ -894,8 +908,8 @@ class QuoteInformationScreen extends StatelessWidget {
                               color: AllColors.textColor,
                             )),
                       )),
-                );
-              })
+                )
+
             ],
           ),
           subtitle: Column(
@@ -1048,7 +1062,6 @@ class QuoteInformationScreen extends StatelessWidget {
 
                         ],
                       )),
-
                   SizedBox(width: 5,),
 
                 ],
