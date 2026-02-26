@@ -980,6 +980,8 @@ class SalesCycleVm extends GetxController {
       String competitor_name,
       String quote_rejected_reason,
       String flag) {
+
+    print('Flag..${flag}');
     //  List<SalesCycleUpdateStatusModal> lines = Quote_Selected_list.map((item) => SalesCycleUpdateStatusModal(quoteId: item.quoteId!)).toList();
 
     loading.value = true;
@@ -1012,14 +1014,16 @@ class SalesCycleVm extends GetxController {
               }*/
               if (flag == "Pending For Approval") {
                 getSalesCycleMstStatusChange(saleCycleList);
+              }else{
+                filterQuoteAcceptedFlag.value = "";
+                pageNumber = 0;
+                clearAllFieldOfFilter();
+                getsalesCycleData(pageNumber, saleCycleList.salesCycleId!,
+                    "ViewHeader", FromPage.value);
+                Get.toNamed(RoutesName.viewSalesCycleHeaderScreen);
+                loading.value = false;
               }
-              filterQuoteAcceptedFlag.value = "";
-              pageNumber = 0;
-              clearAllFieldOfFilter();
-              getsalesCycleData(pageNumber, saleCycleList.salesCycleId!,
-                  "ViewHeader", FromPage.value);
-              Get.toNamed(RoutesName.viewSalesCycleHeaderScreen);
-              loading.value = false;
+
             } else {
               loading.value = false;
               Utils.sanckBarError(
@@ -4358,14 +4362,22 @@ class SalesCycleVm extends GetxController {
             List<SalesCycleApproveRejectModal> response = jsonResponse
                 .map((e) => SalesCycleApproveRejectModal.fromJson(e))
                 .toList();
-            if (response[0].condition!.toLowerCase() == "true") {
+            if (response[0].condition?.toLowerCase() == "true") {
               Utils.sanckBarSuccess(
                   "Message !", response[0].message.toString());
-              filterQuoteAcceptedFlag.value = "";
+              if(FromPage.value == 'Sales'){
+                Get.offAllNamed(RoutesName.salesCycleScreen);
+              }else if(FromPage.value=='FromFunnelDashboard'){
+                Get.offAllNamed(RoutesName.funnelDashboardViewScreen);
+              }else if(FromPage.value=='FromCommitDashboard'){
+                Get.offAllNamed(RoutesName.commitDashboardViewScreen);
+              }
+
+             /* filterQuoteAcceptedFlag.value = "";
               clearAllFieldOfFilter();
               pageNumber = 0;
               getsalesCycleData(pageNumber,
-                  saleCycleList.salesCycleId.toString(), "", FromPage.value);
+                  saleCycleList.salesCycleId.toString(), "", FromPage.value);*/
               loading.value = false;
             } else {
               print("message ${response[0].message.toString()}");
