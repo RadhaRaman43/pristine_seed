@@ -43,6 +43,7 @@ class BusinessPlanTourViewModel extends GetxController{
   RxBool selectMeetingWith = false.obs;
   String StartDate = '', EndDate = '', Tour_Id = '', CustomerId = '';
   RxString isSendForApproval = ''.obs;
+  RxString fromPage = ''.obs;
   RxString filterStatusFlag = 'PENDING'.obs;
 
   String MeetingWithResponse = '', Accompanied_With_Response = '';
@@ -1114,7 +1115,13 @@ class BusinessPlanTourViewModel extends GetxController{
               BusinessTourApprovalVm BusinessTourApprovalController=Get.put(BusinessTourApprovalVm());
               BusinessTourApprovalController.pageNumber = 0;
               BusinessTourApprovalController.getBusinessTourApprovalListData(pageNumber);
-              Get.toNamed(RoutesName.BusinessTourApprovalListScreen);
+              if(fromPage.value=="business_tour_plan_page"){
+                Get.offAllNamed(RoutesName.BusinessTourPlanScreen);
+              }
+              else{
+               Get.offAllNamed(RoutesName.BusinessTourApprovalListScreen);
+              }
+              //Get.toNamed(RoutesName.BusinessTourApprovalListScreen);
 
             } else {
               loading.value = false;

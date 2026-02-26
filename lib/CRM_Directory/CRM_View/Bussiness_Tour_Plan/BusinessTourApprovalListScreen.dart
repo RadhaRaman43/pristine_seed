@@ -151,6 +151,7 @@ class BusinessTourApprovalListScreen extends StatelessWidget{
       margin: EdgeInsets.all(5),
       child: ListTile(
         onTap: () {
+          businessTourPlanViewController.fromPage.value="business_tour_approve_list";
           businessTourPlanViewController.getBusinessTourPlanDetailsApi(businessTourPlanController.BusinessTourApprovalList[position].tourId, "SendForApproval");
         },
         title: Row(

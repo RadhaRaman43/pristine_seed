@@ -300,6 +300,7 @@ class BussinessTourPlanScreen extends StatelessWidget{
       margin: EdgeInsets.all(5),
       child: ListTile(
         onTap: () {
+          businessTourPlanController.fromPage.value='business_tour_plan_page';
           businessTourPlanController.getBusinessTourPlanDetailsApi(businessTourPlanController.BusinessTourPlanList[position].tourId, "TourDetail");
         },
         title: Row(

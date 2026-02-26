@@ -1019,6 +1019,8 @@ class AddTourLinesPage extends StatelessWidget{
                             ),
                             onPressed: ()  {
                               businessTourPlanController.BusinessTourPlanLinesCreate(TourId);
+                              Get.back();
+                              //Navigator.pop(context);
                             },
                             child: Container(
                               width: 60,
