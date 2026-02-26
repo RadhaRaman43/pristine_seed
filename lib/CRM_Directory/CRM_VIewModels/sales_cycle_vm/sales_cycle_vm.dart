@@ -1043,7 +1043,7 @@ class SalesCycleVm extends GetxController {
   }
 
   salesCycleMstApprovereject(SalesCycleModal saleCycleList, String reason,
-      String saleCycleapprovalStatus) {
+      String saleCycleapprovalStatus, {String? prospectStage}) {
     print(saleCycleapprovalStatus);
     loading.value = true;
     Map data = {
@@ -1063,11 +1063,22 @@ class SalesCycleVm extends GetxController {
                 .map((e) => SalesCycleApproveRejectModal.fromJson(e))
                 .toList();
             if (response[0].condition == "True") {
+              clearAllFieldOfFilter();
               Utils.sanckBarSuccess(
                   "Message !", response[0].message.toString());
               filterQuoteAcceptedFlag.value = "";
               pageNumber = 0;
-              clearAllFieldOfFilter();
+              if(FromPage.value=='Sales' && prospectStage!='Prospect Stage'){
+                Get.offAllNamed(RoutesName.salesCycleScreen);
+              }else if(FromPage.value=='FromSCPendingForApproval' && prospectStage!='Prospect Stage'){
+                Get.offAllNamed(RoutesName.salesCyclePendingForApprovalListScreen);
+              }else if(FromPage.value=='FromCommitDashboard' && prospectStage!='Prospect Stage'){
+                Get.offAllNamed(RoutesName.commitDashboardViewScreen);
+              }
+              else if(FromPage.value=='FromFunnelDashboard' && prospectStage!='Prospect Stage'){
+                Get.offAllNamed(RoutesName.funnelDashboardViewScreen);
+              }
+              else{
               getsalesCycleData(
                   pageNumber,
                   saleCycleList.salesCycleId.toString(),
@@ -1075,6 +1086,15 @@ class SalesCycleVm extends GetxController {
                   FromPage.value);
               isApprovalVisible.value = false;
               loading.value = false;
+              }
+              /*clearAllFieldOfFilter();
+              getsalesCycleData(
+                  pageNumber,
+                  saleCycleList.salesCycleId.toString(),
+                  "ViewHeader",
+                  FromPage.value);
+              isApprovalVisible.value = false;
+              loading.value = false;*/
             } else {
               print("message ${response[0].message.toString()}");
               loading.value = false;
@@ -4642,7 +4662,7 @@ class SalesCycleVm extends GetxController {
                     FromPage.value);
               }else{
                 salesCycleMstApprovereject(saleCycleList,
-                    solutionRejectedRemarkController.value.text, approRejeStatus);
+                    solutionRejectedRemarkController.value.text, approRejeStatus, prospectStage: 'Prospect Stage');
               }
 
               //getsalesCycleData(pageNumber, saleCycleList.salesCycleId!, "ViewHeader", 'Sales');
