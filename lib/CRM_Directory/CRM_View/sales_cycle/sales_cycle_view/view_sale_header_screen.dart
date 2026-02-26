@@ -3016,8 +3016,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                         Spacer(),
                         InkWell(
                           onTap: () {
-                            ShowProductCategoryTable(
-                                context, saleCycleController.budgetAmountList);
+                            ShowProductCategoryTable(context, saleCycleController.budgetAmountList);
                             //showInfraLeadDetails(context, saleCycleController.saleCycleList);
                           },
                           child: Text(

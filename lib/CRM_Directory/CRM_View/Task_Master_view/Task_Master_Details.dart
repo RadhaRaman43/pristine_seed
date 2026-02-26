@@ -225,9 +225,7 @@ class TaskMasterDetails extends StatelessWidget{
                                 return IconButton(
                                   onPressed: () {
                                     TaskMaster_page_controller.toggle();
-                                    if (TaskMaster_page_controller
-                                        .isExpandDetails.value ==
-                                        true) {
+                                    if (TaskMaster_page_controller.isExpandDetails.value == true) {
                                       print(
                                           "If......${TaskMaster_page_controller.isExpandDetails.value}");
                                     } else {

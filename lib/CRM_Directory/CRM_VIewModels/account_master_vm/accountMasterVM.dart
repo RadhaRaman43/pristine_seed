@@ -504,7 +504,8 @@ class Accountmastervm extends GetxController{
             loading.value = false;
             regionwithclusterGetByEmailList.value=response;
             RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join('|');
-            print('region....${RegionName_controller.value.text}');
+            SelectedRegion_list.assignAll(regionwithclusterGetByEmailList);
+            //print('region....${RegionName_controller.value.text}');
             if(filterRouting=="Account Draft"){
               RegionName_controller.value.text="";
               clusterName_controller.value.text="";
@@ -1716,8 +1717,9 @@ class Accountmastervm extends GetxController{
     selected_company_type_list.value=[];
     SelectedRegion_list.value=[];
     SelectedCluster_list.value =[];
-    RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join(',');
+    //RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join(',');
     clusterName_controller.value.text = clusterGetByEmailList.map((e) => e.geoValue).join(',');
+    getRegionsWithClusterFilterGetByEmail();
     getAccountMaster(pageNumber,'All');
 
   }
