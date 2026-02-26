@@ -540,9 +540,10 @@ class Taskmastervm extends GetxController{
                           getItemCategoryMstApi(taskId);
 
                         }
-                        if(FromPage.value=="from_pendingDSARDashboard"){
+                        if(FromPage.value=="from_pendingDSARDashboard" || FromPage.value=="from_CallDashboard"){
                           Get.toNamed(RoutesName.taskMasterDetails_screen);
                         }
+                        print("from page ${FromPage.value}");
                         getTaskMstDSARList(taskId);
 
 
@@ -712,7 +713,7 @@ class Taskmastervm extends GetxController{
         }
     }
 
-    ApproveRejectApiHit(String? taskId) async{
+    ApproveRejectApiHit(String? taskId, String from_page) async{
         try{
             Map<String, String> data={
                 "task_id": taskId!,

@@ -927,8 +927,7 @@ class CallDashboardViewScreen extends StatelessWidget {
                         fontWeight: FontWeight.w500),
                   ),
                   Tooltip(
-                    message: dashboard_view_Controller
-                            .callDashboardUserWiseDataList[position].taskId ??
+                    message: dashboard_view_Controller.callDashboardUserWiseDataList[position].taskId ??
                         "",
                     child: Text(
                       dashboard_view_Controller

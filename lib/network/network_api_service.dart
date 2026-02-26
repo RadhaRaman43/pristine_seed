@@ -56,38 +56,6 @@ class NetworkApiServices<T> extends BaseApiServices {
     }
     return reply;
 
-
-    // HttpClient client = new HttpClient();
-    // client.badCertificateCallback =
-    // ((X509Certificate cert, String host, int port) => true);
-    // client.connectionTimeout= const Duration(seconds: 60);
-    //
-    // if(queryParams!=null && queryParams.length>0){
-    //   String queryString = Uri(queryParameters: queryParams).query;
-    //   url= url + '?' + queryString;
-    // }
-    //
-    // HttpClientRequest request = await client.getUrl(Uri.parse(url));
-    // request.headers.add("Content-Type", "application/json");
-    // if (token != null && token != "") {
-    //   request.headers.add("Authorization", token);
-    // }
-    // if (request_host_name != null && request_host_name != "") {
-    //   request.headers.add("request_host_name", request_host_name);
-    // }
-    // if (company_id != null && company_id != "") {
-    //   request.headers.add("company_id", company_id);
-    // }
-    // HttpClientResponse response = await request.close();
-    // String reply = await response.transform(utf8.decoder).join();
-    // if (response.statusCode != 200) {
-    //   throw Exception("Api Error [ Status Code :" +
-    //       response.statusCode.toString() +
-    //       " Response :" +
-    //       reply +
-    //       " ]");
-    // }
-    // return reply;
   }
 
   @override
@@ -100,6 +68,7 @@ class NetworkApiServices<T> extends BaseApiServices {
     var token = await sessionManagement.getAuthToken();
     var request_host_name = await sessionManagement.getRequestHostName();
     var company_id = await sessionManagement.getCompanyId();
+    String adminCheck = await sessionManagement.getIsAdminPermission() ?? '';
 
 print(token);
     Map<String, String> headers ={
@@ -118,7 +87,7 @@ print(token);
       Uri.parse(url),
       headers: headers,
       body: utf8.encode(jsonEncode(data)),
-    ).timeout(Duration(seconds: 60));
+    ).timeout(Duration(seconds: adminCheck=="1"?180:60));
     print(response);
     String reply = response.body.toString();
     if (response.statusCode != 200) {
@@ -210,22 +179,5 @@ print(token);
 
     return reply;
 
-
-    // HttpClient client = new HttpClient();
-    // client.badCertificateCallback =
-    // ((X509Certificate cert, String host, int port) => true);
-    // http.StreamedResponse streamedResponse = await IOClient(
-    //     client
-    // ).send(clint_request).timeout(const Duration(seconds: 60));
-    // String reply = await streamedResponse.stream.bytesToString();
-    // if (streamedResponse.statusCode != 200) {
-    //   throw Exception("Api Error [ Status Code :" +
-    //       streamedResponse.statusCode.toString() +
-    //       " Response :" +
-    //       reply +
-    //       " ]");
-    // }
-    //
-    // return reply;
   }
 }

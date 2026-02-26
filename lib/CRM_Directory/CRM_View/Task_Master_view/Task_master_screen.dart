@@ -1026,7 +1026,7 @@ class TaskMasterScreen extends StatelessWidget {
                                 return;
                               }
                               Navigator.pop(context);
-                              ConfirmationDialog(context, TaskId);
+                              ConfirmationDialog(context, TaskId,"Approve");
                             },
                             child: Container(
                               width: 80,
@@ -1068,7 +1068,7 @@ class TaskMasterScreen extends StatelessWidget {
                                         'Please Enter Reject Reason.');
                                   } else {
                                     Navigator.pop(context);
-                                    ConfirmationDialog(context, TaskId);
+                                    ConfirmationDialog(context, TaskId,"Reject");
                                     //TaskMaster_page_controller.UpdateTaskStatus(context);
                                   }
                                 }
@@ -1095,7 +1095,7 @@ class TaskMasterScreen extends StatelessWidget {
         });
   }
 
-  ConfirmationDialog(context, String taskId) {
+  ConfirmationDialog(context, String taskId, String reason) {
     showDialog(
         context: context,
         builder: (context) {
@@ -1106,7 +1106,7 @@ class TaskMasterScreen extends StatelessWidget {
                 Icon(Icons.check_circle, color: AllColors.lightredColor,),
                 SizedBox(width: 5,),
                 Text(
-                    'Update!',
+                    '${reason}!',
                     style: GoogleFonts.poppins(
                       fontSize: AllFontSize.sisxteen,
                       fontWeight: FontWeight.w700,
@@ -1119,7 +1119,7 @@ class TaskMasterScreen extends StatelessWidget {
                   Column(
                     children: [
                       Text(
-                          'Do you want to Update this Task?',
+                          'Do you want to $reason this Task?',
                           style: GoogleFonts.poppins(
                             fontSize: AllFontSize.fourtine,
                             fontWeight: FontWeight.w500,
@@ -1164,7 +1164,7 @@ class TaskMasterScreen extends StatelessWidget {
                             ),
                             onPressed: () {
                               TaskMaster_page_controller.ApproveRejectApiHit(
-                                  taskId);
+                                  taskId,'');
                               Navigator.pop(context);
                               /*TaskMaster_page_controller.pageNumber=0;
                           TaskMaster_page_controller.getTaskMaster(TaskMaster_page_controller.pageNumber, TaskMaster_page_controller.is_Active.toString(), '', '', '');
