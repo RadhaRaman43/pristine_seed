@@ -114,12 +114,10 @@ class BussinessTourPlanScreen extends StatelessWidget{
                               shape: StadiumBorder(
                                 side: BorderSide(color: AllColors.grayColor),
                               ),
-                              label: Text(
-                                'Pending',
+                              label: Text('Pending',
                                 style: TextStyle(
                                   color: businessTourPlanController.filterStatusFlag.value == 'PENDING'
-                                      ? AllColors.whiteColor
-                                      : AllColors.primaryDark1,
+                                      ? AllColors.whiteColor : AllColors.primaryDark1,
                                   fontSize: AllFontSize.fourtine,
                                   fontWeight: FontWeight.w500,
                                 ),
@@ -302,6 +300,7 @@ class BussinessTourPlanScreen extends StatelessWidget{
       margin: EdgeInsets.all(5),
       child: ListTile(
         onTap: () {
+          businessTourPlanController.fromPage.value='business_tour_plan_page';
           businessTourPlanController.getBusinessTourPlanDetailsApi(businessTourPlanController.BusinessTourPlanList[position].tourId, "TourDetail");
         },
         title: Row(
@@ -762,7 +761,7 @@ class BussinessTourPlanScreen extends StatelessWidget{
                               bindFilterEndDate(context),
                               SizedBox(height: 10,),
                               bindfilterText(context,'Created By',businessTourPlanController.filterCreatedByController.value),
-                              bindAccountOwnerFilter(context),
+                              //bindAccountOwnerFilter(context),
                               SizedBox(height: 10,),
                               bindCrteatedOn(context),
                             ],

@@ -290,8 +290,7 @@ class SalesDashboardVm extends GetxController{
 
 
         } else {
-          Utils.sanckBarError(
-              "False Message !", response[0].message.toString());
+          Utils.sanckBarError("False Message !", response[0].message.toString());
           monthWiseTotalFunnelList.value = [];
           monthWiseCommitmentList.value = [];
           monthWiseFinalBookingList.value = [];
@@ -301,12 +300,14 @@ class SalesDashboardVm extends GetxController{
       }
 
     } catch (e) {
+      Utils.sanckBarError("Api Error !",e.toString() );
       print("API error: $e");
     } finally {
       loading.value = false;
 
     }
   }
+
   Future<Iterable<EmployeeMemberModel>> EmployeeMasterGet(String query) async {
     if (query == '') {
       return const Iterable<EmployeeMemberModel>.empty();
@@ -549,6 +550,7 @@ class SalesDashboardVm extends GetxController{
             loading.value = false;
             regionwithclusterGetByEmailList.value=response;
             RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join('|');
+            SelectedRegion_list.assignAll(regionwithclusterGetByEmailList);
             print('av..${RegionName_controller.value.text}');
             getFilterData();
           }else {
@@ -590,10 +592,9 @@ class SalesDashboardVm extends GetxController{
     DateRange("financial");
     print("cgf${regionwithclusterGetByEmailList.length}");
     filterCustomDateController.value.text = '${formattedStartDate} - ${formattedEndDate}';
-    RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join(',');
+    //RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join(',');
     clusterName_controller.value.text = clusterGetByEmailList.map((e) => e.geoValue).join(',');
-   /* RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join(',');
-    clusterName_controller.value.text = clusterGetByEmailList.map((e) => e.geoValue).join(',');*/
+    getRegionsWithClusterFilterGetByEmail();
 
   }
 

@@ -200,7 +200,8 @@ class PendingDraftQuoteVm extends GetxController{
             loading.value = false;
             regionwithclusterGetByEmailList.value=response;
             RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join('|');
-            print('region....${RegionName_controller.value.text}');
+            SelectedRegion_list.assignAll(regionwithclusterGetByEmailList);
+            //print('region....${RegionName_controller.value.text}');
             if(filterRouting =='Pending Draft Quote'){
               getPendingDraftQuoteFilterData();
             }
@@ -335,10 +336,8 @@ class PendingDraftQuoteVm extends GetxController{
     gm_Approval_controller.value.clear();
     productCategoryController.value.clear();
     createdOnCnontroller.value.clear();
-    //clusterName_controller.value.clear();
     filterQuoteSaleCycleController.value.clear();
     createdByCnontroller.value.clear();
-    //RegionName_controller.value.clear();
     quoteStatusController.value.clear();
     createdOnStartToEnd.value = "";
     extClosureStartToEnd.value = "";
@@ -353,6 +352,12 @@ class PendingDraftQuoteVm extends GetxController{
     BTPFilterController.value.clear();
     MAPFilterController.value.clear();
     StandardCostController.value.clear();
+
+    SelectedCluster_list.value = [];
+    SelectedRegion_list.value = [];
+    //RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join(',');
+    clusterName_controller.value.text = clusterGetByEmailList.map((e) => e.geoValue).join(',');
+    getRegionsWithClusterFilterGetByEmail();
 
 
   }

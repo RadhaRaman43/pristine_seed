@@ -595,13 +595,13 @@ class _Drawer extends State<CustomDrawer> {
                                                 Navigator.of(context);
                                                 break;
 
-                                              case 'Non Standard Items':
+                                              /*case 'Non Standard Items':
                                                 IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
                                                 home_vm.openMenu(cTitle, iconData);
                                                 Get.delete<ItemMasterVm>();
                                                 Get.toNamed(RoutesName.nonStandardItemList);
                                                 Navigator.of(context);
-                                                break;
+                                                break;*/
 
 
 

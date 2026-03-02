@@ -184,7 +184,7 @@ class AddNewDsarScreen extends StatelessWidget{
 
               if(/*TaskMaster_page_controller.ItemCat_type_controller
                   .text.isNotEmpty &&*/ TaskMaster_page_controller.DSAR_Status_type_controller.value.text?.toLowerCase()=='sales cycle'){
-                TaskMaster_page_controller.TaskSaleCatCreateApiHit('DSAR');
+                TaskMaster_page_controller.TaskSaleCatCreateApiHit('DSAR',"");
               }else{
                 TaskMaster_page_controller.TaskDSARMasterCreate();
               }

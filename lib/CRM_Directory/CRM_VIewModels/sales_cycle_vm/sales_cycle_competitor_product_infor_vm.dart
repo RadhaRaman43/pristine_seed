@@ -185,7 +185,8 @@ class SalesCycleCompetitorProductInforVm extends GetxController{
             loading.value = false;
             regionwithclusterGetByEmailList.value=response;
             RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join('|');
-            print('region....${RegionName_controller.value.text}');
+            SelectedRegion_list.assignAll(regionwithclusterGetByEmailList);
+            //print('region....${RegionName_controller.value.text}');
             getFilterData();
             //getGalesCycleCompetitorProductInformationGet(pageNumber);
 
@@ -291,8 +292,12 @@ class SalesCycleCompetitorProductInforVm extends GetxController{
     filterExpectedClosuredateController.value.clear();
     extClosureStartToEnd.value="";
     createdOnStartToEnd.value="";
-    clusterName_controller.value.clear();
-    RegionName_controller.value.clear();
+
+    SelectedCluster_list.value = [];
+    SelectedRegion_list.value = [];
+    //RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join(',');
+    clusterName_controller.value.text = clusterGetByEmailList.map((e) => e.geoValue).join(',');
+    getRegionsWithClusterFilterGetByEmail();
   }
 
   RxString filterDataChecker = ''.obs;

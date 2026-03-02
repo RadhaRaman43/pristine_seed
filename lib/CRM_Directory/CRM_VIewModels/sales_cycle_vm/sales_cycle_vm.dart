@@ -633,7 +633,8 @@ class SalesCycleVm extends GetxController {
             loading.value = false;
             regionwithclusterGetByEmailList.value=response;
             RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join('|');
-            print('region....${RegionName_controller.value.text}');
+            SelectedRegion_list.assignAll(regionwithclusterGetByEmailList);
+           // print('region....${RegionName_controller.value.text}');
             getFilterData();
             //getsalesCycleData(pageNumber, "", "", '');
 
@@ -732,13 +733,9 @@ class SalesCycleVm extends GetxController {
                     ? solutionAcceptedController.value.text = "No"
                     : solutionAcceptedController.value.text = "Yes";
                 proposedSolutionController.value.text =
-                    saleCycleList[0].proposedSolution == null
-                        ? ""
-                        : saleCycleList[0].proposedSolution.toString();
+                    saleCycleList[0].proposedSolution == null ? "" : saleCycleList[0].proposedSolution.toString();
                 solutionRejectedRemarkController.value.text =
-                    saleCycleList[0].rejectReason.toString().isNotEmpty
-                        ? saleCycleList[0].rejectReason.toString()
-                        : "";
+                    saleCycleList[0].rejectReason.toString().isNotEmpty ? saleCycleList[0].rejectReason.toString() : "";
                 closureDateController.value.text =
                     saleCycleList[0].estClosureDate.toString();
                 saleCycleList[0].isDecisionMaker == 0
@@ -4833,8 +4830,9 @@ class SalesCycleVm extends GetxController {
 
     SelectedCluster_list.value=[];
     SelectedRegion_list.value=[];
-    RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join('|');
+    //RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join('|');
     clusterName_controller.value.text = clusterGetByEmailList.map((e) => e.geoValue).join('|');
+    getRegionsWithClusterFilterGetByEmail();
   }
 
   void clearAllFieldOfQuoteFilter() {

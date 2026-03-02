@@ -664,6 +664,7 @@ class PendingDsarDashboardVm extends GetxController{
             loading.value = false;
             regionwithclusterGetByEmailList.value=response;
             RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join(', ');
+            SelectedRegion_list.assignAll(regionwithclusterGetByEmailList);
             print('region....${RegionName_controller.value.text}');
             //callDashboardData();
             getFilterData();
@@ -820,8 +821,9 @@ class PendingDsarDashboardVm extends GetxController{
     selectedDSARStatusList.add(CallStatusMasterModel(taskStatus: "All",),);
     DateRange("month");
     filterCustomDateController.value.text = '${formattedStartDate} - ${formattedEndDate}';
-    RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join(',');
+    //RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join(',');
     clusterName_controller.value.text = clusterGetByEmailList.map((e) => e.geoValue).join(',');
+    getRegionsWithClusterFilterGetByEmail();
 
   }
   RxString filterDataChecker = ''.obs;
