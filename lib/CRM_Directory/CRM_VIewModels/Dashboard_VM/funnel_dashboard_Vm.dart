@@ -73,6 +73,7 @@ class FunnelDashboardVm extends GetxController{
   var RegionName_controller=TextEditingController().obs;
   var CustomerName_controller=TextEditingController().obs;
   var filter_created_on_cont=TextEditingController().obs;
+  var filter_created_on_star_to_cont=TextEditingController().obs;
 
   var CustomerNameApi;
   var ProductCategoryForApi;
@@ -189,10 +190,8 @@ class FunnelDashboardVm extends GetxController{
       if(StageName_controller.value.text.contains("All")){
         StageNameForApi="";
       }else{
-        StageNameForApi = StageName_controller.value.text
-            .split(',')
-            .map((e) => e.trim())
-            .join('|');
+        StageNameForApi = StageName_controller.value.text.split(',').map((e) =>
+            e.trim()).join('|');
 
       }
     }
@@ -579,6 +578,7 @@ class FunnelDashboardVm extends GetxController{
             loading.value = false;
             regionwithclusterGetByEmailList.value=response;
             RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join(', ');
+            SelectedRegion_list.assignAll(regionwithclusterGetByEmailList);
             print('region....${RegionName_controller.value.text}');
             // funnelDashboardData();
              getFilterData();
@@ -724,6 +724,7 @@ class FunnelDashboardVm extends GetxController{
     IsCommit_controller.value.text = 'ALL';
     StageName_controller.value.text='All';
     filter_created_on_cont.value.clear();
+    filter_created_on_star_to_cont.value.clear();
     //clusterName_controller.value.clear();
     CustomerName_controller.value.clear();
     //RegionName_controller.value.clear();
@@ -736,8 +737,9 @@ class FunnelDashboardVm extends GetxController{
     selectedSalesStageStatusList.value = ["All"];
     DateRange("monthly");
     filterCustomDateController.value.text = '${formattedStartDate} - ${formattedEndDate}';
-    RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join(',');
+    //RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join(',');
     clusterName_controller.value.text = clusterGetByEmailList.map((e) => e.geoValue).join(',');
+    getRegionsWithClusterFilterGetByEmail();
 
   }
 
@@ -752,6 +754,7 @@ class FunnelDashboardVm extends GetxController{
       "filter_product_category": ProductCategory_controller.value.text,
       "filter_commit": IsCommit_controller.value.text,
       "filter_created_on": filter_created_on_cont.value.text,
+      "filter_created_on_star_to_cont": filter_created_on_star_to_cont.value.text,
       "filter_owner_name": AccountOwner_controller.value.text,
       "filter_region_name":RegionName_controller.value.text,
       "filter_cluster_name": clusterName_controller.value.text,
@@ -772,6 +775,7 @@ class FunnelDashboardVm extends GetxController{
         ProductCategory_controller.value.text=getFilterData["filter_product_category"]??"";
         IsCommit_controller.value.text=getFilterData["filter_commit"]??"";
         filter_created_on_cont.value.text=getFilterData["filter_created_on"]??"";
+        filter_created_on_star_to_cont.value.text=getFilterData["filter_created_on_star_to_cont"]??"";
         AccountOwner_controller.value.text=getFilterData["filter_owner_name"]??"";
         pageNumber=0;
 

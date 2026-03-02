@@ -225,9 +225,7 @@ class TaskMasterDetails extends StatelessWidget{
                                 return IconButton(
                                   onPressed: () {
                                     TaskMaster_page_controller.toggle();
-                                    if (TaskMaster_page_controller
-                                        .isExpandDetails.value ==
-                                        true) {
+                                    if (TaskMaster_page_controller.isExpandDetails.value == true) {
                                       print(
                                           "If......${TaskMaster_page_controller.isExpandDetails.value}");
                                     } else {
@@ -562,7 +560,7 @@ class TaskMasterDetails extends StatelessWidget{
     );
   }
 
-  showProductCatDialog(context){
+  showProductCatDialog(BuildContext context){
     showDialog(
         context: context,
         builder: (context){
@@ -614,8 +612,8 @@ class TaskMasterDetails extends StatelessWidget{
                           ),
                         ),
                         onPressed: ()  {
-                          TaskMaster_page_controller.TaskSaleCatCreateApiHit('Details');
                           Navigator.pop(context);
+                          TaskMaster_page_controller.TaskSaleCatCreateApiHit('Details',"task_master_detail");
 
                         },
                         child: Container(
@@ -633,7 +631,6 @@ class TaskMasterDetails extends StatelessWidget{
                       ),
 
                     ],)
-
                 ],
               ),
             ),
@@ -845,20 +842,15 @@ class TaskMasterDetails extends StatelessWidget{
   }
 
   Widget bindItemCategoryDropDown(context){
-    return
-      Autocomplete<ItemCategoryMstModel>(
+    return Autocomplete<ItemCategoryMstModel>(
       displayStringForOption: _displayItemCatMasterForOption,
       optionsBuilder: (TextEditingValue textEditingValue) {
         if (textEditingValue.text.isEmpty) {
           return TaskMaster_page_controller.Item_Category_master_list;
           // return const Iterable<VehicleTypeResponse>.empty();
         }
-        return TaskMaster_page_controller.Item_Category_master_list
-            .where((ItemCategoryMstModel option) {
-          return option.categoryName
-              .toString()
-              .toLowerCase()
-              .contains(textEditingValue.text.toLowerCase());
+        return TaskMaster_page_controller.Item_Category_master_list.where((ItemCategoryMstModel option) {
+          return option.categoryName.toString().toLowerCase().contains(textEditingValue.text.toLowerCase());
         }).toList();
       },
       onSelected: (ItemCategoryMstModel selection) {
@@ -1109,7 +1101,7 @@ class TaskMasterDetails extends StatelessWidget{
 
             _buildLabelWithValue(label: "Task Status: ", value: TaskMaster_page_controller.Task_Master_list[0].taskStatus ?? "",color: getStatusColor(taskStatus)),
 
-            _buildLabelWithValue(label: "Product Category: ", value: TaskMaster_page_controller.Task_Master_list[0].productCategory ?? "",),
+            _buildLabelWithValue(label: "Product Category: ", value: TaskMaster_page_controller.Task_Master_list[0].productCategory ?? "",context: context),
 
             _buildLabelWithValue(label: "Date of Visit: ", value: dateTimeCreatedOn,),
 
@@ -1242,6 +1234,7 @@ class TaskMasterDetails extends StatelessWidget{
     required String? value,
     VoidCallback? onTap,
     Color color = AllColors.textColor,
+    BuildContext? context
   }) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1273,6 +1266,30 @@ class TaskMasterDetails extends StatelessWidget{
             ),
           ),
         ),
+        if (label == "Product Category: " &&
+            TaskMaster_page_controller.Task_Master_list[0].isCreateTaskDsar==1&&
+            TaskMaster_page_controller.isHeadofficePermission!="1" &&
+            TaskMaster_page_controller.isAdminWritePermission!="1" && TaskMaster_page_controller.FromPage.value=='from_pendingDSARDashboard' )
+          InkWell(
+            onTap: () {
+              TaskMaster_page_controller.Item_Category_Selected_list.value=[];
+              for(int i = 0; i < TaskMaster_page_controller.Item_Category_master_list.length; i++ ){
+                if(TaskMaster_page_controller.Item_Category_master_list[i].isSelected == 1){
+                  TaskMaster_page_controller.Item_Category_Selected_list.add(TaskMaster_page_controller.Item_Category_master_list[i]);
+                  print('LIstSIze.....${TaskMaster_page_controller.Item_Category_Selected_list.length}');
+                }
+                else{
+                  print('NoLIstSIze.....${TaskMaster_page_controller.Item_Category_Selected_list.length}');
+                }
+              }
+              showProductCatDialog(context!);
+
+            },
+            child: const Padding(
+              padding: EdgeInsets.only(left: 6),
+              child: Icon(Icons.add),
+            ),
+          ),
       ],
     );
   }
@@ -1480,7 +1497,7 @@ class TaskMasterDetails extends StatelessWidget{
                                 return;
                               }
                               Navigator.pop(context);
-                              ConfirmationDialog(context, TaskId);
+                              ConfirmationDialog(context, TaskId,"Approve");
 
 
                             },
@@ -1516,7 +1533,7 @@ class TaskMasterDetails extends StatelessWidget{
                                     Utils.sanckBarError('Error : ', 'Please Enter Reject Reason.');
                                   }else{
                                     Navigator.pop(context);
-                                    ConfirmationDialog(context, TaskId);
+                                    ConfirmationDialog(context, TaskId,"Reject");
                                     //TaskMaster_page_controller.UpdateTaskStatus(context);
                                   }
                                 }
@@ -1545,7 +1562,7 @@ class TaskMasterDetails extends StatelessWidget{
         });
   }
 
-  ConfirmationDialog(context, String taskId){
+  ConfirmationDialog(context, String taskId, String reason){
     showDialog(
         context: context,
         builder: (context){
@@ -1556,7 +1573,7 @@ class TaskMasterDetails extends StatelessWidget{
                 Icon(Icons.check_circle, color: AllColors.lightredColor,),
                 SizedBox(width: 5,),
                 Text(
-                    'Update!',
+                    '$reason!',
                     style: GoogleFonts.poppins(
                       fontSize: AllFontSize.sisxteen,
                       fontWeight: FontWeight.w700,
@@ -1569,7 +1586,7 @@ class TaskMasterDetails extends StatelessWidget{
                   Column(
                     children: [
                       Text(
-                          'Do you want to Update this Task?',
+                          'Do you want to $reason this Task?',
                           style: GoogleFonts.poppins(
                             fontSize: AllFontSize.fourtine,
                             fontWeight: FontWeight.w500,
@@ -1612,7 +1629,7 @@ class TaskMasterDetails extends StatelessWidget{
                               ),
                             ),
                             onPressed: ()  {
-                              TaskMaster_page_controller.ApproveRejectApiHit(taskId);
+                              TaskMaster_page_controller.ApproveRejectApiHit(taskId,'Master_detail_page');
                               Navigator.pop(context);
                               /*TaskMaster_page_controller.pageNumber=0;
                           TaskMaster_page_controller.getTaskMaster(TaskMaster_page_controller.pageNumber, TaskMaster_page_controller.is_Active.toString(), '', '', '');

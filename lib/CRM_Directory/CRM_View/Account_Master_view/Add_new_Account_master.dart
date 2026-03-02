@@ -102,6 +102,9 @@ class AddNewAccountMaster extends StatelessWidget{
           else if(accountMaster_page_controller.FromPage == "AccountUpdate"){
             Get.back();
           }
+          else if(accountMaster_page_controller.FromPage == "AddTourLine"){
+            Get.back();
+          }
           else{
             accountMaster_page_controller.isReferral.value=false;
             accountMaster_page_controller.clearController();

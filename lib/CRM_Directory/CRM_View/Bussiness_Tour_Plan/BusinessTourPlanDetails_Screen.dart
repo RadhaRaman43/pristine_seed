@@ -302,6 +302,7 @@ class BusinessTourPlanDeatil extends StatelessWidget {
                               }else if(title == 'Reject'){
                                 businessTourPlanController.BusinessTourPlanApproveReject(TourId, 'REJECTED');
                               }
+                              Navigator.pop(context);
 
                             },
                             child: Container(
@@ -669,6 +670,7 @@ class BusinessTourPlanDeatil extends StatelessWidget {
                             ),
                             onPressed: ()  {
                               businessTourPlanController.BusinessTourPlanHeaderComplete(TourId);
+                              Navigator.pop(context);
                             },
                             child: Container(
                               width: 60,

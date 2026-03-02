@@ -819,6 +819,10 @@ class CommitDashboardViewscreen extends StatelessWidget{
               ),
               InkWell(
                   onTap: (){
+                   /* if(dashboard_view_Controller.commitDashboardUserWiseDataList[position].salesCycleStatus.toString().toLowerCase() =="suspect"){
+                      saleCycleController.getPurchaseProcessApi();
+                      saleCycleController.getPurchaseTimeFrameApi();
+                    }*/
                     saleCycleController.ProductCategoryWiseAmtGet(0, dashboard_view_Controller.commitDashboardUserWiseDataList[position].salesCycleId!);
                     saleCycleController.pageNumber = 0;
                     saleCycleController.filterQuoteAcceptedFlag.value="";
@@ -1472,7 +1476,7 @@ class CommitDashboardViewscreen extends StatelessWidget{
   bindFilterCreatedOn(BuildContext context) {
     return TextField(
       cursorColor: AllColors.primaryDark1,
-      controller: dashboard_view_Controller.filter_created_on_cont.value,
+      controller: dashboard_view_Controller.filter_created_on_star_to_cont.value,
       readOnly: true,
       decoration: InputDecoration(
         contentPadding: EdgeInsets.symmetric(
@@ -1518,10 +1522,10 @@ class CommitDashboardViewscreen extends StatelessWidget{
         if (picked != null) {
           final startDate = DateFormat('yyyy-MM-dd').format(picked.start);
           final endDate = DateFormat('yyyy-MM-dd').format(picked.end);
-
           dashboard_view_Controller.filter_created_on_cont.value.text = '$startDate @ $endDate';
+          dashboard_view_Controller.filter_created_on_star_to_cont.value.text='$startDate - $endDate';
         } else {
-
+          dashboard_view_Controller.filter_created_on_star_to_cont.value.text='';
           dashboard_view_Controller.filter_created_on_cont.value.text="";
         }
       },
