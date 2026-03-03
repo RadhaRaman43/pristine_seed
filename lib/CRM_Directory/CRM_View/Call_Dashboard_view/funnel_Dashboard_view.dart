@@ -1241,7 +1241,7 @@ class FunnelDashboardView extends StatelessWidget{
     return GestureDetector(
       onTap: () => _showMultiSelectDialog(context, "Select Sales Cycle Stage",
           dashboard_view_Controller.StageName_controller,
-          dashboard_view_Controller.selectedSalesStageStatusList),
+          dashboard_view_Controller.selectedSalesStageStatusList, 'All'),
       child: AbsorbPointer(
         child: TextField(
           controller: dashboard_view_Controller.StageName_controller.value,
@@ -2124,12 +2124,12 @@ class FunnelDashboardView extends StatelessWidget{
     });
   }
   void _showMultiSelectDialog(BuildContext context, String dialogHeader,
-      Rx<TextEditingController> textController, RxList<String> itemList, ) {
+      Rx<TextEditingController> textController, RxList<String> itemList,String defaultValueBind ) {
     final List<String> allItems = itemList.value;
     List<String> selectedItems =
     textController.value.text.split(',').map((e) => e.trim()).where((e) => e.isNotEmpty).toList();
     if (selectedItems.isEmpty) {
-      selectedItems = ["OPEN"];
+      selectedItems = [defaultValueBind];
     }
 
     showDialog(
@@ -2184,7 +2184,7 @@ class FunnelDashboardView extends StatelessWidget{
                     } else {
                       selectedItems.remove(item);
                       if (selectedItems.isEmpty) {
-                        selectedItems.add("OPEN");
+                        selectedItems.add(defaultValueBind);
                       }
                     }
                     (context as Element).markNeedsBuild();
@@ -2236,7 +2236,7 @@ class FunnelDashboardView extends StatelessWidget{
     return GestureDetector(
       onTap: () => _showMultiSelectDialog(context, "Select Quote Accepted",
           dashboard_view_Controller.QuoteAccepted_controller,
-          dashboard_view_Controller.quoteAcceptedList),
+          dashboard_view_Controller.quoteAcceptedList, 'OPEN'),
       child: AbsorbPointer(
         child: TextField(
           controller: dashboard_view_Controller.QuoteAccepted_controller.value,

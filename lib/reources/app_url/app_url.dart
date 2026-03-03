@@ -333,6 +333,7 @@ class AppUrl {
      static const String BusinessTourplanApprovalGet="$BASE_URL/api/CRM/BusinessTourPlan/BusinessTourplanApprovalGet";
      static const String BusinessTourPlanApproveReject="$BASE_URL/api/CRM/BusinessTourPlan/BusinessTourplanApproveReject";
      static const String BusinessTourPlanAllLineGet="$BASE_URL/api/CRM/BusinessTourPlan/BusinessTourPlanAllLineGet";
+     static const String BusinessTourPlanDelete="$BASE_URL/api/CRM/BusinessTourPlan/BusinessTourPlanDelete";
 
 
      //todo dashboard url

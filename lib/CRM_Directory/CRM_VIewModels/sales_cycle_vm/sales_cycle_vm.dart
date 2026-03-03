@@ -3242,6 +3242,8 @@ class SalesCycleVm extends GetxController {
                                     saleCycleList,
                                     saleCycleList.salesCycleStatus!);
 
+
+
                                 // Get.back();
                               },
                               child: Container(
@@ -3827,8 +3829,8 @@ class SalesCycleVm extends GetxController {
                           /* getSalesCycleMstUpdateSuspect(saleCycleList,
                                   updateQuoteAccetedCycleController.value.text
                                   ,competitorNameController.value.text, quoteRejectReasonController.value.text);*/
-                          Get.back();
-                          Get.back();
+                        /*  Get.back();
+                          Get.back();*/
                         },
                         child: Container(
                           width: 60,
@@ -4423,14 +4425,15 @@ class SalesCycleVm extends GetxController {
             if (response[0].condition!.toLowerCase() == "true") {
               Utils.sanckBarSuccess(
                   "Message !", response[0].message.toString());
-              pageNumber = 0;
+              Get.offAllNamed(RoutesName.salesCycleScreen);
+           /*   pageNumber = 0;
               filterQuoteAcceptedFlag.value = 'Loss';
               clearAllFieldOfFilter();
               getsalesCycleData(
                   pageNumber,
                   saleCycleList.salesCycleId.toString(),
                   "ViewHeader",
-                  FromPage.value);
+                  FromPage.value);*/
               loading.value = false;
             } else {
               print("message ${response[0].message.toString()}");
@@ -4727,10 +4730,11 @@ class SalesCycleVm extends GetxController {
             if (response[0].condition == "True") {
               Utils.sanckBarSuccess(
                   "Message", response[0].message.toString());
-              filterQuoteAcceptedFlag.value = "";
+              Get.offAllNamed(RoutesName.salesCycleScreen);
+              /*filterQuoteAcceptedFlag.value = "";
               clearAllFieldOfFilter();
               pageNumber = 0;
-              getsalesCycleData(pageNumber, saleCycleList.salesCycleId.toString(), "ViewHeader", FromPage.value);
+              getsalesCycleData(pageNumber, saleCycleList.salesCycleId.toString(), "ViewHeader", FromPage.value);*/
               //salesCycleMstApprovereject(saleCycleList,solutionRejectedRemarkController.value.text,approRejeStatus);
               loading.value = false;
             } else {
@@ -6016,7 +6020,12 @@ class SalesCycleVm extends GetxController {
     }
 
     pageNumber=0;
-    getsalesCycleData(pageNumber,'',"","");
+    print('From Page...${FromPage.value}');
+    if(FromPage.value=='Sales'){
+      getsalesCycleData(pageNumber,'',"","");
+    }
+
+
   }
 
   void clearFilterData() {

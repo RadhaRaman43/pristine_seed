@@ -1289,4 +1289,47 @@ class BusinessPlanTourViewModel extends GetxController{
     sessionManagement.clearBusinessTourPlanLineData();
   }
 
+
+
+  getBusinessTourPlanDelete(String TourId) {
+    try {
+      Map data = {
+        "tour_id": TourId,
+        "email_id": email
+      };
+      loading.value = true;
+      _api.BusinessTourPlanDelete(data, sessionManagement).then(
+            (onValue) {
+          final jsonResponse = json.decode(onValue);
+          print(onValue);
+          if (jsonResponse is List) {
+            List<BussinessTourPlanModel> response =
+            jsonResponse.map((e) => BussinessTourPlanModel.fromJson(e)).toList();
+            if ( response[0].condition?.toLowerCase() == "true") {
+              loading.value = false;
+              Utils.showToastification("Message !", response[0].message.toString());
+              pageNumber = 0;
+              getBusinessTourPlanData(pageNumber);
+
+            } else {
+              loading.value = false;
+              Utils.showErrorToastification(
+                  "Error !", response[0].message.toString());
+            }
+          } else {
+            loading.value = false;
+          }
+        },
+      ).onError(
+            (error, stackTrace) {
+          print(error);
+          loading.value = false;
+        },
+      );
+    } catch (e) {
+      loading.value = false;
+      print(e);
+    }
+  }
+
 }

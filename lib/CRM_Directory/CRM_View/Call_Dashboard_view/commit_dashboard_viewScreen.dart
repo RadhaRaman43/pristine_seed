@@ -1340,7 +1340,7 @@ class CommitDashboardViewscreen extends StatelessWidget{
     return GestureDetector(
       onTap: () => _showMultiSelectDialog(context, "Select Sales Cycle Stage",
           dashboard_view_Controller.QuoteAccepted_controller,
-          dashboard_view_Controller.quoteAcceptedList),
+          dashboard_view_Controller.quoteAcceptedList,'All'),
       child: AbsorbPointer(
         child: TextField(
           controller: dashboard_view_Controller.QuoteAccepted_controller.value,
@@ -1535,7 +1535,7 @@ class CommitDashboardViewscreen extends StatelessWidget{
     return GestureDetector(
       onTap: () => _showMultiSelectDialog(context, "Select Sales Cycle Stage",
           dashboard_view_Controller.StageName_controller,
-          dashboard_view_Controller.selectedSalesStageStatusList),
+          dashboard_view_Controller.selectedSalesStageStatusList, 'OPEN'),
       child: AbsorbPointer(
         child: TextField(
           controller: dashboard_view_Controller.StageName_controller.value,
@@ -1566,7 +1566,7 @@ class CommitDashboardViewscreen extends StatelessWidget{
 
   void _showMultiSelectDialog(BuildContext context,
       String dialogHeader,
-      Rx<TextEditingController> textController, RxList<String> itemList, ) {
+      Rx<TextEditingController> textController, RxList<String> itemList,String defaultValueBind ) {
     final List<String> allItems =
         itemList.value;
 
@@ -1578,7 +1578,7 @@ class CommitDashboardViewscreen extends StatelessWidget{
         .toList();
 
     if (selectedItems.isEmpty) {
-      selectedItems = ["OPEN"];
+      selectedItems = [defaultValueBind];
     }
 
     showDialog(
@@ -1633,7 +1633,7 @@ class CommitDashboardViewscreen extends StatelessWidget{
                     } else {
                       selectedItems.remove(item);
                       if (selectedItems.isEmpty) {
-                        selectedItems.add("OPEN");
+                        selectedItems.add(defaultValueBind);
                       }
                     }
 

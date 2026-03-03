@@ -7296,7 +7296,10 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                               .actualSalesCycleApprovalStatus
                                               ?.toLowerCase() !=
                                           "rejected") &&
-                                  (saleCycleController.FromPage.value == "Sales" || saleCycleController.FromPage.value == "FromSCPendingForApproval") /*&& saleCycleController.saleCycleList[0].isMarkRateContract==0*/,
+                                  (saleCycleController.FromPage.value == "Sales"
+                                      || saleCycleController.FromPage.value == "FromSCPendingForApproval"
+                                  ||saleCycleController.FromPage.value == "FromCommitDashboard" ||
+                                      saleCycleController.FromPage.value == "FromFunnelDashboard" ) /*&& saleCycleController.saleCycleList[0].isMarkRateContract==0*/,
                               /* saleCycleController.userType.toLowerCase()!="bh"|| saleCycleController.isAdminWritePermission!="1"||
                               saleCycleController
                                               .saleCycleList[0].quoteAccepted!
