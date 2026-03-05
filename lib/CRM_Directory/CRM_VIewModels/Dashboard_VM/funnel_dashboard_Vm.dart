@@ -734,7 +734,7 @@ class FunnelDashboardVm extends GetxController{
     SelectedCluster_list.value = [];
     SelectedRegion_list.value = [];
     //selectedSalesStageStatusList.value = [];
-    selectedSalesStageStatusList.value = ["All"];
+    //selectedSalesStageStatusList.value = ["All"];
     DateRange("monthly");
     filterCustomDateController.value.text = '${formattedStartDate} - ${formattedEndDate}';
     //RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join(',');
