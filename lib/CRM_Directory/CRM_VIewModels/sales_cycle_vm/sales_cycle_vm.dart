@@ -360,11 +360,10 @@ class SalesCycleVm extends GetxController {
   var AccountOwner_controller=TextEditingController().obs;
   var product_category_type_Controller = TextEditingController().obs;
 
-
-
-
-
-
+  RxBool isExpandInfraDetail = false.obs;
+  void toggleInfraDetail() {
+    isExpandInfraDetail.value = !isExpandInfraDetail.value;
+  }
 
   @override
   Future<void> onInit() async {
@@ -1800,21 +1799,28 @@ class SalesCycleVm extends GetxController {
               : (updateItemDescription2Controller.value.text.isNotEmpty
                   ? updateItemDescription2Controller.value.text
                   : quoteLinedata[index.value].itemDescription ?? ""),
-          "qty": flag == "CheckBox"
+          /*"qty": flag == "CheckBox"
               ? 0
               : (qtyUpdateLineController.value.text.isNotEmpty
                   ? qtyUpdateLineController.value.text
-                  : quoteLinedata[index.value].qty),
+                  : quoteLinedata[index.value].qty),*/
+          "qty": flag == "CheckBox" ? 0
+              : (qtyUpdateLineController.value.text.isEmpty ? 0
+              : qtyUpdateLineController.value.text),
           "quote_line_price": flag == "CheckBox"
               ? 0
               : (updateManualPriceController.value.text.isNotEmpty
                   ? updateManualPriceController.value.text
                   : quoteLinedata[index.value].quoteLinePrice),
-          "discount_per": flag == "CheckBox"
+          /*"discount_per": flag == "CheckBox"
               ? 0
               : (updateDiscountPerController.value.text.isNotEmpty
                   ? updateDiscountPerController.value.text
-                  : quoteLinedata[index.value].discountPer),
+                  : quoteLinedata[index.value].discountPer),*/
+          "discount_per": flag == "CheckBox" ? 0
+              : (updateDiscountPerController.value.text.isEmpty ? 0
+              : updateDiscountPerController.value.text),
+
           "bm_discount_per": flag == "CheckBox"
               ? 0
               : bmDiscountPerController.value.text.isNotEmpty

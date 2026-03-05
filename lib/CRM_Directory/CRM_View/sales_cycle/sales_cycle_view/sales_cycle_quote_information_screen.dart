@@ -1036,8 +1036,7 @@ class QuoteInformationScreen extends StatelessWidget {
                                     )),
 
 
-                                Visibility(
-                                    visible: saleCycleController.readMoreList[index],
+                                Visibility(visible: saleCycleController.readMoreList[index],
                                     child: GestureDetector(
                                       onTap: (){
                                         saleCycleController.readMoreList[index] = false;
@@ -1054,12 +1053,11 @@ class QuoteInformationScreen extends StatelessWidget {
                                           Icon(Icons.keyboard_arrow_up,   color: Colors.blue,)
                                         ],
                                       ),
-                                    ))
+                                    )
+                                )
                               ],
                             );
                           })
-
-
                         ],
                       )),
                   SizedBox(width: 5,),
@@ -1070,83 +1068,49 @@ class QuoteInformationScreen extends StatelessWidget {
                 return Visibility(
                   //visible:saleCycleController.quoteHeaderdata[0].createdBy==saleCycleController.email && saleCycleController.quoteHeaderdata[0].quoteStatus=="Pending"?true:false,
                   //visible:saleCycleController.quoteHeaderdata[0].quoteStatus=="Pending"?true:false,
-                  visible: saleCycleController.quoteHeaderdata[0].quoteStatus
-                                  ?.toLowerCase() ==
-                              "draft" &&
-                          saleCycleController.quoteHeaderdata[0].quoteAccepted
-                                  ?.toLowerCase() ==
-                              "open" && saleCycleController.quoteHeaderdata[0].createdBy?.toLowerCase()==saleCycleController.email.toLowerCase()
-                      ? true
-                      : false,
+                  visible: saleCycleController.quoteHeaderdata[0].quoteStatus?.toLowerCase() == "draft" &&
+                          saleCycleController.quoteHeaderdata[0].quoteAccepted?.toLowerCase() == "open" &&
+                      saleCycleController.quoteHeaderdata[0].createdBy?.toLowerCase()==saleCycleController.email.toLowerCase()
+                      ? true : false,
                   child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         InkWell(
                           onTap: () {
-                            saleCycleController.updateItemDescriptionController
-                                .value.text = saleCycleController
-                                    .quoteLinedata[index].itemName
-                                    .toString() +
+                            saleCycleController.updateItemDescriptionController.value.text =
+                                saleCycleController.quoteLinedata[index].itemName.toString() +
                                 "(${saleCycleController.quoteLinedata[index].itemCode})";
-                            saleCycleController.updateItemDescription2Controller
-                                    .value.text =
-                                saleCycleController
-                                    .quoteLinedata[index].itemDescription
-                                    .toString();
-                            saleCycleController
-                                    .qtyUpdateLineController.value.text =
-                                (saleCycleController.quoteLinedata[index].qty?.toInt())
-                                    .toString();
-                            saleCycleController
-                                    .updateUnitPriceController.value.text =
-                                saleCycleController
-                                    .quoteLinedata[index].unitPrice
-                                    .toString();
-                            saleCycleController
-                                    .updateManualPriceController.value.text =
-                                saleCycleController
-                                    .quoteLinedata[index].quoteLinePrice
-                                    .toString();
-                            saleCycleController
-                                    .updateDiscountPerController.value.text =
-                                saleCycleController
-                                    .quoteLinedata[index].discountPer
-                                    .toString();
+                            saleCycleController.updateItemDescription2Controller.value.text =
+                                saleCycleController.quoteLinedata[index].itemDescription.toString();
+                            saleCycleController.qtyUpdateLineController.value.text =
+                                (saleCycleController.quoteLinedata[index].qty?.toInt())==0?"":
+                                (saleCycleController.quoteLinedata[index].qty?.toInt()).toString();
+                            saleCycleController.updateUnitPriceController.value.text =
+                                saleCycleController.quoteLinedata[index].unitPrice.toString();
+                            saleCycleController.updateManualPriceController.value.text =
+                                saleCycleController.quoteLinedata[index].quoteLinePrice.toString();
 
-                            saleCycleController
-                                    .updateDiscountAmountController.value.text =
-                                saleCycleController
-                                    .quoteLinedata[index].approvedDiscountPer
-                                    .toString();
-                            saleCycleController
-                                    .gmDiscountPerContoller.value.text =
-                                saleCycleController
-                                    .quoteLinedata[index].gmDiscountPer
-                                    .toString();
-                            saleCycleController
-                                    .salesCreditPerContoller.value.text =
-                                saleCycleController
-                                    .quoteLinedata[index].salesCredit
-                                    .toString();
 
-                            saleCycleController
-                                    .updateAmountController.value.text =
-                                saleCycleController
-                                    .quoteLinedata[index].mrpPrice
-                                    .toString();
-                            saleCycleController
-                                    .updateTaxPerLineController.value.text =
-                                saleCycleController.quoteLinedata[index].sgstPer
-                                    .toString();
-                            saleCycleController
-                                    .updateTaxAmountLineController.value.text =
-                                saleCycleController.quoteLinedata[index].sgstAmt
-                                    .toString();
-                            saleCycleController.updateGrossAmountLineController
-                                    .value.text =
-                                saleCycleController
-                                    .quoteLinedata[index].grossAmount
-                                    .toString();
+                            saleCycleController.updateDiscountPerController.value.text =
+                                saleCycleController.quoteLinedata[index].discountPer ==0?"":
+                                saleCycleController.quoteLinedata[index].discountPer.toString();
+
+
+
+                            saleCycleController.updateDiscountAmountController.value.text =
+                                saleCycleController.quoteLinedata[index].approvedDiscountPer.toString();
+                            saleCycleController.gmDiscountPerContoller.value.text =
+                                saleCycleController.quoteLinedata[index].gmDiscountPer.toString();
+                            saleCycleController.salesCreditPerContoller.value.text =
+                                saleCycleController.quoteLinedata[index].salesCredit.toString();
+                            saleCycleController.updateAmountController.value.text =
+                                saleCycleController.quoteLinedata[index].mrpPrice.toString();
+                            saleCycleController.updateTaxPerLineController.value.text =
+                                saleCycleController.quoteLinedata[index].sgstPer.toString();
+                            saleCycleController.updateTaxAmountLineController.value.text =
+                                saleCycleController.quoteLinedata[index].sgstAmt.toString();
+                            saleCycleController.updateGrossAmountLineController.value.text =
+                                saleCycleController.quoteLinedata[index].grossAmount.toString();
                             /*saleCycleController.warrentyPeriodController.value.text= saleCycleController.quoteLinedata[index]
                                 .warrantyPeriod.toString();
                             saleCycleController.deliveryWeeksController.value.text= saleCycleController.quoteLinedata[index]

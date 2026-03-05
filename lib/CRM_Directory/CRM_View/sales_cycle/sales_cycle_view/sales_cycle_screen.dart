@@ -478,7 +478,6 @@ class SalesCycleScreen extends StatelessWidget{
   Widget _buildLabelWithValue({
     required String label,
     required String? value,
-    double? width,
     Color color = AllColors.textColor,
   }) {
     return Row(

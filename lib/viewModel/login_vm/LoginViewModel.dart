@@ -29,8 +29,8 @@ class LoginViewModel extends GetxController{
     await _api.loginApiHit(data,sessionManagement).then((value){
       try{
 
-        List<LoginResponse> loginResponse=(json.decode(value) as List).map((i) =>
-            LoginResponse.fromJson(i)).toList();
+        List<LoginResponse> loginResponse=(json.decode(value) as
+        List).map((i) => LoginResponse.fromJson(i)).toList();
 
         if(loginResponse!=null &&  loginResponse[0].condition=="True"){
           loading.value=false;

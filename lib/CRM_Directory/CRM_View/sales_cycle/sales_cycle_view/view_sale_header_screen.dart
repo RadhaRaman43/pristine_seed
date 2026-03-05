@@ -356,15 +356,11 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                     Obx(() {
                       return BindSalesData(context);
                     }),
-                    const SizedBox(
-                      height: 20,
-                    ),
+                    const SizedBox(height: 20,),
                     Obx(() {
                       return bindsaleStatus(context);
                     }),
-                    const  SizedBox(
-                      height: 10,
-                    ),
+                    const  SizedBox(height: 10,),
                     Obx(() {
                       return Visibility(
                         visible: saleCycleController
@@ -2741,47 +2737,18 @@ class ViewSaleHeaderScreen extends StatelessWidget {
               ),
               child: Column(
                 children: [
-                  bindData("Task ID : ",saleCycleController.saleCycleList[0].taskId ?? ""),
+                  bindData(fixText: "Task ID : ",data:saleCycleController.saleCycleList[0].taskId ?? ""),
                   const SizedBox(height: 3,),
-                  Row(
-                    children: [
-                      Text("Customer Name : ",
-                        style: GoogleFonts.poppins(
-                          color: AllColors.primaryDark1,
-                          fontSize: AllFontSize.fourtine,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      Spacer(),
-                      InkWell(
-                        child: Container(
-                          width: size.width * .4,
-                          child: Tooltip(
-                            message: saleCycleController.saleCycleList[0].accountName ?? "",
-                            child: Text(
-                              saleCycleController.saleCycleList[0].accountName ?? "",
-                              overflow: TextOverflow.ellipsis,
-                              textAlign: TextAlign.end,
-                              style: GoogleFonts.poppins(
-                                color: Colors.blueAccent,
-                                fontSize: AllFontSize.fourtine,
-                                fontWeight: FontWeight.w500,
-                                decoration: TextDecoration.underline,
-                                decorationStyle: TextDecorationStyle.wavy,
-                              ),
-                            ),
-                          ),
-                        ),
-                        onTap: () {
-                          accountMaster_page_controller.view = 'FromSaleDetailsScreen';
-                          contact_vm_controller.view = 'FromSaleDetailsScreen';
-                          accountMaster_page_controller.getAccMasterBuyCodeApi(saleCycleController.saleCycleList[0].accountCode!);
-                        },
-                      ),
-                    ],
-                  ),
+                  bindData(fixText:"Customer Name : ", data: saleCycleController.saleCycleList[0].accountName ?? "",
+                    color: Colors.blueAccent,onTap: (){
+                      accountMaster_page_controller.view = 'FromSaleDetailsScreen';
+                      contact_vm_controller.view = 'FromSaleDetailsScreen';
+                      accountMaster_page_controller.getAccMasterBuyCodeApi(saleCycleController.saleCycleList[0].accountCode!);
+                  },
+                    decoration: TextDecoration.underline,
+                    decorationStyle: TextDecorationStyle.wavy,),
                   const SizedBox(height: 3,),
-                  bindData("Contact Name : ",saleCycleController.saleCycleList[0].contactName ?? ""),
+                  bindData(fixText:"Contact Name : ",data:  saleCycleController.saleCycleList[0].contactName ?? ""),
                   const SizedBox(height: 3,),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -2845,340 +2812,116 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(height: 3,),
-                  bindData("Cluster Name : ",saleCycleController.saleCycleList[0].clustureHeadValue ?? ""),
+                  bindData(fixText:"Cluster Name : ",data:  saleCycleController.saleCycleList[0].clustureHeadValue ?? ""),
                   const SizedBox(height: 3,),
-                  bindData("Region Name : ",saleCycleController.saleCycleList[0].branchHeadValue ?? ""),
+                  bindData(fixText:"Region Name : ",data:  saleCycleController.saleCycleList[0].branchHeadValue ?? ""),
                   const SizedBox(height: 3,),
-                  bindData("Sales Cycle Stage : ",saleCycleController.saleCycleList[0].salesCycleStatus ?? ""),
+                  bindData(fixText:"Sales Cycle Stage : ",data:  saleCycleController.saleCycleList[0].salesCycleStatus ?? ""),
                   const SizedBox(height: 3,),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "Sale Cycle Approval Status : ",
-                        style: GoogleFonts.poppins(
-                          color: AllColors.primaryDark1,
-                          fontSize: AllFontSize.fourtine,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      Flexible(
-                        child: Tooltip(
-                          message: saleCycleController.saleCycleList[0].salesCycleApprovalStatus ?? "",
-                          child: Text(saleCycleController.saleCycleList[0].salesCycleApprovalStatus ?? "",
-                            style: GoogleFonts.poppins(
-                              color: getStatusColor(saleCycleStatus),
-                              fontSize: AllFontSize.fourtine,
-                              fontWeight: FontWeight.w500,
-                            ),
-                            textAlign: TextAlign.end,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+                  bindData(fixText:"Sale Cycle Approval Status : ",data:saleCycleController.saleCycleList[0].salesCycleApprovalStatus ?? ""
+                      , color: getStatusColor(saleCycleStatus)),
                   const SizedBox(height: 3,),
-                  bindData("Sales Cycle Remarks : ",saleCycleController.saleCycleList[0].salesCycleRemarks ?? ""),
+                  bindData(fixText:"Sales Cycle Remarks : ",data:  saleCycleController.saleCycleList[0].salesCycleRemarks ?? ""),
                   const SizedBox(height: 3,),
-                  bindData("Created By : ",saleCycleController.saleCycleList[0].createdFullName ?? ""),
+                  bindData(fixText:"Created By : ",data:  saleCycleController.saleCycleList[0].createdFullName ?? ""),
                   const SizedBox(height: 3,),
-                  bindData("Created on : ",dateTimeCreatedOn.toString()),
+                  bindData(fixText:"Created on : ",data:  dateTimeCreatedOn.toString()),
                   const SizedBox(height: 3,),
-                  bindData("Sales Cycle Owner : ",saleCycleController.saleCycleList[0].salesCycleOwnerName ?? ""),
+                  bindData(fixText:"Sales Cycle Owner : ",data:  saleCycleController.saleCycleList[0].salesCycleOwnerName ?? ""),
                   const SizedBox(height: 3,),
-                  bindData("Reporting Manager : ",saleCycleController.saleCycleList[0].approvedFullName ?? ''),
+                  bindData(fixText:"Reporting Manager : ",data:  saleCycleController.saleCycleList[0].approvedFullName ?? ''),
                   const SizedBox(height: 3,),
-                  bindData("Approved/Rejected By : ",saleCycleController.saleCycleList[0].finalApprovedFullName ?? ''),
+                  bindData(fixText:"Approved/Rejected By : ",data:  saleCycleController.saleCycleList[0].finalApprovedFullName ?? ''),
                   const SizedBox(height: 3,),
-                  bindData("Approved/Rejected On : ",dateTimeApprovedOn.toString()),
+                  bindData(fixText:"Approved/Rejected On : ",data:  dateTimeApprovedOn.toString()),
                   const SizedBox(height: 3,),
-                  bindData("Reject Reason",saleCycleController.saleCycleList[0].rejectReason ?? ""),
+                  bindData(fixText:"Reject Reason",data:  saleCycleController.saleCycleList[0].rejectReason ?? ""),
 
                   const SizedBox(height: 3,),
                  // bindData("Budget Amount",saleCycleController.saleCycleList[0].budgetAmount.toString()),
-                  bindData("Budget Amount : ",saleCycleController
-                      .numberFormatWithComma(saleCycleController
-                      .saleCycleList[0]
-                      .budgetAmount)
-                      .toString()),
+                  bindData(fixText:"Budget Amount : ",data:  saleCycleController.numberFormatWithComma(saleCycleController.saleCycleList[0].budgetAmount).toString()),
 
                   const SizedBox(height: 3,),
-                  bindData("Expected Amount : ",saleCycleController.budgetAmountList.isEmpty
-                      ? saleCycleController
-                      .numberFormatWithComma(saleCycleController.saleCycleList[0].estBudgetAmount).toString()
-                      : saleCycleController
-                      .numberFormatWithComma(saleCycleController.budgetAmountList[0].totalEstimatedAmount ?? "")),
-
+                  bindData(fixText:"Expected Amount : ",data:  saleCycleController.budgetAmountList.isEmpty ? saleCycleController.numberFormatWithComma(saleCycleController.saleCycleList[0].estBudgetAmount).toString()
+                      : saleCycleController.numberFormatWithComma(saleCycleController.budgetAmountList[0].totalEstimatedAmount ?? "")),
                   const SizedBox(height: 3,),
-                  bindData("Est. Closure Date : ",expClosureDate.toString()),
+                  bindData(fixText:"Est. Closure Date : ",data:  expClosureDate.toString()),
                   const SizedBox(height: 3,),
-                  Row(
-                    children: [
-                      Text(
-                        "Decision Maker : ",
-                        style: GoogleFonts.poppins(
-                          color: AllColors.primaryDark1,
-                          fontSize: AllFontSize.fourtine,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      Spacer(),
-                      Text(
-                        saleCycleController.saleCycleList[0].isDecisionMaker ==
-                                0
-                            ? 'No'
-                            : 'Yes',
-                        style: GoogleFonts.poppins(
-                          color: saleCycleController.saleCycleList[0].isDecisionMaker ==
-                              1?AllColors.greenblue:AllColors.redColor,
-                          fontSize: AllFontSize.fourtine,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ],
-                  ),
+                  bindData(fixText:"Decision Maker : ",data:saleCycleController.saleCycleList[0].isDecisionMaker == 0 ?
+                  "No" : "Yes", color: saleCycleController.saleCycleList[0]
+                      .isDecisionMaker ==
+                      1?AllColors.greenblue:AllColors.redColor),
                   const SizedBox(height: 3,),
-                  bindData("Purchase Process : ", saleCycleController.saleCycleList[0].purchaseProcess == null ? ""
+                  bindData(fixText:"Purchase Process : ", data:  saleCycleController.saleCycleList[0].purchaseProcess == null ? ""
                       : saleCycleController.saleCycleList[0].purchaseProcess.toString()),
 
                   const SizedBox(height: 3,),
-                  bindData("Purchase Time Frame : ",saleCycleController.saleCycleList[0].purchaseTimeFrame == null ? " "
+                  bindData(fixText:"Purchase Time Frame : ",data:  saleCycleController.saleCycleList[0].purchaseTimeFrame == null ? " "
                       : saleCycleController.saleCycleList[0].purchaseTimeFrame.toString()),
 
                   const SizedBox(height: 3,),
-                  Row(
-                    children: [
-                      Text(
-                        "Is Commit : ",
-                        style: GoogleFonts.poppins(
-                          color: AllColors.primaryDark1,
-                          fontSize: AllFontSize.fourtine,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      Spacer(),
-                      Text(
-                        saleCycleController.saleCycleList[0].commit == 0
-                            ? 'No'
-                            : 'Yes',
-                        style: GoogleFonts.poppins(
-                          color: saleCycleController.saleCycleList[0]
-                              .commit ==
-                              1?AllColors.greenblue:AllColors.redColor,
-                          fontSize: AllFontSize.fourtine,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ],
-                  ),
+                  bindData(fixText:"Is Commit : ",data:saleCycleController.saleCycleList[0].commit == 0 ?
+                  "No" : "Yes", color: saleCycleController.saleCycleList[0]
+                      .commit ==
+                      1?AllColors.greenblue:AllColors.redColor),
                   const SizedBox(height: 3,),
-                  Row(
-                        children: [
-                          Text(
-                            "Is Mark Rate Contract : ",
-                            style: GoogleFonts.poppins(
-                              color: AllColors.primaryDark1,
-                              fontSize: AllFontSize.fourtine,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                          Spacer(),
-                          Text(
-                            saleCycleController.saleCycleList[0].isMarkRateContract == 0 ? 'No' : 'Yes',
-                            style: GoogleFonts.poppins(
-                              color: saleCycleController.saleCycleList[0]
-                                  .isMarkRateContract ==
-                                  1?AllColors.greenblue:AllColors.redColor,
-                              fontSize: AllFontSize.fourtine,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ],
-                      ),
-
+                  bindData(fixText:"Is Mark Rate Contract : ",data:saleCycleController.saleCycleList[0].isMarkRateContract == 0 ?
+                  "No" : "Yes", color: saleCycleController.saleCycleList[0]
+                      .isMarkRateContract ==
+                      1?AllColors.greenblue:AllColors.redColor),
                   const SizedBox(height: 3,),
-                  bindData("Reopen Remarks : ",saleCycleController.saleCycleList[0].reopenRemarks ?? ""),
+                  bindData(fixText:"Reopen Remarks : ",data:  saleCycleController.saleCycleList[0].reopenRemarks ?? ""),
                   const SizedBox(height: 3,),
                   Visibility(
                     // visible: saleCycleController.saleCycleList[0].salesCycleStatus!.toUpperCase()=="PROSPECT" || saleCycleController.saleCycleList[0].salesCycleStatus!.toUpperCase()=="PROPOSE"?true:false,
                     visible: true,
-                    child: Row(
-                      children: [
-                        Text(
-                          "Product Category Amt. : ",
-                          style: GoogleFonts.poppins(
-                            color: AllColors.primaryDark1,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        Spacer(),
-                        InkWell(
-                          onTap: () {
-                            ShowProductCategoryTable(context, saleCycleController.budgetAmountList);
-                            //showInfraLeadDetails(context, saleCycleController.saleCycleList);
-                          },
-                          child: Text(
-                            'View',
-                            style: GoogleFonts.poppins(
-                              color: Colors.blueAccent,
-                              fontSize: AllFontSize.fourtine,
-                              fontWeight: FontWeight.w500,
-                              decoration: TextDecoration.underline,
-                              decorationStyle: TextDecorationStyle.wavy,
-                            ),
-                            textAlign: TextAlign.end,
-                          ),
-                        ),
-                      ],
-                    ),
+                    child: bindData(fixText:"Product Category Amt. : ", data: 'View',color: Colors.blueAccent,onTap: (){
+                      ShowProductCategoryTable(context, saleCycleController.budgetAmountList);
+                    },
+                      decoration: TextDecoration.underline,
+                      decorationStyle: TextDecorationStyle.wavy,),
                   ),
                   const SizedBox(height: 3,),
                   Visibility(
-                    visible: saleCycleController
-                                .saleCycleList[0].salesCycleStatus!
-                                .toUpperCase() !=
-                            "SUSPECT",
-                    child: Row(
-                      children: [
-                        Text(
-                          "Sales Product List : ",
-                          style: GoogleFonts.poppins(
-                            color: AllColors.primaryDark1,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        const Spacer(),
-                        InkWell(
-                          onTap: () {
-                            saleCycleController
-                                .clearSaleProductListController();
-                            saleCycleController.pageNumber = 0;
-                            saleCycleController.getSaleCycleProductByIdList(
-                                saleCycleController.pageNumber,
-                                saleCycleController
-                                    .saleCycleList[0].salesCycleId!);
+                    visible: saleCycleController.saleCycleList[0].salesCycleStatus!.toUpperCase() != "SUSPECT",
+                    child:  bindData(fixText:"Sales Product List : ", data: 'View',color: Colors.blueAccent,onTap: (){
+                      saleCycleController
+                          .clearSaleProductListController();
+                      saleCycleController.pageNumber = 0;
+                      saleCycleController.getSaleCycleProductByIdList(
+                          saleCycleController.pageNumber,
+                          saleCycleController
+                              .saleCycleList[0].salesCycleId!);
 
-                            /* saleCycleController.getsalesCycleCompetitorProductGetBySalesCycleId(
+                      /* saleCycleController.getsalesCycleCompetitorProductGetBySalesCycleId(
                                 saleCycleController.pageNumber,
                                 saleCycleController
                                     .saleCycleList[0].salesCycleId!);*/
-                            //bindListBottomSheet(context, "View");
-                            bindListBottomSheetSalesCycleProductView(context, "View");
-                          },
-                          child: Text(
-                            'View',
-                            style: GoogleFonts.poppins(
-                              color: Colors.blueAccent,
-                              fontSize: AllFontSize.fourtine,
-                              fontWeight: FontWeight.w500,
-                              decoration: TextDecoration.underline,
-                              decorationStyle: TextDecorationStyle.wavy,
-                            ),
-                            textAlign: TextAlign.end,
-                          ),
-                        ),
-                      ],
-                    ),
+                      //bindListBottomSheet(context, "View");
+                      bindListBottomSheetSalesCycleProductView(context, "View");
+                    },
+                      decoration: TextDecoration.underline,
+                      decorationStyle: TextDecorationStyle.wavy,),
                   ),
                   const SizedBox(height: 3,),
-                  Row(
-                    children: [
-                      Text(
-                        "Customer Need Identity : ",
-                        style: GoogleFonts.poppins(
-                          color: AllColors.primaryDark1,
-                          fontSize: AllFontSize.fourtine,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      const Spacer(),
-                      Text(
-                        saleCycleController
-                                    .saleCycleList[0].isCustomerNeedIdentify ==
-                                0
-                            ? "No"
-                            : "Yes",
-                        style: GoogleFonts.poppins(
-                          color: saleCycleController.saleCycleList[0]
-                              .isCustomerNeedIdentify ==
-                              1?AllColors.greenblue:AllColors.redColor,
-                          fontSize: AllFontSize.fourtine,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 3,),
-                  Row(
-                    children: [
-                      Text(
-                        "Solution Accepted : ",
-                        style: GoogleFonts.poppins(
-                          color: AllColors.primaryDark1,
-                          fontSize: AllFontSize.fourtine,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      Spacer(),
-                      Text(
-                        saleCycleController
-                                    .saleCycleList[0].isSolutionAccepted ==
-                                0
-                            ? "No"
-                            : "Yes",
-                        style: GoogleFonts.poppins(
-                          color: saleCycleController.saleCycleList[0]
-                              .isSolutionAccepted ==
-                              1?AllColors.greenblue:AllColors.redColor,
-                          fontSize: AllFontSize.fourtine,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ],
-                  ),
+                  bindData(fixText:"Customer Need Identity : ",data:saleCycleController.saleCycleList[0].isCustomerNeedIdentify == 0 ?
+                  "No" : "Yes", color: saleCycleController.saleCycleList[0]
+                      .isCustomerNeedIdentify ==
+                      1?AllColors.greenblue:AllColors.redColor),
 
                   const SizedBox(height: 3,),
-                  Row(
-                    children: [
-                      Text(
-                        "Quote Accepted : ",
-                        style: GoogleFonts.poppins(
-                          color: AllColors.primaryDark1,
-                          fontSize: AllFontSize.fourtine,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      Spacer(),
-                      InkWell(
-                        onTap: () {
-                          saleCycleController.quoteWonList.length > 0
-                              ? ShowQuoteWon(context) : "";
-                        },
-                        child: Container(
-                          width: size.width * .4,
-                          child: Tooltip(
-                            message: saleCycleController.saleCycleList[0].quoteAccepted ?? "",
-                            child: Text(
-                              saleCycleController.saleCycleList[0].quoteAccepted ?? "",
-                              style: GoogleFonts.poppins(
-                                color: saleCycleController.saleCycleList[0].quoteAccepted?.toLowerCase() == "loss" ? AllColors.redColor : Colors.blueAccent,
-                                fontSize: AllFontSize.fourtine,
-                                fontWeight: FontWeight.w500,
-                                decoration: saleCycleController.saleCycleList[0].quoteAccepted?.toLowerCase() == "won"
-                                    ? TextDecoration.underline : TextDecoration.none,
-                                decorationStyle: TextDecorationStyle.wavy,
-                              ),
-                              textAlign: TextAlign.end,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+                  bindData(fixText:"Solution Accepted : ",data:saleCycleController.saleCycleList[0].isSolutionAccepted == 0 ?
+                  "No" : "Yes", color: saleCycleController.saleCycleList[0]
+                      .isSolutionAccepted ==
+                      1?AllColors.greenblue:AllColors.redColor),
+                  const SizedBox(height: 3,),
+                  bindData(fixText:"Quote Accepted : ", data: saleCycleController.saleCycleList[0].quoteAccepted ?? "",
+                      color: saleCycleController.saleCycleList[0].quoteAccepted?.toLowerCase() == "loss" ? AllColors.redColor : Colors.blueAccent,
+                      onTap: (){
+                    saleCycleController.quoteWonList.length > 0
+                        ? ShowQuoteWon(context) : "";
+                  },decoration: saleCycleController.saleCycleList[0].quoteAccepted?.toLowerCase() == "won" ? TextDecoration.underline : TextDecoration.none,
+                    decorationStyle: TextDecorationStyle.wavy,),
                   const SizedBox(height: 3,),
                   Visibility(
                     visible:
@@ -3252,11 +2995,16 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                       ],
                     ),
                   ),
-                  bindData("Competitor Name : ", saleCycleController.saleCycleList[0].competitorName == null ? "" : saleCycleController.saleCycleList[0].competitorName.toString(),),
+                  bindData(fixText:"Competitor Name : ", data:  saleCycleController.saleCycleList[0].competitorName == null ? "" : saleCycleController.saleCycleList[0].competitorName.toString(),),
                   const SizedBox(height: 3,),
-                  bindData("Quote Reject Reason : ",saleCycleController.saleCycleList[0].quoteRejectedReason == null ? "" : saleCycleController.saleCycleList[0].quoteRejectedReason.toString()),
+                  bindData(fixText:"Quote Reject Reason : ", data:  saleCycleController.saleCycleList[0].quoteRejectedReason == null ? "" : saleCycleController.saleCycleList[0].quoteRejectedReason.toString()),
                   const SizedBox(height: 3,),
-
+                  bindData(fixText:"Infra Lead Details : ", data: 'View',color: Colors.blueAccent,
+                    onTap: (){
+                    showInfraLeadDetails(context, saleCycleController.saleCycleList);
+                  },
+                    decoration: TextDecoration.underline,
+                    decorationStyle: TextDecorationStyle.wavy,),
                 ],
               ),
             ),
@@ -3265,9 +3013,10 @@ class ViewSaleHeaderScreen extends StatelessWidget {
       ),
     );
   }
-  Widget bindData(String fixText, String data,){
 
-// Remove any existing ₹, Rs, or spaces, then add ₹ once
+  Widget bindData({required String fixText,required String data,Color color = AllColors.textColor,
+    VoidCallback? onTap, TextDecoration? decoration, TextDecorationStyle? decorationStyle,}){
+
   if(fixText=="Budget Amount" || fixText=="Expected Amount"){
     String formattedAmount = '₹ ${data}';
     data= formattedAmount;
@@ -3286,16 +3035,21 @@ class ViewSaleHeaderScreen extends StatelessWidget {
         ),
 
         Flexible(
-          child: Tooltip(
-            message: data,
-            child: Text(data,
-              style: GoogleFonts.poppins(
-                color: AllColors.textColor,
-                fontSize: AllFontSize.fourtine,
-                fontWeight: FontWeight.w500,
+          child: InkWell(
+            onTap: onTap,
+            child: Tooltip(
+              message: data,
+              child: Text(data,
+                style: GoogleFonts.poppins(
+                  color: color,
+                  fontSize: AllFontSize.fourtine,
+                  fontWeight: FontWeight.w500,
+                  decoration: decoration,
+                  decorationStyle: decorationStyle,
+                ),
+                textAlign: TextAlign.end,
+                overflow: TextOverflow.ellipsis,
               ),
-              textAlign: TextAlign.end,
-              overflow: TextOverflow.ellipsis,
             ),
           ),
         ),
@@ -6786,8 +6540,9 @@ class ViewSaleHeaderScreen extends StatelessWidget {
     );
   }
 
+
   //todo Infra details commented by nirupma
-  /* void showInfraLeadDetails(BuildContext context,
+    showInfraLeadDetails(BuildContext context,
       RxList<SalesCycleModal> saleCycleList) {
     Size size = Get.size;
     showModalBottomSheet(context: context,
@@ -6842,347 +6597,34 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                     padding: const EdgeInsets.only(left: 8.0, right: 8.0),
                     child: Column(
                       children: [
-                        Row(
-                          children: [
-                            Text(
-                              "User Region",
-                              style: GoogleFonts.poppins(
-                                color: AllColors.primaryDark1,
-                                fontSize: AllFontSize.fourtine,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                            Spacer(),
-                            Text(
-                              saleCycleList[0].userRegion ?? "",
-                              style: GoogleFonts.poppins(
-                                color: AllColors.textColor,
-                                fontSize: AllFontSize.fourtine,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 3,
-                        ),
-
-                        Row(
-                          children: [
-                            Text(
-                              "User Cluster",
-                              style: GoogleFonts.poppins(
-                                color: AllColors.primaryDark1,
-                                fontSize: AllFontSize.fourtine,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                            Spacer(),
-                            Text(
-                              saleCycleList[0].userClusture ?? "",
-                              style: GoogleFonts.poppins(
-                                color: AllColors.textColor,
-                                fontSize: AllFontSize.fourtine,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 3,
-                        ),
-                        Row(
-                          children: [
-                            Text(
-                              "Project Value",
-                              style: GoogleFonts.poppins(
-                                color: AllColors.primaryDark1,
-                                fontSize: AllFontSize.fourtine,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                            Spacer(),
-                            Text(
-                              saleCycleList[0].projectValue.toString(),
-                              style: GoogleFonts.poppins(
-                                color: AllColors.textColor,
-                                fontSize: AllFontSize.fourtine,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 3,
-                        ),
-                        Row(
-                          children: [
-                            Text(
-                              "Exp Date of Order",
-                              style: GoogleFonts.poppins(
-                                color: AllColors.primaryDark1,
-                                fontSize: AllFontSize.fourtine,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                            Spacer(),
-                            Text(
-                              saleCycleList[0].expectedDateOfOrder ?? "",
-                              style: GoogleFonts.poppins(
-                                color: AllColors.textColor,
-                                fontSize: AllFontSize.fourtine,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 3,
-                        ),
-                        Row(
-                          children: [
-                            Text(
-                              "Drawing Collected",
-                              style: GoogleFonts.poppins(
-                                color: AllColors.primaryDark1,
-                                fontSize: AllFontSize.fourtine,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                            Spacer(),
-                            Text(
-                              saleCycleList[0].drawingCollected == 1
-                                  ? "Yes"
-                                  : "No",
-                              style: GoogleFonts.poppins(
-                                color: AllColors.textColor,
-                                fontSize: AllFontSize.fourtine,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 3,
-                        ),
-                        Row(
-                          children: [
-                            Text(
-                              "Proposal Submitted",
-                              style: GoogleFonts.poppins(
-                                color: AllColors.primaryDark1,
-                                fontSize: AllFontSize.fourtine,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                            Spacer(),
-                            Text(
-                              saleCycleList[0].proposalSubmitted == 1
-                                  ? "Yes"
-                                  : "No",
-                              style: GoogleFonts.poppins(
-                                color: AllColors.textColor,
-                                fontSize: AllFontSize.fourtine,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 3,
-                        ),
-                        Row(
-                          children: [
-                            Text(
-                              "Inaugration Date of Project",
-                              style: GoogleFonts.poppins(
-                                color: AllColors.primaryDark1,
-                                fontSize: AllFontSize.fourtine,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                            Spacer(),
-                            Text(
-                              saleCycleList[0].inaugrationDateOfProject ?? "",
-                              style: GoogleFonts.poppins(
-                                color: AllColors.textColor,
-                                fontSize: AllFontSize.fourtine,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 3,
-                        ),
-                        Row(
-                          children: [
-                            Text(
-                              "Architect",
-                              style: GoogleFonts.poppins(
-                                color: AllColors.primaryDark1,
-                                fontSize: AllFontSize.fourtine,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                            Spacer(),
-                            Text(
-                              saleCycleList[0].architect ?? "",
-                              style: GoogleFonts.poppins(
-                                color: AllColors.textColor,
-                                fontSize: AllFontSize.fourtine,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 3,
-                        ),
-                        Row(
-                          children: [
-                            Text(
-                              "Executive Engineer",
-                              style: GoogleFonts.poppins(
-                                color: AllColors.primaryDark1,
-                                fontSize: AllFontSize.fourtine,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                            Spacer(),
-                            Text(
-                              saleCycleList[0].executiveEngineer ?? "",
-                              style: GoogleFonts.poppins(
-                                color: AllColors.textColor,
-                                fontSize: AllFontSize.fourtine,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 3,
-                        ),
-                        Row(
-                          children: [
-                            Text(
-                              "Name of Infra Department",
-                              style: GoogleFonts.poppins(
-                                color: AllColors.primaryDark1,
-                                fontSize: AllFontSize.fourtine,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                            Spacer(),
-                            Text(
-                              saleCycleList[0].nameOfInfraDepartment ?? "",
-                              style: GoogleFonts.poppins(
-                                color: AllColors.textColor,
-                                fontSize: AllFontSize.fourtine,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 3,
-                        ),
-                        Row(
-                          children: [
-                            Text(
-                              "Name of Agency Contactor",
-                              style: GoogleFonts.poppins(
-                                color: AllColors.primaryDark1,
-                                fontSize: AllFontSize.fourtine,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                            Spacer(),
-                            Text(
-                              saleCycleList[0].nameOfAgencyContrator ?? "",
-                              style: GoogleFonts.poppins(
-                                color: AllColors.textColor,
-                                fontSize: AllFontSize.fourtine,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 3,
-                        ),
-                        Row(
-                          children: [
-                            Text(
-                              "Expected Revenue",
-                              style: GoogleFonts.poppins(
-                                color: AllColors.primaryDark1,
-                                fontSize: AllFontSize.fourtine,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                            Spacer(),
-                            Text(
-                              saleCycleList[0].expectedRevenue.toString(),
-                              style: GoogleFonts.poppins(
-                                color: AllColors.textColor,
-                                fontSize: AllFontSize.fourtine,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 3,
-                        ),
-                        Row(
-                          children: [
-                            Text(
-                              "Value Of Quote",
-                              style: GoogleFonts.poppins(
-                                color: AllColors.primaryDark1,
-                                fontSize: AllFontSize.fourtine,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                            Spacer(),
-                            Text(
-                              saleCycleList[0].valueOfQuote.toString(),
-                              style: GoogleFonts.poppins(
-                                color: AllColors.textColor,
-                                fontSize: AllFontSize.fourtine,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 3,
-                        ),
-                        Row(
-                          children: [
-                            Text(
-                              "Expected Date Of Completion",
-                              style: GoogleFonts.poppins(
-                                color: AllColors.primaryDark1,
-                                fontSize: AllFontSize.fourtine,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                            Spacer(),
-                            Text(
-                              saleCycleList[0].expectedDateOfCompletion ?? "",
-                              style: GoogleFonts.poppins(
-                                color: AllColors.textColor,
-                                fontSize: AllFontSize.fourtine,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 3,
-                        ),
+                        bindData(fixText: "User Region : ",data:  saleCycleList[0].userRegion ?? ""),
+                        const SizedBox(height: 3,),
+                        bindData(fixText: "User Cluster : ",data:  saleCycleList[0].userClusture ?? ""),
+                        const SizedBox(height: 3,),
+                        bindData(fixText: "Project Value : ",data:  saleCycleList[0].projectValue.toString()),
+                        const SizedBox(height: 3,),
+                        bindData(fixText: "Exp Date of Order : ",data:  saleCycleList[0].expectedDateOfOrder ?? ""),
+                        const SizedBox(height: 3,),
+                        bindData(fixText: "Drawing Collected : ",data:  saleCycleList[0].drawingCollected == 1 ? "Yes" : "No"),
+                        const SizedBox(height: 3,),
+                        bindData(fixText: "Proposal Submitted : ",data:  saleCycleList[0].proposalSubmitted == 1 ? "Yes" : "No"),
+                        const SizedBox(height: 3,),
+                        bindData(fixText: "Inaugration Date of Project : ",data:  saleCycleList[0].inaugrationDateOfProject ?? ""),
+                        const  SizedBox(height: 3,),
+                        bindData(fixText: "Architect : ",data:  saleCycleList[0].architect ?? ""),
+                        const SizedBox(height: 3,),
+                        bindData(fixText: "Executive Engineer : ",data:  saleCycleList[0].executiveEngineer ?? ""),
+                        const SizedBox(height: 3,),
+                        bindData(fixText: "Name of Infra Department : ",data:  saleCycleList[0].nameOfInfraDepartment ?? ""),
+                        const SizedBox(height: 3,),
+                        bindData(fixText: "Name of Agency Contactor : ",data:  saleCycleList[0].nameOfAgencyContrator ?? ""),
+                        const SizedBox(height: 3,),
+                        bindData(fixText: "Expected Revenue : ",data:  saleCycleList[0].expectedRevenue.toString()),
+                        const SizedBox(height: 3,),
+                        bindData(fixText: "Value Of Quote : ",data:  saleCycleList[0].valueOfQuote.toString()),
+                        const SizedBox(height: 3,),
+                        bindData(fixText:  "Expected Date Of Completion : ",data:  saleCycleList[0].expectedDateOfCompletion ?? ""),
+                        const SizedBox(height: 3,),
                       ],
                     ),
                   ),
@@ -7196,7 +6638,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
         );
       },
     );
-  }*/
+  }
 
   void ShowProductCategoryTable(BuildContext context,
       RxList<ProductCategoryWiseAmtModel> budgetAmountList) {
@@ -11269,6 +10711,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
       },
     );
   }
+
 
 
 
