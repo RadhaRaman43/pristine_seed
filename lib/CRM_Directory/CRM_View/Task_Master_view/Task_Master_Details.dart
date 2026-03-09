@@ -413,7 +413,7 @@ class TaskMasterDetails extends StatelessWidget{
 
                 SizedBox(height: 5,),
 
-                /* Card(
+                 Card(
               color: AllColors.whiteColor,
               elevation: 10,
               margin: EdgeInsets.only(left: 10, right: 10, bottom: 5),
@@ -444,8 +444,7 @@ class TaskMasterDetails extends StatelessWidget{
                             return IconButton(
                               onPressed: () {
                                 TaskMaster_page_controller.toggleInfraDetails();
-                                if (TaskMaster_page_controller
-                                    .isExpandInfraDeatils.value ==
+                                if (TaskMaster_page_controller.isExpandInfraDeatils.value ==
                                     true) {
                                   print(
                                       "If......${TaskMaster_page_controller.isExpandInfraDeatils.value}");
@@ -476,7 +475,7 @@ class TaskMasterDetails extends StatelessWidget{
               ),
             ),
 
-            SizedBox(height: 5,),*/
+            SizedBox(height: 5,),
 
                 Card(
                   color: AllColors.whiteColor,
@@ -1194,6 +1193,99 @@ class TaskMasterDetails extends StatelessWidget{
     );
   }
 
+  Widget viewInfraDetails(BuildContext context) {
+    String? expOrderDate=StaticMethod.convertDateFormat1(TaskMaster_page_controller.Task_Master_list[0].expectedDateOfOrder ?? "");
+    String? inaugurationDate=StaticMethod.convertDateFormat1(TaskMaster_page_controller.Task_Master_list[0].inaugrationDateOfProject ?? "");
+    String? expDateOfCompletion=StaticMethod.convertDateFormat1(TaskMaster_page_controller.Task_Master_list[0].expectedDateOfCompletion ?? "");
+    return   Visibility(
+        visible: TaskMaster_page_controller.isExpandInfraDeatils.value == true ? true : false,
+        child:
+        Container(
+          margin: EdgeInsets.only(left: 10.0, right: 10.0),
+          child: Column(
+            children: [
+              _buildLabelWithValue(label: "Infra Lead: ", value: TaskMaster_page_controller.Task_Master_list[0].clustureHeadValue ?? "",),
+              Row(
+                children: [
+                  Text(
+                    "Infra Lead",
+                    style: GoogleFonts.poppins(
+                      color: AllColors.primaryDark1,
+                      fontSize: AllFontSize.fourtine,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  Spacer(),
+                  InkWell(
+                    onTap: (){
+                      print("Length${TaskMaster_page_controller.userGeoHierarchyy.length}");
+                      TaskMaster_page_controller.infraFlag = 'FromDetailsPage';
+                      for(int i=0; i<TaskMaster_page_controller.userGeoHierarchyy.length;i++){
+                        if(TaskMaster_page_controller.userGeoHierarchyy[i].myLevel==1){
+                          TaskMaster_page_controller.userRegionUpdateController.text=TaskMaster_page_controller.userGeoHierarchyy[i-1].geoValue!;
+                          TaskMaster_page_controller.userClusterUpdateController.text=TaskMaster_page_controller.userGeoHierarchyy[i-2].geoValue!;
+                        }
+                      }
+                      if(TaskMaster_page_controller.Task_Master_list[0].isInfraLead==1){
+                        TaskMaster_page_controller.isInfraYes.value = true;
+                      }else{
+                        TaskMaster_page_controller.isInfraYes.value = false;
+                      }
+                      TaskMaster_page_controller.viewAllDetailsOfTaskUpdateInfra();
+                      //TaskMaster_page_controller.isInfraLeadUpdateController.value.text=TaskMaster_page_controller.isInfraLead.value.text;
+                      TaskMaster_page_controller.getItemCategoryMstApiHit(TaskMaster_page_controller.Task_Master_list[0].taskId,
+                          TaskMaster_page_controller.Task_Master_list[0].infraLeadNo,"");
+                      Get.toNamed(RoutesName.updateTaskMstInfraScreen);
+                    },
+                    child: Text(
+                      TaskMaster_page_controller.Task_Master_list[0].isInfraLead==1?'Yes':'No',
+                      style: GoogleFonts.poppins(
+                        color: Colors.blueAccent,
+                        fontSize: AllFontSize.sisxteen,
+                        fontWeight: FontWeight.w500,
+                        decoration: TextDecoration.underline,
+                        decorationStyle: TextDecorationStyle.wavy,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 3,),
+              _buildLabelWithValue(label: "Infra Lead No.: ", value: TaskMaster_page_controller.Task_Master_list[0].infraLeadNo??"",),
+              const SizedBox(height: 3,),
+              _buildLabelWithValue(label: "User Region: ", value: TaskMaster_page_controller.Task_Master_list[0].userRegion??"",),
+              const SizedBox(height: 3,),
+              _buildLabelWithValue(label: "User Cluster: ", value: TaskMaster_page_controller.Task_Master_list[0].userClusture??"",),
+              const SizedBox(height: 3,),
+              _buildLabelWithValue(label: "Project Value: ", value: TaskMaster_page_controller.Task_Master_list[0].projectValue.toString(),),
+              const SizedBox(height: 3,),
+              _buildLabelWithValue(label: "Exp Date of Order: ", value: expOrderDate??"",),
+              const SizedBox(height: 3,),
+              _buildLabelWithValue(label: "Drawing Collected: ", value: TaskMaster_page_controller.Task_Master_list[0].drawingCollected==1?"Yes":"No",),
+              const SizedBox(height: 3,),
+              _buildLabelWithValue(label: "Proposal Submitted: ", value: TaskMaster_page_controller.Task_Master_list[0].proposalSubmitted==1?"Yes":"No",),
+              const SizedBox(height: 3,),
+              _buildLabelWithValue(label: "Inauguration Date of Project: ", value: inaugurationDate??"",),
+              const SizedBox(height: 3,),
+              _buildLabelWithValue(label: "Architect: ", value: TaskMaster_page_controller.Task_Master_list[0].architect??"",),
+              const SizedBox(height: 3,),
+              _buildLabelWithValue(label: "Executive Engineer: ", value: TaskMaster_page_controller.Task_Master_list[0].executiveEngineer??"",),
+              const SizedBox(height: 3,),
+              _buildLabelWithValue(label: "Name of Infra Department: ", value: TaskMaster_page_controller.Task_Master_list[0].nameOfInfraDepartment??"",),
+              const SizedBox(height: 3,),
+              _buildLabelWithValue(label: "Name of Agency Contactor: ", value: TaskMaster_page_controller.Task_Master_list[0].nameOfAgencyContrator??"",),
+              const SizedBox(height: 3,),
+              _buildLabelWithValue(label: "Expected Revenue: ", value: TaskMaster_page_controller.Task_Master_list[0].expectedRevenue.toString()??"",),
+              const SizedBox(height: 3,),
+              _buildLabelWithValue(label: "Value Of Quote: ", value: TaskMaster_page_controller.Task_Master_list[0].valueOfQuote.toString()??"",),
+              const SizedBox(height: 3,),
+              _buildLabelWithValue(label: "Expected Date Of Completion: ", value: expDateOfCompletion??"",),
+              const SizedBox(height: 3,),
+            ],
+          ),
+        )
+    );
+  }
   Widget viewDsarDetails(BuildContext context) {
     //print('hcsdgyuifgy${TaskMaster_page_controller.Task_Master_list[0].isReadyForApprove}');
     return   Visibility(

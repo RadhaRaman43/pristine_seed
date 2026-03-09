@@ -61,7 +61,7 @@ class UpdateNonStandardItemScreen extends StatelessWidget{
           margin: EdgeInsets.only(left: 30),
           child: DefaultButton(
             press: (){
-              item_master_controller.updateItemMasterCreateFromCRM(item_master_controller.item);
+              item_master_controller.updateItemMasterCreateFromCRM(item_master_controller.item,"",[]);
             },
             text: "Update",
           ),

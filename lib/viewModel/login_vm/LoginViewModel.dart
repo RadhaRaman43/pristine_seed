@@ -28,19 +28,17 @@ class LoginViewModel extends GetxController{
     };
     await _api.loginApiHit(data,sessionManagement).then((value){
       try{
-
         List<LoginResponse> loginResponse=(json.decode(value) as
         List).map((i) => LoginResponse.fromJson(i)).toList();
-
         if(loginResponse!=null &&  loginResponse[0].condition=="True"){
           loading.value=false;
 
-          if(loginResponse[0].isHo=='1'){
+         /* if(loginResponse[0].isHo=='1'){
             sessionManagement.clearSession();
            Get.offAllNamed(RoutesName.loginScreen);
             Utils.sanckBarError('Message !', "Cluster User Can Not Access Mobile Application.");
             return;
-          }
+          }*/
 
           // Utils.sanckBarSuccess("Success", loginResponse[0].message!);
           sessionManagement.setUserCode(loginResponse[0].userType.toString());
@@ -67,10 +65,12 @@ class LoginViewModel extends GetxController{
          // print(loginResponse.message);
           print("elseeee");
         }
-      }catch(e){
+      }
+      catch(e){
         Utils.showErrorToastification("Exception!",e.toString());
         print(e);
-      }finally{
+      }
+      finally{
         loading.value=false;
       }
 

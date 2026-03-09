@@ -56,7 +56,7 @@ class NonStandardItemsScreen extends StatelessWidget{
                   ],
                 ),
                 onTap: () {
-
+                  item_master_controller.downLoadSample(context);
                 },
               ),);
               items.add(PopupMenuItem(
@@ -67,7 +67,7 @@ class NonStandardItemsScreen extends StatelessWidget{
                     ],
                   ),
                   onTap: () {
-
+                    item_master_controller.uploadExcelToServer();
                   },
                 ),);
 
