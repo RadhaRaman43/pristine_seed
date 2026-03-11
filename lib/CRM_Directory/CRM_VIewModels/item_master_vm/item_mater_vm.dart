@@ -12,6 +12,7 @@ import 'package:open_filex/open_filex.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+import '../../../reources/routes/routes_name.dart';
 import '../../../viewModel/SessionManagment/session_managment.dart';
 import '../../CRM_Models/TaskMaster_model/Item_Category_Mast_model.dart';
 import '../../CRM_Models/item_master_modal/non_standard_item_data_modal.dart';
@@ -127,6 +128,9 @@ class ItemMasterVm extends GetxController{
 
               }
           }
+            else{
+              Utils.sanckBarError("False!", "No Data Found");
+            }
         }
     } catch (e) {
       Utils.sanckBarError("Exception error!", e.toString());
@@ -228,11 +232,11 @@ class ItemMasterVm extends GetxController{
         final item = itemList[i];
         items.add({
           "account_code": item.accountCode??"",
-          "active": item.active,
+          "active": item.active=="0"?0:1,
           "brand_name": "",
           "brand_code": "",
           "base_uom": "",
-          "branch_transfer_price":item.branchTransferPrice??"",
+          "branch_transfer_price":item.branchTransferPrice??"0",
           "category_code":  item.categoryName??"",
           "category_name": item.categoryName??"",
           "color_code": "",
@@ -249,7 +253,7 @@ class ItemMasterVm extends GetxController{
           "is_bulky": 0,
           "is_expiry_mandatory": 0,
           "item_code":item.itemCode??"",
-          "list_selling_price": item.listSellingPrice??"",
+          "list_selling_price": item.listSellingPrice??"0",
           "length": 0,
           "label": "",
           "height": 0,
@@ -258,7 +262,7 @@ class ItemMasterVm extends GetxController{
           "manufacturer_name": "",
           "mrp": 0,
           "moq": 0,
-          "minimal_acceptable_price":item.minimalAcceptablePrice??"",
+          "minimal_acceptable_price":item.minimalAcceptablePrice??"0",
           "product_type":item.productType??"",
           "product_group_code": "",
           "product_group_name": "",
@@ -274,7 +278,7 @@ class ItemMasterVm extends GetxController{
           "size_name": "",
           "style_name": "",
           "sale_uom": "",
-          "standard_cost":item.standardCost??"",
+          "standard_cost":item.standardCost??"0",
           "sub_product_group_name": "",
           "sub_sub_product_group_name": "",
           "thikness_gsm": 0,
@@ -362,7 +366,17 @@ class ItemMasterVm extends GetxController{
       if (jsonResponse is List) {
         List<NonStandardItemDataModal> response = jsonResponse.map((e) => NonStandardItemDataModal.fromJson(e)).toList();
         if (response != null && response.length > 0 && response[0].condition == "True") {
-
+          if(updateExcel=="uploadExcel"){
+            Utils.sanckBarSuccess("True!", "Items Update Successfully");
+            itemMstSalesCycleGet(page_no:0,row_Per_Page: rowsPerPage);
+          }
+          else{
+            Utils.sanckBarSuccess("True!", "Item Update Successfully");
+            Get.offAllNamed(RoutesName.nonStandardItemList);
+          }
+        }
+        else{
+          Utils.sanckBarError("False!", response[0].message.toString());
         }
       }
     } catch (e) {
@@ -610,8 +624,8 @@ class ItemMasterVm extends GetxController{
 
   Future<void> uploadExcelToServer() async {
     try {
-      //File? file = await pickExcelFile();
-      File? file = await getExcelFile();
+      File? file = await pickExcelFile();
+      //File? file = await getExcelFile();
       if (file == null){
         return;
       }
@@ -627,7 +641,7 @@ class ItemMasterVm extends GetxController{
     }
   }
 
-/*  Future<File?> pickExcelFile() async {
+  Future<File?> pickExcelFile() async {
     final result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
       allowedExtensions: ['xlsx'],
@@ -639,7 +653,6 @@ class ItemMasterVm extends GetxController{
 
     return null;
   }
- */
   Future<File?> getExcelFile() async {
     Directory dir = Directory('/storage/emulated/0/Download');
     List<FileSystemEntity> files = dir.listSync();

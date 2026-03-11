@@ -56,16 +56,25 @@ class CommitDashboardViewscreen extends StatelessWidget{
               color: AllColors.whiteColor,
             ),
             title:Row(
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Text(
                   'Commit Dashboard',
                   style: GoogleFonts.poppins(
                     color: AllColors.whiteColor,
-                    fontSize: 17.0,
+                    fontSize: 15.0,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
-                Spacer(),
+                Tooltip(
+                  message: "Download Excel",
+                  child: IconButton(
+                    icon: const Icon(Icons.download),
+                    onPressed: ()  {
+                      dashboard_view_Controller.exportNonStandardExcelWithProgress(context,);;
+                    },
+                  ),
+                ),
                 Tooltip(
                   message: "Take Screenshot",
                   child: IconButton(
@@ -143,8 +152,8 @@ class CommitDashboardViewscreen extends StatelessWidget{
                                     ),
                                     Obx((){
                                       return  Text(
-                                        'Date Ranges : ${dashboard_view_Controller.formattedStartDate} - '
-                                            '${dashboard_view_Controller.formattedEndDate}',
+                                        'Date Ranges : ${dashboard_view_Controller.character.value} (${dashboard_view_Controller.formattedStartDate} - '
+                                            '${dashboard_view_Controller.formattedEndDate})',
                                         style: GoogleFonts.poppins(
                                           color: AllColors.blackColor,
                                           fontSize: AllFontSize.twelve,
@@ -192,9 +201,6 @@ class CommitDashboardViewscreen extends StatelessWidget{
                       Obx(() {
                         return BindDashboardBarChartData(context);
                       }),
-
-
-
                       Container(
                           padding: EdgeInsets.only(left: 15.0, bottom: 10.0),
                           child:
@@ -239,10 +245,7 @@ class CommitDashboardViewscreen extends StatelessWidget{
 
 
                       ),
-                      Divider(
-                        height: 1,
-                        color: AllColors.lightgreyColor,
-                      ),
+                      const Divider(height: 1, color: AllColors.lightgreyColor,),
                       Container(
                         height: size.height/2,
                         child: Obx(() {
@@ -298,47 +301,32 @@ class CommitDashboardViewscreen extends StatelessWidget{
 
     try {
       progress.value = 0.10;
-
       RenderRepaintBoundary boundary =
       chartKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
-
       ui.Image chartImage = await boundary.toImage(pixelRatio: 3.0);
-
       progress.value = 0.25;
 
-      var chartBytes =
-      await chartImage.toByteData(format: ui.ImageByteFormat.png);
+      var chartBytes = await chartImage.toByteData(format: ui.ImageByteFormat.png);
       var chartUint8 = chartBytes!.buffer.asUint8List();
-
-      const double textSectionHeight = 80;
+      const double textSectionHeight = 160;
       const double spacing = 20;
-
       final recorder = ui.PictureRecorder();
       final canvas = Canvas(recorder);
-
       final double width = chartImage.width.toDouble();
-      final double height =
-          chartImage.height.toDouble() + textSectionHeight + spacing;
-
+      final double height = chartImage.height.toDouble() + textSectionHeight + spacing;
       final bgPaint = Paint()..color = const Color(0xFFFBF6F6);
       canvas.drawRect(Rect.fromLTWH(0, 0, width, height), bgPaint);
 
+      drawHeader(canvas, width);
+
 
       final chartUiImage = await decodeImageFromList(chartUint8);
-      canvas.drawImage(
-          chartUiImage, Offset(0, textSectionHeight + spacing), Paint());
-
+      canvas.drawImage(chartUiImage, Offset(0, textSectionHeight + spacing), Paint());
       final picture = recorder.endRecording();
-
       progress.value = 0.45;
-
-      final finalImage =
-      await picture.toImage(width.toInt(), height.toInt());
-
-      var finalBytes =
-      await finalImage.toByteData(format: ui.ImageByteFormat.png);
+      final finalImage = await picture.toImage(width.toInt(), height.toInt());
+      var finalBytes = await finalImage.toByteData(format: ui.ImageByteFormat.png);
       var pngBytes = finalBytes!.buffer.asUint8List();
-
       progress.value = 0.65;
 
       // ---------------- Save to Gallery ------------------------
@@ -406,7 +394,58 @@ class CommitDashboardViewscreen extends StatelessWidget{
       },
     );
   }
+  double drawHeader(ui.Canvas canvas, double canvasWidth) {
+    double startY = 40;
+    double leftX = 40;
 
+    List<Map<String, dynamic>> leftTexts = [
+      {
+        "text": "Commitment",
+        "size": 34.0,
+        "color": const Color(0xFF0C0C0C),
+        "weight": FontWeight.bold
+      },
+      {
+        "text":
+        "Time Period - ${dashboard_view_Controller.character.value} (${dashboard_view_Controller.formattedStartDate} - ${dashboard_view_Controller.formattedEndDate})",
+        "size": 22.0,
+        "color": const Color(0xFF0C0C0C),
+        "weight": FontWeight.w500
+      },
+      {
+      "text": 'Quote Accep. :  ${dashboard_view_Controller.QuoteAccepted_controller.value.text}',
+      "size": 22.0,
+      "color": const Color(0xFF0C0C0C),
+      "weight": FontWeight.w500
+      },
+      {
+        "text": 'View : ${dashboard_view_Controller.selectedOption.value}',
+        "size": 22.0,
+        "color": const Color(0xFF0C0C0C),
+        "weight": FontWeight.w500
+      },
+    ];
+
+    for (var item in leftTexts) {
+      final tp = TextPainter(
+        text: TextSpan(
+          text: item["text"],
+          style: TextStyle(
+            fontSize: item["size"],
+            fontWeight: item["weight"],
+            color: item["color"],
+          ),
+        ),
+        textDirection: ui.TextDirection.ltr,
+      );
+
+      tp.layout(maxWidth: canvasWidth * 0.6);
+      tp.paint(canvas, Offset(leftX, startY));
+
+      startY += tp.height + 8;
+    }
+    return startY + 10;
+  }
 
   Future<String> saveTempImage(var bytes) async {
     final tempDir = await getTemporaryDirectory();

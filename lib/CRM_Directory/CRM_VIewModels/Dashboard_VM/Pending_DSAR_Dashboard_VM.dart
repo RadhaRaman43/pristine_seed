@@ -1,8 +1,13 @@
 import 'dart:convert';
+import 'dart:io';
 
+import 'package:excel/excel.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:open_filex/open_filex.dart';
+import 'package:path_provider/path_provider.dart';
 
 import '../../../utils/app_utils.dart';
 import '../../../viewModel/SessionManagment/session_managment.dart';
@@ -77,6 +82,9 @@ class PendingDsarDashboardVm extends GetxController{
   var ClusterNameForApi;
   var RegionNameForApi;
   var EmployeeEmailIdForApi = '';
+
+  RxBool excelLoading = false.obs;
+  RxDouble excelProgress = 0.0.obs;
 
   @override
   Future<void> onInit() async {
@@ -888,6 +896,105 @@ class PendingDsarDashboardVm extends GetxController{
   }
   void clearFilterData() {
     sessionManagement.clearDSARDashboardData();
+  }
+
+
+  Future<void> exportNonStandardExcelWithProgress(BuildContext context, ) async {
+    try {
+      if(pendingDSARDashboardRecordList.length<=0){
+        Utils.sanckBarError("False!", "No Data Found");
+        return;
+      }
+
+      excelLoading.value = true;
+      excelProgress.value = 0;
+      showExcelProgressDialog(context);
+      final excel = Excel.createExcel();
+      excel.rename('Sheet1', "DSAR Dashboard Chart Report");
+      final sheet = excel["DSAR Dashboard Chart Report"];
+
+
+      sheet.cell(CellIndex.indexByColumnRow(columnIndex: 0, rowIndex: 0)).value = TextCellValue('Dashboard - Pending DSAR');
+      sheet.cell(CellIndex.indexByColumnRow(columnIndex: 0, rowIndex: 1)).value = TextCellValue('Time Period : ${character.value}(${formattedStartDate} - ${formattedEndDate})');
+      sheet.cell(CellIndex.indexByColumnRow(columnIndex: 0, rowIndex: 2)).value = TextCellValue('View : ${selectedOption.value}');
+      sheet.cell(CellIndex.indexByColumnRow(columnIndex: 0, rowIndex: 3)).value = TextCellValue('');
+      sheet.cell(CellIndex.indexByColumnRow(columnIndex: 0, rowIndex: 4)).value = TextCellValue('');
+
+      // Write Headers
+      List<String> headers = [];
+      final firstRowMap = removeExcelKeys(pendingDSARDashboardRecordList.first,);
+      headers = firstRowMap.keys.toList();
+      for (int col = 0; col < headers.length; col++) {
+        sheet.cell(CellIndex.indexByColumnRow(columnIndex: col, rowIndex: 5)).value
+        = TextCellValue(headers[col]);
+      }
+
+      final totalRows = pendingDSARDashboardRecordList.length;
+
+      for (int row = 0; row < totalRows; row++) {
+        final rowMap = removeExcelKeys(pendingDSARDashboardRecordList[row],);
+        for (int col = 0; col < headers.length; col++) {
+          final value = rowMap[headers[col]];
+          sheet.cell(CellIndex.indexByColumnRow(
+              columnIndex: col, rowIndex: row + 1+5)).value = value == null
+              ? TextCellValue('') : TextCellValue(value.toString());
+        }
+        excelProgress.value = ((row + 1) / totalRows) * 100;
+        await Future.delayed(const Duration(milliseconds: 5));
+      }
+
+      late Directory dir;
+      if (Platform.isAndroid) {
+        dir = Directory('/storage/emulated/0/Download');
+      } else {
+        dir = await getApplicationDocumentsDirectory();
+      }
+
+      final fileName = "dsar_dashboard_chart_report.xlsx";
+      final filePath = "${dir.path}/$fileName";
+      final file = File(filePath);
+      if (await file.exists()) {
+        await file.delete();
+      }
+      await file.writeAsBytes(excel.encode()!);
+      excelProgress.value = 100;
+      excelLoading.value = false;
+      Get.back();
+      // Open File
+      await OpenFilex.open(filePath);
+      debugPrint("Excel saved at: $filePath");
+    }catch(e){
+      Utils.sanckBarError("Failed to download file!", e.toString());
+      print(e.toString());
+      excelLoading.value = false;
+      Get.back();
+    }
+  }
+  void showExcelProgressDialog(BuildContext context) {
+    Get.dialog(
+      Obx(() => AlertDialog(
+        title: const Text("Generating Excel"),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            LinearProgressIndicator(
+              value: excelProgress.value / 100,
+            ),
+            const SizedBox(height: 12),
+            Text("${excelProgress.value.toStringAsFixed(0)} %"),
+          ],
+        ),
+      )),
+      barrierDismissible: false,
+    );
+  }
+
+  Map<String, dynamic> removeExcelKeys(Records item) {
+    final map = Map<String, dynamic>.from(item.toJson());
+    map.remove('geo_name');
+    map.remove('geo_value');
+    map.remove('email_id');
+    return map;
   }
 
 }

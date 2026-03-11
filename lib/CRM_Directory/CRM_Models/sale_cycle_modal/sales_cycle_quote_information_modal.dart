@@ -40,6 +40,7 @@ class SalesCycleQuoteInformationModal {
   int? noOfSalesAdvice;
   int? isSalesAdviceCreated;
   String? kindAttention;
+  String? parentCategoryCode;
   String? termsAndCondition;
   int? isReadyForApprove;
   int? isReadySendForApproval;
@@ -114,6 +115,7 @@ class SalesCycleQuoteInformationModal {
         this.noOfSalesAdvice,
         this.isSalesAdviceCreated,
         this.kindAttention,
+        this.parentCategoryCode,
         this.termsAndCondition,
         this.isReadyForApprove,
         this.isReadySendForApproval,
@@ -188,6 +190,7 @@ class SalesCycleQuoteInformationModal {
     noOfSalesAdvice = json['no_of_sales_advice'];
     isSalesAdviceCreated = json['is_sales_advice_created'];
     kindAttention = json['kind_attention'];
+    parentCategoryCode = json['parent_category_code'];
     termsAndCondition = json['terms_and_condition'];
     isReadyForApprove = json['is_ready_for_approve'];
     isReadySendForApproval = json['is_ready_send_for_approval'];
@@ -270,6 +273,7 @@ class SalesCycleQuoteInformationModal {
     data['no_of_sales_advice'] = this.noOfSalesAdvice;
     data['is_sales_advice_created'] = this.isSalesAdviceCreated;
     data['kind_attention'] = this.kindAttention;
+    data['parent_category_code'] = this.parentCategoryCode;
     data['terms_and_condition'] = this.termsAndCondition;
     data['is_ready_for_approve'] = this.isReadyForApprove;
     data['is_ready_send_for_approval'] = this.isReadySendForApproval;

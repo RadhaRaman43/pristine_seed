@@ -353,4 +353,7 @@ class AppUrl {
      static const String ItemMstSalesCycleDelete="$BASE_URL/api/ItemMaster/ItemMstSalesCycleDelete";
      static const String GSTGroupGet="$BASE_URL/api/ItemMaster/GSTGroupGet";
      static const String ItemMasterCreateFromCRM="$BASE_URL/api/ItemMaster/ItemMasterCreateFromCRM";
+
+
+     static const String QuoteHeaderParentCategoryUpdate="$BASE_URL/api/CRM/Quote/QuoteHeaderParentCategoryUpdate";
 }

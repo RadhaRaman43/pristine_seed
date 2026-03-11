@@ -80,9 +80,8 @@ class SalesCycleCreateQuoteScreen extends StatelessWidget{
                 const SizedBox(height: 10,),
                 bindKindAttention(context),
                 const  SizedBox(height: 10,),
-                bindProductCategoryDropDown(context),
+               /* bindProductCategoryDropDown(context),
                 const SizedBox(height: 10,),
-
                 Obx(() {
                   return
                     Wrap(
@@ -97,12 +96,15 @@ class SalesCycleCreateQuoteScreen extends StatelessWidget{
                       }).toList(),
                     );
 
-                }),
+                }),*/
                 const  SizedBox(height: 10,),
                /* bindQuoteCommitName(context),
                 SizedBox(height: 10,),*/
                 bindShippingAddress(context),
+                const  SizedBox(height: 10,),
+                bindProductCategoryDropDown(context),
                 const SizedBox(height: 10,),
+
                 Container(
                   margin: EdgeInsets.only(left: 15, right: 15, top: 15),
                   child: Row(
@@ -820,13 +822,13 @@ class SalesCycleCreateQuoteScreen extends StatelessWidget{
         onSelected: (ItemCategoryMstModel selection) {
           saleCycleController.productCategoryController.value.text =
               _displayItemCatMasterForOption(selection).toString();
-          if (!saleCycleController.itemCategorySelectedlist.contains(selection)) {
+          /*if (!saleCycleController.itemCategorySelectedlist.contains(selection)) {
             saleCycleController.itemCategorySelectedlist.add(selection);
             //Utils.showToastification('Success', 'Add Successfully');
           }else{
             Utils.showErrorToastification('Error', 'Already Selected');
           }
-          print("list${saleCycleController.itemCategorySelectedlist.length}");
+          print("list${saleCycleController.itemCategorySelectedlist.length}");*/
 
         },
         fieldViewBuilder: (BuildContext context, TextEditingController controller,

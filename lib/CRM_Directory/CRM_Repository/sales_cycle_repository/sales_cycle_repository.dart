@@ -284,4 +284,8 @@ class SalesCycleRepository{
     return _apiService.postApi(data, AppUrl.ContactMstGet,sessionManagement);
   }
 
+  Future<String> QuoteHeaderParentCategoryUpdate(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.QuoteHeaderParentCategoryUpdate,sessionManagement);
+  }
+
 }

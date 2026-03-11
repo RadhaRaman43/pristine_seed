@@ -68,6 +68,15 @@ class PendingDsarDashboardViewscreen extends StatelessWidget{
                   ),
                 ),
                 Tooltip(
+                  message: "Download Excel",
+                  child: IconButton(
+                    icon: const Icon(Icons.download),
+                    onPressed: ()  {
+                      dashboard_view_Controller.exportNonStandardExcelWithProgress(context,);;
+                    },
+                  ),
+                ),
+                Tooltip(
                   message: "Take Screenshot",
                   child: IconButton(
                     icon: const Icon(Icons.camera_alt_outlined),
@@ -171,9 +180,7 @@ class PendingDsarDashboardViewscreen extends StatelessWidget{
 
 
                       ),
-                      SizedBox(
-                        height: 10,
-                      ),
+                      const SizedBox(height: 10,),
 
                       Padding(
                         padding: const EdgeInsets.only(left: 15.0, right: 25),
@@ -343,13 +350,12 @@ class PendingDsarDashboardViewscreen extends StatelessWidget{
       final canvas = Canvas(recorder);
 
       final double width = chartImage.width.toDouble();
-      final double height =
-          chartImage.height.toDouble() + textSectionHeight + spacing;
+      final double height = chartImage.height.toDouble() + textSectionHeight + spacing;
 
       final bgPaint = Paint()..color = const Color(0xFFFBF6F6);
       canvas.drawRect(Rect.fromLTWH(0, 0, width, height), bgPaint);
-
-      drawVerticalLabels(canvas);
+      drawHeader(canvas, width);
+      //drawVerticalLabels(canvas);
       final chartUiImage = await decodeImageFromList(chartUint8);
       canvas.drawImage(
           chartUiImage, Offset(0, textSectionHeight + spacing), Paint());
@@ -433,6 +439,80 @@ class PendingDsarDashboardViewscreen extends StatelessWidget{
     );
   }
 
+  double drawHeader(ui.Canvas canvas, double canvasWidth) {
+    double startY = 20;
+    double leftX = 20;
+
+    List<Map<String, dynamic>> leftTexts = [
+      {
+        "text": "Dashboard- Pending DSAR",
+        "size": 34.0,
+        "color": const Color(0xFF0C0C0C),
+        "weight": FontWeight.bold
+      },
+      {
+        "text":
+        "Time Period : ${dashboard_view_Controller.character.value}(${dashboard_view_Controller.formattedStartDate} - ${dashboard_view_Controller.formattedEndDate})",
+        "size": 22.0,
+        "color": const Color(0xFF0C0C0C),
+        "weight": FontWeight.w500
+      },
+      {
+        "text": 'View : ${dashboard_view_Controller.selectedOption.value}',
+        "size": 22.0,
+        "color": const Color(0xFF0C0C0C),
+        "weight": FontWeight.w500
+      },
+    ];
+
+    for (var item in leftTexts) {
+      final tp = TextPainter(
+        text: TextSpan(
+          text: item["text"],
+          style: TextStyle(
+            fontSize: item["size"],
+            fontWeight: item["weight"],
+            color: item["color"],
+          ),
+        ),
+        textDirection: ui.TextDirection.ltr,
+      );
+
+      tp.layout(maxWidth: canvasWidth * 0.6);
+      tp.paint(canvas, Offset(leftX, startY));
+
+      startY += tp.height + 8;
+    }
+
+    double rightX = canvasWidth/2 - 320;
+    double legendY = 25;
+    List<Map<String, dynamic>> legends = [
+      {"text": "Follow-Up Call", "color": const Color(0xFF3694D3)},
+      {"text": "Payment Call", "color": const Color(0xFFCC5A37)},
+      {"text": "New Call", "color": const Color(0xFF086D1E)},
+    ];
+
+    for (var item in legends) {
+      final tp = TextPainter(
+        text: TextSpan(
+          text: item["text"],
+          style: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+            color: item["color"],
+          ),
+        ),
+        textDirection: ui.TextDirection.ltr,
+      );
+
+      tp.layout();
+      tp.paint(canvas, Offset(rightX, legendY));
+
+      legendY += tp.height + 10;
+    }
+
+    return startY + 10;
+  }
   void drawVerticalLabels(ui.Canvas canvas) {
     double startY = 20;      // top padding
     double gap = 35;         // space between labels

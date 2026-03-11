@@ -1718,7 +1718,8 @@ class ViewSaleHeaderScreen extends StatelessWidget {
             DateTime? date = await showDatePicker(
               context: context,
               initialDate: initialDate,
-              firstDate: DateTime.now(),
+              firstDate: DateTime(1900),
+              //firstDate: DateTime.now(),
               lastDate: ending_date,
               builder: (BuildContext context, Widget? child) {
                 return Theme(
@@ -6605,6 +6606,9 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                     padding: const EdgeInsets.only(left: 8.0, right: 8.0),
                     child: Column(
                       children: [
+                       /* bindData(fixText: "Infra Lead : ",data:  saleCycleList[0].isInfraLead==1?'Yes':'No',color: Colors.blueAccent,
+                            onTap: ,decoration: TextDecoration.underline,decorationStyle:TextDecorationStyle.wavy ),*/
+                        const SizedBox(height: 3,),
                         bindData(fixText: "User Region : ",data:  saleCycleList[0].userRegion ?? ""),
                         const SizedBox(height: 3,),
                         bindData(fixText: "User Cluster : ",data:  saleCycleList[0].userClusture ?? ""),

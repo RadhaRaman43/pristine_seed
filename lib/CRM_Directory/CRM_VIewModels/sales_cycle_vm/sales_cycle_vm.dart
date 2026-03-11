@@ -220,6 +220,7 @@ class SalesCycleVm extends GetxController {
   RxBool showClusterHead = false.obs;
   RxBool showGeneralManager = false.obs;
   RxBool showApprovalBtn = false.obs;
+  RxBool GmApproveDetail = false.obs;
 
   // todo update quote controller
   var updateItemDescriptionController = TextEditingController().obs;
@@ -1399,7 +1400,8 @@ class SalesCycleVm extends GetxController {
         "quote_commit": contactQuoteCommitController.value.text == "Yes" ? 1 : 0,
         "consignee_id": consigneeId,
         "created_by": email,
-        "kind_attention": kindAttentionController.value.text
+        "kind_attention": kindAttentionController.value.text,
+        "parent_category_code": productCategoryController.value.text.isNotEmpty?productCategoryController.value.text:""
       };
 
       loading.value = true;
@@ -1411,10 +1413,19 @@ class SalesCycleVm extends GetxController {
             List<SalesCycleUpdateStatusModal> response = jsonResponse.map((e) => SalesCycleUpdateStatusModal.fromJson(e)).toList();
             if (response != null && response.length > 0 && response[0].condition?.toLowerCase() == "true") {
               loading.value = false;
-              ProductCatCreateApiHit(response[0].quoteId!);
+              Utils.sanckBarSuccess("Success!", response[0].message.toString());
+              pageNumberForQuote = 0;
+              getQuoteHeaderData(pageNumberForQuote, saleCycleList[0].salesCycleId!, '');
+              Get.toNamed(RoutesName.viewSalesCycleHeaderScreen);
+              //getQuoteHeaderData(0,  saleCycleList[0].salesCycleId!, '');
+              quoteValidityController.value.clear();
+              expectedClosuredateController.value.clear();
+              productCategoryController .value.clear();
+              kindAttentionController.value.clear();
+
+              //ProductCatCreateApiHit(response[0].quoteId!);
               /*getQuoteHeaderData(0,  saleCycleList[0].salesCycleId!);
             Get.toNamed(RoutesName.viewSalesCycleHeaderScreen);
-
             quoteValidityController.value.clear();
             expectedClosuredateController.value.clear();
             productCategoryController.value.clear();*/
@@ -2421,6 +2432,43 @@ class SalesCycleVm extends GetxController {
         loading.value = false;
         Utils.sanckBarException(
             "Api Error!", JsonResponse.toString());
+      }
+    } catch (error, stackTrace) {
+      print(error);
+      print(stackTrace);
+      print("Exception....");
+    }
+  }
+
+  QuoteHeaderParentCategoryUpdate(String quoteId) async {
+
+    Map<String, dynamic> data = {
+      "created_by": email,
+      "quote_id": quoteId,
+      "parent_category_code": productCategoryController.value.text.isNotEmpty?productCategoryController.value.text:"",
+    };
+    print(data);
+    loading.value = true;
+
+    try {
+      final value = await _api.QuoteHeaderParentCategoryUpdate(data, sessionManagement);
+      print(value);
+      final JsonResponse = json.decode(value);
+      if (JsonResponse is List) {
+        List<TaskMasterGetModel> response = JsonResponse.map((e) => TaskMasterGetModel.fromJson(e)).toList();
+        if (response != null && response.isNotEmpty && response[0].condition?.toLowerCase() == "true") {
+          loading.value = false;
+          Utils.sanckBarSuccess("Success!", response[0].message.toString());
+          getQuoteHeaderInformation(quoteId, "fromQuote");
+          getItemCategoryMstApi(quoteHeaderdata[0].salesCycleId.toString(),"",quoteId);
+
+        } else {
+          loading.value = false;
+          Utils.sanckBarError("Error!",  response[0].message.toString());
+        }
+      } else {
+        loading.value = false;
+        Utils.sanckBarException("Api Error!", JsonResponse.toString());
       }
     } catch (error, stackTrace) {
       print(error);
@@ -4774,6 +4822,9 @@ class SalesCycleVm extends GetxController {
     try {
       for (int i = 0; i < approvalPersonList.length; i++) {
         if (email.toLowerCase() == approvalPersonList[i].approvedBy?.toLowerCase()){
+          if(approvalPersonList[i].approverOrder==5){
+            GmApproveDetail.value=true;
+          }
           if(approvalPersonList[i].quoteStatus?.toLowerCase()=="pending for approval"){
             showApprovalBtn.value=true;
             approvalPersonList[i].userType?.toLowerCase() == 'branch head'?showBranchHead.value = true: showBranchHead.value = false;

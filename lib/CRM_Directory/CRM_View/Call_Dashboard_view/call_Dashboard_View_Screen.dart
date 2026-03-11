@@ -63,6 +63,15 @@ class CallDashboardViewScreen extends StatelessWidget {
                 ),
                 Spacer(),
                 Tooltip(
+                  message: "Download Excel",
+                  child: IconButton(
+                    icon: const Icon(Icons.download),
+                    onPressed: ()  {
+                      dashboard_view_Controller.exportNonStandardExcelWithProgress(context,);;
+                    },
+                  ),
+                ),
+                Tooltip(
                   message: "Take Screenshot",
                   child: IconButton(
                     icon: const Icon(Icons.camera_alt_outlined),
@@ -111,8 +120,7 @@ class CallDashboardViewScreen extends StatelessWidget {
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   Visibility(
-                                      visible: dashboard_view_Controller.userType?.toLowerCase() !=
-                                          'bh',
+                                      visible: dashboard_view_Controller.userType?.toLowerCase() != 'bh',
                                       child: _buildActionChip("Cluster")),
                                   SizedBox(width: 8),
                                   _buildActionChip("Region"),
@@ -141,9 +149,7 @@ class CallDashboardViewScreen extends StatelessWidget {
                                     fontWeight: FontWeight.w700,
                                   ),
                                 ),
-                               const SizedBox(
-                                  width: 10,
-                                ),
+                               const SizedBox(width: 10,),
                                 Obx((){
                                   return  Text(
                                     'Date Ranges : ${dashboard_view_Controller.formattedStartDate} - '
@@ -155,10 +161,7 @@ class CallDashboardViewScreen extends StatelessWidget {
                                     ),
                                   );
                                 }),
-                                const SizedBox(
-                                  width: 10,
-                                ),
-
+                                const SizedBox(width: 10,),
                                 Text(
                                   '${dashboard_view_Controller.character.value} : Type Of Calls (R)',
                                   style: GoogleFonts.poppins(
@@ -170,9 +173,7 @@ class CallDashboardViewScreen extends StatelessWidget {
                               ],
                             );
                           })),
-                      SizedBox(
-                        height: 10,
-                      ),
+                      const SizedBox(height: 10,),
                       Padding(
                         padding: const EdgeInsets.only(left: 15.0, right: 25),
                         child: Row(
@@ -251,11 +252,7 @@ class CallDashboardViewScreen extends StatelessWidget {
                                 SizedBox(
                                   width: 10,
                                 ),
-                                Text(
-                                  '(' +
-                                      dashboard_view_Controller.total_rows.value
-                                          .toString() +
-                                      ')',
+                                Text("(${dashboard_view_Controller.total_rows.value.toString()})",
                                   style: GoogleFonts.poppins(
                                     color: AllColors.redColor,
                                     fontSize: AllFontSize.fourtine,
@@ -265,10 +262,7 @@ class CallDashboardViewScreen extends StatelessWidget {
                               ],
                             );
                           })),
-                      Divider(
-                        height: 1,
-                        color: AllColors.lightgreyColor,
-                      ),
+                      const Divider(height: 1, color: AllColors.lightgreyColor,),
                       Container(
                         height: size.height / 2,
                         child: Obx(() {
@@ -287,70 +281,44 @@ class CallDashboardViewScreen extends StatelessWidget {
     );
   }
   Future<void> takeScreenshot(BuildContext context, GlobalKey<State<StatefulWidget>> chartKey) async {
-
     ValueNotifier<double> progress = ValueNotifier(0.0);
     showProgressDialog(context, progress);
-
     try {
       progress.value = 0.10;
-
-      RenderRepaintBoundary boundary =
-      chartKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
-
+      RenderRepaintBoundary boundary = chartKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
       ui.Image chartImage = await boundary.toImage(pixelRatio: 3.0);
-
       progress.value = 0.25;
-
-      var chartBytes =
-      await chartImage.toByteData(format: ui.ImageByteFormat.png);
+      var chartBytes = await chartImage.toByteData(format: ui.ImageByteFormat.png);
       var chartUint8 = chartBytes!.buffer.asUint8List();
-
-      const double textSectionHeight = 80;
+      const double textSectionHeight = 90;
       const double spacing = 20;
-
       final recorder = ui.PictureRecorder();
       final canvas = Canvas(recorder);
-
       final double width = chartImage.width.toDouble();
-      final double height =
-          chartImage.height.toDouble() + textSectionHeight + spacing;
-
+      final double height = chartImage.height.toDouble() + textSectionHeight + spacing;
       final bgPaint = Paint()..color = const Color(0xFFFBF6F6);
       canvas.drawRect(Rect.fromLTWH(0, 0, width, height), bgPaint);
 
-      drawVerticalLabels(canvas);
-
+      drawHeader(canvas, width);
+      //drawVerticalLabels(canvas);
       final chartUiImage = await decodeImageFromList(chartUint8);
-      canvas.drawImage(
-          chartUiImage, Offset(0, textSectionHeight + spacing), Paint());
-
+      canvas.drawImage(chartUiImage, Offset(0, textSectionHeight + spacing), Paint());
       final picture = recorder.endRecording();
-
       progress.value = 0.45;
-
-      final finalImage =
-      await picture.toImage(width.toInt(), height.toInt());
-
-      var finalBytes =
-      await finalImage.toByteData(format: ui.ImageByteFormat.png);
+      final finalImage = await picture.toImage(width.toInt(), height.toInt());
+      var finalBytes = await finalImage.toByteData(format: ui.ImageByteFormat.png);
       var pngBytes = finalBytes!.buffer.asUint8List();
-
       progress.value = 0.65;
-
       // ---------------- Save to Gallery ------------------------
       await MediaStore.ensureInitialized();
       MediaStore.appFolder = "PristineSeed";
-
       String tempFilePath = await saveTempImage(pngBytes);
-
       progress.value = 0.80;
-
       final saveInfo = await MediaStore().saveFile(
         tempFilePath: tempFilePath,
         dirType: DirType.photo,
         dirName: DirName.dcim,
       );
-
       progress.value = 1.0; // close loading dialog
 
       if (saveInfo != null && saveInfo.isSuccessful) {
@@ -362,7 +330,6 @@ class CallDashboardViewScreen extends StatelessWidget {
           const SnackBar(content: Text('Failed to save screenshot')),
         );
       }
-
     } catch (e) {
       Get.back();
       print("Screenshot error: $e");
@@ -374,6 +341,7 @@ class CallDashboardViewScreen extends StatelessWidget {
       Get.back();
     }
   }
+
   void showProgressDialog(BuildContext context, ValueNotifier<double> progress) {
     showDialog(
       context: context,
@@ -401,6 +369,80 @@ class CallDashboardViewScreen extends StatelessWidget {
         );
       },
     );
+  }
+  double drawHeader(ui.Canvas canvas, double canvasWidth) {
+    double startY = 20;
+    double leftX = 20;
+
+    List<Map<String, dynamic>> leftTexts = [
+      {
+        "text": "Dashboard- Tasks",
+        "size": 34.0,
+        "color": const Color(0xFF0C0C0C),
+        "weight": FontWeight.bold
+      },
+      {
+        "text":
+        "Time Period - ${dashboard_view_Controller.character.value}(${dashboard_view_Controller.formattedStartDate} - ${dashboard_view_Controller.formattedEndDate})",
+        "size": 22.0,
+        "color": const Color(0xFF0C0C0C),
+        "weight": FontWeight.w500
+      },
+      {
+        "text": 'View : ${dashboard_view_Controller.selectedOption.value}',
+        "size": 22.0,
+        "color": const Color(0xFF0C0C0C),
+        "weight": FontWeight.w500
+      },
+    ];
+
+    for (var item in leftTexts) {
+      final tp = TextPainter(
+        text: TextSpan(
+          text: item["text"],
+          style: TextStyle(
+            fontSize: item["size"],
+            fontWeight: item["weight"],
+            color: item["color"],
+          ),
+        ),
+        textDirection: ui.TextDirection.ltr,
+      );
+
+      tp.layout(maxWidth: canvasWidth * 0.6);
+      tp.paint(canvas, Offset(leftX, startY));
+
+      startY += tp.height + 8;
+    }
+
+    double rightX = canvasWidth/2 - 320;
+    double legendY = 25;
+    List<Map<String, dynamic>> legends = [
+      {"text": "Follow-Up Call", "color": const Color(0xFF3694D3)},
+      {"text": "Payment Call", "color": const Color(0xFFCC5A37)},
+      {"text": "New Call", "color": const Color(0xFF086D1E)},
+    ];
+
+    for (var item in legends) {
+      final tp = TextPainter(
+        text: TextSpan(
+          text: item["text"],
+          style: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+            color: item["color"],
+          ),
+        ),
+        textDirection: ui.TextDirection.ltr,
+      );
+
+      tp.layout();
+      tp.paint(canvas, Offset(rightX, legendY));
+
+      legendY += tp.height + 10;
+    }
+
+    return startY + 10;
   }
 
   void drawVerticalLabels(ui.Canvas canvas) {
@@ -465,7 +507,8 @@ class CallDashboardViewScreen extends StatelessWidget {
           )
         ],
       ));
-    } else {
+    }
+    else {
       double chartWidth = max(MediaQuery.of(context).size.width, _calculateChartWidth());
       final maxY = _calculateMaxY();
       final interval = _calculateInterval(maxY);
@@ -486,11 +529,9 @@ class CallDashboardViewScreen extends StatelessWidget {
                   barGroups: _createBarGroups(),
                   barTouchData: BarTouchData(
                     enabled: true,
-                    touchCallback:
-                        (FlTouchEvent event, BarTouchResponse? response) {
-                      if (!event.isInterestedForInteractions ||
-                          response == null ||
-                          response.spot == null) return;
+                    touchCallback: (FlTouchEvent event, BarTouchResponse? response) {
+                      if (!event.isInterestedForInteractions || response == null || response.spot == null)
+                        return;
                       final rodIndex = response.spot!.touchedRodDataIndex;
                       final groupIndex = response.spot!.touchedBarGroupIndex;
                       String? record = dashboard_view_Controller.callDashboardRecordList[groupIndex].geoValue == null
@@ -784,9 +825,7 @@ class CallDashboardViewScreen extends StatelessWidget {
   double _calculateChartWidth() {
     final count = dashboard_view_Controller.callDashboardRecordList.length;
     if (count <= 2)
-      return MediaQueryData.fromWindow(WidgetsBinding.instance.window)
-          .size
-          .width;
+      return MediaQueryData.fromWindow(WidgetsBinding.instance.window).size.width;
     final groupWidth = 3 * 15 + 15 * 2; // 3 bars × bar width + 2 × bar space
     return count * groupWidth + 100; // extra padding
   }

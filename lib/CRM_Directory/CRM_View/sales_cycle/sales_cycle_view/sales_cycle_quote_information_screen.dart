@@ -611,7 +611,7 @@ class QuoteInformationScreen extends StatelessWidget {
                         Obx(() {
                           final bool showGM =
                               saleCycleController.isAdminWritePermission == "1" ||
-                                  saleCycleController.userType.toLowerCase() == "gm";
+                                  saleCycleController.userType.toLowerCase() == "gm"||saleCycleController.GmApproveDetail.value;
                           final bool showbh=saleCycleController.userType?.toLowerCase()=='bh' ||
                               saleCycleController.userType?.toLowerCase()=='ch'||
                               saleCycleController.userType?.toLowerCase()=='gm'||
@@ -716,7 +716,6 @@ class QuoteInformationScreen extends StatelessWidget {
                       height: 1,
                       color: AllColors.primaryDark1,
                     )),
-
                   ]),
                 ),
               ),
@@ -974,7 +973,8 @@ class QuoteInformationScreen extends StatelessWidget {
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
                                   Visibility(
-                                      visible: saleCycleController.userType?.toLowerCase()=='gm' || saleCycleController.isAdminWritePermission=="1",
+                                      visible: saleCycleController.userType?.toLowerCase()=='gm' || saleCycleController.isAdminWritePermission=="1" ||
+                                          saleCycleController.GmApproveDetail.value,
                                       child: Column(
                                         children: [
                                           bindData( "Gm % : ",saleCycleController.quoteLinedata[index].gmDiscountPer.toString(),context),
@@ -1007,10 +1007,6 @@ class QuoteInformationScreen extends StatelessWidget {
                               ),
                             );
                           }),
-
-
-
-
                           Obx((){
                            return Row(
                               mainAxisAlignment: MainAxisAlignment.end,
@@ -1324,8 +1320,8 @@ class QuoteInformationScreen extends StatelessWidget {
 
 
                   _buildLabelWithValue(
-                    label: "Product Category",
-                    value: saleCycleController.quoteHeaderdata[0].productCategory ?? "",
+                    label: "P. Product Category",
+                    value: saleCycleController.quoteHeaderdata[0].parentCategoryCode ?? "",
                     color: AllColors.textColor,
                     context: context
                   ),
@@ -1597,18 +1593,18 @@ class QuoteInformationScreen extends StatelessWidget {
           ),
         ),
 
-        if (label == "Product Category" &&
+        if (label == "P. Product Category" &&
             saleCycleController.quoteHeaderdata[0].quoteStatus?.toLowerCase() ==
                 "draft" && saleCycleController.isHeadofficePermission !=
             "1")
           InkWell(
             onTap: () {
-              saleCycleController.itemCategorySelectedlist.clear();
+              /*saleCycleController.itemCategorySelectedlist.clear();
               for (var item in saleCycleController.productCategoryList) {
                 if (item.isSelected == 1) {
                   saleCycleController.itemCategorySelectedlist.add(item);
                 }
-              }
+              }*/
               saleCycleController.productCategoryController.value.clear();
               showProductCatDialog(context);
             },
@@ -1643,10 +1639,8 @@ class QuoteInformationScreen extends StatelessWidget {
               child: Wrap(
                 children: [
                   bindItemCategoryDropDown(context),
-                  SizedBox(
-                    height: 65,
-                  ),
-                  Obx(() {
+                  const SizedBox(height: 65,),
+                 /* Obx(() {
                     return Visibility(
                       visible:
                       saleCycleController.itemCategorySelectedlist.length > 0 ? true : false,
@@ -1662,10 +1656,8 @@ class QuoteInformationScreen extends StatelessWidget {
                         }).toList(),
                       ),
                     );
-                  }),
-                  SizedBox(
-                    height: 15,
-                  ),
+                  }),*/
+                  //const SizedBox(height: 15,),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
@@ -1676,7 +1668,8 @@ class QuoteInformationScreen extends StatelessWidget {
                           ),
                         ),
                         onPressed: () {
-                          saleCycleController.ProductCatCreateSaleCycleInfApiHit(saleCycleController.quoteHeaderdata[0].quoteId.toString());
+                          //saleCycleController.ProductCatCreateSaleCycleInfApiHit(saleCycleController.quoteHeaderdata[0].quoteId.toString());
+                          saleCycleController.QuoteHeaderParentCategoryUpdate(saleCycleController.quoteHeaderdata[0].quoteId.toString());
                           Navigator.pop(context);
                         },
                         child: Container(
@@ -1724,14 +1717,14 @@ class QuoteInformationScreen extends StatelessWidget {
             _displayItemCatMasterForOption(selection).toString();
         print(
             'Controller.....${saleCycleController.productCategoryController.value.text}');
-        if (!saleCycleController.itemCategorySelectedlist.contains(selection)) {
+       /* if (!saleCycleController.itemCategorySelectedlist.contains(selection)) {
           //TaskMaster_page_controller.Item_Category_code_list.add(selection.categoryCode!);
           saleCycleController.itemCategorySelectedlist.add(selection);
           //Utils.showToastification('Success', 'Add Successfully');
         } else {
           Utils.showErrorToastification('Error', 'Already Selected');
         }
-        saleCycleController.productCategoryController.value.clear();
+        saleCycleController.productCategoryController.value.clear();*/
         // TaskMaster_page_controller.AccountOwner = selection.loginEmailId!;
       },
       fieldViewBuilder: (BuildContext context, TextEditingController controller,
