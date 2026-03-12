@@ -26,7 +26,6 @@ class UpdateQuoteHeaderScreen extends StatelessWidget{
     return WillPopScope(
       onWillPop: () async {
         Get.toNamed(RoutesName.quoteInformationScreen);
-
         return false;
       },
       child: Scaffold(

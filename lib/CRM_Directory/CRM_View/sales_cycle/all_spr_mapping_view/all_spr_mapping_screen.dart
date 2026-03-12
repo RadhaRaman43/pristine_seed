@@ -230,7 +230,8 @@ class AllSprMappingScreen extends StatelessWidget{
               _buildLabelWithValue(label: "BTP: ", value:  "₹ ${pendingDraftQuoteController.PendingDraftQuoteList[position].branchTransferPrice.toString() ?? ""}",color:AllColors.textColor),
 
               _buildLabelWithValue(label: "Approved Price Per Unit: ", value:  "₹ ${pendingDraftQuoteController.PendingDraftQuoteList[position].approvedAmountPerUnit.toString() ?? ""}",color:AllColors.textColor),
-              _buildLabelWithValue(label: "Sales Credit Per: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].salesCredit.toString() ?? "",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Sales Credit"
+                  " Per: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].salesCredit.toString() ?? "",color:AllColors.textColor),
               _buildLabelWithValue(label: "BM Per: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].bmDiscountPer.toString() ?? "",color:AllColors.textColor),
               _buildLabelWithValue(label: "GM Per: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].gmDiscountPer.toString() ?? "",color:AllColors.textColor),
               _buildLabelWithValue(label: "GM Absolute: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].gmTotalDiscountAmount.toString() ?? "",color:AllColors.textColor),

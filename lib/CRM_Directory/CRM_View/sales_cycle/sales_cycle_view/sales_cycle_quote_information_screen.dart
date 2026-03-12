@@ -72,11 +72,11 @@ class QuoteInformationScreen extends StatelessWidget {
         else if(saleCycleController.quoteApprovalPage.value=="FromAllSPRMapping"){
           pendingDraftQuoteController.clearAllFieldOfQuoteFilter();
           pendingDraftQuoteController.pageNumberForQuote =0;
-          pendingDraftQuoteController.getPendingDraftQuoteList(pendingDraftQuoteController.pageNumberForQuote, "ALLSPRMAPPING");
+          //pendingDraftQuoteController.getPendingDraftQuoteList(pendingDraftQuoteController.pageNumberForQuote, "ALLSPRMAPPING");
+          print("FromAllSPRMapping.....");
           Get.offNamed(RoutesName.allSPRMappingScreen);
         }
-        else if (saleCycleController.quoteApprovalPage.value ==
-            "approvedQuotationScreen") {
+        else if (saleCycleController.quoteApprovalPage.value == "approvedQuotationScreen") {
           saleCycleController.pageNumberForQuote = 0;
           saleCycleController.getQuoteHeaderData(
               saleCycleController.pageNumberForQuote,
@@ -86,7 +86,8 @@ class QuoteInformationScreen extends StatelessWidget {
         } else if (saleCycleController.quoteApprovalPage.value ==
             "QuoteDashboard") {
           Get.toNamed(RoutesName.AccountDashboardDataQuotation_Screen);
-        } else {
+        }
+        else {
           saleCycleController.clearAllFieldOfQuoteFilter();
           saleCycleController.clearAllFieldOfFilter();
           saleCycleController.pageNumber = 0;

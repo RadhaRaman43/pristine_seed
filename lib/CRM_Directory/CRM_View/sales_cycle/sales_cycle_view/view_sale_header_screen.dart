@@ -6606,8 +6606,27 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                     padding: const EdgeInsets.only(left: 8.0, right: 8.0),
                     child: Column(
                       children: [
-                       /* bindData(fixText: "Infra Lead : ",data:  saleCycleList[0].isInfraLead==1?'Yes':'No',color: Colors.blueAccent,
-                            onTap: ,decoration: TextDecoration.underline,decorationStyle:TextDecorationStyle.wavy ),*/
+                        bindData(fixText: "Infra Lead : ",data:  saleCycleList[0].isInfraLead==1?'Yes':'No',color: Colors.blueAccent,
+                            onTap: (){
+                              print("Length${TaskMaster_page_controller.userGeoHierarchyy.length}");
+                              TaskMaster_page_controller.infraFlag = 'FromDetailsPage';
+                              for(int i=0; i<TaskMaster_page_controller.userGeoHierarchyy.length;i++){
+                                if(TaskMaster_page_controller.userGeoHierarchyy[i].myLevel==1){
+                                  TaskMaster_page_controller.userRegionUpdateController.text=TaskMaster_page_controller.userGeoHierarchyy[i-1].geoValue!;
+                                  TaskMaster_page_controller.userClusterUpdateController.text=TaskMaster_page_controller.userGeoHierarchyy[i-2].geoValue!;
+                                }
+                              }
+                              if(TaskMaster_page_controller.Task_Master_list[0].isInfraLead==1){
+                                TaskMaster_page_controller.isInfraYes.value = true;
+                              }else{
+                                TaskMaster_page_controller.isInfraYes.value = false;
+                              }
+                              TaskMaster_page_controller.viewAllDetailsOfTaskUpdateInfra();
+                              //TaskMaster_page_controller.isInfraLeadUpdateController.value.text=TaskMaster_page_controller.isInfraLead.value.text;
+                              TaskMaster_page_controller.getItemCategoryMstApiHit(TaskMaster_page_controller.Task_Master_list[0].taskId,
+                                  TaskMaster_page_controller.Task_Master_list[0].infraLeadNo,"");
+                              Get.toNamed(RoutesName.updateTaskMstInfraScreen);
+                            },decoration: TextDecoration.underline,decorationStyle:TextDecorationStyle.wavy ),
                         const SizedBox(height: 3,),
                         bindData(fixText: "User Region : ",data:  saleCycleList[0].userRegion ?? ""),
                         const SizedBox(height: 3,),

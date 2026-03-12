@@ -283,7 +283,6 @@ class PendingDraftQuoteVm extends GetxController{
           "page_number": pageNumberForQuote
       };
 
-
       _api.QuoteHeaderGetNewApiHit(data, sessionManagement).then((onValue){
         final jsonResponse = json.decode(onValue);
         print(onValue);
@@ -356,7 +355,7 @@ class PendingDraftQuoteVm extends GetxController{
     SelectedCluster_list.value = [];
     SelectedRegion_list.value = [];
     //RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join(',');
-    clusterName_controller.value.text = clusterGetByEmailList.map((e) => e.geoValue).join(',');
+    clusterName_controller.value.text = clusterGetByEmailList.map((e) => e.geoValue).join('|');
     getRegionsWithClusterFilterGetByEmail();
 
 
