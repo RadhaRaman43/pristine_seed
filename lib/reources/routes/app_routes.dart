@@ -12,6 +12,7 @@ import 'package:navigation_drawer_flutter/view/check_in_approval/check_in_approv
 import 'package:navigation_drawer_flutter/view/forget_password/forget_password_screen.dart';
 import 'package:navigation_drawer_flutter/view/home_view/home_screen.dart';
 import 'package:navigation_drawer_flutter/view/notification_view/notification_screen.dart';
+import 'package:navigation_drawer_flutter/view/service_managment_view_directory/preventive_view/addNewPreventiveCalenderScreen.dart';
 import 'package:navigation_drawer_flutter/view/show_route/show_route.dart';
 import 'package:navigation_drawer_flutter/view/splash_view/splash_screen.dart';
 import 'package:navigation_drawer_flutter/view/user_expense/create_expense_screen.dart';
@@ -243,6 +244,16 @@ class AppRoutes{
         transitionDuration: Duration(microseconds: 180),
         transition: Transition.rightToLeftWithFade
     ),
+
+    GetPage(name: RoutesName.add_new_preventive_calender_screen,
+        page: ()=>AddNewPreventiveCalenderScreen(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
+
+
+
+
 
     GetPage(name: RoutesName.notofication_screen,
         page: ()=>NotificationScreen(),

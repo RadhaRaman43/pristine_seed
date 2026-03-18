@@ -26,6 +26,7 @@ class RoutesName{
   static const preventive_markvisit_screen="/preventive_mark_visit.dart";
   static const preventive_Indent_header_view_screen="/preventive_indent_header_view_screen.dart";
   static const create_preventive_calender_view_screen="/CreatePreventiveCalenderScreen.dart";
+  static const add_new_preventive_calender_screen="/addNewPreventiveCalenderScreen.dart";
 
   //todo TaDa Screen........
   static const checkIn_screen="/check_in_screen.dart";
