@@ -77,6 +77,7 @@ import '../../CRM_Directory/CRM_View/sales_cycle/sales_cycle_view/sales_cycle_sc
 import '../../CRM_Directory/CRM_View/sales_cycle/sales_cycle_view/sales_product_list.dart';
 import '../../CRM_Directory/CRM_View/sales_cycle/sales_cycle_view/update_bussiness_term_page.dart';
 import '../../CRM_Directory/CRM_View/sales_cycle/sales_cycle_view/update_quote_line_data_screen.dart';
+import '../../CRM_Directory/CRM_View/sales_cycle/sales_cycle_view/update_sale_infra_detail_screen.dart';
 import '../../CRM_Directory/CRM_View/sales_cycle/sales_cycle_view/view_sale_header_screen.dart';
 import '../../view/check_in_approval/check_in_approval_header_view_screen.dart';
 import '../../view/check_in_view/check_in_screen.dart';
@@ -670,6 +671,11 @@ class AppRoutes{
         transition: Transition.rightToLeftWithFade
     ),
 
+    GetPage(name: RoutesName.update_sale_infra_detail_screen,
+        page: ()=>UpdateSaleInfraDetailScreen(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
 
     GetPage(name: RoutesName.salesAdviseCreateScreen,
         page: ()=>SalesAdviseCreateScreen(),

@@ -111,8 +111,7 @@ class BusinessTourPlanDeatil extends StatelessWidget {
                       ),
                     );
                   }),
-                  Obx((){
-
+                 /* Obx((){
                     return Visibility(
                         visible:((businessTourPlanController.BusinessTourPlanDetails_list[0].reportingManager==businessTourPlanController.email ||
                             businessTourPlanController.isAdminWritePermission=='1')
@@ -140,10 +139,75 @@ class BusinessTourPlanDeatil extends StatelessWidget {
                         },
                       )
                     );
-                  })
+                  }),*/
 
+                  Obx(() {
+                    bool showEdit =
+                    ((businessTourPlanController.BusinessTourPlanDetails_list[0].reportingManager ==
+                        businessTourPlanController.email ||
+                        businessTourPlanController.isAdminWritePermission == '1') &&
+                        businessTourPlanController.isHeadOfficePermission != '1' &&
+                        (businessTourPlanController.isSendForApproval.value == "SendForApproval" ||
+                            businessTourPlanController.isSendForApproval.value == "TourDetail") &&
+                        businessTourPlanController.BusinessTourPlanDetails_list[0].status
+                            ?.toLowerCase()
+                            .trim() ==
+                            "pending for approval");
+
+                    bool showDownload =
+                        businessTourPlanController.isHeadOfficePermission != "1" &&
+                            businessTourPlanController.BusinessTourHourLines.isNotEmpty &&
+                            businessTourPlanController.BusinessTourPlanDetails_list[0].status != "PENDING";
+
+                    return Visibility(
+                      visible: showEdit || showDownload,
+                      child: PopupMenuButton<String>(
+                        icon: Icon(Icons.more_vert, color: AllColors.whiteColor),
+                        onSelected: (value) {
+                          if (value == "edit") {
+                            showApprovRejectDialog(
+                                context,
+                                businessTourPlanController.BusinessTourPlanDetails_list[0].tourId ?? "");
+                          }
+
+                          if (value == "download") {
+                            businessTourPlanController.businessPlanReportDownload(
+                                businessTourPlanController.BusinessTourPlanDetails_list[0].tourId ?? "");
+                          }
+                        },
+                        itemBuilder: (context) => [
+
+                          if (showEdit)
+                            PopupMenuItem(
+                              value: "edit",
+                              child: Row(
+                                children: [
+                                  Icon(Icons.edit, size: 18,color: Colors.black),
+                                  SizedBox(width: 10),
+                                  Text("Approve / Reject"),
+                                ],
+                              ),
+                            ),
+
+                          if (showDownload)
+                            PopupMenuItem(
+                              value: "download",
+                              child: Row(
+                                children: [
+                                  Icon(Icons.download_for_offline_sharp, size: 18,color: Colors.black,),
+                                  SizedBox(width: 10),
+                                  Text("Download Report"),
+                                ],
+                              ),
+                            ),
+
+                        ],
+                      ),
+                    );
+                  })
                 ],
-              )),
+              ),
+          ),
           drawer: CustomDrawer(),
           body: Obx((){
             if(businessTourPlanController.loading.value){

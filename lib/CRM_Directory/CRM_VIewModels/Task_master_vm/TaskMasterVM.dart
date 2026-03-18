@@ -1396,6 +1396,7 @@ class Taskmastervm extends GetxController{
                             }else if(flag == 'FromDetailsPage'){
                                 Get.toNamed(RoutesName.taskMasterDetails_screen);
                             }
+
                             clearInfraUpdateController();
                         } else {
                           loading.value = false;
@@ -1411,6 +1412,7 @@ class Taskmastervm extends GetxController{
                 loading.value = false;
             }*/
         }
+
 
     getEmpMstEmailByApi() async{
       try{
@@ -1543,6 +1545,8 @@ class Taskmastervm extends GetxController{
         dateOfProposalSubmissionController.text=dateOfProposalSubmission??"";
         projectValueUpdateController.text=Task_Master_list[0].projectValue.toString();
     }
+
+
 
     void clearCreateTaskController(){
         filterTask_Id_controller.clear();

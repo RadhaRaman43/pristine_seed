@@ -221,6 +221,7 @@ class AppUrl {
      static const String TaskDSARMstCreate = "$BASE_URL/api/CRM/Task/TaskDSARMstCreate";
      static const String ItemCategoryMstGetByTaskId = "$BASE_URL/api/CRM/Task/ItemCategoryMstGetByTaskId";
      static const String ItemCategoryMstGetByDocument = "$BASE_URL/api/CRM/Task/ItemCategoryMstGetByDocument";
+     static const String ParentItemCategoryMstGet = "$BASE_URL/api/ItemMaster/ParentItemCategoryMstGet";
      static const String SalesProductCategoryCreate = "$BASE_URL/api/CRM/Task/SalesProductCategoryCreate";
      static const String taskMstInfraUpdate = "$BASE_URL/api/CRM/Task/TaskMstInfraUpdate";
      static const String ItemCategoryMstGet = "$BASE_URL/api/ItemMaster/ItemCategoryMstGet";
@@ -293,6 +294,7 @@ class AppUrl {
      static const String SalesCycleMstGetApprovalList="$BASE_URL/api/CRM/SalesCycle/SalesCycleMstGetApprovalList";
       static const String SalesCycleMstDelete="$BASE_URL/api/CRM/SalesCycle/SalesCycleMstDelete";
       static const String QuoteHeaderUpdateMarkWon="$BASE_URL/api/CRM/Quote/QuoteHeaderUpdateMarkWon";
+      static const String SalesCycleMstInfraUpdate="$BASE_URL/api/CRM/SalesCycle/SalesCycleMstInfraUpdate";
 
 
    //todo SalesAdvise

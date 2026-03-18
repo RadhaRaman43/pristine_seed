@@ -74,6 +74,7 @@ class FunnelDashboardVm extends GetxController{
   var CustomerName_controller=TextEditingController().obs;
   var filter_created_on_cont=TextEditingController().obs;
   var filter_created_on_star_to_cont=TextEditingController().obs;
+  var filter_sale_cycle_id_cont=TextEditingController().obs;
 
   var CustomerNameApi;
   var ProductCategoryForApi;
@@ -277,6 +278,7 @@ class FunnelDashboardVm extends GetxController{
         "filter_stage_name":(StageNameForApi.isEmpty || StageNameForApi.toLowerCase()=='all')?SelectedTabForApi:StageNameForApi,
         "filter_product_category": ProductCategoryForApi.isEmpty?"":ProductCategoryForApi,
         "filter_customer_name": CustomerNameApi.isEmpty?"":CustomerNameApi,
+        "filter_sales_cycle_id": filter_sale_cycle_id_cont.value.text.isEmpty?"":filter_sale_cycle_id_cont.value.text,
         "rowsPerPage": rowsPerPage,
         "pageNumber": pageNumber
       };
@@ -716,6 +718,7 @@ class FunnelDashboardVm extends GetxController{
     CustomerNameApi="";
     SelectedTabForApi = '';
 
+    filter_sale_cycle_id_cont.value.clear();
     filterCustomDateController.value.clear();
     AccountOwner_controller.value.clear();
     typeOfCall_controller.value.clear();
@@ -745,6 +748,7 @@ class FunnelDashboardVm extends GetxController{
 
   void SaveFilterData() async{
     await sessionManagement.saveFunnelDashboardData({
+      "filter_sale_cycle_id_cont": filter_sale_cycle_id_cont.value.text,
       "start_date": formattedStartDate.value,
       "end_date": formattedEndDate.value,
       "filter_custom_date": filterCustomDateController.value.text,
@@ -768,6 +772,7 @@ class FunnelDashboardVm extends GetxController{
 
       if(getFilterData.isNotEmpty){
         filterDataChecker.value='1';
+        filter_sale_cycle_id_cont.value.text=getFilterData["filter_sale_cycle_id_cont"]??"";
         filterCustomDateController.value.text=getFilterData["filter_custom_date"]??"";
         StageName_controller.value.text=getFilterData["filter_stage_name"]??"";
         QuoteAccepted_controller.value.text=getFilterData["filter_quote_accepted"]??"";

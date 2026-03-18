@@ -137,6 +137,7 @@ class RoutesName{
   static const allQuoteLineItemScreen="/All_Quote_Line_Item_Screen";
   static const salesCycleProduct="/sales_product_list";
   static const updateQuoteHeaderScreen="/update_quote_header_screen";
+  static const update_sale_infra_detail_screen="/update_sale_infra_detail_screen";
 
   //todo business tour plan
   static const BusinessTourPlanScreen="/bussiness_tour_plan_screen";

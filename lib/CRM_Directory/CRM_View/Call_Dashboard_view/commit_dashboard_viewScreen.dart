@@ -123,9 +123,9 @@ class CommitDashboardViewscreen extends StatelessWidget{
                                   Visibility(
                                       visible: dashboard_view_Controller.userType?.toLowerCase() != 'bh',
                                       child: _buildActionChip("Cluster")),
-                                  SizedBox(width: 8),
+                                  const SizedBox(width: 8),
                                   _buildActionChip("Region"),
-                                  SizedBox(width: 8),
+                                  const SizedBox(width: 8),
                                   _buildActionChip("Employee"),
                                 ],
                               ),
@@ -230,7 +230,7 @@ class CommitDashboardViewscreen extends StatelessWidget{
                                     ),
                                   ),
                                 ),
-                                SizedBox(width: 10,),
+                                const SizedBox(width: 10,),
                                 Text(
                                   '(' +dashboard_view_Controller.total_rows.value.toString()+')',
                                   style: GoogleFonts.poppins(
@@ -470,7 +470,7 @@ class CommitDashboardViewscreen extends StatelessWidget{
                     fontSize: AllFontSize.sisxteen,
                     fontWeight: FontWeight.w700),
               ),
-              SizedBox(height: 20,)
+              const SizedBox(height: 20,)
             ],
           )
       );
@@ -731,7 +731,7 @@ class CommitDashboardViewscreen extends StatelessWidget{
         ),*/
       );
     } else {
-      return SizedBox.shrink();
+      return  const SizedBox.shrink();
     }
   }
 
@@ -981,7 +981,7 @@ class CommitDashboardViewscreen extends StatelessWidget{
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Icon(Icons.shield_moon_rounded, color: AllColors.primaryDark1,),
-                        SizedBox(width: 5,),
+                        const SizedBox(width: 5,),
                         Text(
                           " Filter ",
                           style: GoogleFonts.poppins(
@@ -1019,9 +1019,9 @@ class CommitDashboardViewscreen extends StatelessWidget{
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              SizedBox(height: 5,),
+                              const SizedBox(height: 5,),
                               RadioGroupDateRangeFilter(context),
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
 
                             ],
                           ),
@@ -1129,7 +1129,7 @@ class CommitDashboardViewscreen extends StatelessWidget{
       width: double.infinity,
       child: Column(
         children: [
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           Container(
             //margin: EdgeInsets.only(left: 15.0, right: 15.0),
             decoration: BoxDecoration(
@@ -1278,23 +1278,25 @@ class CommitDashboardViewscreen extends StatelessWidget{
               ),
             ),
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           bindSalesStageStatus(context),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
+          bindData(context,'Sale Cycle Id', dashboard_view_Controller.filter_sale_cycle_id_cont.value),
+          const SizedBox(height: 10),
           bindQuoteSubmitted(context),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           bindCustomerNameFilter(context),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           bindProductCategoryFilter(context),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           bindIsCommitDropDown(context),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           bindClusterNameFilter(context),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           bindRegionNameFilter(context),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           bindAccountOwnerFilter(context),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           bindFilterCreatedOn(context),
 
 
@@ -1305,7 +1307,35 @@ class CommitDashboardViewscreen extends StatelessWidget{
 
     );
   }
-
+  bindData(BuildContext context, String labelText, TextEditingController controller,) {
+    return TextField(
+      controller: controller,
+      decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+          labelText: labelText,
+          hintText: labelText,
+          hintStyle: GoogleFonts.poppins(
+              color: AllColors.lightblackColor,
+              fontWeight: FontWeight.w300,
+              fontSize: AllFontSize.ten),
+          labelStyle: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontWeight: FontWeight.w500,
+              fontSize: AllFontSize.sisxteen),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          )
+      ),
+      cursorColor: AllColors.primaryDark1,
+      onChanged: (value) {
+        // Handle the text field value changes if needed
+      },
+    );
+  }
   filterWithCustomDate(BuildContext context) {
     return IgnorePointer(
       ignoring: dashboard_view_Controller.character.value != "Custom",
@@ -1603,9 +1633,7 @@ class CommitDashboardViewscreen extends StatelessWidget{
     );
   }
 
-  void _showMultiSelectDialog(BuildContext context,
-      String dialogHeader,
-      Rx<TextEditingController> textController, RxList<String> itemList,String defaultValueBind ) {
+  void _showMultiSelectDialog(BuildContext context, String dialogHeader, Rx<TextEditingController> textController, RxList<String> itemList,String defaultValueBind ) {
     final List<String> allItems =
         itemList.value;
 

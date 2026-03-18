@@ -129,7 +129,7 @@ class EmpMarkLeaveRequestScreen extends StatelessWidget{
                               },
                             );
                           }),
-                          SizedBox(width: 8),
+                          const SizedBox(width: 8),
                           Obx(() {
                             return ActionChip(
                               elevation: 2,
@@ -159,7 +159,7 @@ class EmpMarkLeaveRequestScreen extends StatelessWidget{
                               },
                             );
                           }),
-                          SizedBox(width: 8), // optional spacing between chips
+                          const SizedBox(width: 8), // optional spacing between chips
                           Obx(() {
                             return ActionChip(
                               elevation: 2,
@@ -189,7 +189,37 @@ class EmpMarkLeaveRequestScreen extends StatelessWidget{
                               },
                             );
                           }),
-                          SizedBox(width: 8),
+                          const SizedBox(width: 8),
+                          Obx(() {
+                            return ActionChip(
+                              elevation: 2,
+                              padding: EdgeInsets.symmetric(horizontal: 35, vertical: 2),
+                              backgroundColor:
+                              employeeMarkLeaveController.filterStatus.value == 'All'
+                                  ? AllColors.primaryDark1
+                                  : AllColors.grayColor,
+                              shadowColor: Colors.black,
+                              shape: StadiumBorder(
+                                side: BorderSide(color: AllColors.grayColor),
+                              ),
+                              label: Text(
+                                'All',
+                                style: GoogleFonts.poppins(
+                                  color: employeeMarkLeaveController.filterStatus.value == 'All'
+                                      ? AllColors.whiteColor
+                                      : AllColors.primaryDark1,
+                                  fontSize: AllFontSize.fourtine,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              onPressed: () {
+                                employeeMarkLeaveController.filterStatus.value = 'All';
+                                employeeMarkLeaveController.pageNumber=0;
+                                employeeMarkLeaveController.getEmployeeLeaveData(employeeMarkLeaveController.filterStatus.value,employeeMarkLeaveController.pageNumber);
+                              },
+                            );
+                          }),
+                          const SizedBox(width: 8),
                         ],
                       ),
                     ),
@@ -248,9 +278,6 @@ class EmpMarkLeaveRequestScreen extends StatelessWidget{
       return Center(child: Image.asset("assests/images/no_data_remove.png"));
     }
   }
-
-
-
 
 
   BindEmployeeList(BuildContext context, int index) {

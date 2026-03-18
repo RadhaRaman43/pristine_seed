@@ -72,6 +72,7 @@ class CommitDashboardVm extends GetxController{
   var CustomerName_controller=TextEditingController().obs;
   var filter_created_on_cont=TextEditingController().obs;
   var filter_created_on_star_to_cont=TextEditingController().obs;
+  var filter_sale_cycle_id_cont=TextEditingController().obs;
 
 
   var CustomerNameApi;
@@ -318,10 +319,10 @@ class CommitDashboardVm extends GetxController{
         "filter_stage_name": (StageNameForApi.isEmpty || StageNameForApi.toLowerCase()=='all')?"":StageNameForApi,
         "filter_product_category": ProductCategoryForApi.isEmpty?"":ProductCategoryForApi,
         "filter_customer_name": CustomerNameApi.isEmpty?"":CustomerNameApi,
+        "filter_sales_cycle_id": filter_sale_cycle_id_cont.value.text.isEmpty?"":filter_sale_cycle_id_cont.value.text,
         "rowsPerPage": rowsPerPage,
         "pageNumber": pageNumber
       };
-
 
       _api.commitDashboardUserWiseDataApiHit(data, sessionManagement).then((onValue){
         final jsonResponse = json.decode(onValue);
@@ -742,6 +743,7 @@ class CommitDashboardVm extends GetxController{
     filterCustomDateController.value.clear();
     AccountOwner_controller.value.clear();
     typeOfCall_controller.value.clear();
+    filter_sale_cycle_id_cont.value.clear();
     ProductCategory_controller.value.clear();
     QuoteAccepted_controller.value.text = "OPEN";
     IsCommit_controller.value.text = 'Yes';
@@ -770,6 +772,7 @@ class CommitDashboardVm extends GetxController{
 
   void SaveFilterData() async{
     await sessionManagement.saveCommitDashboardData({
+      "filter_sale_cycle_id_cont": filter_sale_cycle_id_cont.value.text,
       "start_date": formattedStartDate.value,
       "end_date": formattedEndDate.value,
       "filter_custom_date": filterCustomDateController.value.text,
@@ -794,6 +797,7 @@ class CommitDashboardVm extends GetxController{
 
     if(getFilterData.isNotEmpty){
       filterDataChecker.value='1';
+      filter_sale_cycle_id_cont.value.text=getFilterData["filter_sale_cycle_id_cont"]??"";
       filterCustomDateController.value.text=getFilterData["filter_custom_date"]??"";
       StageName_controller.value.text=getFilterData["filter_stage_name"]??"";
       QuoteAccepted_controller.value.text=getFilterData["filter_quote_accepted"]??"";

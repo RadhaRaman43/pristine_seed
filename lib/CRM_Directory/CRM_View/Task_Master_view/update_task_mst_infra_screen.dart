@@ -83,8 +83,10 @@ class UpdateTaskMstInfraScreen extends StatelessWidget{
           //text: "${TaskMaster_page_controller.Task_Master_list[0].isInfraLead==1?"Update":"Add"} Infra Details",
           text: "Submit",
           press: (){
-            TaskMaster_page_controller.gettaskMstInfraUpdate(TaskMaster_page_controller.Task_Master_list[0].infraLeadNo??"", TaskMaster_page_controller.infraFlag);
-          },
+
+              TaskMaster_page_controller.gettaskMstInfraUpdate(TaskMaster_page_controller.Task_Master_list[0].infraLeadNo??"", TaskMaster_page_controller.infraFlag);
+
+            },
         ),
 
       ),
@@ -97,40 +99,41 @@ class UpdateTaskMstInfraScreen extends StatelessWidget{
             children: [
               SizedBox(height: 10,),
               Container(
-                margin: EdgeInsets.only(left: 15.0, right: 15.0),
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: AllColors.grayColor, // Set the border color here
-                    width: 1.0, // Adjust the border width if necessary
-                  ),
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-                child: InputDecorator(
-                  decoration: InputDecoration(
-                    labelText: 'New Infrastructure Lead',
-                    labelStyle: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontWeight: FontWeight.w700,
-                        fontSize: AllFontSize.sisxteen),
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide(
-
-                      ),
-                      borderRadius: BorderRadius.circular(10.0),
+                  margin: EdgeInsets.only(left: 15.0, right: 15.0),
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: AllColors.grayColor, // Set the border color here
+                      width: 1.0, // Adjust the border width if necessary
                     ),
+                    borderRadius: BorderRadius.circular(10.0),
                   ),
-                  child: Column(
-                    children: [
-                      bindIsInfraLead(context),
-                      SizedBox(height: 10,),
-                      binduserRegion(context),
-                      SizedBox(height: 10,),
-                      binduserCluster(context),
-                    ],
-                  ),
-                )
+                  child: InputDecorator(
+                    decoration: InputDecoration(
+                      labelText: 'New Infrastructure Lead',
+                      labelStyle: GoogleFonts.poppins(
+                          color: AllColors.primaryDark1,
+                          fontWeight: FontWeight.w700,
+                          fontSize: AllFontSize.sisxteen),
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(
+
+                        ),
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                    ),
+                    child: Column(
+                      children: [
+                        bindIsInfraLead(context),
+                        const SizedBox(height: 10,),
+                        bindInputData(context,"User Region", TaskMaster_page_controller.userRegionUpdateController,true ),
+                        const SizedBox(height: 10,),
+                        bindInputData(context,"User Cluster",TaskMaster_page_controller.userClusterUpdateController,true ),
+
+                      ],
+                    ),
+                  )
               ),
-              SizedBox(height: 15,),
+              const SizedBox(height: 15,),
 
               Obx((){
                 return Visibility(
@@ -163,11 +166,11 @@ class UpdateTaskMstInfraScreen extends StatelessWidget{
                               ),
                               child: Column(
                                 children: [
-                                  bindNameOfInfraDepartment(context),
-                                  SizedBox(height: 10,),
-                                  bindExcecutiveEngineer(context),
-                                  SizedBox(height: 10,),
-                                  bindAssiEngineer(context)
+                                  bindInputData(context,'Name Of Infra Department',TaskMaster_page_controller.nameofInfradepUpdateController,false ),
+                                  const SizedBox(height: 10,),
+                                  bindInputData(context,'Executive Engineer',TaskMaster_page_controller.executiveEngineerUpdateController,false ),
+                                  const SizedBox(height: 10,),
+                                  bindInputData(context,'Assistant Engineer',TaskMaster_page_controller.assistantEngineerController,false ),
                                 ],
                               ),
                             )
@@ -198,25 +201,25 @@ class UpdateTaskMstInfraScreen extends StatelessWidget{
                               ),
                               child: Column(
                                 children: [
-                                  bindNameOfProject(context),
-                                  SizedBox(height: 10,),
-                                  bindLocation(context),
-                                  SizedBox(height: 10,),
-                                  bindTimePeriodToComplete(context),
-                                  SizedBox(height: 10,),
+                                  bindInputData(context,'Name Of Project',TaskMaster_page_controller.nameOfProjectController,false ),
+                                  const SizedBox(height: 10,),
+                                  bindInputData(context,'Location',TaskMaster_page_controller.locationController,false ),
+                                  const SizedBox(height: 10,),
+                                  bindInputData(context,'Time Period To Complete Civil Work',TaskMaster_page_controller.timePeriodToCompleteWorkController,false ),
+                                  const SizedBox(height: 10,),
                                   bindExpectedDateCompletion(context),
-                                  SizedBox(height: 10,),
-                                  bindProjectValue(context),
-                                  SizedBox(height: 10,),
-                                  bindExpectedRevene(context),
-                                  SizedBox(height: 10,),
+                                  const SizedBox(height: 10,),
+                                  bindInputData(context,'Project Value',TaskMaster_page_controller.projectValueUpdateController,false ),
+                                  const SizedBox(height: 10,),
+                                  bindInputData(context,'Expected Revenue From Furniture etc',TaskMaster_page_controller.expectedRevenueUpdateController,false ),
+                                  const SizedBox(height: 10,),
                                   bindFurnitureIncludedInCivil(context),
                                 ],
                               ),
                             )
                         ),
 
-                        SizedBox(height: 15,),
+                        const SizedBox(height: 15,),
                         Container(
                             margin: EdgeInsets.only(left: 15.0, right: 15.0),
                             decoration: BoxDecoration(
@@ -242,16 +245,15 @@ class UpdateTaskMstInfraScreen extends StatelessWidget{
                               ),
                               child: Column(
                                 children: [
-                                  bindCustomerName(context),
-                                  SizedBox(height: 10,),
-                                  bindContactPersonHOD(context),
-
+                                  bindInputData(context,'Customer Name',TaskMaster_page_controller.customerNameController,false ),
+                                  const SizedBox(height: 10,),
+                                  bindInputData(context,'Contact Person (HOD)/Decision Maker',TaskMaster_page_controller.contactPersonHODController,false ),
                                 ],
                               ),
                             )
                         ),
 
-                        SizedBox(height: 15,),
+                        const SizedBox(height: 15,),
                         Container(
                             margin: EdgeInsets.only(left: 15.0, right: 15.0),
                             decoration: BoxDecoration(
@@ -277,18 +279,17 @@ class UpdateTaskMstInfraScreen extends StatelessWidget{
                               ),
                               child: Column(
                                 children: [
-                                  bindNameOfAgencyContractor(context),
-                                  SizedBox(height: 10,),
-                                  bindOwnerOfContrctor(context),
-                                  SizedBox(height: 10,),
-                                  bindSiteManager(context)
-
+                                  bindInputData(context,'Name Of Agency/Contractor',TaskMaster_page_controller.agencyContractorUpdateController,false ),
+                                  const SizedBox(height: 10,),
+                                  bindInputData(context,'Owner Of Contractor',TaskMaster_page_controller.ownerOfContractorController,false ),
+                                  const SizedBox(height: 10,),
+                                  bindInputData(context,'Project Site Manager',TaskMaster_page_controller.siteManagerController,false ),
                                 ],
                               ),
                             )
                         ),
 
-                        SizedBox(height: 15,),
+                        const SizedBox(height: 15,),
                         Container(
                             margin: EdgeInsets.only(left: 15.0, right: 15.0),
                             decoration: BoxDecoration(
@@ -314,16 +315,15 @@ class UpdateTaskMstInfraScreen extends StatelessWidget{
                               ),
                               child: Column(
                                 children: [
-                                  bindNameOfArchitectFilm(context),
-                                  SizedBox(height: 10,),
-                                  bindArchitect(context),
-
+                                  bindInputData(context,'Name Of Architect Firm',TaskMaster_page_controller.nameOfArchitecfirmUpdateController,false ),
+                                  const SizedBox(height: 10,),
+                                  bindInputData(context,'Architect',TaskMaster_page_controller.architectUpdateController,false ),
                                 ],
                               ),
                             )
                         ),
 
-                        SizedBox(height: 15,),
+                        const SizedBox(height: 15,),
                         Container(
                             margin: EdgeInsets.only(left: 15.0, right: 15.0),
                             decoration: BoxDecoration(
@@ -350,8 +350,7 @@ class UpdateTaskMstInfraScreen extends StatelessWidget{
                               child: Column(
                                 children: [
                                   bindItemCategoryDropDown(context),
-                                  SizedBox(height: 10,),
-
+                                  const SizedBox(height: 10,),
                                   Obx((){
                                     return Visibility(
                                       visible: TaskMaster_page_controller.IsCatergorySelected.value,
@@ -373,21 +372,19 @@ class UpdateTaskMstInfraScreen extends StatelessWidget{
                                       ),
                                     );
                                   }),
-
-
-                                  SizedBox(height: 10,),
+                                  const SizedBox(height: 10,),
                                   bindDrawingCollected(context),
-                                  SizedBox(height: 10,),
+                                  const SizedBox(height: 10,),
                                   bindDateOfDrawingReceived(context),
-                                  SizedBox(height: 10,),
+                                  const SizedBox(height: 10,),
                                   bindProposalSubmitted(context),
-                                  SizedBox(height: 10,),
+                                  const SizedBox(height: 10,),
                                   bindDateOfProposalSubmission(context),
-                                  SizedBox(height: 10,),
-                                  bindValueOfQuote(context),
-                                  SizedBox(height: 10,),
+                                  const SizedBox(height: 10,),
+                                  bindInputData(context,'Value Of Quote',TaskMaster_page_controller.valueOfQuoteUpdateController,false ),
+                                  const SizedBox(height: 10,),
                                   bindExpectedDateOfOrder(context),
-                                  SizedBox(height: 10,),
+                                  const SizedBox(height: 10,),
                                   bindInaugrationDateOfProject(context),
 
                                 ],
@@ -405,6 +402,28 @@ class UpdateTaskMstInfraScreen extends StatelessWidget{
         ),
       ),
     ),
+    );
+  }
+  bindInputData(BuildContext context,String levelText, TextEditingController controller, bool isReadOnly) {
+    var keyBoardType = TextInputType.text;
+    if(levelText=='Time Period To Complete Civil Work' ||
+        levelText=='Project Value' ||
+        levelText=='Expected Revenue From Furniture etc' || levelText == 'Value Of Quote')
+      keyBoardType = TextInputType.number;
+    return  TextFormField(
+      readOnly: isReadOnly,
+      controller: controller,
+      keyboardType: keyBoardType,
+      decoration: InputDecoration(
+          hintText: levelText,
+          labelText: levelText,
+          contentPadding: EdgeInsets.symmetric(vertical: AllFontSize.ten,
+              horizontal: AllFontSize.ten ),
+          border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10)
+          )
+      ),
+
     );
   }
 
@@ -461,186 +480,6 @@ class UpdateTaskMstInfraScreen extends StatelessWidget{
       ),
     );
 
-  }
-
-  Widget binduserRegion(BuildContext context) {
-    return  Container(
-     // padding: EdgeInsets.only(left: 15.0, right: 15.0),
-      child: TextFormField(
-        readOnly: true,
-        controller: TaskMaster_page_controller.userRegionUpdateController,
-        decoration: InputDecoration(
-            hintText: "User Region",
-            labelText: "User Region",
-            contentPadding: EdgeInsets.symmetric(vertical: AllFontSize.ten,
-                horizontal: AllFontSize.ten ),
-            border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10)
-            )
-        ),
-
-      ),
-    );
-  }
-
- Widget binduserCluster(BuildContext context) {
-   return  Container(
-     //padding: EdgeInsets.only(left: 15.0, right: 15.0),
-     child: TextFormField(
-       readOnly: true,
-       controller: TaskMaster_page_controller.userClusterUpdateController,
-       decoration: InputDecoration(
-           hintText: "User Cluster",
-           labelText: "User Cluster",
-           contentPadding: EdgeInsets.symmetric(vertical: AllFontSize.ten,
-               horizontal: AllFontSize.ten ),
-           border: OutlineInputBorder(
-               borderRadius: BorderRadius.circular(10)
-           )
-       ),
-
-     ),
-   );
-  }
-
-  Widget bindProjectValue(BuildContext context) {
-    return TextField(
-      cursorColor:AllColors.primaryDark1 ,
-      controller: TaskMaster_page_controller.projectValueUpdateController,
-      keyboardType: TextInputType.number,
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(
-              vertical: AllFontSize.two, horizontal: AllFontSize.ten),
-          hintText: 'Project Value',
-          labelText: 'Project Value',
-          hintStyle: GoogleFonts.poppins(
-              color: AllColors.lightblackColor,
-              fontWeight: FontWeight.w300,
-              fontSize: AllFontSize.ten),
-          labelStyle: GoogleFonts.poppins(
-              color: AllColors.primaryDark1,
-              fontWeight: FontWeight.w400,
-              fontSize: AllFontSize.sisxteen),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          )
-      ),
-    );
-  }
-
-  Widget bindNameOfProject(BuildContext context) {
-    return TextField(
-      cursorColor:AllColors.primaryDark1 ,
-      controller: TaskMaster_page_controller.nameOfProjectController,
-      //keyboardType: TextInputType.number,
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(
-              vertical: AllFontSize.two, horizontal: AllFontSize.ten),
-          hintText: 'Name Of Project',
-          labelText: 'Name Of Project',
-          hintStyle: GoogleFonts.poppins(
-              color: AllColors.lightblackColor,
-              fontWeight: FontWeight.w300,
-              fontSize: AllFontSize.ten),
-          labelStyle: GoogleFonts.poppins(
-              color: AllColors.primaryDark1,
-              fontWeight: FontWeight.w400,
-              fontSize: AllFontSize.sisxteen),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          )
-      ),
-    );
-  }
-
-  Widget bindCustomerName(BuildContext context) {
-    return TextField(
-      cursorColor:AllColors.primaryDark1 ,
-      controller: TaskMaster_page_controller.customerNameController,
-      //keyboardType: TextInputType.number,
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(
-              vertical: AllFontSize.two, horizontal: AllFontSize.ten),
-          hintText: 'Customer Name',
-          labelText: 'Customer Name',
-          hintStyle: GoogleFonts.poppins(
-              color: AllColors.lightblackColor,
-              fontWeight: FontWeight.w300,
-              fontSize: AllFontSize.ten),
-          labelStyle: GoogleFonts.poppins(
-              color: AllColors.primaryDark1,
-              fontWeight: FontWeight.w400,
-              fontSize: AllFontSize.sisxteen),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          )
-      ),
-    );
-  }
-
-  Widget bindLocation(BuildContext context) {
-    return TextField(
-      cursorColor:AllColors.primaryDark1 ,
-      controller: TaskMaster_page_controller.locationController,
-      //keyboardType: TextInputType.number,
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(
-              vertical: AllFontSize.two, horizontal: AllFontSize.ten),
-          hintText: 'Location',
-          labelText: 'Location',
-          hintStyle: GoogleFonts.poppins(
-              color: AllColors.lightblackColor,
-              fontWeight: FontWeight.w300,
-              fontSize: AllFontSize.ten),
-          labelStyle: GoogleFonts.poppins(
-              color: AllColors.primaryDark1,
-              fontWeight: FontWeight.w400,
-              fontSize: AllFontSize.sisxteen),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          )
-      ),
-    );
-  }
-
-  Widget bindTimePeriodToComplete(BuildContext context) {
-    return TextField(
-      cursorColor:AllColors.primaryDark1 ,
-      controller: TaskMaster_page_controller.timePeriodToCompleteWorkController,
-      keyboardType: TextInputType.number,
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(
-              vertical: AllFontSize.two, horizontal: AllFontSize.ten),
-          hintText: 'Time Period To Complete Civil Work',
-          labelText: 'Time Period To Complete Civil Work',
-          hintStyle: GoogleFonts.poppins(
-              color: AllColors.lightblackColor,
-              fontWeight: FontWeight.w300,
-              fontSize: AllFontSize.ten),
-          labelStyle: GoogleFonts.poppins(
-              color: AllColors.primaryDark1,
-              fontWeight: FontWeight.w400,
-              fontSize: AllFontSize.sisxteen),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          )
-      ),
-    );
   }
 
   bindExpectedDateOfOrder(BuildContext context) {
@@ -922,276 +761,6 @@ class UpdateTaskMstInfraScreen extends StatelessWidget{
     );
   }
 
-  bindAssiEngineer(BuildContext context) {
-    return TextField(
-      cursorColor:AllColors.primaryDark1 ,
-      controller: TaskMaster_page_controller.assistantEngineerController,
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(
-              vertical: AllFontSize.two, horizontal: AllFontSize.ten),
-          hintText: 'Assistant Engineer',
-          labelText: 'Assistant Engineer',
-          hintStyle: GoogleFonts.poppins(
-              color: AllColors.lightblackColor,
-              fontWeight: FontWeight.w300,
-              fontSize: AllFontSize.ten),
-          labelStyle: GoogleFonts.poppins(
-              color: AllColors.primaryDark1,
-              fontWeight: FontWeight.w400,
-              fontSize: AllFontSize.sisxteen),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          )
-      ),
-    );
-  }
-
-  bindArchitect(BuildContext context) {
-    return TextField(
-      cursorColor:AllColors.primaryDark1 ,
-      controller: TaskMaster_page_controller.architectUpdateController,
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(
-              vertical: AllFontSize.two, horizontal: AllFontSize.ten),
-          hintText: 'Architect',
-          labelText: 'Architect',
-          hintStyle: GoogleFonts.poppins(
-              color: AllColors.lightblackColor,
-              fontWeight: FontWeight.w300,
-              fontSize: AllFontSize.ten),
-          labelStyle: GoogleFonts.poppins(
-              color: AllColors.primaryDark1,
-              fontWeight: FontWeight.w400,
-              fontSize: AllFontSize.sisxteen),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          )
-      ),
-    );
-  }
-
-  bindExcecutiveEngineer(BuildContext context) {
-    return TextField(
-      cursorColor:AllColors.primaryDark1 ,
-      controller: TaskMaster_page_controller.executiveEngineerUpdateController,
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(
-              vertical: AllFontSize.two, horizontal: AllFontSize.ten),
-          hintText: 'Executive Engineer',
-          labelText: 'Executive Engineer',
-          hintStyle: GoogleFonts.poppins(
-              color: AllColors.lightblackColor,
-              fontWeight: FontWeight.w300,
-              fontSize: AllFontSize.ten),
-          labelStyle: GoogleFonts.poppins(
-              color: AllColors.primaryDark1,
-              fontWeight: FontWeight.w400,
-              fontSize: AllFontSize.sisxteen),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          )
-      ),
-    );
-  }
-
-  bindContactPersonHOD(BuildContext context) {
-    return TextField(
-      cursorColor:AllColors.primaryDark1 ,
-      controller: TaskMaster_page_controller.contactPersonHODController,
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(
-              vertical: AllFontSize.two, horizontal: AllFontSize.ten),
-          hintText: 'Contact Person (HOD)/Decision Maker',
-          labelText: 'Contact Person (HOD)/Decision Maker',
-          hintStyle: GoogleFonts.poppins(
-              color: AllColors.lightblackColor,
-              fontWeight: FontWeight.w300,
-              fontSize: AllFontSize.ten),
-          labelStyle: GoogleFonts.poppins(
-              color: AllColors.primaryDark1,
-              fontWeight: FontWeight.w400,
-              fontSize: AllFontSize.sisxteen),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          )
-      ),
-    );
-  }
-
-  bindNameOfArchitectFilm(BuildContext context) {
-    return TextField(
-      cursorColor:AllColors.primaryDark1 ,
-      controller: TaskMaster_page_controller.nameOfArchitecfirmUpdateController,
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(
-              vertical: AllFontSize.two, horizontal: AllFontSize.ten),
-          hintText: 'Name Of Architect Firm',
-          labelText: 'Name Of Architect Firm',
-          hintStyle: GoogleFonts.poppins(
-              color: AllColors.lightblackColor,
-              fontWeight: FontWeight.w300,
-              fontSize: AllFontSize.ten),
-          labelStyle: GoogleFonts.poppins(
-              color: AllColors.primaryDark1,
-              fontWeight: FontWeight.w400,
-              fontSize: AllFontSize.sisxteen),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          )
-      ),
-    );
-  }
-
-  bindNameOfInfraDepartment(BuildContext context) {
-    return TextField(
-      cursorColor:AllColors.primaryDark1 ,
-      controller: TaskMaster_page_controller.nameofInfradepUpdateController,
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(
-              vertical: AllFontSize.two, horizontal: AllFontSize.ten),
-          hintText: 'Name Of Infra Department',
-          labelText: 'Name Of Infra Department',
-          hintStyle: GoogleFonts.poppins(
-              color: AllColors.lightblackColor,
-              fontWeight: FontWeight.w300,
-              fontSize: AllFontSize.ten),
-          labelStyle: GoogleFonts.poppins(
-              color: AllColors.primaryDark1,
-              fontWeight: FontWeight.w400,
-              fontSize: AllFontSize.sisxteen),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          )
-      ),
-    );
-  }
-
-  bindNameOfAgencyContractor(BuildContext context) {
-    return TextField(
-      cursorColor:AllColors.primaryDark1 ,
-      controller: TaskMaster_page_controller.agencyContractorUpdateController,
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(
-              vertical: AllFontSize.two, horizontal: AllFontSize.ten),
-          hintText: 'Name Of Agency/Contractor',
-          labelText: 'Name Of Agency/Contractor',
-          hintStyle: GoogleFonts.poppins(
-              color: AllColors.lightblackColor,
-              fontWeight: FontWeight.w300,
-              fontSize: AllFontSize.ten),
-          labelStyle: GoogleFonts.poppins(
-              color: AllColors.primaryDark1,
-              fontWeight: FontWeight.w400,
-              fontSize: AllFontSize.sisxteen),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          )
-      ),
-    );
-  }
-
-  bindOwnerOfContrctor(BuildContext context) {
-    return TextField(
-      cursorColor:AllColors.primaryDark1 ,
-      controller: TaskMaster_page_controller.ownerOfContractorController,
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(
-              vertical: AllFontSize.two, horizontal: AllFontSize.ten),
-          hintText: 'Owner Of Contractor',
-          labelText: 'Owner Of Contractor',
-          hintStyle: GoogleFonts.poppins(
-              color: AllColors.lightblackColor,
-              fontWeight: FontWeight.w300,
-              fontSize: AllFontSize.ten),
-          labelStyle: GoogleFonts.poppins(
-              color: AllColors.primaryDark1,
-              fontWeight: FontWeight.w400,
-              fontSize: AllFontSize.sisxteen),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          )
-      ),
-    );
-  }
-
-  bindSiteManager(BuildContext context) {
-    return TextField(
-      cursorColor:AllColors.primaryDark1 ,
-      controller: TaskMaster_page_controller.siteManagerController,
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(
-              vertical: AllFontSize.two, horizontal: AllFontSize.ten),
-          hintText: 'Project Site Manager',
-          labelText: 'Project Site Manager',
-          hintStyle: GoogleFonts.poppins(
-              color: AllColors.lightblackColor,
-              fontWeight: FontWeight.w300,
-              fontSize: AllFontSize.ten),
-          labelStyle: GoogleFonts.poppins(
-              color: AllColors.primaryDark1,
-              fontWeight: FontWeight.w400,
-              fontSize: AllFontSize.sisxteen),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          )
-      ),
-    );
-  }
-
-  bindExpectedRevene(BuildContext context) {
-    return TextField(
-      cursorColor:AllColors.primaryDark1 ,
-      controller: TaskMaster_page_controller.expectedRevenueUpdateController,
-      keyboardType: TextInputType.number,
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(
-              vertical: AllFontSize.two, horizontal: AllFontSize.ten),
-          hintText: 'Expected Revenue From Furniture etc',
-          labelText: 'Expected Revenue From Furniture etc',
-          hintStyle: GoogleFonts.poppins(
-              color: AllColors.lightblackColor,
-              fontWeight: FontWeight.w300,
-              fontSize: AllFontSize.ten),
-          labelStyle: GoogleFonts.poppins(
-              color: AllColors.primaryDark1,
-              fontWeight: FontWeight.w400,
-              fontSize: AllFontSize.sisxteen),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          )
-      ),
-    );
-  }
 
   Widget bindItemCategoryDropDown(context){
     if(TaskMaster_page_controller.Item_Category_Selected_Infra_list.isNotEmpty){
@@ -1305,33 +874,6 @@ class UpdateTaskMstInfraScreen extends StatelessWidget{
     );
   }
 
-  bindValueOfQuote(BuildContext context) {
-    return TextField(
-      cursorColor:AllColors.primaryDark1 ,
-      controller: TaskMaster_page_controller.valueOfQuoteUpdateController,
-      keyboardType: TextInputType.number,
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(
-              vertical: AllFontSize.two, horizontal: AllFontSize.ten),
-          hintText: 'Value Of Quote',
-          labelText: 'Value Of Quote',
-          hintStyle: GoogleFonts.poppins(
-              color: AllColors.lightblackColor,
-              fontWeight: FontWeight.w300,
-              fontSize: AllFontSize.ten),
-          labelStyle: GoogleFonts.poppins(
-              color: AllColors.primaryDark1,
-              fontWeight: FontWeight.w400,
-              fontSize: AllFontSize.sisxteen),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          )
-      ),
-    );
-  }
 
   bindExpectedDateCompletion(BuildContext context) {
     return TextField(

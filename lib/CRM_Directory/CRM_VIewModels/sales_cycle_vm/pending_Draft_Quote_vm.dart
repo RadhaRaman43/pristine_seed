@@ -75,6 +75,7 @@ class PendingDraftQuoteVm extends GetxController{
   RxList<String> productCategoryTypeList = <String>["Contains","Equals To"].obs;
   String filterRouting = "";
   String title="";
+  String userType = "";
   @override
   Future<void> onInit() async {
     title = Get.arguments??"";
@@ -91,6 +92,7 @@ class PendingDraftQuoteVm extends GetxController{
     else if(title=='Approved / Rejected Quote'){
       filterFlag="APPROVED & REJECTED";
     }
+    userType = await sessionManagement.getUserType() ?? '';
 
     email=await sessionManagement.getEmail() ?? '';
     isAdminWritePermission = await sessionManagement.getIsAdminPermission() ?? '';

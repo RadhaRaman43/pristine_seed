@@ -142,24 +142,26 @@ class PendingDsarDashboardVm extends GetxController{
 
       case 'month':
         startDate = DateTime(now.year, now.month, 1);
-        endDate = DateTime(now.year, now.month + 1, 0);
+        //endDate = DateTime(now.year, now.month + 1, 0);
+        endDate = DateTime.now().subtract(const Duration(days: 1));
         break;
 
       case 'quarterly':
         int currentMonth = now.month;
         if (currentMonth >= 1 && currentMonth <= 3) {
           startDate = DateTime(now.year, 1, 1);
-          endDate = DateTime(now.year, 3, 31);
+          //endDate = DateTime(now.year, 3, 31);
         } else if (currentMonth >= 4 && currentMonth <= 6) {
           startDate = DateTime(now.year, 4, 1);
-          endDate = DateTime(now.year, 6, 30);
+          //endDate = DateTime(now.year, 6, 30);
         } else if (currentMonth >= 7 && currentMonth <= 9) {
           startDate = DateTime(now.year, 7, 1);
-          endDate = DateTime(now.year, 9, 30);
+          //endDate = DateTime(now.year, 9, 30);
         } else {
           startDate = DateTime(now.year, 10, 1);
-          endDate = DateTime(now.year, 12, 31);
+         // endDate = DateTime(now.year, 12, 31);
         }
+        endDate = DateTime.now().subtract(const Duration(days: 1));
         break;
 
       case 'financial':
@@ -170,7 +172,8 @@ class PendingDsarDashboardVm extends GetxController{
         } else {
           // Current FY: starts from April last year to March this year
           startDate = DateTime(now.year - 1, 4, 1);
-          endDate = DateTime(now.year, 3, 31);
+          //endDate = DateTime(now.year, 3, 31);
+          endDate = DateTime.now().subtract(const Duration(days: 1));
         }
         break;
 

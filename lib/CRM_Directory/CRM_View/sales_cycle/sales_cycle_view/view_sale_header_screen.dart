@@ -1115,9 +1115,11 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                               saleCycleController.Shipping_email_Controller.value.text = saleCycleController
                                                       .saleCycleList[0].shippingEmailId ?? "";
                                               saleCycleController.itemCategorySelectedlist.value = [];
-                                              saleCycleController.getItemCategoryMstApi(
+                                              /*saleCycleController.getItemCategoryMstApi(
                                                       saleCycleController.saleCycleList[0].salesCycleId?? "",
-                                                      saleCycleController.saleCycleList[0].taskId?? "","");
+                                                      saleCycleController.saleCycleList[0].taskId?? "","");*/
+                                              saleCycleController.getParentItemCategoryMstGet();
+                                              saleCycleController.IsMultiParentCategory_controller.value.text="No";
                                               Get.toNamed(RoutesName.salesCycleCreateQuoteScreen);
                                             },
                                             child: Container(
@@ -6608,24 +6610,23 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                       children: [
                         bindData(fixText: "Infra Lead : ",data:  saleCycleList[0].isInfraLead==1?'Yes':'No',color: Colors.blueAccent,
                             onTap: (){
-                              print("Length${TaskMaster_page_controller.userGeoHierarchyy.length}");
-                              TaskMaster_page_controller.infraFlag = 'FromDetailsPage';
-                              for(int i=0; i<TaskMaster_page_controller.userGeoHierarchyy.length;i++){
-                                if(TaskMaster_page_controller.userGeoHierarchyy[i].myLevel==1){
-                                  TaskMaster_page_controller.userRegionUpdateController.text=TaskMaster_page_controller.userGeoHierarchyy[i-1].geoValue!;
-                                  TaskMaster_page_controller.userClusterUpdateController.text=TaskMaster_page_controller.userGeoHierarchyy[i-2].geoValue!;
+
+                              /*for(int i=0; i<saleCycleController.userGeoHierarchyy.length;i++){
+                                if(saleCycleController.userGeoHierarchyy[i].myLevel==1){
+                                  saleCycleController.userRegionUpdateController.text=TaskMaster_page_controller.userGeoHierarchyy[i-1].geoValue!;
+                                  saleCycleController.userClusterUpdateController.text=TaskMaster_page_controller.userGeoHierarchyy[i-2].geoValue!;
                                 }
-                              }
-                              if(TaskMaster_page_controller.Task_Master_list[0].isInfraLead==1){
-                                TaskMaster_page_controller.isInfraYes.value = true;
+                              }*/
+                              if(saleCycleList[0].isInfraLead==1){
+                                saleCycleController.isInfraYes.value = true;
                               }else{
-                                TaskMaster_page_controller.isInfraYes.value = false;
+                                saleCycleController.isInfraYes.value = false;
                               }
-                              TaskMaster_page_controller.viewAllDetailsOfTaskUpdateInfra();
+
+                              saleCycleController.viewAllDetailsOfSaleCycleInfra(saleCycleList[0]);
                               //TaskMaster_page_controller.isInfraLeadUpdateController.value.text=TaskMaster_page_controller.isInfraLead.value.text;
-                              TaskMaster_page_controller.getItemCategoryMstApiHit(TaskMaster_page_controller.Task_Master_list[0].taskId,
-                                  TaskMaster_page_controller.Task_Master_list[0].infraLeadNo,"");
-                              Get.toNamed(RoutesName.updateTaskMstInfraScreen);
+                              saleCycleController.getItemCategoryMstApiHit(saleCycleList[0].taskId, saleCycleList[0].infraLeadNo,"");
+                              Get.toNamed(RoutesName.update_sale_infra_detail_screen);
                             },decoration: TextDecoration.underline,decorationStyle:TextDecorationStyle.wavy ),
                         const SizedBox(height: 3,),
                         bindData(fixText: "User Region : ",data:  saleCycleList[0].userRegion ?? ""),

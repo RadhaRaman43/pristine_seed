@@ -371,7 +371,7 @@ class UpdateQuoteHeaderScreen extends StatelessWidget{
             saleCycleController.calculateFinalAmt();
           }
           else if(levelText=='Advc. Payment Amount'){
-            calculatePer();
+            saleCycleController.calculatePer();
           }
          else if(levelText=='Advc. Payment Percentage' || levelText=='Quote Amount'){
             checkPertageValue(context);
@@ -382,33 +382,15 @@ class UpdateQuoteHeaderScreen extends StatelessWidget{
       ),
     );
   }
-  void calculatePer() {
-    if(saleCycleController.advncPaymentAmountController.value.text.isEmpty){
-      saleCycleController.advncPaymentPerController.value.clear();
-    }else{
-      final text = double.parse(saleCycleController.advncPaymentAmountController.value.text);
-      double percantage=0.0;
-      if(saleCycleController.quoteTotAmountController.value.text.isNotEmpty){
-        percantage=(text/double.parse(saleCycleController.quoteTotAmountController.value.text))*100;
-        print("Percentage.${percantage}");
-      }
-      if(percantage<=100){
-        saleCycleController.advncPaymentPerController.value.text = percantage.toStringAsFixed(2);
-      }else if(text>100){
-        Utils.showErrorToastification('Error', 'Payment Percentage cannot be greater than 100');
-      }
-      /*else{
-        Utils.showErrorToastification('Error', 'Payment Percentage cannot be greater than 100');
-      }*/
 
-    }
-  }
   checkPertageValue(BuildContext context) {
     final text = saleCycleController.advncPaymentPerController.value.text;
     final percentageValue = int.tryParse(text);
     if (percentageValue == null) {
       saleCycleController.advncPaymentAmountController.value.clear();
     } else if (percentageValue > 100) {
+      saleCycleController.advncPaymentAmountController.value.clear();
+      saleCycleController.advncPaymentPerController.value.clear();
       print("hhhh${percentageValue}");
       Utils.showErrorToastification('Error', 'Payment Percentage cannot be greater than 100');
     } else if(percentageValue <= 100){

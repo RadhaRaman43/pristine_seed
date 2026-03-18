@@ -258,6 +258,7 @@ class TaskApprovalListScreen extends StatelessWidget{
               _buildLabelWithValue(label: "Purpose Of Visit: ", value: TaskMaster_page_controller.Task_Master_list[position].purposeOfVisit??"",),
               _buildLabelWithValue(label: "Last Activity Updated On: ", value: StaticMethod.dateTimeToDate(TaskMaster_page_controller.Task_Master_list[position].lastActivityUpdatedOn??""),),
               _buildLabelWithValue(label: "Created On: ", value: StaticMethod.dateTimeToDate(TaskMaster_page_controller.Task_Master_list[position].createdOn??"") ,),
+              _buildLabelWithValue(label: "Created By: ", value:TaskMaster_page_controller.Task_Master_list[position].createdFullName??"" ,),
               _buildLabelWithValue(label: "Reporting Person: ", value: TaskMaster_page_controller.Task_Master_list[position].approvedFullName??"",),
               _buildLabelWithValue(label: "Approved By: ", value: TaskMaster_page_controller.Task_Master_list[position].approvedFullName??"",),
               _buildLabelWithValue(label: "Approved On: ", value:  StaticMethod.convertDateFormat1(TaskMaster_page_controller.Task_Master_list[position].approvedOn??""),),

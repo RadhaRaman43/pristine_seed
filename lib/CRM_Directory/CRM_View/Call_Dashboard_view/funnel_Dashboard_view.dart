@@ -978,7 +978,6 @@ class FunnelDashboardView extends StatelessWidget{
                       },
                     );
                   }),
-
                   Obx((){
                     return RadioListTile<String>(
                       title: const Text('Weakly' , style: TextStyle(
@@ -998,7 +997,6 @@ class FunnelDashboardView extends StatelessWidget{
                       },
                     );
                   }),
-
                   Obx((){
                     return RadioListTile<String>(
                       title: const Text('Monthly' ,style: TextStyle(
@@ -1018,7 +1016,6 @@ class FunnelDashboardView extends StatelessWidget{
                       },
                     );
                   }),
-
                   Obx((){
                     return  RadioListTile<String>(
                       title: const Text('Quarterly', style: TextStyle(
@@ -1038,7 +1035,6 @@ class FunnelDashboardView extends StatelessWidget{
                       },
                     );
                   }),
-
                   Obx((){
                     return RadioListTile<String>(
                       title: const Text('Financial Year', style: TextStyle(
@@ -1058,7 +1054,6 @@ class FunnelDashboardView extends StatelessWidget{
                       },
                     );
                   }),
-
                   Obx((){
                     return RadioListTile<String>(
                       title: const Text('Custom', style: TextStyle(
@@ -1073,7 +1068,6 @@ class FunnelDashboardView extends StatelessWidget{
 
                     );
                   }),
-
                   Obx((){
                     return filterWithCustomDate(context);
                   })
@@ -1084,6 +1078,8 @@ class FunnelDashboardView extends StatelessWidget{
           ),
           SizedBox(height: 10),
           bindSalesStageStatus(context),
+          SizedBox(height: 10),
+          bindData(context,'Sale Cycle Id', dashboard_view_Controller.filter_sale_cycle_id_cont.value),
           SizedBox(height: 10),
           bindQuoteSubmitted(context),
           SizedBox(height: 10),
@@ -1105,6 +1101,36 @@ class FunnelDashboardView extends StatelessWidget{
 
       ),
 
+    );
+  }
+
+  bindData(BuildContext context, String labelText, TextEditingController controller,) {
+    return TextField(
+      controller: controller,
+      decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+          labelText: labelText,
+          hintText: labelText,
+          hintStyle: GoogleFonts.poppins(
+              color: AllColors.lightblackColor,
+              fontWeight: FontWeight.w300,
+              fontSize: AllFontSize.ten),
+          labelStyle: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontWeight: FontWeight.w500,
+              fontSize: AllFontSize.sisxteen),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          )
+      ),
+      cursorColor: AllColors.primaryDark1,
+      onChanged: (value) {
+        // Handle the text field value changes if needed
+      },
     );
   }
 

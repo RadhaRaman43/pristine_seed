@@ -22,6 +22,7 @@ import 'package:http/http.dart' as http;
 
 import '../../../constants/app_colors.dart';
 import '../../../constants/app_font_size.dart';
+import '../../../constants/static_methods.dart';
 import '../../../main.dart';
 import '../../../models/service_managment_model_directory/bulk_indent_model/bulk_item_master_model.dart';
 import '../../../reources/routes/routes_name.dart';
@@ -37,6 +38,7 @@ import '../../CRM_Models/TaskMaster_model/Item_Category_Mast_model.dart';
 import '../../CRM_Models/TaskMaster_model/Task_Master_model.dart';
 import '../../CRM_Models/TaskMaster_model/company_type_modal.dart';
 import '../../CRM_Models/TaskMaster_model/task_category_model.dart';
+import '../../CRM_Models/TaskMaster_model/task_update_infra_modal.dart';
 import '../../CRM_Models/sale_cycle_modal/ItemMasterSalesId_Model.dart';
 import '../../CRM_Models/sale_cycle_modal/Item_qoute_with_report_modal.dart';
 import '../../CRM_Models/sale_cycle_modal/SalesCycleById_Model.dart';
@@ -132,8 +134,8 @@ class SalesCycleVm extends GetxController {
 
 
 
-  RxList<ItemCategoryMstModel> productCategoryList =
-      <ItemCategoryMstModel>[].obs;
+  RxList<ItemCategoryMstModel> productCategoryList = <ItemCategoryMstModel>[].obs;
+  RxList<ItemCategoryMstModel> parentProductCategoryList = <ItemCategoryMstModel>[].obs;
   RxList<ItemCategoryMstModel> itemCategorySelectedlist =
       <ItemCategoryMstModel>[].obs;
   RxList<ItemQouteWithReportModal> itemQuoteReportList =
@@ -174,6 +176,7 @@ class SalesCycleVm extends GetxController {
   var expectedClosuredateController = TextEditingController().obs;
   var contactQuoteCommitController = TextEditingController().obs;
   var kindAttentionController = TextEditingController().obs;
+  var IsMultiParentCategory_controller=TextEditingController().obs;
 
   var QuoteSubmittedController = TextEditingController().obs;
   var ConfirmDecisionDateController = TextEditingController().obs;
@@ -205,6 +208,7 @@ class SalesCycleVm extends GetxController {
 
   var updateQuoteShippingAddressConfirmation = TextEditingController().obs;
   RxBool isVisibiltyShippingAddressQuote=false.obs;
+  RxBool IsMultiParentCategory=true.obs;
 
   //todo quotation won controller
   var quotationWonLossController=TextEditingController().obs;
@@ -362,9 +366,45 @@ class SalesCycleVm extends GetxController {
   var product_category_type_Controller = TextEditingController().obs;
 
   RxBool isExpandInfraDetail = false.obs;
-  void toggleInfraDetail() {
-    isExpandInfraDetail.value = !isExpandInfraDetail.value;
-  }
+
+
+  //todo infra detail radha raman
+  RxBool isInfraYes=false.obs;
+  RxBool IsCatergorySelected=false.obs;
+
+  var isInfraLead = TextEditingController().obs;
+  var userRegionUpdateController = TextEditingController();
+  var userClusterUpdateController = TextEditingController();
+  var projectValueUpdateController = TextEditingController();
+  var nameOfProjectController = TextEditingController();
+  var customerNameController = TextEditingController();
+  var locationController = TextEditingController();
+  var timePeriodToCompleteWorkController = TextEditingController();
+  var isInfraLeadUpdateController = TextEditingController().obs;
+  var expectedDateOfOrderUpdateController = TextEditingController();
+  var drawingcollectedUpdateController = TextEditingController();
+  var proposalSubmittedUpdateController = TextEditingController();
+  var inaugrationDateUpdateController = TextEditingController();
+  var architectUpdateController = TextEditingController();
+  var assistantEngineerController = TextEditingController();
+  var executiveEngineerUpdateController = TextEditingController();
+  var contactPersonHODController = TextEditingController();
+  var nameOfArchitecfirmUpdateController = TextEditingController();
+  var nameofInfradepUpdateController = TextEditingController();
+  var agencyContractorUpdateController = TextEditingController();
+  var ownerOfContractorController = TextEditingController();
+  var siteManagerController = TextEditingController();
+  var expectedRevenueUpdateController = TextEditingController();
+  var furnitureIncludedInCivilController = TextEditingController();
+  var valueOfQuoteUpdateController = TextEditingController();
+  var dateofcompletioneUpdateController = TextEditingController();
+  var dateOfProposalSubmissionController = TextEditingController();
+  var dateOfDrawingReceivedController = TextEditingController();
+  var ItemCat_type_controller = TextEditingController();
+
+  RxList<ItemCategoryMstModel> Item_Category_Selected_Infra_list = <ItemCategoryMstModel>[].obs;
+  RxList<ItemCategoryMstModel> Item_Category_Infra_list = <ItemCategoryMstModel>[].obs;
+  RxList<String> isInfraLeadList =["Yes", "No"].obs;
 
   @override
   Future<void> onInit() async {
@@ -401,7 +441,9 @@ class SalesCycleVm extends GetxController {
     }
     super.onInit();
   }
-
+  void toggleInfraDetail() {
+    isExpandInfraDetail.value = !isExpandInfraDetail.value;
+  }
   getCompanyTypeMasterGet() {
     this.loading.value = true;
     Map<String, dynamic> data = {
@@ -1401,7 +1443,8 @@ class SalesCycleVm extends GetxController {
         "consignee_id": consigneeId,
         "created_by": email,
         "kind_attention": kindAttentionController.value.text,
-        "parent_category_code": productCategoryController.value.text.isNotEmpty?productCategoryController.value.text:""
+        "parent_category_code": productCategoryController.value.text.isNotEmpty?productCategoryController.value.text:"",
+        "is_multi_parent_category": IsMultiParentCategory_controller.value=="No"?0:1
       };
 
       loading.value = true;
@@ -1416,6 +1459,7 @@ class SalesCycleVm extends GetxController {
               Utils.sanckBarSuccess("Success!", response[0].message.toString());
               pageNumberForQuote = 0;
               getQuoteHeaderData(pageNumberForQuote, saleCycleList[0].salesCycleId!, '');
+              IsMultiParentCategory.value=true;
               Get.toNamed(RoutesName.viewSalesCycleHeaderScreen);
               //getQuoteHeaderData(0,  saleCycleList[0].salesCycleId!, '');
               quoteValidityController.value.clear();
@@ -2358,9 +2402,7 @@ class SalesCycleVm extends GetxController {
       try {
         List<ItemCategoryMstModel> Response = (json.decode(value)
                 as List<dynamic>)
-            .map(
-                (i) => ItemCategoryMstModel.fromJson(i as Map<String, dynamic>))
-            .toList();
+            .map((i) => ItemCategoryMstModel.fromJson(i as Map<String, dynamic>)).toList();
 
         if (Response.isNotEmpty &&
             Response[0]?.condition.toString() == "True") {
@@ -2384,6 +2426,47 @@ class SalesCycleVm extends GetxController {
     }).onError((error, stackTrace) {
       productCategoryList.value = [];
       itemCategorySelectedlist.value = [];
+      Utils.sanckBarError('Api Exception onError', error.toString());
+      print('catchEx....${error.toString()}');
+    }).whenComplete(() {
+      this.loading.value = false;
+    });
+  }
+
+  getParentItemCategoryMstGet() {
+    this.loading.value = true;
+    Map<String, String> data = {
+      'filter_category': "",
+
+    };
+    print(data);
+
+    _api.ParentItemCategoryMstGet(data, sessionManagement).then((value) {
+      print(value);
+      try {
+        List<ItemCategoryMstModel> Response = (json.decode(value)
+        as List<dynamic>)
+            .map((i) => ItemCategoryMstModel.fromJson(i as Map<String, dynamic>)).toList();
+
+        if (Response.isNotEmpty && Response[0]?.condition.toString() == "True") {
+          parentProductCategoryList.value = Response!;
+          for(int i =0;i<parentProductCategoryList.length;i++){
+            print(" parent item${parentProductCategoryList[i].parentCategoryCode}");
+          }
+
+
+
+        } else {
+          parentProductCategoryList.value = [];
+
+        }
+      } catch (e) {
+        parentProductCategoryList.value = [];
+
+        print('catch....${e.toString()}');
+      }
+    }).onError((error, stackTrace) {
+      parentProductCategoryList.value = [];
       Utils.sanckBarError('Api Exception onError', error.toString());
       print('catchEx....${error.toString()}');
     }).whenComplete(() {
@@ -5295,6 +5378,8 @@ class SalesCycleVm extends GetxController {
     advncPaymentAmountController.value.text = quoteHeaderdata[0].advancePaymentAmt.toString() ?? "";
     termConditionController.value.text = quoteHeaderdata[0].termsAndCondition??"";
 
+    calculatePer();
+
 
   }
 
@@ -6178,6 +6263,214 @@ class SalesCycleVm extends GetxController {
       contact_master_list.value = [];
     }
     return  contact_master_list.value;
+  }
+
+  void calculatePer() {
+    if(advncPaymentAmountController.value.text.isEmpty){
+      advncPaymentPerController.value.clear();
+    }else{
+      final text = double.parse(advncPaymentAmountController.value.text);
+      double percantage=0.0;
+      if(quoteTotAmountController.value.text.isNotEmpty){
+        percantage=(text/double.parse(quoteTotAmountController.value.text))*100;
+        print("Percentage.${percantage}");
+      }
+      if(percantage<=100){
+        advncPaymentPerController.value.text = percantage.toStringAsFixed(2);
+      }else if(text>100){
+        advncPaymentAmountController.value.clear();
+        advncPaymentPerController.value.clear();
+        Utils.showErrorToastification('Error', 'Payment Percentage cannot be greater than 100');
+      }
+
+      //todo radha raman
+      double? advcAmount = double.tryParse(advncPaymentAmountController.value.text);
+      double? finalAmount = double.tryParse(finalAmountController.value.text);
+      if (advcAmount == null) {
+        advcAmount = 0.0;
+      }
+      double totAmount = finalAmount! - advcAmount;
+      pendingAmountController.value.text = totAmount.toStringAsFixed(2);
+
+    }
+  }
+
+  //todo infra detail
+  void viewAllDetailsOfSaleCycleInfra(SalesCycleModal saleCycleList){
+    String? expOrderDate=StaticMethod.convertDateFormat1(saleCycleList.expectedDateOfOrder ?? "");
+    String? inaugurationDate=StaticMethod.convertDateFormat1(saleCycleList.inaugrationDateOfProject ?? "");
+    String? expDateOfCompletion=StaticMethod.convertDateFormat1(saleCycleList.expectedDateOfCompletion ?? "");
+    String? dateDrawingReceived=StaticMethod.convertDateFormat1(saleCycleList.dateDrawingReceived ?? "");
+    String? dateOfProposalSubmission=StaticMethod.convertDateFormat1(saleCycleList.dateOfProposalSubmission ?? "");
+
+    isInfraLeadUpdateController.value.text=saleCycleList.isInfraLead==1 ? "Yes":"No";
+    expectedDateOfOrderUpdateController.text=expOrderDate ?? "";
+    drawingcollectedUpdateController.text=saleCycleList.drawingCollected ==1 ? "Yes":"No";
+    proposalSubmittedUpdateController.text=saleCycleList.drawingCollected==1 ? "Yes":"No";
+    inaugrationDateUpdateController.text= inaugurationDate??"";
+    architectUpdateController.text=saleCycleList.architect ?? "";
+    executiveEngineerUpdateController.text=saleCycleList.executiveEngineer ?? "";
+    nameOfArchitecfirmUpdateController.text=saleCycleList.nameOfArchitectFirm ?? "";
+    nameofInfradepUpdateController.text=saleCycleList.nameOfInfraDepartment ?? "";
+    agencyContractorUpdateController.text=saleCycleList.nameOfAgencyContrator ?? "";
+    expectedRevenueUpdateController.text=saleCycleList.expectedRevenue.toString();
+    valueOfQuoteUpdateController.text=saleCycleList.valueOfQuote.toString();
+    dateofcompletioneUpdateController.text=expDateOfCompletion??"";
+    assistantEngineerController.text=saleCycleList.assistantEngineer??"";
+    nameOfProjectController.text=saleCycleList.projectName??"";
+    locationController.text=saleCycleList.location??"";
+    timePeriodToCompleteWorkController.text=saleCycleList.timePeriodToCompleteCivilWorkInMonths==null?"":saleCycleList.timePeriodToCompleteCivilWorkInMonths.toString();
+    furnitureIncludedInCivilController.text=saleCycleList.furnitureIncludedInCivilScope==1 ? "Yes":"No";
+    customerNameController.text=saleCycleList.customerName??"";
+    contactPersonHODController.text=saleCycleList.contactPersonDecisionMaker??"";
+    ownerOfContractorController.text=saleCycleList.ownerOfContractor??"";
+    siteManagerController.text=saleCycleList.projectSiteManager??"";
+    dateOfDrawingReceivedController.text=dateDrawingReceived??"";
+    dateOfProposalSubmissionController.text=dateOfProposalSubmission??"";
+    projectValueUpdateController.text=saleCycleList.projectValue.toString();
+  }
+
+  getItemCategoryMstApiHit(String? taskId, String? InfraId, String saleCycleId) async {
+    try {
+      Map<String, String> data = {
+        'task_id': taskId! ,
+        'filter_category': "",
+        'sales_cycle_id': saleCycleId,
+        'quote_id': "",
+        'infra_lead_no': InfraId==null?"":InfraId
+      };
+      this.loading.value = true;
+      String value = await _api.getItemCategoryInfraMstApiHit(data, sessionManagement);
+      print(value);
+      List<ItemCategoryMstModel> Response = (json.decode(value) as List<dynamic>)
+          .map((i) => ItemCategoryMstModel.fromJson(i as Map<String, dynamic>)).toList();
+
+      if (Response.isNotEmpty && Response[0].condition?.toLowerCase() == "true") {
+        Item_Category_Infra_list.value = Response;
+
+        Item_Category_Selected_Infra_list.value = [];
+        for (int i = 0; i < Item_Category_Infra_list.length; i++) {
+          if (Item_Category_Infra_list[i].isSelected == 1) {
+            Item_Category_Selected_Infra_list.add(
+                Item_Category_Infra_list[i]);
+          }}
+        print('master list1....${Item_Category_Infra_list.length.toString()}');
+        loading.value = false;
+      } else {
+        Item_Category_Infra_list.value = [];
+        Item_Category_Selected_Infra_list.value = [];
+        loading.value = false;
+        //print('master listelsse1....${Item_Category_Selected_list.length.toString()}');
+      }
+    }
+    catch (e) {
+      print('catch....${e.toString()}');
+      loading.value = false;
+    }
+    /*finally{
+                loading .value=true;
+            }*/
+  }
+  SalesCycleMstInfraUpdate(String InfraNo,) async {
+    try {
+      String? expOrderDate=StaticMethod.convertDateFormat(expectedDateOfOrderUpdateController.text);
+      String? inaugurationDate=StaticMethod.convertDateFormat(inaugrationDateUpdateController.text);
+      String? expDateOfCompletion=StaticMethod.convertDateFormat(dateofcompletioneUpdateController.text);
+      String? dateDrawingReceived=StaticMethod.convertDateFormat(dateOfDrawingReceivedController.text);
+      String? dateOfProposalSubmission=StaticMethod.convertDateFormat(dateOfProposalSubmissionController.text);
+
+      List<TaskSalesProductCategoryLinesModel> lines = Item_Category_Selected_Infra_list.map((item) => TaskSalesProductCategoryLinesModel(productCategoryCode: item.categoryCode!)).toList();
+
+      Map data = {
+
+        "sales_cycle_id": saleCycleList[0].salesCycleId!,
+        "is_infra_lead": isInfraLeadUpdateController.value.text=="Yes"?1:0,
+        "infra_lead_no": InfraNo,
+        "user_region": userRegionUpdateController.text.isEmpty?"":userRegionUpdateController.text,
+        "user_clusture": userClusterUpdateController.text.isEmpty?"":userClusterUpdateController.text,
+        "name_of_infra_department": nameofInfradepUpdateController.text.isEmpty?"":nameofInfradepUpdateController.text,
+        "executive_engineer": executiveEngineerUpdateController.text.isEmpty?"":executiveEngineerUpdateController.text,
+        "assistant_engineer": assistantEngineerController.text.isEmpty?"":assistantEngineerController.text,
+        "project_name": nameOfProjectController.text.isEmpty?"":nameOfProjectController.text,
+        "location": locationController.text.isEmpty?"":locationController.text,
+        "time_period_to_complete_civil_work_in_months": timePeriodToCompleteWorkController.text.isEmpty?"0":timePeriodToCompleteWorkController.text,
+        "expected_date_of_completion": expDateOfCompletion??"",
+        "project_value": projectValueUpdateController.text.isEmpty?"":projectValueUpdateController.text,
+        "expected_revenue": expectedRevenueUpdateController.text.isEmpty?"":expectedRevenueUpdateController.text,
+        "furniture_included_in_civil_scope": furnitureIncludedInCivilController.text=="Yes"?1:0,
+        "customer_name": customerNameController.text.isEmpty?"":customerNameController.text,
+        "contact_person_decision_maker": contactPersonHODController.text.isEmpty?"":contactPersonHODController.text,
+        "name_of_agency_contrator": agencyContractorUpdateController.text.isEmpty?"":agencyContractorUpdateController.text,
+        "owner_of_contrator": ownerOfContractorController.text.isEmpty?"":ownerOfContractorController.text,
+        "project_site_manager": siteManagerController.text.isEmpty?"":siteManagerController.text,
+        "name_of_architect_firm": nameOfArchitecfirmUpdateController.text.isEmpty?"":nameOfArchitecfirmUpdateController.text,
+        "architect": architectUpdateController.text.isEmpty?"":architectUpdateController.text,
+        "lines": lines.map((line) => line.toJson()).toList(),
+        "drawing_collected": drawingcollectedUpdateController.text=="Yes"?1:0,
+        "date_drawing_received": dateDrawingReceived??"",
+        "proposal_submitted": proposalSubmittedUpdateController.text=="Yes"?1:0,
+        "date_of_proposal_submission": dateOfProposalSubmission??"",
+        "value_of_quote": valueOfQuoteUpdateController.text.isEmpty?"":valueOfQuoteUpdateController.text,
+        "expected_date_of_order": expOrderDate??"",
+        "inaugration_date_of_project": inaugurationDate??"",
+        "created_by": email
+      };
+      this.loading.value = true;
+      print(data);
+      String onValue = await  _api.SalesCycleMstInfraUpdate(data, sessionManagement);
+      final jsonResponse = json.decode(onValue);
+      print(onValue);
+      if (jsonResponse is List) {
+        List<TaskUpdateInfraModal> response = jsonResponse.map((e) => TaskUpdateInfraModal.fromJson(e)).toList();
+        if (response[0].condition == "True") {
+          loading.value = false;
+          Utils.sanckBarSuccess("Message !", response[0].message.toString());
+          getsalesCycleData(pageNumber, saleCycleList[0].salesCycleId!, "ViewHeader", 'Sales');
+
+          Get.toNamed(RoutesName.viewSalesCycleHeaderScreen);
+
+
+          clearInfraUpdateController();
+        } else {
+          loading.value = false;
+          Utils.sanckBarError("False Message !", response[0].message.toString());
+        }
+      }
+    } catch (e) {
+      Utils.sanckBarException("Message !", e.toString());
+      print(e);
+      loading.value = false;
+    }
+    /*finally{
+                loading.value = false;
+            }*/
+  }
+  void clearInfraUpdateController(){
+    projectValueUpdateController.clear();
+    expectedDateOfOrderUpdateController.clear();
+    drawingcollectedUpdateController.clear();
+    proposalSubmittedUpdateController.clear();
+    inaugrationDateUpdateController.clear();
+    architectUpdateController.clear();
+    executiveEngineerUpdateController.clear();
+    nameOfArchitecfirmUpdateController.clear();
+    nameofInfradepUpdateController.clear();
+    agencyContractorUpdateController.clear();
+    expectedRevenueUpdateController.clear();
+    valueOfQuoteUpdateController.clear();
+    dateofcompletioneUpdateController.clear();
+    assistantEngineerController.clear();
+    nameOfProjectController.clear();
+    locationController.clear();
+    furnitureIncludedInCivilController.clear();
+    customerNameController.clear();
+    contactPersonHODController.clear();
+    ownerOfContractorController.clear();
+    siteManagerController.clear();
+    dateOfDrawingReceivedController.clear();
+    dateOfProposalSubmissionController.clear();
+    projectValueUpdateController.clear();
+
   }
 
 }
