@@ -195,6 +195,10 @@ class AddNewPreventiveCalenderScreen extends StatelessWidget {
           onTapOutside: (_) => FocusScope.of(context).unfocus(),
           onChanged: (value) {
             c.amcRequestInvoiceNoController.value.text = value;
+            if(value.isEmpty){
+              c.selectedItemNo.value="";
+              create_preventive_page_controller.itemKey.value++;
+            }
           },
 
           decoration: InputDecoration(
@@ -488,9 +492,25 @@ class AddNewPreventiveCalenderScreen extends StatelessWidget {
                 c.selectedItemNo.value),*/
         key: ValueKey(c.itemKey.value),
         displayStringForOption: (option) => option.itemNo ?? "",
-        optionsBuilder: (TextEditingValue textEditingValue) {
+       /* optionsBuilder: (TextEditingValue textEditingValue) {
           final list = c.amcRequestInvoiceItemNoList;
           if (textEditingValue.text.isEmpty) return list;
+          return list.where((item) {
+            return item.itemNo!
+                .toLowerCase()
+                .contains(textEditingValue.text.toLowerCase());
+          }).toList();
+        },*/
+
+        optionsBuilder: (TextEditingValue textEditingValue) {
+          final c = create_preventive_page_controller;
+          if (c.amcRequestInvoiceNoController.value.text.trim().isEmpty) {
+            return const Iterable<AMCRequestInvoiceItemGetModal>.empty();
+          }
+          final list = c.amcRequestInvoiceItemNoList;
+          if (textEditingValue.text.isEmpty) {
+            return list;
+          }
           return list.where((item) {
             return item.itemNo!
                 .toLowerCase()
@@ -766,9 +786,12 @@ class AddNewPreventiveCalenderScreen extends StatelessWidget {
           DateTime start_date = DateFormat("yyyy-MM-dd").parse(text);
           DateTime ending_date = new DateTime(2200);
           FocusScope.of(context).requestFocus(new FocusNode());
+          DateTime initialDate = DateTime.now().isBefore(start_date)
+              ? start_date
+              : DateTime.now();
           DateTime? date = await showDatePicker(
             context: context,
-            initialDate: DateTime.now(),
+            initialDate: initialDate,
             firstDate: start_date,
             lastDate: ending_date,
             builder: (BuildContext context, Widget? child) {

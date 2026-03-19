@@ -1944,32 +1944,24 @@ class PreventiveViewModel extends GetxController {
 
   Future<void> getAMCRequestInvoiceItemNo(String invoiceNo) async {
     amcRequestInvoiceItemNoList.clear();
-
     Map<String, String> data = {
       "email_id": email,
       "invoice_no": invoiceNo
     };
-
     loading.value = true;
-
     try {
       final value =
       await _api.aMCRequestInvoiceWiseItemGetApiHit(
           data, sessionManagement);
-
       final jsonResponse = json.decode(value);
-
       if (jsonResponse is List) {
         List<AMCRequestInvoiceItemGetModal> response =
         jsonResponse
             .map((e) =>
             AMCRequestInvoiceItemGetModal.fromJson(e))
             .toList();
-
         if (response.isNotEmpty &&
             response[0].condition == "True") {
-
-          // 🔥 IMPORTANT FIX
           amcRequestInvoiceItemNoList.clear();
           amcRequestInvoiceItemNoList.addAll(response);
         } else {
@@ -1983,7 +1975,6 @@ class PreventiveViewModel extends GetxController {
       amcRequestInvoiceItemNoList.clear();
       print(e);
     }
-
     loading.value = false;
   }
 
