@@ -9,10 +9,12 @@ class DefaultButtonRed extends StatelessWidget {
     Key? key,
     this.text,
     this.press,
+    this.loading=false,
   }) : super(key: key);
 
   final String? text;
   final Function? press;
+  final bool loading;
 
   Size size = Get.size;
 
@@ -27,7 +29,7 @@ class DefaultButtonRed extends StatelessWidget {
             borderRadius: BorderRadius.circular(20),
           ), backgroundColor: AllColors.redColor,
         ),
-        onPressed: press as void Function()?,
+        onPressed: loading ? null : press as void Function()?,
         child: Text(
           text!,
           style: GoogleFonts.poppins(

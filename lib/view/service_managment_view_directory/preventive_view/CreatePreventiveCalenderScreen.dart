@@ -7,6 +7,7 @@ import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:navigation_drawer_flutter/constants/static_methods.dart';
+import 'package:navigation_drawer_flutter/reources/routes/routes_name.dart';
 
 import '../../../constants/app_colors.dart';
 import '../../../constants/app_font_size.dart';
@@ -23,16 +24,32 @@ class CreatePreventiveCalenderScreen extends StatelessWidget{
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          'Preventive Calender',
-          style: GoogleFonts.poppins(
-            color: AllColors.whiteColor,
-            fontSize: AllFontSize.twentee,
-            fontWeight: FontWeight.w700,
-          ),
+        title: Row(
+          children: [
+            Text(
+              'Preventive Calender',
+              style: GoogleFonts.poppins(
+                color: AllColors.whiteColor,
+                fontSize: AllFontSize.twentee,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            
+            Spacer(),
+            GestureDetector(
+              onTap: (){
+                create_preventive_page_controller.getAMCRequestInvoice("");
+                Get.toNamed(RoutesName.add_new_preventive_calender_screen);
+              },
+              child: CircleAvatar(
+                minRadius: 18,
+                  child: Icon(Icons.add,color:AllColors.primaryDark1),
+              ),
+            )
+          ],
         ),
         iconTheme: IconThemeData(
-          color: AllColors.whiteColor, // Change this to the desired color
+          color: AllColors.whiteColor,
         ),
         backgroundColor: AllColors.primaryDark1,
       ),

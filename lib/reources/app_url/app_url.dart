@@ -98,7 +98,15 @@ class AppUrl {
   static const String createPreventiveCalender = "$BASE_URL/api/ServiceActivity/ServiceWarrantyCalanderGet";
   static const String createPreventiveCall = "$BASE_URL/api/ServiceActivity/ServiceWarrantyPreventiveCreate";
   static const String preventiveOffSiteMarkClosure = "$BASE_URL/api/ServiceActivity/ServiceMarkOffsiteClosure";
-     static const String priventiveDeleteDocument = "$BASE_URL/api/ServiceActivity/ServiceUploadDocumentDelete";
+  static const String priventiveDeleteDocument = "$BASE_URL/api/ServiceActivity/ServiceUploadDocumentDelete";
+
+  //todo written by nirupma for creating preventing  calender
+     static const String aMCRequestInvoiceGet="$BASE_URL/api/ServiceActivity/AMCRequestInvoiceGet";
+     static const String aMCRequestInvoiceWiseItemGet="$BASE_URL/api/ServiceActivity/AMCRequestInvoiceWiseItemGet";
+     static const String aMCRequestCreation="$BASE_URL/api/ServiceActivity/AMCRequestCreation";
+
+
+
   //todo for user expenses..................
 
   static const String getExpenseHeader="$BASE_URL/api/Expense/GetExpenseHeader";
