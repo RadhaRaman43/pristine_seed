@@ -139,7 +139,7 @@ class SalesCycleScreen extends StatelessWidget{
                             },
                           );
                         }),
-                        SizedBox(width: 8),
+                        const SizedBox(width: 8),
                         Obx(() {
                           return ActionChip(
                             elevation: 2,
@@ -177,7 +177,7 @@ class SalesCycleScreen extends StatelessWidget{
                             },
                           );
                         }),
-                        SizedBox(width: 8), // optional spacing between chips
+                        const SizedBox(width: 8), // optional spacing between chips
                         Obx(() {
                           return ActionChip(
                             elevation: 2,
@@ -214,7 +214,7 @@ class SalesCycleScreen extends StatelessWidget{
                             },
                           );
                         }),
-                        SizedBox(width: 8),
+                        const SizedBox(width: 8),
                         Obx(() {
                           return ActionChip(
                             elevation: 2,
@@ -251,7 +251,55 @@ class SalesCycleScreen extends StatelessWidget{
                             },
                           );
                         }),
-                        SizedBox(width: 8),
+                        const SizedBox(width: 8),
+                        Obx(() {
+                          return ActionChip(
+                            elevation: 2,
+                            padding: EdgeInsets.symmetric(horizontal: 30, vertical: 2),
+                            backgroundColor:
+                            salesCycleController.quoteAcceptedForFilterOnSaleCycle.value=="Overdue"
+                                ? AllColors.primaryDark1
+                                : AllColors.grayColor,
+                            shadowColor: Colors.black,
+                            shape: StadiumBorder(
+                              side: BorderSide(color: AllColors.grayColor),
+                            ),
+                            label: Text(
+                                'Overdue',
+                                style: TextStyle(
+                                  color: salesCycleController.quoteAcceptedForFilterOnSaleCycle.value=="Overdue"
+                                      ? AllColors.whiteColor
+                                      : AllColors.primaryDark1,
+                                  fontSize: AllFontSize.fourtine,
+                                  fontWeight: FontWeight.w500,
+                                )
+                            ),
+                            onPressed: () {
+                              salesCycleController.filterQuoteAcceptedFlag.value = 'Open';
+                              salesCycleController.quoteAcceptedForFilterOnSaleCycle.value="Overdue";
+                              salesCycleController.pageNumber=0;
+                              DateTime now = DateTime.now();
+                              late DateTime startDate;
+                              late DateTime endDate;
+                              if (now.month >= 4) {
+                                // Current FY: starts from April this year to March next year
+                                startDate = DateTime(now.year, 4, 1);
+                                endDate = DateTime(now.year + 1, 3, 31);
+                              } else {
+                                // Current FY: starts from April last year to March this year
+                                startDate = DateTime(now.year - 1, 4, 1);
+                                endDate = DateTime(now.year, 3, 31);
+                              }
+                              String start,end;
+                               start= DateFormat('yyyy-MM-dd').format(startDate);
+                              end = DateFormat('yyyy-MM-dd').format(endDate);
+                              salesCycleController.extClosureStartToEnd.value="$start@$end";
+                              salesCycleController.filterExpectedClosuredateController.value.text = '$start - $end';
+                              salesCycleController.getsalesCycleData(salesCycleController.pageNumber, "", "salesPage",'',);
+                            },
+                          );
+                        }),
+                        const SizedBox(width: 8),
                       ],
                     ),
                   ),
