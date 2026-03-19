@@ -25,7 +25,7 @@ class AddNewPreventiveCalenderScreen extends StatelessWidget {
 
   static String _displayAMCRequestInvoiceItemNoForOption(
           AMCRequestInvoiceItemGetModal option) =>
-      option.itemNo ?? "";
+      option.itemNo! +"( ${option.itemName} )";
 
   Size size = Get.size;
 
@@ -65,10 +65,13 @@ class AddNewPreventiveCalenderScreen extends StatelessWidget {
                   const SizedBox(
                     height: 10,
                   ),
-                  Visibility(
-                    visible: create_preventive_page_controller.isShowItemNo.value,
-                    child: bindInvoiceItemGet(context),
-                  ),
+                  Obx((){
+                    return Visibility(
+                      visible: create_preventive_page_controller.isShowItemNo.value,
+                      child: bindInvoiceItemGet(context),
+                    );
+                  }),
+
                   const SizedBox(
                     height: 10,
                   ),
@@ -111,9 +114,8 @@ class AddNewPreventiveCalenderScreen extends StatelessWidget {
                               Utils.sanckBarError(
                                   'Invoice No. ', 'Please Select Invoice No.');
                             } else if (create_preventive_page_controller
-                                .amcRequestInvoiceItemNoController
+                                .selectedItemNo
                                 .value
-                                .text
                                 .isEmpty) {
                               Utils.sanckBarError(
                                   'Item No. ', 'Please Select Item No.');
@@ -150,14 +152,110 @@ class AddNewPreventiveCalenderScreen extends StatelessWidget {
     );
   }
 
-  Widget bindInvoiceNo(context) {
+
+  Widget bindInvoiceNo(BuildContext context) {
+    final controller = create_preventive_page_controller;
+    return Autocomplete<AMCRequestInvoiceGetModal>(
+      key: ValueKey(controller.invoiceKey.value),
+      displayStringForOption: (option) =>
+      option.invoiceNo ?? "",
+      optionsBuilder: (TextEditingValue textEditingValue) async {
+        return await controller
+            .getAMCRequestInvoice(textEditingValue.text);
+      },
+      onSelected: (selection) async {
+        controller.amcRequestInvoiceNoController.value.text =
+            selection.invoiceNo ?? "";
+        controller.serviceNo.value =
+            selection.serviceNo ?? "";
+        controller.amcRequestInvoiceItemNoController.clear();
+        controller.selectedItemNo.value = "";
+        controller.amcRequestInvoiceItemNoList.clear();
+        create_preventive_page_controller.itemKey.value++;
+
+        await controller.getAMCRequestInvoiceItemNo(
+            selection.invoiceNo ?? "");
+      },
+
+      fieldViewBuilder: (context, textController, focusNode, onSubmit) {
+        final c = create_preventive_page_controller;
+        if (c.amcRequestInvoiceNoController.value.text.isNotEmpty &&
+            textController.text !=
+                c.amcRequestInvoiceNoController.value.text) {
+          textController.text =
+              c.amcRequestInvoiceNoController.value.text;
+          textController.selection = TextSelection.fromPosition(
+            TextPosition(offset: textController.text.length),
+          );
+        }
+        return TextField(
+          controller: textController,
+          focusNode: focusNode,
+          cursorColor: AllColors.primaryDark1,
+          onTapOutside: (_) => FocusScope.of(context).unfocus(),
+          onChanged: (value) {
+            c.amcRequestInvoiceNoController.value.text = value;
+          },
+
+          decoration: InputDecoration(
+            hintText: 'Select Invoice No.',
+            labelText: 'Select Invoice No.',
+            hintStyle: GoogleFonts.poppins(
+                color: AllColors.lightblackColor,
+                fontWeight: FontWeight.w300,
+                fontSize: AllFontSize.ten),
+            labelStyle: GoogleFonts.poppins(
+                color: AllColors.primaryDark1,
+                fontWeight: FontWeight.w700,
+                fontSize: AllFontSize.fourtine),
+            contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.two,
+              horizontal: AllFontSize.ten,
+            ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+              )
+          ),
+        );
+      },
+
+      optionsViewBuilder:
+          (context, onSelected, suggestions) {
+        return Align(
+            alignment: Alignment.topLeft,
+            child: Material(
+              elevation: 4,
+              child: Container(
+                color: AllColors.grayColor1,
+                constraints: BoxConstraints(maxHeight: 300),
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: suggestions.length,
+                  itemBuilder: (context, index) {
+                    final option = suggestions.elementAt(index);
+                    return ListTile(
+                      title: Text(option.invoiceNo ?? ""),
+                      onTap: () => onSelected(option),
+                    );
+                  },
+                ),
+              ),
+            )
+        );
+      },
+    );
+  }
+ /* Widget bindInvoiceNo(context) {
     return Autocomplete<AMCRequestInvoiceGetModal>(
       displayStringForOption: _displayAMCRequestInvoiceNoForOption,
       optionsBuilder: (TextEditingValue textEditingValue) async {
-        /*if (textEditingValue.text.isEmpty) {
+        *//*if (textEditingValue.text.isEmpty) {
           return [];
           //return create_preventive_page_controller.amcRequestInvoiceList.value;
-        }*/
+        }*//*
         return await create_preventive_page_controller.getAMCRequestInvoice(textEditingValue.text);
       },
       onSelected: (AMCRequestInvoiceGetModal selection) {
@@ -166,13 +264,14 @@ class AddNewPreventiveCalenderScreen extends StatelessWidget {
             .text = _displayAMCRequestInvoiceNoForOption(selection!).toString();
         create_preventive_page_controller.serviceNo.value =
             selection.serviceNo ?? "";
-        create_preventive_page_controller
-            .amcRequestInvoiceItemNoController.value
-            .clear();
+        create_preventive_page_controller.amcRequestInvoiceItemNoController.clear();
+        create_preventive_page_controller.amcRequestInvoiceItemNoList.clear();
+        create_preventive_page_controller.selectedItemNo.value="";
+        create_preventive_page_controller.isShowItemNo.value=false;
+        create_preventive_page_controller.isShowItemNo.value=true;
+        create_preventive_page_controller.getAMCRequestInvoiceItemNo(selection.invoiceNo ?? "");
 
-        create_preventive_page_controller
-            .getAMCRequestInvoiceItemNo(selection.invoiceNo ?? "");
-        FocusScope.of(context).unfocus();
+        //FocusScope.of(context).unfocus();
       },
       fieldViewBuilder: (BuildContext context, TextEditingController controller,
           FocusNode focusNode, VoidCallback onFieldSubmitted) {
@@ -180,19 +279,24 @@ class AddNewPreventiveCalenderScreen extends StatelessWidget {
           onTapOutside: (value) {
             FocusScope.of(context).unfocus();
           },
-          onChanged: (value) {
-            if (value.isEmpty) {
-              create_preventive_page_controller
-                  .amcRequestInvoiceNoController.value
-                  .clear();
-            }
-            // create_preventive_page_controller.getAMCRequestInvoice("");
-          },
           cursorColor: AllColors.primaryDark1,
           controller: controller
             ..text = create_preventive_page_controller
                 .amcRequestInvoiceNoController.value.text,
           focusNode: focusNode,
+          onChanged: (value){
+            if(value.isEmpty || value==null){
+              create_preventive_page_controller
+                  .amcRequestInvoiceNoController.value.clear();
+              create_preventive_page_controller.isShowInvoiceNo.value=false;
+              create_preventive_page_controller.isShowInvoiceNo.value=true;
+              create_preventive_page_controller
+                  .amcRequestInvoiceItemNoController.clear();
+              create_preventive_page_controller.isShowItemNo.value=false;
+              create_preventive_page_controller.isShowItemNo.value=true;
+
+            }
+          },
           decoration: InputDecoration(
               contentPadding: EdgeInsets.symmetric(
                   vertical: AllFontSize.two, horizontal: AllFontSize.ten),
@@ -223,6 +327,7 @@ class AddNewPreventiveCalenderScreen extends StatelessWidget {
             elevation: 4.0,
             child: Container(
               color: AllColors.grayColor1,
+              width: size.width,
               constraints: BoxConstraints(maxHeight: 300),
               child: ListView.builder(
                 shrinkWrap: true,
@@ -239,15 +344,18 @@ class AddNewPreventiveCalenderScreen extends StatelessWidget {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
-                              overflow: TextOverflow.ellipsis,
-                              option.invoiceNo.toString(),
-                              style: GoogleFonts.poppins(
-                                  color: AllColors.blackColor,
-                                  fontWeight: FontWeight.w300,
-                                  fontSize: AllFontSize
-                                      .sisxteen // Change the text color here
-                                  ),
+                            Container(
+                              width: size.width*.7,
+                              child: Text(
+                                overflow: TextOverflow.ellipsis,
+                                option.invoiceNo.toString(),
+                                style: GoogleFonts.poppins(
+                                    color: AllColors.blackColor,
+                                    fontWeight: FontWeight.w300,
+                                    fontSize: AllFontSize
+                                        .sisxteen // Change the text color here
+                                    ),
+                              ),
                             ),
                           ],
                         )),
@@ -259,7 +367,7 @@ class AddNewPreventiveCalenderScreen extends StatelessWidget {
         );
       },
     );
-  }
+  }*/
 
 /*  bindInvoiceNo(BuildContext context){
     return Container(
@@ -371,11 +479,100 @@ class AddNewPreventiveCalenderScreen extends StatelessWidget {
       ),
     );
   }*/
+  Widget bindInvoiceItemGet(BuildContext context) {
+    return Obx(() {
+      final c = create_preventive_page_controller;
+      return Autocomplete<AMCRequestInvoiceItemGetModal>(
+       /* key: ValueKey(
+            c.amcRequestInvoiceItemNoList.length.toString() +
+                c.selectedItemNo.value),*/
+        key: ValueKey(c.itemKey.value),
+        displayStringForOption: (option) => option.itemNo ?? "",
+        optionsBuilder: (TextEditingValue textEditingValue) {
+          final list = c.amcRequestInvoiceItemNoList;
+          if (textEditingValue.text.isEmpty) return list;
+          return list.where((item) {
+            return item.itemNo!
+                .toLowerCase()
+                .contains(textEditingValue.text.toLowerCase());
+          }).toList();
+        },
+        onSelected: (selection) {
+          c.selectedItemNo.value = selection.itemNo ?? "";
+          FocusScope.of(context).unfocus();
+        },
 
-  Widget bindInvoiceItemGet(context) {
+        fieldViewBuilder:
+            (context, textController, focusNode, onSubmit) {
+          if (c.selectedItemNo.value.isNotEmpty &&
+              textController.text != c.selectedItemNo.value) {
+            textController.text = c.selectedItemNo.value;
+          }
+          return TextField(
+            controller: textController,
+            focusNode: focusNode,
+            cursorColor: AllColors.primaryDark1,
+            decoration: InputDecoration(
+              hintText: 'Select Item No.',
+              labelText: 'Select Item No.',
+              hintStyle: GoogleFonts.poppins(
+                  color: AllColors.lightblackColor,
+                  fontWeight: FontWeight.w300,
+                  fontSize: AllFontSize.ten),
+              labelStyle: GoogleFonts.poppins(
+                  color: AllColors.primaryDark1,
+                  fontWeight: FontWeight.w700,
+                  fontSize: AllFontSize.fourtine),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                )
+             /* border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),*/
+            ),
+          );
+        },
+
+        optionsViewBuilder:
+            (context, onSelected, suggestions) {
+          return Align(
+            alignment: Alignment.topLeft,
+            child: Material(
+              elevation: 4,
+              child: Container(
+                color: AllColors.grayColor1,
+                constraints: BoxConstraints(maxHeight: 300),
+                child: ListView.builder(
+                  itemCount: suggestions.length,
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) {
+                    final option = suggestions.elementAt(index);
+
+                    return ListTile(
+                      title: Text(
+                          "${option.itemNo} (${option.itemName})"),
+                      onTap: () => onSelected(option),
+                    );
+                  },
+                ),
+              ),
+            ),
+          );
+        },
+      );
+    });
+  }
+/*  Widget bindInvoiceItemGet(context) {
     return Autocomplete<AMCRequestInvoiceItemGetModal>(
       displayStringForOption: _displayAMCRequestInvoiceItemNoForOption,
-      optionsBuilder: (TextEditingValue textEditingValue) async {
+      optionsBuilder: (TextEditingValue textEditingValue) {
+        if (textEditingValue.text.isEmpty) {
+          print("list...${create_preventive_page_controller.amcRequestInvoiceItemNoList.length}");
+          return create_preventive_page_controller.amcRequestInvoiceItemNoList.value;
+        }
         return create_preventive_page_controller.amcRequestInvoiceItemNoList
             .where((AMCRequestInvoiceItemGetModal option) {
           return option.itemNo
@@ -384,12 +581,15 @@ class AddNewPreventiveCalenderScreen extends StatelessWidget {
               .contains(textEditingValue.text.toLowerCase());
         }).toList();
       },
+
+
       onSelected: (AMCRequestInvoiceItemGetModal selection) {
         print(selection);
         create_preventive_page_controller
-                .amcRequestInvoiceItemNoController.value.text =
+                .amcRequestInvoiceItemNoController.text =
             _displayAMCRequestInvoiceItemNoForOption(selection!).toString();
         FocusScope.of(context).unfocus();
+        create_preventive_page_controller.selectedItemNo.value=selection.itemNo??"";
       },
       fieldViewBuilder: (BuildContext context, TextEditingController controller,
           FocusNode focusNode, VoidCallback onFieldSubmitted) {
@@ -397,10 +597,14 @@ class AddNewPreventiveCalenderScreen extends StatelessWidget {
           onTapOutside: (value) {
             FocusScope.of(context).unfocus();
           },
+          onTap: (){
+            create_preventive_page_controller.isShowItemNo.value=false;
+            create_preventive_page_controller.isShowItemNo.value=true;
+          },
           cursorColor: AllColors.primaryDark1,
           controller: controller
             ..text = create_preventive_page_controller
-                .amcRequestInvoiceItemNoController.value.text,
+                .amcRequestInvoiceItemNoController.text,
           focusNode: focusNode,
           decoration: InputDecoration(
               contentPadding: EdgeInsets.symmetric(
@@ -448,15 +652,18 @@ class AddNewPreventiveCalenderScreen extends StatelessWidget {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
-                              overflow: TextOverflow.ellipsis,
-                              option.itemNo.toString(),
-                              style: GoogleFonts.poppins(
-                                  color: AllColors.blackColor,
-                                  fontWeight: FontWeight.w300,
-                                  fontSize: AllFontSize
-                                      .sisxteen // Change the text color here
-                                  ),
+                            Container(
+                              width: size.width*.7,
+                              child: Text(
+                                overflow: TextOverflow.ellipsis,
+                                  option.itemNo! +"( ${option.itemName} )",
+                                style: GoogleFonts.poppins(
+                                    color: AllColors.blackColor,
+                                    fontWeight: FontWeight.w300,
+                                    fontSize: AllFontSize
+                                        .sisxteen // Change the text color here
+                                    ),
+                              ),
                             ),
                           ],
                         )),
@@ -468,7 +675,7 @@ class AddNewPreventiveCalenderScreen extends StatelessWidget {
         );
       },
     );
-  }
+  }*/
 
   bindWarrantyStartDate(BuildContext context) {
     return TextField(
@@ -613,4 +820,6 @@ class AddNewPreventiveCalenderScreen extends StatelessWidget {
       cursorColor: AllColors.primaryDark1,
     );
   }
+
+
 }

@@ -127,14 +127,17 @@ class PreventiveViewModel extends GetxController {
   //todo add new preventive calender controller
 
   var amcRequestInvoiceNoController = TextEditingController().obs;
-  var amcRequestInvoiceItemNoController = TextEditingController().obs;
+  final amcRequestInvoiceItemNoController = TextEditingController();
   var warrantyStartDateController = TextEditingController().obs;
   var warrantyEndDateController = TextEditingController().obs;
   var frequencyController = TextEditingController().obs;
   RxBool isShowInvoiceNo=true.obs;
   RxBool isShowItemNo=true.obs;
+  RxInt invoiceKey = 0.obs;
+  RxInt itemKey = 0.obs;
 
   RxString serviceNo="".obs;
+  RxString selectedItemNo="".obs;
 
   RxDouble currentLat = 0.0.obs;
   RxDouble currentLng = 0.0.obs;
@@ -1882,6 +1885,7 @@ class PreventiveViewModel extends GetxController {
         jsonResponse.map((data) => AMCRequestInvoiceGetModal.fromJson(data)).toList();
         if (response[0].condition?.toLowerCase() == 'true') {
           amcRequestInvoiceList.value = response;
+
         } else {
           amcRequestInvoiceList.value= [];
         }
@@ -1937,7 +1941,53 @@ class PreventiveViewModel extends GetxController {
     }
   }*/
 
-  getAMCRequestInvoiceItemNo(String invoiceNo) {
+
+  Future<void> getAMCRequestInvoiceItemNo(String invoiceNo) async {
+    amcRequestInvoiceItemNoList.clear();
+
+    Map<String, String> data = {
+      "email_id": email,
+      "invoice_no": invoiceNo
+    };
+
+    loading.value = true;
+
+    try {
+      final value =
+      await _api.aMCRequestInvoiceWiseItemGetApiHit(
+          data, sessionManagement);
+
+      final jsonResponse = json.decode(value);
+
+      if (jsonResponse is List) {
+        List<AMCRequestInvoiceItemGetModal> response =
+        jsonResponse
+            .map((e) =>
+            AMCRequestInvoiceItemGetModal.fromJson(e))
+            .toList();
+
+        if (response.isNotEmpty &&
+            response[0].condition == "True") {
+
+          // 🔥 IMPORTANT FIX
+          amcRequestInvoiceItemNoList.clear();
+          amcRequestInvoiceItemNoList.addAll(response);
+        } else {
+          amcRequestInvoiceItemNoList.clear();
+        }
+      } else {
+        amcRequestInvoiceItemNoList.clear();
+        Utils.sanckBarException("Api Error!", jsonResponse);
+      }
+    } catch (e) {
+      amcRequestInvoiceItemNoList.clear();
+      print(e);
+    }
+
+    loading.value = false;
+  }
+
+/*  getAMCRequestInvoiceItemNo(String invoiceNo) {
     amcRequestInvoiceItemNoList.value=[];
     Map<String, String> data = {"email_id": email, "invoice_no": invoiceNo};
     print(data);
@@ -1975,21 +2025,33 @@ class PreventiveViewModel extends GetxController {
       amcRequestInvoiceItemNoList.value = [];
       print(e);
     }
-  }
+  }*/
 
   void clearAllField() {
-    amcRequestInvoiceItemNoController.value.clear();
+    amcRequestInvoiceItemNoController.clear();
     amcRequestInvoiceNoController.value.clear();
     warrantyStartDateController.value.clear();
     warrantyEndDateController.value.clear();
     frequencyController.value.clear();
     serviceNo.value="";
+    selectedItemNo.value="";
    // amcRequestInvoiceItemNoList.value=[];
     isShowInvoiceNo.value=false;
     isShowInvoiceNo.value=true;
     isShowItemNo.value=false;
     isShowItemNo.value=true;
+    invoiceKey.value++;
+    itemKey.value++;
 
+  }
+
+  @override
+  void onClose() {
+    amcRequestInvoiceNoController.value.dispose();
+    warrantyStartDateController.value.dispose();
+    warrantyEndDateController.value.dispose();
+    frequencyController.value.dispose();
+    super.onClose();
   }
 
   getAMCRequestCreation() {
@@ -1997,7 +2059,7 @@ class PreventiveViewModel extends GetxController {
       "email_id": email,
       "service_no": serviceNo.value,
       "invoice_no": amcRequestInvoiceNoController.value.text,
-      "item_no": amcRequestInvoiceItemNoController.value.text,
+      "item_no":selectedItemNo.value,
       "warranty_start_date": warrantyStartDateController.value.text,
       "warranty_end_date": warrantyEndDateController.value.text,
       "frequency_of_pm": frequencyController.value.text
