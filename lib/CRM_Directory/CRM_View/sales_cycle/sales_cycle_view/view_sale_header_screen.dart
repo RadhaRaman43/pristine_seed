@@ -1067,31 +1067,13 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                           width: 10,
                                         ),
                                         Visibility(
-                                          visible: saleCycleController
-                                                          .saleCycleList[0]
-                                                          .createdBy
-                                                          ?.toLowerCase() ==
-                                                      saleCycleController.email
-                                                          .toLowerCase() &&
-                                                  saleCycleController
-                                                          .saleCycleList[0]
-                                                          .quoteAccepted
-                                                          ?.toUpperCase() ==
-                                                      "OPEN" &&
-                                                  !(saleCycleController.FromPage.value ==
-                                                          "FromDashboard" ||
-                                                      saleCycleController
-                                                              .FromPage.value ==
-                                                          "QuotePendingPage" ||
-                                                      saleCycleController
-                                                              .FromPage.value ==
-                                                          "ApprovedRejectedQuotePage" ||
-                                                      saleCycleController
-                                                              .FromPage.value ==
-                                                          "FromAllQuotePage" ||
-                                                      saleCycleController
-                                                              .FromPage.value ==
-                                                          "FromALLQuoteLineItems")
+                                          visible: saleCycleController.saleCycleList[0].createdBy?.toLowerCase() == saleCycleController.email.toLowerCase() &&
+                                                  saleCycleController.saleCycleList[0].quoteAccepted?.toUpperCase() == "OPEN" &&
+                                                  !(saleCycleController.FromPage.value == "FromDashboard" ||
+                                                      saleCycleController.FromPage.value == "QuotePendingPage" ||
+                                                      saleCycleController.FromPage.value == "ApprovedRejectedQuotePage" ||
+                                                      saleCycleController.FromPage.value == "FromAllQuotePage" ||
+                                                      saleCycleController.FromPage.value == "FromALLQuoteLineItems")
                                               ? true
                                               : false,
                                           child: GestureDetector(
@@ -1115,11 +1097,11 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                               saleCycleController.Shipping_email_Controller.value.text = saleCycleController
                                                       .saleCycleList[0].shippingEmailId ?? "";
                                               saleCycleController.itemCategorySelectedlist.value = [];
-                                              /*saleCycleController.getItemCategoryMstApi(
+                                              saleCycleController.getItemCategoryMstApi(
                                                       saleCycleController.saleCycleList[0].salesCycleId?? "",
-                                                      saleCycleController.saleCycleList[0].taskId?? "","");*/
-                                              saleCycleController.getParentItemCategoryMstGet();
-                                              saleCycleController.IsMultiParentCategory_controller.value.text="No";
+                                                      saleCycleController.saleCycleList[0].taskId?? "","");
+                                              //saleCycleController.getParentItemCategoryMstGet();
+                                              //saleCycleController.IsMultiParentCategory_controller.value.text="No";
                                               Get.toNamed(RoutesName.salesCycleCreateQuoteScreen);
                                             },
                                             child: Container(

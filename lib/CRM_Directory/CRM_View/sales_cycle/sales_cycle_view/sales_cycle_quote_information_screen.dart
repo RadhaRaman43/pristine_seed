@@ -1318,14 +1318,21 @@ class QuoteInformationScreen extends StatelessWidget {
                     value: saleCycleController.quoteHeaderdata[0].contactName ?? "",
                     color: AllColors.textColor,
                   ),
-
-
                   _buildLabelWithValue(
+                      label: "Product Category",
+                      value: saleCycleController.quoteHeaderdata[0].productCategory
+
+                          ?? "",
+                      color: AllColors.textColor,
+                      context: context
+                  ),
+
+                 /* _buildLabelWithValue(
                     label: "P. Product Category",
                     value: saleCycleController.quoteHeaderdata[0].parentCategoryCode ?? "",
                     color: AllColors.textColor,
                     context: context
-                  ),
+                  ),*/
 
 
                   _buildLabelWithValue(

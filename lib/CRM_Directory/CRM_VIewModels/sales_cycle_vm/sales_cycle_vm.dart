@@ -1160,8 +1160,7 @@ class SalesCycleVm extends GetxController {
     }
   }
 
-  getQuoteHeaderData(
-      int pageNumberForQuote, String saleCycleId, String status) {
+  getQuoteHeaderData(int pageNumberForQuote, String saleCycleId, String status) {
     try {
       Map data = {
         "filter_quote_id": filterQuoteIdController.value.text.isNotEmpty
@@ -1238,9 +1237,7 @@ class SalesCycleVm extends GetxController {
             List<SalesCycleQuoteHeaderModal> response = jsonResponse
                 .map((e) => SalesCycleQuoteHeaderModal.fromJson(e))
                 .toList();
-            if (response != null &&
-                response.length > 0 &&
-                response[0].condition?.toLowerCase() == "true") {
+            if (response != null && response.length > 0 && response[0].condition?.toLowerCase() == "true") {
                loading.value = false;
               if (pageNumberForQuote == 0) {
                 quoteList.clear();
@@ -1444,7 +1441,7 @@ class SalesCycleVm extends GetxController {
         "created_by": email,
         "kind_attention": kindAttentionController.value.text,
         "parent_category_code": productCategoryController.value.text.isNotEmpty?productCategoryController.value.text:"",
-        "is_multi_parent_category": IsMultiParentCategory_controller.value=="No"?0:1
+        //"is_multi_parent_category": IsMultiParentCategory_controller.value=="No"?0:1
       };
 
       loading.value = true;
@@ -1459,15 +1456,15 @@ class SalesCycleVm extends GetxController {
               Utils.sanckBarSuccess("Success!", response[0].message.toString());
               pageNumberForQuote = 0;
               getQuoteHeaderData(pageNumberForQuote, saleCycleList[0].salesCycleId!, '');
-              IsMultiParentCategory.value=true;
+              //IsMultiParentCategory.value=true;
               Get.toNamed(RoutesName.viewSalesCycleHeaderScreen);
               //getQuoteHeaderData(0,  saleCycleList[0].salesCycleId!, '');
               quoteValidityController.value.clear();
               expectedClosuredateController.value.clear();
               productCategoryController .value.clear();
               kindAttentionController.value.clear();
+              ProductCatCreateApiHit(response[0].quoteId!);
 
-              //ProductCatCreateApiHit(response[0].quoteId!);
               /*getQuoteHeaderData(0,  saleCycleList[0].salesCycleId!);
             Get.toNamed(RoutesName.viewSalesCycleHeaderScreen);
             quoteValidityController.value.clear();
@@ -2400,13 +2397,11 @@ class SalesCycleVm extends GetxController {
     _api.getItemCategoryMstApiHit(data, sessionManagement).then((value) {
       print(value);
       try {
-        List<ItemCategoryMstModel> Response = (json.decode(value)
-                as List<dynamic>)
+        List<ItemCategoryMstModel> Response = (json.decode(value) as List<dynamic>)
             .map((i) => ItemCategoryMstModel.fromJson(i as Map<String, dynamic>)).toList();
 
-        if (Response.isNotEmpty &&
-            Response[0]?.condition.toString() == "True") {
-          productCategoryList.value = Response!;
+        if (Response.isNotEmpty && Response[0]?.condition.toString() == "True") {
+          productCategoryList.value = Response;
           itemCategorySelectedlist.value = [];
           for (int i = 0; i < Response.length; i++) {
             if (Response[i].isSelected == 1) {
@@ -2450,12 +2445,6 @@ class SalesCycleVm extends GetxController {
 
         if (Response.isNotEmpty && Response[0]?.condition.toString() == "True") {
           parentProductCategoryList.value = Response!;
-          for(int i =0;i<parentProductCategoryList.length;i++){
-            print(" parent item${parentProductCategoryList[i].parentCategoryCode}");
-          }
-
-
-
         } else {
           parentProductCategoryList.value = [];
 

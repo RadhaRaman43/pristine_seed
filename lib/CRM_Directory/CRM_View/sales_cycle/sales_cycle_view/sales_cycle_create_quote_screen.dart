@@ -22,7 +22,7 @@ class SalesCycleCreateQuoteScreen extends StatelessWidget{
   static String _displayCustomerNeedIdentityStatusForOption(String option) =>
       option;
   static String _displayItemCatMasterForOption(ItemCategoryMstModel option) =>
-      option.parentCategoryCode!;
+      option.categoryName!;
   Size size=Get.size;
   @override
   Widget build(BuildContext context) {
@@ -68,8 +68,8 @@ class SalesCycleCreateQuoteScreen extends StatelessWidget{
           child: SingleChildScrollView(
             child: Column(
               children: [
-                Padding(padding: const EdgeInsets.only(left: 15.0, right: 15, top: 15),
-                child: bindIsMultiParentCategoryDropDown(context),),
+               /* Padding(padding: const EdgeInsets.only(left: 15.0, right: 15, top: 15),
+                child: bindIsMultiParentCategoryDropDown(context),),*/
                 const SizedBox(height: 10,),
                 bindAccountName(context),
                 const SizedBox(height: 10,),
@@ -83,7 +83,7 @@ class SalesCycleCreateQuoteScreen extends StatelessWidget{
                 const SizedBox(height: 10,),
                 bindKindAttention(context),
                 const  SizedBox(height: 10,),
-               /* bindProductCategoryDropDown(context),
+                bindProductCategoryDropDown(context),
                 const SizedBox(height: 10,),
                 Obx(() {
                   return
@@ -99,17 +99,17 @@ class SalesCycleCreateQuoteScreen extends StatelessWidget{
                       }).toList(),
                     );
 
-                }),*/
+                }),
                 const  SizedBox(height: 10,),
                /* bindQuoteCommitName(context),
                 SizedBox(height: 10,),*/
                 bindShippingAddress(context),
                 const  SizedBox(height: 10,),
-                Obx((){
+               /* Obx((){
 
                   return Visibility(visible: saleCycleController.IsMultiParentCategory.value,
-                    child:  bindProductCategoryDropDown(context),);
-                }),
+                    child:  bindParentProductCategoryDropDown(context),);
+                }),*/
                 //bindProductCategoryDropDown(context),
                 const SizedBox(height: 10,),
 
@@ -870,6 +870,119 @@ class SalesCycleCreateQuoteScreen extends StatelessWidget{
         displayStringForOption: _displayItemCatMasterForOption,
         optionsBuilder: (TextEditingValue textEditingValue) {
           if (textEditingValue.text.isEmpty) {
+            return saleCycleController.productCategoryList.value;
+            // return const Iterable<VehicleTypeResponse>.empty();
+          }
+          return saleCycleController.productCategoryList
+              .where((ItemCategoryMstModel option) {
+            return option.categoryName
+                .toString()
+                .toLowerCase()
+                .contains(textEditingValue.text.toLowerCase());
+          }).toList();
+        },
+        onSelected: (ItemCategoryMstModel selection) {
+          saleCycleController.productCategoryController.value.text =
+              _displayItemCatMasterForOption(selection).toString();
+          if (!saleCycleController.itemCategorySelectedlist.contains(selection)) {
+            saleCycleController.itemCategorySelectedlist.add(selection);
+            //Utils.showToastification('Success', 'Add Successfully');
+          }else{
+            Utils.showErrorToastification('Error', 'Already Selected');
+          }
+          print("list${saleCycleController.itemCategorySelectedlist.length}");
+
+        },
+        fieldViewBuilder: (BuildContext context, TextEditingController controller,
+            FocusNode focusNode, VoidCallback onFieldSubmitted) {
+          return TextField(
+            onTap: (){
+              controller.clear();
+            },
+            cursorColor: AllColors.primaryDark1,
+            controller: controller
+              ..text = saleCycleController.productCategoryController.value.text,
+            focusNode: focusNode,
+            decoration: InputDecoration(
+                suffixIcon: InkWell(
+                    onTap: (){
+                      focusNode.requestFocus();
+                      controller.clear();
+                    },
+                    child: Icon(Icons.arrow_drop_down)),
+                contentPadding: EdgeInsets.symmetric(
+                    vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+                hintText: 'Product Category',
+                labelText: 'Product Category',
+
+                hintStyle: GoogleFonts.poppins(
+                    color: AllColors.lightblackColor,
+                    fontWeight: FontWeight.w300,
+                    fontSize: AllFontSize.ten),
+                labelStyle: GoogleFonts.poppins(
+                    color: AllColors.primaryDark1,
+                    fontWeight: FontWeight.w500,
+                    fontSize: AllFontSize.sisxteen),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                )
+            ),
+          );
+        },
+        optionsViewBuilder: (BuildContext context,
+            AutocompleteOnSelected<ItemCategoryMstModel> onSelected,
+            Iterable<ItemCategoryMstModel> suggestions) {
+          return Align(
+            alignment: Alignment.topLeft,
+            child: Material(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+              elevation: 4.0,
+              child: Container(
+                width: size.width*.7,
+                constraints: BoxConstraints(maxHeight: 200),
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: suggestions.length,
+                  itemBuilder: (context, index) {
+                    final ItemCategoryMstModel option =
+                    suggestions.elementAt(index);
+                    return GestureDetector(
+                      onTap: () {
+                        onSelected(option);
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text(
+                          option.categoryName.toString(),
+                          style: GoogleFonts.poppins(
+                              color: AllColors.blackColor,
+                              fontWeight: FontWeight.w300,
+                              fontSize: AllFontSize
+                                  .sisxteen // Change the text color here
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  /*Widget bindParentProductCategoryDropDown(context){
+    return Padding(
+      padding: const EdgeInsets.only(left: 15, right: 15),
+      child: Autocomplete<ItemCategoryMstModel>(
+        displayStringForOption: _displayItemCatMasterForOption,
+        optionsBuilder: (TextEditingValue textEditingValue) {
+          if (textEditingValue.text.isEmpty) {
             return saleCycleController.parentProductCategoryList.value;
             // return const Iterable<VehicleTypeResponse>.empty();
           }
@@ -884,13 +997,13 @@ class SalesCycleCreateQuoteScreen extends StatelessWidget{
         onSelected: (ItemCategoryMstModel selection) {
           saleCycleController.productCategoryController.value.text =
               _displayItemCatMasterForOption(selection).toString();
-          /*if (!saleCycleController.itemCategorySelectedlist.contains(selection)) {
+          *//*if (!saleCycleController.itemCategorySelectedlist.contains(selection)) {
             saleCycleController.itemCategorySelectedlist.add(selection);
             //Utils.showToastification('Success', 'Add Successfully');
           }else{
             Utils.showErrorToastification('Error', 'Already Selected');
           }
-          print("list${saleCycleController.itemCategorySelectedlist.length}");*/
+          print("list${saleCycleController.itemCategorySelectedlist.length}");*//*
 
         },
         fieldViewBuilder: (BuildContext context, TextEditingController controller,
@@ -904,16 +1017,16 @@ class SalesCycleCreateQuoteScreen extends StatelessWidget{
               ..text = saleCycleController.productCategoryController.value.text,
             focusNode: focusNode,
             decoration: InputDecoration(
-              suffixIcon: InkWell(
-                  onTap: (){
-                    focusNode.requestFocus();
-                    controller.clear();
-                  },
-                  child: Icon(Icons.arrow_drop_down)),
-              contentPadding: EdgeInsets.symmetric(
-                  vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-              hintText: 'Parent Product Category',
-              labelText: 'Parent Product Category',
+                suffixIcon: InkWell(
+                    onTap: (){
+                      focusNode.requestFocus();
+                      controller.clear();
+                    },
+                    child: Icon(Icons.arrow_drop_down)),
+                contentPadding: EdgeInsets.symmetric(
+                    vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+                hintText: 'Parent Product Category',
+                labelText: 'Parent Product Category',
 
                 hintStyle: GoogleFonts.poppins(
                     color: AllColors.lightblackColor,
@@ -973,6 +1086,6 @@ class SalesCycleCreateQuoteScreen extends StatelessWidget{
         },
       ),
     );
-  }
+  }*/
 
 }
