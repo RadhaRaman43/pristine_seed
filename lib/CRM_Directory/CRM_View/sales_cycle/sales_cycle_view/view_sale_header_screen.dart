@@ -1097,11 +1097,11 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                               saleCycleController.Shipping_email_Controller.value.text = saleCycleController
                                                       .saleCycleList[0].shippingEmailId ?? "";
                                               saleCycleController.itemCategorySelectedlist.value = [];
-                                              saleCycleController.getItemCategoryMstApi(
-                                                      saleCycleController.saleCycleList[0].salesCycleId?? "",
-                                                      saleCycleController.saleCycleList[0].taskId?? "","");
-                                              //saleCycleController.getParentItemCategoryMstGet();
-                                              //saleCycleController.IsMultiParentCategory_controller.value.text="No";
+                                              // saleCycleController.getItemCategoryMstApi(
+                                              //         saleCycleController.saleCycleList[0].salesCycleId?? "",
+                                              //         saleCycleController.saleCycleList[0].taskId?? "","");
+                                              saleCycleController.getParentItemCategoryMstGet();
+                                              saleCycleController.IsMultiParentCategory_controller.value.text="No";
                                               Get.toNamed(RoutesName.salesCycleCreateQuoteScreen);
                                             },
                                             child: Container(
@@ -3897,7 +3897,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                         }
                         saleCycleController.quoteId.value = saleCycleController.quoteList[index].quoteId!;
                         saleCycleController.getQuoteHeaderInformation(saleCycleController.quoteList[index].quoteId, flag);
-
+                        saleCycleController.getParentItemCategoryMstGet();
                       },
                       child: Icon(
                         Icons.remove_red_eye,
@@ -3935,6 +3935,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
             ),
             _buildLabelWithValue(label: "Quote Version : ", value: (saleCycleController.quoteList[index].quoteVersion.toString()) ??"",),
             _buildLabelWithValue(label: "Product Category : ", value: saleCycleController.quoteList[index].productCategory ??"",),
+            _buildLabelWithValue(label: "Parent Product Category : ", value: saleCycleController.quoteList[index].parentProductCategory ??"",),
             _buildLabelWithValue(label: "Quote Status : ", value: saleCycleController.quoteList[index].quoteStatus ??"",color:getStatusColor(saleCycleStatus) ),
             _buildLabelWithValue(label: "Quote Accepted : ", value: saleCycleController.quoteList[index].quoteAccepted ??"",color:getQuoteAccepted(quoteAccepted) ),
             _buildLabelWithValue(label: "Quote Status Won : ", value: saleCycleController.quoteList[index].quoteStatusWon ??"",color:getQuoteAccepted(quoteAccepted) ),

@@ -97,6 +97,9 @@ class SalesCycleRepository{
   Future<String> taskSaleCatCreateApiHit(var data,SessionManagement sessionManagement) async{
     return _apiService.postApi(data, AppUrl.QuoteSalesProductCategoryCreate, sessionManagement);
   }
+  Future<String> QuoteSalesParentProductCategoryCreate(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.QuoteSalesParentProductCategoryCreate, sessionManagement);
+  }
 
   Future<String> UpdateBusinessTermsApiHit(var data,SessionManagement sessionManagement) async{
     return _apiService.postApi(data, AppUrl.QuoteHeaderUpdateBusinessTerms, sessionManagement);

@@ -89,7 +89,7 @@ class QuoteInformationScreen extends StatelessWidget {
         }
         else {
           saleCycleController.clearAllFieldOfQuoteFilter();
-          saleCycleController.clearAllFieldOfFilter();
+          //saleCycleController.clearAllFieldOfFilter();
           saleCycleController.pageNumber = 0;
           saleCycleController.pageNumberForQuote = 0;
           saleCycleController.filterQuoteAcceptedFlag.value = "";
@@ -99,10 +99,10 @@ class QuoteInformationScreen extends StatelessWidget {
               "",
               saleCycleController.FromPage.value);
 
-          saleCycleController.getQuoteHeaderData(
+          /*saleCycleController.getQuoteHeaderData(
               saleCycleController.pageNumberForQuote,
               saleCycleController.quoteHeaderdata[0].salesCycleId!,
-              '');
+              '');*/
           Get.toNamed(RoutesName.viewSalesCycleHeaderScreen);
         }
         // saleCycleController.FromPage="Sales";
@@ -1327,12 +1327,12 @@ class QuoteInformationScreen extends StatelessWidget {
                       context: context
                   ),
 
-                 /* _buildLabelWithValue(
+                  _buildLabelWithValue(
                     label: "P. Product Category",
-                    value: saleCycleController.quoteHeaderdata[0].parentCategoryCode ?? "",
+                    value: saleCycleController.quoteHeaderdata[0].parentProductCategoryCode ?? "",
                     color: AllColors.textColor,
                     context: context
-                  ),*/
+                  ),
 
 
                   _buildLabelWithValue(
@@ -1607,13 +1607,28 @@ class QuoteInformationScreen extends StatelessWidget {
             "1")
           InkWell(
             onTap: () {
-              /*saleCycleController.itemCategorySelectedlist.clear();
-              for (var item in saleCycleController.productCategoryList) {
+              saleCycleController.itemCategorySelectedlist.clear();
+              String codes = saleCycleController.quoteHeaderdata[0].parentProductCategoryCode ?? "";
+              if (codes.isNotEmpty) {
+                saleCycleController.itemCategorySelectedlist.value = codes
+                    .split(',')
+                    .map((e) => ItemCategoryMstModel(
+                  parentCategoryCode: e.trim(),
+                ))
+                    .toList();
+              }
+              /*for (var item in saleCycleController.parentProductCategoryList) {
                 if (item.isSelected == 1) {
                   saleCycleController.itemCategorySelectedlist.add(item);
                 }
               }*/
               saleCycleController.productCategoryController.value.clear();
+              if(saleCycleController.quoteHeaderdata[0].isMultiParentCategory==1){
+                saleCycleController.IsMultiParentCategory_controller.value.text="Yes";
+              }
+              else{
+                saleCycleController.IsMultiParentCategory_controller.value.text = "No";
+              }
               showProductCatDialog(context);
             },
             child: const Padding(
@@ -1633,7 +1648,7 @@ class QuoteInformationScreen extends StatelessWidget {
               borderRadius: BorderRadius.circular(10.0),
             ),
             title: Text(
-              'Product Category',
+              'Parent Product Category',
               style: GoogleFonts.poppins(
                 fontSize: AllFontSize.sisxteen,
                 fontWeight: FontWeight.w700,
@@ -1646,9 +1661,16 @@ class QuoteInformationScreen extends StatelessWidget {
               padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
               child: Wrap(
                 children: [
-                  bindItemCategoryDropDown(context),
+                  bindIsMultiParentCategoryDropDown(context),
+                  const  SizedBox(height: 10,),
+                  Obx((){
+                    return Visibility(visible: saleCycleController.showMultiParentCategory.value,
+                      child:  bindItemCategoryDropDown(context),);
+                  }),
+                  const  SizedBox(height: 65,),
+                  //bindItemCategoryDropDown(context),
                   const SizedBox(height: 65,),
-                 /* Obx(() {
+                  Obx(() {
                     return Visibility(
                       visible:
                       saleCycleController.itemCategorySelectedlist.length > 0 ? true : false,
@@ -1656,7 +1678,7 @@ class QuoteInformationScreen extends StatelessWidget {
                         spacing: 8.0,
                         children: saleCycleController.itemCategorySelectedlist.map((category) {
                           return Chip(
-                            label: Text(category.categoryName ?? ""),
+                            label: Text(category.parentCategoryCode ?? ""),
                             onDeleted: () {
                               saleCycleController.itemCategorySelectedlist.remove(category);
                             },
@@ -1664,7 +1686,7 @@ class QuoteInformationScreen extends StatelessWidget {
                         }).toList(),
                       ),
                     );
-                  }),*/
+                  }),
                   //const SizedBox(height: 15,),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
@@ -1678,6 +1700,7 @@ class QuoteInformationScreen extends StatelessWidget {
                         onPressed: () {
                           //saleCycleController.ProductCatCreateSaleCycleInfApiHit(saleCycleController.quoteHeaderdata[0].quoteId.toString());
                           saleCycleController.QuoteHeaderParentCategoryUpdate(saleCycleController.quoteHeaderdata[0].quoteId.toString());
+                          //saleCycleController.ProductCatCreateApiHit(saleCycleController.quoteHeaderdata[0].quoteId.toString(),"");
                           Navigator.pop(context);
                         },
                         child: Container(
@@ -1701,19 +1724,82 @@ class QuoteInformationScreen extends StatelessWidget {
           );
         });
   }
+  bindIsMultiParentCategoryDropDown(BuildContext context) {
+    return DropdownMenu<String>(
+
+      width: MediaQuery.of(context).size.width,
+      controller: saleCycleController.IsMultiParentCategory_controller.value,
+      label: Text(
+        "Is Multi Parent Category",
+        style: GoogleFonts.poppins(
+            color: AllColors.primaryDark1,
+            fontSize: AllFontSize.fourtine,
+            fontWeight: FontWeight.w600),
+      ),
+      initialSelection: saleCycleController.IsMultiParentCategory_controller.value.text,
+      inputDecorationTheme: const InputDecorationTheme(
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+          borderSide: BorderSide(
+            color: AllColors.primaryDark1,
+          ),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+              color: AllColors.primaryDark1), // Change the color to green
+        ),
+        border: OutlineInputBorder(
+          borderSide: BorderSide(
+              color: AllColors.primaryDark1), // Change the color to green
+        ),
+        filled: false,
+        contentPadding: EdgeInsets.symmetric(
+            vertical: AllFontSize.two, horizontal: AllFontSize.ten),
+      ),
+      onSelected: (String? selection) {
+        print(selection);
+        saleCycleController.IsMultiParentCategory_controller.value.text =
+            _displayCustomerNeedIdentityStatusForOption(selection!).toString();
+        if( saleCycleController.IsMultiParentCategory_controller.value.text=="Yes"){
+          saleCycleController.productCategoryController.value.text="";
+          saleCycleController.itemCategorySelectedlist.value=[];
+          saleCycleController.IsMultiParentCategory.value=true;
+          saleCycleController.showMultiParentCategory.value=false;
+          saleCycleController.showMultiParentCategory.value=true;
+        }
+        else{
+          saleCycleController.productCategoryController.value.text="";
+          saleCycleController.itemCategorySelectedlist.value=[];
+          saleCycleController.IsMultiParentCategory.value=false;
+          saleCycleController.showMultiParentCategory.value=false;
+          saleCycleController.showMultiParentCategory.value=true;
+        }
+      },
+      dropdownMenuEntries: ["Yes","No"].map<DropdownMenuEntry<String>>((String e) {
+        return DropdownMenuEntry<String>(
+            value: e,
+            label: e,
+            style: ButtonStyle(
+              foregroundColor:
+              MaterialStateProperty.all<Color>(AllColors.primaryDark1),
+            ));
+      }).toList(),
+    );
+  }
   static String _displayItemCatMasterForOption(ItemCategoryMstModel option) =>
-      option.categoryName!;
+      option.parentCategoryCode!;
+
   Widget bindItemCategoryDropDown(context) {
     return Autocomplete<ItemCategoryMstModel>(
       displayStringForOption: _displayItemCatMasterForOption,
       optionsBuilder: (TextEditingValue textEditingValue) {
         if (textEditingValue.text.isEmpty) {
-          return saleCycleController.productCategoryList;
+          return saleCycleController.parentProductCategoryList;
           // return const Iterable<VehicleTypeResponse>.empty();
         }
-        return saleCycleController.productCategoryList
+        return saleCycleController.parentProductCategoryList
             .where((ItemCategoryMstModel option) {
-          return option.categoryName
+          return option.parentCategoryCode
               .toString()
               .toLowerCase()
               .contains(textEditingValue.text.toLowerCase());
@@ -1723,17 +1809,21 @@ class QuoteInformationScreen extends StatelessWidget {
         // Update the TextField with the selected
         saleCycleController.productCategoryController.value.text =
             _displayItemCatMasterForOption(selection).toString();
-        print(
-            'Controller.....${saleCycleController.productCategoryController.value.text}');
-       /* if (!saleCycleController.itemCategorySelectedlist.contains(selection)) {
-          //TaskMaster_page_controller.Item_Category_code_list.add(selection.categoryCode!);
-          saleCycleController.itemCategorySelectedlist.add(selection);
-          //Utils.showToastification('Success', 'Add Successfully');
-        } else {
-          Utils.showErrorToastification('Error', 'Already Selected');
+        if (saleCycleController.IsMultiParentCategory.value) {
+
+          if (!saleCycleController.itemCategorySelectedlist.contains(selection)) {
+            saleCycleController.itemCategorySelectedlist.add(selection);
+            //Utils.showToastification('Success', 'Add Successfully');
+          }else{
+            Utils.showErrorToastification('Error', 'Already Selected');
+          }
         }
-        saleCycleController.productCategoryController.value.clear();*/
-        // TaskMaster_page_controller.AccountOwner = selection.loginEmailId!;
+        else{
+          saleCycleController.productCategoryController.value.text =
+              _displayItemCatMasterForOption(selection).toString();
+          saleCycleController.itemCategorySelectedlist.value=[];
+          saleCycleController.itemCategorySelectedlist.add(selection);
+        }
       },
       fieldViewBuilder: (BuildContext context, TextEditingController controller,
           FocusNode focusNode, VoidCallback onFieldSubmitted) {
@@ -1758,8 +1848,8 @@ class QuoteInformationScreen extends StatelessWidget {
                   child: Icon(Icons.arrow_drop_down)),
               contentPadding: EdgeInsets.symmetric(
                   vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-              hintText: 'Product Category',
-              labelText: 'Product Category',
+              hintText: 'Parent Product Category',
+              labelText: 'Parent Product Category',
               border: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(10))),
             ),
@@ -1790,12 +1880,11 @@ class QuoteInformationScreen extends StatelessWidget {
                     child: Container(
                       padding: EdgeInsets.all(8.0),
                       child: Text(
-                        option.categoryName.toString(),
+                        option.parentCategoryCode.toString(),
                         style: GoogleFonts.poppins(
                             color: AllColors.blackColor,
                             fontWeight: FontWeight.w300,
-                            fontSize: AllFontSize
-                                .sisxteen // Change the text color here
+                            fontSize: AllFontSize.sisxteen // Change the text color here
                         ),
                       ),
                     ),

@@ -208,7 +208,8 @@ class SalesCycleVm extends GetxController {
 
   var updateQuoteShippingAddressConfirmation = TextEditingController().obs;
   RxBool isVisibiltyShippingAddressQuote=false.obs;
-  RxBool IsMultiParentCategory=true.obs;
+  RxBool IsMultiParentCategory=false.obs;
+  RxBool showMultiParentCategory=true.obs;
 
   //todo quotation won controller
   var quotationWonLossController=TextEditingController().obs;
@@ -1163,58 +1164,30 @@ class SalesCycleVm extends GetxController {
   getQuoteHeaderData(int pageNumberForQuote, String saleCycleId, String status) {
     try {
       Map data = {
-        "filter_quote_id": filterQuoteIdController.value.text.isNotEmpty
-            ? filterQuoteIdController.value.text
-            : "",
+        "filter_quote_id": filterQuoteIdController.value.text.isNotEmpty ? filterQuoteIdController.value.text : "",
         "filter_sales_cycle_id": saleCycleId.isNotEmpty ? saleCycleId : "",
-        "filter_account_code": accountCodeController.value.text.isEmpty
-            ? ""
-            : accountCodeController.value.text,
-        "filter_account_name": accountNameController.value.text.isEmpty
-            ? ""
-            : accountNameController.value.text,
-        "filter_rh_approval": rh_Approval_controller.value.text.isEmpty
-            ? ""
-            : rh_Approval_controller.value.text,
-        "filter_cbh_approval": cbh_Approval_controller.value.text.isEmpty
-            ? ""
-            : cbh_Approval_controller.value.text,
-        "filter_category_approval":
-            category_Approval_controller.value.text.isEmpty
-                ? ""
-                : category_Approval_controller.value.text,
-        "filter_gm_approval": gm_Approval_controller.value.text.isEmpty
-            ? ""
-            : gm_Approval_controller.value.text,
+        "filter_account_code": accountCodeController.value.text.isEmpty ? "" : accountCodeController.value.text,
+        "filter_account_name": accountNameController.value.text.isEmpty ? "" : accountNameController.value.text,
+        "filter_rh_approval": rh_Approval_controller.value.text.isEmpty ? "" : rh_Approval_controller.value.text,
+        "filter_cbh_approval": cbh_Approval_controller.value.text.isEmpty ? "" : cbh_Approval_controller.value.text,
+        "filter_category_approval": category_Approval_controller.value.text.isEmpty ? "" : category_Approval_controller.value.text,
+        "filter_gm_approval": gm_Approval_controller.value.text.isEmpty ? "" : gm_Approval_controller.value.text,
         "filter_quote_version": -1,
-        "filter_quote_validity": quoteValidityStartToEnd.value.isNotEmpty
-            ? quoteValidityStartToEnd.value
-            : "",
-        "filter_exp_closure_date": extClosureStartToEnd.value.isNotEmpty
-            ? extClosureStartToEnd.value
-            : "",
-        "filter_quote_status": filterQuoteStatusController.value.text.isNotEmpty
-            ? filterQuoteStatusController.value.text
-            : status,
-        "filter_product_category": productCategoryController.value.text.isEmpty
-            ? ""
-            : productCategoryController.value.text,
+        "filter_quote_validity": quoteValidityStartToEnd.value.isNotEmpty ? quoteValidityStartToEnd.value : "",
+        "filter_exp_closure_date": extClosureStartToEnd.value.isNotEmpty ? extClosureStartToEnd.value : "",
+        "filter_quote_status": filterQuoteStatusController.value.text.isNotEmpty ? filterQuoteStatusController.value.text : status,
+        "filter_product_category": productCategoryController.value.text.isEmpty ? "" : productCategoryController.value.text,
         "filter_created_by":"" /*FromPage == "QuoteApprovalPage" ? "" :( isAdminWritePermission.value=="1"?"":saleCycleList[0].salesCycleOwner)*/,
-        "filter_created_on":
-            createdOnStartToEnd.value.isEmpty ? "" : createdOnStartToEnd.value,
+        "filter_created_on": createdOnStartToEnd.value.isEmpty ? "" : createdOnStartToEnd.value,
         "filter_frontliner_value": "",
         "filter_branch_head_value":
-        quoteFilterRegionController.value.text.isEmpty
-                ? ""
-                : quoteFilterRegionController.value.text,
+        quoteFilterRegionController.value.text.isEmpty ? "" : quoteFilterRegionController.value.text,
         "filter_zone_head_value": "",
-        "filter_clusture_head_value":
-        quoteFilterClusterController.value.text.isEmpty
-                ? ""
-                : quoteFilterClusterController.value.text,
+        "filter_clusture_head_value": quoteFilterClusterController.value.text.isEmpty ? "" : quoteFilterClusterController.value.text,
         "row_per_page": rowsPerPage,
         "page_number": pageNumberForQuote
-      }; /*{
+      };
+      /*{
         "filter_quote_id": filterQuoteIdController.value.text.isNotEmpty? filterQuoteIdController.value.text:"",
         "filter_sales_cycle_id": saleCycleId.isNotEmpty?saleCycleId:"" ,
         "filter_account_name": "",
@@ -1252,9 +1225,9 @@ class SalesCycleVm extends GetxController {
             loading.value = false;
           }
         },
-      ).onError(
-        (error, stackTrace) {
+      ).onError((error, stackTrace) {
           print(error);
+          loading.value = false;
         },
       );
     } catch (e) {
@@ -1427,6 +1400,11 @@ class SalesCycleVm extends GetxController {
   }
 
   saleCycleQuoteCreate(String saleCycleId) {
+    /*if(IsMultiParentCategory.value && itemCategorySelectedlist.isNotEmpty){
+      productCategoryController.value.text=itemCategorySelectedlist.map((e) => e.parentCategoryCode.toString())
+          .join(', ');
+    }*/
+
     try {
       Map data = {
         "sales_cycle_id": saleCycleId.toString(),
@@ -1440,10 +1418,11 @@ class SalesCycleVm extends GetxController {
         "consignee_id": consigneeId,
         "created_by": email,
         "kind_attention": kindAttentionController.value.text,
-        "parent_category_code": productCategoryController.value.text.isNotEmpty?productCategoryController.value.text:"",
-        //"is_multi_parent_category": IsMultiParentCategory_controller.value=="No"?0:1
+        "parent_category_code": /*productCategoryController.value.text.isNotEmpty?productCategoryController.value.text:*/"",
+        "is_multi_parent_category": IsMultiParentCategory_controller.value.text=="No"?0:1
       };
 
+      print("datttt $data");
       loading.value = true;
       _api.quoteHeaderCreateApiHit(data, sessionManagement).then(
         (onValue) {
@@ -1455,21 +1434,17 @@ class SalesCycleVm extends GetxController {
               loading.value = false;
               Utils.sanckBarSuccess("Success!", response[0].message.toString());
               pageNumberForQuote = 0;
-              getQuoteHeaderData(pageNumberForQuote, saleCycleList[0].salesCycleId!, '');
-              //IsMultiParentCategory.value=true;
-              Get.toNamed(RoutesName.viewSalesCycleHeaderScreen);
-              //getQuoteHeaderData(0,  saleCycleList[0].salesCycleId!, '');
+              ProductCatCreateApiHit(response[0].quoteId!,"back");
               quoteValidityController.value.clear();
               expectedClosuredateController.value.clear();
               productCategoryController .value.clear();
               kindAttentionController.value.clear();
-              ProductCatCreateApiHit(response[0].quoteId!);
+              IsMultiParentCategory.value=false;
+              itemCategorySelectedlist.value=[];
+              getQuoteHeaderData(pageNumberForQuote, saleCycleList[0].salesCycleId!, '');
+              IsMultiParentCategory.value=false;
+              Get.toNamed(RoutesName.viewSalesCycleHeaderScreen);
 
-              /*getQuoteHeaderData(0,  saleCycleList[0].salesCycleId!);
-            Get.toNamed(RoutesName.viewSalesCycleHeaderScreen);
-            quoteValidityController.value.clear();
-            expectedClosuredateController.value.clear();
-            productCategoryController.value.clear();*/
             } else {
               Utils.sanckBarError(
                   "False Message !", response[0].message.toString());
@@ -1481,10 +1456,12 @@ class SalesCycleVm extends GetxController {
         },
       ).onError(
         (error, stackTrace) {
+          Utils.sanckBarError("OnError Message !", error.toString());
           print(error);
         },
       );
     } catch (e) {
+      Utils.sanckBarError("Error Message !", e.toString());
       loading.value = false;
       print(e);
     }
@@ -2432,10 +2409,8 @@ class SalesCycleVm extends GetxController {
     this.loading.value = true;
     Map<String, String> data = {
       'filter_category': "",
-
     };
     print(data);
-
     _api.ParentItemCategoryMstGet(data, sessionManagement).then((value) {
       print(value);
       try {
@@ -2463,21 +2438,21 @@ class SalesCycleVm extends GetxController {
     });
   }
 
-  ProductCatCreateApiHit(String quoteId) async {
+  ProductCatCreateApiHit(String quoteIds, String back) async {
     List<TaskSalesProductCategoryLinesModel> lines = itemCategorySelectedlist
         .map((item) => TaskSalesProductCategoryLinesModel(
-            productCategoryCode: item.categoryCode!))
-        .toList();
+            productCategoryCode: item.parentCategoryCode!)).toList();
+
     Map<String, dynamic> data = {
       "created_by": email,
-      "quote_id": quoteId.toString(),
+      "quote_id": quoteIds.toString(),
       "lines": lines.map((line) => line.toJson()).toList(),
     };
     print(data);
     loading.value = true;
 
     try {
-      final value = await _api.taskSaleCatCreateApiHit(data, sessionManagement);
+      final value = await _api.QuoteSalesParentProductCategoryCreate(data, sessionManagement);
       print(value);
       final JsonResponse = json.decode(value);
       if (JsonResponse is List) {
@@ -2486,38 +2461,45 @@ class SalesCycleVm extends GetxController {
         if (response != null &&
             response.isNotEmpty &&
             response[0].condition?.toLowerCase() == "true") {
-          loading.value = false;
           Utils.sanckBarSuccess("Success!", response[0].message.toString());
           pageNumberForQuote = 0;
-          getQuoteHeaderData(pageNumberForQuote, saleCycleList[0].salesCycleId!, '');
-          Get.toNamed(RoutesName.viewSalesCycleHeaderScreen);
+
+          if(back=="back"){
+            print("back isss ");
+            getQuoteHeaderData(pageNumberForQuote, saleCycleList[0].salesCycleId!, '');
+            Get.toNamed(RoutesName.viewSalesCycleHeaderScreen);
+          }/*else{
+            getQuoteHeaderInformation(quoteId.value, "Quote");
+          }*/
+
           //getQuoteHeaderData(0,  saleCycleList[0].salesCycleId!, '');
           quoteValidityController.value.clear();
           expectedClosuredateController.value.clear();
           productCategoryController .value.clear();
           kindAttentionController.value.clear();
         } else {
-          loading.value = false;
           Utils.sanckBarError("Error!",  response[0].message.toString());
         }
       } else {
-        loading.value = false;
-        Utils.sanckBarException(
-            "Api Error!", JsonResponse.toString());
+        Utils.sanckBarException("Api Error!", JsonResponse.toString());
       }
     } catch (error, stackTrace) {
       print(error);
       print(stackTrace);
       print("Exception....");
     }
+    finally{
+      loading.value = false;
+    }
   }
 
-  QuoteHeaderParentCategoryUpdate(String quoteId) async {
 
+  QuoteHeaderParentCategoryUpdate(String quoteId) async {
     Map<String, dynamic> data = {
       "created_by": email,
       "quote_id": quoteId,
       "parent_category_code": productCategoryController.value.text.isNotEmpty?productCategoryController.value.text:"",
+      "is_multi_parent_category": "1"
     };
     print(data);
     loading.value = true;
@@ -2531,8 +2513,10 @@ class SalesCycleVm extends GetxController {
         if (response != null && response.isNotEmpty && response[0].condition?.toLowerCase() == "true") {
           loading.value = false;
           Utils.sanckBarSuccess("Success!", response[0].message.toString());
+          ProductCatCreateApiHit(quoteHeaderdata[0].quoteId.toString(),"");
           getQuoteHeaderInformation(quoteId, "fromQuote");
-          getItemCategoryMstApi(quoteHeaderdata[0].salesCycleId.toString(),"",quoteId);
+
+          //getItemCategoryMstApi(quoteHeaderdata[0].salesCycleId.toString(),"",quoteId);
 
         } else {
           loading.value = false;

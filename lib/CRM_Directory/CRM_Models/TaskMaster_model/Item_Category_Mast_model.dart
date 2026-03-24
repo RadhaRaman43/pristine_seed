@@ -27,7 +27,9 @@ class ItemCategoryMstModel {
         this.isSelected,
         this.expiryRange,
         this.tolerance,
-        this.toleranceMrp});
+        this.toleranceMrp,
+        this.parentCategoryCode
+      });
 
   ItemCategoryMstModel.fromJson(Map<String, dynamic> json) {
     condition = json['condition'];

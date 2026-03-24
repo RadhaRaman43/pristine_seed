@@ -10,6 +10,7 @@ class SalesCycleQuoteInformationModal {
   String? contactName;
   String? productCategory;
   String? productCategoryCode;
+  String? parentProductCategoryCode;
   String? quoteStatus;
   String? quoteValidity;
   String? expClosureDate;
@@ -69,6 +70,7 @@ class SalesCycleQuoteInformationModal {
   String? quoteWonName;
   dynamic? wonOn;
   dynamic? lossReason;
+  int? isMultiParentCategory;
   String? branchHeadValue;
   String? clustureHeadValue;
   List<QuoteItems>? quoteItems;
@@ -85,6 +87,7 @@ class SalesCycleQuoteInformationModal {
         this.contactName,
         this.productCategory,
         this.productCategoryCode,
+        this.parentProductCategoryCode,
         this.quoteStatus,
         this.quoteValidity,
         this.expClosureDate,
@@ -144,6 +147,7 @@ class SalesCycleQuoteInformationModal {
         this.quoteWonName,
         this.wonOn,
         this.lossReason,
+        this.isMultiParentCategory,
         this.branchHeadValue,
         this.clustureHeadValue,
         this.quoteItems});
@@ -160,6 +164,7 @@ class SalesCycleQuoteInformationModal {
     contactName = json['contact_name'];
     productCategory = json['product_category'];
     productCategoryCode = json['product_category_code'];
+    parentProductCategoryCode = json['parent_product_category_code'];
     quoteStatus = json['quote_status'];
     quoteValidity = json['quote_validity'];
     expClosureDate = json['exp_closure_date'];
@@ -219,6 +224,7 @@ class SalesCycleQuoteInformationModal {
     wonBy = json['won_by'];
     quoteWonName = json['quote_won_name'];
     lossReason = json['loss_reason'];
+    isMultiParentCategory = json['is_multi_parent_category'];
     wonOn = json['won_on'];
     branchHeadValue = json['branch_head_value'];
     clustureHeadValue = json['clusture_head_value'];
@@ -243,6 +249,7 @@ class SalesCycleQuoteInformationModal {
     data['contact_name'] = this.contactName;
     data['product_category'] = this.productCategory;
     data['product_category_code'] = this.productCategoryCode;
+    data['parent_product_category_code'] = this.parentProductCategoryCode;
     data['quote_status'] = this.quoteStatus;
     data['quote_validity'] = this.quoteValidity;
     data['exp_closure_date'] = this.expClosureDate;
@@ -304,6 +311,7 @@ class SalesCycleQuoteInformationModal {
     data['quote_won_name'] = this.quoteWonName;
     data['won_on'] = this.wonOn;
     data['loss_reason'] = this.lossReason;
+    data['is_multi_parent_category'] = this.isMultiParentCategory;
     data['branch_head_value'] = this.branchHeadValue;
     data['clusture_head_value'] = this.clustureHeadValue;
     if (this.quoteItems != null) {

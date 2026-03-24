@@ -271,6 +271,7 @@ class AppUrl {
      static const String QuoteLineCreateFromPropectStage = "$BASE_URL/api/CRM/Quote/QuoteLineCreateFromPropectStage";
     // static const String ItemCategoryMstGetByDocument = "$BASE_URL/api/CRM/Task/ItemCategoryMstGetByDocument";
      static const String QuoteSalesProductCategoryCreate = "$BASE_URL/api/CRM/Task/QuoteSalesProductCategoryCreate";
+     static const String QuoteSalesParentProductCategoryCreate = "$BASE_URL/api/CRM/Task/QuoteSalesParentProductCategoryCreate";
      static const String QuoteHeaderUpdateBusinessTerms = "$BASE_URL/api/CRM/Quote/QuoteHeaderUpdateBusinessTerms";
      static const String quotationReport = "$BASE_URL/api/CRM/Quote/QuotationReport";
      static const String specialPriceRequestReport = "$BASE_URL/api/CRM/Quote/SpecialPriceRequestReport";

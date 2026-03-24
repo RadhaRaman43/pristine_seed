@@ -23,6 +23,8 @@ class SalesCycleCreateQuoteScreen extends StatelessWidget{
       option;
   static String _displayItemCatMasterForOption(ItemCategoryMstModel option) =>
       option.categoryName!;
+  static String _displayParentItemCatMasterForOption(ItemCategoryMstModel option) =>
+      option.parentCategoryCode!;
   Size size=Get.size;
   @override
   Widget build(BuildContext context) {
@@ -68,8 +70,6 @@ class SalesCycleCreateQuoteScreen extends StatelessWidget{
           child: SingleChildScrollView(
             child: Column(
               children: [
-               /* Padding(padding: const EdgeInsets.only(left: 15.0, right: 15, top: 15),
-                child: bindIsMultiParentCategoryDropDown(context),),*/
                 const SizedBox(height: 10,),
                 bindAccountName(context),
                 const SizedBox(height: 10,),
@@ -83,9 +83,9 @@ class SalesCycleCreateQuoteScreen extends StatelessWidget{
                 const SizedBox(height: 10,),
                 bindKindAttention(context),
                 const  SizedBox(height: 10,),
-                bindProductCategoryDropDown(context),
+                //bindProductCategoryDropDown(context),
                 const SizedBox(height: 10,),
-                Obx(() {
+                /*Obx(() {
                   return
                     Wrap(
                       spacing: 8.0,
@@ -99,19 +99,41 @@ class SalesCycleCreateQuoteScreen extends StatelessWidget{
                       }).toList(),
                     );
 
-                }),
+                }),*/
                 const  SizedBox(height: 10,),
                /* bindQuoteCommitName(context),
                 SizedBox(height: 10,),*/
                 bindShippingAddress(context),
                 const  SizedBox(height: 10,),
-               /* Obx((){
-
-                  return Visibility(visible: saleCycleController.IsMultiParentCategory.value,
+                Padding(padding: const EdgeInsets.only(left: 15.0, right: 15, top: 15),
+                  child: bindIsMultiParentCategoryDropDown(context),),
+                const  SizedBox(height: 10,),
+                Obx((){
+                  return Visibility(visible: saleCycleController.showMultiParentCategory.value,
                     child:  bindParentProductCategoryDropDown(context),);
-                }),*/
-                //bindProductCategoryDropDown(context),
+                }),
                 const SizedBox(height: 10,),
+                Obx(() {
+                  return
+                    Visibility(
+                      visible: saleCycleController.IsMultiParentCategory.value,
+                      child: Wrap(
+                        spacing: 8.0,
+                        children: saleCycleController.itemCategorySelectedlist.map((category) {
+                          return Chip(
+                            label: Text(category.parentCategoryCode!),
+                            onDeleted: () {
+                              saleCycleController.itemCategorySelectedlist.remove(category);
+                              if(saleCycleController.itemCategorySelectedlist.isEmpty){
+                                saleCycleController.productCategoryController.value.text ="";
+                              }
+                            },
+                          );
+                        }).toList(),
+                      ),
+                    );
+
+                }),
 
                 Container(
                   margin: EdgeInsets.only(left: 15, right: 15, top: 15),
@@ -154,7 +176,6 @@ class SalesCycleCreateQuoteScreen extends StatelessWidget{
                       saleCycleController.saleCycleQuoteCreate(saleCycleController.saleCycleList[0].salesCycleId!);
                        //saleCycleController.accountNameController.value.clear();
                       //saleCycleController.contactNameController.value.clear();
-
                     },
                     text: "Add Quote",
                   ),
@@ -206,10 +227,17 @@ class SalesCycleCreateQuoteScreen extends StatelessWidget{
             _displayCustomerNeedIdentityStatusForOption(selection!).toString();
         if( saleCycleController.IsMultiParentCategory_controller.value.text=="Yes"){
           saleCycleController.productCategoryController.value.text="";
-          saleCycleController.IsMultiParentCategory.value=false;
+          saleCycleController.itemCategorySelectedlist.value=[];
+          saleCycleController.IsMultiParentCategory.value=true;
+          saleCycleController.showMultiParentCategory.value=false;
+          saleCycleController.showMultiParentCategory.value=true;
         }
         else{
-          saleCycleController.IsMultiParentCategory.value=true;
+          saleCycleController.productCategoryController.value.text="";
+          saleCycleController.itemCategorySelectedlist.value=[];
+          saleCycleController.IsMultiParentCategory.value=false;
+          saleCycleController.showMultiParentCategory.value=false;
+          saleCycleController.showMultiParentCategory.value=true;
         }
       },
       dropdownMenuEntries: ["Yes","No"].map<DropdownMenuEntry<String>>((String e) {
@@ -863,7 +891,7 @@ class SalesCycleCreateQuoteScreen extends StatelessWidget{
 
   }
 
-  Widget bindProductCategoryDropDown(context){
+  /*Widget bindProductCategoryDropDown(context){
     return Padding(
       padding: const EdgeInsets.only(left: 15, right: 15),
       child: Autocomplete<ItemCategoryMstModel>(
@@ -960,8 +988,7 @@ class SalesCycleCreateQuoteScreen extends StatelessWidget{
                           style: GoogleFonts.poppins(
                               color: AllColors.blackColor,
                               fontWeight: FontWeight.w300,
-                              fontSize: AllFontSize
-                                  .sisxteen // Change the text color here
+                              fontSize: AllFontSize.sisxteen
                           ),
                         ),
                       ),
@@ -974,13 +1001,13 @@ class SalesCycleCreateQuoteScreen extends StatelessWidget{
         },
       ),
     );
-  }
+  }*/
 
-  /*Widget bindParentProductCategoryDropDown(context){
+  Widget bindParentProductCategoryDropDown(context){
     return Padding(
       padding: const EdgeInsets.only(left: 15, right: 15),
       child: Autocomplete<ItemCategoryMstModel>(
-        displayStringForOption: _displayItemCatMasterForOption,
+        displayStringForOption: _displayParentItemCatMasterForOption,
         optionsBuilder: (TextEditingValue textEditingValue) {
           if (textEditingValue.text.isEmpty) {
             return saleCycleController.parentProductCategoryList.value;
@@ -988,23 +1015,28 @@ class SalesCycleCreateQuoteScreen extends StatelessWidget{
           }
           return saleCycleController.parentProductCategoryList
               .where((ItemCategoryMstModel option) {
-            return option.parentCategoryCode
-                .toString()
-                .toLowerCase()
+            return option.parentCategoryCode.toString().toLowerCase()
                 .contains(textEditingValue.text.toLowerCase());
           }).toList();
         },
         onSelected: (ItemCategoryMstModel selection) {
           saleCycleController.productCategoryController.value.text =
-              _displayItemCatMasterForOption(selection).toString();
-          *//*if (!saleCycleController.itemCategorySelectedlist.contains(selection)) {
-            saleCycleController.itemCategorySelectedlist.add(selection);
-            //Utils.showToastification('Success', 'Add Successfully');
-          }else{
-            Utils.showErrorToastification('Error', 'Already Selected');
-          }
-          print("list${saleCycleController.itemCategorySelectedlist.length}");*//*
+              _displayParentItemCatMasterForOption(selection).toString();
+          if (saleCycleController.IsMultiParentCategory.value) {
 
+            if (!saleCycleController.itemCategorySelectedlist.contains(selection)) {
+              saleCycleController.itemCategorySelectedlist.add(selection);
+              //Utils.showToastification('Success', 'Add Successfully');
+            }else{
+              Utils.showErrorToastification('Error', 'Already Selected');
+            }
+          }
+          else{
+            saleCycleController.productCategoryController.value.text =
+                _displayParentItemCatMasterForOption(selection).toString();
+            saleCycleController.itemCategorySelectedlist.value=[];
+            saleCycleController.itemCategorySelectedlist.add(selection);
+          }
         },
         fieldViewBuilder: (BuildContext context, TextEditingController controller,
             FocusNode focusNode, VoidCallback onFieldSubmitted) {
@@ -1013,8 +1045,7 @@ class SalesCycleCreateQuoteScreen extends StatelessWidget{
               controller.clear();
             },
             cursorColor: AllColors.primaryDark1,
-            controller: controller
-              ..text = saleCycleController.productCategoryController.value.text,
+            controller: controller..text = saleCycleController.productCategoryController.value.text,
             focusNode: focusNode,
             decoration: InputDecoration(
                 suffixIcon: InkWell(
@@ -1086,6 +1117,6 @@ class SalesCycleCreateQuoteScreen extends StatelessWidget{
         },
       ),
     );
-  }*/
+  }
 
 }
