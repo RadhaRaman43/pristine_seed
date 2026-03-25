@@ -206,6 +206,7 @@ class PreventiveScreen extends StatelessWidget{
                                     )),
                               ),
                               onPressed: () {
+                                Get.toNamed(RoutesName.create_preventive_calender_view_screen);
                                 preventive_page_controller.createPreventiveCalenderCallApi();
 
                               }, //Text

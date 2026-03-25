@@ -131,6 +131,7 @@ class PreventiveViewModel extends GetxController {
   var warrantyStartDateController = TextEditingController().obs;
   var warrantyEndDateController = TextEditingController().obs;
   var frequencyController = TextEditingController().obs;
+  var pinCodeController = TextEditingController().obs;
   RxBool isShowInvoiceNo=true.obs;
   RxBool isShowItemNo=true.obs;
   RxInt invoiceKey = 0.obs;
@@ -956,13 +957,13 @@ class PreventiveViewModel extends GetxController {
                 response[0].condition == "True") {
               loading.value = false;
               create_preventive_calender_list.value = response;
-              Get.toNamed(RoutesName.create_preventive_calender_view_screen);
+
             } else {
               loading.value = false;
               create_preventive_calender_list.value = [];
               /* Utils.showErrorToastification(
                   "Error!", "No Calender Date Found");*/
-              Utils.showErrorToastification("Error!", response[0].message!);
+              //Utils.showErrorToastification("Error!", response[0].message!);
               //service_installation_details_list.value=[];
             }
           } else {
@@ -1944,32 +1945,24 @@ class PreventiveViewModel extends GetxController {
 
   Future<void> getAMCRequestInvoiceItemNo(String invoiceNo) async {
     amcRequestInvoiceItemNoList.clear();
-
     Map<String, String> data = {
       "email_id": email,
       "invoice_no": invoiceNo
     };
-
     loading.value = true;
-
     try {
       final value =
       await _api.aMCRequestInvoiceWiseItemGetApiHit(
           data, sessionManagement);
-
       final jsonResponse = json.decode(value);
-
       if (jsonResponse is List) {
         List<AMCRequestInvoiceItemGetModal> response =
         jsonResponse
             .map((e) =>
             AMCRequestInvoiceItemGetModal.fromJson(e))
             .toList();
-
         if (response.isNotEmpty &&
             response[0].condition == "True") {
-
-          // 🔥 IMPORTANT FIX
           amcRequestInvoiceItemNoList.clear();
           amcRequestInvoiceItemNoList.addAll(response);
         } else {
@@ -1983,7 +1976,6 @@ class PreventiveViewModel extends GetxController {
       amcRequestInvoiceItemNoList.clear();
       print(e);
     }
-
     loading.value = false;
   }
 
@@ -2042,6 +2034,7 @@ class PreventiveViewModel extends GetxController {
     isShowItemNo.value=true;
     invoiceKey.value++;
     itemKey.value++;
+    pinCodeController.value.text="";
 
   }
 

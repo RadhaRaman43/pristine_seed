@@ -60,7 +60,19 @@ class AddNewPreventiveCalenderScreen extends StatelessWidget {
                 children: [
                   Visibility(
                     visible: create_preventive_page_controller.isShowInvoiceNo.value,
-                    child: bindInvoiceNo(context),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          flex: 2,
+                          child: bindInvoiceNo(context),
+                        ),
+                        SizedBox(width: 10),
+                        Expanded(
+                          flex: 1,
+                          child: bindPinCode(context),
+                        ),
+                      ],
+                    ),
                   ),
                   const SizedBox(
                     height: 10,
@@ -171,6 +183,7 @@ class AddNewPreventiveCalenderScreen extends StatelessWidget {
         controller.amcRequestInvoiceItemNoController.clear();
         controller.selectedItemNo.value = "";
         controller.amcRequestInvoiceItemNoList.clear();
+        controller.pinCodeController.value.text=selection.pincode??"";
         create_preventive_page_controller.itemKey.value++;
 
         await controller.getAMCRequestInvoiceItemNo(
@@ -195,6 +208,11 @@ class AddNewPreventiveCalenderScreen extends StatelessWidget {
           onTapOutside: (_) => FocusScope.of(context).unfocus(),
           onChanged: (value) {
             c.amcRequestInvoiceNoController.value.text = value;
+            if(value.isEmpty){
+              c.selectedItemNo.value="";
+              controller.pinCodeController.value.text="";
+              create_preventive_page_controller.itemKey.value++;
+            }
           },
 
           decoration: InputDecoration(
@@ -488,9 +506,25 @@ class AddNewPreventiveCalenderScreen extends StatelessWidget {
                 c.selectedItemNo.value),*/
         key: ValueKey(c.itemKey.value),
         displayStringForOption: (option) => option.itemNo ?? "",
-        optionsBuilder: (TextEditingValue textEditingValue) {
+       /* optionsBuilder: (TextEditingValue textEditingValue) {
           final list = c.amcRequestInvoiceItemNoList;
           if (textEditingValue.text.isEmpty) return list;
+          return list.where((item) {
+            return item.itemNo!
+                .toLowerCase()
+                .contains(textEditingValue.text.toLowerCase());
+          }).toList();
+        },*/
+
+        optionsBuilder: (TextEditingValue textEditingValue) {
+          final c = create_preventive_page_controller;
+          if (c.amcRequestInvoiceNoController.value.text.trim().isEmpty) {
+            return const Iterable<AMCRequestInvoiceItemGetModal>.empty();
+          }
+          final list = c.amcRequestInvoiceItemNoList;
+          if (textEditingValue.text.isEmpty) {
+            return list;
+          }
           return list.where((item) {
             return item.itemNo!
                 .toLowerCase()
@@ -766,9 +800,12 @@ class AddNewPreventiveCalenderScreen extends StatelessWidget {
           DateTime start_date = DateFormat("yyyy-MM-dd").parse(text);
           DateTime ending_date = new DateTime(2200);
           FocusScope.of(context).requestFocus(new FocusNode());
+          DateTime initialDate = DateTime.now().isBefore(start_date)
+              ? start_date
+              : DateTime.now();
           DateTime? date = await showDatePicker(
             context: context,
-            initialDate: DateTime.now(),
+            initialDate: initialDate,
             firstDate: start_date,
             lastDate: ending_date,
             builder: (BuildContext context, Widget? child) {
@@ -821,5 +858,31 @@ class AddNewPreventiveCalenderScreen extends StatelessWidget {
     );
   }
 
-
+  bindPinCode(BuildContext context) {
+    return TextField(
+      keyboardType: TextInputType.number,
+      readOnly: true,
+      controller: create_preventive_page_controller.pinCodeController.value,
+      decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+          labelText: 'Pin Code',
+          hintText: 'Pin Code',
+          hintStyle: GoogleFonts.poppins(
+              color: AllColors.lightblackColor,
+              fontWeight: FontWeight.w300,
+              fontSize: AllFontSize.ten),
+          labelStyle: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontWeight: FontWeight.w700,
+              fontSize: AllFontSize.fourtine),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          )),
+      cursorColor: AllColors.primaryDark1,
+    );
+  }
 }
