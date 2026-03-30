@@ -644,7 +644,7 @@ class CommitDashboardVm extends GetxController{
         "filter_postal_code": '',
         "filter_district": '',
         "filter_created_by": '',
-        "filter_account_owner": email,
+        "filter_account_owner": ""/*email*/,
         "filter_frontliner_value": "",
         "filter_branch_head_value": '',
         "filter_zone_head_value": "",

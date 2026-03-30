@@ -136,8 +136,7 @@ class SalesCycleVm extends GetxController {
 
   RxList<ItemCategoryMstModel> productCategoryList = <ItemCategoryMstModel>[].obs;
   RxList<ItemCategoryMstModel> parentProductCategoryList = <ItemCategoryMstModel>[].obs;
-  RxList<ItemCategoryMstModel> itemCategorySelectedlist =
-      <ItemCategoryMstModel>[].obs;
+  RxList<ItemCategoryMstModel> itemCategorySelectedlist = <ItemCategoryMstModel>[].obs;
   RxList<ItemQouteWithReportModal> itemQuoteReportList =
       <ItemQouteWithReportModal>[].obs;
   RxList<AddressMasterModel> address_master_list = <AddressMasterModel>[].obs;
@@ -2498,8 +2497,8 @@ class SalesCycleVm extends GetxController {
     Map<String, dynamic> data = {
       "created_by": email,
       "quote_id": quoteId,
-      "parent_category_code": productCategoryController.value.text.isNotEmpty?productCategoryController.value.text:"",
-      "is_multi_parent_category": "1"
+      "parent_category_code": /*productCategoryController.value.text.isNotEmpty?productCategoryController.value.text:*/"",
+      "is_multi_parent_category": IsMultiParentCategory_controller.value.text=="Yes"?1:0
     };
     print(data);
     loading.value = true;

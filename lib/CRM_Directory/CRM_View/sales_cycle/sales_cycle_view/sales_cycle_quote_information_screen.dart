@@ -1614,8 +1614,7 @@ class QuoteInformationScreen extends StatelessWidget {
                     .split(',')
                     .map((e) => ItemCategoryMstModel(
                   parentCategoryCode: e.trim(),
-                ))
-                    .toList();
+                )).toList();
               }
               /*for (var item in saleCycleController.parentProductCategoryList) {
                 if (item.isSelected == 1) {
@@ -1625,9 +1624,11 @@ class QuoteInformationScreen extends StatelessWidget {
               saleCycleController.productCategoryController.value.clear();
               if(saleCycleController.quoteHeaderdata[0].isMultiParentCategory==1){
                 saleCycleController.IsMultiParentCategory_controller.value.text="Yes";
+                saleCycleController.IsMultiParentCategory.value=true;
               }
               else{
                 saleCycleController.IsMultiParentCategory_controller.value.text = "No";
+                saleCycleController.IsMultiParentCategory.value=false;
               }
               showProductCatDialog(context);
             },
@@ -1660,6 +1661,8 @@ class QuoteInformationScreen extends StatelessWidget {
               width: size.width * 4,
               padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
               child: Wrap(
+                spacing: 0,
+                runSpacing: 10,
                 children: [
                   bindIsMultiParentCategoryDropDown(context),
                   const  SizedBox(height: 10,),
@@ -1667,9 +1670,9 @@ class QuoteInformationScreen extends StatelessWidget {
                     return Visibility(visible: saleCycleController.showMultiParentCategory.value,
                       child:  bindItemCategoryDropDown(context),);
                   }),
-                  const  SizedBox(height: 65,),
+                  const  SizedBox(height: 15,),
                   //bindItemCategoryDropDown(context),
-                  const SizedBox(height: 65,),
+                  const SizedBox(height: 55,),
                   Obx(() {
                     return Visibility(
                       visible:
@@ -1726,11 +1729,9 @@ class QuoteInformationScreen extends StatelessWidget {
   }
   bindIsMultiParentCategoryDropDown(BuildContext context) {
     return DropdownMenu<String>(
-
       width: MediaQuery.of(context).size.width,
       controller: saleCycleController.IsMultiParentCategory_controller.value,
-      label: Text(
-        "Is Multi Parent Category",
+      label: Text("Is Multi Parent Category",
         style: GoogleFonts.poppins(
             color: AllColors.primaryDark1,
             fontSize: AllFontSize.fourtine,
@@ -1738,6 +1739,9 @@ class QuoteInformationScreen extends StatelessWidget {
       ),
       initialSelection: saleCycleController.IsMultiParentCategory_controller.value.text,
       inputDecorationTheme: const InputDecorationTheme(
+        fillColor: Colors.white,
+        filled: true,
+
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.all(Radius.circular(10)),
           borderSide: BorderSide(
@@ -1752,9 +1756,8 @@ class QuoteInformationScreen extends StatelessWidget {
           borderSide: BorderSide(
               color: AllColors.primaryDark1), // Change the color to green
         ),
-        filled: false,
         contentPadding: EdgeInsets.symmetric(
-            vertical: AllFontSize.two, horizontal: AllFontSize.ten),
+            vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
       ),
       onSelected: (String? selection) {
         print(selection);
@@ -1775,6 +1778,11 @@ class QuoteInformationScreen extends StatelessWidget {
           saleCycleController.showMultiParentCategory.value=true;
         }
       },
+      menuStyle:  MenuStyle(
+        fixedSize: MaterialStateProperty.all(
+          Size(MediaQuery.of(context).size.width * 0.7, 100), // 👈 same width
+        ),
+      ),
       dropdownMenuEntries: ["Yes","No"].map<DropdownMenuEntry<String>>((String e) {
         return DropdownMenuEntry<String>(
             value: e,
@@ -1807,14 +1815,21 @@ class QuoteInformationScreen extends StatelessWidget {
       },
       onSelected: (ItemCategoryMstModel selection) {
         // Update the TextField with the selected
+        print("length---${saleCycleController.itemCategorySelectedlist.length}");
         saleCycleController.productCategoryController.value.text =
             _displayItemCatMasterForOption(selection).toString();
         if (saleCycleController.IsMultiParentCategory.value) {
+          bool alreadyExists = saleCycleController.itemCategorySelectedlist.any(
+                (item) => item.parentCategoryCode == selection.parentCategoryCode,
+          );
 
-          if (!saleCycleController.itemCategorySelectedlist.contains(selection)) {
+          if (!alreadyExists) {
+            saleCycleController.itemCategorySelectedlist.add(selection);
+          }
+          /*if (!saleCycleController.itemCategorySelectedlist.contains(selection)) {
             saleCycleController.itemCategorySelectedlist.add(selection);
             //Utils.showToastification('Success', 'Add Successfully');
-          }else{
+          }*/else{
             Utils.showErrorToastification('Error', 'Already Selected');
           }
         }
@@ -1840,6 +1855,10 @@ class QuoteInformationScreen extends StatelessWidget {
             focusNode: focusNode,
             //onSubmitted: onFieldSubmitted,
             decoration: InputDecoration(
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                    color: AllColors.primaryDark1), // Change the color to green
+              ),
               suffixIcon: InkWell(
                   onTap: () {
                     focusNode.requestFocus();
@@ -1850,7 +1869,9 @@ class QuoteInformationScreen extends StatelessWidget {
                   vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
               hintText: 'Parent Product Category',
               labelText: 'Parent Product Category',
+              labelStyle: TextStyle(color:AllColors.blackColor),
               border: OutlineInputBorder(
+
                   borderRadius: BorderRadius.all(Radius.circular(10))),
             ),
           ),

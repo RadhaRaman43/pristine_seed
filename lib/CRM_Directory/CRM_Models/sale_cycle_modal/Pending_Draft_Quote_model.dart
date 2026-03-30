@@ -9,6 +9,7 @@ class Pending_Draft_Quote_Model {
   String? contactCode;
   String? contactName;
   String? productCategory;
+  String? parentProductCategory;
   String? quoteStatus;
   String? quoteValidity;
   String? expClosureDate;
@@ -114,6 +115,7 @@ class Pending_Draft_Quote_Model {
         this.contactCode,
         this.contactName,
         this.productCategory,
+        this.parentProductCategory,
         this.quoteStatus,
         this.quoteValidity,
         this.expClosureDate,
@@ -219,6 +221,7 @@ class Pending_Draft_Quote_Model {
     contactCode = json['contact_code'];
     contactName = json['contact_name'];
     productCategory = json['product_category'];
+    parentProductCategory = json['parent_product_category'];
     quoteStatus = json['quote_status'];
     quoteValidity = json['quote_validity'];
     expClosureDate = json['exp_closure_date'];
@@ -326,6 +329,7 @@ class Pending_Draft_Quote_Model {
     data['contact_code'] = this.contactCode;
     data['contact_name'] = this.contactName;
     data['product_category'] = this.productCategory;
+    data['parent_product_category'] = this.parentProductCategory;
     data['quote_status'] = this.quoteStatus;
     data['quote_validity'] = this.quoteValidity;
     data['exp_closure_date'] = this.expClosureDate;

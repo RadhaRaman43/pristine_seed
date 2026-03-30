@@ -1892,8 +1892,7 @@ class CommitDashboardViewscreen extends StatelessWidget{
 
           itemBuilder: (context, item, isSelected) {
             return ListTile(
-              title: Text(
-                item.accountName ?? "",
+              title: Text("${item.accountName ?? ""}(${item.accountCode ?? ""})",
                 style: TextStyle(
                   color: isSelected ? Colors.blue : Colors.black,
                   fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,

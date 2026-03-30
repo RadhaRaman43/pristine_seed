@@ -31,6 +31,8 @@ class SalesCycleCompetitorProductInforVm extends GetxController{
   var clusterName_controller = TextEditingController().obs;
   var createdByController = TextEditingController().obs;
   var district_controller = TextEditingController().obs;
+  var competitor_name_controller = TextEditingController().obs;
+  var loss_reason_controller = TextEditingController().obs;
   var postalCodeController = TextEditingController().obs;
   var companyProfileTypeController = TextEditingController().obs;
   var filterTask_Id_controller = TextEditingController().obs;
@@ -223,14 +225,14 @@ class SalesCycleCompetitorProductInforVm extends GetxController{
       "filter_created_by": email,
       "filter_created_on": createdOnStartToEnd.value.isNotEmpty?createdOnStartToEnd.value:"",
       "filter_item_code_name": filterItemCodeController.value.text.isNotEmpty?filterItemCodeController.value.text:"",
-      "filter_competitor_name": "",
-      "filter_loss_reason": "",
+      "filter_competitor_name": competitor_name_controller.value.text.isEmpty?"":competitor_name_controller.value.text,
+      "filter_loss_reason": loss_reason_controller.value.text.isEmpty?"":loss_reason_controller.value.text,
       "filter_sales_cycle_status": filterSalesCycleStatusController.value.text.isNotEmpty?filterSalesCycleStatusController.value.text:"",
       "filter_sales_cycle_approval_status": filterSalesCycleApprovalStatusController.value.text.isNotEmpty?filterSalesCycleApprovalStatusController.value.text:"",
       "filter_sales_cycle_quote_accepted":filterQuoteAcceptedController.value.text.isNotEmpty?filterQuoteAcceptedController.value.text:"",
       "filter_expected_closure_date": filterExpectedClosuredateController.value.text.isNotEmpty?filterExpectedClosuredateController.value.text:"",
-      "filter_postal_code": "",
-      "filter_district": "",
+      "filter_postal_code":postalCodeController.value.text.isEmpty? "":postalCodeController.value.text,
+      "filter_district": district_controller.value.text.isEmpty?"":district_controller.value.text,
       "filter_frontliner_value": "",
       "filter_branch_head_value": RegionName_controller.value.text.isNotEmpty?RegionName_controller.value.text:"",
       "filter_zone_head_value": "",
@@ -290,6 +292,10 @@ class SalesCycleCompetitorProductInforVm extends GetxController{
     filterSalesCycleIdController.value.clear();
     productCategoryController.value.clear();
     filterExpectedClosuredateController.value.clear();
+    postalCodeController.value.clear();
+    district_controller.value.clear();
+    competitor_name_controller.value.clear();
+    loss_reason_controller.value.clear();
     extClosureStartToEnd.value="";
     createdOnStartToEnd.value="";
 
@@ -321,6 +327,10 @@ class SalesCycleCompetitorProductInforVm extends GetxController{
         'createdOn_Controller': createdOnCnontroller.value.text,
         'product_category': productCategoryController.value.text,
         'product_category_type': product_category_type_Controller.value.text,
+        'postalCodeController': postalCodeController.value.text,
+        'district_controller': district_controller.value.text,
+        'competitor_name_controller': competitor_name_controller.value.text,
+        'loss_reason_controller': loss_reason_controller.value.text,
       });
     }
     catch(e){
@@ -352,6 +362,10 @@ class SalesCycleCompetitorProductInforVm extends GetxController{
       createdOnCnontroller.value.text=getFilterData["createdOn_Controller"]??"";
       productCategoryController.value.text=getFilterData["product_category"]??"";
       product_category_type_Controller.value.text=getFilterData["product_category_type"]??"";
+      postalCodeController.value.text=getFilterData["postalCodeController"]??"";
+      district_controller.value.text=getFilterData["district_controller"]??"";
+      competitor_name_controller.value.text=getFilterData["competitor_name_controller"]??"";
+      loss_reason_controller.value.text=getFilterData["loss_reason_controller"]??"";
 
 
       if(getFilterData["region_name"].toString().isNotEmpty && getFilterData["region_name"].toString()!=""){

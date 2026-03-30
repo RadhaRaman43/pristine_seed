@@ -37,6 +37,7 @@ class PendingDraftQuoteVm extends GetxController{
   var accountCodeController=TextEditingController().obs;
   var accountNameController=TextEditingController().obs;
   var productCategoryController=TextEditingController().obs;
+  var parentProductCategoryController=TextEditingController().obs;
   var quoteStatusController=TextEditingController().obs;
   var filterQuoteValidityController=TextEditingController().obs;
   var filterExpectedClosuredateController=TextEditingController().obs;
@@ -60,6 +61,7 @@ class PendingDraftQuoteVm extends GetxController{
   var StandardCostController=TextEditingController().obs;
   var product_category_type_Controller = TextEditingController().obs;
 
+
   RxList<Pending_Draft_Quote_Model> PendingDraftQuoteList=<Pending_Draft_Quote_Model>[].obs;
   RxList<String> QuoteStatusList = ["All", "DRAFT", "PENDING FOR APPROVAL", ].obs;
   RxList<String> approvedRejectedStatusList = ["All", "APPROVED", "REJECTED", ].obs;
@@ -69,6 +71,9 @@ class PendingDraftQuoteVm extends GetxController{
   RxList<ClusterModal> SelectedCluster_list = <ClusterModal>[].obs;
   RxList<RegionWithClusterFilterModal> regionwithclusterGetByEmailList = <RegionWithClusterFilterModal>[].obs;
   RxList<RegionWithClusterFilterModal> SelectedRegion_list = <RegionWithClusterFilterModal>[].obs;
+
+  RxList<ItemCategoryMstModel> parentProductCategoryList = <ItemCategoryMstModel>[].obs;
+  RxList<ItemCategoryMstModel> parentItemCategorySelectedList = <ItemCategoryMstModel>[].obs;
 
   RxList<ItemCategoryMstModel> Item_Category_master_list_without_task = <ItemCategoryMstModel>[].obs;
   RxList<ItemCategoryMstModel> Selected_Item_Category_master_list_without_task = <ItemCategoryMstModel>[].obs;
@@ -100,6 +105,7 @@ class PendingDraftQuoteVm extends GetxController{
     //getPendingDraftQuoteList(pageNumberForQuote, filterFlag);
     product_category_type_Controller.value.text="Contains";
     getItemCategoryMstWithoutTaskIdApi();
+    getParentItemCategoryMstGet();
     getClustersGetByEmail();
 
 
@@ -109,6 +115,39 @@ class PendingDraftQuoteVm extends GetxController{
   Future<void>refreshList() async{
     getPendingDraftQuoteList(pageNumberForQuote, filterFlag);
   }
+  getParentItemCategoryMstGet() {
+    this.loading.value = true;
+    Map<String, String> data = {
+      'filter_category': "",
+    };
+    print(data);
+    _api.ParentItemCategoryMstGet(data, sessionManagement).then((value) {
+      print(value);
+      try {
+        List<ItemCategoryMstModel> Response = (json.decode(value)
+        as List<dynamic>)
+            .map((i) => ItemCategoryMstModel.fromJson(i as Map<String, dynamic>)).toList();
+
+        if (Response.isNotEmpty && Response[0]?.condition.toString() == "True") {
+          parentProductCategoryList.value = Response!;
+        } else {
+          parentProductCategoryList.value = [];
+
+        }
+      } catch (e) {
+        parentProductCategoryList.value = [];
+
+        print('catch....${e.toString()}');
+      }
+    }).onError((error, stackTrace) {
+      parentProductCategoryList.value = [];
+      Utils.sanckBarError('Api Exception onError', error.toString());
+      print('catchEx....${error.toString()}');
+    }).whenComplete(() {
+      this.loading.value = false;
+    });
+  }
+
   getItemCategoryMstWithoutTaskIdApi() {
     loading.value = true;
     Map<String, String> data = {
@@ -263,6 +302,7 @@ class PendingDraftQuoteVm extends GetxController{
           "filter_quote_status": quoteStatusController.value.text.isEmpty || quoteStatusController.value.text == 'All'?"":quoteStatusController.value.text,
           "filter_flag": flagFilter,
           "filter_product_category": productCategoryController.value.text.isEmpty?"":productCategoryController.value.text,
+          "filter_parent_product_category": parentProductCategoryController.value.text.isEmpty?"":parentProductCategoryController.value.text,
           "filter_product_category_type": product_category_type_Controller.value.text.isEmpty?"":product_category_type_Controller.value.text,
           "filter_created_by": isAdminWritePermission == '1'?'':email,
           "filter_created_on": createdOnStartToEnd.value.isNotEmpty?createdOnStartToEnd.value:"",
@@ -323,7 +363,9 @@ class PendingDraftQuoteVm extends GetxController{
 
   void clearAllFieldOfQuoteFilter() {
     product_category_type_Controller.value.text="Contains";
+    parentProductCategoryController.value.clear();
     Selected_Item_Category_master_list_without_task.value=[];
+    parentItemCategorySelectedList.value=[];
 
     filterQuoteIdController.value.clear();
     filterQuoteVersionController.value.clear();
@@ -386,6 +428,7 @@ class PendingDraftQuoteVm extends GetxController{
       'createdOn_Controller': createdOnCnontroller.value.text,
       'createdOnStartToEnd': createdOnStartToEnd.value,
       'product_category': productCategoryController.value.text,
+      'parentProductCategoryController': parentProductCategoryController.value.text,
       'product_category_type': product_category_type_Controller.value.text,
     });
     filterDataChecker.value='';
@@ -414,6 +457,7 @@ class PendingDraftQuoteVm extends GetxController{
       createdOnCnontroller.value.text=getFilterData["createdOn_Controller"]??"";
       createdOnStartToEnd.value=getFilterData["createdOnStartToEnd"]??"";
       productCategoryController.value.text=getFilterData["product_category"]??"";
+      parentProductCategoryController.value.text=getFilterData["parentProductCategoryController"]??"";
       product_category_type_Controller.value.text=getFilterData["product_category_type"]??"";
 
       if(getFilterData["region_name"].toString().isNotEmpty && getFilterData["region_name"].toString()!=""){
@@ -464,6 +508,7 @@ class PendingDraftQuoteVm extends GetxController{
       'createdOn_Controller': createdOnCnontroller.value.text,
       'createdOnStartToEnd': createdOnStartToEnd.value,
       'product_category': productCategoryController.value.text,
+      'parentProductCategoryController': parentProductCategoryController.value.text,
       'product_category_type': product_category_type_Controller.value.text,
     });
     filterDataChecker.value='';
@@ -492,6 +537,7 @@ class PendingDraftQuoteVm extends GetxController{
       createdOnCnontroller.value.text=getFilterData["createdOn_Controller"]??"";
       createdOnStartToEnd.value=getFilterData["createdOnStartToEnd"]??"";
       productCategoryController.value.text=getFilterData["product_category"]??"";
+      parentProductCategoryController.value.text=getFilterData["parentProductCategoryController"]??"";
       product_category_type_Controller.value.text=getFilterData["product_category_type"]??"";
 
       if(getFilterData["region_name"].toString().isNotEmpty && getFilterData["region_name"].toString()!=""){
@@ -541,6 +587,7 @@ class PendingDraftQuoteVm extends GetxController{
       'createdOn_Controller': createdOnCnontroller.value.text,
       'createdOnStartToEnd': createdOnStartToEnd.value,
       'product_category': productCategoryController.value.text,
+      'parentProductCategoryController': parentProductCategoryController.value.text,
       'product_category_type': product_category_type_Controller.value.text,
     });
     filterDataChecker.value='';
@@ -570,6 +617,7 @@ class PendingDraftQuoteVm extends GetxController{
       createdOnCnontroller.value.text=getFilterData["createdOn_Controller"]??"";
       createdOnStartToEnd.value=getFilterData["createdOnStartToEnd"]??"";
       productCategoryController.value.text=getFilterData["product_category"]??"";
+      parentProductCategoryController.value.text=getFilterData["parentProductCategoryController"]??"";
       product_category_type_Controller.value.text=getFilterData["product_category_type"]??"";
 
       if(getFilterData["region_name"].toString().isNotEmpty && getFilterData["region_name"].toString()!=""){
@@ -629,6 +677,7 @@ class PendingDraftQuoteVm extends GetxController{
       'createdOn_Controller': createdOnCnontroller.value.text,
       'createdOnStartToEnd': createdOnStartToEnd.value,
       'product_category': productCategoryController.value.text,
+      'parentProductCategoryController': parentProductCategoryController.value.text,
       'product_category_type': product_category_type_Controller.value.text,
     });
     filterDataChecker.value='';
@@ -668,6 +717,7 @@ class PendingDraftQuoteVm extends GetxController{
       createdOnCnontroller.value.text=getFilterData["createdOn_Controller"]??"";
       createdOnStartToEnd.value=getFilterData["createdOnStartToEnd"]??"";
       productCategoryController.value.text=getFilterData["product_category"]??"";
+      parentProductCategoryController.value.text=getFilterData["parentProductCategoryController"]??"";
       product_category_type_Controller.value.text=getFilterData["product_category_type"]??"";
 
       if(getFilterData["region_name"].toString().isNotEmpty && getFilterData["region_name"].toString()!=""){
@@ -720,6 +770,7 @@ class PendingDraftQuoteVm extends GetxController{
       'region_name': RegionName_controller.value.text,
       'cluster_name': clusterName_controller.value.text,
       'product_category': productCategoryController.value.text,
+      'parentProductCategoryController': parentProductCategoryController.value.text,
       'product_category_type': product_category_type_Controller.value.text,
     });
     filterDataChecker.value='';
@@ -752,6 +803,7 @@ class PendingDraftQuoteVm extends GetxController{
       cbh_Approval_controller.value.text=getFilterData["cbh_Approval_controller"]??"";
       gm_Approval_controller.value.text=getFilterData["gm_Approval_controller"]??"";
       productCategoryController.value.text=getFilterData["product_category"]??"";
+      parentProductCategoryController.value.text=getFilterData["parentProductCategoryController"]??"";
       product_category_type_Controller.value.text=getFilterData["product_category_type"]??"";
 
       if(getFilterData["region_name"].toString().isNotEmpty && getFilterData["region_name"].toString()!=""){
