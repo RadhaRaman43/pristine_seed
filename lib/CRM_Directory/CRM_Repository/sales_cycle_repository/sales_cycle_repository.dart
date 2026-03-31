@@ -303,4 +303,8 @@ class SalesCycleRepository{
     return _apiService.postApi(data,AppUrl.SalesCycleMstInfraUpdate, sessionManagement);
   }
 
+  Future<String> QuoteMstStatusChangeToDraft(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data,AppUrl.QuoteMstStatusChangeToDraft, sessionManagement);
+  }
+
 }

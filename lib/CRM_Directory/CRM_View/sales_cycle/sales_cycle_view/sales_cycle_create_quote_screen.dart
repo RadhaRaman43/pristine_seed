@@ -195,7 +195,7 @@ class SalesCycleCreateQuoteScreen extends StatelessWidget{
       width: MediaQuery.of(context).size.width,
       controller: saleCycleController.IsMultiParentCategory_controller.value,
       label: Text(
-        "Is Multi Parent Category",
+        "Rate Contract Only",
         style: GoogleFonts.poppins(
             color: AllColors.primaryDark1,
             fontSize: AllFontSize.fourtine,

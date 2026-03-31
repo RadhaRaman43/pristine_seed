@@ -75,7 +75,7 @@ class AllQuoteScreen extends StatelessWidget{
               children: [
                 Obx((){
                   return Visibility(
-                    visible:pendingDraftQuoteController.loading.value ,
+                    visible:pendingDraftQuoteController.loading.value || saleCycleController.loading.value,
                     child: LinearProgressIndicator(
                       backgroundColor: AllColors.primaryDark1,
                       color: AllColors.textColor,

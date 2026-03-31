@@ -616,8 +616,7 @@ class CommitDashboardVm extends GetxController{
           loading.value = false;
         }
       },
-      ).onError(
-            (error, stackTrace) {
+      ).onError((error, stackTrace) {
           print(error);
         },
       );

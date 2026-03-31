@@ -272,12 +272,8 @@ class QuoteInformationScreen extends StatelessWidget {
                                         ),
                                       ),
                                       onPressed: () {
-                                        saleCycleController
-                                            .quoteStatusController.value
-                                            .clear();
-                                        saleCycleController
-                                            .rejectreasonQuoteController.value
-                                            .clear();
+                                        saleCycleController.quoteStatusController.value.clear();
+                                        saleCycleController.rejectreasonQuoteController.value.clear();
                                         saleCycleController
                                             .managerRemarksController.value
                                             .clear();
@@ -362,12 +358,15 @@ class QuoteInformationScreen extends StatelessWidget {
                         }),
 
                         Obx(() {
+                          print("quote accepted ${saleCycleController.quoteHeaderdata[0].quoteAccepted?.toLowerCase() != "loss"}");
                          return Visibility(
-                            visible: ((saleCycleController.quoteHeaderdata[0].quoteStatus?.toLowerCase() == "draft" &&
+                            visible: saleCycleController.quoteHeaderdata[0].quoteAccepted?.toLowerCase() != "loss"&&
+                                saleCycleController.quoteHeaderdata[0].quoteAccepted?.toLowerCase() != "won"&&(
+                                (saleCycleController.quoteHeaderdata[0].quoteStatus?.toLowerCase() == "draft" &&
                                     saleCycleController.quoteHeaderdata[0].quoteAccepted?.toLowerCase() == "open"&&
-                                    saleCycleController.quoteHeaderdata[0].isReadySendForApproval == 1) ||
-                                saleCycleController.isAdminWritePermission=="1" ||
-                                    ((saleCycleController.userType.toLowerCase()=="ch"||saleCycleController.userType.toLowerCase()=="bh"||
+                                    saleCycleController.quoteHeaderdata[0].isReadySendForApproval == 1)
+                                    || saleCycleController.isAdminWritePermission=="1"
+                                    || ((saleCycleController.userType.toLowerCase()=="ch"||saleCycleController.userType.toLowerCase()=="bh"||
                                         saleCycleController.userType.toLowerCase()=="gm") &&
                                     saleCycleController.quoteHeaderdata[0].quoteStatus?.toLowerCase() == "pending for approval")) ? true : false,
                             child: GestureDetector(
@@ -424,10 +423,24 @@ class QuoteInformationScreen extends StatelessWidget {
                             ),
                           );
                         }),
-
-
-
-
+                        Visibility(
+                          visible: saleCycleController.isAdminWritePermission=="1",
+                          child: ActionChip(
+                          label: Text(
+                            "Move To Draft",
+                            style: GoogleFonts.poppins(
+                              color: AllColors.whiteColor,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          onPressed: () {
+                            moveToDraftDialog(context);
+                          },
+                          backgroundColor: AllColors.primaryDark1,
+                          shape: StadiumBorder(
+                            side: BorderSide.none,
+                          ),
+                        ),)
                       ],
                     ),
                     Obx(() {
@@ -1731,7 +1744,7 @@ class QuoteInformationScreen extends StatelessWidget {
     return DropdownMenu<String>(
       width: MediaQuery.of(context).size.width,
       controller: saleCycleController.IsMultiParentCategory_controller.value,
-      label: Text("Is Multi Parent Category",
+      label: Text("Rate Contract Only",
         style: GoogleFonts.poppins(
             color: AllColors.primaryDark1,
             fontSize: AllFontSize.fourtine,
@@ -3299,6 +3312,97 @@ class QuoteInformationScreen extends StatelessWidget {
           );
         });
   }
+
+  Future moveToDraftDialog(BuildContext context) {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Container(
+            child: AlertDialog(
+              title: Text(
+                "Move To Draft",
+                style: GoogleFonts.poppins(
+                  color: AllColors.primaryDark1,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              content: Container(
+                /*height: size.height*.21,
+                  width: size.width*4,*/
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text('Do you want to move this quote ?',
+                          style: GoogleFonts.poppins(
+                            fontSize: AllFontSize.fourtine,
+                            fontWeight: FontWeight.w500,
+                            color: AllColors.primaryDark1,
+                          )),
+                      SizedBox(height: 10),
+                      Container(
+                        width: size.width,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              child: ElevatedButton(
+                                style: ButtonStyle(
+                                  backgroundColor: MaterialStateProperty.all<Color>(
+                                    AllColors.lightredColor,
+                                  ),
+                                ),
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                  //Get.back();
+                                },
+                                child: Container(
+                                  child: Text(
+                                    'Cancel',
+                                    style: GoogleFonts.poppins(
+                                      color: AllColors.blackColor,
+                                      fontSize: AllFontSize.fourtine,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Expanded(
+                              child: ElevatedButton(
+                                style: ButtonStyle(
+                                  backgroundColor: MaterialStateProperty.all<Color>(
+                                    AllColors.greenblue,
+                                  ),
+                                ),
+                                onPressed: () {
+                                  saleCycleController.QuoteMstStatusChangeToDraft(saleCycleController.quoteHeaderdata[0].quoteId ?? "");
+                                 Navigator.pop(context);
+                                },
+                                child: Container(
+                                  child: Text(
+                                    'Confirm',
+                                    style: GoogleFonts.poppins(
+                                      color: AllColors.blackColor,
+                                      fontSize: AllFontSize.fourtine,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      )
+                    ],
+                  )),
+            ),
+          );
+        });
+  }
+
 
   Widget managerRemarksField(BuildContext context) {
     return TextField(

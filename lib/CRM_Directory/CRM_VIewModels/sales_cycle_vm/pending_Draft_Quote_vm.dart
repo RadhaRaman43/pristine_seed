@@ -115,47 +115,41 @@ class PendingDraftQuoteVm extends GetxController{
   Future<void>refreshList() async{
     getPendingDraftQuoteList(pageNumberForQuote, filterFlag);
   }
-  getParentItemCategoryMstGet() {
-    this.loading.value = true;
+  getParentItemCategoryMstGet() async{
     Map<String, String> data = {
       'filter_category': "",
     };
+    this.loading.value = true;
     print(data);
-    _api.ParentItemCategoryMstGet(data, sessionManagement).then((value) {
+    String value = await _api.ParentItemCategoryMstGet(data, sessionManagement);
       print(value);
       try {
         List<ItemCategoryMstModel> Response = (json.decode(value)
-        as List<dynamic>)
-            .map((i) => ItemCategoryMstModel.fromJson(i as Map<String, dynamic>)).toList();
-
+        as List<dynamic>).map((i) => ItemCategoryMstModel.fromJson(i as Map<String, dynamic>)).toList();
         if (Response.isNotEmpty && Response[0]?.condition.toString() == "True") {
           parentProductCategoryList.value = Response!;
         } else {
           parentProductCategoryList.value = [];
-
         }
       } catch (e) {
         parentProductCategoryList.value = [];
-
         print('catch....${e.toString()}');
       }
-    }).onError((error, stackTrace) {
-      parentProductCategoryList.value = [];
-      Utils.sanckBarError('Api Exception onError', error.toString());
-      print('catchEx....${error.toString()}');
-    }).whenComplete(() {
-      this.loading.value = false;
-    });
+      finally{
+        loading.value=false;
+      }
+
   }
 
-  getItemCategoryMstWithoutTaskIdApi() {
-    loading.value = true;
+  getItemCategoryMstWithoutTaskIdApi() async{
+
+    try {
     Map<String, String> data = {
 
     };
+    loading.value = true;
+    String value = await _api.getItemCategoryMstWithoutTaskIdApiHit(data, sessionManagement);
 
-    _api.getItemCategoryMstWithoutTaskIdApiHit(data, sessionManagement).then((value) {
-      try {
         List<ItemCategoryMstModel> Response =
         (json.decode(value) as List<dynamic>).map((i) => ItemCategoryMstModel.fromJson(i as Map<String, dynamic>)).toList();
 
@@ -171,29 +165,25 @@ class PendingDraftQuoteVm extends GetxController{
         Item_Category_master_list_without_task.value = [];
         print('catch....${e.toString()}');
       }
-    }).onError((error, stackTrace) {
-      Item_Category_master_list_without_task.value = [];
-      Utils.sanckBarError('Api Exception onError', error.toString());
-      print('catchEx....${error.toString()}');
-    }).whenComplete(() {
-      loading.value = false;
-    });
+      finally{
+        loading.value=false;
+      }
+
   }
 
-  void getClustersGetByEmail() {
+  void getClustersGetByEmail() async{
     try{
       Map<String, String> data={
         "email_id":email
       };
       loading.value=true;
       print("data is ${data}");
-      _api.clustersGetByEmailApiHit(data, sessionManagement).then((onValue){
+      String onValue = await _api.clustersGetByEmailApiHit(data, sessionManagement);
         print(onValue);
         final jsonResponse = json.decode(onValue);
         if(jsonResponse is List){
           List<ClusterModal> response = jsonResponse.map((e) => ClusterModal.fromJson(e)).toList();
           if(response.length>0 && response[0].condition=="True"){
-            loading.value = false;
             clusterGetByEmailList.value=response;
             if (clusterGetByEmailList.value.isNotEmpty && SelectedCluster_list.isEmpty) {
               SelectedCluster_list.assignAll(clusterGetByEmailList.value);
@@ -201,26 +191,17 @@ class PendingDraftQuoteVm extends GetxController{
               getRegionsWithClusterFilterGetByEmail();
             }
           }else {
-            loading.value = false;
             clusterGetByEmailList.value=[];
           }
-        } else {
-          loading.value = false;
         }
-      },
-      ).onError(
-            (error, stackTrace) {
-          print(error);
-        },
-      ).whenComplete(() {
-        loading.value=false;
-      },);
     }catch(e){
-      loading.value = false;
       print(e);
-    } 
+    }
+    finally{
+      loading.value = false;
+    }
   }
-  void getRegionsWithClusterFilterGetByEmail() {
+  void getRegionsWithClusterFilterGetByEmail() async{
     var selectedCluster="";
     if(clusterName_controller.value.text.isNotEmpty){
       selectedCluster = clusterName_controller.value.text.split(',').map((e) => e.trim()).join('|');
@@ -232,7 +213,7 @@ class PendingDraftQuoteVm extends GetxController{
       };
       loading.value=true;
       print("data is ${data}");
-      _api.RegionsWithClusterFilterGetByEmailApiHit(data, sessionManagement).then((onValue){
+      String onValue = await _api.RegionsWithClusterFilterGetByEmailApiHit(data, sessionManagement);
         print(onValue);
         final jsonResponse = json.decode(onValue);
         if(jsonResponse is List){
@@ -263,28 +244,18 @@ class PendingDraftQuoteVm extends GetxController{
             //getPendingDraftQuoteList(pageNumberForQuote, filterFlag);
 
           }else {
-            loading.value = false;
             regionwithclusterGetByEmailList.value=[];
           }
-        } else {
-          loading.value = false;
         }
-      },
-      ).onError(
-            (error, stackTrace) {
-          print(error);
-        },
-      );
     }catch(e){
-      loading.value = false;
       print(e);
     }finally{
       loading.value = false;
     }
   }
 
-  getPendingDraftQuoteList(int pageNumberForQuote,String flagFilter){
-    loading.value=true;
+  getPendingDraftQuoteList(int pageNumberForQuote,String flagFilter) async{
+
     try{
 
       Map data={
@@ -324,15 +295,15 @@ class PendingDraftQuoteVm extends GetxController{
           "row_per_page": rowsPerPage,
           "page_number": pageNumberForQuote
       };
+      loading.value=true;
 
-      _api.QuoteHeaderGetNewApiHit(data, sessionManagement).then((onValue){
+      String onValue = await _api.QuoteHeaderGetNewApiHit(data, sessionManagement);
         final jsonResponse = json.decode(onValue);
         print(onValue);
        this.filterFlag=flagFilter;
         if(jsonResponse is List){
           List<Pending_Draft_Quote_Model> response = jsonResponse.map((e) => Pending_Draft_Quote_Model.fromJson(e)).toList();
           if(response!= null && response.length>0 && response[0].condition=="True"){
-            loading.value = false;
             if(pageNumberForQuote==0){
               PendingDraftQuoteList.clear();
             }
@@ -341,22 +312,13 @@ class PendingDraftQuoteVm extends GetxController{
             total_rows=int.parse(PendingDraftQuoteList[0].totalRows!);
           }else {
             PendingDraftQuoteList.value=[];
-            loading.value = false;
           }
-        } else {
-          loading.value = false;
         }
-      },
-      ).onError(
-            (error, stackTrace) {
-          print(error);
-        },
-      ).whenComplete(() {
-        loading.value = false;
-      },);
     }catch(e){
-      loading.value = false;
       print(e);
+    }
+    finally{
+      loading.value = false;
     }
 
   }
