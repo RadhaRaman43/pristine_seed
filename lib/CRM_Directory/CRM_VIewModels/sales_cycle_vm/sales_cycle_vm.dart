@@ -1294,6 +1294,7 @@ class SalesCycleVm extends GetxController {
           .join(', ');
     }*/
 
+
     try {
       Map data = {
         "sales_cycle_id": saleCycleId.toString(),

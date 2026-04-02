@@ -1331,6 +1331,9 @@ class QuoteInformationScreen extends StatelessWidget {
                     value: saleCycleController.quoteHeaderdata[0].contactName ?? "",
                     color: AllColors.textColor,
                   ),
+                  Visibility(
+                    visible: saleCycleController.quoteHeaderdata[0].parentProductCategoryCode==null,
+                    child:
                   _buildLabelWithValue(
                       label: "Product Category",
                       value: saleCycleController.quoteHeaderdata[0].productCategory
@@ -1338,7 +1341,8 @@ class QuoteInformationScreen extends StatelessWidget {
                           ?? "",
                       color: AllColors.textColor,
                       context: context
-                  ),
+                  ),),
+
 
                   _buildLabelWithValue(
                     label: "P. Product Category",
