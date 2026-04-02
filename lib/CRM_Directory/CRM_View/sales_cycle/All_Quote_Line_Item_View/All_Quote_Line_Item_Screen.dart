@@ -222,12 +222,12 @@ class AllQuoteLineItemScreen extends StatelessWidget{
                   account_vm_controller.view = 'FromALLQuoteLineItems';
                   contact_vm_controller.view = 'FromALLQuoteLineItems';
                   account_vm_controller.getAccMasterBuyCodeApi(
-                      pendingDraftQuoteController
-                          .PendingDraftQuoteList[position].accountCode!);
+                      pendingDraftQuoteController.PendingDraftQuoteList[position].accountCode!);
                 },),
               _buildLabelWithValue(label: "Customer Code: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].accountCode ?? "",color:AllColors.textColor),
               _buildLabelWithValue(label: "Contact Name: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].contactName ?? "",color:AllColors.textColor),
               _buildLabelWithValue(label: "Product Category: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].productCategory ?? "",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Parent Product Category: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].parentProductCategory ?? "",color:AllColors.textColor),
               _buildLabelWithValue(label: "Quote Status: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].quoteStatus ?? "",color:getStatusColor(saleCycleStatus)),
               _buildLabelWithValue(label: "Quote Validity: ", value:  quoteValidityDate.toString(),color:AllColors.textColor),
               _buildLabelWithValue(label: "Expected Closure Date: ", value: expectedClosuredateDate.toString(),color:AllColors.textColor),
@@ -242,11 +242,29 @@ class AllQuoteLineItemScreen extends StatelessWidget{
               _buildLabelWithValue(label: "Item Name: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].itemName ?? "",color:AllColors.textColor),
               _buildLabelWithValue(label: "Qty: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].qty.toString() ?? "",color:AllColors.textColor),
               _buildLabelWithValue(label: "LSP: ", value:  "₹ ${pendingDraftQuoteController.PendingDraftQuoteList[position].listSellingPrice.toString() ?? ""}",color:AllColors.textColor),
-              _buildLabelWithValue(label: "MAP: ", value:  "₹ ${pendingDraftQuoteController.PendingDraftQuoteList[position].minimalAcceptablePrice.toString() ?? ""}",color:AllColors.textColor),
-              _buildLabelWithValue(label: "BTP: ", value:  "₹ ${pendingDraftQuoteController.PendingDraftQuoteList[position].branchTransferPrice.toString() ?? ""}",color:AllColors.textColor),
-              _buildLabelWithValue(label: "BM %: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].bmDiscountPer.toString(),color:AllColors.textColor),
-              _buildLabelWithValue(label: "GM %: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].gmDiscountPer.toString(),color:AllColors.textColor),
-              _buildLabelWithValue(label: "Standard Cost: ", value:  "₹ ${pendingDraftQuoteController.PendingDraftQuoteList[position].standardCost.toString() ?? ""}",color:AllColors.textColor),
+              
+              Visibility(visible: /*pendingDraftQuoteController.userType=="bh" ||*/ pendingDraftQuoteController.userType=="cl"
+                  ||pendingDraftQuoteController.userType=="gm" || pendingDraftQuoteController.isAdminWritePermission=="1",
+                  child: _buildLabelWithValue(label: "MAP: ", value:  "₹ ${pendingDraftQuoteController.PendingDraftQuoteList[position].minimalAcceptablePrice.toString() ?? ""}",color:AllColors.textColor)),
+              
+              Visibility(visible: pendingDraftQuoteController.userType=="bh" || pendingDraftQuoteController.userType=="cl"
+                  ||pendingDraftQuoteController.userType=="gm" || pendingDraftQuoteController.isAdminWritePermission=="1",
+                  child: _buildLabelWithValue(label: "BTP: ", value:  "₹ ${pendingDraftQuoteController.PendingDraftQuoteList[position].branchTransferPrice.toString() ?? ""}",color:AllColors.textColor)),
+              Visibility(visible: pendingDraftQuoteController.userType=="bh" || pendingDraftQuoteController.userType=="cl"
+                  ||pendingDraftQuoteController.userType=="gm" || pendingDraftQuoteController.isAdminWritePermission=="1",
+                  child: _buildLabelWithValue(label: "BM %: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].bmDiscountPer.toString(),color:AllColors.textColor)),
+              
+              Visibility(visible: /*pendingDraftQuoteController.userType=="bh" ||*/ pendingDraftQuoteController.userType=="cl"
+                  ||pendingDraftQuoteController.userType=="gm" || pendingDraftQuoteController.isAdminWritePermission=="1",
+                  child: _buildLabelWithValue(label: "GM %: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].gmDiscountPer.toString(),color:AllColors.textColor)),
+              Visibility(
+                  visible: /*pendingDraftQuoteController.userType=="bh" ||*/ pendingDraftQuoteController.userType=="cl"
+                      ||pendingDraftQuoteController.userType=="gm" || pendingDraftQuoteController.isAdminWritePermission=="1",
+                  child: _buildLabelWithValue(label: "GM Absolute: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].gmTotalDiscountAmount.toString(),color:AllColors.textColor)),
+              
+              Visibility(visible: /*pendingDraftQuoteController.userType=="bh" ||*/ pendingDraftQuoteController.userType=="cl"
+                  ||pendingDraftQuoteController.userType=="gm" || pendingDraftQuoteController.isAdminWritePermission=="1",
+                  child: _buildLabelWithValue(label: "Standard Cost: ", value:  "₹ ${pendingDraftQuoteController.PendingDraftQuoteList[position].standardCost.toString() ?? ""}",color:AllColors.textColor)),
               _buildLabelWithValue(label: "Sales Credit: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].salesCredit.toString()??"",color:AllColors.textColor),
               _buildLabelWithValue(label: "Is Active: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].isActive.toString()=="1"? "Yes":"No",color:AllColors.textColor),
               _buildLabelWithValue(label: "Installation Charges : ", value:"₹ ${ pendingDraftQuoteController.PendingDraftQuoteList[position].installationCharges.toString() ?? ""}" ,color:AllColors.textColor),
@@ -376,7 +394,7 @@ class AllQuoteLineItemScreen extends StatelessWidget{
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Icon(Icons.shield_moon_rounded, color: AllColors.primaryDark1,),
-                        SizedBox(width: 5,),
+                        const SizedBox(width: 5,),
                         Text(
                           "Quote Filter ",
                           style: GoogleFonts.poppins(
@@ -414,63 +432,65 @@ class AllQuoteLineItemScreen extends StatelessWidget{
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              SizedBox(height: 5,),
+                              const SizedBox(height: 5,),
                               bindData(context,'Quote Id', pendingDraftQuoteController.filterQuoteIdController.value),
-                              SizedBox(height: 10),
+                              const SizedBox(height: 10),
                               bindData(context,'Quote Version', pendingDraftQuoteController.filterQuoteVersionController.value),
-                              SizedBox(height: 10),
+                              const SizedBox(height: 10),
                               bindData(context,'Sale Cycle Id', pendingDraftQuoteController.filterQuoteSaleCycleController.value),
-                              SizedBox(height: 10),
+                              const SizedBox(height: 10),
                               bindData(context,'Customer Code', pendingDraftQuoteController.accountCodeController.value),
-                              SizedBox(height: 10),
+                              const SizedBox(height: 10),
                               bindData(context,'Customer Name', pendingDraftQuoteController.accountNameController.value),
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
                               filterWithQuoteStatus(context),
-                              SizedBox(height: 10),
+                              const SizedBox(height: 10),
                               filterWithQuoteValidity(context),
-                              SizedBox(height: 10),
+                              const SizedBox(height: 10),
                               filterWithQuoteClosureDate(context),
-                              SizedBox(height: 10),
+                              const SizedBox(height: 10),
                               bindData(context,'Rh Approval', pendingDraftQuoteController.rh_Approval_controller.value),
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
                               bindData(context,'CBH Approval', pendingDraftQuoteController.cbh_Approval_controller.value),
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
                               bindData(context,'Category Approval', pendingDraftQuoteController.category_Approval_controller.value),
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
                               bindData(context,'Gm Approval', pendingDraftQuoteController.gm_Approval_controller.value),
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
                               bindClusterNameFilter(context),
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
                               bindRegionNameFilter(context),
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
                               bindData(context,'Item Code', pendingDraftQuoteController.itemCodeController.value),
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
                               bindData(context,'Item Name', pendingDraftQuoteController.itemNameController.value),
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
                               bindData(context,'Quantity', pendingDraftQuoteController.quantityFilterController.value),
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
                               bindData(context,'GM Discount %', pendingDraftQuoteController.GmDiscountPerController.value),
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
                               bindData(context,'BM Discount %', pendingDraftQuoteController.BmDiscountPerController.value),
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
                               bindData(context,'Sales Credit', pendingDraftQuoteController.SalesCreditController.value),
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
                               bindData(context,'LSP', pendingDraftQuoteController.LSPFilterController.value),
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
                               bindData(context,'BTP', pendingDraftQuoteController.BTPFilterController.value),
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
                               bindData(context,'MAP', pendingDraftQuoteController.MAPFilterController.value),
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
                               bindData(context,'Standard Cost', pendingDraftQuoteController.StandardCostController.value),
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
                               bindData(context,'Created By', pendingDraftQuoteController.createdByCnontroller.value),
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
                               filterWithQuoteCreatedOn(context),
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
                               bindProductCategory(context),
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
+                              filterWithQuoteParentProductCategory(context),
+                              const SizedBox(height: 10,),
                               bindProductCategoryTypeDropDown(context),
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
 
                             ],
                           ),
@@ -724,6 +744,82 @@ class AllQuoteLineItemScreen extends StatelessWidget{
           ),
           itemBuilder: (context, item, isSelected) => ListTile(
             title: Text(item.categoryName ?? ""),
+          ),
+        ),
+      );
+    });
+  }
+
+  filterWithQuoteParentProductCategory(BuildContext context) {
+    return Obx(() {
+      if (pendingDraftQuoteController.parentProductCategoryController.value.text.isNotEmpty && pendingDraftQuoteController.filterDataChecker.value=='1') {
+        List<String> nameList = pendingDraftQuoteController.parentProductCategoryController.value.text.split('|');
+        pendingDraftQuoteController.parentItemCategorySelectedList.value =
+            List.generate(nameList.length, (index) {
+              return ItemCategoryMstModel(
+                parentCategoryCode: nameList[index].trim(),
+              );
+            });
+      }
+      return DropdownSearch<ItemCategoryMstModel>.multiSelection(
+        items: pendingDraftQuoteController.parentProductCategoryList,
+        itemAsString: (ItemCategoryMstModel u) => u.parentCategoryCode ?? "",
+        selectedItems: pendingDraftQuoteController.parentItemCategorySelectedList,
+        dropdownDecoratorProps: DropDownDecoratorProps(
+          baseStyle: TextStyle(color: Colors.black),
+          dropdownSearchDecoration: InputDecoration(
+            filled: false,
+            labelText: pendingDraftQuoteController.parentItemCategorySelectedList.isNotEmpty ? "Parent Product Category" : null,
+            hintText:  "Parent Product Category" ,
+            hintStyle: GoogleFonts.poppins(
+                color: AllColors.lightblackColor,
+                fontWeight: FontWeight.w300,
+                fontSize: AllFontSize.ten),
+            labelStyle: GoogleFonts.poppins(
+                color: AllColors.primaryDark1,
+                fontWeight: FontWeight.w500,
+                fontSize: AllFontSize.sisxteen),
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+          ),
+        ),
+        dropdownBuilder: (context, selectedItems) {
+          if (selectedItems.isEmpty) {
+            return Text(
+              "Parent Product Category",
+              style: GoogleFonts.poppins(
+                color: AllColors.primaryDark1, // Match your hint color
+                fontSize: AllFontSize.sisxteen,
+                fontWeight: FontWeight.w500,
+              ),
+            );
+          }
+          return SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Text(
+              selectedItems.map((e) => e.parentCategoryCode).join(', '),
+              style: TextStyle(color: Colors.black), // Only black text
+            ),
+          );
+        },
+        onChanged: (List<ItemCategoryMstModel> selectedList) {
+          pendingDraftQuoteController.parentItemCategorySelectedList.value = selectedList;
+          pendingDraftQuoteController.parentProductCategoryController.value.text =
+              selectedList.map((e) => e.parentCategoryCode).join('|');
+        },
+        popupProps: PopupPropsMultiSelection.dialog(
+          showSearchBox: true,
+          searchFieldProps: TextFieldProps(
+            decoration: InputDecoration(
+              contentPadding: EdgeInsets.only(top: 20, left: 12, right: 12),
+              // Top margin here
+              hintText: "Search...",
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+          ),
+          itemBuilder: (context, item, isSelected) => ListTile(
+            title: Text(item.parentCategoryCode ?? ""),
           ),
         ),
       );

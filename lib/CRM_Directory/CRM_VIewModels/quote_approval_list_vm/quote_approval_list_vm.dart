@@ -182,7 +182,8 @@ class QuoteApprovalListVm extends GetxController{
             loading.value = false;
             regionwithclusterGetByEmailList.value=response;
             RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join('|');
-            print('region....${RegionName_controller.value.text}');
+            SelectedRegion_list.assignAll(regionwithclusterGetByEmailList);
+            // print('region....${RegionName_controller.value.text}');
             getFilterData();
             //getQuoteHeaderData(pageNumberForQuote);
 
@@ -285,13 +286,17 @@ class QuoteApprovalListVm extends GetxController{
     productCategoryController.value.clear();
     createdOnCnontroller.value.clear();
     frontliner_controller.value.clear();
-    RegionName_controller.value.clear();
     zone_head_value_controller.value.clear();
-    clusterName_controller.value.clear();
     filterQuoteSaleCycleController.value.clear();
     createdOnStartToEnd.value = "";
     extClosureStartToEnd.value = "";
     quoteValidityStartToEnd.value = "";
+
+    SelectedCluster_list.value = [];
+    SelectedRegion_list.value = [];
+    //RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join(',');
+    clusterName_controller.value.text = clusterGetByEmailList.map((e) => e.geoValue).join('|');
+    getRegionsWithClusterFilterGetByEmail();
 
   }
 

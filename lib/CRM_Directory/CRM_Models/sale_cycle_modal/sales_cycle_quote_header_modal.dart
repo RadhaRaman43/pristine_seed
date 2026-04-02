@@ -9,6 +9,7 @@ class SalesCycleQuoteHeaderModal {
   String? contactCode;
   String? contactName;
   String? productCategory;
+  String? parentProductCategory;
   String? quoteStatus;
   String? quoteValidity;
   String? expClosureDate;
@@ -72,6 +73,7 @@ class SalesCycleQuoteHeaderModal {
         this.contactCode,
         this.contactName,
         this.productCategory,
+        this.parentProductCategory,
         this.quoteStatus,
         this.quoteValidity,
         this.expClosureDate,
@@ -135,6 +137,7 @@ class SalesCycleQuoteHeaderModal {
     contactCode = json['contact_code'];
     contactName = json['contact_name'];
     productCategory = json['product_category'];
+    parentProductCategory = json['parent_product_category'];
     quoteStatus = json['quote_status'];
     quoteValidity = json['quote_validity'];
     expClosureDate = json['exp_closure_date'];
@@ -200,6 +203,7 @@ class SalesCycleQuoteHeaderModal {
     data['contact_code'] = this.contactCode;
     data['contact_name'] = this.contactName;
     data['product_category'] = this.productCategory;
+    data['parent_product_category'] = this.parentProductCategory;
     data['quote_status'] = this.quoteStatus;
     data['quote_validity'] = this.quoteValidity;
     data['exp_closure_date'] = this.expClosureDate;

@@ -630,9 +630,6 @@ class FunnelDashboardView extends StatelessWidget{
       child: Container(
         width: size.width,
         child: ListTile(
-          onTap: () {
-
-          },
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -664,6 +661,11 @@ class FunnelDashboardView extends StatelessWidget{
               ),
               InkWell(
                   onTap: (){
+
+                    if(dashboard_view_Controller.funnelDashboardUserWiseDataList[position].salesCycleStatus.toString().toLowerCase() =="suspect"){
+                      saleCycleController.getPurchaseProcessApi();
+                      saleCycleController.getPurchaseTimeFrameApi();
+                    }
 
                     saleCycleController.ProductCategoryWiseAmtGet(0, dashboard_view_Controller.funnelDashboardUserWiseDataList[position].salesCycleId!);
                     saleCycleController.pageNumber = 0;
@@ -976,7 +978,6 @@ class FunnelDashboardView extends StatelessWidget{
                       },
                     );
                   }),
-
                   Obx((){
                     return RadioListTile<String>(
                       title: const Text('Weakly' , style: TextStyle(
@@ -996,7 +997,6 @@ class FunnelDashboardView extends StatelessWidget{
                       },
                     );
                   }),
-
                   Obx((){
                     return RadioListTile<String>(
                       title: const Text('Monthly' ,style: TextStyle(
@@ -1016,7 +1016,6 @@ class FunnelDashboardView extends StatelessWidget{
                       },
                     );
                   }),
-
                   Obx((){
                     return  RadioListTile<String>(
                       title: const Text('Quarterly', style: TextStyle(
@@ -1036,7 +1035,6 @@ class FunnelDashboardView extends StatelessWidget{
                       },
                     );
                   }),
-
                   Obx((){
                     return RadioListTile<String>(
                       title: const Text('Financial Year', style: TextStyle(
@@ -1056,7 +1054,6 @@ class FunnelDashboardView extends StatelessWidget{
                       },
                     );
                   }),
-
                   Obx((){
                     return RadioListTile<String>(
                       title: const Text('Custom', style: TextStyle(
@@ -1071,7 +1068,6 @@ class FunnelDashboardView extends StatelessWidget{
 
                     );
                   }),
-
                   Obx((){
                     return filterWithCustomDate(context);
                   })
@@ -1082,6 +1078,8 @@ class FunnelDashboardView extends StatelessWidget{
           ),
           SizedBox(height: 10),
           bindSalesStageStatus(context),
+          SizedBox(height: 10),
+          bindData(context,'Sale Cycle Id', dashboard_view_Controller.filter_sale_cycle_id_cont.value),
           SizedBox(height: 10),
           bindQuoteSubmitted(context),
           SizedBox(height: 10),
@@ -1103,6 +1101,36 @@ class FunnelDashboardView extends StatelessWidget{
 
       ),
 
+    );
+  }
+
+  bindData(BuildContext context, String labelText, TextEditingController controller,) {
+    return TextField(
+      controller: controller,
+      decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+          labelText: labelText,
+          hintText: labelText,
+          hintStyle: GoogleFonts.poppins(
+              color: AllColors.lightblackColor,
+              fontWeight: FontWeight.w300,
+              fontSize: AllFontSize.ten),
+          labelStyle: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontWeight: FontWeight.w500,
+              fontSize: AllFontSize.sisxteen),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          )
+      ),
+      cursorColor: AllColors.primaryDark1,
+      onChanged: (value) {
+        // Handle the text field value changes if needed
+      },
     );
   }
 
@@ -1177,7 +1205,7 @@ class FunnelDashboardView extends StatelessWidget{
   bindFilterCreatedOn(BuildContext context) {
     return TextField(
       cursorColor: AllColors.primaryDark1,
-      controller: dashboard_view_Controller.filter_created_on_cont.value,
+      controller: dashboard_view_Controller.filter_created_on_star_to_cont.value,
       readOnly: true,
       decoration: InputDecoration(
         contentPadding: EdgeInsets.symmetric(
@@ -1225,8 +1253,9 @@ class FunnelDashboardView extends StatelessWidget{
           final endDate = DateFormat('yyyy-MM-dd').format(picked.end);
 
           dashboard_view_Controller.filter_created_on_cont.value.text = '$startDate @ $endDate';
+          dashboard_view_Controller.filter_created_on_star_to_cont.value.text='$startDate - $endDate';
         } else {
-
+          dashboard_view_Controller.filter_created_on_star_to_cont.value.text="";
           dashboard_view_Controller.filter_created_on_cont.value.text="";
         }
       },
@@ -1238,7 +1267,7 @@ class FunnelDashboardView extends StatelessWidget{
     return GestureDetector(
       onTap: () => _showMultiSelectDialog(context, "Select Sales Cycle Stage",
           dashboard_view_Controller.StageName_controller,
-          dashboard_view_Controller.selectedSalesStageStatusList),
+          dashboard_view_Controller.selectedSalesStageStatusList, 'All'),
       child: AbsorbPointer(
         child: TextField(
           controller: dashboard_view_Controller.StageName_controller.value,
@@ -2121,12 +2150,12 @@ class FunnelDashboardView extends StatelessWidget{
     });
   }
   void _showMultiSelectDialog(BuildContext context, String dialogHeader,
-      Rx<TextEditingController> textController, RxList<String> itemList, ) {
+      Rx<TextEditingController> textController, RxList<String> itemList,String defaultValueBind ) {
     final List<String> allItems = itemList.value;
     List<String> selectedItems =
     textController.value.text.split(',').map((e) => e.trim()).where((e) => e.isNotEmpty).toList();
     if (selectedItems.isEmpty) {
-      selectedItems = ["OPEN"];
+      selectedItems = [defaultValueBind];
     }
 
     showDialog(
@@ -2181,7 +2210,7 @@ class FunnelDashboardView extends StatelessWidget{
                     } else {
                       selectedItems.remove(item);
                       if (selectedItems.isEmpty) {
-                        selectedItems.add("OPEN");
+                        selectedItems.add(defaultValueBind);
                       }
                     }
                     (context as Element).markNeedsBuild();
@@ -2233,7 +2262,7 @@ class FunnelDashboardView extends StatelessWidget{
     return GestureDetector(
       onTap: () => _showMultiSelectDialog(context, "Select Quote Accepted",
           dashboard_view_Controller.QuoteAccepted_controller,
-          dashboard_view_Controller.quoteAcceptedList),
+          dashboard_view_Controller.quoteAcceptedList, 'OPEN'),
       child: AbsorbPointer(
         child: TextField(
           controller: dashboard_view_Controller.QuoteAccepted_controller.value,

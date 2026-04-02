@@ -68,6 +68,15 @@ class PendingDsarDashboardViewscreen extends StatelessWidget{
                   ),
                 ),
                 Tooltip(
+                  message: "Download Excel",
+                  child: IconButton(
+                    icon: const Icon(Icons.download),
+                    onPressed: ()  {
+                      dashboard_view_Controller.exportNonStandardExcelWithProgress(context,);;
+                    },
+                  ),
+                ),
+                Tooltip(
                   message: "Take Screenshot",
                   child: IconButton(
                     icon: const Icon(Icons.camera_alt_outlined),
@@ -113,7 +122,7 @@ class PendingDsarDashboardViewscreen extends StatelessWidget{
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   Visibility(
-                                      visible: dashboard_view_Controller.userType != 'Branch Head',
+                                      visible: dashboard_view_Controller.userType?.toLowerCase() != 'bh',
                                       child: _buildActionChip("Cluster")),
                                   SizedBox(width: 8),
                                   _buildActionChip("Region"),
@@ -124,7 +133,7 @@ class PendingDsarDashboardViewscreen extends StatelessWidget{
                             ),
                           ),
                         ),
-                        visible: dashboard_view_Controller.userType != 'Frontliners',
+                        visible: dashboard_view_Controller.userType?.toLowerCase() != 'fl',
                       ),
 
                       Container(
@@ -171,9 +180,7 @@ class PendingDsarDashboardViewscreen extends StatelessWidget{
 
 
                       ),
-                      SizedBox(
-                        height: 10,
-                      ),
+                      const SizedBox(height: 10,),
 
                       Padding(
                         padding: const EdgeInsets.only(left: 15.0, right: 25),
@@ -343,13 +350,12 @@ class PendingDsarDashboardViewscreen extends StatelessWidget{
       final canvas = Canvas(recorder);
 
       final double width = chartImage.width.toDouble();
-      final double height =
-          chartImage.height.toDouble() + textSectionHeight + spacing;
+      final double height = chartImage.height.toDouble() + textSectionHeight + spacing;
 
       final bgPaint = Paint()..color = const Color(0xFFFBF6F6);
       canvas.drawRect(Rect.fromLTWH(0, 0, width, height), bgPaint);
-
-      drawVerticalLabels(canvas);
+      drawHeader(canvas, width);
+      //drawVerticalLabels(canvas);
       final chartUiImage = await decodeImageFromList(chartUint8);
       canvas.drawImage(
           chartUiImage, Offset(0, textSectionHeight + spacing), Paint());
@@ -433,6 +439,80 @@ class PendingDsarDashboardViewscreen extends StatelessWidget{
     );
   }
 
+  double drawHeader(ui.Canvas canvas, double canvasWidth) {
+    double startY = 20;
+    double leftX = 20;
+
+    List<Map<String, dynamic>> leftTexts = [
+      {
+        "text": "Dashboard- Pending DSAR",
+        "size": 34.0,
+        "color": const Color(0xFF0C0C0C),
+        "weight": FontWeight.bold
+      },
+      {
+        "text":
+        "Time Period : ${dashboard_view_Controller.character.value}(${dashboard_view_Controller.formattedStartDate} - ${dashboard_view_Controller.formattedEndDate})",
+        "size": 22.0,
+        "color": const Color(0xFF0C0C0C),
+        "weight": FontWeight.w500
+      },
+      {
+        "text": 'View : ${dashboard_view_Controller.selectedOption.value}',
+        "size": 22.0,
+        "color": const Color(0xFF0C0C0C),
+        "weight": FontWeight.w500
+      },
+    ];
+
+    for (var item in leftTexts) {
+      final tp = TextPainter(
+        text: TextSpan(
+          text: item["text"],
+          style: TextStyle(
+            fontSize: item["size"],
+            fontWeight: item["weight"],
+            color: item["color"],
+          ),
+        ),
+        textDirection: ui.TextDirection.ltr,
+      );
+
+      tp.layout(maxWidth: canvasWidth * 0.6);
+      tp.paint(canvas, Offset(leftX, startY));
+
+      startY += tp.height + 8;
+    }
+
+    double rightX = canvasWidth/2 - 320;
+    double legendY = 25;
+    List<Map<String, dynamic>> legends = [
+      {"text": "Follow-Up Call", "color": const Color(0xFF3694D3)},
+      {"text": "Payment Call", "color": const Color(0xFFCC5A37)},
+      {"text": "New Call", "color": const Color(0xFF086D1E)},
+    ];
+
+    for (var item in legends) {
+      final tp = TextPainter(
+        text: TextSpan(
+          text: item["text"],
+          style: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+            color: item["color"],
+          ),
+        ),
+        textDirection: ui.TextDirection.ltr,
+      );
+
+      tp.layout();
+      tp.paint(canvas, Offset(rightX, legendY));
+
+      legendY += tp.height + 10;
+    }
+
+    return startY + 10;
+  }
   void drawVerticalLabels(ui.Canvas canvas) {
     double startY = 20;      // top padding
     double gap = 35;         // space between labels
@@ -677,9 +757,9 @@ class PendingDsarDashboardViewscreen extends StatelessWidget{
     return List.generate(dashboard_view_Controller.pendingDSARDashboardRecordList.length, (index) {
       final record = dashboard_view_Controller.pendingDSARDashboardRecordList[index];
       double Width = 20;
-      if(dashboard_view_Controller.userType == 'Frontliners'){
+      if(dashboard_view_Controller.userType?.toLowerCase() == 'fl'){
         Width = 100;
-      }else if(dashboard_view_Controller.userType == 'Branch Head' && dashboard_view_Controller.selectedOption == 'Region') {
+      }else if(dashboard_view_Controller.userType?.toLowerCase() == 'bh' && dashboard_view_Controller.selectedOption == 'Region') {
         Width = 100;
       }else{
         Width = 20;
@@ -911,13 +991,12 @@ class PendingDsarDashboardViewscreen extends StatelessWidget{
               InkWell(
                   onTap: (){
                     TaskMaster_page_controller.FromPage.value='from_pendingDSARDashboard';
-                    TaskMaster_page_controller.getTaskMaster(0,
-                        TaskMaster_page_controller.is_Active
-                            .toString(),
-                        dashboard_view_Controller.pendingDSARDashboardUserWiseDataList[position]
-                            .taskId,
-                        '', 'GET FROM TASK ID', TaskMaster_page_controller.date_filter, TaskMaster_page_controller.is_done.value);
-                    Get.toNamed(RoutesName.taskMasterDetails_screen);
+                    TaskMaster_page_controller.TaskID = dashboard_view_Controller.pendingDSARDashboardUserWiseDataList[position].taskId??"";
+                    TaskMaster_page_controller.getTaskMaster(0, TaskMaster_page_controller.is_Active.toString(),
+                        dashboard_view_Controller.pendingDSARDashboardUserWiseDataList[position].taskId,
+                        'task_master_detail', 'GET FROM TASK ID', TaskMaster_page_controller.date_filter,
+                        TaskMaster_page_controller.is_done.value);
+                    //Get.toNamed(RoutesName.taskMasterDetails_screen);
                   },
                   child: Icon(Icons.remove_red_eye, size: 30,color: AllColors.textColor,))
 
@@ -1325,10 +1404,10 @@ class PendingDsarDashboardViewscreen extends StatelessWidget{
 
                   Obx((){
                     return RadioListTile<String>(
-                      title: const Text('Month' ,style: TextStyle(
+                      title: const Text('Monthly' ,style: TextStyle(
                           fontSize: AllFontSize.sisxteen
                       ),),
-                      value: 'Month',
+                      value: 'Monthly',
                       dense: true,
                       groupValue: dashboard_view_Controller.character.value.toString(),
                       onChanged: (value) {

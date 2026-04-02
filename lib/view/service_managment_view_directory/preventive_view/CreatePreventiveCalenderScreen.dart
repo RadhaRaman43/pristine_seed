@@ -7,6 +7,7 @@ import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:navigation_drawer_flutter/constants/static_methods.dart';
+import 'package:navigation_drawer_flutter/reources/routes/routes_name.dart';
 
 import '../../../constants/app_colors.dart';
 import '../../../constants/app_font_size.dart';
@@ -21,46 +22,68 @@ class CreatePreventiveCalenderScreen extends StatelessWidget{
   Size size= Get.size;
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'Preventive Calender',
-          style: GoogleFonts.poppins(
-            color: AllColors.whiteColor,
-            fontSize: AllFontSize.twentee,
-            fontWeight: FontWeight.w700,
-          ),
-        ),
-        iconTheme: IconThemeData(
-          color: AllColors.whiteColor, // Change this to the desired color
-        ),
-        backgroundColor: AllColors.primaryDark1,
-      ),
-      drawer: CustomDrawer(),
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        child: SingleChildScrollView(
-          child: Column(
+    return WillPopScope(
+      onWillPop: () async {
+        Get.toNamed(RoutesName.preventive_screen);
+        return false;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: Row(
             children: [
-              Obx(() {
-                  return Container(
-                    margin: EdgeInsets.only(top: 0.3),
-                    child: Visibility(
-                      visible: create_preventive_page_controller.loading
-                          .value,
-                      child: LinearProgressIndicator(
-                        backgroundColor: AllColors.primaryDark1,
-                        color: AllColors.textColor,
-                      ),
-                    ),
-                  );
-                },
+              Text(
+                'Preventive Calender',
+                style: GoogleFonts.poppins(
+                  color: AllColors.whiteColor,
+                  fontSize: AllFontSize.twentee,
+                  fontWeight: FontWeight.w700,
+                ),
               ),
-              Obx(() {
-                return BindCustomerListView(context);
-              }),
+
+              Spacer(),
+              GestureDetector(
+                onTap: (){
+                  create_preventive_page_controller.getAMCRequestInvoice("");
+                  Get.toNamed(RoutesName.add_new_preventive_calender_screen);
+                },
+                child: CircleAvatar(
+                  minRadius: 18,
+                    child: Icon(Icons.add,color:AllColors.primaryDark1),
+                ),
+              )
             ],
+          ),
+          iconTheme: IconThemeData(
+            color: AllColors.whiteColor,
+          ),
+          backgroundColor: AllColors.primaryDark1,
+        ),
+        drawer: CustomDrawer(),
+        body: Container(
+          width: double.infinity,
+          height: double.infinity,
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Obx(() {
+                    return Container(
+                      margin: EdgeInsets.only(top: 0.3),
+                      child: Visibility(
+                        visible: create_preventive_page_controller.loading
+                            .value,
+                        child: LinearProgressIndicator(
+                          backgroundColor: AllColors.primaryDark1,
+                          color: AllColors.textColor,
+                        ),
+                      ),
+                    );
+                  },
+                ),
+                Obx(() {
+                  return BindCustomerListView(context);
+                }),
+              ],
+            ),
           ),
         ),
       ),

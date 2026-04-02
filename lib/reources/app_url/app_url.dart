@@ -1,9 +1,9 @@
 class AppUrl {
 
    //todo testing url...
-     static const String BASE_URL = "https://devlogin.pristinefulfil.com";
+     //static const String BASE_URL = "https://devlogin.pristinefulfil.com";
     //todo live url....
-       //static const String BASE_URL = "https://care.pristinefulfil.com";
+       static const String BASE_URL = "https://care.pristinefulfil.com";
 
   static const String login_url = "$BASE_URL/api/UserLogin/Login";
   static const String logout_url = "$BASE_URL/api/UserLogin/Logout";
@@ -98,7 +98,15 @@ class AppUrl {
   static const String createPreventiveCalender = "$BASE_URL/api/ServiceActivity/ServiceWarrantyCalanderGet";
   static const String createPreventiveCall = "$BASE_URL/api/ServiceActivity/ServiceWarrantyPreventiveCreate";
   static const String preventiveOffSiteMarkClosure = "$BASE_URL/api/ServiceActivity/ServiceMarkOffsiteClosure";
-     static const String priventiveDeleteDocument = "$BASE_URL/api/ServiceActivity/ServiceUploadDocumentDelete";
+  static const String priventiveDeleteDocument = "$BASE_URL/api/ServiceActivity/ServiceUploadDocumentDelete";
+
+  //todo written by nirupma for creating preventing  calender
+     static const String aMCRequestInvoiceGet="$BASE_URL/api/ServiceActivity/AMCRequestInvoiceGet";
+     static const String aMCRequestInvoiceWiseItemGet="$BASE_URL/api/ServiceActivity/AMCRequestInvoiceWiseItemGet";
+     static const String aMCRequestCreation="$BASE_URL/api/ServiceActivity/AMCRequestCreation";
+
+
+
   //todo for user expenses..................
 
   static const String getExpenseHeader="$BASE_URL/api/Expense/GetExpenseHeader";
@@ -221,6 +229,7 @@ class AppUrl {
      static const String TaskDSARMstCreate = "$BASE_URL/api/CRM/Task/TaskDSARMstCreate";
      static const String ItemCategoryMstGetByTaskId = "$BASE_URL/api/CRM/Task/ItemCategoryMstGetByTaskId";
      static const String ItemCategoryMstGetByDocument = "$BASE_URL/api/CRM/Task/ItemCategoryMstGetByDocument";
+     static const String ParentItemCategoryMstGet = "$BASE_URL/api/ItemMaster/ParentItemCategoryMstGet";
      static const String SalesProductCategoryCreate = "$BASE_URL/api/CRM/Task/SalesProductCategoryCreate";
      static const String taskMstInfraUpdate = "$BASE_URL/api/CRM/Task/TaskMstInfraUpdate";
      static const String ItemCategoryMstGet = "$BASE_URL/api/ItemMaster/ItemCategoryMstGet";
@@ -262,6 +271,7 @@ class AppUrl {
      static const String QuoteLineCreateFromPropectStage = "$BASE_URL/api/CRM/Quote/QuoteLineCreateFromPropectStage";
     // static const String ItemCategoryMstGetByDocument = "$BASE_URL/api/CRM/Task/ItemCategoryMstGetByDocument";
      static const String QuoteSalesProductCategoryCreate = "$BASE_URL/api/CRM/Task/QuoteSalesProductCategoryCreate";
+     static const String QuoteSalesParentProductCategoryCreate = "$BASE_URL/api/CRM/Task/QuoteSalesParentProductCategoryCreate";
      static const String QuoteHeaderUpdateBusinessTerms = "$BASE_URL/api/CRM/Quote/QuoteHeaderUpdateBusinessTerms";
      static const String quotationReport = "$BASE_URL/api/CRM/Quote/QuotationReport";
      static const String specialPriceRequestReport = "$BASE_URL/api/CRM/Quote/SpecialPriceRequestReport";
@@ -293,6 +303,8 @@ class AppUrl {
      static const String SalesCycleMstGetApprovalList="$BASE_URL/api/CRM/SalesCycle/SalesCycleMstGetApprovalList";
       static const String SalesCycleMstDelete="$BASE_URL/api/CRM/SalesCycle/SalesCycleMstDelete";
       static const String QuoteHeaderUpdateMarkWon="$BASE_URL/api/CRM/Quote/QuoteHeaderUpdateMarkWon";
+      static const String SalesCycleMstInfraUpdate="$BASE_URL/api/CRM/SalesCycle/SalesCycleMstInfraUpdate";
+      static const String QuoteMstStatusChangeToDraft ="$BASE_URL/api/CRM/Quote/QuoteMstStatusChangeToDraft";
 
 
    //todo SalesAdvise
@@ -333,6 +345,7 @@ class AppUrl {
      static const String BusinessTourplanApprovalGet="$BASE_URL/api/CRM/BusinessTourPlan/BusinessTourplanApprovalGet";
      static const String BusinessTourPlanApproveReject="$BASE_URL/api/CRM/BusinessTourPlan/BusinessTourplanApproveReject";
      static const String BusinessTourPlanAllLineGet="$BASE_URL/api/CRM/BusinessTourPlan/BusinessTourPlanAllLineGet";
+     static const String BusinessTourPlanDelete="$BASE_URL/api/CRM/BusinessTourPlan/BusinessTourPlanDelete";
 
 
      //todo dashboard url
@@ -352,4 +365,7 @@ class AppUrl {
      static const String ItemMstSalesCycleDelete="$BASE_URL/api/ItemMaster/ItemMstSalesCycleDelete";
      static const String GSTGroupGet="$BASE_URL/api/ItemMaster/GSTGroupGet";
      static const String ItemMasterCreateFromCRM="$BASE_URL/api/ItemMaster/ItemMasterCreateFromCRM";
+
+
+     static const String QuoteHeaderParentCategoryUpdate="$BASE_URL/api/CRM/Quote/QuoteHeaderParentCategoryUpdate";
 }

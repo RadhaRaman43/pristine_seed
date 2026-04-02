@@ -22,6 +22,7 @@ import 'package:http/http.dart' as http;
 
 import '../../../constants/app_colors.dart';
 import '../../../constants/app_font_size.dart';
+import '../../../constants/static_methods.dart';
 import '../../../main.dart';
 import '../../../models/service_managment_model_directory/bulk_indent_model/bulk_item_master_model.dart';
 import '../../../reources/routes/routes_name.dart';
@@ -37,6 +38,7 @@ import '../../CRM_Models/TaskMaster_model/Item_Category_Mast_model.dart';
 import '../../CRM_Models/TaskMaster_model/Task_Master_model.dart';
 import '../../CRM_Models/TaskMaster_model/company_type_modal.dart';
 import '../../CRM_Models/TaskMaster_model/task_category_model.dart';
+import '../../CRM_Models/TaskMaster_model/task_update_infra_modal.dart';
 import '../../CRM_Models/sale_cycle_modal/ItemMasterSalesId_Model.dart';
 import '../../CRM_Models/sale_cycle_modal/Item_qoute_with_report_modal.dart';
 import '../../CRM_Models/sale_cycle_modal/SalesCycleById_Model.dart';
@@ -132,10 +134,9 @@ class SalesCycleVm extends GetxController {
 
 
 
-  RxList<ItemCategoryMstModel> productCategoryList =
-      <ItemCategoryMstModel>[].obs;
-  RxList<ItemCategoryMstModel> itemCategorySelectedlist =
-      <ItemCategoryMstModel>[].obs;
+  RxList<ItemCategoryMstModel> productCategoryList = <ItemCategoryMstModel>[].obs;
+  RxList<ItemCategoryMstModel> parentProductCategoryList = <ItemCategoryMstModel>[].obs;
+  RxList<ItemCategoryMstModel> itemCategorySelectedlist = <ItemCategoryMstModel>[].obs;
   RxList<ItemQouteWithReportModal> itemQuoteReportList =
       <ItemQouteWithReportModal>[].obs;
   RxList<AddressMasterModel> address_master_list = <AddressMasterModel>[].obs;
@@ -174,6 +175,7 @@ class SalesCycleVm extends GetxController {
   var expectedClosuredateController = TextEditingController().obs;
   var contactQuoteCommitController = TextEditingController().obs;
   var kindAttentionController = TextEditingController().obs;
+  var IsMultiParentCategory_controller=TextEditingController().obs;
 
   var QuoteSubmittedController = TextEditingController().obs;
   var ConfirmDecisionDateController = TextEditingController().obs;
@@ -205,6 +207,8 @@ class SalesCycleVm extends GetxController {
 
   var updateQuoteShippingAddressConfirmation = TextEditingController().obs;
   RxBool isVisibiltyShippingAddressQuote=false.obs;
+  RxBool IsMultiParentCategory=false.obs;
+  RxBool showMultiParentCategory=true.obs;
 
   //todo quotation won controller
   var quotationWonLossController=TextEditingController().obs;
@@ -220,6 +224,7 @@ class SalesCycleVm extends GetxController {
   RxBool showClusterHead = false.obs;
   RxBool showGeneralManager = false.obs;
   RxBool showApprovalBtn = false.obs;
+  RxBool GmApproveDetail = false.obs;
 
   // todo update quote controller
   var updateItemDescriptionController = TextEditingController().obs;
@@ -360,11 +365,46 @@ class SalesCycleVm extends GetxController {
   var AccountOwner_controller=TextEditingController().obs;
   var product_category_type_Controller = TextEditingController().obs;
 
+  RxBool isExpandInfraDetail = false.obs;
 
 
+  //todo infra detail radha raman
+  RxBool isInfraYes=false.obs;
+  RxBool IsCatergorySelected=false.obs;
 
+  var isInfraLead = TextEditingController().obs;
+  var userRegionUpdateController = TextEditingController();
+  var userClusterUpdateController = TextEditingController();
+  var projectValueUpdateController = TextEditingController();
+  var nameOfProjectController = TextEditingController();
+  var customerNameController = TextEditingController();
+  var locationController = TextEditingController();
+  var timePeriodToCompleteWorkController = TextEditingController();
+  var isInfraLeadUpdateController = TextEditingController().obs;
+  var expectedDateOfOrderUpdateController = TextEditingController();
+  var drawingcollectedUpdateController = TextEditingController();
+  var proposalSubmittedUpdateController = TextEditingController();
+  var inaugrationDateUpdateController = TextEditingController();
+  var architectUpdateController = TextEditingController();
+  var assistantEngineerController = TextEditingController();
+  var executiveEngineerUpdateController = TextEditingController();
+  var contactPersonHODController = TextEditingController();
+  var nameOfArchitecfirmUpdateController = TextEditingController();
+  var nameofInfradepUpdateController = TextEditingController();
+  var agencyContractorUpdateController = TextEditingController();
+  var ownerOfContractorController = TextEditingController();
+  var siteManagerController = TextEditingController();
+  var expectedRevenueUpdateController = TextEditingController();
+  var furnitureIncludedInCivilController = TextEditingController();
+  var valueOfQuoteUpdateController = TextEditingController();
+  var dateofcompletioneUpdateController = TextEditingController();
+  var dateOfProposalSubmissionController = TextEditingController();
+  var dateOfDrawingReceivedController = TextEditingController();
+  var ItemCat_type_controller = TextEditingController();
 
-
+  RxList<ItemCategoryMstModel> Item_Category_Selected_Infra_list = <ItemCategoryMstModel>[].obs;
+  RxList<ItemCategoryMstModel> Item_Category_Infra_list = <ItemCategoryMstModel>[].obs;
+  RxList<String> isInfraLeadList =["Yes", "No"].obs;
 
   @override
   Future<void> onInit() async {
@@ -376,7 +416,7 @@ class SalesCycleVm extends GetxController {
           await sessionManagement.getIsAdminPermission() ?? '';
       isHeadofficePermission.value =
           await sessionManagement.getisHeadofficePermission() ?? '';
-      clearAllFieldOfFilter();
+      //clearAllFieldOfFilter();
       product_category_type_Controller.value.text = "Contains";
       getItemCategoryMstWithoutTaskIdApi();
       getCompanyTypeMasterGet();
@@ -401,8 +441,10 @@ class SalesCycleVm extends GetxController {
     }
     super.onInit();
   }
-
-  getCompanyTypeMasterGet() {
+  void toggleInfraDetail() {
+    isExpandInfraDetail.value = !isExpandInfraDetail.value;
+  }
+  getCompanyTypeMasterGet() async{
     this.loading.value = true;
     Map<String, dynamic> data = {
       "filter_description": "",
@@ -410,7 +452,7 @@ class SalesCycleVm extends GetxController {
       "page_number": 0
     };
 
-    _api.getCompanyTypeMasterGet(data, sessionManagement).then((value) {
+    String value = await _api.getCompanyTypeMasterGet(data, sessionManagement);
       print("company profile...${value}");
       try {
         List<CompanyTypeModal> Response =
@@ -426,12 +468,10 @@ class SalesCycleVm extends GetxController {
       } catch (e) {
         print('catch....${e.toString()}');
       }
-    }).onError((error, stackTrace) {
-      Utils.sanckBarError('Api Exception onError', error.toString());
-      print('catchEx....${error.toString()}');
-    }).whenComplete(() {
-      this.loading.value = false;
-    });
+      finally{
+        loading.value=false;
+      }
+
   }
 
   Future<List<EmployeeMemberModel>> EmployeeMasterGet(String query) async {
@@ -470,16 +510,15 @@ class SalesCycleVm extends GetxController {
   }
 
 
-  getEmployeeMemberApi() {
+  getEmployeeMemberApi() async{
+    try {
     Map data = {
       "email_id": email,
       "flag": "GeoLevelLower"
     };
     print(data);
     loading.value = true;
-    try {
-      _api.EmployeeMamberGetApiHit(data, sessionManagement).then(
-            (value) {
+      String value = await _api.EmployeeMamberGetApiHit(data, sessionManagement);
           print(value);
           final JsonResponse = json.decode(value);
           if (JsonResponse is List) {
@@ -504,17 +543,14 @@ class SalesCycleVm extends GetxController {
             // service_indent_header_list.value = [];
             Utils.sanckBarException("Api Error!", JsonResponse);
           }
-        },
-      ).onError(
-            (error, stackTrace) {
-          print(error);
-          //service_indent_header_list.value = [];
-        },
-      );
+
     } catch (e) {
-      loading.value = false;
+
       employee_Member_list.value = [];
       print(e);
+    }
+    finally{
+      loading.value = false;
     }
   }
 
@@ -569,20 +605,19 @@ class SalesCycleVm extends GetxController {
     return input.trim();
   }
 
-  void getClustersGetByEmail() {
+  void getClustersGetByEmail() async{
     try{
       Map<String, String> data={
         "email_id":email
       };
       loading.value=true;
       print("data is ${data}");
-      _api.clustersGetByEmailApiHit(data, sessionManagement).then((onValue){
+      String onValue = await _api.clustersGetByEmailApiHit(data, sessionManagement);
         print(onValue);
         final jsonResponse = json.decode(onValue);
         if(jsonResponse is List){
           List<ClusterModal> response = jsonResponse.map((e) => ClusterModal.fromJson(e)).toList();
           if(response.length>0 && response[0].condition=="True"){
-            loading.value = false;
             clusterGetByEmailList.value=response;
             if (clusterGetByEmailList.value.isNotEmpty && SelectedCluster_list.isEmpty) {
               SelectedCluster_list.assignAll(clusterGetByEmailList.value);
@@ -590,68 +625,49 @@ class SalesCycleVm extends GetxController {
               getRegionsWithClusterFilterGetByEmail();
             }
           }else {
-            loading.value = false;
             clusterGetByEmailList.value=[];
           }
-        } else {
-          loading.value = false;
         }
-      },
-      ).onError(
-            (error, stackTrace) {
-          print(error);
-        },
-      );
     }catch(e){
-      loading.value = false;
       print(e);
     }finally{
       loading.value = false;
     }
   }
-  void getRegionsWithClusterFilterGetByEmail() {
+  void getRegionsWithClusterFilterGetByEmail() async{
     var selectedCluster="";
+    try{
     if(clusterName_controller.value.text.isNotEmpty){
       selectedCluster = clusterName_controller.value.text
           .split(',')
           .map((e) => e.trim())
           .join('|');
     }
-    try{
+
       Map<String, String> data={
         "email_id":email,
         "cluster_filter":selectedCluster.isEmpty?"":selectedCluster
       };
       loading.value=true;
       print("data is ${data}");
-      _api.RegionsWithClusterFilterGetByEmailApiHit(data, sessionManagement).then((onValue){
+      String onValue = await _api.RegionsWithClusterFilterGetByEmailApiHit(data, sessionManagement);
         print(onValue);
         final jsonResponse = json.decode(onValue);
         if(jsonResponse is List){
           List<RegionWithClusterFilterModal> response = jsonResponse.map((e) => RegionWithClusterFilterModal.fromJson(e)).toList();
           if(response.length>0 && response[0].condition=="True"){
-            loading.value = false;
             regionwithclusterGetByEmailList.value=response;
             RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join('|');
-            print('region....${RegionName_controller.value.text}');
+            SelectedRegion_list.assignAll(regionwithclusterGetByEmailList);
+           // print('region....${RegionName_controller.value.text}');
             getFilterData();
             //getsalesCycleData(pageNumber, "", "", '');
 
           }else {
-            loading.value = false;
             regionwithclusterGetByEmailList.value=[];
           }
-        } else {
-          loading.value = false;
         }
-      },
-      ).onError(
-            (error, stackTrace) {
-          print(error);
-        },
-      );
     }catch(e){
-      loading.value = false;
       print(e);
     }finally{
       loading.value = false;
@@ -659,9 +675,10 @@ class SalesCycleVm extends GetxController {
   }
 
 
-  getsalesCycleData(int page_no, String saleCycleId, String flag, String fromPage) {
+  getsalesCycleData(int page_no, String saleCycleId, String flag, String fromPage) async{
     FromPage.value = fromPage;
     String emailForUpdate = "";
+    try {
     if (salesCycleOwnerController.value.text.isNotEmpty) {
       emailForUpdate = extractEmail(salesCycleOwnerController.value.text);
     }
@@ -672,7 +689,7 @@ class SalesCycleVm extends GetxController {
           .map((e) => e.trim())
           .join('|');
     }
-    try {
+
       Map data = {
         "filter_sales_cycle_id": saleCycleId.isNotEmpty ? saleCycleId : saleCycleController.value.text,
         "filter_task_id": filterTask_Id_controller.value.text.isEmpty ? "" : filterTask_Id_controller.value.text,
@@ -705,8 +722,7 @@ class SalesCycleVm extends GetxController {
       };
       print('sale data ${data}');
       loading.value = true;
-      _api.salesCycleMstGetApihit(data, sessionManagement).then(
-        (onValue) {
+      String onValue = await _api.salesCycleMstGetApihit(data, sessionManagement);
           final jsonResponse = json.decode(onValue);
           print(onValue);
           if (jsonResponse is List) {
@@ -715,7 +731,6 @@ class SalesCycleVm extends GetxController {
             if (response != null &&
                 response.length > 0 &&
                 response[0].condition == "True") {
-              loading.value = false;
               print('listSize.....${saleCycleList.length}');
               if (page_no == 0) {
                 saleCycleList.clear();
@@ -732,13 +747,9 @@ class SalesCycleVm extends GetxController {
                     ? solutionAcceptedController.value.text = "No"
                     : solutionAcceptedController.value.text = "Yes";
                 proposedSolutionController.value.text =
-                    saleCycleList[0].proposedSolution == null
-                        ? ""
-                        : saleCycleList[0].proposedSolution.toString();
+                    saleCycleList[0].proposedSolution == null ? "" : saleCycleList[0].proposedSolution.toString();
                 solutionRejectedRemarkController.value.text =
-                    saleCycleList[0].rejectReason.toString().isNotEmpty
-                        ? saleCycleList[0].rejectReason.toString()
-                        : "";
+                    saleCycleList[0].rejectReason.toString().isNotEmpty ? saleCycleList[0].rejectReason.toString() : "";
                 closureDateController.value.text =
                     saleCycleList[0].estClosureDate.toString();
                 saleCycleList[0].isDecisionMaker == 0
@@ -796,33 +807,29 @@ class SalesCycleVm extends GetxController {
             contactNameController.value.text=saleCycleList[0].contactName??"";
 */
             } else {
-              loading.value = false;
               saleCycleList.value = [];
             }
-          } else {
-            loading.value = false;
           }
-        },
-      ).onError(
-        (error, stackTrace) {
-          print(error);
-          loading.value = false;
-        },
-      );
+
     } catch (e) {
-      loading.value = false;
+
       print('Exception..$e');
+    }
+    finally{
+      loading.value = false;
     }
   }
 
-  getItemCategoryMstWithoutTaskIdApi() {
-    this.loading.value = true;
+  getItemCategoryMstWithoutTaskIdApi() async {
+
+    try {
     Map<String, String> data = {
 
     };
+    this.loading.value = true;
 
-    _api.getItemCategoryMstWithoutTaskIdApiHit(data, sessionManagement).then((value) {
-      try {
+    String value = await _api.getItemCategoryMstWithoutTaskIdApiHit(data, sessionManagement);
+
         List<ItemCategoryMstModel> Response =
         (json.decode(value) as List<dynamic>)
             .map((i) => ItemCategoryMstModel.fromJson(i as Map<String, dynamic>))
@@ -840,58 +847,49 @@ class SalesCycleVm extends GetxController {
         Item_Category_master_list_without_task.value = [];
         print('catch....${e.toString()}');
       }
-    }).onError((error, stackTrace) {
-      Item_Category_master_list_without_task.value = [];
-      Utils.sanckBarError('Api Exception onError', error.toString());
-      print('catchEx....${error.toString()}');
-    }).whenComplete(() {
-      this.loading.value = false;
-    });
+      finally{
+      loading.value= false;
+      }
+
   }
-  SalesCycleMstDelete(int index) {
+
+  SalesCycleMstDelete(int index) async{
+    try {
     Map data = {
       'sales_cycle_id': saleCycleList[index].salesCycleId,
       "created_by": email
     };
     print(data);
     loading.value = true;
-    try {
-      _api.SalesCycleMstDelete(data, sessionManagement).then(
-            (value) {
+
+      String value = await _api.SalesCycleMstDelete(data, sessionManagement);
           print(value);
           final JsonResponse = json.decode(value);
           if (JsonResponse is List) {
             List<SalesCycleUpdateStatusModal> response =
             JsonResponse.map((e) => SalesCycleUpdateStatusModal.fromJson(e)).toList();
             if (response != null && response.length > 0 && response[0].condition == "True") {
-              loading.value = false;
               saleCycleList.removeAt(index);
               Utils.sanckBarSuccess('Success Message!',response[0].message.toString());
 
             } else {
-              loading.value = false;
               Utils.sanckBarError("False Message !", response[0].message.toString());
               //Account_Master_list.value=[];
             }
           } else {
-            loading.value = false;
             // service_indent_header_list.value = [];
             Utils.sanckBarException("Api Error!", JsonResponse);
           }
-        },
-      ).onError(
-            (error, stackTrace) {
-          print(error);
-          //service_indent_header_list.value = [];
-        },
-      );
+
     } catch (e) {
-      loading.value = false;
       print(e);
+    }
+    finally{
+      loading.value = false;
     }
   }
 
-  QuoteMstDelete(int index) {
+  QuoteMstDelete(int index) async{
     Map data = {
       "quote_id": quoteList[index].quoteId,
       "created_by": email
@@ -899,77 +897,60 @@ class SalesCycleVm extends GetxController {
     print(data);
     loading.value = true;
     try {
-      _api.QuoteMstDelete(data, sessionManagement).then(
-            (value) {
+      String value = await  _api.QuoteMstDelete(data, sessionManagement);
           print(value);
           final JsonResponse = json.decode(value);
           if (JsonResponse is List) {
             List<SalesCycleUpdateStatusModal> response =
             JsonResponse.map((e) => SalesCycleUpdateStatusModal.fromJson(e)).toList();
             if (response != null && response.length > 0 && response[0].condition == "True") {
-              loading.value = false;
               quoteList.removeAt(index);
               Utils.sanckBarSuccess('Success Message!',response[0].message.toString());
 
             } else {
-              loading.value = false;
               Utils.sanckBarError("False Message !", response[0].message.toString());
               //Account_Master_list.value=[];
             }
           } else {
-            loading.value = false;
             // service_indent_header_list.value = [];
             Utils.sanckBarException("Api Error!", JsonResponse);
           }
-        },
-      ).onError(
-            (error, stackTrace) {
-          print(error);
-          //service_indent_header_list.value = [];
-        },
-      );
     } catch (e) {
-      loading.value = false;
+
       print(e);
+    }
+    finally{
+      loading.value = false;
     }
   }
 
-  ProductCategoryWiseAmtGet(int page_no, String saleCycleId) {
+  ProductCategoryWiseAmtGet(int page_no, String saleCycleId) async {
     try {
       Map data = {
         "sale_cycle_id": saleCycleId.isNotEmpty ? saleCycleId : saleCycleController.value.text,
       };
       loading.value = true;
-      _api.SaleCycleProductCategoryWiseAmtGet(data, sessionManagement).then(
-        (onValue) {
+      String onValue = await _api.SaleCycleProductCategoryWiseAmtGet(data, sessionManagement);
           final jsonResponse = json.decode(onValue);
           print(onValue);
           if (jsonResponse is List) {
             List<ProductCategoryWiseAmtModel> response = jsonResponse.map((e) => ProductCategoryWiseAmtModel.fromJson(e)).toList();
             if (response != null && response.length > 0 && response[0].condition == "True") {
-              loading.value = false;
               budgetAmountList.value = response;
               print('budgetAmt...${budgetAmountList.value}');
               Total_Budget_Amount.value = response[0].totalBudgetAmount ?? "";
               Total_Expected_Amount.value = response[0].totalEstimatedAmount ?? "";
               //total_rows=int.parse(budgetAmountList[0].totalRows!);
             } else {
-              loading.value = false;
               budgetAmountList.value = [];
             }
-          } else {
-            loading.value = false;
           }
-        },
-      ).onError(
-        (error, stackTrace) {
-          print(error);
-          loading.value = false;
-        },
-      );
+
     } catch (e) {
-      loading.value = false;
       print(e);
+    }
+    finally{
+      loading.value = false;
     }
   }
 
@@ -979,10 +960,12 @@ class SalesCycleVm extends GetxController {
       String quote_accepted,
       String competitor_name,
       String quote_rejected_reason,
-      String flag) {
+      String flag) async {
+
+    print('Flag..${flag}');
     //  List<SalesCycleUpdateStatusModal> lines = Quote_Selected_list.map((item) => SalesCycleUpdateStatusModal(quoteId: item.quoteId!)).toList();
 
-    loading.value = true;
+    try {
     Map data = {
       "sales_cycle_id": saleCycleList.salesCycleId,
       "est_closure_date": closureDateController.value.text.isEmpty ? saleCycleList.estClosureDate : closureDateController.value.text,
@@ -994,9 +977,9 @@ class SalesCycleVm extends GetxController {
       "sales_cycle_owner": flag == "" ? saleCycleOwnerSelected.value : saleCycleList.salesCycleOwner,
       "created_by": email
     };
-    try {
-      _api.salesCycleMstUpdateApiHit(data, sessionManagement).then(
-        (onValue) {
+    loading.value = true;
+
+      String onValue = await _api.salesCycleMstUpdateApiHit(data, sessionManagement);
           final jsonResponse = json.decode(onValue);
           print(onValue);
           if (jsonResponse is List) {
@@ -1012,40 +995,35 @@ class SalesCycleVm extends GetxController {
               }*/
               if (flag == "Pending For Approval") {
                 getSalesCycleMstStatusChange(saleCycleList);
+              }else{
+                filterQuoteAcceptedFlag.value = "";
+                pageNumber = 0;
+                clearAllFieldOfFilter();
+                getsalesCycleData(pageNumber, saleCycleList.salesCycleId!,
+                    "ViewHeader", FromPage.value);
+                Get.toNamed(RoutesName.viewSalesCycleHeaderScreen);
               }
-              filterQuoteAcceptedFlag.value = "";
-              pageNumber = 0;
-              clearAllFieldOfFilter();
-              getsalesCycleData(pageNumber, saleCycleList.salesCycleId!,
-                  "ViewHeader", 'Sales');
-              Get.toNamed(RoutesName.viewSalesCycleHeaderScreen);
-              loading.value = false;
+
             } else {
-              loading.value = false;
               Utils.sanckBarError(
                   "False Message !", response[0].message.toString());
             }
-          } else {
-            loading.value = false;
           }
-        },
-      ).onError(
-        (error, stackTrace) {
-          loading.value = false;
-          print(error);
-        },
-      );
     } catch (e) {
       Utils.sanckBarException("Message !", e.toString());
-      loading.value = false;
+
       print(e);
+    }
+    finally{
+      loading.value = false;
     }
   }
 
   salesCycleMstApprovereject(SalesCycleModal saleCycleList, String reason,
-      String saleCycleapprovalStatus) {
+      String saleCycleapprovalStatus, {String? prospectStage}) async{
     print(saleCycleapprovalStatus);
-    loading.value = true;
+
+    try {
     Map data = {
       "sales_cycle_id": saleCycleList.salesCycleId,
       "sales_cycle_status": saleCycleList.salesCycleStatus,
@@ -1053,9 +1031,8 @@ class SalesCycleVm extends GetxController {
       "reject_reason": reason.isNotEmpty ? reason : "",
       "created_by": email
     };
-    try {
-      _api.salesCycleMstApproveRejectApiHit(data, sessionManagement).then(
-        (onValue) {
+    loading.value = true;
+     String onValue = await  _api.salesCycleMstApproveRejectApiHit(data, sessionManagement);
           final jsonResponse = json.decode(onValue);
           print(onValue);
           if (jsonResponse is List) {
@@ -1063,96 +1040,79 @@ class SalesCycleVm extends GetxController {
                 .map((e) => SalesCycleApproveRejectModal.fromJson(e))
                 .toList();
             if (response[0].condition == "True") {
+              clearAllFieldOfFilter();
               Utils.sanckBarSuccess(
                   "Message !", response[0].message.toString());
               filterQuoteAcceptedFlag.value = "";
               pageNumber = 0;
-              clearAllFieldOfFilter();
+              if(FromPage.value=='Sales' && prospectStage!='Prospect Stage'){
+                Get.offAllNamed(RoutesName.salesCycleScreen);
+              }else if(FromPage.value=='FromSCPendingForApproval' && prospectStage!='Prospect Stage'){
+                Get.offAllNamed(RoutesName.salesCyclePendingForApprovalListScreen);
+              }else if(FromPage.value=='FromCommitDashboard' && prospectStage!='Prospect Stage'){
+                Get.offAllNamed(RoutesName.commitDashboardViewScreen);
+              }
+              else if(FromPage.value=='FromFunnelDashboard' && prospectStage!='Prospect Stage'){
+                Get.offAllNamed(RoutesName.funnelDashboardViewScreen);
+              }
+              else{
               getsalesCycleData(
                   pageNumber,
                   saleCycleList.salesCycleId.toString(),
                   "ViewHeader",
                   FromPage.value);
               isApprovalVisible.value = false;
-              loading.value = false;
+              }
+              /*clearAllFieldOfFilter();
+              getsalesCycleData(
+                  pageNumber,
+                  saleCycleList.salesCycleId.toString(),
+                  "ViewHeader",
+                  FromPage.value);
+              isApprovalVisible.value = false;
+              loading.value = false;*/
             } else {
               print("message ${response[0].message.toString()}");
-              loading.value = false;
               Utils.sanckBarError(
                   "False Message !", response[0].message.toString());
             }
-          } else {
-            loading.value = false;
           }
-        },
-      ).onError(
-        (error, stackTrace) {
-          print(error);
-        },
-      );
     } catch (e) {
       Utils.sanckBarException("Message !", e.toString());
-      loading.value = false;
       print(e);
+    }
+    finally{
+      loading.value = false;
     }
   }
 
-  getQuoteHeaderData(
-      int pageNumberForQuote, String saleCycleId, String status) {
+  getQuoteHeaderData(int pageNumberForQuote, String saleCycleId, String status) async{
     try {
       Map data = {
-        "filter_quote_id": filterQuoteIdController.value.text.isNotEmpty
-            ? filterQuoteIdController.value.text
-            : "",
+        "filter_quote_id": filterQuoteIdController.value.text.isNotEmpty ? filterQuoteIdController.value.text : "",
         "filter_sales_cycle_id": saleCycleId.isNotEmpty ? saleCycleId : "",
-        "filter_account_code": accountCodeController.value.text.isEmpty
-            ? ""
-            : accountCodeController.value.text,
-        "filter_account_name": accountNameController.value.text.isEmpty
-            ? ""
-            : accountNameController.value.text,
-        "filter_rh_approval": rh_Approval_controller.value.text.isEmpty
-            ? ""
-            : rh_Approval_controller.value.text,
-        "filter_cbh_approval": cbh_Approval_controller.value.text.isEmpty
-            ? ""
-            : cbh_Approval_controller.value.text,
-        "filter_category_approval":
-            category_Approval_controller.value.text.isEmpty
-                ? ""
-                : category_Approval_controller.value.text,
-        "filter_gm_approval": gm_Approval_controller.value.text.isEmpty
-            ? ""
-            : gm_Approval_controller.value.text,
+        "filter_account_code": accountCodeController.value.text.isEmpty ? "" : accountCodeController.value.text,
+        "filter_account_name": accountNameController.value.text.isEmpty ? "" : accountNameController.value.text,
+        "filter_rh_approval": rh_Approval_controller.value.text.isEmpty ? "" : rh_Approval_controller.value.text,
+        "filter_cbh_approval": cbh_Approval_controller.value.text.isEmpty ? "" : cbh_Approval_controller.value.text,
+        "filter_category_approval": category_Approval_controller.value.text.isEmpty ? "" : category_Approval_controller.value.text,
+        "filter_gm_approval": gm_Approval_controller.value.text.isEmpty ? "" : gm_Approval_controller.value.text,
         "filter_quote_version": -1,
-        "filter_quote_validity": quoteValidityStartToEnd.value.isNotEmpty
-            ? quoteValidityStartToEnd.value
-            : "",
-        "filter_exp_closure_date": extClosureStartToEnd.value.isNotEmpty
-            ? extClosureStartToEnd.value
-            : "",
-        "filter_quote_status": filterQuoteStatusController.value.text.isNotEmpty
-            ? filterQuoteStatusController.value.text
-            : status,
-        "filter_product_category": productCategoryController.value.text.isEmpty
-            ? ""
-            : productCategoryController.value.text,
-        "filter_created_by": FromPage == "QuoteApprovalPage" ? "" :( isAdminWritePermission.value=="1"?"":saleCycleList[0].salesCycleOwner),
-        "filter_created_on":
-            createdOnStartToEnd.value.isEmpty ? "" : createdOnStartToEnd.value,
+        "filter_quote_validity": quoteValidityStartToEnd.value.isNotEmpty ? quoteValidityStartToEnd.value : "",
+        "filter_exp_closure_date": extClosureStartToEnd.value.isNotEmpty ? extClosureStartToEnd.value : "",
+        "filter_quote_status": filterQuoteStatusController.value.text.isNotEmpty ? filterQuoteStatusController.value.text : status,
+        "filter_product_category": productCategoryController.value.text.isEmpty ? "" : productCategoryController.value.text,
+        "filter_created_by":"" /*FromPage == "QuoteApprovalPage" ? "" :( isAdminWritePermission.value=="1"?"":saleCycleList[0].salesCycleOwner)*/,
+        "filter_created_on": createdOnStartToEnd.value.isEmpty ? "" : createdOnStartToEnd.value,
         "filter_frontliner_value": "",
         "filter_branch_head_value":
-        quoteFilterRegionController.value.text.isEmpty
-                ? ""
-                : quoteFilterRegionController.value.text,
+        quoteFilterRegionController.value.text.isEmpty ? "" : quoteFilterRegionController.value.text,
         "filter_zone_head_value": "",
-        "filter_clusture_head_value":
-        quoteFilterClusterController.value.text.isEmpty
-                ? ""
-                : quoteFilterClusterController.value.text,
+        "filter_clusture_head_value": quoteFilterClusterController.value.text.isEmpty ? "" : quoteFilterClusterController.value.text,
         "row_per_page": rowsPerPage,
         "page_number": pageNumberForQuote
-      }; /*{
+      };
+      /*{
         "filter_quote_id": filterQuoteIdController.value.text.isNotEmpty? filterQuoteIdController.value.text:"",
         "filter_sales_cycle_id": saleCycleId.isNotEmpty?saleCycleId:"" ,
         "filter_account_name": "",
@@ -1167,18 +1127,14 @@ class SalesCycleVm extends GetxController {
         "page_number": pageNumberForQuote
   };*/
       loading.value = true;
-      _api.quoteHeaderGetApiHit(data, sessionManagement).then(
-        (onValue) {
+      String onValue = await _api.quoteHeaderGetApiHit(data, sessionManagement);
           final jsonResponse = json.decode(onValue);
           print(onValue);
           if (jsonResponse is List) {
             List<SalesCycleQuoteHeaderModal> response = jsonResponse
                 .map((e) => SalesCycleQuoteHeaderModal.fromJson(e))
                 .toList();
-            if (response != null &&
-                response.length > 0 &&
-                response[0].condition?.toLowerCase() == "true") {
-               loading.value = false;
+            if (response != null && response.length > 0 && response[0].condition?.toLowerCase() == "true") {
               if (pageNumberForQuote == 0) {
                 quoteList.clear();
               }
@@ -1186,24 +1142,17 @@ class SalesCycleVm extends GetxController {
               total_rows = int.parse(quoteList[0].totalRows!);
             } else {
               quoteList.value = [];
-              loading.value = false;
             }
-          } else {
-            loading.value = false;
           }
-        },
-      ).onError(
-        (error, stackTrace) {
-          print(error);
-        },
-      );
     } catch (e) {
-      loading.value = false;
       print(e);
+    }
+    finally{
+      loading.value = false;
     }
   }
 
-  getQuoteWonData(String saleCycleId) {
+  getQuoteWonData(String saleCycleId) async{
     try {
       Map data = {
         "sale_cycle_id": saleCycleId.isNotEmpty ? saleCycleId : "",
@@ -1212,8 +1161,7 @@ class SalesCycleVm extends GetxController {
         //"pageNumber": pageNumberForQuote
       };
       loading.value = true;
-      _api.quoteWonDataGetApiHit(data, sessionManagement).then(
-        (onValue) {
+      String onValue = await _api.quoteWonDataGetApiHit(data, sessionManagement);
           final jsonResponse = json.decode(onValue);
           print(onValue);
           if (jsonResponse is List) {
@@ -1222,7 +1170,6 @@ class SalesCycleVm extends GetxController {
             if (response != null &&
                 response.length > 0 &&
                 response[0].condition == "True") {
-              loading.value = false;
               if (pageNumberForQuote == 0) {
                 quoteWonList.clear();
               }
@@ -1230,25 +1177,19 @@ class SalesCycleVm extends GetxController {
               total_rows = int.parse(quoteWonList[0].totalRows!);
             } else {
               quoteWonList.value = [];
-              loading.value = false;
             }
-          } else {
-            loading.value = false;
           }
-        },
-      ).onError(
-        (error, stackTrace) {
-          print(error);
-        },
-      );
     } catch (e) {
-      loading.value = false;
+
       print(e);
+    }
+    finally{
+      loading.value = false;
     }
   }
 
-  getApprovalPersonList(String QuoteId) {
-    loading.value = true;
+  getApprovalPersonList(String QuoteId) async{
+
     approvalPersonList.value=[];
     Map data = {
       "filter_quote_id": QuoteId,
@@ -1264,9 +1205,8 @@ class SalesCycleVm extends GetxController {
       "row_per_page": 0,
       "page_number": 0
     };
-
-    _api.quoteHeaderGetApiHit(data, sessionManagement).then(
-      (onValue) {
+    loading.value = true;
+   String onValue = await  _api.quoteHeaderGetApiHit(data, sessionManagement);
         try {
           final jsonResponse = json.decode(onValue);
           print(onValue);
@@ -1295,27 +1235,18 @@ class SalesCycleVm extends GetxController {
               approvalPersonList.value = [];
             }
           } else {
-
-            loading.value = false;
             // service_indent_header_list.value = [];
             Utils.sanckBarException("Api Error!", jsonResponse);
           }
         } catch (e) {
           print(e);
-        } /*finally {
+        } finally {
           loading.value = false;
-        }*/
-      },
-    ).onError(
-      (error, stackTrace) {
-        print(error);
-      },
-    ).whenComplete(() {
-      this.loading.value = false;
-    });
+        }
+
   }
 
-  getSaleCycleProductByIdList(int pageNumber, String SalesId) {
+  getSaleCycleProductByIdList(int pageNumber, String SalesId) async {
     Map data = {
       "sales_cycle_id": SalesId,
       "created_by": email,
@@ -1328,8 +1259,7 @@ class SalesCycleVm extends GetxController {
       "pageNumber": pageNumber
     };
     loading.value = true;
-    _api.SalesCycleProductGetBySalesCycleId(data, sessionManagement).then(
-      (onValue) {
+    String onValue = await _api.SalesCycleProductGetBySalesCycleId(data, sessionManagement);
         try {
           final jsonResponse = json.decode(onValue);
           print(onValue);
@@ -1347,7 +1277,6 @@ class SalesCycleVm extends GetxController {
               get_SalesCycleProductById_List.value = [];
             }
           } else {
-            loading.value = false;
             // service_indent_header_list.value = [];
             // Utils.sanckBarException("Api Error!", jsonResponse);
           }
@@ -1356,17 +1285,15 @@ class SalesCycleVm extends GetxController {
         } finally {
           loading.value = false;
         }
-      },
-    ).onError(
-      (error, stackTrace) {
-        print('sjdbbsidbi${error}');
-      },
-    ).whenComplete(() {
-      this.loading.value = false;
-    });
+
   }
 
   saleCycleQuoteCreate(String saleCycleId) {
+    /*if(IsMultiParentCategory.value && itemCategorySelectedlist.isNotEmpty){
+      productCategoryController.value.text=itemCategorySelectedlist.map((e) => e.parentCategoryCode.toString())
+          .join(', ');
+    }*/
+
     try {
       Map data = {
         "sales_cycle_id": saleCycleId.toString(),
@@ -1379,9 +1306,12 @@ class SalesCycleVm extends GetxController {
         "quote_commit": contactQuoteCommitController.value.text == "Yes" ? 1 : 0,
         "consignee_id": consigneeId,
         "created_by": email,
-        "kind_attention": kindAttentionController.value.text
+        "kind_attention": kindAttentionController.value.text,
+        "parent_category_code": /*productCategoryController.value.text.isNotEmpty?productCategoryController.value.text:*/"",
+        "is_multi_parent_category": IsMultiParentCategory_controller.value.text=="No"?0:1
       };
 
+      print("datttt $data");
       loading.value = true;
       _api.quoteHeaderCreateApiHit(data, sessionManagement).then(
         (onValue) {
@@ -1391,13 +1321,19 @@ class SalesCycleVm extends GetxController {
             List<SalesCycleUpdateStatusModal> response = jsonResponse.map((e) => SalesCycleUpdateStatusModal.fromJson(e)).toList();
             if (response != null && response.length > 0 && response[0].condition?.toLowerCase() == "true") {
               loading.value = false;
-              ProductCatCreateApiHit(response[0].quoteId!);
-              /*getQuoteHeaderData(0,  saleCycleList[0].salesCycleId!);
-            Get.toNamed(RoutesName.viewSalesCycleHeaderScreen);
+              Utils.sanckBarSuccess("Success!", response[0].message.toString());
+              pageNumberForQuote = 0;
+              ProductCatCreateApiHit(response[0].quoteId!,"back");
+              quoteValidityController.value.clear();
+              expectedClosuredateController.value.clear();
+              productCategoryController .value.clear();
+              kindAttentionController.value.clear();
+              IsMultiParentCategory.value=false;
+              itemCategorySelectedlist.value=[];
+              getQuoteHeaderData(pageNumberForQuote, saleCycleList[0].salesCycleId!, '');
+              IsMultiParentCategory.value=false;
+              Get.toNamed(RoutesName.viewSalesCycleHeaderScreen);
 
-            quoteValidityController.value.clear();
-            expectedClosuredateController.value.clear();
-            productCategoryController.value.clear();*/
             } else {
               Utils.sanckBarError(
                   "False Message !", response[0].message.toString());
@@ -1409,10 +1345,12 @@ class SalesCycleVm extends GetxController {
         },
       ).onError(
         (error, stackTrace) {
+          Utils.sanckBarError("OnError Message !", error.toString());
           print(error);
         },
       );
     } catch (e) {
+      Utils.sanckBarError("Error Message !", e.toString());
       loading.value = false;
       print(e);
     }
@@ -1446,7 +1384,7 @@ class SalesCycleVm extends GetxController {
           filterQuoteAcceptedFlag.value = "";
           clearAllFieldOfFilter();
           pageNumber = 0;
-          getsalesCycleData(pageNumber, SalesId, "ViewHeader", 'Sales');
+          getsalesCycleData(pageNumber, SalesId, "ViewHeader", FromPage.value);
           //Get.toNamed(RoutesName.viewSalesCycleHeaderScreen);
         } else {
           Utils.sanckBarError("Error!", "Please select at least single product category");
@@ -1779,21 +1717,28 @@ class SalesCycleVm extends GetxController {
               : (updateItemDescription2Controller.value.text.isNotEmpty
                   ? updateItemDescription2Controller.value.text
                   : quoteLinedata[index.value].itemDescription ?? ""),
-          "qty": flag == "CheckBox"
+          /*"qty": flag == "CheckBox"
               ? 0
               : (qtyUpdateLineController.value.text.isNotEmpty
                   ? qtyUpdateLineController.value.text
-                  : quoteLinedata[index.value].qty),
+                  : quoteLinedata[index.value].qty),*/
+          "qty": flag == "CheckBox" ? 0
+              : (qtyUpdateLineController.value.text.isEmpty ? 0
+              : qtyUpdateLineController.value.text),
           "quote_line_price": flag == "CheckBox"
               ? 0
               : (updateManualPriceController.value.text.isNotEmpty
                   ? updateManualPriceController.value.text
                   : quoteLinedata[index.value].quoteLinePrice),
-          "discount_per": flag == "CheckBox"
+          /*"discount_per": flag == "CheckBox"
               ? 0
               : (updateDiscountPerController.value.text.isNotEmpty
                   ? updateDiscountPerController.value.text
-                  : quoteLinedata[index.value].discountPer),
+                  : quoteLinedata[index.value].discountPer),*/
+          "discount_per": flag == "CheckBox" ? 0
+              : (updateDiscountPerController.value.text.isEmpty ? 0
+              : updateDiscountPerController.value.text),
+
           "bm_discount_per": flag == "CheckBox"
               ? 0
               : bmDiscountPerController.value.text.isNotEmpty
@@ -1940,11 +1885,11 @@ class SalesCycleVm extends GetxController {
     }
   }
 
-  void ProductCategoryWiseAmtCreateApiHit(int id) {
+  void ProductCategoryWiseAmtCreateApiHit(int id, String SalesCycleID) {
     try {
       Map data = {
         "id": id,
-        "sale_cycle_id": salesCycleId.toString(),
+        "sale_cycle_id": SalesCycleID,
         "product_category":
             ProductCategoryCode.value.isEmpty ? "" : ProductCategoryCode.value,
         "estimated_amount": expectedAmountController.value.text,
@@ -1962,7 +1907,7 @@ class SalesCycleVm extends GetxController {
             if (response[0].condition == "True") {
               Utils.sanckBarSuccess("Message !", response[0].message.toString());
               pageNumber = 0;
-              ProductCategoryWiseAmtGet(pageNumber, salesCycleId.value);
+              ProductCategoryWiseAmtGet(pageNumber, SalesCycleID);
               productCategoryController.value.clear();
               budgetAmountController.value.clear();
               expectedAmountController.value.clear();
@@ -2305,8 +2250,8 @@ class SalesCycleVm extends GetxController {
     }
   }
 
-  getItemCategoryMstApi(String salesId, String taskID, String quoteId) {
-    this.loading.value = true;
+  getItemCategoryMstApi(String salesId, String taskID, String quoteId) async{
+
     Map<String, String> data = {
       'task_id': taskID,
       'filter_category': "",
@@ -2314,19 +2259,15 @@ class SalesCycleVm extends GetxController {
       'quote_id': quoteId
     };
     print(data);
-
-    _api.getItemCategoryMstApiHit(data, sessionManagement).then((value) {
+    this.loading.value = true;
+    String value = await _api.getItemCategoryMstApiHit(data, sessionManagement);
       print(value);
       try {
-        List<ItemCategoryMstModel> Response = (json.decode(value)
-                as List<dynamic>)
-            .map(
-                (i) => ItemCategoryMstModel.fromJson(i as Map<String, dynamic>))
-            .toList();
+        List<ItemCategoryMstModel> Response = (json.decode(value) as List<dynamic>)
+            .map((i) => ItemCategoryMstModel.fromJson(i as Map<String, dynamic>)).toList();
 
-        if (Response.isNotEmpty &&
-            Response[0]?.condition.toString() == "True") {
-          productCategoryList.value = Response!;
+        if (Response.isNotEmpty && Response[0]?.condition.toString() == "True") {
+          productCategoryList.value = Response;
           itemCategorySelectedlist.value = [];
           for (int i = 0; i < Response.length; i++) {
             if (Response[i].isSelected == 1) {
@@ -2343,9 +2284,38 @@ class SalesCycleVm extends GetxController {
         itemCategorySelectedlist.value = [];
         print('catch....${e.toString()}');
       }
+      finally{
+        this.loading.value = false;
+      }
+
+  }
+
+  getParentItemCategoryMstGet() {
+    this.loading.value = true;
+    Map<String, String> data = {
+      'filter_category': "",
+    };
+    print(data);
+    _api.ParentItemCategoryMstGet(data, sessionManagement).then((value) {
+      print(value);
+      try {
+        List<ItemCategoryMstModel> Response = (json.decode(value)
+        as List<dynamic>)
+            .map((i) => ItemCategoryMstModel.fromJson(i as Map<String, dynamic>)).toList();
+
+        if (Response.isNotEmpty && Response[0]?.condition.toString() == "True") {
+          parentProductCategoryList.value = Response!;
+        } else {
+          parentProductCategoryList.value = [];
+
+        }
+      } catch (e) {
+        parentProductCategoryList.value = [];
+
+        print('catch....${e.toString()}');
+      }
     }).onError((error, stackTrace) {
-      productCategoryList.value = [];
-      itemCategorySelectedlist.value = [];
+      parentProductCategoryList.value = [];
       Utils.sanckBarError('Api Exception onError', error.toString());
       print('catchEx....${error.toString()}');
     }).whenComplete(() {
@@ -2353,21 +2323,21 @@ class SalesCycleVm extends GetxController {
     });
   }
 
-  ProductCatCreateApiHit(String quoteId) async {
+  ProductCatCreateApiHit(String quoteIds, String back) async {
     List<TaskSalesProductCategoryLinesModel> lines = itemCategorySelectedlist
         .map((item) => TaskSalesProductCategoryLinesModel(
-            productCategoryCode: item.categoryCode!))
-        .toList();
+            productCategoryCode: item.parentCategoryCode!)).toList();
+
     Map<String, dynamic> data = {
       "created_by": email,
-      "quote_id": quoteId.toString(),
+      "quote_id": quoteIds.toString(),
       "lines": lines.map((line) => line.toJson()).toList(),
     };
     print(data);
     loading.value = true;
 
     try {
-      final value = await _api.taskSaleCatCreateApiHit(data, sessionManagement);
+      final value = await _api.QuoteSalesParentProductCategoryCreate(data, sessionManagement);
       print(value);
       final JsonResponse = json.decode(value);
       if (JsonResponse is List) {
@@ -2376,24 +2346,70 @@ class SalesCycleVm extends GetxController {
         if (response != null &&
             response.isNotEmpty &&
             response[0].condition?.toLowerCase() == "true") {
-          loading.value = false;
           Utils.sanckBarSuccess("Success!", response[0].message.toString());
           pageNumberForQuote = 0;
-          getQuoteHeaderData(pageNumberForQuote, saleCycleList[0].salesCycleId!, '');
-          Get.toNamed(RoutesName.viewSalesCycleHeaderScreen);
+
+          if(back=="back"){
+            print("back isss ");
+            getQuoteHeaderData(pageNumberForQuote, saleCycleList[0].salesCycleId!, '');
+            Get.toNamed(RoutesName.viewSalesCycleHeaderScreen);
+          }/*else{
+            getQuoteHeaderInformation(quoteId.value, "Quote");
+          }*/
+
           //getQuoteHeaderData(0,  saleCycleList[0].salesCycleId!, '');
           quoteValidityController.value.clear();
           expectedClosuredateController.value.clear();
           productCategoryController .value.clear();
           kindAttentionController.value.clear();
         } else {
+          Utils.sanckBarError("Error!",  response[0].message.toString());
+        }
+      } else {
+        Utils.sanckBarException("Api Error!", JsonResponse.toString());
+      }
+    } catch (error, stackTrace) {
+      print(error);
+      print(stackTrace);
+      print("Exception....");
+    }
+    finally{
+      loading.value = false;
+    }
+  }
+
+
+  QuoteHeaderParentCategoryUpdate(String quoteId) async {
+    Map<String, dynamic> data = {
+      "created_by": email,
+      "quote_id": quoteId,
+      "parent_category_code": /*productCategoryController.value.text.isNotEmpty?productCategoryController.value.text:*/"",
+      "is_multi_parent_category": IsMultiParentCategory_controller.value.text=="Yes"?1:0
+    };
+    print(data);
+    loading.value = true;
+
+    try {
+      final value = await _api.QuoteHeaderParentCategoryUpdate(data, sessionManagement);
+      print(value);
+      final JsonResponse = json.decode(value);
+      if (JsonResponse is List) {
+        List<TaskMasterGetModel> response = JsonResponse.map((e) => TaskMasterGetModel.fromJson(e)).toList();
+        if (response != null && response.isNotEmpty && response[0].condition?.toLowerCase() == "true") {
+          loading.value = false;
+          Utils.sanckBarSuccess("Success!", response[0].message.toString());
+          ProductCatCreateApiHit(quoteHeaderdata[0].quoteId.toString(),"");
+          getQuoteHeaderInformation(quoteId, "fromQuote");
+
+          //getItemCategoryMstApi(quoteHeaderdata[0].salesCycleId.toString(),"",quoteId);
+
+        } else {
           loading.value = false;
           Utils.sanckBarError("Error!",  response[0].message.toString());
         }
       } else {
         loading.value = false;
-        Utils.sanckBarException(
-            "Api Error!", JsonResponse.toString());
+        Utils.sanckBarException("Api Error!", JsonResponse.toString());
       }
     } catch (error, stackTrace) {
       print(error);
@@ -2964,8 +2980,8 @@ class SalesCycleVm extends GetxController {
     if (advcAmount == null) {
       advcAmount = 0.0;
     }
-    double totAmount = finalAmount! - advcAmount;
-    pendingAmountController.value.text = totAmount.toString();
+    //double totAmount = finalAmount! - advcAmount;
+    //pendingAmountController.value.text = totAmount.toString();
 
   }
 
@@ -3220,6 +3236,8 @@ class SalesCycleVm extends GetxController {
                                     context,
                                     saleCycleList,
                                     saleCycleList.salesCycleStatus!);
+
+
 
                                 // Get.back();
                               },
@@ -3806,8 +3824,8 @@ class SalesCycleVm extends GetxController {
                           /* getSalesCycleMstUpdateSuspect(saleCycleList,
                                   updateQuoteAccetedCycleController.value.text
                                   ,competitorNameController.value.text, quoteRejectReasonController.value.text);*/
-                          Get.back();
-                          Get.back();
+                        /*  Get.back();
+                          Get.back();*/
                         },
                         child: Container(
                           width: 60,
@@ -4052,12 +4070,12 @@ class SalesCycleVm extends GetxController {
     );
   }
 
-  getPurchaseProcessApi() {
-    this.loading.value = true;
+  getPurchaseProcessApi() async{
+    try {
     Map<String, String> data = {'flag': "purchase_process"};
+    this.loading.value = true;
+    String value = await _api.getMasterTypeApiHit(data, sessionManagement);
 
-    _api.getMasterTypeApiHit(data, sessionManagement).then((value) {
-      try {
         List<GetMasterTypeModel> emp_masterResponse = (json.decode(value)
                 as List<dynamic>)
             .map((i) => GetMasterTypeModel.fromJson(i as Map<String, dynamic>))
@@ -4076,24 +4094,19 @@ class SalesCycleVm extends GetxController {
         get_PurchaseProcess_list.value = [];
         print('catch....${e.toString()}');
       }
-    }).onError((error, stackTrace) {
-      get_PurchaseProcess_list.value = [];
-      Utils.sanckBarError('Api Exception onError', error.toString());
-      print('catchEx....${error.toString()}');
-    }).whenComplete(() {
-      this.loading.value = false;
-    });
+      finally{
+      loading.value = false;
+      }
+
   }
 
-  getPurchaseTimeFrameApi() {
-    this.loading.value = true;
+  getPurchaseTimeFrameApi() async{
+    try {
     Map<String, String> data = {'flag': "purchase_time_frame"};
-
-    _api.getMasterTypeApiHit(data, sessionManagement).then((value) {
-      try {
+    this.loading.value = true;
+    String value = await _api.getMasterTypeApiHit(data, sessionManagement);
         List<GetMasterTypeModel> emp_masterResponse = (json.decode(value) as List<dynamic>)
             .map((i) => GetMasterTypeModel.fromJson(i as Map<String, dynamic>)).toList();
-
         if (emp_masterResponse.isNotEmpty && emp_masterResponse[0]?.condition.toString() == "True") {
           get_PurchaseTimeFrame_list.value = emp_masterResponse[0].list!;
           print('master list....${get_PurchaseTimeFrame_list.length.toString()}');
@@ -4106,13 +4119,9 @@ class SalesCycleVm extends GetxController {
         get_PurchaseTimeFrame_list.value = [];
         print('catch....${e.toString()}');
       }
-    }).onError((error, stackTrace) {
-      get_PurchaseTimeFrame_list.value = [];
-      Utils.sanckBarError('Api Exception onError', error.toString());
-      print('catchEx....${error.toString()}');
-    }).whenComplete(() {
-      this.loading.value = false;
-    });
+      finally{
+        loading.value = false;
+      }
   }
 
   void getAddressMasterList(int pageNumber, String account_Code) {
@@ -4338,14 +4347,22 @@ class SalesCycleVm extends GetxController {
             List<SalesCycleApproveRejectModal> response = jsonResponse
                 .map((e) => SalesCycleApproveRejectModal.fromJson(e))
                 .toList();
-            if (response[0].condition!.toLowerCase() == "true") {
+            if (response[0].condition?.toLowerCase() == "true") {
               Utils.sanckBarSuccess(
                   "Message !", response[0].message.toString());
-              filterQuoteAcceptedFlag.value = "";
+              if(FromPage.value == 'Sales'){
+                Get.offAllNamed(RoutesName.salesCycleScreen);
+              }else if(FromPage.value=='FromFunnelDashboard'){
+                Get.offAllNamed(RoutesName.funnelDashboardViewScreen);
+              }else if(FromPage.value=='FromCommitDashboard'){
+                Get.offAllNamed(RoutesName.commitDashboardViewScreen);
+              }
+
+             /* filterQuoteAcceptedFlag.value = "";
               clearAllFieldOfFilter();
               pageNumber = 0;
               getsalesCycleData(pageNumber,
-                  saleCycleList.salesCycleId.toString(), "", FromPage.value);
+                  saleCycleList.salesCycleId.toString(), "", FromPage.value);*/
               loading.value = false;
             } else {
               print("message ${response[0].message.toString()}");
@@ -4394,14 +4411,15 @@ class SalesCycleVm extends GetxController {
             if (response[0].condition!.toLowerCase() == "true") {
               Utils.sanckBarSuccess(
                   "Message !", response[0].message.toString());
-              pageNumber = 0;
+              Get.offAllNamed(RoutesName.salesCycleScreen);
+           /*   pageNumber = 0;
               filterQuoteAcceptedFlag.value = 'Loss';
               clearAllFieldOfFilter();
               getsalesCycleData(
                   pageNumber,
                   saleCycleList.salesCycleId.toString(),
                   "ViewHeader",
-                  FromPage.value);
+                  FromPage.value);*/
               loading.value = false;
             } else {
               print("message ${response[0].message.toString()}");
@@ -4642,7 +4660,7 @@ class SalesCycleVm extends GetxController {
                     FromPage.value);
               }else{
                 salesCycleMstApprovereject(saleCycleList,
-                    solutionRejectedRemarkController.value.text, approRejeStatus);
+                    solutionRejectedRemarkController.value.text, approRejeStatus, prospectStage: 'Prospect Stage');
               }
 
               //getsalesCycleData(pageNumber, saleCycleList.salesCycleId!, "ViewHeader", 'Sales');
@@ -4698,10 +4716,11 @@ class SalesCycleVm extends GetxController {
             if (response[0].condition == "True") {
               Utils.sanckBarSuccess(
                   "Message", response[0].message.toString());
-              filterQuoteAcceptedFlag.value = "";
+              Get.offAllNamed(RoutesName.salesCycleScreen);
+              /*filterQuoteAcceptedFlag.value = "";
               clearAllFieldOfFilter();
               pageNumber = 0;
-              getsalesCycleData(pageNumber, saleCycleList.salesCycleId.toString(), "ViewHeader", FromPage.value);
+              getsalesCycleData(pageNumber, saleCycleList.salesCycleId.toString(), "ViewHeader", FromPage.value);*/
               //salesCycleMstApprovereject(saleCycleList,solutionRejectedRemarkController.value.text,approRejeStatus);
               loading.value = false;
             } else {
@@ -4735,6 +4754,9 @@ class SalesCycleVm extends GetxController {
     try {
       for (int i = 0; i < approvalPersonList.length; i++) {
         if (email.toLowerCase() == approvalPersonList[i].approvedBy?.toLowerCase()){
+          if(approvalPersonList[i].approverOrder==5){
+            GmApproveDetail.value=true;
+          }
           if(approvalPersonList[i].quoteStatus?.toLowerCase()=="pending for approval"){
             showApprovalBtn.value=true;
             approvalPersonList[i].userType?.toLowerCase() == 'branch head'?showBranchHead.value = true: showBranchHead.value = false;
@@ -4801,8 +4823,9 @@ class SalesCycleVm extends GetxController {
 
     SelectedCluster_list.value=[];
     SelectedRegion_list.value=[];
-    RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join('|');
+    //RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join('|');
     clusterName_controller.value.text = clusterGetByEmailList.map((e) => e.geoValue).join('|');
+    getRegionsWithClusterFilterGetByEmail();
   }
 
   void clearAllFieldOfQuoteFilter() {
@@ -4940,16 +4963,16 @@ class SalesCycleVm extends GetxController {
     }
   }
 
-  getquotationMstRejectReopen(String quoteid, String remarks) {
-    loading.value = true;
+  getquotationMstRejectReopen(String quoteid, String remarks) async {
+
+    try {
     Map data = {
       "quote_id": quoteid,
       "created_by": email,
       "reopen_remarks": remarks
     };
-    try {
-      _api.QuoteMstRejectReopenApiHit(data, sessionManagement).then(
-        (onValue) {
+    loading.value = true;
+      String onValue = await _api.QuoteMstRejectReopenApiHit(data, sessionManagement);
           final jsonResponse = json.decode(onValue);
           print(onValue);
           if (jsonResponse is List) {
@@ -4961,26 +4984,50 @@ class SalesCycleVm extends GetxController {
                   "Message !", response[0].message.toString());
               filterQuoteAcceptedFlag.value = "";
               getQuoteHeaderInformation(quoteid, quoteApprovalPage.value);
-              loading.value = false;
             } else {
-              loading.value = false;
               Utils.sanckBarError(
                   "False Message !", response[0].message.toString());
             }
-          } else {
-            loading.value = false;
           }
-        },
-      ).onError(
-        (error, stackTrace) {
-          loading.value = false;
-          print(error);
-        },
-      );
     } catch (e) {
       Utils.sanckBarError("Message !", e.toString());
-      loading.value = false;
       print(e);
+    }
+    finally{
+      loading.value = false;
+    }
+  }
+
+  QuoteMstStatusChangeToDraft(String quoteid) async{
+    loading.value = true;
+    Map data = {
+      "quote_id": quoteid,
+      "created_by": email,
+
+    };
+    try {
+      String onValue = await _api.QuoteMstStatusChangeToDraft(data, sessionManagement);
+          final jsonResponse = json.decode(onValue);
+          print(onValue);
+          if (jsonResponse is List) {
+            List<SalesCycleApproveRejectModal> response = jsonResponse
+                .map((e) => SalesCycleApproveRejectModal.fromJson(e))
+                .toList();
+            if (response[0].condition?.toLowerCase() == "true") {
+              Utils.sanckBarSuccess(
+                  "Message !", response[0].message.toString());
+              filterQuoteAcceptedFlag.value = "";
+              getQuoteHeaderInformation(quoteid, quoteApprovalPage.value);
+            } else {
+              Utils.sanckBarError("False Message !", response[0].message.toString());
+            }
+          }
+    } catch (e) {
+      Utils.sanckBarError("Message !", e.toString());
+      print(e);
+    }
+    finally{
+      loading.value = false;
     }
   }
 
@@ -5203,6 +5250,8 @@ class SalesCycleVm extends GetxController {
     advncPaymentPerController.value.text = quoteHeaderdata[0].advancePaymentPer.toString() ?? "";
     advncPaymentAmountController.value.text = quoteHeaderdata[0].advancePaymentAmt.toString() ?? "";
     termConditionController.value.text = quoteHeaderdata[0].termsAndCondition??"";
+
+    calculatePer();
 
 
   }
@@ -5986,7 +6035,12 @@ class SalesCycleVm extends GetxController {
     }
 
     pageNumber=0;
-    getsalesCycleData(pageNumber,'',"","");
+    print('From Page...${FromPage.value}');
+    if(FromPage.value=='Sales'){
+      getsalesCycleData(pageNumber,'',"","");
+    }
+
+
   }
 
   void clearFilterData() {
@@ -6082,6 +6136,214 @@ class SalesCycleVm extends GetxController {
       contact_master_list.value = [];
     }
     return  contact_master_list.value;
+  }
+
+  void calculatePer() {
+    if(advncPaymentAmountController.value.text.isEmpty){
+      advncPaymentPerController.value.clear();
+    }else{
+      final text = double.parse(advncPaymentAmountController.value.text);
+      double percantage=0.0;
+      if(quoteTotAmountController.value.text.isNotEmpty){
+        percantage=(text/double.parse(quoteTotAmountController.value.text))*100;
+        print("Percentage.${percantage}");
+      }
+      if(percantage<=100){
+        advncPaymentPerController.value.text = percantage.toStringAsFixed(2);
+      }else if(text>100){
+        advncPaymentAmountController.value.clear();
+        advncPaymentPerController.value.clear();
+        Utils.showErrorToastification('Error', 'Payment Percentage cannot be greater than 100');
+      }
+
+      //todo radha raman
+      double? advcAmount = double.tryParse(advncPaymentAmountController.value.text);
+      double? finalAmount = double.tryParse(finalAmountController.value.text);
+      if (advcAmount == null) {
+        advcAmount = 0.0;
+      }
+      double totAmount = finalAmount! - advcAmount;
+      pendingAmountController.value.text = totAmount.toStringAsFixed(2);
+
+    }
+  }
+
+  //todo infra detail
+  void viewAllDetailsOfSaleCycleInfra(SalesCycleModal saleCycleList){
+    String? expOrderDate=StaticMethod.convertDateFormat1(saleCycleList.expectedDateOfOrder ?? "");
+    String? inaugurationDate=StaticMethod.convertDateFormat1(saleCycleList.inaugrationDateOfProject ?? "");
+    String? expDateOfCompletion=StaticMethod.convertDateFormat1(saleCycleList.expectedDateOfCompletion ?? "");
+    String? dateDrawingReceived=StaticMethod.convertDateFormat1(saleCycleList.dateDrawingReceived ?? "");
+    String? dateOfProposalSubmission=StaticMethod.convertDateFormat1(saleCycleList.dateOfProposalSubmission ?? "");
+
+    isInfraLeadUpdateController.value.text=saleCycleList.isInfraLead==1 ? "Yes":"No";
+    expectedDateOfOrderUpdateController.text=expOrderDate ?? "";
+    drawingcollectedUpdateController.text=saleCycleList.drawingCollected ==1 ? "Yes":"No";
+    proposalSubmittedUpdateController.text=saleCycleList.drawingCollected==1 ? "Yes":"No";
+    inaugrationDateUpdateController.text= inaugurationDate??"";
+    architectUpdateController.text=saleCycleList.architect ?? "";
+    executiveEngineerUpdateController.text=saleCycleList.executiveEngineer ?? "";
+    nameOfArchitecfirmUpdateController.text=saleCycleList.nameOfArchitectFirm ?? "";
+    nameofInfradepUpdateController.text=saleCycleList.nameOfInfraDepartment ?? "";
+    agencyContractorUpdateController.text=saleCycleList.nameOfAgencyContrator ?? "";
+    expectedRevenueUpdateController.text=saleCycleList.expectedRevenue.toString();
+    valueOfQuoteUpdateController.text=saleCycleList.valueOfQuote.toString();
+    dateofcompletioneUpdateController.text=expDateOfCompletion??"";
+    assistantEngineerController.text=saleCycleList.assistantEngineer??"";
+    nameOfProjectController.text=saleCycleList.projectName??"";
+    locationController.text=saleCycleList.location??"";
+    timePeriodToCompleteWorkController.text=saleCycleList.timePeriodToCompleteCivilWorkInMonths==null?"":saleCycleList.timePeriodToCompleteCivilWorkInMonths.toString();
+    furnitureIncludedInCivilController.text=saleCycleList.furnitureIncludedInCivilScope==1 ? "Yes":"No";
+    customerNameController.text=saleCycleList.customerName??"";
+    contactPersonHODController.text=saleCycleList.contactPersonDecisionMaker??"";
+    ownerOfContractorController.text=saleCycleList.ownerOfContractor??"";
+    siteManagerController.text=saleCycleList.projectSiteManager??"";
+    dateOfDrawingReceivedController.text=dateDrawingReceived??"";
+    dateOfProposalSubmissionController.text=dateOfProposalSubmission??"";
+    projectValueUpdateController.text=saleCycleList.projectValue.toString();
+  }
+
+  getItemCategoryMstApiHit(String? taskId, String? InfraId, String saleCycleId) async {
+    try {
+      Map<String, String> data = {
+        'task_id': taskId! ,
+        'filter_category': "",
+        'sales_cycle_id': saleCycleId,
+        'quote_id': "",
+        'infra_lead_no': InfraId==null?"":InfraId
+      };
+      this.loading.value = true;
+      String value = await _api.getItemCategoryInfraMstApiHit(data, sessionManagement);
+      print(value);
+      List<ItemCategoryMstModel> Response = (json.decode(value) as List<dynamic>)
+          .map((i) => ItemCategoryMstModel.fromJson(i as Map<String, dynamic>)).toList();
+
+      if (Response.isNotEmpty && Response[0].condition?.toLowerCase() == "true") {
+        Item_Category_Infra_list.value = Response;
+
+        Item_Category_Selected_Infra_list.value = [];
+        for (int i = 0; i < Item_Category_Infra_list.length; i++) {
+          if (Item_Category_Infra_list[i].isSelected == 1) {
+            Item_Category_Selected_Infra_list.add(
+                Item_Category_Infra_list[i]);
+          }}
+        print('master list1....${Item_Category_Infra_list.length.toString()}');
+        loading.value = false;
+      } else {
+        Item_Category_Infra_list.value = [];
+        Item_Category_Selected_Infra_list.value = [];
+        loading.value = false;
+        //print('master listelsse1....${Item_Category_Selected_list.length.toString()}');
+      }
+    }
+    catch (e) {
+      print('catch....${e.toString()}');
+      loading.value = false;
+    }
+    /*finally{
+                loading .value=true;
+            }*/
+  }
+  SalesCycleMstInfraUpdate(String InfraNo,) async {
+    try {
+      String? expOrderDate=StaticMethod.convertDateFormat(expectedDateOfOrderUpdateController.text);
+      String? inaugurationDate=StaticMethod.convertDateFormat(inaugrationDateUpdateController.text);
+      String? expDateOfCompletion=StaticMethod.convertDateFormat(dateofcompletioneUpdateController.text);
+      String? dateDrawingReceived=StaticMethod.convertDateFormat(dateOfDrawingReceivedController.text);
+      String? dateOfProposalSubmission=StaticMethod.convertDateFormat(dateOfProposalSubmissionController.text);
+
+      List<TaskSalesProductCategoryLinesModel> lines = Item_Category_Selected_Infra_list.map((item) => TaskSalesProductCategoryLinesModel(productCategoryCode: item.categoryCode!)).toList();
+
+      Map data = {
+
+        "sales_cycle_id": saleCycleList[0].salesCycleId!,
+        "is_infra_lead": isInfraLeadUpdateController.value.text=="Yes"?1:0,
+        "infra_lead_no": InfraNo,
+        "user_region": userRegionUpdateController.text.isEmpty?"":userRegionUpdateController.text,
+        "user_clusture": userClusterUpdateController.text.isEmpty?"":userClusterUpdateController.text,
+        "name_of_infra_department": nameofInfradepUpdateController.text.isEmpty?"":nameofInfradepUpdateController.text,
+        "executive_engineer": executiveEngineerUpdateController.text.isEmpty?"":executiveEngineerUpdateController.text,
+        "assistant_engineer": assistantEngineerController.text.isEmpty?"":assistantEngineerController.text,
+        "project_name": nameOfProjectController.text.isEmpty?"":nameOfProjectController.text,
+        "location": locationController.text.isEmpty?"":locationController.text,
+        "time_period_to_complete_civil_work_in_months": timePeriodToCompleteWorkController.text.isEmpty?"0":timePeriodToCompleteWorkController.text,
+        "expected_date_of_completion": expDateOfCompletion??"",
+        "project_value": projectValueUpdateController.text.isEmpty?"":projectValueUpdateController.text,
+        "expected_revenue": expectedRevenueUpdateController.text.isEmpty?"":expectedRevenueUpdateController.text,
+        "furniture_included_in_civil_scope": furnitureIncludedInCivilController.text=="Yes"?1:0,
+        "customer_name": customerNameController.text.isEmpty?"":customerNameController.text,
+        "contact_person_decision_maker": contactPersonHODController.text.isEmpty?"":contactPersonHODController.text,
+        "name_of_agency_contrator": agencyContractorUpdateController.text.isEmpty?"":agencyContractorUpdateController.text,
+        "owner_of_contrator": ownerOfContractorController.text.isEmpty?"":ownerOfContractorController.text,
+        "project_site_manager": siteManagerController.text.isEmpty?"":siteManagerController.text,
+        "name_of_architect_firm": nameOfArchitecfirmUpdateController.text.isEmpty?"":nameOfArchitecfirmUpdateController.text,
+        "architect": architectUpdateController.text.isEmpty?"":architectUpdateController.text,
+        "lines": lines.map((line) => line.toJson()).toList(),
+        "drawing_collected": drawingcollectedUpdateController.text=="Yes"?1:0,
+        "date_drawing_received": dateDrawingReceived??"",
+        "proposal_submitted": proposalSubmittedUpdateController.text=="Yes"?1:0,
+        "date_of_proposal_submission": dateOfProposalSubmission??"",
+        "value_of_quote": valueOfQuoteUpdateController.text.isEmpty?"":valueOfQuoteUpdateController.text,
+        "expected_date_of_order": expOrderDate??"",
+        "inaugration_date_of_project": inaugurationDate??"",
+        "created_by": email
+      };
+      this.loading.value = true;
+      print(data);
+      String onValue = await  _api.SalesCycleMstInfraUpdate(data, sessionManagement);
+      final jsonResponse = json.decode(onValue);
+      print(onValue);
+      if (jsonResponse is List) {
+        List<TaskUpdateInfraModal> response = jsonResponse.map((e) => TaskUpdateInfraModal.fromJson(e)).toList();
+        if (response[0].condition == "True") {
+          loading.value = false;
+          Utils.sanckBarSuccess("Message !", response[0].message.toString());
+          getsalesCycleData(pageNumber, saleCycleList[0].salesCycleId!, "ViewHeader", 'Sales');
+
+          Get.toNamed(RoutesName.viewSalesCycleHeaderScreen);
+
+
+          clearInfraUpdateController();
+        } else {
+          loading.value = false;
+          Utils.sanckBarError("False Message !", response[0].message.toString());
+        }
+      }
+    } catch (e) {
+      Utils.sanckBarException("Message !", e.toString());
+      print(e);
+      loading.value = false;
+    }
+    /*finally{
+                loading.value = false;
+            }*/
+  }
+  void clearInfraUpdateController(){
+    projectValueUpdateController.clear();
+    expectedDateOfOrderUpdateController.clear();
+    drawingcollectedUpdateController.clear();
+    proposalSubmittedUpdateController.clear();
+    inaugrationDateUpdateController.clear();
+    architectUpdateController.clear();
+    executiveEngineerUpdateController.clear();
+    nameOfArchitecfirmUpdateController.clear();
+    nameofInfradepUpdateController.clear();
+    agencyContractorUpdateController.clear();
+    expectedRevenueUpdateController.clear();
+    valueOfQuoteUpdateController.clear();
+    dateofcompletioneUpdateController.clear();
+    assistantEngineerController.clear();
+    nameOfProjectController.clear();
+    locationController.clear();
+    furnitureIncludedInCivilController.clear();
+    customerNameController.clear();
+    contactPersonHODController.clear();
+    ownerOfContractorController.clear();
+    siteManagerController.clear();
+    dateOfDrawingReceivedController.clear();
+    dateOfProposalSubmissionController.clear();
+    projectValueUpdateController.clear();
+
   }
 
 }

@@ -37,6 +37,7 @@ class PendingDraftQuoteVm extends GetxController{
   var accountCodeController=TextEditingController().obs;
   var accountNameController=TextEditingController().obs;
   var productCategoryController=TextEditingController().obs;
+  var parentProductCategoryController=TextEditingController().obs;
   var quoteStatusController=TextEditingController().obs;
   var filterQuoteValidityController=TextEditingController().obs;
   var filterExpectedClosuredateController=TextEditingController().obs;
@@ -60,6 +61,7 @@ class PendingDraftQuoteVm extends GetxController{
   var StandardCostController=TextEditingController().obs;
   var product_category_type_Controller = TextEditingController().obs;
 
+
   RxList<Pending_Draft_Quote_Model> PendingDraftQuoteList=<Pending_Draft_Quote_Model>[].obs;
   RxList<String> QuoteStatusList = ["All", "DRAFT", "PENDING FOR APPROVAL", ].obs;
   RxList<String> approvedRejectedStatusList = ["All", "APPROVED", "REJECTED", ].obs;
@@ -70,11 +72,15 @@ class PendingDraftQuoteVm extends GetxController{
   RxList<RegionWithClusterFilterModal> regionwithclusterGetByEmailList = <RegionWithClusterFilterModal>[].obs;
   RxList<RegionWithClusterFilterModal> SelectedRegion_list = <RegionWithClusterFilterModal>[].obs;
 
+  RxList<ItemCategoryMstModel> parentProductCategoryList = <ItemCategoryMstModel>[].obs;
+  RxList<ItemCategoryMstModel> parentItemCategorySelectedList = <ItemCategoryMstModel>[].obs;
+
   RxList<ItemCategoryMstModel> Item_Category_master_list_without_task = <ItemCategoryMstModel>[].obs;
   RxList<ItemCategoryMstModel> Selected_Item_Category_master_list_without_task = <ItemCategoryMstModel>[].obs;
   RxList<String> productCategoryTypeList = <String>["Contains","Equals To"].obs;
   String filterRouting = "";
   String title="";
+  String userType = "";
   @override
   Future<void> onInit() async {
     title = Get.arguments??"";
@@ -91,6 +97,7 @@ class PendingDraftQuoteVm extends GetxController{
     else if(title=='Approved / Rejected Quote'){
       filterFlag="APPROVED & REJECTED";
     }
+    userType = await sessionManagement.getUserType() ?? '';
 
     email=await sessionManagement.getEmail() ?? '';
     isAdminWritePermission = await sessionManagement.getIsAdminPermission() ?? '';
@@ -98,6 +105,7 @@ class PendingDraftQuoteVm extends GetxController{
     //getPendingDraftQuoteList(pageNumberForQuote, filterFlag);
     product_category_type_Controller.value.text="Contains";
     getItemCategoryMstWithoutTaskIdApi();
+    getParentItemCategoryMstGet();
     getClustersGetByEmail();
 
 
@@ -107,14 +115,41 @@ class PendingDraftQuoteVm extends GetxController{
   Future<void>refreshList() async{
     getPendingDraftQuoteList(pageNumberForQuote, filterFlag);
   }
-  getItemCategoryMstWithoutTaskIdApi() {
-    loading.value = true;
+  getParentItemCategoryMstGet() async{
+    Map<String, String> data = {
+      'filter_category': "",
+    };
+    this.loading.value = true;
+    print(data);
+    String value = await _api.ParentItemCategoryMstGet(data, sessionManagement);
+      print(value);
+      try {
+        List<ItemCategoryMstModel> Response = (json.decode(value)
+        as List<dynamic>).map((i) => ItemCategoryMstModel.fromJson(i as Map<String, dynamic>)).toList();
+        if (Response.isNotEmpty && Response[0]?.condition.toString() == "True") {
+          parentProductCategoryList.value = Response!;
+        } else {
+          parentProductCategoryList.value = [];
+        }
+      } catch (e) {
+        parentProductCategoryList.value = [];
+        print('catch....${e.toString()}');
+      }
+      finally{
+        loading.value=false;
+      }
+
+  }
+
+  getItemCategoryMstWithoutTaskIdApi() async{
+
+    try {
     Map<String, String> data = {
 
     };
+    loading.value = true;
+    String value = await _api.getItemCategoryMstWithoutTaskIdApiHit(data, sessionManagement);
 
-    _api.getItemCategoryMstWithoutTaskIdApiHit(data, sessionManagement).then((value) {
-      try {
         List<ItemCategoryMstModel> Response =
         (json.decode(value) as List<dynamic>).map((i) => ItemCategoryMstModel.fromJson(i as Map<String, dynamic>)).toList();
 
@@ -130,29 +165,25 @@ class PendingDraftQuoteVm extends GetxController{
         Item_Category_master_list_without_task.value = [];
         print('catch....${e.toString()}');
       }
-    }).onError((error, stackTrace) {
-      Item_Category_master_list_without_task.value = [];
-      Utils.sanckBarError('Api Exception onError', error.toString());
-      print('catchEx....${error.toString()}');
-    }).whenComplete(() {
-      loading.value = false;
-    });
+      finally{
+        loading.value=false;
+      }
+
   }
 
-  void getClustersGetByEmail() {
+  void getClustersGetByEmail() async{
     try{
       Map<String, String> data={
         "email_id":email
       };
       loading.value=true;
       print("data is ${data}");
-      _api.clustersGetByEmailApiHit(data, sessionManagement).then((onValue){
+      String onValue = await _api.clustersGetByEmailApiHit(data, sessionManagement);
         print(onValue);
         final jsonResponse = json.decode(onValue);
         if(jsonResponse is List){
           List<ClusterModal> response = jsonResponse.map((e) => ClusterModal.fromJson(e)).toList();
           if(response.length>0 && response[0].condition=="True"){
-            loading.value = false;
             clusterGetByEmailList.value=response;
             if (clusterGetByEmailList.value.isNotEmpty && SelectedCluster_list.isEmpty) {
               SelectedCluster_list.assignAll(clusterGetByEmailList.value);
@@ -160,26 +191,17 @@ class PendingDraftQuoteVm extends GetxController{
               getRegionsWithClusterFilterGetByEmail();
             }
           }else {
-            loading.value = false;
             clusterGetByEmailList.value=[];
           }
-        } else {
-          loading.value = false;
         }
-      },
-      ).onError(
-            (error, stackTrace) {
-          print(error);
-        },
-      ).whenComplete(() {
-        loading.value=false;
-      },);
     }catch(e){
-      loading.value = false;
       print(e);
-    } 
+    }
+    finally{
+      loading.value = false;
+    }
   }
-  void getRegionsWithClusterFilterGetByEmail() {
+  void getRegionsWithClusterFilterGetByEmail() async{
     var selectedCluster="";
     if(clusterName_controller.value.text.isNotEmpty){
       selectedCluster = clusterName_controller.value.text.split(',').map((e) => e.trim()).join('|');
@@ -191,7 +213,7 @@ class PendingDraftQuoteVm extends GetxController{
       };
       loading.value=true;
       print("data is ${data}");
-      _api.RegionsWithClusterFilterGetByEmailApiHit(data, sessionManagement).then((onValue){
+      String onValue = await _api.RegionsWithClusterFilterGetByEmailApiHit(data, sessionManagement);
         print(onValue);
         final jsonResponse = json.decode(onValue);
         if(jsonResponse is List){
@@ -200,7 +222,8 @@ class PendingDraftQuoteVm extends GetxController{
             loading.value = false;
             regionwithclusterGetByEmailList.value=response;
             RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join('|');
-            print('region....${RegionName_controller.value.text}');
+            SelectedRegion_list.assignAll(regionwithclusterGetByEmailList);
+            //print('region....${RegionName_controller.value.text}');
             if(filterRouting =='Pending Draft Quote'){
               getPendingDraftQuoteFilterData();
             }
@@ -221,28 +244,18 @@ class PendingDraftQuoteVm extends GetxController{
             //getPendingDraftQuoteList(pageNumberForQuote, filterFlag);
 
           }else {
-            loading.value = false;
             regionwithclusterGetByEmailList.value=[];
           }
-        } else {
-          loading.value = false;
         }
-      },
-      ).onError(
-            (error, stackTrace) {
-          print(error);
-        },
-      );
     }catch(e){
-      loading.value = false;
       print(e);
     }finally{
       loading.value = false;
     }
   }
 
-  getPendingDraftQuoteList(int pageNumberForQuote,String flagFilter){
-    loading.value=true;
+  getPendingDraftQuoteList(int pageNumberForQuote,String flagFilter) async{
+
     try{
 
       Map data={
@@ -260,6 +273,7 @@ class PendingDraftQuoteVm extends GetxController{
           "filter_quote_status": quoteStatusController.value.text.isEmpty || quoteStatusController.value.text == 'All'?"":quoteStatusController.value.text,
           "filter_flag": flagFilter,
           "filter_product_category": productCategoryController.value.text.isEmpty?"":productCategoryController.value.text,
+          "filter_parent_product_category": parentProductCategoryController.value.text.isEmpty?"":parentProductCategoryController.value.text,
           "filter_product_category_type": product_category_type_Controller.value.text.isEmpty?"":product_category_type_Controller.value.text,
           "filter_created_by": isAdminWritePermission == '1'?'':email,
           "filter_created_on": createdOnStartToEnd.value.isNotEmpty?createdOnStartToEnd.value:"",
@@ -281,16 +295,15 @@ class PendingDraftQuoteVm extends GetxController{
           "row_per_page": rowsPerPage,
           "page_number": pageNumberForQuote
       };
+      loading.value=true;
 
-
-      _api.QuoteHeaderGetNewApiHit(data, sessionManagement).then((onValue){
+      String onValue = await _api.QuoteHeaderGetNewApiHit(data, sessionManagement);
         final jsonResponse = json.decode(onValue);
         print(onValue);
        this.filterFlag=flagFilter;
         if(jsonResponse is List){
           List<Pending_Draft_Quote_Model> response = jsonResponse.map((e) => Pending_Draft_Quote_Model.fromJson(e)).toList();
           if(response!= null && response.length>0 && response[0].condition=="True"){
-            loading.value = false;
             if(pageNumberForQuote==0){
               PendingDraftQuoteList.clear();
             }
@@ -299,29 +312,22 @@ class PendingDraftQuoteVm extends GetxController{
             total_rows=int.parse(PendingDraftQuoteList[0].totalRows!);
           }else {
             PendingDraftQuoteList.value=[];
-            loading.value = false;
           }
-        } else {
-          loading.value = false;
         }
-      },
-      ).onError(
-            (error, stackTrace) {
-          print(error);
-        },
-      ).whenComplete(() {
-        loading.value = false;
-      },);
     }catch(e){
-      loading.value = false;
       print(e);
+    }
+    finally{
+      loading.value = false;
     }
 
   }
 
   void clearAllFieldOfQuoteFilter() {
     product_category_type_Controller.value.text="Contains";
+    parentProductCategoryController.value.clear();
     Selected_Item_Category_master_list_without_task.value=[];
+    parentItemCategorySelectedList.value=[];
 
     filterQuoteIdController.value.clear();
     filterQuoteVersionController.value.clear();
@@ -335,10 +341,8 @@ class PendingDraftQuoteVm extends GetxController{
     gm_Approval_controller.value.clear();
     productCategoryController.value.clear();
     createdOnCnontroller.value.clear();
-    //clusterName_controller.value.clear();
     filterQuoteSaleCycleController.value.clear();
     createdByCnontroller.value.clear();
-    //RegionName_controller.value.clear();
     quoteStatusController.value.clear();
     createdOnStartToEnd.value = "";
     extClosureStartToEnd.value = "";
@@ -353,6 +357,12 @@ class PendingDraftQuoteVm extends GetxController{
     BTPFilterController.value.clear();
     MAPFilterController.value.clear();
     StandardCostController.value.clear();
+
+    SelectedCluster_list.value = [];
+    SelectedRegion_list.value = [];
+    //RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join(',');
+    clusterName_controller.value.text = clusterGetByEmailList.map((e) => e.geoValue).join('|');
+    getRegionsWithClusterFilterGetByEmail();
 
 
   }
@@ -380,6 +390,7 @@ class PendingDraftQuoteVm extends GetxController{
       'createdOn_Controller': createdOnCnontroller.value.text,
       'createdOnStartToEnd': createdOnStartToEnd.value,
       'product_category': productCategoryController.value.text,
+      'parentProductCategoryController': parentProductCategoryController.value.text,
       'product_category_type': product_category_type_Controller.value.text,
     });
     filterDataChecker.value='';
@@ -408,6 +419,7 @@ class PendingDraftQuoteVm extends GetxController{
       createdOnCnontroller.value.text=getFilterData["createdOn_Controller"]??"";
       createdOnStartToEnd.value=getFilterData["createdOnStartToEnd"]??"";
       productCategoryController.value.text=getFilterData["product_category"]??"";
+      parentProductCategoryController.value.text=getFilterData["parentProductCategoryController"]??"";
       product_category_type_Controller.value.text=getFilterData["product_category_type"]??"";
 
       if(getFilterData["region_name"].toString().isNotEmpty && getFilterData["region_name"].toString()!=""){
@@ -458,6 +470,7 @@ class PendingDraftQuoteVm extends GetxController{
       'createdOn_Controller': createdOnCnontroller.value.text,
       'createdOnStartToEnd': createdOnStartToEnd.value,
       'product_category': productCategoryController.value.text,
+      'parentProductCategoryController': parentProductCategoryController.value.text,
       'product_category_type': product_category_type_Controller.value.text,
     });
     filterDataChecker.value='';
@@ -486,6 +499,7 @@ class PendingDraftQuoteVm extends GetxController{
       createdOnCnontroller.value.text=getFilterData["createdOn_Controller"]??"";
       createdOnStartToEnd.value=getFilterData["createdOnStartToEnd"]??"";
       productCategoryController.value.text=getFilterData["product_category"]??"";
+      parentProductCategoryController.value.text=getFilterData["parentProductCategoryController"]??"";
       product_category_type_Controller.value.text=getFilterData["product_category_type"]??"";
 
       if(getFilterData["region_name"].toString().isNotEmpty && getFilterData["region_name"].toString()!=""){
@@ -535,6 +549,7 @@ class PendingDraftQuoteVm extends GetxController{
       'createdOn_Controller': createdOnCnontroller.value.text,
       'createdOnStartToEnd': createdOnStartToEnd.value,
       'product_category': productCategoryController.value.text,
+      'parentProductCategoryController': parentProductCategoryController.value.text,
       'product_category_type': product_category_type_Controller.value.text,
     });
     filterDataChecker.value='';
@@ -564,6 +579,7 @@ class PendingDraftQuoteVm extends GetxController{
       createdOnCnontroller.value.text=getFilterData["createdOn_Controller"]??"";
       createdOnStartToEnd.value=getFilterData["createdOnStartToEnd"]??"";
       productCategoryController.value.text=getFilterData["product_category"]??"";
+      parentProductCategoryController.value.text=getFilterData["parentProductCategoryController"]??"";
       product_category_type_Controller.value.text=getFilterData["product_category_type"]??"";
 
       if(getFilterData["region_name"].toString().isNotEmpty && getFilterData["region_name"].toString()!=""){
@@ -623,6 +639,7 @@ class PendingDraftQuoteVm extends GetxController{
       'createdOn_Controller': createdOnCnontroller.value.text,
       'createdOnStartToEnd': createdOnStartToEnd.value,
       'product_category': productCategoryController.value.text,
+      'parentProductCategoryController': parentProductCategoryController.value.text,
       'product_category_type': product_category_type_Controller.value.text,
     });
     filterDataChecker.value='';
@@ -662,6 +679,7 @@ class PendingDraftQuoteVm extends GetxController{
       createdOnCnontroller.value.text=getFilterData["createdOn_Controller"]??"";
       createdOnStartToEnd.value=getFilterData["createdOnStartToEnd"]??"";
       productCategoryController.value.text=getFilterData["product_category"]??"";
+      parentProductCategoryController.value.text=getFilterData["parentProductCategoryController"]??"";
       product_category_type_Controller.value.text=getFilterData["product_category_type"]??"";
 
       if(getFilterData["region_name"].toString().isNotEmpty && getFilterData["region_name"].toString()!=""){
@@ -714,6 +732,7 @@ class PendingDraftQuoteVm extends GetxController{
       'region_name': RegionName_controller.value.text,
       'cluster_name': clusterName_controller.value.text,
       'product_category': productCategoryController.value.text,
+      'parentProductCategoryController': parentProductCategoryController.value.text,
       'product_category_type': product_category_type_Controller.value.text,
     });
     filterDataChecker.value='';
@@ -746,6 +765,7 @@ class PendingDraftQuoteVm extends GetxController{
       cbh_Approval_controller.value.text=getFilterData["cbh_Approval_controller"]??"";
       gm_Approval_controller.value.text=getFilterData["gm_Approval_controller"]??"";
       productCategoryController.value.text=getFilterData["product_category"]??"";
+      parentProductCategoryController.value.text=getFilterData["parentProductCategoryController"]??"";
       product_category_type_Controller.value.text=getFilterData["product_category_type"]??"";
 
       if(getFilterData["region_name"].toString().isNotEmpty && getFilterData["region_name"].toString()!=""){

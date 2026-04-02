@@ -13,6 +13,7 @@ import '../../../main.dart';
 import '../../../reources/routes/routes_name.dart';
 import '../../../utils/app_utils.dart';
 import '../../../viewModel/SessionManagment/session_managment.dart';
+import '../../CRM_Models/AccountMaster_model/Employee_Member_Model.dart';
 import '../../CRM_Models/AccountMaster_model/cluster_modal.dart';
 import '../../CRM_Models/AccountMaster_model/region_with_cluster_filter_modal.dart';
 import '../../CRM_Models/Bussiness_Tour_Plan_Model/BusinessPlanReport_Model.dart';
@@ -42,6 +43,7 @@ class BusinessPlanTourViewModel extends GetxController{
   RxBool selectMeetingWith = false.obs;
   String StartDate = '', EndDate = '', Tour_Id = '', CustomerId = '';
   RxString isSendForApproval = ''.obs;
+  RxString fromPage = ''.obs;
   RxString filterStatusFlag = 'PENDING'.obs;
 
   String MeetingWithResponse = '', Accompanied_With_Response = '';
@@ -79,12 +81,15 @@ class BusinessPlanTourViewModel extends GetxController{
 
 
   var filterTourDateController = TextEditingController().obs;
+  var filterTourDateFromToController = TextEditingController().obs;
   var filterCreatedOnController = TextEditingController().obs;
 
   RxString createdOnStartToEnd="".obs;
 
 
 
+  RxList<EmployeeMemberModel> employee_Member_list = <EmployeeMemberModel>[].obs;
+  RxList<EmployeeMemberModel> SelectedEmployee_Member_list = <EmployeeMemberModel>[].obs;
 
  /* //todo Bussiness Tour Plan Line Details Controller
   var filterCreatedByController = TextEditingController().obs;
@@ -120,6 +125,7 @@ class BusinessPlanTourViewModel extends GetxController{
     filterRouting = await sessionManagement.getfilterRouting() ?? '';
     approveRejectList.value = ['Approve', 'Reject'];
     clearAllFieldOfFilter();
+    EmployeeMasterGet("");
     getClustersGetByEmail();
 
     super.onInit();
@@ -143,14 +149,58 @@ class BusinessPlanTourViewModel extends GetxController{
     }
   }
 
-  void getClustersGetByEmail() {
+  Future<Iterable<EmployeeMemberModel>> EmployeeMasterGet(String query) async {
+    print("aditi..");
+    try {
+      Map data = {
+        'filter_name': '',
+        'filter_email': query,
+        'filter_location_id': '',
+        'email_id': email,
+        'rowsPerPage': 50,
+        'pageNumber': 0,
+      };
+      loading.value=true;
+      print("created by ${data}");
+      String employee_response =await _api.EmployeeMatserGetApiHit(data, sessionManagement);
+
+
+      final jsonResponse = json.decode(employee_response);
+
+      if (jsonResponse is List) {
+        print(jsonResponse);
+        List<EmployeeMemberModel> response =
+        jsonResponse.map((data) => EmployeeMemberModel.fromJson(data)).toList();
+        print('condition..'+response[0].condition.toString());
+        if (response[0].condition == 'True') {
+          print(jsonResponse);
+          employee_Member_list.value = response;
+          loading.value=false;
+        } else {
+          loading.value=false;
+          employee_Member_list.value = [];
+        }
+      } else {
+        loading.value=false;
+        Utils.sanckBarException('False!', jsonResponse.message);
+        employee_Member_list.value = [];
+      }
+    } catch (e) {
+      loading.value=false;
+      Utils.sanckBarException('Exception!', e.toString());
+      employee_Member_list.value = [];
+    }
+    return employee_Member_list.value;
+  }
+
+  void getClustersGetByEmail() async{
     try{
       Map<String, String> data={
         "email_id":email
       };
       loading.value=true;
       print("data is ${data}");
-      _api.clustersGetByEmailApiHit(data, sessionManagement).then((onValue){
+      String onValue = await _api.clustersGetByEmailApiHit(data, sessionManagement);
         print(onValue);
         final jsonResponse = json.decode(onValue);
         if(jsonResponse is List){
@@ -160,8 +210,7 @@ class BusinessPlanTourViewModel extends GetxController{
             clusterGetByEmailList.value=response;
             if (clusterGetByEmailList.value.isNotEmpty && SelectedCluster_list.isEmpty) {
               SelectedCluster_list.assignAll(clusterGetByEmailList.value);
-              clusterName_controller.value.text =
-                  clusterGetByEmailList.value.map((e) => e.geoValue).join('|');
+              clusterName_controller.value.text = clusterGetByEmailList.value.map((e) => e.geoValue).join('|');
               getRegionsWithClusterFilterGetByEmail();
             }
           }else {
@@ -171,12 +220,7 @@ class BusinessPlanTourViewModel extends GetxController{
         } else {
           loading.value = false;
         }
-      },
-      ).onError(
-            (error, stackTrace) {
-          print(error);
-        },
-      );
+
     }catch(e){
       loading.value = false;
       print(e);
@@ -184,13 +228,10 @@ class BusinessPlanTourViewModel extends GetxController{
       loading.value = false;
     }
   }
-  void getRegionsWithClusterFilterGetByEmail() {
+  void getRegionsWithClusterFilterGetByEmail() async{
     var selectedCluster="";
     if(clusterName_controller.value.text.isNotEmpty){
-      selectedCluster = clusterName_controller.value.text
-          .split(',')
-          .map((e) => e.trim())
-          .join('|');
+      selectedCluster = clusterName_controller.value.text.split(',').map((e) => e.trim()).join('|');
     }
     try{
       Map<String, String> data={
@@ -199,7 +240,7 @@ class BusinessPlanTourViewModel extends GetxController{
       };
       loading.value=true;
       print("data is ${data}");
-      _api.RegionsWithClusterFilterGetByEmailApiHit(data, sessionManagement).then((onValue){
+      String onValue = await _api.RegionsWithClusterFilterGetByEmailApiHit(data, sessionManagement);
         print(onValue);
         final jsonResponse = json.decode(onValue);
         if(jsonResponse is List){
@@ -208,14 +249,13 @@ class BusinessPlanTourViewModel extends GetxController{
             loading.value = false;
             regionwithclusterGetByEmailList.value=response;
             RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join('|');
-            print('region....${RegionName_controller.value.text}');
+            SelectedRegion_list.assignAll(regionwithclusterGetByEmailList);
             if(filterRouting=='Business Tour Plan Line Details'){
               getBusinessPlanLineFilterData();
             }
             else if(filterRouting=='Business Tour Plan'){
               getFilterData();
             }
-
 
             //getBusinessTourPlanAllLineGet(pageNumber);
 
@@ -226,12 +266,7 @@ class BusinessPlanTourViewModel extends GetxController{
         } else {
           loading.value = false;
         }
-      },
-      ).onError(
-            (error, stackTrace) {
-          print(error);
-        },
-      );
+
     }catch(e){
       loading.value = false;
       print(e);
@@ -294,14 +329,14 @@ class BusinessPlanTourViewModel extends GetxController{
     }
   }
 
-  getBusinessTourPlanAllLineGet(int page_no) {
+  getBusinessTourPlanAllLineGet(int page_no) async{
     try {
       Map data = {
         "tour_id": filterTourIdController.value.text.isEmpty?"":filterTourIdController.value.text,
         "account_code": "",
         "created_by": filterCreatedByController.value.text.isEmpty? email:filterCreatedByController.value.text,
         "created_on": createdOnStartToEnd.value.isEmpty?"":createdOnStartToEnd.value,
-        "tour_date_on": filterTourDateController.value.text.isEmpty?"":filterTourDateController.value.text,
+        "tour_date_on": filterTourDateFromToController.value.text.isEmpty?"":filterTourDateFromToController.value.text,
         "branch_head_value": RegionName_controller.value.text.isEmpty?"":RegionName_controller.value.text,
         "clusture_head_value": clusterName_controller.value.text.isEmpty?"":clusterName_controller.value.text,
         "district": "",
@@ -312,15 +347,13 @@ class BusinessPlanTourViewModel extends GetxController{
         "pageNumber": page_no
       };
       loading.value = true;
-      _api.BusinessTourPlanAllLineGet(data, sessionManagement).then(
-            (onValue) {
+      String onValue = await _api.BusinessTourPlanAllLineGet(data, sessionManagement);
           final jsonResponse = json.decode(onValue);
           print(onValue);
           if (jsonResponse is List) {
             List<BussinessTourPlanLineDetailsModal> response =
             jsonResponse.map((e) => BussinessTourPlanLineDetailsModal.fromJson(e)).toList();
             if (response.length > 0 && response[0].condition == "True") {
-              loading.value = false;
               if (page_no == 0) {
                 BusinessTourPlanLineDetailList.clear();
               }
@@ -329,22 +362,15 @@ class BusinessPlanTourViewModel extends GetxController{
               total_rows = int.parse(BusinessTourPlanLineDetailList[0].totalRows!);
 
             } else {
-              loading.value = false;
               BusinessTourPlanLineDetailList.value = [];
             }
-          } else {
-            loading.value = false;
           }
-        },
-      ).onError(
-            (error, stackTrace) {
-          print(error);
-          loading.value = false;
-        },
-      );
     } catch (e) {
-      loading.value = false;
+
       print(e);
+    }
+    finally{
+      loading.value = false;
     }
   }
 
@@ -1089,7 +1115,13 @@ class BusinessPlanTourViewModel extends GetxController{
               BusinessTourApprovalVm BusinessTourApprovalController=Get.put(BusinessTourApprovalVm());
               BusinessTourApprovalController.pageNumber = 0;
               BusinessTourApprovalController.getBusinessTourApprovalListData(pageNumber);
-              Get.toNamed(RoutesName.BusinessTourApprovalListScreen);
+              if(fromPage.value=="business_tour_plan_page"){
+                Get.offAllNamed(RoutesName.BusinessTourPlanScreen);
+              }
+              else{
+               Get.offAllNamed(RoutesName.BusinessTourApprovalListScreen);
+              }
+              //Get.toNamed(RoutesName.BusinessTourApprovalListScreen);
 
             } else {
               loading.value = false;
@@ -1123,13 +1155,15 @@ class BusinessPlanTourViewModel extends GetxController{
     filterTouringRegionController.value.clear();
     filterTouringNameController.value.clear();
     filterTourDateController.value.clear();
+    filterTourDateFromToController.value.clear();
     filterCreatedOnController.value.clear();
     createdOnStartToEnd.value="";
 
     SelectedCluster_list.value=[];
     SelectedRegion_list.value=[];
-    RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join('|');
+    //RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join('|');
     clusterName_controller.value.text = clusterGetByEmailList.map((e) => e.geoValue).join('|');
+    getRegionsWithClusterFilterGetByEmail();
 
   }
 
@@ -1213,6 +1247,7 @@ class BusinessPlanTourViewModel extends GetxController{
       'cluster_name': clusterName_controller.value.text,
       'filterTouringRegionController': filterTouringRegionController.value.text,
       'filterTourDateController': filterTourDateController.value.text,
+      'filterTourDateFromToController': filterTourDateFromToController.value.text,
       'filterCreatedByController': filterCreatedByController.value.text,
       'filterCreatedOnController': filterCreatedOnController.value.text,
     });
@@ -1227,6 +1262,7 @@ class BusinessPlanTourViewModel extends GetxController{
       filterTourIdController.value.text=getFilterData["filterTourIdController"]??"";
       filterTouringRegionController.value.text=getFilterData["filterTouringRegionController"]??"";
       filterTourDateController.value.text=getFilterData["filterTourDateController"]??"";
+      filterTourDateFromToController.value.text=getFilterData["filterTourDateFromToController"]??"";
       filterCreatedByController.value.text=getFilterData["filterCreatedByController"]??"";
       filterCreatedOnController.value.text=getFilterData["filterCreatedOnController"]??"";
       filterDataChecker.value='1';
@@ -1251,6 +1287,49 @@ class BusinessPlanTourViewModel extends GetxController{
   void clearBusinessPlanLineFilterData() {
     filterDataChecker.value='';
     sessionManagement.clearBusinessTourPlanLineData();
+  }
+
+
+
+  getBusinessTourPlanDelete(String TourId) {
+    try {
+      Map data = {
+        "tour_id": TourId,
+        "email_id": email
+      };
+      loading.value = true;
+      _api.BusinessTourPlanDelete(data, sessionManagement).then(
+            (onValue) {
+          final jsonResponse = json.decode(onValue);
+          print(onValue);
+          if (jsonResponse is List) {
+            List<BussinessTourPlanModel> response =
+            jsonResponse.map((e) => BussinessTourPlanModel.fromJson(e)).toList();
+            if ( response[0].condition?.toLowerCase() == "true") {
+              loading.value = false;
+              Utils.showToastification("Message !", response[0].message.toString());
+              pageNumber = 0;
+              getBusinessTourPlanData(pageNumber);
+
+            } else {
+              loading.value = false;
+              Utils.showErrorToastification(
+                  "Error !", response[0].message.toString());
+            }
+          } else {
+            loading.value = false;
+          }
+        },
+      ).onError(
+            (error, stackTrace) {
+          print(error);
+          loading.value = false;
+        },
+      );
+    } catch (e) {
+      loading.value = false;
+      print(e);
+    }
   }
 
 }

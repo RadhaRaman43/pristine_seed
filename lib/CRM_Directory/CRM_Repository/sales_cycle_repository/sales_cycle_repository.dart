@@ -97,6 +97,9 @@ class SalesCycleRepository{
   Future<String> taskSaleCatCreateApiHit(var data,SessionManagement sessionManagement) async{
     return _apiService.postApi(data, AppUrl.QuoteSalesProductCategoryCreate, sessionManagement);
   }
+  Future<String> QuoteSalesParentProductCategoryCreate(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.QuoteSalesParentProductCategoryCreate, sessionManagement);
+  }
 
   Future<String> UpdateBusinessTermsApiHit(var data,SessionManagement sessionManagement) async{
     return _apiService.postApi(data, AppUrl.QuoteHeaderUpdateBusinessTerms, sessionManagement);
@@ -282,6 +285,26 @@ class SalesCycleRepository{
 
   Future<String> contactMstGetList(var data,SessionManagement sessionManagement) async{
     return _apiService.postApi(data, AppUrl.ContactMstGet,sessionManagement);
+  }
+
+  Future<String> QuoteHeaderParentCategoryUpdate(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.QuoteHeaderParentCategoryUpdate,sessionManagement);
+  }
+
+  Future<String> ParentItemCategoryMstGet(var data,SessionManagement sessionManagement) async{
+    return _apiService.getApi(AppUrl.ParentItemCategoryMstGet, sessionManagement, data);
+  }
+
+  Future<String> getItemCategoryInfraMstApiHit(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data,AppUrl.ItemCategoryMstGetByDocument, sessionManagement);
+  }
+
+  Future<String> SalesCycleMstInfraUpdate(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data,AppUrl.SalesCycleMstInfraUpdate, sessionManagement);
+  }
+
+  Future<String> QuoteMstStatusChangeToDraft(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data,AppUrl.QuoteMstStatusChangeToDraft, sessionManagement);
   }
 
 }

@@ -139,7 +139,7 @@ class SalesCycleScreen extends StatelessWidget{
                             },
                           );
                         }),
-                        SizedBox(width: 8),
+                        const SizedBox(width: 8),
                         Obx(() {
                           return ActionChip(
                             elevation: 2,
@@ -177,7 +177,7 @@ class SalesCycleScreen extends StatelessWidget{
                             },
                           );
                         }),
-                        SizedBox(width: 8), // optional spacing between chips
+                        const SizedBox(width: 8), // optional spacing between chips
                         Obx(() {
                           return ActionChip(
                             elevation: 2,
@@ -214,7 +214,7 @@ class SalesCycleScreen extends StatelessWidget{
                             },
                           );
                         }),
-                        SizedBox(width: 8),
+                        const SizedBox(width: 8),
                         Obx(() {
                           return ActionChip(
                             elevation: 2,
@@ -251,7 +251,55 @@ class SalesCycleScreen extends StatelessWidget{
                             },
                           );
                         }),
-                        SizedBox(width: 8),
+                        const SizedBox(width: 8),
+                        Obx(() {
+                          return ActionChip(
+                            elevation: 2,
+                            padding: EdgeInsets.symmetric(horizontal: 30, vertical: 2),
+                            backgroundColor:
+                            salesCycleController.quoteAcceptedForFilterOnSaleCycle.value=="Overdue"
+                                ? AllColors.primaryDark1
+                                : AllColors.grayColor,
+                            shadowColor: Colors.black,
+                            shape: StadiumBorder(
+                              side: BorderSide(color: AllColors.grayColor),
+                            ),
+                            label: Text(
+                                'Overdue',
+                                style: TextStyle(
+                                  color: salesCycleController.quoteAcceptedForFilterOnSaleCycle.value=="Overdue"
+                                      ? AllColors.whiteColor
+                                      : AllColors.primaryDark1,
+                                  fontSize: AllFontSize.fourtine,
+                                  fontWeight: FontWeight.w500,
+                                )
+                            ),
+                            onPressed: () {
+                              salesCycleController.filterQuoteAcceptedFlag.value = 'Open';
+                              salesCycleController.quoteAcceptedForFilterOnSaleCycle.value="Overdue";
+                              salesCycleController.pageNumber=0;
+                              DateTime now = DateTime.now();
+                              late DateTime startDate;
+                              late DateTime endDate;
+                              if (now.month >= 4) {
+                                // Current FY: starts from April this year to March next year
+                                startDate = DateTime(now.year, 4, 1);
+                                endDate = DateTime(now.year + 1, 3, 31);
+                              } else {
+                                // Current FY: starts from April last year to March this year
+                                startDate = DateTime(now.year - 1, 4, 1);
+                                endDate = DateTime(now.year, 3, 31);
+                              }
+                              String start,end;
+                               start= DateFormat('yyyy-MM-dd').format(startDate);
+                              end = DateFormat('yyyy-MM-dd').format(endDate);
+                              salesCycleController.extClosureStartToEnd.value="$start@$end";
+                              salesCycleController.filterExpectedClosuredateController.value.text = '$start - $end';
+                              salesCycleController.getsalesCycleData(salesCycleController.pageNumber, "", "salesPage",'',);
+                            },
+                          );
+                        }),
+                        const SizedBox(width: 8),
                       ],
                     ),
                   ),
@@ -376,7 +424,7 @@ class SalesCycleScreen extends StatelessWidget{
               child: Row(
                 children: [
                   Text(
-                    "Sales Cycle Id: ",
+                    "Sales Cycle Id : ",
                     style: GoogleFonts.poppins(
                         color: AllColors.primaryDark1,
                         fontSize: AllFontSize.fourtine,
@@ -434,39 +482,39 @@ class SalesCycleScreen extends StatelessWidget{
                   );
                 },
               ),
-              _buildLabelWithValue(label: "Customer Code: ", value: salesCycleController.saleCycleList[position].accountCode,),
-              _buildLabelWithValue(label: "Sales Cycle Owner: ", value: salesCycleController.saleCycleList[position].salesCycleOwnerName,),
-              _buildLabelWithValue(label: "Exp. Closure Date: ", value: salesCycleController.saleCycleList[position].estClosureDate,),
+              _buildLabelWithValue(label: "Customer Code : ", value: salesCycleController.saleCycleList[position].accountCode,),
+              _buildLabelWithValue(label: "Sales Cycle Owner : ", value: salesCycleController.saleCycleList[position].salesCycleOwnerName,),
+              _buildLabelWithValue(label: "Exp. Closure Date : ", value: salesCycleController.saleCycleList[position].estClosureDate,),
               //_buildLabelWithValue(label: "Expected Amount: ", value: '₹ ${salesCycleController.saleCycleList[position].estBudgetAmount}',),
-              _buildLabelWithValue(label: "Expected Amount: ", value: "₹ ${
+              _buildLabelWithValue(label: "Expected Amount : ", value: "₹ ${
                   salesCycleController
                       .numberFormatWithComma(salesCycleController.saleCycleList[position].estBudgetAmount)
                       .toString()
               }",color:AllColors.textColor),
-              _buildLabelWithValue(label: "Is Commit: ", value: salesCycleController.saleCycleList[position].commit==1?"Yes":"No",),
-              _buildLabelWithValue(label: "Sales Cycle Status: ", value: salesCycleController.saleCycleList[position].salesCycleStatus,),
-              _buildLabelWithValue(label: "Quote Accepted: ", value: salesCycleController.saleCycleList[position].quoteAccepted, color: getQouteAcceptedColor(saleQuoteAccepted),),
-              _buildLabelWithValue(label: "Product Category: ", value: salesCycleController.saleCycleList[position].productCategory,),
-              _buildLabelWithValue(label: "Budget Amount: ", value: "₹ ${
+              _buildLabelWithValue(label: "Is Commit : ", value: salesCycleController.saleCycleList[position].commit==1?"Yes":"No",),
+              _buildLabelWithValue(label: "Sales Cycle Status : ", value: salesCycleController.saleCycleList[position].salesCycleStatus,),
+              _buildLabelWithValue(label: "Quote Accepted : ", value: salesCycleController.saleCycleList[position].quoteAccepted, color: getQouteAcceptedColor(saleQuoteAccepted),),
+              _buildLabelWithValue(label: "Product Category : ", value: salesCycleController.saleCycleList[position].productCategory,),
+              _buildLabelWithValue(label: "Budget Amount : ", value: "₹ ${
                   salesCycleController
                       .numberFormatWithComma(salesCycleController.saleCycleList[position].budgetAmount)
                       .toString()
               }",color:AllColors.textColor),
              // _buildLabelWithValue(label: "Budget Amount : ", value: "₹ ${salesCycleController.saleCycleList[position].budgetAmount.toString()}",),
-              _buildLabelWithValue(label: "Contact Name: ", value: salesCycleController.saleCycleList[position].contactName,),
-              _buildLabelWithValue(label: "Purchase Process: ", value: salesCycleController.saleCycleList[position].purchaseProcess,),
-              _buildLabelWithValue(label: "Company Pro. Type: ", value: salesCycleController.saleCycleList[position].companyProfileType,),
-              _buildLabelWithValue(label: "Is Solution Accepted: ", value: salesCycleController.saleCycleList[position].isSolutionAccepted.toString()=="1"?"Yes":"No",),
-              _buildLabelWithValue(label: "Task Id: ", value: salesCycleController.saleCycleList[position].taskId,),
-              _buildLabelWithValue(label: "Pin Code: ", value: salesCycleController.saleCycleList[position].postCode,),
-              _buildLabelWithValue(label: "District: ", value: salesCycleController.saleCycleList[position].district,),
-              _buildLabelWithValue(label: "Cluster Name: ", value: salesCycleController.saleCycleList[position].clustureHeadValue,),
-              _buildLabelWithValue(label: "Region Name: ", value: salesCycleController.saleCycleList[position].branchHeadValue,),
-              _buildLabelWithValue(label: "Created By: ", value: salesCycleController.saleCycleList[position].createdFullName,),
-              _buildLabelWithValue(label: "Created On: ", value: createdOn,),
-              _buildLabelWithValue(label: "Reporting Manager: ", value: salesCycleController.saleCycleList[position].approvedFullName,),
-              _buildLabelWithValue(label: "Approved On: ", value: approvedOn,),
-              _buildLabelWithValue(label: "Reject Reason: ", value: salesCycleController.saleCycleList[position].rejectReason,),
+              _buildLabelWithValue(label: "Contact Name : ", value: salesCycleController.saleCycleList[position].contactName,),
+              _buildLabelWithValue(label: "Purchase Process : ", value: salesCycleController.saleCycleList[position].purchaseProcess,),
+              _buildLabelWithValue(label: "Company Pro. Type : ", value: salesCycleController.saleCycleList[position].companyProfileType,),
+              _buildLabelWithValue(label: "Is Solution Accepted : ", value: salesCycleController.saleCycleList[position].isSolutionAccepted.toString()=="1"?"Yes":"No",),
+              _buildLabelWithValue(label: "Task Id : ", value: salesCycleController.saleCycleList[position].taskId,),
+              _buildLabelWithValue(label: "Pin Code : ", value: salesCycleController.saleCycleList[position].postCode,),
+              _buildLabelWithValue(label: "District : ", value: salesCycleController.saleCycleList[position].district,),
+              _buildLabelWithValue(label: "Cluster Name : ", value: salesCycleController.saleCycleList[position].clustureHeadValue,),
+              _buildLabelWithValue(label: "Region Name : ", value: salesCycleController.saleCycleList[position].branchHeadValue,),
+              _buildLabelWithValue(label: "Created By : ", value: salesCycleController.saleCycleList[position].createdFullName,),
+              _buildLabelWithValue(label: "Created On : ", value: createdOn,),
+              _buildLabelWithValue(label: "Reporting Manager : ", value: salesCycleController.saleCycleList[position].approvedFullName,),
+              _buildLabelWithValue(label: "Approved On : ", value: approvedOn,),
+              _buildLabelWithValue(label: "Reject Reason : ", value: salesCycleController.saleCycleList[position].rejectReason,),
             ],
           ),
 
@@ -478,7 +526,6 @@ class SalesCycleScreen extends StatelessWidget{
   Widget _buildLabelWithValue({
     required String label,
     required String? value,
-    double? width,
     Color color = AllColors.textColor,
   }) {
     return Row(

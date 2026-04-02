@@ -333,11 +333,12 @@ class UpdateAccountMaster extends StatelessWidget{
             height: double.infinity,
             child: SingleChildScrollView(
               child: Obx((){
+                print("check.... ${accountMaster_page_controller.view} ${accountMaster_page_controller.isAdminWritePermission}");
                 return  IgnorePointer(
                   ignoring: accountMaster_page_controller.isHeadofficePermission.value=="1"?true:false,
                   child: Column(
                     children: [
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       DottedBorder(
                         color: Colors.blue,
                         strokeWidth: 2,
@@ -351,22 +352,25 @@ class UpdateAccountMaster extends StatelessWidget{
 
                         ),
                       ),
-                      SizedBox(height: 15,),
+                      const SizedBox(height: 15,),
                       bindInputData("Customer Code",accountMaster_page_controller.account_code_controller,true,context),
-                      SizedBox(height: 15,),
-                      bindInputData("Customer Name*",accountMaster_page_controller.account_name_controller,accountMaster_page_controller.view=='Account'?false:true,context),
+                      const SizedBox(height: 15,),
+                      bindInputData("Customer Name*",accountMaster_page_controller.account_name_controller,
+                          //accountMaster_page_controller.view=='Account'?false:true,context),
+                          accountMaster_page_controller.view=='Account' &&
+                              accountMaster_page_controller.isAdminWritePermission=="1"?false:true,context),
 
-                      SizedBox(height: 15,),
+                      const SizedBox(height: 15,),
                       Container(
                         padding: EdgeInsets.only(left: 15.0, right: 15.0),
                         child: bindAccountOwnerDropDown(context),
                       ),
 
-                      SizedBox(height: 15,),
+                      const SizedBox(height: 15,),
                       bindInputData("Branch Name",accountMaster_page_controller.AccountTitle_Controller,
                           accountMaster_page_controller.view=='Account'?false:true,context),
 
-                      SizedBox(height: 15,),
+                      const SizedBox(height: 15,),
 
                       Container(
                         margin: EdgeInsets.only(left: 15.0, right: 15.0),
@@ -391,15 +395,12 @@ class UpdateAccountMaster extends StatelessWidget{
                           ),
                           child: Column(
                             children: [
-                              SizedBox(height: 15,),
-                              bindInputData("Old Crm Customer No.",
-                                  accountMaster_page_controller.OldCRMAccountNo_Controller,
-                                  true,context),
-
-                              SizedBox(height: 15,),
+                              const SizedBox(height: 15,),
+                              bindInputData("Old Crm Customer No.", accountMaster_page_controller.OldCRMAccountNo_Controller, true,context),
+                              const SizedBox(height: 15,),
 
                               bindAccountTypeDropDown(context),
-                              SizedBox(height: 15,),
+                              const SizedBox(height: 15,),
                               Form(
                                 key: _formKey,
                                 child:  bindInputData("Phone No.*",
@@ -407,12 +408,12 @@ class UpdateAccountMaster extends StatelessWidget{
                                     accountMaster_page_controller.view=='Account'?false:true,context),
                               ),
 
-                              SizedBox(height: 15,),
+                              const SizedBox(height: 15,),
                               bindInputData("Alternate Phone No.",
                                   accountMaster_page_controller.Alternate_PhoneNo_Controller,
                                   accountMaster_page_controller.view=='Account'?false:true,context),
 
-                              SizedBox(height: 15,),
+                              const SizedBox(height: 15,),
 
                               Form(
                                 key: _formKeyEmail,
@@ -422,12 +423,12 @@ class UpdateAccountMaster extends StatelessWidget{
 
                               ),
 
-                              SizedBox(height: 15,),
+                              const SizedBox(height: 15,),
                               bindAccCatogeryTypeDropDown(context),
-                              SizedBox(height: 15,),
+                              const SizedBox(height: 15,),
 
                               bindComProfTypeDropDown(context),
-                              SizedBox(height: 15,),
+                              const SizedBox(height: 15,),
 
                               Obx((){
                                 return Visibility(
@@ -435,7 +436,7 @@ class UpdateAccountMaster extends StatelessWidget{
                                   child:bindComProfSubTypeDropDown(context), );
                               }),
 
-                              SizedBox(height: 15,),
+                              const SizedBox(height: 15,),
 
                               Obx((){
                                 return Visibility(
@@ -476,7 +477,7 @@ class UpdateAccountMaster extends StatelessWidget{
 
                               bindGstRegistrationTypeDropDown(context),
 
-                              SizedBox(height: 15,),
+                              const SizedBox(height: 15,),
 
                               Obx(() {
                                 return
@@ -505,19 +506,19 @@ class UpdateAccountMaster extends StatelessWidget{
 
                               ),
 
-                              SizedBox(height: 15,),
+                              const SizedBox(height: 15,),
                               bindInputData("Customer IFSC Code",
                                   accountMaster_page_controller.IfscCode_Controller,
                                   accountMaster_page_controller.view=='Account'?false:true,context),
 
 
-                              SizedBox(height: 15,),
+                              const SizedBox(height: 15,),
 
                               bindInputData("Website",
                                   accountMaster_page_controller.Website_Controller,
                                   accountMaster_page_controller.view=='Account'?false:true,context),
 
-                              SizedBox(height: 15,),
+                              const SizedBox(height: 15,),
 
                               bindIsReferralDropDown(context),
 
@@ -542,7 +543,7 @@ class UpdateAccountMaster extends StatelessWidget{
                         ),
                       ),
 
-                      SizedBox(height: 15,),
+                      const SizedBox(height: 15,),
 
                       Container(
                         margin: EdgeInsets.only(left: 15.0, right: 15.0),
@@ -571,11 +572,11 @@ class UpdateAccountMaster extends StatelessWidget{
                                   accountMaster_page_controller.Address_controller,
                                   accountMaster_page_controller.view=='Account'?false:true,context),
 
-                              SizedBox(height: 15,),
+                              const SizedBox(height: 15,),
                               bindInputData("Address2",
                                   accountMaster_page_controller.Address2_Controller,
                                   accountMaster_page_controller.view=='Account'?false:true,context),
-                              SizedBox(height: 15,),
+                              const SizedBox(height: 15,),
                               Obx((){
                                 return Visibility(
                                   visible:accountMaster_page_controller.ShowState1.value,
@@ -584,7 +585,7 @@ class UpdateAccountMaster extends StatelessWidget{
                                   ),
                                 );
                               }),
-                              SizedBox(height: 15,),
+                              const SizedBox(height: 15,),
                               Obx((){
                                 return Visibility(
                                   visible:accountMaster_page_controller.ShowState1.value,
@@ -593,7 +594,7 @@ class UpdateAccountMaster extends StatelessWidget{
                                   ),
                                 );
                               }),
-                              SizedBox(height: 15,),
+                              const SizedBox(height: 15,),
                               Obx((){
                                 return Visibility(
                                   visible:accountMaster_page_controller.ShowState1.value,
@@ -602,7 +603,7 @@ class UpdateAccountMaster extends StatelessWidget{
                                   ),
                                 );
                               }),
-                              SizedBox(height: 15,),
+                              const SizedBox(height: 15,),
                               Obx((){
                                 return Visibility(
                                   visible:accountMaster_page_controller.ShowState1.value,
@@ -611,7 +612,7 @@ class UpdateAccountMaster extends StatelessWidget{
                                   ),
                                 );
                               }),
-                              SizedBox(height: 15,),
+                              const SizedBox(height: 15,),
 
                               Obx(() {
                                 return  bindInputData("Full Address", accountMaster_page_controller.FullAddress_Controller.value, true,context);
@@ -623,7 +624,7 @@ class UpdateAccountMaster extends StatelessWidget{
                         ),
                       ),
 
-                      SizedBox(height: 15,),
+                      const SizedBox(height: 15,),
 
 
                       IgnorePointer(
@@ -733,7 +734,7 @@ class UpdateAccountMaster extends StatelessWidget{
                                           },
                                         ),
 
-                                        SizedBox(width: 10,),
+                                        const SizedBox(width: 10,),
                                         InkWell(
                                           onTap: (){
                                             accountMaster_page_controller.selectedItem.value = -1;
@@ -756,7 +757,7 @@ class UpdateAccountMaster extends StatelessWidget{
                                     ),
                                   ],
                                 ),
-                                SizedBox(height: 15,),
+                                const SizedBox(height: 15,),
                                 Obx((){
                                   if(accountMaster_page_controller.Shipping_FullAddress_Controller.value.text.isNotEmpty ||
                                       accountMaster_page_controller.Shipping_FullAddress_Controller.value.text == null){
@@ -811,7 +812,7 @@ class UpdateAccountMaster extends StatelessWidget{
                                           ),
                                         ),
 
-                                        SizedBox(height: 15,),
+                                        const SizedBox(height: 15,),
                                         Container(
                                           decoration: BoxDecoration(
                                               color: Colors.white,
@@ -855,7 +856,7 @@ class UpdateAccountMaster extends StatelessWidget{
 
                                           ),
                                         ),
-                                        SizedBox(height: 15,),
+                                        const SizedBox(height: 15,),
                                         Obx((){
                                           return Visibility(
                                             visible:accountMaster_page_controller.ShowState.value,
@@ -864,7 +865,7 @@ class UpdateAccountMaster extends StatelessWidget{
                                             ),
                                           );
                                         }),
-                                        SizedBox(height: 15,),
+                                        const SizedBox(height: 15,),
                                         Obx(() {
                                           return Visibility(
                                             visible:accountMaster_page_controller.ShowState.value,
@@ -874,7 +875,7 @@ class UpdateAccountMaster extends StatelessWidget{
                                             ),
                                           );
                                         }),
-                                        SizedBox(height: 15,),
+                                        const  SizedBox(height: 15,),
                                         Obx(() {
                                           return Visibility(
                                             visible:accountMaster_page_controller.ShowState.value,
@@ -883,7 +884,7 @@ class UpdateAccountMaster extends StatelessWidget{
                                             ),
                                           );
                                         }),
-                                        SizedBox(height: 15,),
+                                        const SizedBox(height: 15,),
                                         Obx(() {
                                           return Visibility(
                                             visible:accountMaster_page_controller.ShowState.value,
@@ -892,7 +893,7 @@ class UpdateAccountMaster extends StatelessWidget{
                                             ),
                                           );
                                         }),
-                                        SizedBox(height: 15,),
+                                        const SizedBox(height: 15,),
                                         Container(
                                           decoration: BoxDecoration(
                                               color: Colors.white,
@@ -930,7 +931,7 @@ class UpdateAccountMaster extends StatelessWidget{
 
 
 
-                      SizedBox(height: 15,),
+                      const SizedBox(height: 15,),
 
                       Container(
                         margin: EdgeInsets.only(left: 15.0, right: 15.0),
@@ -983,7 +984,7 @@ class UpdateAccountMaster extends StatelessWidget{
                                 ),
                               ),
 
-                              SizedBox(height: 15,),
+                              const SizedBox(height: 15,),
 
                               Container(
                                 decoration: BoxDecoration(
@@ -1015,18 +1016,18 @@ class UpdateAccountMaster extends StatelessWidget{
                                 ),
                               ),
 
-                              SizedBox(height: 15,),
+                              const SizedBox(height: 15,),
 
                               bindTatResponseTypeDropDown(context),
 
-                              SizedBox(height: 15,),
+                              const SizedBox(height: 15,),
 
                             ],
                           ),
                         ),
                       ),
 
-                      SizedBox(height: 15,),
+                      const SizedBox(height: 15,),
 
 
                       Container(
@@ -1118,7 +1119,7 @@ class UpdateAccountMaster extends StatelessWidget{
                               ),
 
 
-                              SizedBox(height: 15,),
+                              const SizedBox(height: 15,),
 
                               /*Container(
                      decoration: BoxDecoration(
@@ -1187,7 +1188,7 @@ class UpdateAccountMaster extends StatelessWidget{
                         ),
                       ),
 
-                      SizedBox(height: 100,),
+                      const SizedBox(height: 100,),
 
 
 
@@ -1245,7 +1246,7 @@ class UpdateAccountMaster extends StatelessWidget{
         controller: controller,
         maxLength: maxLength,
         maxLines: maxLines,
-        readOnly: readOnly,
+        readOnly:readOnly,
         keyboardType:hintData == "Phone No.*" || hintData == "Alternate Phone No."?TextInputType.phone: TextInputType.text,
         inputFormatters: (hintData == "Phone No.*" || hintData == "Alternate Phone No.")
             ? [FilteringTextInputFormatter.digitsOnly]
@@ -1405,11 +1406,11 @@ class UpdateAccountMaster extends StatelessWidget{
                           color: AllColors.primaryDark1,
                         ),),
 
-                      SizedBox(height: 15,),
+                      const SizedBox(height: 15,),
 
                       bindTypeDropDown(context),
 
-                      SizedBox(height: 15,),
+                      const SizedBox(height: 15,),
 
                       Obx(() {
                         return Visibility(
@@ -1420,7 +1421,7 @@ class UpdateAccountMaster extends StatelessWidget{
                                 color: Colors.white,
                                 borderRadius: BorderRadius.circular(10)
                             ),
-                            padding: EdgeInsets.only(left: 10.0, ),
+                            //padding: EdgeInsets.only(left: 10.0, ),
                             child: TextFormField(
                               controller: accountMaster_page_controller
                                   .ImageUrl_Controller,
@@ -1446,7 +1447,7 @@ class UpdateAccountMaster extends StatelessWidget{
 
                       }),
 
-                      SizedBox(height: 15,),
+                      const SizedBox(height: 15,),
 
                       Row(
                         mainAxisAlignment:MainAxisAlignment.end,
@@ -1477,7 +1478,7 @@ class UpdateAccountMaster extends StatelessWidget{
 
                             },
                             child: Container(
-                              width: 120,
+                             // width: 120,
                               alignment: Alignment.center,
                               child: Obx((){
                                 return Text(
@@ -1504,119 +1505,18 @@ class UpdateAccountMaster extends StatelessWidget{
     );
   }
 
-  /*Widget bindTypeDropDown(context){
-    return Autocomplete<String>(
-      displayStringForOption: _displayIsActiveForOption,
-      optionsBuilder: (TextEditingValue textEditingValue) {
-        if (textEditingValue.text.isEmpty) {
-          return accountMaster_page_controller.UploadImageTypeList;
-          // return const Iterable<VehicleTypeResponse>.empty();
-        }
-        return accountMaster_page_controller.UploadImageTypeList
-            .where((String option) {
-          return option
-              .toString()
-              .toLowerCase()
-              .contains(textEditingValue.text.toLowerCase());
-        }).toList();
-      },
-      onSelected: (String selection) {
-        print(selection);
-        // Update the TextField with the selected
-        accountMaster_page_controller.UploadImageType_controller.text =
-            _displayIsActiveForOption(selection).toString();
-        accountMaster_page_controller.ImageUrl_Controller.clear();
-        if(accountMaster_page_controller.UploadImageType_controller.text == 'Url'){
-          accountMaster_page_controller.UploadImage.value = true;
-          accountMaster_page_controller.ButtonText.value = 'Upload Url';
-        }else{
-          accountMaster_page_controller.UploadImage.value = false;
-          accountMaster_page_controller.ButtonText.value = 'Choose files';
-        }
-       // print('IsActive.....${accountMaster_page_controller.UploadImageType_controller.text}');
-      },
-      fieldViewBuilder: (BuildContext context, TextEditingController controller,
-          FocusNode focusNode, VoidCallback onFieldSubmitted) {
-        return Container(
-          decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(10)
-          ),
-          child: TextField(
-            cursorColor: AllColors.primaryDark1,
-            controller: controller
-              ..text = accountMaster_page_controller.UploadImageType_controller
-                  .text,
-            focusNode: focusNode,
-            //onSubmitted: onFieldSubmitted,
-            decoration: InputDecoration(
-              suffixIcon: Icon(Icons.arrow_drop_down),
-              contentPadding: EdgeInsets.symmetric(
-                  vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-              hintText: 'Select Type',
-              labelText: 'Select Type',
-              border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(10))
-              ),
-            ),
-          ),
-        );
-      },
-      optionsViewBuilder: (BuildContext context,
-          AutocompleteOnSelected<String> onSelected,
-          Iterable<String> suggestions) {
-        return Align(
-          alignment: Alignment.topLeft,
-          child: Material(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-            elevation: 4.0,
-            child: Container(
-              width: size.width*.56,
-              constraints: BoxConstraints(maxHeight: 200),
-              child: ListView.builder(
-                shrinkWrap: true,
-                itemCount: suggestions.length,
-                itemBuilder: (context, index) {
-                  final String option =
-                  suggestions.elementAt(index);
-                  return GestureDetector(
-                    onTap: () {
-                      onSelected(option);
-                    },
-                    child: Container(
-                      padding: EdgeInsets.all(8.0),
-                      child: Text(
-                        option,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.blackColor,
-                            fontWeight: FontWeight.w300,
-                            fontSize: AllFontSize
-                                .sisxteen // Change the text color here
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
-          ),
-        );
-      },
-    );
-  }*/
-
   Widget bindTypeDropDown(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(10),
       ),
-      padding: EdgeInsets.symmetric(horizontal: AllFontSize.ten),
+      //padding: EdgeInsets.symmetric(horizontal: AllFontSize.ten),
       child: DropdownMenu<String>(
         initialSelection: accountMaster_page_controller.UploadImageType_controller.text.isNotEmpty
             ? accountMaster_page_controller.UploadImageType_controller.text
             : null,
-        width: MediaQuery.of(context).size.width * 0.56,
+        width: MediaQuery.of(context).size.width * 0.6,
         menuHeight: 200,
         hintText: 'Select Type',
         label: Text('Select Type'),

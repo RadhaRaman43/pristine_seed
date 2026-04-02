@@ -172,12 +172,11 @@ class CreateBulkIndentScreen extends StatelessWidget{
                               ),
                             ),
                             Spacer(),
-                            Text(
-                              create_bulk_controller
-                                  . bulk_indent_header_create_list![
-                              0]
-                                  .indentStatus ??
-                                  "",
+                            Text(create_bulk_controller
+                                . bulk_indent_header_create_list![0]
+                                .indentStatus?.toLowerCase()=='ready for consumption'?'Ready For Receiving':create_bulk_controller
+                                . bulk_indent_header_create_list![
+                            0].indentStatus ?? "",
                               style: GoogleFonts.poppins(
                                 color: AllColors.redColor,
                                 fontSize: AllFontSize.fourtine,
@@ -246,7 +245,7 @@ class CreateBulkIndentScreen extends StatelessWidget{
                                             .indentNo!);
                                   },
                                   child: Text(
-                                    'Consume',
+                                    'Receive',
                                     style: GoogleFonts.poppins(
                                         color: AllColors
                                             .primaryDark1,
@@ -1848,7 +1847,7 @@ class CreateBulkIndentScreen extends StatelessWidget{
               TableRow(
                 children: [
                   Text(
-                    "Consume Qty.:",
+                    "Received Qty.:",
                     style: GoogleFonts.poppins(
                       color: AllColors.primaryDark1,
                       fontSize: AllFontSize.fourtine,
@@ -2109,7 +2108,7 @@ class CreateBulkIndentScreen extends StatelessWidget{
                       .consumer_quantity_controller,
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
-                    labelText: "Consumer Qty ",
+                    labelText: "Receive Qty ",
                     labelStyle: TextStyle(color: AllColors.primaryDark1),
                     enabledBorder: UnderlineInputBorder(
                       borderSide: BorderSide(color: AllColors.primaryDark1),

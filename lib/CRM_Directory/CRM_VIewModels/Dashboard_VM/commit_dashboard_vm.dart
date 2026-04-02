@@ -1,8 +1,13 @@
 import 'dart:convert';
+import 'dart:io';
 
+import 'package:excel/excel.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:open_filex/open_filex.dart';
+import 'package:path_provider/path_provider.dart';
 
 import '../../../utils/app_utils.dart';
 import '../../../viewModel/SessionManagment/session_managment.dart';
@@ -66,6 +71,8 @@ class CommitDashboardVm extends GetxController{
   var RegionName_controller=TextEditingController().obs;
   var CustomerName_controller=TextEditingController().obs;
   var filter_created_on_cont=TextEditingController().obs;
+  var filter_created_on_star_to_cont=TextEditingController().obs;
+  var filter_sale_cycle_id_cont=TextEditingController().obs;
 
 
   var CustomerNameApi;
@@ -77,6 +84,9 @@ class CommitDashboardVm extends GetxController{
   var StageNameForApi;
   var isCommitForApi;
   var EmployeeEmailIdForApi = '';
+
+  RxBool excelLoading = false.obs;
+  RxDouble excelProgress = 0.0.obs;
 
   @override
   Future<void> onInit() async {
@@ -309,10 +319,10 @@ class CommitDashboardVm extends GetxController{
         "filter_stage_name": (StageNameForApi.isEmpty || StageNameForApi.toLowerCase()=='all')?"":StageNameForApi,
         "filter_product_category": ProductCategoryForApi.isEmpty?"":ProductCategoryForApi,
         "filter_customer_name": CustomerNameApi.isEmpty?"":CustomerNameApi,
+        "filter_sales_cycle_id": filter_sale_cycle_id_cont.value.text.isEmpty?"":filter_sale_cycle_id_cont.value.text,
         "rowsPerPage": rowsPerPage,
         "pageNumber": pageNumber
       };
-
 
       _api.commitDashboardUserWiseDataApiHit(data, sessionManagement).then((onValue){
         final jsonResponse = json.decode(onValue);
@@ -594,6 +604,7 @@ class CommitDashboardVm extends GetxController{
             loading.value = false;
             regionwithclusterGetByEmailList.value=response;
             RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join(', ');
+            SelectedRegion_list.assignAll(regionwithclusterGetByEmailList);
             print('region....${RegionName_controller.value.text}');
             //commitDashboardData();
             getFilterData();
@@ -605,8 +616,7 @@ class CommitDashboardVm extends GetxController{
           loading.value = false;
         }
       },
-      ).onError(
-            (error, stackTrace) {
+      ).onError((error, stackTrace) {
           print(error);
         },
       );
@@ -633,7 +643,7 @@ class CommitDashboardVm extends GetxController{
         "filter_postal_code": '',
         "filter_district": '',
         "filter_created_by": '',
-        "filter_account_owner": email,
+        "filter_account_owner": ""/*email*/,
         "filter_frontliner_value": "",
         "filter_branch_head_value": '',
         "filter_zone_head_value": "",
@@ -732,6 +742,7 @@ class CommitDashboardVm extends GetxController{
     filterCustomDateController.value.clear();
     AccountOwner_controller.value.clear();
     typeOfCall_controller.value.clear();
+    filter_sale_cycle_id_cont.value.clear();
     ProductCategory_controller.value.clear();
     QuoteAccepted_controller.value.text = "OPEN";
     IsCommit_controller.value.text = 'Yes';
@@ -739,6 +750,8 @@ class CommitDashboardVm extends GetxController{
   //  clusterName_controller.value.clear();
     CustomerName_controller.value.clear();
     filter_created_on_cont.value.clear();
+    filter_created_on_star_to_cont.value.clear();
+
   //  RegionName_controller.value.clear();
     SelectedAccount_Master_list.value = [];
     SelectedEmployee_Member_list.value = [];
@@ -746,17 +759,19 @@ class CommitDashboardVm extends GetxController{
     SelectedCluster_list.value = [];
     SelectedRegion_list.value = [];
     //selectedSalesStageStatusList.value = [];
-    selectedSalesStageStatusList.value = ["All"];
+    //selectedSalesStageStatusList.value = ["All"];
     DateRange("monthly");
     filterCustomDateController.value.text = '${formattedStartDate} - ${formattedEndDate}';
-    RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join(',');
-    clusterName_controller.value.text = clusterGetByEmailList.map((e) => e.geoValue).join(',');
+    //RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join(',');
+    clusterName_controller.value.text = clusterGetByEmailList.map((e) => e.geoValue).join('|');
+    getRegionsWithClusterFilterGetByEmail();
 
 
   }
 
   void SaveFilterData() async{
     await sessionManagement.saveCommitDashboardData({
+      "filter_sale_cycle_id_cont": filter_sale_cycle_id_cont.value.text,
       "start_date": formattedStartDate.value,
       "end_date": formattedEndDate.value,
       "filter_custom_date": filterCustomDateController.value.text,
@@ -766,6 +781,7 @@ class CommitDashboardVm extends GetxController{
       "filter_product_category": ProductCategory_controller.value.text,
       "filter_commit": IsCommit_controller.value.text,
       "filter_created_on": filter_created_on_cont.value.text,
+      "filter_created_on_star_to_cont": filter_created_on_star_to_cont.value.text,
       "filter_owner_name": AccountOwner_controller.value.text,
       "filter_region_name":RegionName_controller.value.text,
       "filter_cluster_name": clusterName_controller.value.text,
@@ -780,6 +796,7 @@ class CommitDashboardVm extends GetxController{
 
     if(getFilterData.isNotEmpty){
       filterDataChecker.value='1';
+      filter_sale_cycle_id_cont.value.text=getFilterData["filter_sale_cycle_id_cont"]??"";
       filterCustomDateController.value.text=getFilterData["filter_custom_date"]??"";
       StageName_controller.value.text=getFilterData["filter_stage_name"]??"";
       QuoteAccepted_controller.value.text=getFilterData["filter_quote_accepted"]??"";
@@ -787,6 +804,7 @@ class CommitDashboardVm extends GetxController{
       ProductCategory_controller.value.text=getFilterData["filter_product_category"]??"";
       IsCommit_controller.value.text=getFilterData["filter_commit"]??"";
       filter_created_on_cont.value.text=getFilterData["filter_created_on"]??"";
+      filter_created_on_star_to_cont.value.text=getFilterData["filter_created_on_star_to_cont"]??"";
       AccountOwner_controller.value.text=getFilterData["filter_owner_name"]??"";
       pageNumber=0;
 
@@ -821,5 +839,102 @@ class CommitDashboardVm extends GetxController{
   String numberFormatWithComma(dynamic number) {
     final formatter = NumberFormat('#,##,###', 'en_IN');
     return formatter.format(number);
+  }
+
+  Future<void> exportNonStandardExcelWithProgress(BuildContext context, ) async {
+    try {
+      if(commitDashboardRecordList.length<=0){
+        Utils.sanckBarError("False!", "No Data Found");
+        return;
+      }
+
+      excelLoading.value = true;
+      excelProgress.value = 0;
+      showExcelProgressDialog(context);
+      final excel = Excel.createExcel();
+      excel.rename('Sheet1', "Commitment Dashboard Chart Report");
+      final sheet = excel["Commitment Dashboard Chart Report"];
+
+      sheet.cell(CellIndex.indexByColumnRow(columnIndex: 0, rowIndex: 0)).value = TextCellValue('Dashboard - Commitment');
+      sheet.cell(CellIndex.indexByColumnRow(columnIndex: 0, rowIndex: 1)).value = TextCellValue('Time Period : ${character.value} (${formattedStartDate} - ${formattedEndDate})');
+      sheet.cell(CellIndex.indexByColumnRow(columnIndex: 0, rowIndex: 2)).value = TextCellValue('Quote Accepted ${QuoteAccepted_controller.value.text}');
+      sheet.cell(CellIndex.indexByColumnRow(columnIndex: 0, rowIndex: 3)).value = TextCellValue('View : ${selectedOption.value}');
+      sheet.cell(CellIndex.indexByColumnRow(columnIndex: 0, rowIndex: 4)).value = TextCellValue('');
+
+      // Write Headers
+      List<String> headers = [];
+      final firstRowMap = removeExcelKeys(commitDashboardRecordList.first,);
+      headers = firstRowMap.keys.toList();
+      for (int col = 0; col < headers.length; col++) {
+        sheet.cell(CellIndex.indexByColumnRow(columnIndex: col, rowIndex: 5)).value
+        = TextCellValue(headers[col]);
+      }
+      final totalRows = commitDashboardRecordList.length;
+
+      for (int row = 0; row < totalRows; row++) {
+        final rowMap = removeExcelKeys(commitDashboardRecordList[row],);
+        for (int col = 0; col < headers.length; col++) {
+          final value = rowMap[headers[col]];
+          sheet.cell(CellIndex.indexByColumnRow(
+              columnIndex: col, rowIndex: row + 1+5)).value = value == null
+              ? TextCellValue('') : TextCellValue(value.toString());
+        }
+        excelProgress.value = ((row + 1) / totalRows) * 100;
+        await Future.delayed(const Duration(milliseconds: 5));
+      }
+      late Directory dir;
+      if (Platform.isAndroid) {
+        dir = Directory('/storage/emulated/0/Download');
+      }
+      else {
+        dir = await getApplicationDocumentsDirectory();
+      }
+
+      final fileName = "commitment_dashboard_chart_report.xlsx";
+      final filePath = "${dir.path}/$fileName";
+      final file = File(filePath);
+      if (await file.exists()) {
+        await file.delete();
+      }
+      await file.writeAsBytes(excel.encode()!);
+      excelProgress.value = 100;
+      excelLoading.value = false;
+      Get.back();
+      // Open File
+      await OpenFilex.open(filePath);
+      debugPrint("Excel saved at: $filePath");
+    }catch(e){
+      Utils.sanckBarError("Failed to download file!", e.toString());
+      print(e.toString());
+      excelLoading.value = false;
+      Get.back();
+    }
+  }
+
+  Map<String, dynamic> removeExcelKeys(Records item) {
+    final map = Map<String, dynamic>.from(item.toJson());
+    map.remove('geo_name');
+    map.remove('geo_value');
+    map.remove('email_id');
+    return map;
+  }
+
+  void showExcelProgressDialog(BuildContext context) {
+    Get.dialog(
+      Obx(() => AlertDialog(
+        title: const Text("Generating Excel"),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            LinearProgressIndicator(
+              value: excelProgress.value / 100,
+            ),
+            const SizedBox(height: 12),
+            Text("${excelProgress.value.toStringAsFixed(0)} %"),
+          ],
+        ),
+      )),
+      barrierDismissible: false,
+    );
   }
 }

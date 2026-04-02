@@ -1,4 +1,3 @@
-//import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -6,31 +5,30 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:navigation_drawer_flutter/constants/theme.dart';
 import 'package:navigation_drawer_flutter/reources/routes/app_routes.dart';
-import 'package:open_file/open_file.dart';
+import 'package:open_filex/open_filex.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'dart:io';
 
-
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-FlutterLocalNotificationsPlugin();
-final navigatorKey=GlobalKey<NavigatorState>();
-void main() async{
+    FlutterLocalNotificationsPlugin();
+final navigatorKey = GlobalKey<NavigatorState>();
+
+void main() async {
   // todo for Trust all certificates for network requests (for testing only).
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);//todo lock landscape mode
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp]); //todo lock landscape mode
   HttpOverrides.global = MyHttpOverrides();
   await _initLocalNotifications();
   runApp(const MyApp());
-
 }
 
 Future<void> _initLocalNotifications() async {
   const AndroidInitializationSettings androidSettings =
-  AndroidInitializationSettings('@mipmap/launcher_icon');
+      AndroidInitializationSettings('@mipmap/launcher_icon');
 
-  const DarwinInitializationSettings iosSettings =
-  DarwinInitializationSettings(
+  const DarwinInitializationSettings iosSettings = DarwinInitializationSettings(
     requestAlertPermission: true,
     requestBadgePermission: true,
     requestSoundPermission: true,
@@ -47,7 +45,8 @@ Future<void> _initLocalNotifications() async {
     onDidReceiveNotificationResponse: (response) async {
       final payload = response.payload;
       if (payload != null) {
-        await OpenFile.open(payload);
+        //await OpenFile.open(payload);
+        await OpenFilex.open(payload);
       }
     },
   );
@@ -61,7 +60,7 @@ Future<void> _initLocalNotifications() async {
 
   await flutterLocalNotificationsPlugin
       .resolvePlatformSpecificImplementation<
-      AndroidFlutterLocalNotificationsPlugin>()
+          AndroidFlutterLocalNotificationsPlugin>()
       ?.createNotificationChannel(channel);
 }
 
@@ -69,23 +68,23 @@ class MyHttpOverrides extends HttpOverrides {
   @override
   HttpClient createHttpClient(SecurityContext? context) {
     return super.createHttpClient(context)
-      ..badCertificateCallback = (X509Certificate cert, String host, int port) => true;
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
   }
 }
 
-class MyApp extends StatelessWidget{
-  static String app_CurrentStatus="Running";
+class MyApp extends StatelessWidget {
+  static String app_CurrentStatus = "Running";
+
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context)   {
-      /// requestPermission();
+  Widget build(BuildContext context) {
+    /// requestPermission();
     return GetMaterialApp(
       builder: (context, child) {
         return SafeArea(
-            top: false,
-            bottom: true,
-            child: child??const SizedBox.shrink());
+            top: false, bottom: true, child: child ?? const SizedBox.shrink());
       },
       debugShowCheckedModeBanner: false,
       title: 'Pristine Seeds',
@@ -93,7 +92,6 @@ class MyApp extends StatelessWidget{
       //home: ShowRoutesScreen(),
       getPages: AppRoutes.appRoutes(),
     );
-
   }
 
   Future<void> requestPermission() async {
@@ -118,45 +116,43 @@ class MyApp extends StatelessWidget{
     _isAndroidPermissionNotificationGranted();
     _requestPermissions_forNotification();
   }
+
   Future<bool> _isAndroidPermissionNotificationGranted() async {
     if (Platform.isAndroid) {
       final bool granted = await flutterLocalNotificationsPlugin
-          .resolvePlatformSpecificImplementation<
-          AndroidFlutterLocalNotificationsPlugin>()
-          ?.areNotificationsEnabled() ??
+              .resolvePlatformSpecificImplementation<
+                  AndroidFlutterLocalNotificationsPlugin>()
+              ?.areNotificationsEnabled() ??
           false;
 
       return granted;
     }
     return false;
   }
+
   Future<void> _requestPermissions_forNotification() async {
     if (Platform.isIOS || Platform.isMacOS) {
       await flutterLocalNotificationsPlugin
           .resolvePlatformSpecificImplementation<
-          IOSFlutterLocalNotificationsPlugin>()
+              IOSFlutterLocalNotificationsPlugin>()
           ?.requestPermissions(
-        alert: true,
-        badge: true,
-        sound: true,
-      );
+            alert: true,
+            badge: true,
+            sound: true,
+          );
       await flutterLocalNotificationsPlugin
           .resolvePlatformSpecificImplementation<
-          MacOSFlutterLocalNotificationsPlugin>()
+              MacOSFlutterLocalNotificationsPlugin>()
           ?.requestPermissions(
-        alert: true,
-        badge: true,
-        sound: true,
-      );
-    } else
-    if (Platform.isAndroid) {
+            alert: true,
+            badge: true,
+            sound: true,
+          );
+    } else if (Platform.isAndroid) {
       final AndroidFlutterLocalNotificationsPlugin? androidImplementation =
-      flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<
-          AndroidFlutterLocalNotificationsPlugin>();
+          flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<
+              AndroidFlutterLocalNotificationsPlugin>();
       await androidImplementation?.requestNotificationsPermission();
-
     }
   }
 }
-
-

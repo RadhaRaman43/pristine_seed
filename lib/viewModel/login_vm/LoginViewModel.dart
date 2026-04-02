@@ -28,25 +28,21 @@ class LoginViewModel extends GetxController{
     };
     await _api.loginApiHit(data,sessionManagement).then((value){
       try{
-
-        List<LoginResponse> loginResponse=(json.decode(value) as List).map((i) =>
-            LoginResponse.fromJson(i)).toList();
-
+        List<LoginResponse> loginResponse=(json.decode(value) as
+        List).map((i) => LoginResponse.fromJson(i)).toList();
         if(loginResponse!=null &&  loginResponse[0].condition=="True"){
           loading.value=false;
-
-         /* if(loginResponse[0].isHo=='1'){
+          if(loginResponse[0].isHo=='1'){
             sessionManagement.clearSession();
            Get.offAllNamed(RoutesName.loginScreen);
             Utils.sanckBarError('Message !', "Cluster User Can Not Access Mobile Application.");
             return;
-          }*/
-
-         // Utils.sanckBarSuccess("Success", loginResponse[0].message!);
+          }
+          // Utils.sanckBarSuccess("Success", loginResponse[0].message!);
           sessionManagement.setUserCode(loginResponse[0].userType.toString());
           sessionManagement.setCompanyId(loginResponse[0].companyId.toString());
           sessionManagement.setEmail(loginResponse[0].email.toString());
-          sessionManagement.setUserType(loginResponse[0].userTypeName.toString());
+          sessionManagement.setUserType(loginResponse[0].userType.toString());
           sessionManagement.setAuthToken(loginResponse[0].jwtToken.toString());
           sessionManagement.setRequestHostName(loginResponse[0].requestHostName.toString());
           sessionManagement.setName(loginResponse[0].name.toString());
@@ -56,7 +52,7 @@ class LoginViewModel extends GetxController{
           sessionManagement.setProfile(loginResponse[0].profile.toString());
           sessionManagement.setIsCrm(loginResponse[0].isCrm.toString());
           sessionManagement.setMenuList(loginResponse[0].menu ?? []);
-         // Get.toNamed(RoutesName.homeScreen);
+          // Get.toNamed(RoutesName.homeScreen);
           Get.offAllNamed(RoutesName.homeScreen);
 
         }
@@ -67,10 +63,12 @@ class LoginViewModel extends GetxController{
          // print(loginResponse.message);
           print("elseeee");
         }
-      }catch(e){
+      }
+      catch(e){
         Utils.showErrorToastification("Exception!",e.toString());
         print(e);
-      }finally{
+      }
+      finally{
         loading.value=false;
       }
 

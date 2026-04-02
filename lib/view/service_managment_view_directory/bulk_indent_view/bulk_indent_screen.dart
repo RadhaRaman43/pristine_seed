@@ -375,9 +375,9 @@ class BulkIndentListScreen extends StatelessWidget{
                     width: size.width * .04,
                   ),
                   Spacer(),
-                  Obx(
-                        () {
+                  Obx(() {
                       return Text(bulkIndentController
+                          .bulk_indent_list[position].indentStatus?.toLowerCase()=='ready for consumption'?'Ready For Receiving':bulkIndentController
                           .bulk_indent_list[position].indentStatus ?? "",
                         style: GoogleFonts.poppins(
                             color: AllColors.textColor,

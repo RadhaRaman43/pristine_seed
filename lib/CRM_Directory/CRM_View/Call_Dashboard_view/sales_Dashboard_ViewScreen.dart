@@ -75,7 +75,7 @@ class SalesDashboardViewscreen extends StatelessWidget{
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Visibility(
-                                visible: dashboard_view_Controller.userType != 'Branch Head',
+                                visible: dashboard_view_Controller.userType?.toLowerCase() != 'bh',
                                 child: _buildActionChip("Cluster")),
                             SizedBox(width: 8),
                             _buildActionChip("Region"),
@@ -86,7 +86,7 @@ class SalesDashboardViewscreen extends StatelessWidget{
                       ),
                     ),
                   ),
-                  visible: dashboard_view_Controller.userType != 'Frontliners',
+                  visible: dashboard_view_Controller.userType?.toLowerCase() != 'fl',
                 ),
                 Container(
                   margin: EdgeInsets.only(top: 15.0,left: 10,right: 10),
@@ -1671,10 +1671,10 @@ class SalesDashboardViewscreen extends StatelessWidget{
                     Obx(() {
                       return RadioListTile<String>(
                         title: const Text(
-                          'Month',
+                          'Monthly',
                           style: TextStyle(fontSize: AllFontSize.sisxteen),
                         ),
-                        value: 'Month',
+                        value: 'Monthly',
                         dense: true,
                         groupValue:
                         dashboard_view_Controller.character.value.toString(),

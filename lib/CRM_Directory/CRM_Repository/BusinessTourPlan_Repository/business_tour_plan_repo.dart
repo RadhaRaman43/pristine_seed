@@ -68,12 +68,19 @@ class BusinessTourPlanRepo{
     return _apiService.postApi(data, AppUrl.BusinessTourPlanAllLineGet,sessionManagement);
   }
 
+  Future<String> BusinessTourPlanDelete(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.BusinessTourPlanDelete,sessionManagement);
+  }
+
   Future<String> clustersGetByEmailApiHit(var data,SessionManagement sessionManagement) async{
     return _apiService.getApi(AppUrl.ClustersGetByEmail, sessionManagement, data);
   }
 
   Future<String> RegionsWithClusterFilterGetByEmailApiHit(var data,SessionManagement sessionManagement) async{
     return _apiService.getApi(AppUrl.RegionsWithClusterFilterGetByEmail, sessionManagement, data);
+  }
+  Future<String> EmployeeMatserGetApiHit(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.get_employee_master,sessionManagement);
   }
 
 

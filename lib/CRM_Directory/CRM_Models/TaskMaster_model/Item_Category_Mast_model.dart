@@ -12,6 +12,7 @@ class ItemCategoryMstModel {
   int? expiryRange;
   int? tolerance;
   int? toleranceMrp;
+  String? parentCategoryCode;
 
   ItemCategoryMstModel(
       {this.condition,
@@ -26,7 +27,9 @@ class ItemCategoryMstModel {
         this.isSelected,
         this.expiryRange,
         this.tolerance,
-        this.toleranceMrp});
+        this.toleranceMrp,
+        this.parentCategoryCode
+      });
 
   ItemCategoryMstModel.fromJson(Map<String, dynamic> json) {
     condition = json['condition'];
@@ -42,6 +45,7 @@ class ItemCategoryMstModel {
     expiryRange = json['expiry_range'];
     tolerance = json['tolerance'];
     toleranceMrp = json['tolerance_mrp'];
+    parentCategoryCode = json['parent_category_code'];
   }
 
   Map<String, dynamic> toJson() {
@@ -59,6 +63,7 @@ class ItemCategoryMstModel {
     data['expiry_range'] = this.expiryRange;
     data['tolerance'] = this.tolerance;
     data['tolerance_mrp'] = this.toleranceMrp;
+    data['parent_category_code'] = this.parentCategoryCode;
     return data;
   }
 }

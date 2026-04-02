@@ -12,6 +12,7 @@ import 'package:navigation_drawer_flutter/view/check_in_approval/check_in_approv
 import 'package:navigation_drawer_flutter/view/forget_password/forget_password_screen.dart';
 import 'package:navigation_drawer_flutter/view/home_view/home_screen.dart';
 import 'package:navigation_drawer_flutter/view/notification_view/notification_screen.dart';
+import 'package:navigation_drawer_flutter/view/service_managment_view_directory/preventive_view/addNewPreventiveCalenderScreen.dart';
 import 'package:navigation_drawer_flutter/view/show_route/show_route.dart';
 import 'package:navigation_drawer_flutter/view/splash_view/splash_screen.dart';
 import 'package:navigation_drawer_flutter/view/user_expense/create_expense_screen.dart';
@@ -77,6 +78,7 @@ import '../../CRM_Directory/CRM_View/sales_cycle/sales_cycle_view/sales_cycle_sc
 import '../../CRM_Directory/CRM_View/sales_cycle/sales_cycle_view/sales_product_list.dart';
 import '../../CRM_Directory/CRM_View/sales_cycle/sales_cycle_view/update_bussiness_term_page.dart';
 import '../../CRM_Directory/CRM_View/sales_cycle/sales_cycle_view/update_quote_line_data_screen.dart';
+import '../../CRM_Directory/CRM_View/sales_cycle/sales_cycle_view/update_sale_infra_detail_screen.dart';
 import '../../CRM_Directory/CRM_View/sales_cycle/sales_cycle_view/view_sale_header_screen.dart';
 import '../../view/check_in_approval/check_in_approval_header_view_screen.dart';
 import '../../view/check_in_view/check_in_screen.dart';
@@ -243,6 +245,16 @@ class AppRoutes{
         transitionDuration: Duration(microseconds: 180),
         transition: Transition.rightToLeftWithFade
     ),
+
+    GetPage(name: RoutesName.add_new_preventive_calender_screen,
+        page: ()=>AddNewPreventiveCalenderScreen(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
+
+
+
+
 
     GetPage(name: RoutesName.notofication_screen,
         page: ()=>NotificationScreen(),
@@ -670,6 +682,11 @@ class AppRoutes{
         transition: Transition.rightToLeftWithFade
     ),
 
+    GetPage(name: RoutesName.update_sale_infra_detail_screen,
+        page: ()=>UpdateSaleInfraDetailScreen(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
 
     GetPage(name: RoutesName.salesAdviseCreateScreen,
         page: ()=>SalesAdviseCreateScreen(),

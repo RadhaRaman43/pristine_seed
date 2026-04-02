@@ -310,7 +310,8 @@ class SalesCyclePendingForApprovalVm extends GetxController{
             loading.value = false;
             regionwithclusterGetByEmailList.value=response;
             RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join('|');
-            print('region....${RegionName_controller.value.text}');
+            SelectedRegion_list.assignAll(regionwithclusterGetByEmailList);
+            //print('region....${RegionName_controller.value.text}');
             getFilterData();
             //getsalesCycleData(pageNumber);
 
@@ -430,8 +431,8 @@ class SalesCyclePendingForApprovalVm extends GetxController{
     proposedSolutionController.value.clear();
     postalCodeController.value.clear();
     district_controller.value.clear();
-    RegionName_controller.value.clear();
-    clusterName_controller.value.clear();
+    //RegionName_controller.value.clear();
+    //clusterName_controller.value.clear();
     createdByController.value.clear();
     filterExpectedClosuredateController.value.clear();
     createdOnCnontroller.value.clear();
@@ -443,6 +444,11 @@ class SalesCyclePendingForApprovalVm extends GetxController{
     AccountOwnerForApi = '';
     AccountOwner_controller.value.clear();
     SelectedEmployee_Member_list.value = [];
+    SelectedCluster_list.value = [];
+    SelectedRegion_list.value = [];
+    //RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join(',');
+    clusterName_controller.value.text = clusterGetByEmailList.map((e) => e.geoValue).join(',');
+    getRegionsWithClusterFilterGetByEmail();
   }
 
 

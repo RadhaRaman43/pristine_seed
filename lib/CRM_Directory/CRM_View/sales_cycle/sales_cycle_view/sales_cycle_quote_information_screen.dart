@@ -72,11 +72,11 @@ class QuoteInformationScreen extends StatelessWidget {
         else if(saleCycleController.quoteApprovalPage.value=="FromAllSPRMapping"){
           pendingDraftQuoteController.clearAllFieldOfQuoteFilter();
           pendingDraftQuoteController.pageNumberForQuote =0;
-          pendingDraftQuoteController.getPendingDraftQuoteList(pendingDraftQuoteController.pageNumberForQuote, "ALLSPRMAPPING");
+          //pendingDraftQuoteController.getPendingDraftQuoteList(pendingDraftQuoteController.pageNumberForQuote, "ALLSPRMAPPING");
+          print("FromAllSPRMapping.....");
           Get.offNamed(RoutesName.allSPRMappingScreen);
         }
-        else if (saleCycleController.quoteApprovalPage.value ==
-            "approvedQuotationScreen") {
+        else if (saleCycleController.quoteApprovalPage.value == "approvedQuotationScreen") {
           saleCycleController.pageNumberForQuote = 0;
           saleCycleController.getQuoteHeaderData(
               saleCycleController.pageNumberForQuote,
@@ -86,9 +86,10 @@ class QuoteInformationScreen extends StatelessWidget {
         } else if (saleCycleController.quoteApprovalPage.value ==
             "QuoteDashboard") {
           Get.toNamed(RoutesName.AccountDashboardDataQuotation_Screen);
-        } else {
+        }
+        else {
           saleCycleController.clearAllFieldOfQuoteFilter();
-          saleCycleController.clearAllFieldOfFilter();
+          //saleCycleController.clearAllFieldOfFilter();
           saleCycleController.pageNumber = 0;
           saleCycleController.pageNumberForQuote = 0;
           saleCycleController.filterQuoteAcceptedFlag.value = "";
@@ -98,10 +99,10 @@ class QuoteInformationScreen extends StatelessWidget {
               "",
               saleCycleController.FromPage.value);
 
-          saleCycleController.getQuoteHeaderData(
+          /*saleCycleController.getQuoteHeaderData(
               saleCycleController.pageNumberForQuote,
               saleCycleController.quoteHeaderdata[0].salesCycleId!,
-              '');
+              '');*/
           Get.toNamed(RoutesName.viewSalesCycleHeaderScreen);
         }
         // saleCycleController.FromPage="Sales";
@@ -271,12 +272,8 @@ class QuoteInformationScreen extends StatelessWidget {
                                         ),
                                       ),
                                       onPressed: () {
-                                        saleCycleController
-                                            .quoteStatusController.value
-                                            .clear();
-                                        saleCycleController
-                                            .rejectreasonQuoteController.value
-                                            .clear();
+                                        saleCycleController.quoteStatusController.value.clear();
+                                        saleCycleController.rejectreasonQuoteController.value.clear();
                                         saleCycleController
                                             .managerRemarksController.value
                                             .clear();
@@ -326,7 +323,7 @@ class QuoteInformationScreen extends StatelessWidget {
                           return Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Visibility(
-                              visible:(saleCycleController.userType?.toLowerCase()=='branch head' ||
+                              visible:(saleCycleController.userType?.toLowerCase()=='bh' ||
                                   saleCycleController.email.toLowerCase()==saleCycleController.quoteHeaderdata[0].createdBy?.toLowerCase())
                                   && saleCycleController.quoteHeaderdata[0].quoteStatus?.toLowerCase() == 'approved' &&
                                   saleCycleController.quoteHeaderdata[0].quoteStatusWon?.toLowerCase() == 'open',
@@ -361,13 +358,16 @@ class QuoteInformationScreen extends StatelessWidget {
                         }),
 
                         Obx(() {
+                          print("quote accepted ${saleCycleController.quoteHeaderdata[0].quoteAccepted?.toLowerCase() != "loss"}");
                          return Visibility(
-                            visible: ((saleCycleController.quoteHeaderdata[0].quoteStatus?.toLowerCase() == "draft" &&
+                            visible: saleCycleController.quoteHeaderdata[0].quoteAccepted?.toLowerCase() != "loss"&&
+                                saleCycleController.quoteHeaderdata[0].quoteAccepted?.toLowerCase() != "won"&&(
+                                (saleCycleController.quoteHeaderdata[0].quoteStatus?.toLowerCase() == "draft" &&
                                     saleCycleController.quoteHeaderdata[0].quoteAccepted?.toLowerCase() == "open"&&
-                                    saleCycleController.quoteHeaderdata[0].isReadySendForApproval == 1) ||
-                                saleCycleController.isAdminWritePermission=="1" ||
-                                    ((saleCycleController.userType.toLowerCase()=="cluster head"||saleCycleController.userType.toLowerCase()=="branch head"||
-                                        saleCycleController.userType.toLowerCase()=="general manager") &&
+                                    saleCycleController.quoteHeaderdata[0].isReadySendForApproval == 1)
+                                    || saleCycleController.isAdminWritePermission=="1"
+                                    || ((saleCycleController.userType.toLowerCase()=="ch"||saleCycleController.userType.toLowerCase()=="bh"||
+                                        saleCycleController.userType.toLowerCase()=="gm") &&
                                     saleCycleController.quoteHeaderdata[0].quoteStatus?.toLowerCase() == "pending for approval")) ? true : false,
                             child: GestureDetector(
                               onTap: () {
@@ -423,10 +423,24 @@ class QuoteInformationScreen extends StatelessWidget {
                             ),
                           );
                         }),
-
-
-
-
+                        Visibility(
+                          visible: saleCycleController.isAdminWritePermission=="1",
+                          child: ActionChip(
+                          label: Text(
+                            "Move To Draft",
+                            style: GoogleFonts.poppins(
+                              color: AllColors.whiteColor,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          onPressed: () {
+                            moveToDraftDialog(context);
+                          },
+                          backgroundColor: AllColors.primaryDark1,
+                          shape: StadiumBorder(
+                            side: BorderSide.none,
+                          ),
+                        ),)
                       ],
                     ),
                     Obx(() {
@@ -611,10 +625,10 @@ class QuoteInformationScreen extends StatelessWidget {
                         Obx(() {
                           final bool showGM =
                               saleCycleController.isAdminWritePermission == "1" ||
-                                  saleCycleController.userType.toLowerCase() == "general manager";
-                          final bool showbh=saleCycleController.userType?.toLowerCase()=='branch head' ||
-                              saleCycleController.userType?.toLowerCase()=='cluster head'||
-                              saleCycleController.userType?.toLowerCase()=='general manager'||
+                                  saleCycleController.userType.toLowerCase() == "gm"||saleCycleController.GmApproveDetail.value;
+                          final bool showbh=saleCycleController.userType?.toLowerCase()=='bh' ||
+                              saleCycleController.userType?.toLowerCase()=='ch'||
+                              saleCycleController.userType?.toLowerCase()=='gm'||
                               saleCycleController.isAdminWritePermission.value=="1";
 
                           final data = saleCycleController.quoteHeaderdata[0];
@@ -716,7 +730,6 @@ class QuoteInformationScreen extends StatelessWidget {
                       height: 1,
                       color: AllColors.primaryDark1,
                     )),
-
                   ]),
                 ),
               ),
@@ -850,8 +863,22 @@ class QuoteInformationScreen extends StatelessWidget {
                   ],
                 ),
               ),
-              Obx(() {
-                return Visibility(
+              Visibility(
+                visible: saleCycleController.isAdminWritePermission=='1' && saleCycleController
+                    .quoteHeaderdata[0].quoteStatus?.toLowerCase()=="pending for approval",
+                  child: InkWell(
+                    onTap: () {
+                      showDialogForDelete(context, index);
+                    },
+                    child:
+                    Icon(Icons.delete, color: Colors.red, size: 27),
+                  ),),
+
+              const SizedBox(
+                width: 10,
+              ),
+
+                 Visibility(
                   visible:(saleCycleController.showBranchHead.value ||
                       saleCycleController.showClusterHead.value ||
                       saleCycleController.showGeneralManager.value || saleCycleController.isAdminWritePermission=='1') && saleCycleController
@@ -894,8 +921,8 @@ class QuoteInformationScreen extends StatelessWidget {
                               color: AllColors.textColor,
                             )),
                       )),
-                );
-              })
+                )
+
             ],
           ),
           subtitle: Column(
@@ -911,10 +938,10 @@ class QuoteInformationScreen extends StatelessWidget {
                           bindData( "LSP :","₹ ${saleCycleController.numberFormatWithComma(saleCycleController.quoteLinedata[index].listSellingPrice).toString()}",context),
                           Obx(() {
                             return Visibility(
-                              visible: saleCycleController.userType?.toLowerCase()=='branch head' ||
-                                  saleCycleController.userType?.toLowerCase()=='cluster head'||
+                              visible: saleCycleController.userType?.toLowerCase()=='bh' ||
+                                  saleCycleController.userType?.toLowerCase()=='ch'||
                                   saleCycleController.isAdminWritePermission=="1" ||
-                                  saleCycleController.userType?.toLowerCase()=='general manager',
+                                  saleCycleController.userType?.toLowerCase()=='gm',
                               child: bindData("MAP : ","₹ ${saleCycleController.numberFormatWithComma(saleCycleController
                                   .quoteLinedata[index].minimalAcceptablePrice).toString()}",context),
                             );
@@ -928,13 +955,13 @@ class QuoteInformationScreen extends StatelessWidget {
 
                             );
                           }),*/
-                          bindData( "Seeking % : ",(saleCycleController.quoteLinedata[index].discountPer?.toInt()).toString(),context),
+                          bindData( "Seeking % : ",saleCycleController.quoteLinedata[index].discountPer.toString(),context),
                           bindData( "Seeking Amt P/U : ","₹ ${saleCycleController.numberFormatWithComma(saleCycleController.quoteLinedata[index].discountAmtPerUnit).toString()}",context),
                           Obx((){
                             return Visibility(
-                              visible: saleCycleController.userType?.toLowerCase()=='branch head' ||
-                                  saleCycleController.userType?.toLowerCase()=='cluster head'||
-                                  saleCycleController.userType?.toLowerCase()=='general manager'||
+                              visible: saleCycleController.userType?.toLowerCase()=='bh' ||
+                                  saleCycleController.userType?.toLowerCase()=='ch'||
+                                  saleCycleController.userType?.toLowerCase()=='gm'||
                                   saleCycleController.isAdminWritePermission.value=="1",
                             /*  visible: saleCycleController.showBranchHead.value ||
                                   saleCycleController.showClusterHead.value || saleCycleController.isAdminWritePermission.value=="1",*/
@@ -945,7 +972,7 @@ class QuoteInformationScreen extends StatelessWidget {
                           Obx(() {
                             return Visibility(
                               visible:
-                              saleCycleController.userType?.toLowerCase()=='general manager' || saleCycleController.isAdminWritePermission=="1",
+                              saleCycleController.userType?.toLowerCase()=='gm' || saleCycleController.isAdminWritePermission=="1",
                               child:  bindData( "Std Cost : ","₹ ${
                                   saleCycleController.numberFormatWithComma(saleCycleController.quoteLinedata[index].standardCost).toString()}",context),
                             );
@@ -960,7 +987,8 @@ class QuoteInformationScreen extends StatelessWidget {
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
                                   Visibility(
-                                      visible: saleCycleController.userType?.toLowerCase()=='general manager' || saleCycleController.isAdminWritePermission=="1",
+                                      visible: saleCycleController.userType?.toLowerCase()=='gm' || saleCycleController.isAdminWritePermission=="1" ||
+                                          saleCycleController.GmApproveDetail.value,
                                       child: Column(
                                         children: [
                                           bindData( "Gm % : ",saleCycleController.quoteLinedata[index].gmDiscountPer.toString(),context),
@@ -976,9 +1004,9 @@ class QuoteInformationScreen extends StatelessWidget {
                                   bindData("Price P/U : ","₹ ${saleCycleController.numberFormatWithComma(saleCycleController.quoteLinedata[index].quoteLinePrice).toString()}",context),
                                   bindData("Total Seeking Price : ","₹ ${saleCycleController.numberFormatWithComma(saleCycleController.quoteLinedata[index].discountAmt).toString()}",context),
                                    Visibility(
-                                      visible: saleCycleController.userType?.toLowerCase()=='branch head' ||
-                                          saleCycleController.userType?.toLowerCase()=='cluster head'||
-                                          saleCycleController.userType?.toLowerCase()=='general manager'||
+                                      visible: saleCycleController.userType?.toLowerCase()=='bh' ||
+                                          saleCycleController.userType?.toLowerCase()=='ch'||
+                                          saleCycleController.userType?.toLowerCase()=='gm'||
                                           saleCycleController.isAdminWritePermission.value=="1",
                                       child:  bindData( "Bm % : ",saleCycleController.quoteLinedata[index].bmDiscountPer.toString(),context),
                                     ),
@@ -993,10 +1021,6 @@ class QuoteInformationScreen extends StatelessWidget {
                               ),
                             );
                           }),
-
-
-
-
                           Obx((){
                            return Row(
                               mainAxisAlignment: MainAxisAlignment.end,
@@ -1022,8 +1046,7 @@ class QuoteInformationScreen extends StatelessWidget {
                                     )),
 
 
-                                Visibility(
-                                    visible: saleCycleController.readMoreList[index],
+                                Visibility(visible: saleCycleController.readMoreList[index],
                                     child: GestureDetector(
                                       onTap: (){
                                         saleCycleController.readMoreList[index] = false;
@@ -1040,15 +1063,13 @@ class QuoteInformationScreen extends StatelessWidget {
                                           Icon(Icons.keyboard_arrow_up,   color: Colors.blue,)
                                         ],
                                       ),
-                                    ))
+                                    )
+                                )
                               ],
                             );
                           })
-
-
                         ],
                       )),
-
                   SizedBox(width: 5,),
 
                 ],
@@ -1057,83 +1078,49 @@ class QuoteInformationScreen extends StatelessWidget {
                 return Visibility(
                   //visible:saleCycleController.quoteHeaderdata[0].createdBy==saleCycleController.email && saleCycleController.quoteHeaderdata[0].quoteStatus=="Pending"?true:false,
                   //visible:saleCycleController.quoteHeaderdata[0].quoteStatus=="Pending"?true:false,
-                  visible: saleCycleController.quoteHeaderdata[0].quoteStatus
-                                  ?.toLowerCase() ==
-                              "draft" &&
-                          saleCycleController.quoteHeaderdata[0].quoteAccepted
-                                  ?.toLowerCase() ==
-                              "open" && saleCycleController.quoteHeaderdata[0].createdBy?.toLowerCase()==saleCycleController.email.toLowerCase()
-                      ? true
-                      : false,
+                  visible: saleCycleController.quoteHeaderdata[0].quoteStatus?.toLowerCase() == "draft" &&
+                          saleCycleController.quoteHeaderdata[0].quoteAccepted?.toLowerCase() == "open" &&
+                      saleCycleController.quoteHeaderdata[0].createdBy?.toLowerCase()==saleCycleController.email.toLowerCase()
+                      ? true : false,
                   child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         InkWell(
                           onTap: () {
-                            saleCycleController.updateItemDescriptionController
-                                .value.text = saleCycleController
-                                    .quoteLinedata[index].itemName
-                                    .toString() +
+                            saleCycleController.updateItemDescriptionController.value.text =
+                                saleCycleController.quoteLinedata[index].itemName.toString() +
                                 "(${saleCycleController.quoteLinedata[index].itemCode})";
-                            saleCycleController.updateItemDescription2Controller
-                                    .value.text =
-                                saleCycleController
-                                    .quoteLinedata[index].itemDescription
-                                    .toString();
-                            saleCycleController
-                                    .qtyUpdateLineController.value.text =
-                                (saleCycleController.quoteLinedata[index].qty?.toInt())
-                                    .toString();
-                            saleCycleController
-                                    .updateUnitPriceController.value.text =
-                                saleCycleController
-                                    .quoteLinedata[index].unitPrice
-                                    .toString();
-                            saleCycleController
-                                    .updateManualPriceController.value.text =
-                                saleCycleController
-                                    .quoteLinedata[index].quoteLinePrice
-                                    .toString();
-                            saleCycleController
-                                    .updateDiscountPerController.value.text =
-                                (saleCycleController
-                                    .quoteLinedata[index].discountPer?.toInt())
-                                    .toString();
+                            saleCycleController.updateItemDescription2Controller.value.text =
+                                saleCycleController.quoteLinedata[index].itemDescription.toString();
+                            saleCycleController.qtyUpdateLineController.value.text =
+                                (saleCycleController.quoteLinedata[index].qty?.toInt())==0?"":
+                                (saleCycleController.quoteLinedata[index].qty?.toInt()).toString();
+                            saleCycleController.updateUnitPriceController.value.text =
+                                saleCycleController.quoteLinedata[index].unitPrice.toString();
+                            saleCycleController.updateManualPriceController.value.text =
+                                saleCycleController.quoteLinedata[index].quoteLinePrice.toString();
 
-                            saleCycleController
-                                    .updateDiscountAmountController.value.text =
-                                saleCycleController
-                                    .quoteLinedata[index].approvedDiscountPer
-                                    .toString();
-                            saleCycleController
-                                    .gmDiscountPerContoller.value.text =
-                                saleCycleController
-                                    .quoteLinedata[index].gmDiscountPer
-                                    .toString();
-                            saleCycleController
-                                    .salesCreditPerContoller.value.text =
-                                saleCycleController
-                                    .quoteLinedata[index].salesCredit
-                                    .toString();
 
-                            saleCycleController
-                                    .updateAmountController.value.text =
-                                saleCycleController
-                                    .quoteLinedata[index].mrpPrice
-                                    .toString();
-                            saleCycleController
-                                    .updateTaxPerLineController.value.text =
-                                saleCycleController.quoteLinedata[index].sgstPer
-                                    .toString();
-                            saleCycleController
-                                    .updateTaxAmountLineController.value.text =
-                                saleCycleController.quoteLinedata[index].sgstAmt
-                                    .toString();
-                            saleCycleController.updateGrossAmountLineController
-                                    .value.text =
-                                saleCycleController
-                                    .quoteLinedata[index].grossAmount
-                                    .toString();
+                            saleCycleController.updateDiscountPerController.value.text =
+                                saleCycleController.quoteLinedata[index].discountPer ==0?"":
+                                saleCycleController.quoteLinedata[index].discountPer.toString();
+
+
+
+                            saleCycleController.updateDiscountAmountController.value.text =
+                                saleCycleController.quoteLinedata[index].approvedDiscountPer.toString();
+                            saleCycleController.gmDiscountPerContoller.value.text =
+                                saleCycleController.quoteLinedata[index].gmDiscountPer.toString();
+                            saleCycleController.salesCreditPerContoller.value.text =
+                                saleCycleController.quoteLinedata[index].salesCredit.toString();
+                            saleCycleController.updateAmountController.value.text =
+                                saleCycleController.quoteLinedata[index].mrpPrice.toString();
+                            saleCycleController.updateTaxPerLineController.value.text =
+                                saleCycleController.quoteLinedata[index].sgstPer.toString();
+                            saleCycleController.updateTaxAmountLineController.value.text =
+                                saleCycleController.quoteLinedata[index].sgstAmt.toString();
+                            saleCycleController.updateGrossAmountLineController.value.text =
+                                saleCycleController.quoteLinedata[index].grossAmount.toString();
                             /*saleCycleController.warrentyPeriodController.value.text= saleCycleController.quoteLinedata[index]
                                 .warrantyPeriod.toString();
                             saleCycleController.deliveryWeeksController.value.text= saleCycleController.quoteLinedata[index]
@@ -1285,7 +1272,7 @@ class QuoteInformationScreen extends StatelessWidget {
                     value: saleCycleController.quoteHeaderdata[0].salesCycleId ?? "",
                     color: AllColors.textColor,
                   ),
-                  SizedBox(height: 3,),
+
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -1332,59 +1319,71 @@ class QuoteInformationScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-                  SizedBox(height: 3,),
+
                   _buildLabelWithValue(
                     label: "Customer Code",
                     value: saleCycleController.quoteHeaderdata[0].accountCode ?? "",
                     color: AllColors.textColor,
                   ),
-                  SizedBox(height: 3,),
+
                   _buildLabelWithValue(
                     label: "Contact Name",
                     value: saleCycleController.quoteHeaderdata[0].contactName ?? "",
                     color: AllColors.textColor,
                   ),
-
-                  SizedBox(height: 3,),
                   _buildLabelWithValue(
-                    label: "Product Category",
-                    value: saleCycleController.quoteHeaderdata[0].productCategory ?? "",
+                      label: "Product Category",
+                      value: saleCycleController.quoteHeaderdata[0].productCategory
+
+                          ?? "",
+                      color: AllColors.textColor,
+                      context: context
+                  ),
+
+                  _buildLabelWithValue(
+                    label: "P. Product Category",
+                    value: saleCycleController.quoteHeaderdata[0].parentProductCategoryCode ?? "",
                     color: AllColors.textColor,
                     context: context
                   ),
 
-                  SizedBox(height: 3,),
+
                   _buildLabelWithValue(
                     label: "Quote Status",
                     value: saleCycleController.quoteHeaderdata[0].quoteStatus ?? "",
                     color: getStatusColor(saleCycleQuoteStatus),
                   ),
 
-                  SizedBox(height: 3,),
                   _buildLabelWithValue(
                     label: "Expected Closure Date",
                     value: expectedclosuredate.toString(),
                     color: AllColors.textColor,
                   ),
-                  SizedBox(height: 3,),
+
                   _buildLabelWithValue(
                     label: "Quote Validity",
                     value: quoteValidityDate.toString(),
                     color: AllColors.textColor,
                   ),
-                  SizedBox(height: 3,),
+
+                  _buildLabelWithValue(
+                    label: "Quote Version",
+                    value: saleCycleController.quoteHeaderdata[0].quoteVersion.toString() ?? '',
+                    color: AllColors.textColor,
+                  ),
+
                   _buildLabelWithValue(
                     label: "Kind Attention",
                     value: saleCycleController.quoteHeaderdata[0].kindAttention ?? '',
                     color: AllColors.textColor,
                   ),
-                  SizedBox(height: 3,),
+
                   _buildLabelWithValue(
                     label: "Terms & Condition",
                     value: saleCycleController.quoteHeaderdata[0].termsAndCondition ?? '',
                     color: AllColors.textColor,
                   ),
-                  SizedBox(height: 3,),
+
                   Row(
                     children: [
                       Text(
@@ -1426,38 +1425,38 @@ class QuoteInformationScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-                  SizedBox(height: 3,),
+
                   _buildLabelWithValue(
                     label: "Installation Charges",
                     value: saleCycleController.quoteHeaderdata[0].installationCharges == null ? "" : saleCycleController.quoteHeaderdata[0].installationCharges.toString(),
                     color: AllColors.textColor,
                   ),
-                  SizedBox(height: 3,),
+
                   _buildLabelWithValue(
                     label: "Other Charges",
                     value: saleCycleController.quoteHeaderdata[0].otherCharges == null ? "" : saleCycleController.quoteHeaderdata[0].otherCharges.toString(),
                     color: AllColors.textColor,
                   ),
-                  SizedBox(height: 3,),
+
                   _buildLabelWithValue(
                     label: "Warranty Period",
                     value: saleCycleController.quoteHeaderdata[0].warrantyPeriod ?? '',
                     color: AllColors.textColor,
                   ),
-                  SizedBox(height: 3,),
+
                   _buildLabelWithValue(
                     label: "Delivery In Weeks",
                     value: saleCycleController.quoteHeaderdata[0].deliveryInWeeks ?? '',
                     color: AllColors.textColor,
                   ),
-                  SizedBox(height: 3,),
+
                   _buildLabelWithValue(
                     label: "Advance Payment %",
                     value: saleCycleController.quoteHeaderdata[0].advancePaymentPer == null
                         ? "" : saleCycleController.quoteHeaderdata[0].advancePaymentPer.toString(),
                     color: AllColors.textColor,
                   ),
-                  SizedBox(height: 3,),
+
                   _buildLabelWithValue(
                     label: "Advance Payment Amt",
                     value:saleCycleController.quoteHeaderdata[0].advancePaymentAmt == null?"":" ₹ ${saleCycleController.numberFormatWithComma(
@@ -1466,26 +1465,26 @@ class QuoteInformationScreen extends StatelessWidget {
                     color: AllColors.textColor,
                   ),
 
-                  SizedBox(height: 3,),
+
                   _buildLabelWithValue(
                     label: "FrontLiner Remarks",
                     value: saleCycleController.quoteHeaderdata[0].otherRemarks ?? '',
                     color: AllColors.textColor,
                   ),
-                  SizedBox(height: 3,),
+
                   _buildLabelWithValue(
                     label: "Quote Accepted",
                     value: saleCycleController.quoteHeaderdata[0].quoteAccepted ?? '',
                     color: AllColors.textColor,
                   ),
 
-                  SizedBox(height: 3,),
+
                   _buildLabelWithValue(
                     label: "Quote Commit",
                     value: saleCycleController.quoteHeaderdata[0].quoteCommit.toString() == '1' ? 'Yes' : 'No',
                     color: saleCycleController.quoteHeaderdata[0].quoteCommit.toString() == '1'?AllColors.greenblue:AllColors.redColor,
                   ),
-                  SizedBox(height: 3,),
+
                   _buildLabelWithValue(
                     label: "Quote Total Amt.",
                     value:" ₹ ${saleCycleController.numberFormatWithComma(
@@ -1493,7 +1492,7 @@ class QuoteInformationScreen extends StatelessWidget {
                     //value: saleCycleController.quoteHeaderdata[0].quoteTotalAmount.toString() ?? '',
                     color: AllColors.textColor,
                   ),
-                  SizedBox(height: 3,),
+
                   _buildLabelWithValue(
                     label: "Quote GST Amt.",
                     value:" ₹ ${saleCycleController.numberFormatWithComma(
@@ -1501,7 +1500,7 @@ class QuoteInformationScreen extends StatelessWidget {
                     //value:  saleCycleController.quoteHeaderdata[0].quoteGstAmount.toString() ?? '',
                     color: AllColors.textColor,
                   ),
-                  SizedBox(height: 3,),
+
                   _buildLabelWithValue(
                     label: "Quote Gross Amt.",
                     value:" ₹ ${saleCycleController.numberFormatWithComma(
@@ -1509,31 +1508,31 @@ class QuoteInformationScreen extends StatelessWidget {
                     //value: saleCycleController.quoteHeaderdata[0].quoteGrossAmount.toString() ?? "",
                     color: AllColors.textColor,
                   ),
-                  SizedBox(height: 3,),
+
                   _buildLabelWithValue(
                     label: "Created By",
                     value: saleCycleController.quoteHeaderdata[0].createdFullName ?? '',
                     color: AllColors.textColor,
                   ),
-                  SizedBox(height: 3,),
+
                   _buildLabelWithValue(
                     label: "Created on",
                     value: dateTimeCreatedOn.toString(),
                     color: AllColors.textColor,
                   ),
-                  SizedBox(height: 3,),
+
                   _buildLabelWithValue(
                     label: "Cluster",
                     value: saleCycleController.quoteHeaderdata[0].clustureHeadValue ?? '',
                     color: AllColors.textColor,
                   ),
-                  SizedBox(height: 3,),
+
                   _buildLabelWithValue(
                     label: "Region",
                     value: saleCycleController.quoteHeaderdata[0].branchHeadValue ?? '',
                     color: AllColors.textColor,
                   ),
-                  SizedBox(height: 3,),
+
                   _buildLabelWithValue(
                     label: "Reject Reason",
                     value: saleCycleController.quoteHeaderdata[0].rejectReason ?? '',
@@ -1567,7 +1566,7 @@ class QuoteInformationScreen extends StatelessWidget {
                     value: saleCycleController.quoteHeaderdata[0].wonOn ?? '',
                     color: AllColors.textColor,
                   ),
-                  SizedBox(height: 3,),
+
                 ],
               ),
             ),
@@ -1615,19 +1614,35 @@ class QuoteInformationScreen extends StatelessWidget {
           ),
         ),
 
-        if (label == "Product Category" &&
+        if (label == "P. Product Category" &&
             saleCycleController.quoteHeaderdata[0].quoteStatus?.toLowerCase() ==
                 "draft" && saleCycleController.isHeadofficePermission !=
             "1")
           InkWell(
             onTap: () {
               saleCycleController.itemCategorySelectedlist.clear();
-              for (var item in saleCycleController.productCategoryList) {
+              String codes = saleCycleController.quoteHeaderdata[0].parentProductCategoryCode ?? "";
+              if (codes.isNotEmpty) {
+                saleCycleController.itemCategorySelectedlist.value = codes
+                    .split(',')
+                    .map((e) => ItemCategoryMstModel(
+                  parentCategoryCode: e.trim(),
+                )).toList();
+              }
+              /*for (var item in saleCycleController.parentProductCategoryList) {
                 if (item.isSelected == 1) {
                   saleCycleController.itemCategorySelectedlist.add(item);
                 }
-              }
+              }*/
               saleCycleController.productCategoryController.value.clear();
+              if(saleCycleController.quoteHeaderdata[0].isMultiParentCategory==1){
+                saleCycleController.IsMultiParentCategory_controller.value.text="Yes";
+                saleCycleController.IsMultiParentCategory.value=true;
+              }
+              else{
+                saleCycleController.IsMultiParentCategory_controller.value.text = "No";
+                saleCycleController.IsMultiParentCategory.value=false;
+              }
               showProductCatDialog(context);
             },
             child: const Padding(
@@ -1647,7 +1662,7 @@ class QuoteInformationScreen extends StatelessWidget {
               borderRadius: BorderRadius.circular(10.0),
             ),
             title: Text(
-              'Product Category',
+              'Parent Product Category',
               style: GoogleFonts.poppins(
                 fontSize: AllFontSize.sisxteen,
                 fontWeight: FontWeight.w700,
@@ -1659,11 +1674,18 @@ class QuoteInformationScreen extends StatelessWidget {
               width: size.width * 4,
               padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
               child: Wrap(
+                spacing: 0,
+                runSpacing: 10,
                 children: [
-                  bindItemCategoryDropDown(context),
-                  SizedBox(
-                    height: 65,
-                  ),
+                  bindIsMultiParentCategoryDropDown(context),
+                  const  SizedBox(height: 10,),
+                  Obx((){
+                    return Visibility(visible: saleCycleController.showMultiParentCategory.value,
+                      child:  bindItemCategoryDropDown(context),);
+                  }),
+                  const  SizedBox(height: 15,),
+                  //bindItemCategoryDropDown(context),
+                  const SizedBox(height: 55,),
                   Obx(() {
                     return Visibility(
                       visible:
@@ -1672,7 +1694,7 @@ class QuoteInformationScreen extends StatelessWidget {
                         spacing: 8.0,
                         children: saleCycleController.itemCategorySelectedlist.map((category) {
                           return Chip(
-                            label: Text(category.categoryName ?? ""),
+                            label: Text(category.parentCategoryCode ?? ""),
                             onDeleted: () {
                               saleCycleController.itemCategorySelectedlist.remove(category);
                             },
@@ -1681,9 +1703,7 @@ class QuoteInformationScreen extends StatelessWidget {
                       ),
                     );
                   }),
-                  SizedBox(
-                    height: 15,
-                  ),
+                  //const SizedBox(height: 15,),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
@@ -1694,7 +1714,9 @@ class QuoteInformationScreen extends StatelessWidget {
                           ),
                         ),
                         onPressed: () {
-                          saleCycleController.ProductCatCreateSaleCycleInfApiHit(saleCycleController.quoteHeaderdata[0].quoteId.toString());
+                          //saleCycleController.ProductCatCreateSaleCycleInfApiHit(saleCycleController.quoteHeaderdata[0].quoteId.toString());
+                          saleCycleController.QuoteHeaderParentCategoryUpdate(saleCycleController.quoteHeaderdata[0].quoteId.toString());
+                          //saleCycleController.ProductCatCreateApiHit(saleCycleController.quoteHeaderdata[0].quoteId.toString(),"");
                           Navigator.pop(context);
                         },
                         child: Container(
@@ -1718,19 +1740,87 @@ class QuoteInformationScreen extends StatelessWidget {
           );
         });
   }
+  bindIsMultiParentCategoryDropDown(BuildContext context) {
+    return DropdownMenu<String>(
+      width: MediaQuery.of(context).size.width,
+      controller: saleCycleController.IsMultiParentCategory_controller.value,
+      label: Text("Rate Contract Only",
+        style: GoogleFonts.poppins(
+            color: AllColors.primaryDark1,
+            fontSize: AllFontSize.fourtine,
+            fontWeight: FontWeight.w600),
+      ),
+      initialSelection: saleCycleController.IsMultiParentCategory_controller.value.text,
+      inputDecorationTheme: const InputDecorationTheme(
+        fillColor: Colors.white,
+        filled: true,
+
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+          borderSide: BorderSide(
+            color: AllColors.primaryDark1,
+          ),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+              color: AllColors.primaryDark1), // Change the color to green
+        ),
+        border: OutlineInputBorder(
+          borderSide: BorderSide(
+              color: AllColors.primaryDark1), // Change the color to green
+        ),
+        contentPadding: EdgeInsets.symmetric(
+            vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+      ),
+      onSelected: (String? selection) {
+        print(selection);
+        saleCycleController.IsMultiParentCategory_controller.value.text =
+            _displayCustomerNeedIdentityStatusForOption(selection!).toString();
+        if( saleCycleController.IsMultiParentCategory_controller.value.text=="Yes"){
+          saleCycleController.productCategoryController.value.text="";
+          saleCycleController.itemCategorySelectedlist.value=[];
+          saleCycleController.IsMultiParentCategory.value=true;
+          saleCycleController.showMultiParentCategory.value=false;
+          saleCycleController.showMultiParentCategory.value=true;
+        }
+        else{
+          saleCycleController.productCategoryController.value.text="";
+          saleCycleController.itemCategorySelectedlist.value=[];
+          saleCycleController.IsMultiParentCategory.value=false;
+          saleCycleController.showMultiParentCategory.value=false;
+          saleCycleController.showMultiParentCategory.value=true;
+        }
+      },
+      menuStyle:  MenuStyle(
+        fixedSize: MaterialStateProperty.all(
+          Size(MediaQuery.of(context).size.width * 0.7, 100), // 👈 same width
+        ),
+      ),
+      dropdownMenuEntries: ["Yes","No"].map<DropdownMenuEntry<String>>((String e) {
+        return DropdownMenuEntry<String>(
+            value: e,
+            label: e,
+            style: ButtonStyle(
+              foregroundColor:
+              MaterialStateProperty.all<Color>(AllColors.primaryDark1),
+            ));
+      }).toList(),
+    );
+  }
   static String _displayItemCatMasterForOption(ItemCategoryMstModel option) =>
-      option.categoryName!;
+      option.parentCategoryCode!;
+
   Widget bindItemCategoryDropDown(context) {
     return Autocomplete<ItemCategoryMstModel>(
       displayStringForOption: _displayItemCatMasterForOption,
       optionsBuilder: (TextEditingValue textEditingValue) {
         if (textEditingValue.text.isEmpty) {
-          return saleCycleController.productCategoryList;
+          return saleCycleController.parentProductCategoryList;
           // return const Iterable<VehicleTypeResponse>.empty();
         }
-        return saleCycleController.productCategoryList
+        return saleCycleController.parentProductCategoryList
             .where((ItemCategoryMstModel option) {
-          return option.categoryName
+          return option.parentCategoryCode
               .toString()
               .toLowerCase()
               .contains(textEditingValue.text.toLowerCase());
@@ -1738,19 +1828,30 @@ class QuoteInformationScreen extends StatelessWidget {
       },
       onSelected: (ItemCategoryMstModel selection) {
         // Update the TextField with the selected
+        print("length---${saleCycleController.itemCategorySelectedlist.length}");
         saleCycleController.productCategoryController.value.text =
             _displayItemCatMasterForOption(selection).toString();
-        print(
-            'Controller.....${saleCycleController.productCategoryController.value.text}');
-        if (!saleCycleController.itemCategorySelectedlist.contains(selection)) {
-          //TaskMaster_page_controller.Item_Category_code_list.add(selection.categoryCode!);
-          saleCycleController.itemCategorySelectedlist.add(selection);
-          //Utils.showToastification('Success', 'Add Successfully');
-        } else {
-          Utils.showErrorToastification('Error', 'Already Selected');
+        if (saleCycleController.IsMultiParentCategory.value) {
+          bool alreadyExists = saleCycleController.itemCategorySelectedlist.any(
+                (item) => item.parentCategoryCode == selection.parentCategoryCode,
+          );
+
+          if (!alreadyExists) {
+            saleCycleController.itemCategorySelectedlist.add(selection);
+          }
+          /*if (!saleCycleController.itemCategorySelectedlist.contains(selection)) {
+            saleCycleController.itemCategorySelectedlist.add(selection);
+            //Utils.showToastification('Success', 'Add Successfully');
+          }*/else{
+            Utils.showErrorToastification('Error', 'Already Selected');
+          }
         }
-        saleCycleController.productCategoryController.value.clear();
-        // TaskMaster_page_controller.AccountOwner = selection.loginEmailId!;
+        else{
+          saleCycleController.productCategoryController.value.text =
+              _displayItemCatMasterForOption(selection).toString();
+          saleCycleController.itemCategorySelectedlist.value=[];
+          saleCycleController.itemCategorySelectedlist.add(selection);
+        }
       },
       fieldViewBuilder: (BuildContext context, TextEditingController controller,
           FocusNode focusNode, VoidCallback onFieldSubmitted) {
@@ -1767,6 +1868,10 @@ class QuoteInformationScreen extends StatelessWidget {
             focusNode: focusNode,
             //onSubmitted: onFieldSubmitted,
             decoration: InputDecoration(
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                    color: AllColors.primaryDark1), // Change the color to green
+              ),
               suffixIcon: InkWell(
                   onTap: () {
                     focusNode.requestFocus();
@@ -1775,9 +1880,11 @@ class QuoteInformationScreen extends StatelessWidget {
                   child: Icon(Icons.arrow_drop_down)),
               contentPadding: EdgeInsets.symmetric(
                   vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-              hintText: 'Product Category',
-              labelText: 'Product Category',
+              hintText: 'Parent Product Category',
+              labelText: 'Parent Product Category',
+              labelStyle: TextStyle(color:AllColors.blackColor),
               border: OutlineInputBorder(
+
                   borderRadius: BorderRadius.all(Radius.circular(10))),
             ),
           ),
@@ -1807,12 +1914,11 @@ class QuoteInformationScreen extends StatelessWidget {
                     child: Container(
                       padding: EdgeInsets.all(8.0),
                       child: Text(
-                        option.categoryName.toString(),
+                        option.parentCategoryCode.toString(),
                         style: GoogleFonts.poppins(
                             color: AllColors.blackColor,
                             fontWeight: FontWeight.w300,
-                            fontSize: AllFontSize
-                                .sisxteen // Change the text color here
+                            fontSize: AllFontSize.sisxteen // Change the text color here
                         ),
                       ),
                     ),
@@ -3206,6 +3312,97 @@ class QuoteInformationScreen extends StatelessWidget {
           );
         });
   }
+
+  Future moveToDraftDialog(BuildContext context) {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Container(
+            child: AlertDialog(
+              title: Text(
+                "Move To Draft",
+                style: GoogleFonts.poppins(
+                  color: AllColors.primaryDark1,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              content: Container(
+                /*height: size.height*.21,
+                  width: size.width*4,*/
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text('Do you want to move this quote ?',
+                          style: GoogleFonts.poppins(
+                            fontSize: AllFontSize.fourtine,
+                            fontWeight: FontWeight.w500,
+                            color: AllColors.primaryDark1,
+                          )),
+                      SizedBox(height: 10),
+                      Container(
+                        width: size.width,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              child: ElevatedButton(
+                                style: ButtonStyle(
+                                  backgroundColor: MaterialStateProperty.all<Color>(
+                                    AllColors.lightredColor,
+                                  ),
+                                ),
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                  //Get.back();
+                                },
+                                child: Container(
+                                  child: Text(
+                                    'Cancel',
+                                    style: GoogleFonts.poppins(
+                                      color: AllColors.blackColor,
+                                      fontSize: AllFontSize.fourtine,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Expanded(
+                              child: ElevatedButton(
+                                style: ButtonStyle(
+                                  backgroundColor: MaterialStateProperty.all<Color>(
+                                    AllColors.greenblue,
+                                  ),
+                                ),
+                                onPressed: () {
+                                  saleCycleController.QuoteMstStatusChangeToDraft(saleCycleController.quoteHeaderdata[0].quoteId ?? "");
+                                 Navigator.pop(context);
+                                },
+                                child: Container(
+                                  child: Text(
+                                    'Confirm',
+                                    style: GoogleFonts.poppins(
+                                      color: AllColors.blackColor,
+                                      fontSize: AllFontSize.fourtine,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      )
+                    ],
+                  )),
+            ),
+          );
+        });
+  }
+
 
   Widget managerRemarksField(BuildContext context) {
     return TextField(

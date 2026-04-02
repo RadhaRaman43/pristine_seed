@@ -96,4 +96,16 @@ class PreventiveRepository {
     return _apiService.postApi(data, AppUrl.priventiveDeleteDocument,sessionManagement);
   }
 
+  Future<String> aMCRequestInvoiceGetApiHit(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.aMCRequestInvoiceGet,sessionManagement);
+  }
+
+  Future<String> aMCRequestInvoiceWiseItemGetApiHit(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.aMCRequestInvoiceWiseItemGet,sessionManagement);
+  }
+
+  Future<String> aMCRequestCreationApiHit(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.aMCRequestCreation,sessionManagement);
+  }
+
 }

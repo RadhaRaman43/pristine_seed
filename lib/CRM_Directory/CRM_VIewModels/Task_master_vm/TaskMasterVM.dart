@@ -434,7 +434,8 @@ class Taskmastervm extends GetxController{
             if(response.length>0 && response[0].condition=="True"){
               regionwithclusterGetByEmailList.value=response;
               RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join('|');
-              print('region....${RegionName_controller.value.text}');
+              SelectedRegion_list.assignAll(regionwithclusterGetByEmailList);
+              //print('region....${RegionName_controller.value.text}');
               getFilterData();
               //getTaskMaster(pageNumber, is_Active.toString(), '', '', '', date_filter,is_done.value);
 
@@ -471,10 +472,7 @@ class Taskmastervm extends GetxController{
         }
         AccountOwnerForApi = '';
         if(AccountOwner_controller.value.text.isNotEmpty){
-            AccountOwnerForApi = AccountOwner_controller.value.text
-                .split(',')
-                .map((e) => e.trim())
-                .join('|');
+            AccountOwnerForApi = AccountOwner_controller.value.text.split(',').map((e) => e.trim()).join('|');
         }
         try{
             Map data={
@@ -484,7 +482,8 @@ class Taskmastervm extends GetxController{
                 "filter_task_status": status == 'All'?"":status,
                 "filter_product_category": product_category_controller.value.text.isEmpty?"":product_category_controller.value.text,
                 "filter_product_category_type": product_category_type_Controller.value.text.isEmpty?"":product_category_type_Controller.value.text,
-                "filter_type_of_call":  Type_of_call_controller.value.text.isEmpty?"":Type_of_call_controller.value.text,
+                "filter_type_of_call":  Type_of_call_controller.value.text.isEmpty?"":
+                Type_of_call_controller.value.text.toLowerCase()=="all"?"":Type_of_call_controller.value.text,
                 "filter_method_of_call": method_of_call_controller.value.text.isEmpty?"":method_of_call_controller.value.text,
                 "filter_last_activity_status": lastActivityStatus_Controller.value.text.isEmpty?"":lastActivityStatus_Controller.value.text,
                 "filter_company_profile_type": companyProfileTypeController.value.text.isEmpty?"":companyProfileTypeController.value.text,
@@ -533,13 +532,19 @@ class Taskmastervm extends GetxController{
                             }else if(Active == 0){
                                 IsSaleCycleActive = 'No';
                             }
-
                             getTaskMstDSARList(taskId);
                             getItemCategoryMstApi(taskId);
                             getTaskPersonMstByTaskIdApi(taskId);
                             Get.toNamed(RoutesName.taskMasterDetails_screen);
+                        }
+                        if(flag=="task_master_detail"){
+                          getItemCategoryMstApi(taskId);
 
                         }
+                        if(FromPage.value=="from_pendingDSARDashboard" || FromPage.value=="from_CallDashboard"){
+                          Get.toNamed(RoutesName.taskMasterDetails_screen);
+                        }
+                        print("from page ${FromPage.value}");
                         getTaskMstDSARList(taskId);
 
 
@@ -709,7 +714,7 @@ class Taskmastervm extends GetxController{
         }
     }
 
-    ApproveRejectApiHit(String? taskId) async{
+    ApproveRejectApiHit(String? taskId, String from_page) async{
         try{
             Map<String, String> data={
                 "task_id": taskId!,
@@ -922,7 +927,7 @@ class Taskmastervm extends GetxController{
                       }
 
                       CallStatus_Master_list.addAll(response);
-                      if(filter!='0' && flag=="Call"){
+                      if(filter=='0' && flag=="Call"){
                         Type_of_call_controller.value.text=CallStatus_Master_list[0].taskStatus??"";
                       }
 
@@ -1175,7 +1180,7 @@ class Taskmastervm extends GetxController{
 
     }
 
-    TaskSaleCatCreateApiHit(String flag) async {
+    TaskSaleCatCreateApiHit(String flag,String from_page) async {
       try {
         List<TaskSalesProductCategoryLinesModel> lines = Item_Category_Selected_list.map((item) => TaskSalesProductCategoryLinesModel(productCategoryCode: item.categoryCode!)).toList();
         Map<String, dynamic> data = {
@@ -1189,19 +1194,22 @@ class Taskmastervm extends GetxController{
             final value = await _api.TaskSaleCatCreateApiHit(data, sessionManagement);
             print(value);
             final JsonResponse = json.decode(value);
-
             if (JsonResponse is List) {
                 List<TaskMasterGetModel> response =
                 JsonResponse.map((e) => TaskMasterGetModel.fromJson(e)).toList();
-
                 if (response != null && response.isNotEmpty && response[0].condition == "True") {
                   loading.value = false;
                     Utils.sanckBarSuccess("Success!", response[0].message.toString());
-
                     if(flag == 'Details'){
-                        getTaskMaster(0, 'All', TaskID, "",'', date_filter, is_done.value);
+                        if(from_page=="task_master_detail"){
+                          getTaskMaster(0, is_Active.toString(), TaskID, 'task_master_detail', 'GET FROM TASK ID', date_filter, is_done.value);
+                        }
+                        else{
+                          getTaskMaster(0, 'All', TaskID, "",'', date_filter, is_done.value);
+                          getItemCategoryMstApi(TaskID);
+                        }
                         //todo by raman
-                        getItemCategoryMstApi(TaskID);
+
                         Get.toNamed(RoutesName.taskMasterDetails_screen);
                     } else if(flag == 'DSAR'){
                       TaskDSARMasterCreate();
@@ -1388,6 +1396,7 @@ class Taskmastervm extends GetxController{
                             }else if(flag == 'FromDetailsPage'){
                                 Get.toNamed(RoutesName.taskMasterDetails_screen);
                             }
+
                             clearInfraUpdateController();
                         } else {
                           loading.value = false;
@@ -1403,6 +1412,7 @@ class Taskmastervm extends GetxController{
                 loading.value = false;
             }*/
         }
+
 
     getEmpMstEmailByApi() async{
       try{
@@ -1536,6 +1546,8 @@ class Taskmastervm extends GetxController{
         projectValueUpdateController.text=Task_Master_list[0].projectValue.toString();
     }
 
+
+
     void clearCreateTaskController(){
         filterTask_Id_controller.clear();
         Item_Category_Selected_list.value=[];
@@ -1605,8 +1617,9 @@ class Taskmastervm extends GetxController{
 
       SelectedCluster_list.value=[];
       SelectedRegion_list.value=[];
-      RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join('|');
+      //RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join('|');
       clusterName_controller.value.text = clusterGetByEmailList.map((e) => e.geoValue).join('|');
+    getRegionsWithClusterFilterGetByEmail();
 
   }
 

@@ -56,16 +56,25 @@ class CommitDashboardViewscreen extends StatelessWidget{
               color: AllColors.whiteColor,
             ),
             title:Row(
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Text(
                   'Commit Dashboard',
                   style: GoogleFonts.poppins(
                     color: AllColors.whiteColor,
-                    fontSize: 17.0,
+                    fontSize: 15.0,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
-                Spacer(),
+                Tooltip(
+                  message: "Download Excel",
+                  child: IconButton(
+                    icon: const Icon(Icons.download),
+                    onPressed: ()  {
+                      dashboard_view_Controller.exportNonStandardExcelWithProgress(context,);;
+                    },
+                  ),
+                ),
                 Tooltip(
                   message: "Take Screenshot",
                   child: IconButton(
@@ -112,29 +121,27 @@ class CommitDashboardViewscreen extends StatelessWidget{
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   Visibility(
-                                      visible: dashboard_view_Controller.userType != 'Branch Head',
+                                      visible: dashboard_view_Controller.userType?.toLowerCase() != 'bh',
                                       child: _buildActionChip("Cluster")),
-                                  SizedBox(width: 8),
+                                  const SizedBox(width: 8),
                                   _buildActionChip("Region"),
-                                  SizedBox(width: 8),
+                                  const SizedBox(width: 8),
                                   _buildActionChip("Employee"),
                                 ],
                               ),
                             ),
                           ),
                         ),
-                        visible: dashboard_view_Controller.userType != 'Frontliners',
+                        visible: dashboard_view_Controller.userType?.toLowerCase() != 'fl',
                       ),
 
                       Container(
                           padding: EdgeInsets.only(left: 15.0, bottom: 10.0, top: 10.0),
                           child:
-                          Obx((){
-                            return  Column(
+                            Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-
                                     Text(
                                       'Commitment',
                                       style: GoogleFonts.poppins(
@@ -145,8 +152,8 @@ class CommitDashboardViewscreen extends StatelessWidget{
                                     ),
                                     Obx((){
                                       return  Text(
-                                        'Date Ranges : ${dashboard_view_Controller.formattedStartDate} - '
-                                            '${dashboard_view_Controller.formattedEndDate}',
+                                        'Date Ranges : ${dashboard_view_Controller.character.value} (${dashboard_view_Controller.formattedStartDate} - '
+                                            '${dashboard_view_Controller.formattedEndDate})',
                                         style: GoogleFonts.poppins(
                                           color: AllColors.blackColor,
                                           fontSize: AllFontSize.twelve,
@@ -187,16 +194,13 @@ class CommitDashboardViewscreen extends StatelessWidget{
                                   );
                                 }),
                               ],
-                            );
-                          })
+                            )
+
                       ),
 
                       Obx(() {
                         return BindDashboardBarChartData(context);
                       }),
-
-
-
                       Container(
                           padding: EdgeInsets.only(left: 15.0, bottom: 10.0),
                           child:
@@ -226,7 +230,7 @@ class CommitDashboardViewscreen extends StatelessWidget{
                                     ),
                                   ),
                                 ),
-                                SizedBox(width: 10,),
+                                const SizedBox(width: 10,),
                                 Text(
                                   '(' +dashboard_view_Controller.total_rows.value.toString()+')',
                                   style: GoogleFonts.poppins(
@@ -241,10 +245,7 @@ class CommitDashboardViewscreen extends StatelessWidget{
 
 
                       ),
-                      Divider(
-                        height: 1,
-                        color: AllColors.lightgreyColor,
-                      ),
+                      const Divider(height: 1, color: AllColors.lightgreyColor,),
                       Container(
                         height: size.height/2,
                         child: Obx(() {
@@ -300,47 +301,32 @@ class CommitDashboardViewscreen extends StatelessWidget{
 
     try {
       progress.value = 0.10;
-
       RenderRepaintBoundary boundary =
       chartKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
-
       ui.Image chartImage = await boundary.toImage(pixelRatio: 3.0);
-
       progress.value = 0.25;
 
-      var chartBytes =
-      await chartImage.toByteData(format: ui.ImageByteFormat.png);
+      var chartBytes = await chartImage.toByteData(format: ui.ImageByteFormat.png);
       var chartUint8 = chartBytes!.buffer.asUint8List();
-
-      const double textSectionHeight = 80;
+      const double textSectionHeight = 160;
       const double spacing = 20;
-
       final recorder = ui.PictureRecorder();
       final canvas = Canvas(recorder);
-
       final double width = chartImage.width.toDouble();
-      final double height =
-          chartImage.height.toDouble() + textSectionHeight + spacing;
-
+      final double height = chartImage.height.toDouble() + textSectionHeight + spacing;
       final bgPaint = Paint()..color = const Color(0xFFFBF6F6);
       canvas.drawRect(Rect.fromLTWH(0, 0, width, height), bgPaint);
 
+      drawHeader(canvas, width);
+
 
       final chartUiImage = await decodeImageFromList(chartUint8);
-      canvas.drawImage(
-          chartUiImage, Offset(0, textSectionHeight + spacing), Paint());
-
+      canvas.drawImage(chartUiImage, Offset(0, textSectionHeight + spacing), Paint());
       final picture = recorder.endRecording();
-
       progress.value = 0.45;
-
-      final finalImage =
-      await picture.toImage(width.toInt(), height.toInt());
-
-      var finalBytes =
-      await finalImage.toByteData(format: ui.ImageByteFormat.png);
+      final finalImage = await picture.toImage(width.toInt(), height.toInt());
+      var finalBytes = await finalImage.toByteData(format: ui.ImageByteFormat.png);
       var pngBytes = finalBytes!.buffer.asUint8List();
-
       progress.value = 0.65;
 
       // ---------------- Save to Gallery ------------------------
@@ -408,7 +394,58 @@ class CommitDashboardViewscreen extends StatelessWidget{
       },
     );
   }
+  double drawHeader(ui.Canvas canvas, double canvasWidth) {
+    double startY = 40;
+    double leftX = 40;
 
+    List<Map<String, dynamic>> leftTexts = [
+      {
+        "text": "Commitment",
+        "size": 34.0,
+        "color": const Color(0xFF0C0C0C),
+        "weight": FontWeight.bold
+      },
+      {
+        "text":
+        "Time Period - ${dashboard_view_Controller.character.value} (${dashboard_view_Controller.formattedStartDate} - ${dashboard_view_Controller.formattedEndDate})",
+        "size": 22.0,
+        "color": const Color(0xFF0C0C0C),
+        "weight": FontWeight.w500
+      },
+      {
+      "text": 'Quote Accep. :  ${dashboard_view_Controller.QuoteAccepted_controller.value.text}',
+      "size": 22.0,
+      "color": const Color(0xFF0C0C0C),
+      "weight": FontWeight.w500
+      },
+      {
+        "text": 'View : ${dashboard_view_Controller.selectedOption.value}',
+        "size": 22.0,
+        "color": const Color(0xFF0C0C0C),
+        "weight": FontWeight.w500
+      },
+    ];
+
+    for (var item in leftTexts) {
+      final tp = TextPainter(
+        text: TextSpan(
+          text: item["text"],
+          style: TextStyle(
+            fontSize: item["size"],
+            fontWeight: item["weight"],
+            color: item["color"],
+          ),
+        ),
+        textDirection: ui.TextDirection.ltr,
+      );
+
+      tp.layout(maxWidth: canvasWidth * 0.6);
+      tp.paint(canvas, Offset(leftX, startY));
+
+      startY += tp.height + 8;
+    }
+    return startY + 10;
+  }
 
   Future<String> saveTempImage(var bytes) async {
     final tempDir = await getTemporaryDirectory();
@@ -433,7 +470,7 @@ class CommitDashboardViewscreen extends StatelessWidget{
                     fontSize: AllFontSize.sisxteen,
                     fontWeight: FontWeight.w700),
               ),
-              SizedBox(height: 20,)
+              const SizedBox(height: 20,)
             ],
           )
       );
@@ -627,9 +664,9 @@ class CommitDashboardViewscreen extends StatelessWidget{
     return List.generate(dashboard_view_Controller.commitDashboardRecordList.length, (index) {
       final record = dashboard_view_Controller.commitDashboardRecordList[index];
       double Width = 50;
-      if(dashboard_view_Controller.userType == 'Frontliners'){
+      if(dashboard_view_Controller.userType?.toLowerCase() == 'fl'){
         Width = 85;
-      }else if(dashboard_view_Controller.userType == 'Branch Head' && dashboard_view_Controller.selectedOption == 'Region') {
+      }else if(dashboard_view_Controller.userType?.toLowerCase() == 'bh' && dashboard_view_Controller.selectedOption == 'Region') {
         Width = 85;
       }else{
         Width = 50;
@@ -694,7 +731,7 @@ class CommitDashboardViewscreen extends StatelessWidget{
         ),*/
       );
     } else {
-      return SizedBox.shrink();
+      return  const SizedBox.shrink();
     }
   }
 
@@ -790,9 +827,6 @@ class CommitDashboardViewscreen extends StatelessWidget{
       child: Container(
         width: size.width,
         child: ListTile(
-          onTap: () {
-
-          },
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -824,6 +858,10 @@ class CommitDashboardViewscreen extends StatelessWidget{
               ),
               InkWell(
                   onTap: (){
+                   /* if(dashboard_view_Controller.commitDashboardUserWiseDataList[position].salesCycleStatus.toString().toLowerCase() =="suspect"){
+                      saleCycleController.getPurchaseProcessApi();
+                      saleCycleController.getPurchaseTimeFrameApi();
+                    }*/
                     saleCycleController.ProductCategoryWiseAmtGet(0, dashboard_view_Controller.commitDashboardUserWiseDataList[position].salesCycleId!);
                     saleCycleController.pageNumber = 0;
                     saleCycleController.filterQuoteAcceptedFlag.value="";
@@ -943,7 +981,7 @@ class CommitDashboardViewscreen extends StatelessWidget{
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Icon(Icons.shield_moon_rounded, color: AllColors.primaryDark1,),
-                        SizedBox(width: 5,),
+                        const SizedBox(width: 5,),
                         Text(
                           " Filter ",
                           style: GoogleFonts.poppins(
@@ -981,9 +1019,9 @@ class CommitDashboardViewscreen extends StatelessWidget{
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              SizedBox(height: 5,),
+                              const SizedBox(height: 5,),
                               RadioGroupDateRangeFilter(context),
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
 
                             ],
                           ),
@@ -1091,7 +1129,7 @@ class CommitDashboardViewscreen extends StatelessWidget{
       width: double.infinity,
       child: Column(
         children: [
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           Container(
             //margin: EdgeInsets.only(left: 15.0, right: 15.0),
             decoration: BoxDecoration(
@@ -1240,23 +1278,25 @@ class CommitDashboardViewscreen extends StatelessWidget{
               ),
             ),
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           bindSalesStageStatus(context),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
+          bindData(context,'Sale Cycle Id', dashboard_view_Controller.filter_sale_cycle_id_cont.value),
+          const SizedBox(height: 10),
           bindQuoteSubmitted(context),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           bindCustomerNameFilter(context),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           bindProductCategoryFilter(context),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           bindIsCommitDropDown(context),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           bindClusterNameFilter(context),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           bindRegionNameFilter(context),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           bindAccountOwnerFilter(context),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           bindFilterCreatedOn(context),
 
 
@@ -1267,7 +1307,35 @@ class CommitDashboardViewscreen extends StatelessWidget{
 
     );
   }
-
+  bindData(BuildContext context, String labelText, TextEditingController controller,) {
+    return TextField(
+      controller: controller,
+      decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+          labelText: labelText,
+          hintText: labelText,
+          hintStyle: GoogleFonts.poppins(
+              color: AllColors.lightblackColor,
+              fontWeight: FontWeight.w300,
+              fontSize: AllFontSize.ten),
+          labelStyle: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontWeight: FontWeight.w500,
+              fontSize: AllFontSize.sisxteen),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          )
+      ),
+      cursorColor: AllColors.primaryDark1,
+      onChanged: (value) {
+        // Handle the text field value changes if needed
+      },
+    );
+  }
   filterWithCustomDate(BuildContext context) {
     return IgnorePointer(
       ignoring: dashboard_view_Controller.character.value != "Custom",
@@ -1341,7 +1409,7 @@ class CommitDashboardViewscreen extends StatelessWidget{
     return GestureDetector(
       onTap: () => _showMultiSelectDialog(context, "Select Sales Cycle Stage",
           dashboard_view_Controller.QuoteAccepted_controller,
-          dashboard_view_Controller.quoteAcceptedList),
+          dashboard_view_Controller.quoteAcceptedList,'All'),
       child: AbsorbPointer(
         child: TextField(
           controller: dashboard_view_Controller.QuoteAccepted_controller.value,
@@ -1477,7 +1545,7 @@ class CommitDashboardViewscreen extends StatelessWidget{
   bindFilterCreatedOn(BuildContext context) {
     return TextField(
       cursorColor: AllColors.primaryDark1,
-      controller: dashboard_view_Controller.filter_created_on_cont.value,
+      controller: dashboard_view_Controller.filter_created_on_star_to_cont.value,
       readOnly: true,
       decoration: InputDecoration(
         contentPadding: EdgeInsets.symmetric(
@@ -1523,10 +1591,10 @@ class CommitDashboardViewscreen extends StatelessWidget{
         if (picked != null) {
           final startDate = DateFormat('yyyy-MM-dd').format(picked.start);
           final endDate = DateFormat('yyyy-MM-dd').format(picked.end);
-
           dashboard_view_Controller.filter_created_on_cont.value.text = '$startDate @ $endDate';
+          dashboard_view_Controller.filter_created_on_star_to_cont.value.text='$startDate - $endDate';
         } else {
-
+          dashboard_view_Controller.filter_created_on_star_to_cont.value.text='';
           dashboard_view_Controller.filter_created_on_cont.value.text="";
         }
       },
@@ -1536,7 +1604,7 @@ class CommitDashboardViewscreen extends StatelessWidget{
     return GestureDetector(
       onTap: () => _showMultiSelectDialog(context, "Select Sales Cycle Stage",
           dashboard_view_Controller.StageName_controller,
-          dashboard_view_Controller.selectedSalesStageStatusList),
+          dashboard_view_Controller.selectedSalesStageStatusList, 'OPEN'),
       child: AbsorbPointer(
         child: TextField(
           controller: dashboard_view_Controller.StageName_controller.value,
@@ -1565,9 +1633,7 @@ class CommitDashboardViewscreen extends StatelessWidget{
     );
   }
 
-  void _showMultiSelectDialog(BuildContext context,
-      String dialogHeader,
-      Rx<TextEditingController> textController, RxList<String> itemList, ) {
+  void _showMultiSelectDialog(BuildContext context, String dialogHeader, Rx<TextEditingController> textController, RxList<String> itemList,String defaultValueBind ) {
     final List<String> allItems =
         itemList.value;
 
@@ -1579,7 +1645,7 @@ class CommitDashboardViewscreen extends StatelessWidget{
         .toList();
 
     if (selectedItems.isEmpty) {
-      selectedItems = ["OPEN"];
+      selectedItems = [defaultValueBind];
     }
 
     showDialog(
@@ -1634,7 +1700,7 @@ class CommitDashboardViewscreen extends StatelessWidget{
                     } else {
                       selectedItems.remove(item);
                       if (selectedItems.isEmpty) {
-                        selectedItems.add("OPEN");
+                        selectedItems.add(defaultValueBind);
                       }
                     }
 
@@ -1826,8 +1892,7 @@ class CommitDashboardViewscreen extends StatelessWidget{
 
           itemBuilder: (context, item, isSelected) {
             return ListTile(
-              title: Text(
-                item.accountName ?? "",
+              title: Text("${item.accountName ?? ""}(${item.accountCode ?? ""})",
                 style: TextStyle(
                   color: isSelected ? Colors.blue : Colors.black,
                   fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,

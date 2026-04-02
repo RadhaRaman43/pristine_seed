@@ -189,7 +189,8 @@ class SalesAdviseAllListVm extends GetxController{
             loading.value = false;
             regionwithclusterGetByEmailList.value=response;
             RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join('|');
-            print('region....${RegionName_controller.value.text}');
+            SelectedRegion_list.assignAll(regionwithclusterGetByEmailList);
+            //print('region....${RegionName_controller.value.text}');
             if(filterRouting=='All Sales Advice Line Items'){
               getAllSaleAdviseLineFilterData();
 
@@ -329,12 +330,16 @@ class SalesAdviseAllListVm extends GetxController{
     GM_per_ilterController.value.clear();
     StandardCostController.value.clear();
     SalesCreditController.value.clear();
-
     createdOnStartToEnd.value="";
-    //RegionName_controller.value.clear();
-    //clusterName_controller.value.clear();
     productCategoryController.value.clear();
     createdOnCnontroller.value.clear();
+
+
+    SelectedCluster_list.value = [];
+    SelectedRegion_list.value = [];
+    //RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join(',');
+    clusterName_controller.value.text = clusterGetByEmailList.map((e) => e.geoValue).join('|');
+    getRegionsWithClusterFilterGetByEmail();
 
 
 

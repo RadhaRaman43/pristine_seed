@@ -238,10 +238,8 @@ class AccountdashboarddatalistScreen extends StatelessWidget{
                   onTap: (){
                     accountMaster_page_controller.view='TaskDashboard';
                     TaskMaster_page_controller.getTaskMaster(0,
-                        TaskMaster_page_controller.is_Active
-                            .toString(),
-                        accountMaster_page_controller.AccountDashboardDataList[position]
-                            .taskId,
+                        TaskMaster_page_controller.is_Active.toString(),
+                        accountMaster_page_controller.AccountDashboardDataList[position].taskId,
                         '', 'GET FROM TASK ID', TaskMaster_page_controller.date_filter, TaskMaster_page_controller.is_done.value);
                     Get.toNamed(RoutesName.taskMasterDetails_screen);
                   },

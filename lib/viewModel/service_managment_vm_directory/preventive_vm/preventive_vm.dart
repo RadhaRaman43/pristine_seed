@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:dotted_border/dotted_border.dart';
@@ -7,6 +8,8 @@ import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:navigation_drawer_flutter/models/service_managment_model_directory/servicePreventiveModel/amc_request_invoice_item_get_modal.dart';
+import 'package:navigation_drawer_flutter/models/service_managment_model_directory/servicePreventiveModel/amc_request_invoice_modal.dart';
 
 //import 'package:marquee/marquee.dart';
 import 'package:navigation_drawer_flutter/viewModel/SessionManagment/session_managment.dart';
@@ -33,6 +36,7 @@ class PreventiveViewModel extends GetxController {
   final _api = PreventiveRepository();
   SessionManagement sessionManagement = SessionManagement();
   RxBool loading = false.obs;
+  RxBool btnloading = false.obs;
   RxInt is_done = 0.obs;
   RxString date_filter = "TODAY".obs;
   String email = "";
@@ -52,22 +56,26 @@ class PreventiveViewModel extends GetxController {
 
   String item_no = "";
   RxBool isCheckBox = false.obs;
-  int is_warrenty= 0;
-  RxBool is_Showindent=false.obs;
-  RxBool is_indent_type_dropDown=false.obs;
-  double unit_price= 0;
+  int is_warrenty = 0;
+  RxBool is_Showindent = false.obs;
+  RxBool is_indent_type_dropDown = false.obs;
+  double unit_price = 0;
 
 
   RxList<PreventiveItemNoResponse> item_no_list =
       <PreventiveItemNoResponse>[].obs;
-  RxList<ServicePreventiveListResponse> service_preventive_list = <ServicePreventiveListResponse>[].obs;
-  RxList<ServicePreventiveDetailsResponse> service_preventive_details_list = <ServicePreventiveDetailsResponse>[].obs;
+  RxList<ServicePreventiveListResponse> service_preventive_list =
+      <ServicePreventiveListResponse>[].obs;
+  RxList<ServicePreventiveDetailsResponse> service_preventive_details_list =
+      <ServicePreventiveDetailsResponse>[].obs;
 
-  RxList<PreventiveIndentHeaderCreateResponse> service_indent_header_list = <PreventiveIndentHeaderCreateResponse>[].obs;
-
+  RxList<PreventiveIndentHeaderCreateResponse> service_indent_header_list =
+      <PreventiveIndentHeaderCreateResponse>[].obs;
 
   //RxList<ServicePreventiveIndentHeaderResponse> service_indent_header_list = <ServicePreventiveIndentHeaderResponse>[].obs;
-  RxList<PreventiveIndentHeaderCreateResponse> service_indent_header_create_list = <PreventiveIndentHeaderCreateResponse>[].obs;
+  RxList<PreventiveIndentHeaderCreateResponse>
+      service_indent_header_create_list =
+      <PreventiveIndentHeaderCreateResponse>[].obs;
 
   RxList<CreatePreventiveCalender> create_preventive_calender_list =
       <CreatePreventiveCalender>[].obs;
@@ -76,7 +84,13 @@ class PreventiveViewModel extends GetxController {
 
   RxList<PreventiveItemDetailsResponse> item_details_list =
       <PreventiveItemDetailsResponse>[].obs;
-  RxList<String> indent_type_list = <String>["Self","Warehouse"].obs;
+
+  RxList<AMCRequestInvoiceGetModal> amcRequestInvoiceList =
+      <AMCRequestInvoiceGetModal>[].obs;
+
+  RxList<AMCRequestInvoiceItemGetModal> amcRequestInvoiceItemNoList =
+      <AMCRequestInvoiceItemGetModal>[].obs;
+  RxList<String> indent_type_list = <String>["Self", "Warehouse"].obs;
 
   var reason_code_controller = TextEditingController();
   var reason_description_controller = TextEditingController();
@@ -102,24 +116,54 @@ class PreventiveViewModel extends GetxController {
   var invoice_date_search_controller = TextEditingController();
   var discount_controller = TextEditingController();
   var closure_remark_controller = TextEditingController();
-  var unit_price_controller=TextEditingController();
-  var indent_type_controller=TextEditingController();
-  var paybal_amount_controller=TextEditingController();
+  var unit_price_controller = TextEditingController();
+  var indent_type_controller = TextEditingController();
+  var paybal_amount_controller = TextEditingController();
 
-  var indent_date_controller=TextEditingController();
+  var indent_date_controller = TextEditingController();
 
-  var item_price_controller=TextEditingController();
+  var item_price_controller = TextEditingController();
+
+  //todo add new preventive calender controller
+
+  var amcRequestInvoiceNoController = TextEditingController().obs;
+  final amcRequestInvoiceItemNoController = TextEditingController();
+  var warrantyStartDateController = TextEditingController().obs;
+  var warrantyEndDateController = TextEditingController().obs;
+  var frequencyController = TextEditingController().obs;
+  var pinCodeController = TextEditingController().obs;
+  RxBool isShowInvoiceNo=true.obs;
+  RxBool isShowItemNo=true.obs;
+  RxInt invoiceKey = 0.obs;
+  RxInt itemKey = 0.obs;
+
+  RxString serviceNo="".obs;
+  RxString selectedItemNo="".obs;
 
   RxDouble currentLat = 0.0.obs;
   RxDouble currentLng = 0.0.obs;
+
+  Timer? _debounce;
 
   @override
   void onInit() async {
     email = await sessionManagement.getEmail() ?? '';
     getServicePreventiveList(is_done.value, pageNumber, date_filter.value);
-   // getReasonMaster();
+    // getReasonMaster();
     initCurrentLocationLatLant();
+
+    amcRequestInvoiceNoController.value.addListener(() {
+      final query = amcRequestInvoiceNoController.value.text;
+      _debounce?.cancel();
+      _debounce = Timer(const Duration(milliseconds: 400), () {
+        getAMCRequestInvoice(query);
+      });
+    });
+
   }
+
+
+
 
   void toggle() {
     isExpand.value = !isExpand.value;
@@ -144,7 +188,8 @@ class PreventiveViewModel extends GetxController {
 
   getServicePreventiveList(int is_done, int page_no, String date_filter,
       {String globle_search_value = ""}) {
-    var date=StaticMethod.convertDateFormat(invoice_date_search_controller.text);
+    var date =
+        StaticMethod.convertDateFormat(invoice_date_search_controller.text);
     Map data;
     if (globle_search_value != null &&
         globle_search_value!.isNotEmpty &&
@@ -171,8 +216,8 @@ class PreventiveViewModel extends GetxController {
         "service_status": "",
         "is_done": is_done,
         "email_id": email,
-       // "invoice_date": invoice_date_search_controller.value.text.isEmpty ? "" : invoice_date_search_controller.value.text,
-        "invoice_date":date!.isEmpty ? "" : date,
+        // "invoice_date": invoice_date_search_controller.value.text.isEmpty ? "" : invoice_date_search_controller.value.text,
+        "invoice_date": date!.isEmpty ? "" : date,
         "customer_no_name": customer_no_search_controller.value.text.isEmpty
             ? ""
             : customer_no_search_controller.value.text,
@@ -273,9 +318,6 @@ class PreventiveViewModel extends GetxController {
     }
   }*/
 
-
-
-
   Future<Iterable<PreventiveItemNoResponse>> getItemNo(String text) async {
     if (text == '') {
       return const Iterable<PreventiveItemNoResponse>.empty();
@@ -286,8 +328,7 @@ class PreventiveViewModel extends GetxController {
       "filter_item_no": text
     };
 
-    String itemdropdownresp =
-    await _api.item_noApiHit(data, sessionManagement);
+    String itemdropdownresp = await _api.item_noApiHit(data, sessionManagement);
     try {
       final jsonResponse = json.decode(itemdropdownresp);
       if (jsonResponse is List) {
@@ -308,12 +349,10 @@ class PreventiveViewModel extends GetxController {
       }
     } catch (e) {
       Utils.sanckBarException('Exception!', e.toString());
-      item_no_list.value= [];
+      item_no_list.value = [];
     }
-    return   item_no_list.value;
+    return item_no_list.value;
   }
-
-
 
   getItemDetails() {
     Map<String, String> data = {
@@ -452,7 +491,10 @@ class PreventiveViewModel extends GetxController {
     }
   }
 
-  IndentConsumerLineApi(String indent_no, int line_no,) {
+  IndentConsumerLineApi(
+    String indent_no,
+    int line_no,
+  ) {
     Map data = {
       "indent_no": indent_no,
       "line_no": line_no,
@@ -543,7 +585,6 @@ class PreventiveViewModel extends GetxController {
     }
   }
 
-
   //todo search reason drop down ....
 
 /*  getReasonMaster() {
@@ -594,7 +635,6 @@ class PreventiveViewModel extends GetxController {
     }
   }*/
 
-
   Future<Iterable<ReasonModel>> getSearchReasonMaster(String text) async {
     if (text == '') {
       return const Iterable<ReasonModel>.empty();
@@ -609,14 +649,13 @@ class PreventiveViewModel extends GetxController {
     };
 
     String reasondropdownresp =
-    await _api.preventiveReasonMasterApiHit(data, sessionManagement);
+        await _api.preventiveReasonMasterApiHit(data, sessionManagement);
     try {
       final jsonResponse = json.decode(reasondropdownresp);
       if (jsonResponse is List) {
         print(jsonResponse);
-        List<ReasonModel> response = jsonResponse
-            .map((data) => ReasonModel.fromJson(data))
-            .toList();
+        List<ReasonModel> response =
+            jsonResponse.map((data) => ReasonModel.fromJson(data)).toList();
         if (response[0].condition == 'True') {
           print(jsonResponse);
           reason_master_list.value = response;
@@ -630,11 +669,10 @@ class PreventiveViewModel extends GetxController {
       }
     } catch (e) {
       Utils.sanckBarException('Exception!', e.toString());
-      reason_master_list.value= [];
+      reason_master_list.value = [];
     }
-    return   reason_master_list.value;
+    return reason_master_list.value;
   }
-
 
   IndentLineCreate(String indent_no, BuildContext context) {
     if (item_no_controller.text.isEmpty) {
@@ -674,8 +712,8 @@ class PreventiveViewModel extends GetxController {
                 response[0].condition == "True") {
               loading.value = false;
               item_no = "";
-              is_warrenty=0 ;
-              unit_price=0;
+              is_warrenty = 0;
+              unit_price = 0;
               unit_price_controller.clear();
               item_price_controller.clear();
               service_indent_header_create_list.value = response;
@@ -787,7 +825,7 @@ class PreventiveViewModel extends GetxController {
                 response[0].condition == "True") {
               loading.value = false;
               service_indent_header_create_list.value = response;
-               IndentHeaderListApi();
+              IndentHeaderListApi();
               //    Get.toNamed(RoutesName.installation_screen);
               Utils.showToastification("Success!", response[0].message!);
             } else {
@@ -919,13 +957,13 @@ class PreventiveViewModel extends GetxController {
                 response[0].condition == "True") {
               loading.value = false;
               create_preventive_calender_list.value = response;
-              Get.toNamed(RoutesName.create_preventive_calender_view_screen);
+
             } else {
               loading.value = false;
               create_preventive_calender_list.value = [];
               /* Utils.showErrorToastification(
                   "Error!", "No Calender Date Found");*/
-              Utils.showErrorToastification("Error!", response[0].message!);
+              //Utils.showErrorToastification("Error!", response[0].message!);
               //service_installation_details_list.value=[];
             }
           } else {
@@ -948,7 +986,7 @@ class PreventiveViewModel extends GetxController {
   }
 
   createPreventiveCallApi(
-    String warranty_id, String service_id, String dateAndTime) {
+      String warranty_id, String service_id, String dateAndTime) {
     Map data = {
       "warranty_id": warranty_id,
       "service_id": service_id,
@@ -1063,11 +1101,13 @@ class PreventiveViewModel extends GetxController {
   }
 
   reSchduleRequestApi(BuildContext context) {
-    if(reason_code_controller.text.isEmpty){
+    if (reason_code_controller.text.isEmpty) {
       Utils.showErrorToastification("Message", "Please Select Reason Code");
       return;
-    }if(reschdule_remark_controller.text.isEmpty){
-      Utils.showErrorToastification("Message", "Please Enter Reschedule Remark");
+    }
+    if (reschdule_remark_controller.text.isEmpty) {
+      Utils.showErrorToastification(
+          "Message", "Please Enter Reschedule Remark");
       return;
     }
     Map data = {
@@ -1149,11 +1189,11 @@ class PreventiveViewModel extends GetxController {
               loading.value = false;
               service_indent_header_create_list.value = response;
               indent_type_controller.clear();
-              is_Showindent.value=true;
-              is_indent_type_dropDown.value=false;
-              if(indent_no!="" ){
-                is_Showindent.value=true;
-                is_indent_type_dropDown.value=false;
+              is_Showindent.value = true;
+              is_indent_type_dropDown.value = false;
+              if (indent_no != "") {
+                is_Showindent.value = true;
+                is_indent_type_dropDown.value = false;
                 Get.toNamed(RoutesName.preventive_Indent_header_view_screen);
               }
 
@@ -1253,7 +1293,7 @@ class PreventiveViewModel extends GetxController {
         "document_type": image_flag.value,
         "email_id": email,
         "file_desc": image_description_controller.text,
-        "capture_type":capture_flag.value
+        "capture_type": capture_flag.value
       };
       clint_request.fields.addAll(fields);
       clint_request.files.add(await http.MultipartFile.fromPath(
@@ -1276,7 +1316,7 @@ class PreventiveViewModel extends GetxController {
               response_data[0].condition == 'True') {
             loading.value = false;
             upLoadLocalImagesList.value = '';
-            capture_flag.value='';
+            capture_flag.value = '';
             Navigator.pop(context);
             getServicePreventiveDetails(id, "Refresh");
 
@@ -1323,33 +1363,25 @@ class PreventiveViewModel extends GetxController {
     }
   }
 
-
-
-  imageDeleteApiHit(String image_id, BuildContext context ) {
-    Map data = {
-      "service_id": id,
-      "email_id": email,
-      "image_id": image_id
-    };
+  imageDeleteApiHit(String image_id, BuildContext context) {
+    Map data = {"service_id": id, "email_id": email, "image_id": image_id};
     print(data);
     loading.value = true;
     try {
       _api.serviceCorrectiveImageDeleteApiHit(data, sessionManagement).then(
-            (value) {
+        (value) {
           print(value);
           final JsonResponse = json.decode(value);
           if (JsonResponse is List) {
-            List<ServicePreventiveDetailsResponse> response =
-            JsonResponse.map((e) => ServicePreventiveDetailsResponse.fromJson(e)).toList();
+            List<ServicePreventiveDetailsResponse> response = JsonResponse.map(
+                (e) => ServicePreventiveDetailsResponse.fromJson(e)).toList();
             if (response != null &&
                 response.length > 0 &&
                 response[0].condition == "True") {
               loading.value = false;
               Utils.showToastification("Success!", response[0].message!);
-              getServicePreventiveDetails(id,"Refresh");
+              getServicePreventiveDetails(id, "Refresh");
               Navigator.of(context).pop();
-
-
             } else {
               loading.value = false;
               print(response);
@@ -1361,9 +1393,9 @@ class PreventiveViewModel extends GetxController {
           }
         },
       ).onError(
-            (error, stackTrace) {
+        (error, stackTrace) {
           print(error);
-          service_indent_header_create_list.value=[];
+          service_indent_header_create_list.value = [];
         },
       );
     } catch (e) {
@@ -1371,7 +1403,6 @@ class PreventiveViewModel extends GetxController {
       print(e);
     }
   }
-
 
   void showLineImagesPopup(BuildContext context) {
     List<FileList> dialog_file_list = [];
@@ -1543,31 +1574,53 @@ class PreventiveViewModel extends GetxController {
                                             width: 100,
                                             margin: EdgeInsets.all(8),
                                             decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.circular(8),
-                                              border: Border.all(color: Colors.blueGrey, width: 0.5),
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
+                                              border: Border.all(
+                                                  color: Colors.blueGrey,
+                                                  width: 0.5),
                                             ),
                                             child: Padding(
-                                              padding: const EdgeInsets.all(3.0),
-                                              child: upLoadImageSection(dialog_file_list![index]),
+                                              padding:
+                                                  const EdgeInsets.all(3.0),
+                                              child: upLoadImageSection(
+                                                  dialog_file_list![index]),
                                             ),
                                           ),
                                           Positioned(
                                             right: 5,
                                             child: InkWell(
                                               onTap: () {
-                                                CustomConfirmDialog.showDialog(context: context, title: "Confirm", content: "Do You Want to continue", onPress: () {
-                                                  Navigator.of(context).pop();
-                                                  imageDeleteApiHit(dialog_file_list[index].id.toString(),context);
-                                                }, isLoading: loading);
+                                                CustomConfirmDialog.showDialog(
+                                                    context: context,
+                                                    title: "Confirm",
+                                                    content:
+                                                        "Do You Want to continue",
+                                                    onPress: () {
+                                                      Navigator.of(context)
+                                                          .pop();
+                                                      imageDeleteApiHit(
+                                                          dialog_file_list[
+                                                                  index]
+                                                              .id
+                                                              .toString(),
+                                                          context);
+                                                    },
+                                                    isLoading: loading);
                                               },
                                               child: Container(
                                                 height: 30,
                                                 width: 30,
                                                 decoration: BoxDecoration(
                                                     shape: BoxShape.circle,
-                                                    color: AllColors.primaryDark1
+                                                    color:
+                                                        AllColors.primaryDark1),
+                                                child: Icon(
+                                                  Icons.delete,
+                                                  size: 18,
+                                                  color: AllColors
+                                                      .customDarkerWhite,
                                                 ),
-                                                child: Icon(Icons.delete,size: 18,color: AllColors.customDarkerWhite,),
                                               ),
                                             ),
                                           )
@@ -1575,8 +1628,7 @@ class PreventiveViewModel extends GetxController {
                                         // child:
                                       ),
 
-
-                                     /* Container(
+                                      /* Container(
                                         width: 100,
                                         margin: EdgeInsets.all(8),
                                         decoration: BoxDecoration(
@@ -1818,6 +1870,226 @@ class PreventiveViewModel extends GetxController {
           desiredAccuracy: LocationAccuracy.high);
       currentLat.value = userLocation.latitude;
       currentLng.value = userLocation.longitude;
+    }
+  }
+
+
+  Future<List<AMCRequestInvoiceGetModal>> getAMCRequestInvoice(String text) async {
+    try {
+      Map<String, String> data = {"email_id": email, "invoice_no": text};
+
+      String customer_response =await  _api.aMCRequestInvoiceGetApiHit(data, sessionManagement);
+      final jsonResponse = json.decode(customer_response);
+      if (jsonResponse is List) {
+        print(jsonResponse);
+        List<AMCRequestInvoiceGetModal> response =
+        jsonResponse.map((data) => AMCRequestInvoiceGetModal.fromJson(data)).toList();
+        if (response[0].condition?.toLowerCase() == 'true') {
+          amcRequestInvoiceList.value = response;
+
+        } else {
+          amcRequestInvoiceList.value= [];
+        }
+      } else {
+        Utils.sanckBarException('False!', jsonResponse.message);
+        amcRequestInvoiceList.value = [];
+      }
+    } catch (e) {
+      Utils.sanckBarException('Exception!', e.toString());
+      amcRequestInvoiceList.value = [];
+    }
+    return  amcRequestInvoiceList.value;
+  }
+
+/*  getAMCRequestInvoice(String invoiceNo) {
+    Map<String, String> data = {"email_id": email, "invoice_no": invoiceNo};
+    print(data);
+    loading.value = true;
+    try {
+      _api.aMCRequestInvoiceGetApiHit(data, sessionManagement).then(
+        (value) {
+          print(value);
+          final JsonResponse = json.decode(value);
+          if (JsonResponse is List) {
+            List<AMCRequestInvoiceGetModal> response =
+                JsonResponse.map((e) => AMCRequestInvoiceGetModal.fromJson(e))
+                    .toList();
+            if (response != null &&
+                response.length > 0 &&
+                response[0].condition == "True") {
+              loading.value = false;
+              amcRequestInvoiceList.value = response;
+            } else {
+              loading.value = false;
+            }
+          } else {
+            loading.value = false;
+            amcRequestInvoiceList.value = [];
+
+            Utils.sanckBarException("Api Error!", JsonResponse);
+          }
+        },
+      ).onError(
+        (error, stackTrace) {
+          print(error);
+          amcRequestInvoiceList.value = [];
+        },
+      );
+    } catch (e) {
+      loading.value = false;
+      amcRequestInvoiceList.value = [];
+      print(e);
+    }
+  }*/
+
+
+  Future<void> getAMCRequestInvoiceItemNo(String invoiceNo) async {
+    amcRequestInvoiceItemNoList.clear();
+    Map<String, String> data = {
+      "email_id": email,
+      "invoice_no": invoiceNo
+    };
+    loading.value = true;
+    try {
+      final value =
+      await _api.aMCRequestInvoiceWiseItemGetApiHit(
+          data, sessionManagement);
+      final jsonResponse = json.decode(value);
+      if (jsonResponse is List) {
+        List<AMCRequestInvoiceItemGetModal> response =
+        jsonResponse
+            .map((e) =>
+            AMCRequestInvoiceItemGetModal.fromJson(e))
+            .toList();
+        if (response.isNotEmpty &&
+            response[0].condition == "True") {
+          amcRequestInvoiceItemNoList.clear();
+          amcRequestInvoiceItemNoList.addAll(response);
+        } else {
+          amcRequestInvoiceItemNoList.clear();
+        }
+      } else {
+        amcRequestInvoiceItemNoList.clear();
+        Utils.sanckBarException("Api Error!", jsonResponse);
+      }
+    } catch (e) {
+      amcRequestInvoiceItemNoList.clear();
+      print(e);
+    }
+    loading.value = false;
+  }
+
+/*  getAMCRequestInvoiceItemNo(String invoiceNo) {
+    amcRequestInvoiceItemNoList.value=[];
+    Map<String, String> data = {"email_id": email, "invoice_no": invoiceNo};
+    print(data);
+    loading.value = true;
+    try {
+      _api.aMCRequestInvoiceWiseItemGetApiHit(data, sessionManagement).then(
+        (value) {
+          print(value);
+          final JsonResponse = json.decode(value);
+          if (JsonResponse is List) {
+            List<AMCRequestInvoiceItemGetModal> response = JsonResponse.map(
+                (e) => AMCRequestInvoiceItemGetModal.fromJson(e)).toList();
+            if (response != null &&
+                response.length > 0 &&
+                response[0].condition == "True") {
+              loading.value = false;
+              amcRequestInvoiceItemNoList.value = response;
+            } else {
+              loading.value = false;
+            }
+          } else {
+            loading.value = false;
+            amcRequestInvoiceItemNoList.value = [];
+            Utils.sanckBarException("Api Error!", JsonResponse);
+          }
+        },
+      ).onError(
+        (error, stackTrace) {
+          print(error);
+          amcRequestInvoiceItemNoList.value = [];
+        },
+      );
+    } catch (e) {
+      loading.value = false;
+      amcRequestInvoiceItemNoList.value = [];
+      print(e);
+    }
+  }*/
+
+  void clearAllField() {
+    amcRequestInvoiceItemNoController.clear();
+    amcRequestInvoiceNoController.value.clear();
+    warrantyStartDateController.value.clear();
+    warrantyEndDateController.value.clear();
+    frequencyController.value.clear();
+    serviceNo.value="";
+    selectedItemNo.value="";
+   // amcRequestInvoiceItemNoList.value=[];
+    isShowInvoiceNo.value=false;
+    isShowInvoiceNo.value=true;
+    isShowItemNo.value=false;
+    isShowItemNo.value=true;
+    invoiceKey.value++;
+    itemKey.value++;
+    pinCodeController.value.text="";
+
+  }
+
+  @override
+  void onClose() {
+    amcRequestInvoiceNoController.value.dispose();
+    warrantyStartDateController.value.dispose();
+    warrantyEndDateController.value.dispose();
+    frequencyController.value.dispose();
+    super.onClose();
+  }
+
+  getAMCRequestCreation() {
+    Map<String, String> data = {
+      "email_id": email,
+      "service_no": serviceNo.value,
+      "invoice_no": amcRequestInvoiceNoController.value.text,
+      "item_no":selectedItemNo.value,
+      "warranty_start_date": warrantyStartDateController.value.text,
+      "warranty_end_date": warrantyEndDateController.value.text,
+      "frequency_of_pm": frequencyController.value.text
+    };
+    print(data);
+    btnloading.value = true;
+    try {
+      _api.aMCRequestCreationApiHit(data, sessionManagement).then(
+        (value) {
+          print(value);
+          final JsonResponse = json.decode(value);
+          if (JsonResponse is List) {
+            List<AMCRequestInvoiceItemGetModal> response = JsonResponse.map(
+                (e) => AMCRequestInvoiceItemGetModal.fromJson(e)).toList();
+            if (response[0].condition?.toString() == "True") {
+              btnloading.value = false;
+              Utils.sanckBarSuccess('Success', response[0].message.toString());
+              Get.offNamed(RoutesName.create_preventive_calender_view_screen);
+              createPreventiveCalenderCallApi();
+              clearAllField();
+            } else {
+              Utils.sanckBarError('False', response[0].message.toString());
+              btnloading.value = false;
+            }
+          } else {
+            btnloading.value = false;
+            Utils.sanckBarException("Api Error!", JsonResponse);
+          }
+        },
+      ).onError(
+        (error, stackTrace) {
+          print(error);
+        },
+      );
+    } catch (e) {
+      btnloading.value = false;
+      print(e);
     }
   }
 }

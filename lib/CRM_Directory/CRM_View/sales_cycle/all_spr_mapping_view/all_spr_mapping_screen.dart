@@ -1,3 +1,4 @@
+
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -219,20 +220,36 @@ class AllSprMappingScreen extends StatelessWidget{
               _buildLabelWithValue(label: "Price Per Unit: ", value:"₹ ${pendingDraftQuoteController.PendingDraftQuoteList[position].unitPrice.toString() ?? ""}"  ,color:AllColors.textColor),
               _buildLabelWithValue(label: "Quantity: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].qty.toString(),color:AllColors.textColor),
               _buildLabelWithValue(label: "LSP: ", value:  "₹ ${pendingDraftQuoteController.PendingDraftQuoteList[position].listSellingPrice.toString() ?? ""}",color:AllColors.textColor),
-              _buildLabelWithValue(label: "MAP: ", value:  "₹ ${pendingDraftQuoteController.PendingDraftQuoteList[position].minimalAcceptablePrice.toString() ?? ""}",color:AllColors.textColor),
+
+              Visibility(visible:  /*pendingDraftQuoteController.userType=="bh" ||*/ pendingDraftQuoteController.userType=="cl"
+                  ||pendingDraftQuoteController.userType=="gm" || pendingDraftQuoteController.isAdminWritePermission=="1" ,
+                  child: _buildLabelWithValue(label: "MAP: ", value:  "₹ ${pendingDraftQuoteController.PendingDraftQuoteList[position].minimalAcceptablePrice.toString() ?? ""}",color:AllColors.textColor)),
 
               _buildLabelWithValue(label: "Seeking Price Per Unit: ", value:  "₹ ${pendingDraftQuoteController.PendingDraftQuoteList[position].discountAmtPerUnit.toString() ?? ""}",color:AllColors.textColor),
               _buildLabelWithValue(label: "Seeking Discount Per: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].discountPer.toString() ?? "",color:AllColors.textColor),
               _buildLabelWithValue(label: "Total Seeking Price: ", value:  "₹ ${pendingDraftQuoteController.PendingDraftQuoteList[position].discountAmt.toString() ?? ""}",color:AllColors.textColor),
-              _buildLabelWithValue(label: "Cost STD: ", value:  "₹ ${pendingDraftQuoteController.PendingDraftQuoteList[position].standardCost.toString() ?? ""}",color:AllColors.textColor),
+              Visibility(visible:  /*pendingDraftQuoteController.userType=="bh" ||*/ pendingDraftQuoteController.userType=="cl"
+                  ||pendingDraftQuoteController.userType=="gm" || pendingDraftQuoteController.isAdminWritePermission=="1" ,
+                  child: _buildLabelWithValue(label: "Standard Cost: ", value:  "₹ ${pendingDraftQuoteController.PendingDraftQuoteList[position].standardCost.toString() ?? ""}",color:AllColors.textColor)),
               _buildLabelWithValue(label: "Discount Per: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].approvedDiscountPer.toString(),color:AllColors.textColor),
-              _buildLabelWithValue(label: "BTP: ", value:  "₹ ${pendingDraftQuoteController.PendingDraftQuoteList[position].branchTransferPrice.toString() ?? ""}",color:AllColors.textColor),
+              Visibility(visible:  pendingDraftQuoteController.userType=="bh" || pendingDraftQuoteController.userType=="cl"
+                  ||pendingDraftQuoteController.userType=="gm" || pendingDraftQuoteController.isAdminWritePermission=="1" ,
+                  child: _buildLabelWithValue(label: "BTP: ", value:  "₹ ${pendingDraftQuoteController.PendingDraftQuoteList[position].branchTransferPrice.toString() ?? ""}",color:AllColors.textColor)),
 
               _buildLabelWithValue(label: "Approved Price Per Unit: ", value:  "₹ ${pendingDraftQuoteController.PendingDraftQuoteList[position].approvedAmountPerUnit.toString() ?? ""}",color:AllColors.textColor),
-              _buildLabelWithValue(label: "Sales Credit Per: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].salesCredit.toString() ?? "",color:AllColors.textColor),
-              _buildLabelWithValue(label: "BM Per: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].bmDiscountPer.toString() ?? "",color:AllColors.textColor),
-              _buildLabelWithValue(label: "GM Per: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].gmDiscountPer.toString() ?? "",color:AllColors.textColor),
-              _buildLabelWithValue(label: "GM Absolute: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].gmTotalDiscountAmount.toString() ?? "",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Sales Credit"
+                  " Per: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].salesCredit.toString() ?? "",color:AllColors.textColor),
+              Visibility(visible:  pendingDraftQuoteController.userType=="bh" || pendingDraftQuoteController.userType=="cl"
+                  ||pendingDraftQuoteController.userType=="gm" || pendingDraftQuoteController.isAdminWritePermission=="1" ,
+                  child: _buildLabelWithValue(label: "BM Per: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].bmDiscountPer.toString() ?? "",color:AllColors.textColor)),
+
+              Visibility(visible:  /*pendingDraftQuoteController.userType=="bh" ||*/ pendingDraftQuoteController.userType=="cl"
+                  ||pendingDraftQuoteController.userType=="gm" || pendingDraftQuoteController.isAdminWritePermission=="1",
+                  child: _buildLabelWithValue(label: "GM Per: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].gmDiscountPer.toString() ?? "",color:AllColors.textColor)),
+              Visibility(visible:  /*pendingDraftQuoteController.userType=="bh" ||*/ pendingDraftQuoteController.userType=="cl"
+                  ||pendingDraftQuoteController.userType=="gm" || pendingDraftQuoteController.isAdminWritePermission=="1",
+                  child: _buildLabelWithValue(label: "GM Absolute: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].gmTotalDiscountAmount.toString() ?? "",color:AllColors.textColor)),
+
               _buildLabelWithValue(label: "Approved Price: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].approvedAmount.toString() ?? "",color:AllColors.textColor),
               _buildLabelWithValue(label: "GST Per: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].igstPer.toString() ?? "",color:AllColors.textColor),
               _buildLabelWithValue(label: "GST Amount: ", value:  "₹ ${pendingDraftQuoteController.PendingDraftQuoteList[position].gstAmount.toString() ?? ""}",color:AllColors.textColor),
@@ -254,6 +271,7 @@ class AllSprMappingScreen extends StatelessWidget{
               _buildLabelWithValue(label: "Quote Accepted: ",value: pendingDraftQuoteController.PendingDraftQuoteList[position].quoteAccepted ?? "",color:AllColors.textColor),
               _buildLabelWithValue(label: "Approval Manager: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].approvedFullName ?? "",color:AllColors.textColor),
               _buildLabelWithValue(label: "Product Category: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].productCategory ?? "",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Parent Product Category: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].parentProductCategory ?? "",color:AllColors.textColor),
               _buildLabelWithValue(label: "Quote Version: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].quoteVersion.toString(),color:AllColors.textColor),
               _buildLabelWithValue(label: "Quote Status: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].quoteStatus ?? "",color:getStatusColor(saleCycleStatus)),
               _buildLabelWithValue(label: "Expected Closure Date: ", value: expectedClosuredateDate.toString(),color:AllColors.textColor),
@@ -468,6 +486,8 @@ class AllSprMappingScreen extends StatelessWidget{
                               bindRegionNameFilter(context),
                               const SizedBox(height: 10,),
                               bindProductCategory(context),
+                              const SizedBox(height: 10,),
+                              filterWithQuoteParentProductCategory(context),
                               const SizedBox(height: 10,),
                               bindProductCategoryTypeDropDown(context),
                               const SizedBox(height: 10,),
@@ -721,6 +741,82 @@ class AllSprMappingScreen extends StatelessWidget{
           ),
           itemBuilder: (context, item, isSelected) => ListTile(
             title: Text(item.categoryName ?? ""),
+          ),
+        ),
+      );
+    });
+  }
+
+  filterWithQuoteParentProductCategory(BuildContext context) {
+    return Obx(() {
+      if (pendingDraftQuoteController.parentProductCategoryController.value.text.isNotEmpty && pendingDraftQuoteController.filterDataChecker.value=='1') {
+        List<String> nameList = pendingDraftQuoteController.parentProductCategoryController.value.text.split('|');
+        pendingDraftQuoteController.parentItemCategorySelectedList.value =
+            List.generate(nameList.length, (index) {
+              return ItemCategoryMstModel(
+                parentCategoryCode: nameList[index].trim(),
+              );
+            });
+      }
+      return DropdownSearch<ItemCategoryMstModel>.multiSelection(
+        items: pendingDraftQuoteController.parentProductCategoryList,
+        itemAsString: (ItemCategoryMstModel u) => u.parentCategoryCode ?? "",
+        selectedItems: pendingDraftQuoteController.parentItemCategorySelectedList,
+        dropdownDecoratorProps: DropDownDecoratorProps(
+          baseStyle: TextStyle(color: Colors.black),
+          dropdownSearchDecoration: InputDecoration(
+            filled: false,
+            labelText: pendingDraftQuoteController.parentItemCategorySelectedList.isNotEmpty ? "Parent Product Category" : null,
+            hintText:  "Parent Product Category" ,
+            hintStyle: GoogleFonts.poppins(
+                color: AllColors.lightblackColor,
+                fontWeight: FontWeight.w300,
+                fontSize: AllFontSize.ten),
+            labelStyle: GoogleFonts.poppins(
+                color: AllColors.primaryDark1,
+                fontWeight: FontWeight.w500,
+                fontSize: AllFontSize.sisxteen),
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+          ),
+        ),
+        dropdownBuilder: (context, selectedItems) {
+          if (selectedItems.isEmpty) {
+            return Text(
+              "Parent Product Category",
+              style: GoogleFonts.poppins(
+                color: AllColors.primaryDark1, // Match your hint color
+                fontSize: AllFontSize.sisxteen,
+                fontWeight: FontWeight.w500,
+              ),
+            );
+          }
+          return SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Text(
+              selectedItems.map((e) => e.parentCategoryCode).join(', '),
+              style: TextStyle(color: Colors.black), // Only black text
+            ),
+          );
+        },
+        onChanged: (List<ItemCategoryMstModel> selectedList) {
+          pendingDraftQuoteController.parentItemCategorySelectedList.value = selectedList;
+          pendingDraftQuoteController.parentProductCategoryController.value.text =
+              selectedList.map((e) => e.parentCategoryCode).join('|');
+        },
+        popupProps: PopupPropsMultiSelection.dialog(
+          showSearchBox: true,
+          searchFieldProps: TextFieldProps(
+            decoration: InputDecoration(
+              contentPadding: EdgeInsets.only(top: 20, left: 12, right: 12),
+              // Top margin here
+              hintText: "Search...",
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+          ),
+          itemBuilder: (context, item, isSelected) => ListTile(
+            title: Text(item.parentCategoryCode ?? ""),
           ),
         ),
       );

@@ -403,20 +403,7 @@ class SaleCyclePendingForApprovalList extends StatelessWidget{
                     child: Row(
                       children: [
                         Expanded(child: _buildButton(
-                          text: 'Submit',
-                          borderColor: AllColors.primaryDark,
-                          textColor: AllColors.primaryDark1,
-                          onTap: () {
-                            Get.back();
-                            salesCyclePendingForApprovalController.pageNumber = 0;
-                            salesCyclePendingForApprovalController.getsalesCycleData(salesCyclePendingForApprovalController.pageNumber,);
-                          },
-                        )),
-
-                        const SizedBox(width: 6),
-
-                        Expanded(child: _buildButton(
-                          text: 'Reset',
+                          text: 'Clear',
                           borderColor: AllColors.redColor,
                           textColor: AllColors.redColor,
                           onTap: () {
@@ -425,6 +412,20 @@ class SaleCyclePendingForApprovalList extends StatelessWidget{
                             salesCyclePendingForApprovalController.clearAllFieldOfFilter();
                             salesCyclePendingForApprovalController.clearFilterData();
                             salesCyclePendingForApprovalController.pageNumber=0;
+                            salesCyclePendingForApprovalController.getsalesCycleData(salesCyclePendingForApprovalController.pageNumber,);
+                          },
+                        )),
+
+
+                        const SizedBox(width: 6),
+
+                        Expanded(child: _buildButton(
+                          text: 'Apply',
+                          borderColor: AllColors.primaryDark,
+                          textColor: AllColors.primaryDark1,
+                          onTap: () {
+                            Get.back();
+                            salesCyclePendingForApprovalController.pageNumber = 0;
                             salesCyclePendingForApprovalController.getsalesCycleData(salesCyclePendingForApprovalController.pageNumber,);
                           },
                         )),

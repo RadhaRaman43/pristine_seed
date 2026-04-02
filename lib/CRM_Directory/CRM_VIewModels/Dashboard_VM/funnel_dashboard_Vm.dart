@@ -73,6 +73,8 @@ class FunnelDashboardVm extends GetxController{
   var RegionName_controller=TextEditingController().obs;
   var CustomerName_controller=TextEditingController().obs;
   var filter_created_on_cont=TextEditingController().obs;
+  var filter_created_on_star_to_cont=TextEditingController().obs;
+  var filter_sale_cycle_id_cont=TextEditingController().obs;
 
   var CustomerNameApi;
   var ProductCategoryForApi;
@@ -189,10 +191,8 @@ class FunnelDashboardVm extends GetxController{
       if(StageName_controller.value.text.contains("All")){
         StageNameForApi="";
       }else{
-        StageNameForApi = StageName_controller.value.text
-            .split(',')
-            .map((e) => e.trim())
-            .join('|');
+        StageNameForApi = StageName_controller.value.text.split(',').map((e) =>
+            e.trim()).join('|');
 
       }
     }
@@ -278,6 +278,7 @@ class FunnelDashboardVm extends GetxController{
         "filter_stage_name":(StageNameForApi.isEmpty || StageNameForApi.toLowerCase()=='all')?SelectedTabForApi:StageNameForApi,
         "filter_product_category": ProductCategoryForApi.isEmpty?"":ProductCategoryForApi,
         "filter_customer_name": CustomerNameApi.isEmpty?"":CustomerNameApi,
+        "filter_sales_cycle_id": filter_sale_cycle_id_cont.value.text.isEmpty?"":filter_sale_cycle_id_cont.value.text,
         "rowsPerPage": rowsPerPage,
         "pageNumber": pageNumber
       };
@@ -384,53 +385,6 @@ class FunnelDashboardVm extends GetxController{
   }
 
 
-  getEmployeeMemberApi() {
-    Map data = {
-      "email_id": email,
-      "flag": "GeoLevelLower"
-    };
-    print(data);
-    loading.value = true;
-    try {
-      _api.EmployeeMamberGetApiHit(data, sessionManagement).then(
-            (value) {
-          print(value);
-          final JsonResponse = json.decode(value);
-          if (JsonResponse is List) {
-            List<EmployeeMemberModel> response =
-            JsonResponse.map((e) => EmployeeMemberModel.fromJson(e))
-                .toList();
-            if (response != null &&
-                response.length > 0 &&
-                response[0].condition == "True") {
-              loading.value = false;
-              employee_Member_list.value=response;
-              //Get.toNamed(RoutesName.create_preventive_calender_view_screen);
-
-            } else {
-              loading.value = false;
-              employee_Member_list.value=[];
-              //Utils.showErrorToastification("Error!", "No Date Found");
-              //service_installation_details_list.value=[];
-            }
-          } else {
-            loading.value = false;
-            // service_indent_header_list.value = [];
-            Utils.showExceptionToastification("Api Error!", JsonResponse);
-          }
-        },
-      ).onError(
-            (error, stackTrace) {
-          print(error);
-          //service_indent_header_list.value = [];
-        },
-      );
-    } catch (e) {
-      loading.value = false;
-      employee_Member_list.value = [];
-      print(e);
-    }
-  }
 
   getEmployeeTeamMemberGetByClusterRegionApi() {
     Map data = {
@@ -626,6 +580,7 @@ class FunnelDashboardVm extends GetxController{
             loading.value = false;
             regionwithclusterGetByEmailList.value=response;
             RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join(', ');
+            SelectedRegion_list.assignAll(regionwithclusterGetByEmailList);
             print('region....${RegionName_controller.value.text}');
             // funnelDashboardData();
              getFilterData();
@@ -763,6 +718,7 @@ class FunnelDashboardVm extends GetxController{
     CustomerNameApi="";
     SelectedTabForApi = '';
 
+    filter_sale_cycle_id_cont.value.clear();
     filterCustomDateController.value.clear();
     AccountOwner_controller.value.clear();
     typeOfCall_controller.value.clear();
@@ -771,6 +727,7 @@ class FunnelDashboardVm extends GetxController{
     IsCommit_controller.value.text = 'ALL';
     StageName_controller.value.text='All';
     filter_created_on_cont.value.clear();
+    filter_created_on_star_to_cont.value.clear();
     //clusterName_controller.value.clear();
     CustomerName_controller.value.clear();
     //RegionName_controller.value.clear();
@@ -780,16 +737,18 @@ class FunnelDashboardVm extends GetxController{
     SelectedCluster_list.value = [];
     SelectedRegion_list.value = [];
     //selectedSalesStageStatusList.value = [];
-    selectedSalesStageStatusList.value = ["All"];
+    //selectedSalesStageStatusList.value = ["All"];
     DateRange("monthly");
     filterCustomDateController.value.text = '${formattedStartDate} - ${formattedEndDate}';
-    RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join(',');
-    clusterName_controller.value.text = clusterGetByEmailList.map((e) => e.geoValue).join(',');
+    //RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join(',');
+    clusterName_controller.value.text = clusterGetByEmailList.map((e) => e.geoValue).join('|');
+    getRegionsWithClusterFilterGetByEmail();
 
   }
 
   void SaveFilterData() async{
     await sessionManagement.saveFunnelDashboardData({
+      "filter_sale_cycle_id_cont": filter_sale_cycle_id_cont.value.text,
       "start_date": formattedStartDate.value,
       "end_date": formattedEndDate.value,
       "filter_custom_date": filterCustomDateController.value.text,
@@ -799,6 +758,7 @@ class FunnelDashboardVm extends GetxController{
       "filter_product_category": ProductCategory_controller.value.text,
       "filter_commit": IsCommit_controller.value.text,
       "filter_created_on": filter_created_on_cont.value.text,
+      "filter_created_on_star_to_cont": filter_created_on_star_to_cont.value.text,
       "filter_owner_name": AccountOwner_controller.value.text,
       "filter_region_name":RegionName_controller.value.text,
       "filter_cluster_name": clusterName_controller.value.text,
@@ -812,6 +772,7 @@ class FunnelDashboardVm extends GetxController{
 
       if(getFilterData.isNotEmpty){
         filterDataChecker.value='1';
+        filter_sale_cycle_id_cont.value.text=getFilterData["filter_sale_cycle_id_cont"]??"";
         filterCustomDateController.value.text=getFilterData["filter_custom_date"]??"";
         StageName_controller.value.text=getFilterData["filter_stage_name"]??"";
         QuoteAccepted_controller.value.text=getFilterData["filter_quote_accepted"]??"";
@@ -819,6 +780,7 @@ class FunnelDashboardVm extends GetxController{
         ProductCategory_controller.value.text=getFilterData["filter_product_category"]??"";
         IsCommit_controller.value.text=getFilterData["filter_commit"]??"";
         filter_created_on_cont.value.text=getFilterData["filter_created_on"]??"";
+        filter_created_on_star_to_cont.value.text=getFilterData["filter_created_on_star_to_cont"]??"";
         AccountOwner_controller.value.text=getFilterData["filter_owner_name"]??"";
         pageNumber=0;
 

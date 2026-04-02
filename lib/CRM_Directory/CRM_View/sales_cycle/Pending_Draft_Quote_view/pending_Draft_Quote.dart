@@ -219,6 +219,7 @@ class PendingDraftQuote extends StatelessWidget{
               _buildLabelWithValue(label: "Customer Code: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].accountCode ?? "",color:AllColors.textColor),
               _buildLabelWithValue(label: "Contact Name: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].contactName ?? "",color:AllColors.textColor),
               _buildLabelWithValue(label: "Product Category: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].productCategory ?? "",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Parent Product Category: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].parentProductCategory ?? "",color:AllColors.textColor),
               _buildLabelWithValue(label: "Quote Status: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].quoteStatus ?? "",color:getStatusColor(saleCycleStatus)),
               _buildLabelWithValue(label: "Quote Validity: ", value:  quoteValidityDate.toString(),color:AllColors.textColor),
               _buildLabelWithValue(label: "Expected Closure Date: ", value: expectedClosuredateDate.toString(),color:AllColors.textColor),
@@ -354,7 +355,7 @@ class PendingDraftQuote extends StatelessWidget{
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Icon(Icons.shield_moon_rounded, color: AllColors.primaryDark1,),
-                        SizedBox(width: 5,),
+                        const SizedBox(width: 5,),
                         Text(
                           "Quote Filter ",
                           style: GoogleFonts.poppins(
@@ -392,43 +393,45 @@ class PendingDraftQuote extends StatelessWidget{
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              SizedBox(height: 5,),
+                              const SizedBox(height: 5,),
                               bindData(context,'Quote Id',pendingDraftQuoteController.filterQuoteIdController.value),
-                              SizedBox(height: 10),
+                              const SizedBox(height: 10),
                               bindData(context,'Quote Version',pendingDraftQuoteController.filterQuoteVersionController.value),
-                              SizedBox(height: 10),
+                              const SizedBox(height: 10),
                               bindData(context,'Sale Cycle Id',pendingDraftQuoteController.filterQuoteSaleCycleController.value),
-                              SizedBox(height: 10),
+                              const SizedBox(height: 10),
                               bindData(context,'Customer Code',pendingDraftQuoteController.accountCodeController.value),
-                              SizedBox(height: 10),
+                              const SizedBox(height: 10),
                               bindData(context,'Customer Name',pendingDraftQuoteController.accountNameController.value),
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
                               filterWithQuoteStatus(context),
-                              SizedBox(height: 10),
+                              const SizedBox(height: 10),
                               filterWithQuoteValidity(context),
-                              SizedBox(height: 10),
+                              const SizedBox(height: 10),
                               filterWithQuoteClosureDate(context),
-                              SizedBox(height: 10),
+                              const SizedBox(height: 10),
                               bindData(context,'Rh Approval',pendingDraftQuoteController.rh_Approval_controller.value),
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
                               bindData(context,'CBH Approval',pendingDraftQuoteController.cbh_Approval_controller.value),
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
                               bindData(context,'Category Approval',pendingDraftQuoteController.category_Approval_controller.value),
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
                               bindData(context,'Gm Approval',pendingDraftQuoteController.gm_Approval_controller.value),
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
                               bindClusterNameFilter(context),
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
                               bindRegionNameFilter(context),
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
                               bindData(context,'Created By',pendingDraftQuoteController.createdByCnontroller.value),
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
                               filterWithQuoteCreatedOn(context),
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
                               filterWithQuoteProductCategory(context),
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
+                              filterWithQuoteParentProductCategory(context),
+                              const SizedBox(height: 10,),
                               bindProductCategoryTypeDropDown(context),
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
                             ],
                           ),
                         ),
@@ -685,6 +688,84 @@ class PendingDraftQuote extends StatelessWidget{
       );
     });
   }
+
+  filterWithQuoteParentProductCategory(BuildContext context) {
+    return Obx(() {
+      if (pendingDraftQuoteController.parentProductCategoryController.value.text.isNotEmpty && pendingDraftQuoteController.filterDataChecker.value=='1') {
+        List<String> nameList = pendingDraftQuoteController.parentProductCategoryController.value.text.split('|');
+        pendingDraftQuoteController.parentItemCategorySelectedList.value =
+            List.generate(nameList.length, (index) {
+              return ItemCategoryMstModel(
+                parentCategoryCode: nameList[index].trim(),
+              );
+            });
+      }
+      return DropdownSearch<ItemCategoryMstModel>.multiSelection(
+        items: pendingDraftQuoteController.parentProductCategoryList,
+        itemAsString: (ItemCategoryMstModel u) => u.parentCategoryCode ?? "",
+        selectedItems: pendingDraftQuoteController.parentItemCategorySelectedList,
+        dropdownDecoratorProps: DropDownDecoratorProps(
+          baseStyle: TextStyle(color: Colors.black),
+          dropdownSearchDecoration: InputDecoration(
+            filled: false,
+            labelText: pendingDraftQuoteController.parentItemCategorySelectedList.isNotEmpty ? "Parent Product Category" : null,
+            hintText:  "Parent Product Category" ,
+            hintStyle: GoogleFonts.poppins(
+                color: AllColors.lightblackColor,
+                fontWeight: FontWeight.w300,
+                fontSize: AllFontSize.ten),
+            labelStyle: GoogleFonts.poppins(
+                color: AllColors.primaryDark1,
+                fontWeight: FontWeight.w500,
+                fontSize: AllFontSize.sisxteen),
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+          ),
+        ),
+        dropdownBuilder: (context, selectedItems) {
+          if (selectedItems.isEmpty) {
+            return Text(
+              "Parent Product Category",
+              style: GoogleFonts.poppins(
+                color: AllColors.primaryDark1, // Match your hint color
+                fontSize: AllFontSize.sisxteen,
+                fontWeight: FontWeight.w500,
+              ),
+            );
+          }
+          return SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Text(
+              selectedItems.map((e) => e.parentCategoryCode).join(', '),
+              style: TextStyle(color: Colors.black), // Only black text
+            ),
+          );
+        },
+        onChanged: (List<ItemCategoryMstModel> selectedList) {
+          pendingDraftQuoteController.parentItemCategorySelectedList.value = selectedList;
+          pendingDraftQuoteController.parentProductCategoryController.value.text =
+              selectedList.map((e) => e.parentCategoryCode).join('|');
+        },
+        popupProps: PopupPropsMultiSelection.dialog(
+          showSearchBox: true,
+          searchFieldProps: TextFieldProps(
+            decoration: InputDecoration(
+              contentPadding: EdgeInsets.only(top: 20, left: 12, right: 12),
+              // Top margin here
+              hintText: "Search...",
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+          ),
+          itemBuilder: (context, item, isSelected) => ListTile(
+            title: Text(item.parentCategoryCode ?? ""),
+          ),
+        ),
+      );
+    });
+  }
+
+
   Widget bindProductCategoryTypeDropDown(context) {
     return DropdownMenu<String>(
       width: MediaQuery.of(context).size.width - 15,

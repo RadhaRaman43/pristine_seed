@@ -26,7 +26,6 @@ class UpdateQuoteHeaderScreen extends StatelessWidget{
     return WillPopScope(
       onWillPop: () async {
         Get.toNamed(RoutesName.quoteInformationScreen);
-
         return false;
       },
       child: Scaffold(
@@ -140,9 +139,9 @@ class UpdateQuoteHeaderScreen extends StatelessWidget{
             Visibility(
               visible:
                 saleCycleController.isAdminWritePermission == "1" ||
-                saleCycleController.userType.toLowerCase() == "branch head" ||
-                saleCycleController.userType.toLowerCase() == "cluster head" ||
-                saleCycleController.userType.toLowerCase() == "general manager",
+                saleCycleController.userType.toLowerCase() == "bh" ||
+                saleCycleController.userType.toLowerCase() == "ch" ||
+                saleCycleController.userType.toLowerCase() == "gm",
               child: Column(
                 children: [
               bindInputData(context,'Installation Charges',saleCycleController.installationChargesController.value,Icon(Icons.currency_rupee)),
@@ -371,10 +370,10 @@ class UpdateQuoteHeaderScreen extends StatelessWidget{
           if(levelText=='Installation Charges' ||levelText=='Other Charges'){
             saleCycleController.calculateFinalAmt();
           }
-          if(levelText=='Advc. Payment Amount'){
-            calculatePer();
+          else if(levelText=='Advc. Payment Amount'){
+            saleCycleController.calculatePer();
           }
-          if(levelText=='Advc. Payment Percentage' || levelText=='Quote Amount'){
+         else if(levelText=='Advc. Payment Percentage' || levelText=='Quote Amount'){
             checkPertageValue(context);
           }
 
@@ -383,38 +382,20 @@ class UpdateQuoteHeaderScreen extends StatelessWidget{
       ),
     );
   }
-  void calculatePer() {
-    if(saleCycleController.advncPaymentAmountController.value.text.isEmpty){
-      saleCycleController.advncPaymentPerController.value.clear();
-    }else{
-      final text = double.parse(saleCycleController.advncPaymentAmountController.value.text);
-      double percantage=0.0;
-      if(saleCycleController.quoteTotAmountController.value.text.isNotEmpty){
-        percantage=(text/double.parse(saleCycleController.quoteTotAmountController.value.text))*100;
-        print("Percentage.${percantage}");
-      }
-      if(percantage<=100){
-        saleCycleController.advncPaymentPerController.value.text = percantage.toStringAsFixed(2);
-      }else if(text>100){
-        Utils.showErrorToastification('Error', 'Payment Percentage cannot be greater than 100');
-      }
-      /*else{
-        Utils.showErrorToastification('Error', 'Payment Percentage cannot be greater than 100');
-      }*/
 
-    }
-  }
   checkPertageValue(BuildContext context) {
     final text = saleCycleController.advncPaymentPerController.value.text;
     final percentageValue = int.tryParse(text);
     if (percentageValue == null) {
       saleCycleController.advncPaymentAmountController.value.clear();
     } else if (percentageValue > 100) {
+      saleCycleController.advncPaymentAmountController.value.clear();
+      saleCycleController.advncPaymentPerController.value.clear();
       print("hhhh${percentageValue}");
       Utils.showErrorToastification('Error', 'Payment Percentage cannot be greater than 100');
     } else if(percentageValue <= 100){
       final advanceAmt = (saleCycleController.quoteHeaderdata[0].quoteTotalAmount! * percentageValue) / 100;
-      saleCycleController.advncPaymentAmountController.value.text = advanceAmt.toString();
+      saleCycleController.advncPaymentAmountController.value.text = advanceAmt.toStringAsFixed(2);
       final parts=saleCycleController.advncPaymentAmountController.value.text.split('.');
       if(parts.length==2 && parts[1].length>4){
         String trimmed = '${parts[0]}.${parts[1].substring(0, 4)}';
@@ -430,8 +411,10 @@ class UpdateQuoteHeaderScreen extends StatelessWidget{
       advcAmount = 0.0;
     }
     double totAmount = finalAmount! - advcAmount;
-    saleCycleController.pendingAmountController.value.text = totAmount.toString();
+    saleCycleController.pendingAmountController.value.text = totAmount.toStringAsFixed(2);
   }
+  
+  
   Widget bindTermCondition(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
