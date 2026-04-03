@@ -279,19 +279,18 @@ class SalesCycleScreen extends StatelessWidget{
                               salesCycleController.quoteAcceptedForFilterOnSaleCycle.value="Overdue";
                               salesCycleController.pageNumber=0;
                               DateTime now = DateTime.now();
-                              late DateTime startDate;
-                              late DateTime endDate;
-                              if (now.month >= 4) {
-                                // Current FY: starts from April this year to March next year
-                                startDate = DateTime(now.year, 4, 1);
-                                endDate = DateTime(now.year + 1, 3, 31);
+                              //late DateTime startDate;
+                              final DateTime oneYearAgo = DateTime(now.year - 1, 4, 1);
+                              late DateTime endDate=DateTime(now.year, now.month, now.day-1);
+                              /*if (now.month >= 4) {
+                                //startDate = DateTime(now.year, 4, 1);
+                                endDate = DateTime(now.year, now.month, now.day-1);
                               } else {
-                                // Current FY: starts from April last year to March this year
-                                startDate = DateTime(now.year - 1, 4, 1);
-                                endDate = DateTime(now.year, 3, 31);
-                              }
+                                //startDate = DateTime(now.year - 1, 4, 1);
+                                endDate = DateTime(now.year-1, 3, 31);
+                              }*/
                               String start,end;
-                               start= DateFormat('yyyy-MM-dd').format(startDate);
+                               start= DateFormat('yyyy-MM-dd').format(oneYearAgo);
                               end = DateFormat('yyyy-MM-dd').format(endDate);
                               salesCycleController.extClosureStartToEnd.value="$start@$end";
                               salesCycleController.filterExpectedClosuredateController.value.text = '$start - $end';

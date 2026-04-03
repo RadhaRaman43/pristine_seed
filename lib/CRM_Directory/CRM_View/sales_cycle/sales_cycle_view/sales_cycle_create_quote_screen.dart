@@ -173,9 +173,15 @@ class SalesCycleCreateQuoteScreen extends StatelessWidget{
                   margin: EdgeInsets.only(left: 15, right: 15, top: 15),
                   child: DefaultButton(
                     press: (){
-                      saleCycleController.saleCycleQuoteCreate(saleCycleController.saleCycleList[0].salesCycleId!);
+
                        //saleCycleController.accountNameController.value.clear();
                       //saleCycleController.contactNameController.value.clear();
+                      if(saleCycleController.productCategoryController.value.text==null ||
+                          saleCycleController.productCategoryController.value.text.isEmpty ||
+                          saleCycleController.itemCategorySelectedlist.value.isEmpty){
+                        return Utils.sanckBarError("Parent Product Category", "Please Select Parent Product Category");
+                      }
+                      saleCycleController.saleCycleQuoteCreate(saleCycleController.saleCycleList[0].salesCycleId!);
                     },
                     text: "Add Quote",
                   ),
