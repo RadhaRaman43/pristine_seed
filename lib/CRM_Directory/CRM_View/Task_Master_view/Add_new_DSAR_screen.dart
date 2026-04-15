@@ -399,7 +399,7 @@ class AddNewDsarScreen extends StatelessWidget{
                     ),);
               }),
 
-              Obx((){
+             /* Obx((){
                 return Visibility(
                   visible: TaskMaster_page_controller.ItemCateDropDown.value,
                   child:  Column(
@@ -426,7 +426,7 @@ class AddNewDsarScreen extends StatelessWidget{
                       SizedBox(height: 15,),
                     ],
                   ),);
-              }),
+              }),*/
 
               Obx(() {
                 return

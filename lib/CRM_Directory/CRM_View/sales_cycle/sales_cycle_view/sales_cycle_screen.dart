@@ -132,6 +132,8 @@ class SalesCycleScreen extends StatelessWidget{
                               ),*/
                             ),
                             onPressed: () {
+                              salesCycleController.extClosureStartToEnd.value="";
+                              salesCycleController.filterExpectedClosuredateController.value.text = '';
                               salesCycleController.filterQuoteAcceptedFlag.value = 'Open';
                               salesCycleController.quoteAcceptedForFilterOnSaleCycle.value="Open";
                               salesCycleController.pageNumber=0;
@@ -170,6 +172,8 @@ class SalesCycleScreen extends StatelessWidget{
                               ),*/
                             ),
                             onPressed: () {
+                              salesCycleController.extClosureStartToEnd.value="";
+                              salesCycleController.filterExpectedClosuredateController.value.text = '';
                               salesCycleController.filterQuoteAcceptedFlag.value = 'Won';
                               salesCycleController.quoteAcceptedForFilterOnSaleCycle.value = "Won";
                               salesCycleController.pageNumber=0;
@@ -207,6 +211,8 @@ class SalesCycleScreen extends StatelessWidget{
                               ),*/
                             ),
                             onPressed: () {
+                              salesCycleController.extClosureStartToEnd.value="";
+                              salesCycleController.filterExpectedClosuredateController.value.text = '';
                               salesCycleController.filterQuoteAcceptedFlag.value = 'Loss';
                               salesCycleController.quoteAcceptedForFilterOnSaleCycle.value="Loss";
                               salesCycleController.pageNumber=0;
@@ -244,6 +250,8 @@ class SalesCycleScreen extends StatelessWidget{
                               ),*/
                             ),
                             onPressed: () {
+                              salesCycleController.extClosureStartToEnd.value="";
+                              salesCycleController.filterExpectedClosuredateController.value.text = '';
                               salesCycleController.quoteAcceptedForFilterOnSaleCycle.value="";
                               salesCycleController.filterQuoteAcceptedFlag.value = '';
                               salesCycleController.pageNumber=0;

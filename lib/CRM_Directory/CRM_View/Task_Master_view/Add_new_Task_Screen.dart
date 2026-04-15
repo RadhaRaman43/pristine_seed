@@ -153,7 +153,7 @@ class AddNewTaskScreen extends StatelessWidget{
                   ),
                 );
               }),
-              SizedBox(height: 25,),
+              const SizedBox(height: 25,),
               Container(
                 padding: EdgeInsets.only(left: 15.0, right: 15.0),
                 height: 50,

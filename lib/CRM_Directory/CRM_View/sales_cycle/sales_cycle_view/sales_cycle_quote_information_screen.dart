@@ -563,68 +563,8 @@ class QuoteInformationScreen extends StatelessWidget {
                               thickness: 1,
                               color: AllColors.lightgreyColor,
                             ),
-                            /*Obx(() {
-                              return Table(
-                                defaultVerticalAlignment:
-                                    TableCellVerticalAlignment.middle,
-                                columnWidths: const {
-                                  0: FixedColumnWidth(120),
-                                  1: FixedColumnWidth(150),
-                                  2: FixedColumnWidth(120),
-                                  3: FixedColumnWidth(130),
-                                  4: FixedColumnWidth(130),
-                                  5: FixedColumnWidth(120),
-                                  6: FixedColumnWidth(130),
-                                  7: FixedColumnWidth(120),
-                                  8: FixedColumnWidth(130),
-                                  9: FixedColumnWidth(130),
-                                },
-                                border: TableBorder.symmetric(
-                                  inside: BorderSide(
-                                      width: 1,
-                                      color: AllColors.lightgreyColor),
-                                ),
-                                children: [
-                                  // Header Row
-                                  TableRow(
-                                    children: [
-                                      tableHeaderCell("Qty"),
-                                      tableHeaderCell("BM %"),
-                                      tableHeaderCell("Appr Amt Per Unit"),
-                                      tableHeaderCell("Sales Credit"),
-                                      tableHeaderCell("Total Approved Price"),
-                                      Visibility(visible:saleCycleController.isAdminWritePermission=="1"|| saleCycleController.userType.toLowerCase()=="GM",child: tableHeaderCell("GM %")),
-                                      Visibility(visible:saleCycleController.isAdminWritePermission=="1"|| saleCycleController.userType.toLowerCase()=="GM",child:  tableHeaderCell("GM Amt"),),
-                                      Visibility(visible:saleCycleController.isAdminWritePermission=="1"|| saleCycleController.userType.toLowerCase()=="GM",child: tableHeaderCell("GM Total Amt"),),
-
-                                      tableHeaderCell("Gst Amount"),
-                                      tableHeaderCell("Total Amount"),
-                                    ],
-                                  ),
-                                  // Value Row
-                                  TableRow(
-                                    children: [
-                                      tableValueCell(saleCycleController.quoteHeaderdata[0].quoteTotalQty?.toInt()),
-                                      tableValueCell(saleCycleController.quoteHeaderdata[0].quoteTotalBmPerAverage),
-                                      tableValueCell("₹ ${saleCycleController.numberFormatWithComma(saleCycleController.quoteHeaderdata[0].quoteApprovedAmtPerUnit)}"),
-                                      tableValueCell(saleCycleController.quoteHeaderdata[0].quoteSalesCreditAverage),
-                                      tableValueCell("₹ ${saleCycleController.numberFormatWithComma(saleCycleController.quoteHeaderdata[0].quoteTotalApprovedDiscountAmount)}"),
-
-                                      Visibility(visible:saleCycleController.isAdminWritePermission=="1"|| saleCycleController.userType.toLowerCase()=="GM",child:tableValueCell(saleCycleController.quoteHeaderdata[0].quoteTotalGmPerAverage),),
-                                      Visibility(visible:saleCycleController.isAdminWritePermission=="1"|| saleCycleController.userType.toLowerCase()=="GM",child:  tableValueCell("₹ ${saleCycleController.numberFormatWithComma(saleCycleController.quoteHeaderdata[0].quoteTotalGmDiscountAmount)}"),),
-                                      Visibility(visible:saleCycleController.isAdminWritePermission=="1"|| saleCycleController.userType.toLowerCase()=="GM",child: tableValueCell("₹ ${saleCycleController.numberFormatWithComma(saleCycleController.quoteHeaderdata[0].quoteNewTotalGmDiscountAmount)}"),),
-
-
-                                      tableValueCell("₹ ${saleCycleController.numberFormatWithComma(saleCycleController.quoteHeaderdata[0].quoteGstAmount)}"),
-                                      tableValueCell("₹ ${saleCycleController.numberFormatWithComma(saleCycleController.quoteHeaderdata[0].quoteGrossAmount)}"),
-                                    ],
-                                  ),
-                                ],
-                              );
-                            })*/
                         Obx(() {
-                          final bool showGM =
-                              saleCycleController.isAdminWritePermission == "1" ||
+                          final bool showGM = saleCycleController.isAdminWritePermission == "1" ||
                                   saleCycleController.userType.toLowerCase() == "gm"||saleCycleController.GmApproveDetail.value;
                           final bool showbh=saleCycleController.userType?.toLowerCase()=='bh' ||
                               saleCycleController.userType?.toLowerCase()=='ch'||
@@ -1332,7 +1272,8 @@ class QuoteInformationScreen extends StatelessWidget {
                     color: AllColors.textColor,
                   ),
                   Visibility(
-                    visible: saleCycleController.quoteHeaderdata[0].parentProductCategoryCode==null,
+                    visible: saleCycleController.quoteHeaderdata[0].parentProductCategoryCode==null ||
+                        saleCycleController.quoteHeaderdata[0].parentProductCategoryCode=="",
                     child:
                   _buildLabelWithValue(
                       label: "Product Category",
@@ -4799,32 +4740,6 @@ class QuoteInformationScreen extends StatelessWidget {
     );
   }
 
-  bindGmDiscountPer(BuildContext context) {
-    return TextField(
-      keyboardType: TextInputType.number,
-      cursorColor: AllColors.primaryDark1,
-      controller: saleCycleController.gmDiscountPerContoller.value,
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(
-              vertical: AllFontSize.two, horizontal: AllFontSize.ten),
-          hintText: 'Gm %',
-          labelText: 'Gm %',
-          hintStyle: GoogleFonts.poppins(
-              color: AllColors.lightblackColor,
-              fontWeight: FontWeight.w300,
-              fontSize: AllFontSize.ten),
-          labelStyle: GoogleFonts.poppins(
-              color: AllColors.primaryDark1,
-              fontWeight: FontWeight.w500,
-              fontSize: AllFontSize.sisxteen),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          )),
-    );
-  }
 
   bindSalesCreditPer(BuildContext context) {
     return TextField(

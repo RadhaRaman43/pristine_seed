@@ -906,6 +906,8 @@ class Taskmastervm extends GetxController{
         return Account_Master_list;
     }
 
+
+
     CallStatusMasterApiHit(String flag,{String? filter}) async {
         try{
             Map<String, String> data={
@@ -1457,7 +1459,6 @@ class Taskmastervm extends GetxController{
                 "task_id": TaskID,
                 "along_with_person_name": "",
                 "email_id": email,
-
             };
             loading.value=true;
             String onValue = await _api.TaskPersonMstGetByTaskId(data, sessionManagement);
@@ -1524,23 +1525,29 @@ class Taskmastervm extends GetxController{
         drawingcollectedUpdateController.text=Task_Master_list[0].drawingCollected ==1 ? "Yes":"No";
         proposalSubmittedUpdateController.text=Task_Master_list[0].drawingCollected==1 ? "Yes":"No";
         inaugrationDateUpdateController.text= inaugurationDate??"";
-        architectUpdateController.text=Task_Master_list[0].architect ?? "";
-        executiveEngineerUpdateController.text=Task_Master_list[0].executiveEngineer ?? "";
-        nameOfArchitecfirmUpdateController.text=Task_Master_list[0].nameOfArchitectFirm ?? "";
-        nameofInfradepUpdateController.text=Task_Master_list[0].nameOfInfraDepartment ?? "";
-        agencyContractorUpdateController.text=Task_Master_list[0].nameOfAgencyContrator ?? "";
+
+        nameofInfradepUpdateController.text=Task_Master_list[0].actualNameOfInfraDepartment ?? "";
+        executiveEngineerUpdateController.text=Task_Master_list[0].actualExecutiveEngineer ?? "";
+        assistantEngineerController.text=Task_Master_list[0].actualAssistantEngineer??"";
+
+        customerNameController.text=Task_Master_list[0].actualCustomerName??"";
+        contactPersonHODController.text=Task_Master_list[0].actualContactPersonDecisionMaker??"";
+
+        agencyContractorUpdateController.text=Task_Master_list[0].actualNameOfAgencyContrator ?? "";
+        ownerOfContractorController.text=Task_Master_list[0].actualOwnerOfContractor??"";
+        siteManagerController.text=Task_Master_list[0].actualProjectSiteManager??"";
+
+        architectUpdateController.text=Task_Master_list[0].actualArchitect ?? "";
+        nameOfArchitecfirmUpdateController.text=Task_Master_list[0].actualNameOfArchitectFirm ?? "";
+
         expectedRevenueUpdateController.text=Task_Master_list[0].expectedRevenue.toString();
         valueOfQuoteUpdateController.text=Task_Master_list[0].valueOfQuote.toString();
         dateofcompletioneUpdateController.text=expDateOfCompletion??"";
-        assistantEngineerController.text=Task_Master_list[0].assistantEngineer??"";
+
         nameOfProjectController.text=Task_Master_list[0].projectName??"";
         locationController.text=Task_Master_list[0].location??"";
         timePeriodToCompleteWorkController.text=Task_Master_list[0].timePeriodToCompleteCivilWorkInMonths==null?"":Task_Master_list[0].timePeriodToCompleteCivilWorkInMonths.toString();
         furnitureIncludedInCivilController.text=Task_Master_list[0].furnitureIncludedInCivilScope==1 ? "Yes":"No";
-        customerNameController.text=Task_Master_list[0].customerName??"";
-        contactPersonHODController.text=Task_Master_list[0].contactPersonDecisionMaker??"";
-        ownerOfContractorController.text=Task_Master_list[0].ownerOfContractor??"";
-        siteManagerController.text=Task_Master_list[0].projectSiteManager??"";
         dateOfDrawingReceivedController.text=dateDrawingReceived??"";
         dateOfProposalSubmissionController.text=dateOfProposalSubmission??"";
         projectValueUpdateController.text=Task_Master_list[0].projectValue.toString();

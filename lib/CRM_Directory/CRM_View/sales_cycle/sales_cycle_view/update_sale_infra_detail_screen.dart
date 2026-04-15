@@ -9,6 +9,8 @@ import '../../../../constants/app_colors.dart';
 import '../../../../constants/app_font_size.dart';
 import '../../../../utils/app_utils.dart';
 import '../../../../view/custom_drawer.dart';
+import '../../../CRM_Models/AccountMaster_model/Account_Master_model.dart';
+import '../../../CRM_Models/Contact_Master_modal/Contact_Master_modal/conract_master_modal.dart';
 import '../../../CRM_Models/TaskMaster_model/Item_Category_Mast_model.dart';
 import '../../../CRM_VIewModels/sales_cycle_vm/sales_cycle_vm.dart';
 
@@ -22,6 +24,13 @@ class UpdateSaleInfraDetailScreen extends StatelessWidget{
 
   static String _displayItemCatMasterForOption(ItemCategoryMstModel option) =>
       option.categoryName!;
+
+  static String _displayAccountNameForOption(AccountMasterModel option) =>
+      //option.accountName!+"(${option.accountCode!})";
+      option.accountCode!;
+
+  static String _displayContactNameForOption(ContactMstGetListModal option) =>
+      option.contactCode!;
 
 
   @override
@@ -93,7 +102,16 @@ class UpdateSaleInfraDetailScreen extends StatelessWidget{
         child: SingleChildScrollView(
           child: Column(
             children: [
-              SizedBox(height: 10,),
+              Obx((){
+                return Visibility(
+                  visible:saleCycleController.loading.value ,
+                  child: LinearProgressIndicator(
+                    backgroundColor: AllColors.primaryDark1,
+                    color: AllColors.textColor,
+                  ),
+                );
+              }),
+              const SizedBox(height: 25,),
               Container(
                   margin: EdgeInsets.only(left: 15.0, right: 15.0),
                   decoration: BoxDecoration(
@@ -162,11 +180,16 @@ class UpdateSaleInfraDetailScreen extends StatelessWidget{
                               ),
                               child: Column(
                                 children: [
-                                  bindInputData(context,'Name Of Infra Department',saleCycleController.nameofInfradepUpdateController,false ),
+                                  bindAccountNameDropDown(context,saleCycleController.nameofInfradepUpdateController,'Name Of Infra Department',false),
+                                  const SizedBox(height: 10,),
+                                  bindContactNameDropDown(context,saleCycleController.executiveEngineerUpdateController,'Executive Engineer',false),
+                                  const SizedBox(height: 10,),
+                                  bindContactNameDropDown(context,saleCycleController.assistantEngineerController,'Assistant Engineer',false),
+                                  /*bindInputData(context,'Name Of Infra Department',saleCycleController.nameofInfradepUpdateController,false ),
                                   const SizedBox(height: 10,),
                                   bindInputData(context,'Executive Engineer',saleCycleController.executiveEngineerUpdateController,false ),
                                   const SizedBox(height: 10,),
-                                  bindInputData(context,'Assistant Engineer',saleCycleController.assistantEngineerController,false ),
+                                  bindInputData(context,'Assistant Engineer',saleCycleController.assistantEngineerController,false ),*/
                                 ],
                               ),
                             )
@@ -241,9 +264,13 @@ class UpdateSaleInfraDetailScreen extends StatelessWidget{
                               ),
                               child: Column(
                                 children: [
-                                  bindInputData(context,'Customer Name',saleCycleController.customerNameController,false ),
+                                  bindAccountNameDropDown(context,saleCycleController.customerNameController,'Customer Name',false),
                                   const SizedBox(height: 10,),
-                                  bindInputData(context,'Contact Person (HOD)/Decision Maker',saleCycleController.contactPersonHODController,false ),
+                                  bindContactNameDropDown(context,saleCycleController.contactPersonHODController,'Contact Person (HOD)/Decision Maker',false),
+
+                                  /*bindInputData(context,'Customer Name',saleCycleController.customerNameController,false ),
+                                  const SizedBox(height: 10,),
+                                  bindInputData(context,'Contact Person (HOD)/Decision Maker',saleCycleController.contactPersonHODController,false ),*/
                                 ],
                               ),
                             )
@@ -275,11 +302,17 @@ class UpdateSaleInfraDetailScreen extends StatelessWidget{
                               ),
                               child: Column(
                                 children: [
-                                  bindInputData(context,'Name Of Agency/Contractor',saleCycleController.agencyContractorUpdateController,false ),
+                                  bindAccountNameDropDown(context,saleCycleController.agencyContractorUpdateController,'Name Of Agency/Contractor',false),
+                                  const SizedBox(height: 10,),
+                                  bindContactNameDropDown(context,saleCycleController.ownerOfContractorController,'Owner Of Contractor',false),
+                                  const SizedBox(height: 10,),
+                                  bindContactNameDropDown(context,saleCycleController.siteManagerController,'Project Site Manager',false),
+
+                                  /*bindInputData(context,'Name Of Agency/Contractor',saleCycleController.agencyContractorUpdateController,false ),
                                   const SizedBox(height: 10,),
                                   bindInputData(context,'Owner Of Contractor',saleCycleController.ownerOfContractorController,false ),
                                   const SizedBox(height: 10,),
-                                  bindInputData(context,'Project Site Manager',saleCycleController.siteManagerController,false ),
+                                  bindInputData(context,'Project Site Manager',saleCycleController.siteManagerController,false ),*/
                                 ],
                               ),
                             )
@@ -311,9 +344,13 @@ class UpdateSaleInfraDetailScreen extends StatelessWidget{
                               ),
                               child: Column(
                                 children: [
-                                  bindInputData(context,'Name Of Architect Firm',saleCycleController.nameOfArchitecfirmUpdateController,false ),
+                                  bindAccountNameDropDown(context,saleCycleController.nameOfArchitecfirmUpdateController,'Name Of Architect Firm',false),
                                   const SizedBox(height: 10,),
-                                  bindInputData(context,'Architect',saleCycleController.architectUpdateController,false ),
+                                  bindContactNameDropDown(context,saleCycleController.architectUpdateController,'Architect',false),
+
+                                 /* bindInputData(context,'Name Of Architect Firm',saleCycleController.nameOfArchitecfirmUpdateController,false ),
+                                  const SizedBox(height: 10,),
+                                  bindInputData(context,'Architect',saleCycleController.architectUpdateController,false ),*/
                                 ],
                               ),
                             )
@@ -478,7 +515,250 @@ class UpdateSaleInfraDetailScreen extends StatelessWidget{
 
     );
   }
+  
+  Widget bindAccountNameDropDown(context, TextEditingController controller1,String labelText, bool readOnly){
+    return Autocomplete<AccountMasterModel>(
+      displayStringForOption: _displayAccountNameForOption,
+      optionsBuilder: (TextEditingValue textEditingValue) {
+        if (textEditingValue.text.isEmpty) {
+          return saleCycleController.getAccountMaster(saleCycleController.rowsPerPage,"");
+        }
+        return saleCycleController.getAccountMaster(saleCycleController.rowsPerPage,textEditingValue.text);
+      },
+      onSelected: (AccountMasterModel selection) {
 
+        if(labelText=='Name Of Infra Department'){
+          saleCycleController.nameofInfradepUpdateController.text =
+              _displayAccountNameForOption(selection).toString();
+          saleCycleController.executiveEngineerUpdateController.text="";
+          saleCycleController.assistantEngineerController.text="";
+          saleCycleController.isInfraYes.value = false;
+          saleCycleController.isInfraYes.value = true;
+        }
+        else if(labelText=='Customer Name'){
+          saleCycleController.customerNameController.text =
+              _displayAccountNameForOption(selection).toString();
+          saleCycleController.contactPersonHODController.text="";
+          saleCycleController.isInfraYes.value = false;
+          saleCycleController.isInfraYes.value = true;
+
+        }
+        else if(labelText=='Name Of Agency/Contractor'){
+          saleCycleController.agencyContractorUpdateController.text =
+              _displayAccountNameForOption(selection).toString();
+          saleCycleController.ownerOfContractorController.text="";
+          saleCycleController.siteManagerController.text="";
+          saleCycleController.isInfraYes.value = false;
+          saleCycleController.isInfraYes.value = true;
+        }
+        else if(labelText=='Name Of Architect Firm'){
+          saleCycleController.nameOfArchitecfirmUpdateController.text =
+              _displayAccountNameForOption(selection).toString();
+          saleCycleController.architectUpdateController.text="";
+          saleCycleController.isInfraYes.value = false;
+          saleCycleController.isInfraYes.value = true;
+        }
+
+        /*saleCycleController.account_code.value=selection.accountCode!;
+        saleCycleController.account_name.value=selection.accountName!;*/
+
+        saleCycleController.getContactMasterList(selection.accountCode!,selection.accountName!);
+        saleCycleController.pageNumber = 0;
+       
+      },
+      fieldViewBuilder: (BuildContext context, TextEditingController controller,
+          FocusNode focusNode, VoidCallback onFieldSubmitted) {
+        return TextField(
+          onTap: (){
+           // controller.clear();
+          },
+          cursorColor: AllColors.primaryDark1,
+          controller: controller..text = controller1.text,
+          focusNode: focusNode,
+          //onSubmitted: onFieldSubmitted,
+          decoration: InputDecoration(
+            suffixIcon: IconButton(
+              color: AllColors.primaryDark1,
+              onPressed: (){
+                if(focusNode.hasFocus){
+                  focusNode.unfocus();
+                }else{
+                  focusNode.requestFocus();
+                }
+              },
+              icon: Icon(Icons.arrow_drop_down),
+            ),
+            contentPadding: EdgeInsets.symmetric(
+                vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+            //hintText: labelText,
+            labelText: labelText,
+            border: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10))
+            ),
+          ),
+        );
+      },
+      optionsViewBuilder: (BuildContext context,
+          AutocompleteOnSelected<AccountMasterModel> onSelected,
+          Iterable<AccountMasterModel> suggestions) {
+        return Align(
+          alignment: Alignment.topLeft,
+          child: Material(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+            elevation: 4.0,
+            child: Container(
+              width: size.width*.9,
+              constraints: BoxConstraints(maxHeight: 200),
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: suggestions.length,
+                itemBuilder: (context, index) {
+                  final AccountMasterModel option =
+                  suggestions.elementAt(index);
+                  return GestureDetector(
+                    onTap: () {
+                      onSelected(option);
+                    },
+                    child: Container(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text(
+                        //option.accountName!+"(${option.accountCode!})",
+                        option.accountCode!,
+                        style: GoogleFonts.poppins(
+                            color: AllColors.blackColor,
+                            fontWeight: FontWeight.w300,
+                            fontSize: AllFontSize.sisxteen // Change the text color here
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget bindContactNameDropDown(context, TextEditingController controller1, String labelText, bool readOnly){
+    return Autocomplete<ContactMstGetListModal>(
+      displayStringForOption: _displayContactNameForOption,
+      optionsBuilder: (TextEditingValue textEditingValue) {
+        if (textEditingValue.text.isEmpty) {
+          return saleCycleController.infra_contact_master_list;
+        }
+        return saleCycleController.infra_contact_master_list
+            .where((ContactMstGetListModal option) {
+          return option.contactName
+              .toString()
+              .toLowerCase()
+              .contains(textEditingValue.text.toLowerCase());
+        }).toList();
+      },
+      onSelected: (ContactMstGetListModal selection) {
+        if(labelText=='Executive Engineer') {
+          saleCycleController.executiveEngineerUpdateController.text =
+              _displayContactNameForOption(selection).toString();
+        }
+        else if(labelText=='Assistant Engineer'){
+          saleCycleController.assistantEngineerController.text =
+              _displayContactNameForOption(selection).toString();
+        }
+        else if(labelText=='Contact Person (HOD)/Decision Maker'){
+          saleCycleController.contactPersonHODController.text =
+              _displayContactNameForOption(selection).toString();
+        }
+        else if(labelText=='Owner Of Contractor'){
+          saleCycleController.ownerOfContractorController.text =
+              _displayContactNameForOption(selection).toString();
+        }
+        else if(labelText=='Project Site Manager'){
+          saleCycleController.siteManagerController.text =
+              _displayContactNameForOption(selection).toString();
+        }
+        else if(labelText=='Architect'){
+          saleCycleController.architectUpdateController.text =
+              _displayContactNameForOption(selection).toString();
+        }
+
+      },
+      fieldViewBuilder: (BuildContext context, TextEditingController controller,
+          FocusNode focusNode, VoidCallback onFieldSubmitted) {
+        print("print controller ${controller1.text}");
+        return TextField(
+          onTap: (){
+            //controller.clear();
+          },
+          cursorColor: AllColors.primaryDark1,
+          controller: controller..text = controller1.text,
+          focusNode: focusNode,
+          //onSubmitted: onFieldSubmitted,
+          decoration: InputDecoration(
+            suffixIcon: IconButton(
+              color: AllColors.primaryDark1,
+              onPressed: (){
+                if(focusNode.hasFocus){
+                  focusNode.unfocus();
+                }else{
+                  focusNode.requestFocus();
+                }
+              },
+              icon: Icon(Icons.arrow_drop_down),
+            ),
+            contentPadding: EdgeInsets.symmetric(
+                vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+            //hintText: labelText,
+            labelText: labelText,
+
+            border: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10))
+            ),
+          ),
+        );
+      },
+      optionsViewBuilder: (BuildContext context,
+          AutocompleteOnSelected<ContactMstGetListModal> onSelected,
+          Iterable<ContactMstGetListModal> suggestions) {
+        return Align(
+          alignment: Alignment.topLeft,
+          child: Material(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+            elevation: 4.0,
+            child: Container(
+              width: size.width*.9,
+              constraints: BoxConstraints(maxHeight: 200),
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: suggestions.length,
+                itemBuilder: (context, index) {
+                  final ContactMstGetListModal option =
+                  suggestions.elementAt(index);
+                  return GestureDetector(
+                    onTap: () {
+                      onSelected(option);
+                    },
+                    child: Container(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text(
+                        option.contactCode.toString(),
+                        style: GoogleFonts.poppins(
+                            color: AllColors.blackColor,
+                            fontWeight: FontWeight.w300,
+                            fontSize: AllFontSize
+                                .sisxteen // Change the text color here
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
 
 
   bindExpectedDateOfOrder(BuildContext context) {

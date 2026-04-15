@@ -80,6 +80,16 @@ class TaskMasterGetModel {
   String? district;
   String? taskOwner;
   String? taskOwnerFullName;
+  String? actualNameOfInfraDepartment;
+  String? actualCustomerName;
+  String? actualNameOfAgencyContrator;
+  String? actualNameOfArchitectFirm;
+  String? actualExecutiveEngineer;
+  String? actualAssistantEngineer;
+  String? actualContactPersonDecisionMaker;
+  String? actualOwnerOfContractor;
+  String? actualProjectSiteManager;
+  String? actualArchitect;
 
   TaskMasterGetModel(
       {this.condition,
@@ -162,7 +172,18 @@ class TaskMasterGetModel {
         this.postCode,
         this.district,
         this.taskOwner,
-        this.taskOwnerFullName});
+        this.taskOwnerFullName,
+        this.actualNameOfInfraDepartment,
+        this.actualCustomerName,
+        this.actualNameOfAgencyContrator,
+        this.actualNameOfArchitectFirm,
+        this.actualExecutiveEngineer,
+        this.actualAssistantEngineer,
+        this.actualContactPersonDecisionMaker,
+        this.actualOwnerOfContractor,
+        this.actualProjectSiteManager,
+        this.actualArchitect
+      });
 
   TaskMasterGetModel.fromJson(Map<String, dynamic> json) {
     condition = json['condition'];
@@ -245,8 +266,18 @@ class TaskMasterGetModel {
     companyProfileType = json['company_profile_type'];
     postCode = json['post_code'];
     district = json['district'];
-    taskOwner = json['account_owner'];
-    taskOwnerFullName = json['account_owner_full_name'];
+    taskOwner = json['task_owner'];
+    taskOwnerFullName = json['task_owner_full_name'];
+    actualNameOfInfraDepartment = json['actual_name_of_infra_department'];
+    actualCustomerName = json['actual_customer_name'];
+    actualNameOfAgencyContrator = json['actual_name_of_agency_contrator'];
+    actualNameOfArchitectFirm = json['actual_name_of_architect_firm'];
+    actualExecutiveEngineer = json['actual_executive_engineer'];
+    actualAssistantEngineer = json['actual_assistant_engineer'];
+    actualContactPersonDecisionMaker = json['actual_contact_person_decision_maker'];
+    actualOwnerOfContractor = json['actual_owner_of_contractor'];
+    actualProjectSiteManager = json['actual_project_site_manager'];
+    actualArchitect = json['actual_architect'];
   }
 
   Map<String, dynamic> toJson() {
@@ -332,8 +363,19 @@ class TaskMasterGetModel {
     data['company_profile_type'] = this.companyProfileType;
     data['post_code'] = this.postCode;
     data['district'] = this.district;
-    data['account_owner'] = this.taskOwner;
-    data['account_owner_full_name'] = this.taskOwnerFullName;
+    data['task_owner'] = this.taskOwner;
+    data['task_owner_full_name'] = this.taskOwnerFullName;
+    data['actual_name_of_infra_department'] = this.actualNameOfInfraDepartment;
+    data['actual_customer_name'] = this.actualCustomerName;
+    data['actual_name_of_agency_contrator'] = this.actualNameOfAgencyContrator;
+    data['actual_name_of_architect_firm'] = this.actualNameOfArchitectFirm;
+    data['actual_executive_engineer'] = this.actualExecutiveEngineer;
+    data['actual_assistant_engineer'] = this.actualAssistantEngineer;
+    data['actual_contact_person_decision_maker'] =
+        this.actualContactPersonDecisionMaker;
+    data['actual_owner_of_contractor'] = this.actualOwnerOfContractor;
+    data['actual_project_site_manager'] = this.actualProjectSiteManager;
+    data['actual_architect'] = this.actualArchitect;
     return data;
   }
 }

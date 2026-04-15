@@ -406,6 +406,13 @@ class SalesCycleVm extends GetxController {
   RxList<ItemCategoryMstModel> Item_Category_Infra_list = <ItemCategoryMstModel>[].obs;
   RxList<String> isInfraLeadList =["Yes", "No"].obs;
 
+
+  RxList<AccountMasterModel> Account_Master_list=<AccountMasterModel>[].obs;
+  RxList<ContactMstGetListModal> infra_contact_master_list=<ContactMstGetListModal>[].obs;
+  RxString account_code="".obs;
+  RxString account_name="".obs;
+  RxString contact_code="".obs;
+
   @override
   Future<void> onInit() async {
     try {
@@ -4755,7 +4762,7 @@ class SalesCycleVm extends GetxController {
     try {
       for (int i = 0; i < approvalPersonList.length; i++) {
         if (email.toLowerCase() == approvalPersonList[i].approvedBy?.toLowerCase()){
-          if(approvalPersonList[i].approverOrder==5){
+          if(approvalPersonList[i].approverOrder==5 && approvalPersonList[i].userType?.toLowerCase()=="general manager"){
             GmApproveDetail.value=true;
           }
           if(approvalPersonList[i].quoteStatus?.toLowerCase()=="pending for approval"){
@@ -4811,10 +4818,12 @@ class SalesCycleVm extends GetxController {
     clusterName_controller.value.clear();
     createdByController.value.clear();
     reportingManagerController.value.clear();
-    filterExpectedClosuredateController.value.clear();
     createdOnCnontroller.value.clear();
     createdOnStartToEnd.value = "";
-    extClosureStartToEnd.value = "";
+    if(quoteAcceptedForFilterOnSaleCycle.value!="Overdue"){
+      extClosureStartToEnd.value = "";
+      filterExpectedClosuredateController.value.clear();
+    }
     SaleCycleStatusController.value.text = 'All';
     ApprovalStatusController.value.text = 'All';
 
@@ -6182,23 +6191,30 @@ class SalesCycleVm extends GetxController {
     drawingcollectedUpdateController.text=saleCycleList.drawingCollected ==1 ? "Yes":"No";
     proposalSubmittedUpdateController.text=saleCycleList.drawingCollected==1 ? "Yes":"No";
     inaugrationDateUpdateController.text= inaugurationDate??"";
-    architectUpdateController.text=saleCycleList.architect ?? "";
-    executiveEngineerUpdateController.text=saleCycleList.executiveEngineer ?? "";
-    nameOfArchitecfirmUpdateController.text=saleCycleList.nameOfArchitectFirm ?? "";
-    nameofInfradepUpdateController.text=saleCycleList.nameOfInfraDepartment ?? "";
-    agencyContractorUpdateController.text=saleCycleList.nameOfAgencyContrator ?? "";
+
+    nameofInfradepUpdateController.text=saleCycleList.actualNameOfInfraDepartment ?? "";
+    executiveEngineerUpdateController.text=saleCycleList.actualExecutiveEngineer ?? "";
+    assistantEngineerController.text=saleCycleList.actualAssistantEngineer??"";
+
+    customerNameController.text=saleCycleList.actualCustomerName??"";
+    contactPersonHODController.text=saleCycleList.actualContactPersonDecisionMaker??"";
+
+    agencyContractorUpdateController.text=saleCycleList.actualNameOfAgencyContrator ?? "";
+    ownerOfContractorController.text=saleCycleList.actualOwnerOfContractor??"";
+    siteManagerController.text=saleCycleList.actualProjectSiteManager??"";
+
+    architectUpdateController.text=saleCycleList.actualArchitect ?? "";
+    nameOfArchitecfirmUpdateController.text=saleCycleList.actualNameOfArchitectFirm ?? "";
+
+
     expectedRevenueUpdateController.text=saleCycleList.expectedRevenue.toString();
     valueOfQuoteUpdateController.text=saleCycleList.valueOfQuote.toString();
     dateofcompletioneUpdateController.text=expDateOfCompletion??"";
-    assistantEngineerController.text=saleCycleList.assistantEngineer??"";
+
     nameOfProjectController.text=saleCycleList.projectName??"";
     locationController.text=saleCycleList.location??"";
     timePeriodToCompleteWorkController.text=saleCycleList.timePeriodToCompleteCivilWorkInMonths==null?"":saleCycleList.timePeriodToCompleteCivilWorkInMonths.toString();
     furnitureIncludedInCivilController.text=saleCycleList.furnitureIncludedInCivilScope==1 ? "Yes":"No";
-    customerNameController.text=saleCycleList.customerName??"";
-    contactPersonHODController.text=saleCycleList.contactPersonDecisionMaker??"";
-    ownerOfContractorController.text=saleCycleList.ownerOfContractor??"";
-    siteManagerController.text=saleCycleList.projectSiteManager??"";
     dateOfDrawingReceivedController.text=dateDrawingReceived??"";
     dateOfProposalSubmissionController.text=dateOfProposalSubmission??"";
     projectValueUpdateController.text=saleCycleList.projectValue.toString();
@@ -6218,15 +6234,12 @@ class SalesCycleVm extends GetxController {
       print(value);
       List<ItemCategoryMstModel> Response = (json.decode(value) as List<dynamic>)
           .map((i) => ItemCategoryMstModel.fromJson(i as Map<String, dynamic>)).toList();
-
       if (Response.isNotEmpty && Response[0].condition?.toLowerCase() == "true") {
         Item_Category_Infra_list.value = Response;
-
         Item_Category_Selected_Infra_list.value = [];
         for (int i = 0; i < Item_Category_Infra_list.length; i++) {
           if (Item_Category_Infra_list[i].isSelected == 1) {
-            Item_Category_Selected_Infra_list.add(
-                Item_Category_Infra_list[i]);
+            Item_Category_Selected_Infra_list.add(Item_Category_Infra_list[i]);
           }}
         print('master list1....${Item_Category_Infra_list.length.toString()}');
         loading.value = false;
@@ -6346,6 +6359,94 @@ class SalesCycleVm extends GetxController {
     projectValueUpdateController.clear();
 
   }
+
+  Future<Iterable<AccountMasterModel>> getAccountMaster(int page_no, String accont_name) async{
+    try{
+      Map<String, dynamic> data={
+        "filter_account_code": "",
+        "filter_account_name": accont_name,
+        "filter_account_type": "",
+        "filter_email_id": "",
+        "filter_phone_no": "",
+        "filter_company_profile_type": "",
+        "filter_state_name": "",
+        "filter_postal_code": "",
+        "filter_district": "",
+        "filter_created_by": "",
+        "filter_account_owner":email,
+        "filter_frontliner_value": "",
+        "filter_branch_head_value": "",
+        "filter_zone_head_value": "",
+        "filter_clusture_head_value": "",
+        "filter_is_active": "-1",
+        "filter_created_on": "",
+        "filter_account_owner_new": "",
+        "row_per_page": rowsPerPage,
+        "page_number": 0
+      };
+      loading.value = true;
+      String onValue = await _api.AccountMasterGetApiHit(data, sessionManagement);
+      final jsonResponse = json.decode(onValue);
+      if(jsonResponse is List){
+        List<AccountMasterModel> response = jsonResponse.map((e) => AccountMasterModel.fromJson(e)).toList();
+        if(response!= null && response.length>0 && response[0].condition=="True"){
+          Account_Master_list.value=response;
+
+        }else {
+          Account_Master_list.value=[];
+        }
+      }
+
+    }catch(e){
+      print(e);
+    }
+    finally{
+      loading.value = false;
+    }
+    return Account_Master_list;
+  }
+
+  getContactMasterList(String accountCode, String accountName) async {
+    try{
+      Map<String, String> data={
+        "filter_contact_name": '',
+        "filter_account_code": accountCode,
+        "filter_account_name": accountName,
+        "filter_department_name": '',
+        "row_per_page": rowsPerPage.toString(),
+        "page_number": '0'
+      };
+      loading.value = true;
+      print("data is ${data}");
+      String onValue = await _api.contactMstGetList(data, sessionManagement);
+      final jsonResponse = json.decode(onValue);
+      print(onValue);
+      if(jsonResponse is List){
+        List<ContactMstGetListModal> response = jsonResponse.map((e) => ContactMstGetListModal.fromJson(e)).toList();
+        if(response!= null && response.length>0 && response[0].condition=="True"){
+
+          if(pageNumber==0){
+            infra_contact_master_list.clear();
+          }
+          infra_contact_master_list.addAll(response);
+          total_rows=int.parse(infra_contact_master_list[0].totalRows!);
+          print('Total rows ${total_rows}');
+
+        }else {
+          infra_contact_master_list.value=[];
+        }
+      }
+
+    }catch(e){
+      print(e);
+    }
+    finally{
+      loading.value = false;
+    }
+
+  }
+
+
 
 }
 

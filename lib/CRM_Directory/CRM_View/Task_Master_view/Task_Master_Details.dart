@@ -56,33 +56,30 @@ class TaskMasterDetails extends StatelessWidget{
             Get.toNamed(RoutesName.viewSalesCycleHeaderScreen);
             //account_vm_controller.view='';
            // Get.back();
-          }else if (account_vm_controller.view=="TaskDashboard") {
+          }
+          else if (account_vm_controller.view=="TaskDashboard") {
             account_vm_controller.view = '';
             Get.toNamed(RoutesName.AccountDashboardData_Screen);
-          }else if (TaskMaster_page_controller.FromPage=="from_pendingDSARDashboard"){
+          }
+          else if (TaskMaster_page_controller.FromPage=="from_pendingDSARDashboard"){
             TaskMaster_page_controller.FromPage.value='';
             Get.toNamed(RoutesName.pendingDSARDashboardViewScreen);
-         }
-          else if (TaskMaster_page_controller.FromPage=="from_CallDashboard"){
+          }
+          else if (TaskMaster_page_controller.FromPage == "from_CallDashboard"){
           TaskMaster_page_controller.FromPage.value='';
           Get.toNamed(RoutesName.callDashboardViewScreen);
-         }
+          }
           else {
             TaskMaster_page_controller.resetAllFieldOfFilter();
             TaskMaster_page_controller.pageNumber = 0;
-            TaskMaster_page_controller
-                .date_filter.value = "Today";
-            TaskMaster_page_controller
-                .is_done.value = 0;
-            TaskMaster_page_controller
-                .filter.value = "Running";
-            TaskMaster_page_controller.is_Active=-1;
-            TaskMaster_page_controller
-                .getTaskMaster(
+            TaskMaster_page_controller.date_filter.value = "Today";
+            TaskMaster_page_controller.is_done.value = 0;
+            TaskMaster_page_controller.filter.value = "Running";
+            TaskMaster_page_controller.is_Active = -1;
+            TaskMaster_page_controller.getTaskMaster(
                 TaskMaster_page_controller.pageNumber,
                 TaskMaster_page_controller.is_Active.toString(),
-                '',
-                '',
+                '', '',
                 TaskMaster_page_controller.Task_status_controller.value.text,
                 TaskMaster_page_controller.date_filter,
                 TaskMaster_page_controller.is_done.value);
@@ -1267,13 +1264,13 @@ class TaskMasterDetails extends StatelessWidget{
               const SizedBox(height: 3,),
               _buildLabelWithValue(label: "Inauguration Date of Project: ", value: inaugurationDate??"",),
               const SizedBox(height: 3,),
-              _buildLabelWithValue(label: "Architect: ", value: TaskMaster_page_controller.Task_Master_list[0].architect??"",),
+              _buildLabelWithValue(label: "Architect: ", value: TaskMaster_page_controller.Task_Master_list[0].actualArchitect??"",),
               const SizedBox(height: 3,),
-              _buildLabelWithValue(label: "Executive Engineer: ", value: TaskMaster_page_controller.Task_Master_list[0].executiveEngineer??"",),
+              _buildLabelWithValue(label: "Executive Engineer: ", value: TaskMaster_page_controller.Task_Master_list[0].actualExecutiveEngineer??"",),
               const SizedBox(height: 3,),
-              _buildLabelWithValue(label: "Name of Infra Department: ", value: TaskMaster_page_controller.Task_Master_list[0].nameOfInfraDepartment??"",),
+              _buildLabelWithValue(label: "Name of Infra Department: ", value: TaskMaster_page_controller.Task_Master_list[0].actualNameOfInfraDepartment??"",),
               const SizedBox(height: 3,),
-              _buildLabelWithValue(label: "Name of Agency Contactor: ", value: TaskMaster_page_controller.Task_Master_list[0].nameOfAgencyContrator??"",),
+              _buildLabelWithValue(label: "Name of Agency Contactor: ", value: TaskMaster_page_controller.Task_Master_list[0].actualNameOfAgencyContrator??"",),
               const SizedBox(height: 3,),
               _buildLabelWithValue(label: "Expected Revenue: ", value: TaskMaster_page_controller.Task_Master_list[0].expectedRevenue.toString()??"",),
               const SizedBox(height: 3,),

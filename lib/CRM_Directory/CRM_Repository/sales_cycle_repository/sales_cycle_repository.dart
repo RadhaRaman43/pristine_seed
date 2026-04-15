@@ -307,4 +307,9 @@ class SalesCycleRepository{
     return _apiService.postApi(data,AppUrl.QuoteMstStatusChangeToDraft, sessionManagement);
   }
 
+  Future<String> AccountMasterGetApiHit(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.AccountMstGet,sessionManagement);
+  }
+
+
 }

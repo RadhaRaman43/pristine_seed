@@ -243,26 +243,26 @@ class AllQuoteLineItemScreen extends StatelessWidget{
               _buildLabelWithValue(label: "Qty: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].qty.toString() ?? "",color:AllColors.textColor),
               _buildLabelWithValue(label: "LSP: ", value:  "₹ ${pendingDraftQuoteController.PendingDraftQuoteList[position].listSellingPrice.toString() ?? ""}",color:AllColors.textColor),
               
-              Visibility(visible: /*pendingDraftQuoteController.userType=="bh" ||*/ pendingDraftQuoteController.userType=="cl"
+              Visibility(visible: /*pendingDraftQuoteController.userType=="bh" ||*/ pendingDraftQuoteController.userType.toLowerCase()=="ch"
                   ||pendingDraftQuoteController.userType=="gm" || pendingDraftQuoteController.isAdminWritePermission=="1",
                   child: _buildLabelWithValue(label: "MAP: ", value:  "₹ ${pendingDraftQuoteController.PendingDraftQuoteList[position].minimalAcceptablePrice.toString() ?? ""}",color:AllColors.textColor)),
               
-              Visibility(visible: pendingDraftQuoteController.userType=="bh" || pendingDraftQuoteController.userType=="cl"
+              Visibility(visible: pendingDraftQuoteController.userType=="bh" || pendingDraftQuoteController.userType.toLowerCase()=="ch"
                   ||pendingDraftQuoteController.userType=="gm" || pendingDraftQuoteController.isAdminWritePermission=="1",
                   child: _buildLabelWithValue(label: "BTP: ", value:  "₹ ${pendingDraftQuoteController.PendingDraftQuoteList[position].branchTransferPrice.toString() ?? ""}",color:AllColors.textColor)),
-              Visibility(visible: pendingDraftQuoteController.userType=="bh" || pendingDraftQuoteController.userType=="cl"
+              Visibility(visible: pendingDraftQuoteController.userType=="bh" || pendingDraftQuoteController.userType.toLowerCase()=="ch"
                   ||pendingDraftQuoteController.userType=="gm" || pendingDraftQuoteController.isAdminWritePermission=="1",
                   child: _buildLabelWithValue(label: "BM %: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].bmDiscountPer.toString(),color:AllColors.textColor)),
               
-              Visibility(visible: /*pendingDraftQuoteController.userType=="bh" ||*/ pendingDraftQuoteController.userType=="cl"
+              Visibility(visible: /*pendingDraftQuoteController.userType=="bh" ||*/ pendingDraftQuoteController.userType.toLowerCase()=="ch"
                   ||pendingDraftQuoteController.userType=="gm" || pendingDraftQuoteController.isAdminWritePermission=="1",
                   child: _buildLabelWithValue(label: "GM %: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].gmDiscountPer.toString(),color:AllColors.textColor)),
               Visibility(
-                  visible: /*pendingDraftQuoteController.userType=="bh" ||*/ pendingDraftQuoteController.userType=="cl"
+                  visible: /*pendingDraftQuoteController.userType=="bh" ||*/ pendingDraftQuoteController.userType.toLowerCase()=="ch"
                       ||pendingDraftQuoteController.userType=="gm" || pendingDraftQuoteController.isAdminWritePermission=="1",
                   child: _buildLabelWithValue(label: "GM Absolute: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].gmTotalDiscountAmount.toString(),color:AllColors.textColor)),
               
-              Visibility(visible: /*pendingDraftQuoteController.userType=="bh" ||*/ pendingDraftQuoteController.userType=="cl"
+              Visibility(visible: /*pendingDraftQuoteController.userType=="bh" ||*/ pendingDraftQuoteController.userType.toLowerCase()=="ch"
                   ||pendingDraftQuoteController.userType=="gm" || pendingDraftQuoteController.isAdminWritePermission=="1",
                   child: _buildLabelWithValue(label: "Standard Cost: ", value:  "₹ ${pendingDraftQuoteController.PendingDraftQuoteList[position].standardCost.toString() ?? ""}",color:AllColors.textColor)),
               _buildLabelWithValue(label: "Sales Credit: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].salesCredit.toString()??"",color:AllColors.textColor),
