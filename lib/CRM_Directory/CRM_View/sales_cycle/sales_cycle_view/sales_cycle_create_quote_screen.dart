@@ -121,11 +121,11 @@ class SalesCycleCreateQuoteScreen extends StatelessWidget{
                         spacing: 8.0,
                         children: saleCycleController.itemCategorySelectedlist.map((category) {
                           return Chip(
-                            label: Text(category.parentCategoryCode!),
+                            label: Text(category.parentCategoryCode??""),
                             onDeleted: () {
                               saleCycleController.itemCategorySelectedlist.remove(category);
                               if(saleCycleController.itemCategorySelectedlist.isEmpty){
-                                saleCycleController.productCategoryController.value.text ="";
+                                saleCycleController.productCategoryController.value.text = "";
                               }
                             },
                           );
@@ -134,7 +134,6 @@ class SalesCycleCreateQuoteScreen extends StatelessWidget{
                     );
 
                 }),
-
                 Container(
                   margin: EdgeInsets.only(left: 15, right: 15, top: 15),
                   child: Row(
@@ -169,11 +168,10 @@ class SalesCycleCreateQuoteScreen extends StatelessWidget{
                   ),
                 ),
                 const SizedBox(height: 5,),
-                 Container(
+                Container(
                   margin: EdgeInsets.only(left: 15, right: 15, top: 15),
                   child: DefaultButton(
                     press: (){
-
                        //saleCycleController.accountNameController.value.clear();
                       //saleCycleController.contactNameController.value.clear();
                       if(saleCycleController.productCategoryController.value.text==null ||
@@ -187,8 +185,6 @@ class SalesCycleCreateQuoteScreen extends StatelessWidget{
                   ),
                 ),
 
-
-                
               ],
             ),
           ),
