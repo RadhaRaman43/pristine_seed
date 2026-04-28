@@ -168,6 +168,9 @@ class AllQuoteScreen extends StatelessWidget{
             pendingDraftQuoteController.PendingDraftQuoteList[position].quoteId!;
             saleCycleController.getApprovalPersonList(pendingDraftQuoteController.PendingDraftQuoteList[position].quoteId??"");
             // saleCycleController.quoteApprovalPage.value="quoteApprovalScreen";
+            saleCycleController.getParentItemCategoryMstGet();
+            saleCycleController.getItemCategoryMstApi("" ,"","" );
+
             saleCycleController.getQuoteHeaderInformation(pendingDraftQuoteController.PendingDraftQuoteList[position].quoteId, "AllQuoteList");
           },
           title: Row(

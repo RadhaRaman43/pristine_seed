@@ -1431,11 +1431,9 @@ class SalesCycleVm extends GetxController {
               getQuoteHeaderData(
                   pageNumberForQuote, saleCycleList[0].salesCycleId!, '');
               //Get.toNamed(RoutesName.viewSalesCycleHeaderScreen);
-              Utils.sanckBarSuccess(
-                  "Success Message !", response[0].message.toString());
+              Utils.sanckBarSuccess("Success Message !", response[0].message.toString());
             } else {
-              Utils.sanckBarError(
-                  "False Message !", response[0].message.toString());
+              Utils.sanckBarError("False Message !", response[0].message.toString());
               loading.value = false;
             }
           } else {
@@ -2332,9 +2330,8 @@ class SalesCycleVm extends GetxController {
   }
 
   ProductCatCreateApiHit(String quoteIds, String back) async {
-    List<TaskSalesProductCategoryLinesModel> lines = itemCategorySelectedlist
-        .map((item) => TaskSalesProductCategoryLinesModel(
-            productCategoryCode: item.parentCategoryCode!)).toList();
+    List<TaskSalesProductCategoryLinesModel>lines = itemCategorySelectedlist
+          .map((item) => TaskSalesProductCategoryLinesModel(productCategoryCode: item.parentCategoryCode!)).toList();
 
     Map<String, dynamic> data = {
       "created_by": email,
@@ -2361,8 +2358,9 @@ class SalesCycleVm extends GetxController {
             print("back isss ");
             getQuoteHeaderData(pageNumberForQuote, saleCycleList[0].salesCycleId!, '');
             Get.toNamed(RoutesName.viewSalesCycleHeaderScreen);
-          }/*else{
-            getQuoteHeaderInformation(quoteId.value, "Quote");
+          }
+          /*else (){
+            getQuoteHeaderInformation(quoteHeaderdata[0].quoteId.toString(), "");
           }*/
 
           //getQuoteHeaderData(0,  saleCycleList[0].salesCycleId!, '');
@@ -2386,7 +2384,6 @@ class SalesCycleVm extends GetxController {
     }
   }
 
-
   QuoteHeaderParentCategoryUpdate(String quoteId) async {
     Map<String, dynamic> data = {
       "created_by": email,
@@ -2396,7 +2393,6 @@ class SalesCycleVm extends GetxController {
     };
     print(data);
     loading.value = true;
-
     try {
       final value = await _api.QuoteHeaderParentCategoryUpdate(data, sessionManagement);
       print(value);
@@ -2408,7 +2404,6 @@ class SalesCycleVm extends GetxController {
           Utils.sanckBarSuccess("Success!", response[0].message.toString());
           ProductCatCreateApiHit(quoteHeaderdata[0].quoteId.toString(),"");
           getQuoteHeaderInformation(quoteId, "fromQuote");
-
           //getItemCategoryMstApi(quoteHeaderdata[0].salesCycleId.toString(),"",quoteId);
 
         } else {
@@ -2448,9 +2443,8 @@ class SalesCycleVm extends GetxController {
         if (response != null && response.isNotEmpty && response[0].condition?.toLowerCase() == "true") {
           loading.value = false;
           Utils.sanckBarSuccess("Success!", response[0].message.toString());
-          getQuoteHeaderInformation(quoteId, "fromQuote");
+          getQuoteHeaderInformation(quoteId, "AllQuoteList");
           getItemCategoryMstApi(quoteHeaderdata[0].salesCycleId.toString(),"",quoteId);
-
         } else {
           loading.value = false;
           Utils.sanckBarError("Error!",  response[0].message.toString());
@@ -2479,8 +2473,7 @@ class SalesCycleVm extends GetxController {
           "item_code": item_code.toString(),
           "item_description": "",
           "qty": qtyUpdateLineController.value.text.isNotEmpty
-              ? qtyUpdateLineController.value.text
-              : 0,
+              ? qtyUpdateLineController.value.text : 0,
           "line_status": "pending"
         }
       ]
