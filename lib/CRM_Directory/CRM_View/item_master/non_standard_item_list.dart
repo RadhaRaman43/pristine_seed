@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:navigation_drawer_flutter/constants/static_methods.dart';
 
 import '../../../constants/app_colors.dart';
 import '../../../constants/app_font_size.dart';
@@ -236,6 +237,7 @@ class NonStandardItemsScreen extends StatelessWidget{
                   Get.toNamed(RoutesName.updateNonStandardItemList);
                 },
                 child: Icon(Icons.update,  color: Colors.blue,)),
+            SizedBox(width: 6,),
             Obx(() {
               return Visibility(
                 visible: item_master_controller.isAdminWritePermission.value == "1" &&
@@ -271,7 +273,7 @@ class NonStandardItemsScreen extends StatelessWidget{
             _buildLabelWithValue(label: "Is Active : ", value: item_master_controller.nonStandardList[position].active==1?"YES":"NO",),
             _buildLabelWithValue(label: "Expired On : ", value: item_master_controller.nonStandardList[position].expiredOn??"",),
             _buildLabelWithValue(label: "Rate Contract Valid Date : ", value: item_master_controller.nonStandardList[position].rateContractValidDate??"",),
-            _buildLabelWithValue(label: "Created/Updated On : ", value: item_master_controller.nonStandardList[position].updatedOn??"",),
+            _buildLabelWithValue(label: "Created/Updated On : ", value:StaticMethod.onlyDate(item_master_controller.nonStandardList[position].updatedOn??"") ,),
           ],
         ),
 
