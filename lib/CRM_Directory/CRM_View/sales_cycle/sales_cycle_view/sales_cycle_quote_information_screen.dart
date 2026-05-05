@@ -215,7 +215,7 @@ class QuoteInformationScreen extends StatelessWidget {
                       children: [
                         Obx((){
                           return Visibility(
-                            visible:  ((saleCycleController.quoteHeaderdata[0].createdBy?.toLowerCase()==saleCycleController.email.toLowerCase() ||
+                            visible:  ((/*saleCycleController.quoteHeaderdata[0].createdBy?.toLowerCase()==saleCycleController.email.toLowerCase() ||*/
                                 saleCycleController.isAdminWritePermission=="1")&&
                             saleCycleController
                                 .quoteHeaderdata[0].quoteStatus?.toLowerCase()=="rejected") || (saleCycleController
