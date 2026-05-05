@@ -1,9 +1,9 @@
 class AppUrl {
 
    //todo testing url...
-     //static const String BASE_URL = "https://devlogin.pristinefulfil.com";
+     static const String BASE_URL = "https://devlogin.pristinefulfil.com";
     //todo live url....
-       static const String BASE_URL = "https://care.pristinefulfil.com";
+       //static const String BASE_URL = "https://care.pristinefulfil.com";
 
   static const String login_url = "$BASE_URL/api/UserLogin/Login";
   static const String logout_url = "$BASE_URL/api/UserLogin/Logout";
@@ -255,6 +255,7 @@ class AppUrl {
      static const String salesCycleMstApproveReject = "$BASE_URL/api/CRM/SalesCycle/SalesCycleMstApproveReject";
      static const String SalesCycleMstGetByAccountCode = "$BASE_URL/api/CRM/SalesCycle/SalesCycleMstGetByAccountCode";
      static const String quoteHeaderGet = "$BASE_URL/api/CRM/Quote/QuoteHeaderGet";
+     static const String QuoteHeaderGetApprovalPendency = "$BASE_URL/api/CRM/Quote/QuoteHeaderGetApprovalPendency";
      static const String QuoteWonDataGet = "$BASE_URL/api/CRM/Quote/QuoteWonDataGet";
      static const String quoteHeaderCreate = "$BASE_URL/api/CRM/Quote/QuoteHeaderCreate";
      static const String quoteHeaderDuplicateCreate = "$BASE_URL/api/CRM/Quote/QuoteHeaderDuplicate";

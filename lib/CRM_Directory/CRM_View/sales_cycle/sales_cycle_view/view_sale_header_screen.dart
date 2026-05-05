@@ -79,14 +79,26 @@ class ViewSaleHeaderScreen extends StatelessWidget {
               0,
               TaskMaster_page_controller.is_Active.toString(),
               TaskMaster_page_controller.Task_Master_list[0].taskId,
-              '',
-              'GET FROM TASK ID',
+              '', 'GET FROM TASK ID',
               TaskMaster_page_controller.date_filter,
               TaskMaster_page_controller.is_done.value);
           Get.toNamed(RoutesName.taskMasterDetails_screen);
-        } else if (saleCycleController.FromPage.value == "QuoteApprovalPage") {
+        }
+        else if (saleCycleController.FromPage.value == "Quote Approval List") {
           quoteApprovalController.getQuoteHeaderData(0);
           Get.toNamed(RoutesName.quoteApprovalListScreen);
+        }
+        else if (saleCycleController.FromPage.value == "Quote RH Approval List") {
+          quoteApprovalController.getQuoteHeaderData(0);
+          Get.toNamed(RoutesName.quoteRHApprovalListScreen);
+        }
+        else if (saleCycleController.FromPage.value == "Quote CBH Approval List") {
+          quoteApprovalController.getQuoteHeaderData(0);
+          Get.toNamed(RoutesName.quoteCBHApprovalListScreen);
+        }
+        else if (saleCycleController.FromPage.value == "Quote GM Approval List") {
+          quoteApprovalController.getQuoteHeaderData(0);
+          Get.toNamed(RoutesName.quoteGMApprovalListScreen);
         } else if (saleCycleController.FromPage.value == "FromTaskScreen") {
           Get.offAllNamed(RoutesName.taskMaster_screen);
         } else if (saleCycleController.FromPage.value == "FromDashboard") {

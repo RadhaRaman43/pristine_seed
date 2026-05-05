@@ -127,6 +127,11 @@ class RoutesName{
   static const UpdateBussinessTermPage="/update_bussiness_term_page.dart";
   static const updateTaskMstInfraScreen="/update_task_mst_infra_screen";
   static const quoteApprovalListScreen="/quote_approval_list_screen";
+
+  static const quoteRHApprovalListScreen="/quote_rh_approval_list_screen";
+  static const quoteCBHApprovalListScreen="/quote_cbh_approval_list_screen";
+  static const quoteGMApprovalListScreen="/quote_gm_approval_list_screen";
+
   static const approvedQuotationListScreen="/approved_quotation_list.dart";
   static const ItemListBySalesCycle_Screen="/ItemListBySalesCycle_Screen.dart";
   static const salesCyclePendingForApprovalListScreen="/sale_cycle_pending_for_approval_list";

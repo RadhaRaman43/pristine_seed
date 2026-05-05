@@ -22,7 +22,6 @@ import '../CRM_Directory/CRM_VIewModels/account_master_vm/accountMasterVM.dart';
 import '../CRM_Directory/CRM_VIewModels/contact_master_vm/contact_master_vm/ContactMasterVM.dart';
 import '../CRM_Directory/CRM_VIewModels/contact_master_vm/contact_master_vm/all_contact_master_vm.dart';
 import '../CRM_Directory/CRM_VIewModels/emp_infor_system/leave_request_approval_vm.dart';
-import '../CRM_Directory/CRM_VIewModels/emp_infor_system/mark_attendance_view_modal.dart';
 import '../CRM_Directory/CRM_VIewModels/item_master_vm/item_mater_vm.dart';
 import '../CRM_Directory/CRM_VIewModels/quote_approval_list_vm/quote_approval_list_vm.dart';
 import '../CRM_Directory/CRM_VIewModels/sales_cycle_vm/pending_Draft_Quote_vm.dart';
@@ -32,7 +31,6 @@ import '../CRM_Directory/CRM_VIewModels/sales_cycle_vm/sales_cycle_vm.dart';
 import '../constants/app_colors.dart';
 import '../constants/app_font_size.dart';
 import '../constants/static_methods.dart';
-import '../firebase/firebase_api.dart';
 import '../locat_database/databaseHelper.dart';
 import '../models/loginModel/login_model.dart';
 import '../reources/routes/routes_name.dart';
@@ -247,6 +245,7 @@ class _Drawer extends State<CustomDrawer> {
                                                 break;
           
                                               case 'Check In/Out':
+                                                sessionManagement.setfilterRouting('Check In/Out');
                                                 IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
                                                 home_vm.openMenu(cTitle, iconData);
                                                 Get.toNamed(RoutesName.checkIn_screen,preventDuplicates: false);
@@ -254,6 +253,7 @@ class _Drawer extends State<CustomDrawer> {
                                                 break;
           
                                               case 'Check In':
+                                                sessionManagement.setfilterRouting('Check In');
                                                 IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
                                                 home_vm.openMenu(cTitle, iconData);
                                                 Get.toNamed(RoutesName.checkInApproval,preventDuplicates: false);
@@ -261,6 +261,7 @@ class _Drawer extends State<CustomDrawer> {
                                                 break;
           
                                               case 'User Expense':
+                                                sessionManagement.setfilterRouting('User Expense');
                                                 IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
                                                 home_vm.openMenu(cTitle, iconData);
                                                 Get.toNamed(RoutesName.myExpenseScreen,preventDuplicates: false);
@@ -268,6 +269,7 @@ class _Drawer extends State<CustomDrawer> {
                                                 break;
           
                                               case 'Expense':
+                                                sessionManagement.setfilterRouting('Expense');
                                                 IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
                                                 home_vm.openMenu(cTitle, iconData);
                                                 Get.toNamed(RoutesName.expenseApprovarScreen,preventDuplicates: false);
@@ -276,6 +278,7 @@ class _Drawer extends State<CustomDrawer> {
           
           
                                               case 'User Route':
+                                                sessionManagement.setfilterRouting('User Route');
                                                 IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
                                                 home_vm.openMenu(cTitle, iconData);
                                                 Get.toNamed(RoutesName.showRouteScreen,preventDuplicates: false);
@@ -319,6 +322,7 @@ class _Drawer extends State<CustomDrawer> {
           
           
                                               case 'User Inventory':
+                                                sessionManagement.setfilterRouting('User Inventory');
                                                 IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
                                                 home_vm.openMenu(cTitle, iconData);
                                                 Get.toNamed(RoutesName.service_inventory_screen,preventDuplicates: false);
@@ -338,6 +342,7 @@ class _Drawer extends State<CustomDrawer> {
                                                 break;
           
                                               case 'Contacts Master':
+                                                sessionManagement.setfilterRouting('Contacts Master');
                                                 IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
                                                 home_vm.openMenu(cTitle, iconData);
                                                 Get.delete<ContactMasterVM>();
@@ -355,6 +360,7 @@ class _Drawer extends State<CustomDrawer> {
                                                 break;
           
                                               case 'All Contacts Master':
+                                                sessionManagement.setfilterRouting('All Contacts Master');
                                                 IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
                                                 home_vm.openMenu(cTitle, iconData);
                                                 Get.delete<AllContactMasterVm>();
@@ -363,6 +369,7 @@ class _Drawer extends State<CustomDrawer> {
                                                 break;
           
                                               case 'Tasks':
+                                                sessionManagement.setfilterRouting('Tasks');
                                                 IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
                                                 home_vm.openMenu(cTitle, iconData);
                                                 Get.delete<Taskmastervm>();
@@ -370,6 +377,7 @@ class _Drawer extends State<CustomDrawer> {
                                                 Navigator.of(context);
                                                 break;
                                               case 'Task Approval List':
+                                                sessionManagement.setfilterRouting('Task Approval List');
                                                 IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
                                                 home_vm.openMenu(cTitle, iconData);
                                                 Get.delete<TaskApprovalvm>();
@@ -377,6 +385,7 @@ class _Drawer extends State<CustomDrawer> {
                                                 Navigator.of(context);
                                                 break;
                                               case 'Sales Cycle':
+                                                sessionManagement.setfilterRouting('Sales Cycle');
                                                 IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
                                                 home_vm.openMenu(cTitle, iconData);
                                                 Get.delete<SalesCycleVm>();
@@ -392,13 +401,36 @@ class _Drawer extends State<CustomDrawer> {
                                                 break;
           
                                               case 'Quote Approval List':
+                                                sessionManagement.setfilterRouting('Quote Approval List');
                                                 IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
                                                 home_vm.openMenu(cTitle, iconData);
                                                 Get.delete<QuoteApprovalListVm>();
-                                                final quoteApprovalController=Get.put(QuoteApprovalListVm());
-                                                /* quoteApprovalController.pageNumberForQuote = 0;
-                                                quoteApprovalController.getQuoteHeaderData(0);*/
                                                 Get.toNamed(RoutesName.quoteApprovalListScreen,);
+                                                Navigator.of(context);
+                                                break;
+
+                                              case 'Quote RH Approval List':
+                                                sessionManagement.setfilterRouting('Quote RH Approval List');
+                                                IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
+                                                home_vm.openMenu(cTitle, iconData);
+                                                Get.delete<QuoteApprovalListVm>();
+                                                Get.toNamed(RoutesName.quoteRHApprovalListScreen,);
+                                                Navigator.of(context);
+                                                break;
+                                              case 'Quote CBH Approval List':
+                                                sessionManagement.setfilterRouting('Quote CBH Approval List');
+                                                IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
+                                                home_vm.openMenu(cTitle, iconData);
+                                                Get.delete<QuoteApprovalListVm>();
+                                                Get.toNamed(RoutesName.quoteCBHApprovalListScreen,);
+                                                Navigator.of(context);
+                                                break;
+                                              case 'Quote GM Approval List':
+                                                sessionManagement.setfilterRouting('Quote GM Approval List');
+                                                IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
+                                                home_vm.openMenu(cTitle, iconData);
+                                                Get.delete<QuoteApprovalListVm>();
+                                                Get.toNamed(RoutesName.quoteGMApprovalListScreen,);
                                                 Navigator.of(context);
                                                 break;
           
@@ -411,6 +443,7 @@ class _Drawer extends State<CustomDrawer> {
                                                 Navigator.of(context);
                                                 break;*/
                                               case 'Mark Leave Request':
+                                                sessionManagement.setfilterRouting('Mark Leave Request');
                                                 IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
                                                 home_vm.openMenu(cTitle, iconData);
                                                 Get.delete<EmpMarkLeaveRequestVm>();
@@ -420,6 +453,7 @@ class _Drawer extends State<CustomDrawer> {
                                                 break;
           
                                               case 'Leave Request Approval':
+                                                sessionManagement.setfilterRouting('Leave Request Approval');
                                                 IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
                                                 home_vm.openMenu(cTitle, iconData);
                                                 Get.delete<LeaveRequestApprovalVm>();
@@ -430,6 +464,7 @@ class _Drawer extends State<CustomDrawer> {
           
           
                                               case 'Sales Cycle Approval List':
+                                                sessionManagement.setfilterRouting('Sales Cycle Approval List');
                                                 IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
                                                 home_vm.openMenu(cTitle, iconData);
                                                 Get.delete<SalesCyclePendingForApprovalVm>();
@@ -467,6 +502,7 @@ class _Drawer extends State<CustomDrawer> {
                                                 break;
           
                                               case 'Sales Cycle Competitor List':
+                                                sessionManagement.setfilterRouting('Sales Cycle Competitor List');
                                                 IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
                                                 home_vm.openMenu(cTitle, iconData);
                                                 Get.delete<SalesCycleCompetitorProductInforVm>();
@@ -534,6 +570,7 @@ class _Drawer extends State<CustomDrawer> {
                                                 break;
           
                                               case 'Business Tour Approval List':
+                                                sessionManagement.setfilterRouting('Business Tour Approval List');
                                                 IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
                                                 home_vm.openMenu(cTitle, iconData);
                                                 Get.delete<BusinessTourApprovalVm>();
@@ -543,6 +580,7 @@ class _Drawer extends State<CustomDrawer> {
                                                 break;
           
                                               case 'Approved / Rejected Business Tour Plan':
+                                                sessionManagement.setfilterRouting('Approved / Rejected Business Tour Plan');
                                                 IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
                                                 home_vm.openMenu(cTitle, iconData);
                                                 Get.delete<BusinessTourApprovalVm>();
@@ -552,6 +590,7 @@ class _Drawer extends State<CustomDrawer> {
                                                 break;
           
                                               case 'Call Dashboard':
+                                                sessionManagement.setfilterRouting('Call Dashboard');
                                                 IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
                                                 home_vm.openMenu(cTitle, iconData);
                                                 Get.delete<CallDashboardVm>();
@@ -561,6 +600,7 @@ class _Drawer extends State<CustomDrawer> {
                                                 break;
           
                                               case 'Funnel Dashboard':
+                                                sessionManagement.setfilterRouting('Funnel Dashboard');
                                                 IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
                                                 home_vm.openMenu(cTitle, iconData);
                                                 Get.delete<FunnelDashboardVm>();
@@ -570,6 +610,7 @@ class _Drawer extends State<CustomDrawer> {
                                                 break;
           
                                               case 'Commit Dashboard':
+                                                sessionManagement.setfilterRouting('Commit Dashboard');
                                                 IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
                                                 home_vm.openMenu(cTitle, iconData);
                                                 Get.delete<CommitDashboardVm>();
@@ -579,6 +620,7 @@ class _Drawer extends State<CustomDrawer> {
                                                 break;
           
                                               case 'Sales Dashboard ':
+                                                sessionManagement.setfilterRouting('Sales Dashboard');
                                                 IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
                                                 home_vm.openMenu(cTitle, iconData);
                                                 Get.delete<SalesDashboardVm>();
@@ -588,6 +630,7 @@ class _Drawer extends State<CustomDrawer> {
                                                 break;
           
                                               case 'Pending DSAR Dashboard':
+                                                sessionManagement.setfilterRouting('Pending DSAR Dashboard');
                                                 IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
                                                 home_vm.openMenu(cTitle, iconData);
                                                 Get.delete<PendingDsarDashboardVm>();
@@ -596,6 +639,7 @@ class _Drawer extends State<CustomDrawer> {
                                                 break;
 
                                               case 'Non Standard Items':
+                                                sessionManagement.setfilterRouting('Non Standard Items');
                                                 IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
                                                 home_vm.openMenu(cTitle, iconData);
                                                 Get.delete<ItemMasterVm>();

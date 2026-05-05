@@ -5,6 +5,9 @@ import 'package:navigation_drawer_flutter/CRM_Directory/CRM_View/Task_Master_vie
 import 'package:navigation_drawer_flutter/CRM_Directory/CRM_View/Task_Master_view/task_master_approval_details.dart';
 import 'package:navigation_drawer_flutter/CRM_Directory/CRM_View/item_master/non_standard_item_list.dart';
 import 'package:navigation_drawer_flutter/CRM_Directory/CRM_View/pageNotFound.dart';
+import 'package:navigation_drawer_flutter/CRM_Directory/CRM_View/sales_cycle/quote_approval_list/quote_cbh_approval_list.dart';
+import 'package:navigation_drawer_flutter/CRM_Directory/CRM_View/sales_cycle/quote_approval_list/quote_gm_approval_list.dart';
+import 'package:navigation_drawer_flutter/CRM_Directory/CRM_View/sales_cycle/quote_approval_list/quote_rh_approval_list.dart';
 import 'package:navigation_drawer_flutter/component/default_button.dart';
 import 'package:navigation_drawer_flutter/component/error_404.dart';
 import 'package:navigation_drawer_flutter/reources/routes/routes_name.dart';
@@ -662,6 +665,25 @@ class AppRoutes{
         transitionDuration: Duration(microseconds: 180),
         transition: Transition.rightToLeftWithFade
     ),
+
+
+    GetPage(name: RoutesName.quoteRHApprovalListScreen,
+        page: ()=>QuoteRHApprovalList(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
+    GetPage(name: RoutesName.quoteCBHApprovalListScreen,
+        page: ()=>QuoteCBHApprovalList(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
+    GetPage(name: RoutesName.quoteGMApprovalListScreen,
+        page: ()=>QuoteGMApprovalList(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
+
+
 
     GetPage(name: RoutesName.approvedQuotationListScreen,
         page: ()=>ApprovedQuotationList(),

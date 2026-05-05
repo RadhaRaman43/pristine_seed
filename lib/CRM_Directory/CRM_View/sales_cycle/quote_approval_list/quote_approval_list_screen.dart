@@ -165,7 +165,9 @@ class QuoteApprovalListScreen extends StatelessWidget{
         width: size.width,
         child: ListTile(
           onTap: () {
-            saleCycleController.getQuoteHeaderInformation(quoteApprovalController.quoteApprovalList[position].quoteId, "quoteApprovalScreen");
+            //saleCycleController.getQuoteHeaderInformation(quoteApprovalController.quoteApprovalList[position].quoteId, "quoteApprovalScreen");
+            saleCycleController.getQuoteHeaderInformation(quoteApprovalController.quoteApprovalList[position].quoteId,
+                quoteApprovalController.filterRouting);
           },
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -207,15 +209,16 @@ class QuoteApprovalListScreen extends StatelessWidget{
                   saleCycleController.pageNumber = 0;
                   saleCycleController.filterQuoteAcceptedFlag.value="";
                   saleCycleController.clearAllFieldOfFilter();
-                  saleCycleController.getsalesCycleData(saleCycleController.pageNumber, quoteApprovalController.quoteApprovalList[position].salesCycleId!, "ViewHeader", "QuoteApprovalPage");
+                  saleCycleController.getsalesCycleData(saleCycleController.pageNumber,
+                      quoteApprovalController.quoteApprovalList[position].salesCycleId!, "ViewHeader", quoteApprovalController.filterRouting);
 
                 },),
               _buildLabelOnTap(label: "Customer Name: ", value:  quoteApprovalController.quoteApprovalList[position].accountName ?? "",color:Colors.blueAccent,
                 onTap: (){
                   final account_vm_controller = Get.put(Accountmastervm());
-                  final contact_vm_controller = Get.put(ContactMasterVM());
-                  account_vm_controller.view='FromQuoteApproval';
-                  contact_vm_controller.view='FromQuoteVIEW';
+                  //final contact_vm_controller = Get.put(ContactMasterVM());
+                  account_vm_controller.view= quoteApprovalController.filterRouting;
+                  //contact_vm_controller.view='FromQuoteVIEW';
                   account_vm_controller.getAccMasterBuyCodeApi(quoteApprovalController.quoteApprovalList[position]
                       .accountCode!);
                 },),
@@ -470,7 +473,7 @@ class QuoteApprovalListScreen extends StatelessWidget{
                           textColor: AllColors.green,
                           onTap: () {
                             Get.back();
-                            quoteApprovalController.SaveFilterData();
+                            quoteApprovalController.SaveFilterData(quoteApprovalController.apiQuoteStatusField);
                           },
                         )),
                       ],

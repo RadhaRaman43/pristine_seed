@@ -579,13 +579,13 @@ class SessionManagement {
   }
 
   //todo Quote approver
-  Future<void> saveQuoteApproverData(Map<String, dynamic> data) async {
+  Future<void> saveQuoteApproverData(String saveTag,Map<String, dynamic> data) async {
     final prefs = await SharedPreferences.getInstance();
-    prefs.setString("Quote_approver_data", jsonEncode(data));
+    prefs.setString(saveTag, jsonEncode(data));
   }
-  Future<Map<String, dynamic>> getQuoteApproverData() async {
+  Future<Map<String, dynamic>> getQuoteApproverData(String getTag) async {
     final prefs = await SharedPreferences.getInstance();
-    String? data = prefs.getString("Quote_approver_data");
+    String? data = prefs.getString(getTag);
     return data != null ? jsonDecode(data) : {};
   }
   Future<void> clearQuoteApproverData() async {

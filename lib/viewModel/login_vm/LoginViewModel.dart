@@ -14,8 +14,8 @@ class LoginViewModel extends GetxController{
   final _api=LoginRepository();
   final emailController =TextEditingController().obs;
   final passController =TextEditingController().obs;
-  final emailFocusNode=FocusNode().obs;
-  final passFocusNode=FocusNode().obs;
+  final emailFocusNode =FocusNode().obs;
+  final passFocusNode =FocusNode().obs;
 
   RxBool loading=false.obs;
   SessionManagement sessionManagement=SessionManagement();
@@ -32,12 +32,12 @@ class LoginViewModel extends GetxController{
         List).map((i) => LoginResponse.fromJson(i)).toList();
         if(loginResponse!=null &&  loginResponse[0].condition=="True"){
           loading.value=false;
-          if(loginResponse[0].isHo=='1'){
+          /*if(loginResponse[0].isHo=='1'){
             sessionManagement.clearSession();
            Get.offAllNamed(RoutesName.loginScreen);
             Utils.sanckBarError('Message !', "Cluster User Can Not Access Mobile Application.");
             return;
-          }
+          }*/
           // Utils.sanckBarSuccess("Success", loginResponse[0].message!);
           sessionManagement.setUserCode(loginResponse[0].userType.toString());
           sessionManagement.setCompanyId(loginResponse[0].companyId.toString());
@@ -54,7 +54,6 @@ class LoginViewModel extends GetxController{
           sessionManagement.setMenuList(loginResponse[0].menu ?? []);
           // Get.toNamed(RoutesName.homeScreen);
           Get.offAllNamed(RoutesName.homeScreen);
-
         }
         else{
           passController.value.text="";
@@ -71,7 +70,6 @@ class LoginViewModel extends GetxController{
       finally{
         loading.value=false;
       }
-
     }).onError((error, stackTrace) {
       print(error);
       Utils.showErrorToastification("Api Error!",error.toString());

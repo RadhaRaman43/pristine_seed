@@ -42,10 +42,21 @@ class QuoteInformationScreen extends StatelessWidget {
     return WillPopScope(
       onWillPop: () async {
         print("Satus ${saleCycleController.quoteApprovalPage.value}");
-        if (saleCycleController.quoteApprovalPage.value ==
-            "quoteApprovalScreen") {
+        if (saleCycleController.quoteApprovalPage.value == "Quote Approval List") {
           quoteApprovalController.getQuoteHeaderData(0);
           Get.toNamed(RoutesName.quoteApprovalListScreen);
+        }
+        else if (saleCycleController.quoteApprovalPage.value == "Quote RH Approval List") {
+          quoteApprovalController.getQuoteHeaderData(0);
+          Get.toNamed(RoutesName.quoteRHApprovalListScreen);
+        }
+        else if (saleCycleController.quoteApprovalPage.value == "Quote CBH Approval List") {
+          quoteApprovalController.getQuoteHeaderData(0);
+          Get.toNamed(RoutesName.quoteCBHApprovalListScreen);
+        }
+        else if (saleCycleController.quoteApprovalPage.value == "Quote GM Approval List") {
+          quoteApprovalController.getQuoteHeaderData(0);
+          Get.toNamed(RoutesName.quoteGMApprovalListScreen);
         }else if (saleCycleController.quoteApprovalPage.value == "pendingDraftQuote") {
           pendingDraftQuoteController.clearAllFieldOfQuoteFilter();
           pendingDraftQuoteController.pageNumberForQuote =0;

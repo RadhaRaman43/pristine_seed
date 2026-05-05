@@ -412,12 +412,14 @@ class SalesCycleVm extends GetxController {
   RxString account_code="".obs;
   RxString account_name="".obs;
   RxString contact_code="".obs;
+  String filterRouting = "";
 
   @override
   Future<void> onInit() async {
     try {
       loading.value=true;
       email = await sessionManagement.getEmail() ?? '';
+      filterRouting = await sessionManagement.getfilterRouting() ?? '';
       userType = await sessionManagement.getUserType() ?? '';
       isAdminWritePermission.value =
           await sessionManagement.getIsAdminPermission() ?? '';
@@ -425,20 +427,26 @@ class SalesCycleVm extends GetxController {
           await sessionManagement.getisHeadofficePermission() ?? '';
       //clearAllFieldOfFilter();
       product_category_type_Controller.value.text = "Contains";
-      getItemCategoryMstWithoutTaskIdApi();
-      getCompanyTypeMasterGet();
-      if (this.isAdminWritePermission.value == 1) {
-        EmployeeMasterGet('');
+
+      if (filterRouting == "Quote Approval List" || filterRouting == "Quote RH Approval List" ||
+          filterRouting == "Quote CBH Approval List" || filterRouting == "Quote GM Approval List") {
+
+      }else{
+        getItemCategoryMstWithoutTaskIdApi();
+        getCompanyTypeMasterGet();
+        if (this.isAdminWritePermission.value == 1) {
+          EmployeeMasterGet('');
+        }
+        else {
+          getEmployeeMemberApi();
+        }
+        //getsalesCycleData(pageNumber, "", "", '');
+
+        getClustersGetByEmail();
+        itemCategorySelectedlist.value = [];
       }
-      else {
-        getEmployeeMemberApi();
-      }
 
 
-      //getsalesCycleData(pageNumber, "", "", '');
-
-      getClustersGetByEmail();
-      itemCategorySelectedlist.value = [];
     }
     catch(e){
 
@@ -1006,8 +1014,7 @@ class SalesCycleVm extends GetxController {
                 filterQuoteAcceptedFlag.value = "";
                 pageNumber = 0;
                 clearAllFieldOfFilter();
-                getsalesCycleData(pageNumber, saleCycleList.salesCycleId!,
-                    "ViewHeader", FromPage.value);
+                getsalesCycleData(pageNumber, saleCycleList.salesCycleId!, "ViewHeader", FromPage.value);
                 Get.toNamed(RoutesName.viewSalesCycleHeaderScreen);
               }
 
@@ -1512,6 +1519,7 @@ class SalesCycleVm extends GetxController {
                 return;
               }
               quoteApprovalPage.value = flag;
+              print("Rh flag ${flag}");
               getItemCategoryMstApi(quoteHeaderdata[0].salesCycleId.toString(),"" ,  quoteId!);
               Get.toNamed(RoutesName.quoteInformationScreen);
 
