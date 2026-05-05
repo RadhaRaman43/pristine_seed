@@ -223,6 +223,7 @@ class QuoteInformationScreen extends StatelessWidget {
                                 saleCycleController.quoteHeaderdata[0].quoteAccepted?.toLowerCase()=="open" ,
                             child: Tooltip(
                               message: "Reopen",
+
                               child: Container(
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(30),
