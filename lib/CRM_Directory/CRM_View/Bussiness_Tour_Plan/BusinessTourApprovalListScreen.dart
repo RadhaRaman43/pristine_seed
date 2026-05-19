@@ -1,3 +1,4 @@
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -12,6 +13,7 @@ import '../../../reources/routes/routes_name.dart';
 import '../../../view/custom_drawer.dart';
 import '../../CRM_Models/AccountMaster_model/cluster_modal.dart';
 import '../../CRM_Models/AccountMaster_model/region_with_cluster_filter_modal.dart';
+import '../../CRM_Models/Bussiness_Tour_Plan_Model/reporting_manager_modal.dart';
 import '../../CRM_VIewModels/Bussiness_Tour_Plan_Vm/BusinessPlanTour_Vm.dart';
 import '../../CRM_VIewModels/Bussiness_Tour_Plan_Vm/Business_Tour_Approval_Vm.dart';
 
@@ -289,7 +291,7 @@ class BusinessTourApprovalListScreen extends StatelessWidget{
       builder: (BuildContext context) {
         return DraggableScrollableSheet(
           expand: false,
-          // initialChildSize: 0.85,
+           initialChildSize: 0.85,
           minChildSize: 0.5,
           maxChildSize: 0.95,
           builder: (_, scrollController) {
@@ -344,20 +346,22 @@ class BusinessTourApprovalListScreen extends StatelessWidget{
                           child: Column(
                             mainAxisSize: MainAxisSize.max,
                             children: [
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
                               bindfilterText(context,'Tour ID',businessTourPlanController.filterTourIdController.value),
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
                               bindClusterNameFilter(context),
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
                               bindRegionNameFilter(context),
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
                               bindFilterStartDate(context),
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
                               bindFilterEndDate(context),
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
                               bindfilterText(context,'Created By',businessTourPlanController.filterCreatedByController.value),
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
                               bindCrteatedOn(context),
+                              const SizedBox(height: 10,),
+                              bindReportingManager(context)
 
                             ],
                           ),
@@ -713,6 +717,96 @@ class BusinessTourApprovalListScreen extends StatelessWidget{
         }
       },
     );
+  }
+  bindReportingManager(BuildContext context) {
+    return Obx(() {
+      if (businessTourPlanController.reporting_manager_Controller.value.text
+          .isNotEmpty &&
+          businessTourPlanController.filterDataChecker.value == '1') {
+        List<String> nameList = businessTourPlanController
+            .reporting_manager_Controller.value.text.split('|');
+
+        businessTourPlanController.selectedReportingMangerList.assignAll(
+          List.generate(nameList.length, (index) {
+            return ReportingManagerModal(
+              userFullName: nameList[index].trim(),
+            );
+          }),
+        );
+      }
+
+      return DropdownSearch<ReportingManagerModal>.multiSelection(
+        compareFn: (item, selectedItem) =>
+        item.emailId == selectedItem.emailId,
+        asyncItems: (String filter) async {
+          return await businessTourPlanController.getReportingManager(filter);
+        },
+        itemAsString: (ReportingManagerModal u) => u.emailId ?? "",
+        selectedItems: businessTourPlanController.selectedReportingMangerList,
+        dropdownBuilder: (context, selectedItems) {
+          if (selectedItems.isEmpty) {
+            return Text(
+              "Select Reporting Manager",
+              style: GoogleFonts.poppins(
+                color: AllColors.primaryDark1, // Match your hint color
+                fontSize: AllFontSize.sisxteen,
+                fontWeight: FontWeight.w500,
+              ),
+            );
+          }return SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Text(
+              selectedItems.map((e) => e.userFullName).join(', '),
+              style: TextStyle(color: Colors.black),
+            ),
+          );
+        },
+
+        dropdownDecoratorProps: DropDownDecoratorProps(
+          dropdownSearchDecoration: InputDecoration(
+            labelText: businessTourPlanController.selectedReportingMangerList
+                .isNotEmpty ? "Reporting Manager" : null,
+            hintText: "Search Reporting Manager",
+            contentPadding: const EdgeInsets.symmetric(
+                horizontal: 12, vertical: 8),
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+          ),
+        ),
+
+        onChanged: (List<ReportingManagerModal> selectedList) {
+          businessTourPlanController.selectedReportingMangerList.assignAll(
+              selectedList);
+          businessTourPlanController.reporting_manager_Controller.value.text =
+              selectedList.map((e) => e.emailId).join('|');
+        },
+
+        popupProps: PopupPropsMultiSelection.dialog(
+          showSearchBox: true,
+          isFilterOnline: true,
+          searchDelay: const Duration(milliseconds: 300),
+          searchFieldProps: TextFieldProps(
+            decoration: InputDecoration(
+              hintText: "Search...",
+              prefixIcon: const Icon(Icons.search),
+              border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8)),
+            ),
+          ),
+
+          itemBuilder: (context, item, isSelected) {
+            return ListTile(
+              title: Text("${item.userFullName ?? ""}",
+                style: TextStyle(
+                  color: isSelected ? Colors.blue : Colors.black,
+                  fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                ),
+              ),
+              selected: isSelected,
+            );
+          },
+        ),
+      );
+    });
   }
 
   bindfilterText(BuildContext context, String hintData, TextEditingController controller) {

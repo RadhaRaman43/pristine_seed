@@ -220,6 +220,7 @@ class QuoteRHApprovalList extends StatelessWidget{
               _buildLabelWithValue(label: "Contact Name: ", value:  quoteApprovalController.quoteApprovalList[position].contactName ?? "",color:AllColors.textColor),
               _buildLabelWithValue(label: "Product Category: ", value:  quoteApprovalController.quoteApprovalList[position].productCategory ?? "",color:AllColors.textColor),
               _buildLabelWithValue(label: "Quote Status: ", value:  quoteApprovalController.quoteApprovalList[position].quoteStatus ?? "",color:getStatusColor(saleCycleStatus)),
+              _buildLabelWithValue(label: "Quote Accepted: ", value:  quoteApprovalController.quoteApprovalList[position].quoteAccepted ?? "",color:AllColors.textColor),
               _buildLabelWithValue(label: "Quote Validity: ", value:  quoteValidityDate.toString(),color:AllColors.textColor),
               _buildLabelWithValue(label: "Expected Closure Date: ", value: expectedClosuredateDate.toString(),color:AllColors.textColor),
               _buildLabelWithValue(label: "Quote Commit: ", value:  quoteApprovalController.quoteApprovalList[position].quoteCommit.toString() ?? "",color:AllColors.textColor),
@@ -355,39 +356,41 @@ class QuoteRHApprovalList extends StatelessWidget{
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              SizedBox(height: 5,),
+                              const SizedBox(height: 5,),
                               bindData(context,'Quote Id',quoteApprovalController.filterQuoteIdController.value),
-                              SizedBox(height: 10),
+                              const SizedBox(height: 10),
                               bindData(context,'Quote Version',quoteApprovalController.filterQuoteVersionController.value),
-                              SizedBox(height: 10),
+                              const SizedBox(height: 10),
+                              bindQuoteAccepted(context),
+                              const SizedBox(height: 10),
                               bindData(context,'Sale Cycle Id',quoteApprovalController.filterQuoteSaleCycleController.value),
-                              SizedBox(height: 10),
+                              const SizedBox(height: 10),
                               bindData(context,'Customer Name',quoteApprovalController.accountNameController.value),
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
                               bindData(context,'Customer Code',quoteApprovalController.accountCodeController.value),
-                              SizedBox(height: 10),
+                              const SizedBox(height: 10),
                               filterWithQuoteValidity(context),
-                              SizedBox(height: 10),
+                              const SizedBox(height: 10),
                               filterWithQuoteClosureDate(context),
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
                               bindData(context,'Rh Approval',quoteApprovalController.rh_Approval_controller.value),
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
                               bindData(context,'CBH Approval',quoteApprovalController.cbh_Approval_controller.value),
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
                               bindData(context,'Category Approval',quoteApprovalController.category_Approval_controller.value),
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
                               bindData(context,'Gm Approval',quoteApprovalController.gm_Approval_controller.value),
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
                               bindClusterNameFilter(context),
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
                               bindRegionNameFilter(context),
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
                               filterWithQuoteCreatedOn(context),
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
                               bindProductCategory(context),
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
                               bindProductCategoryTypeDropDown(context),
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
 
                             ],
                           ),
@@ -410,7 +413,8 @@ class QuoteRHApprovalList extends StatelessWidget{
                             quoteApprovalController.clearAllFieldOfQuoteFilter();
                             quoteApprovalController.pageNumberForQuote = 0;
                             quoteApprovalController.getQuoteHeaderData(quoteApprovalController.pageNumberForQuote,);
-                            Get.back();
+
+
                           },
                         )),
                         const SizedBox(width: 6),
@@ -474,6 +478,65 @@ class QuoteRHApprovalList extends StatelessWidget{
       onChanged: (value) {
         // Handle the text field value changes if needed
       },
+    );
+  }
+  bindQuoteAccepted(BuildContext context) {
+    return Container(
+
+      child: DropdownMenu<String>(
+        width: MediaQuery.of(context).size.width-15,
+        controller: quoteApprovalController.filterQuoteAcceptedController.value,
+        label: Text(
+          "Select Quote Accepted",
+          style: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontSize: AllFontSize.sisxteen,
+              fontWeight: FontWeight.w500),
+        ),
+
+        inputDecorationTheme: const InputDecorationTheme(
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+              color: AllColors.primaryDark1,),
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+                color: AllColors.primaryDark1), // Change the color to green
+          ),
+          border: OutlineInputBorder(
+            borderSide: BorderSide(
+                color: AllColors.primaryDark1), // Change the color to green
+          ),
+          filled: false,
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.two, horizontal: AllFontSize.ten),
+        ),
+
+
+        onSelected: (String? selection) {
+          print(selection);
+          if(selection=="Open"){
+            quoteApprovalController.filterQuoteAcceptedController.value.text = '';
+          }
+          else{
+
+            quoteApprovalController.filterQuoteAcceptedController.value.text =selection.toString();
+
+            debugPrint("Quote accepted.... ${quoteApprovalController.filterQuoteAcceptedController.value.text}");
+          }
+
+
+        },
+        dropdownMenuEntries:
+        quoteApprovalController.qouteAcceptedList.map<
+            DropdownMenuEntry<String>>((String e) {
+          return DropdownMenuEntry<String>(
+              value: e, label: e!, style: ButtonStyle(
+            foregroundColor: MaterialStateProperty.all<Color>(
+                AllColors.primaryDark1),));
+        }).toList(),
+      ),
     );
   }
   Widget _buildButton({

@@ -138,8 +138,6 @@ class FunnelDashboardView extends StatelessWidget{
                                       const SizedBox(width: 10,)
                                     ],
                                   ),
-
-
                                   Obx((){
                                     return  Text(
                                       'Date Ranges : ${dashboard_view_Controller.formattedStartDate} - '
@@ -151,8 +149,7 @@ class FunnelDashboardView extends StatelessWidget{
                                       ),
                                     );
                                   }),
-
-                                   Obx((){
+                                  Obx((){
                                      return  Tooltip(
                                        message:  'Quote Accep. ${dashboard_view_Controller.QuoteAccepted_controller.value.text}',
                                        child: Text(
@@ -166,9 +163,7 @@ class FunnelDashboardView extends StatelessWidget{
                                        ),
                                      );
                                    }),
-
-                                const  SizedBox(height: 10,),
-
+                                  const  SizedBox(height: 10,),
                                   Obx((){
                                     return Container(
                                       //width: 90,
@@ -203,7 +198,6 @@ class FunnelDashboardView extends StatelessWidget{
                                       ),
                                     );
                                   }),
-
                                   SizedBox(height: 10,),
                                   Obx((){
                                     return Padding(
@@ -408,6 +402,7 @@ class FunnelDashboardView extends StatelessWidget{
     try {
       progress.value = 0.10;
 
+
       RenderRepaintBoundary boundary =
       chartKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
 
@@ -415,8 +410,7 @@ class FunnelDashboardView extends StatelessWidget{
 
       progress.value = 0.25;
 
-      var chartBytes =
-      await chartImage.toByteData(format: ui.ImageByteFormat.png);
+      var chartBytes = await chartImage.toByteData(format: ui.ImageByteFormat.png);
       var chartUint8 = chartBytes!.buffer.asUint8List();
 
       const double textSectionHeight = 80;
@@ -499,7 +493,7 @@ class FunnelDashboardView extends StatelessWidget{
               content: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Text("Saving screenshot..."),
+                  Text("Saving screenshot...",style: GoogleFonts.poppins(color: AllColors.primaryDark1),),
                   const SizedBox(height: 20),
                   LinearProgressIndicator(value: value),
                   const SizedBox(height: 10),

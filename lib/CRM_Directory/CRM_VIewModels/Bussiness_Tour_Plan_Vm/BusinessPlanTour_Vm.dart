@@ -22,6 +22,8 @@ import '../../CRM_Models/Bussiness_Tour_Plan_Model/BussinessTourPlanLineDetailsM
 import '../../CRM_Models/Bussiness_Tour_Plan_Model/BussinessTourPlanModel.dart';
 import '../../CRM_Models/Bussiness_Tour_Plan_Model/TourPlanAccount_Model.dart';
 import '../../CRM_Models/Bussiness_Tour_Plan_Model/TouringDistrictModel.dart';
+import '../../CRM_Models/Bussiness_Tour_Plan_Model/region_master_modal.dart';
+import '../../CRM_Models/Bussiness_Tour_Plan_Model/reporting_manager_modal.dart';
 import '../../CRM_Models/sale_cycle_modal/alongWithPersonModel.dart';
 import '../../CRM_Repository/BusinessTourPlan_Repository/business_tour_plan_repo.dart';
 import 'Business_Tour_Approval_Vm.dart';
@@ -90,6 +92,9 @@ class BusinessPlanTourViewModel extends GetxController{
 
   RxList<EmployeeMemberModel> employee_Member_list = <EmployeeMemberModel>[].obs;
   RxList<EmployeeMemberModel> SelectedEmployee_Member_list = <EmployeeMemberModel>[].obs;
+  RxList<RegionMasterModal> regionMasterList = <RegionMasterModal>[].obs;
+  RxList<ReportingManagerModal> reportingMangerList = <ReportingManagerModal>[].obs;
+  RxList<ReportingManagerModal> selectedReportingMangerList = <ReportingManagerModal>[].obs;
 
  /* //todo Bussiness Tour Plan Line Details Controller
   var filterCreatedByController = TextEditingController().obs;
@@ -101,6 +106,7 @@ class BusinessPlanTourViewModel extends GetxController{
   var touringRegionController = TextEditingController().obs;
   var startDateController = TextEditingController().obs;
   var endDateController = TextEditingController().obs;
+  var remarkController = TextEditingController().obs;
 
   var AlongPersonWith_controller = TextEditingController();
   var TourPlanDistrict_Controller = TextEditingController();
@@ -112,7 +118,13 @@ class BusinessPlanTourViewModel extends GetxController{
   var TourType_Controller = TextEditingController().obs;
 
   var ApproveReject_Controller = TextEditingController();
-  var RejectReason_Controller = TextEditingController();
+  var RejectReason_Controller = TextEditingController().obs;
+  var manager_remark_Controller = TextEditingController().obs;
+  var reporting_manager_Controller = TextEditingController().obs;
+  var ApprovalStatusController = TextEditingController().obs;
+
+  RxList<String> ApprovalStatusList = ["All", "PENDING", "PENDING FOR APPROVAL", "APPROVED", "REJECTED"].obs;
+
   RxBool RejectBool=false.obs;
   String ApproveReject = '';
   RxList<String> approveRejectList = <String>[].obs;
@@ -125,6 +137,8 @@ class BusinessPlanTourViewModel extends GetxController{
     filterRouting = await sessionManagement.getfilterRouting() ?? '';
     approveRejectList.value = ['Approve', 'Reject'];
     clearAllFieldOfFilter();
+    //getReportingManager("");
+    RegionMasterGet();
     EmployeeMasterGet("");
     getClustersGetByEmail();
 
@@ -150,7 +164,7 @@ class BusinessPlanTourViewModel extends GetxController{
   }
 
   Future<Iterable<EmployeeMemberModel>> EmployeeMasterGet(String query) async {
-    print("aditi..");
+
     try {
       Map data = {
         'filter_name': '',
@@ -193,6 +207,72 @@ class BusinessPlanTourViewModel extends GetxController{
     return employee_Member_list.value;
   }
 
+  void RegionMasterGet() async {
+
+    try {
+      Map data = {
+        "filter_cluster_name": "",
+        "filter_zone_name": "",
+        "filter_region_name": ""
+      };
+      loading.value=true;
+      print("created by ${data}");
+      String employee_response =await _api.RegionMasterGet(data, sessionManagement);
+
+
+      final jsonResponse = json.decode(employee_response);
+
+      if (jsonResponse is List) {
+        print(jsonResponse);
+        List<RegionMasterModal> response =
+        jsonResponse.map((data) => RegionMasterModal.fromJson(data)).toList();
+        print('condition..'+response[0].condition.toString());
+        if (response[0].condition == 'True') {
+          print(jsonResponse);
+          regionMasterList.value = response;
+        } else {
+          Utils.sanckBarException('False!', response.toString());
+
+        }
+      }
+    } catch (e) {
+      Utils.sanckBarException('Exception!', e.toString());
+      employee_Member_list.value = [];
+    }
+    finally{
+      loading.value=false;
+    }
+
+  }
+  Future<List<ReportingManagerModal>> getReportingManager(String searchText) async {
+    try {
+      Map<String, dynamic> data = {
+        "email_id": "rajesh.kumar1@methodexsystems.com",
+        "filter_value": searchText,
+        "rowsPerPage": 50,
+        "pageNumber": 0
+      };
+      print("data is master....${data}");
+      final response =
+      await _api.BusinessTourplanReportingManagerGet(data, sessionManagement);
+
+      final jsonResponse = json.decode(response);
+
+      if (jsonResponse is List) {
+        List<ReportingManagerModal> list =
+        jsonResponse.map((e) => ReportingManagerModal.fromJson(e)).toList();
+        if (list.isNotEmpty && list[0].condition?.toLowerCase() == "true") {
+          reportingMangerList.value = list;
+          return list;
+        }
+      }
+      return [];
+    } catch (e) {
+      print(e);
+      return [];
+    }
+  }
+
   void getClustersGetByEmail() async{
     try{
       Map<String, String> data={
@@ -228,6 +308,7 @@ class BusinessPlanTourViewModel extends GetxController{
       loading.value = false;
     }
   }
+
   void getRegionsWithClusterFilterGetByEmail() async{
     var selectedCluster="";
     if(clusterName_controller.value.text.isNotEmpty){
@@ -288,6 +369,7 @@ class BusinessPlanTourViewModel extends GetxController{
         "end_date": EndDate_filter_controller.value.text.isEmpty?"":EndDate_filter_controller.value.text,
         "filter_created_on": createdOn_filter_controller.value.text.isEmpty?"":createdOn_filter_controller.value.text,
         "status": filterStatusFlag.value=='All'?'':filterStatusFlag.value,
+        "reporting_manager": reporting_manager_Controller.value.text.isEmpty?"":reporting_manager_Controller.value.text,
         "rowsPerPage": rowsPerPage,
         "pageNumber": page_no
       };
@@ -299,8 +381,7 @@ class BusinessPlanTourViewModel extends GetxController{
           if (jsonResponse is List) {
             List<BussinessTourPlanModel> response =
             jsonResponse.map((e) => BussinessTourPlanModel.fromJson(e)).toList();
-            if (response.length > 0 && response[0].condition == "Tru"
-                "e") {
+            if (response.length > 0 && response[0].condition == "True") {
               loading.value = false;
               if (page_no == 0) {
                 BusinessTourPlanList.clear();
@@ -319,13 +400,13 @@ class BusinessPlanTourViewModel extends GetxController{
         },
       ).onError(
             (error, stackTrace) {
-          print(error);
+          print("on error $error");
           loading.value = false;
         },
       );
     } catch (e) {
       loading.value = false;
-      print(e);
+      print("catch error $e");
     }
   }
 
@@ -380,7 +461,8 @@ class BusinessPlanTourViewModel extends GetxController{
         "touring_region": touringRegionController.value.text,
         "start_date": startDateController.value.text,
         "end_date": endDateController.value.text,
-        "email_id": email
+        "email_id": email,
+        "remarks": remarkController.value.text
       };
       loading.value = true;
       _api.BusinessTourPlanHeaderCreate(data, sessionManagement).then(
@@ -1095,11 +1177,16 @@ class BusinessPlanTourViewModel extends GetxController{
 
   BusinessTourPlanApproveReject(String TourId, String Status) {
     try {
+      if(manager_remark_Controller.value.text.isEmpty){
+        Utils.sanckBarError("Manager Remark!", "Please Enter Manager Remark");
+        return;
+      }
       Map data = {
         "tour_id": TourId,
         "status": Status,
         "reject_remark": RejectReason_Controller.value.text.isNotEmpty?RejectReason_Controller.value.text:'',
-        "email_id": email
+        "email_id": email,
+        "manager_remarks": manager_remark_Controller.value.text
       };
       loading.value = true;
       _api.BusinessTourPlanApproveReject(data, sessionManagement).then(
@@ -1157,7 +1244,11 @@ class BusinessPlanTourViewModel extends GetxController{
     filterTourDateController.value.clear();
     filterTourDateFromToController.value.clear();
     filterCreatedOnController.value.clear();
+    reporting_manager_Controller.value.clear();
+    ApprovalStatusController.value.clear();
     createdOnStartToEnd.value="";
+    selectedReportingMangerList.value=[];
+    filterStatusFlag.value = 'PENDING';
 
     SelectedCluster_list.value=[];
     SelectedRegion_list.value=[];
@@ -1197,6 +1288,8 @@ class BusinessPlanTourViewModel extends GetxController{
       'EndDate_filter_controller': EndDate_filter_controller.value.text,
       'filterCreatedByController': filterCreatedByController.value.text,
       'createdOn_filter_controller': createdOn_filter_controller.value.text,
+      'reporting_manager_Controller': reporting_manager_Controller.value.text,
+      'ApprovalStatusController': ApprovalStatusController.value.text,
 
     });
     filterDataChecker.value='';
@@ -1214,6 +1307,9 @@ class BusinessPlanTourViewModel extends GetxController{
       EndDate_filter_controller.value.text=getFilterData["EndDate_filter_controller"]??"";
       filterCreatedByController.value.text=getFilterData["filterCreatedByController"]??"";
       createdOn_filter_controller.value.text=getFilterData["createdOn_filter_controller"]??"";
+      reporting_manager_Controller.value.text=getFilterData["reporting_manager_Controller"]??"";
+      ApprovalStatusController.value.text=getFilterData["ApprovalStatusController"]??"";
+      ApprovalStatusController.value.text=ApprovalStatusController.value.text;
       filterDataChecker.value='1';
 
       if(getFilterData["region_name"].toString().isNotEmpty && getFilterData["region_name"].toString()!=""){

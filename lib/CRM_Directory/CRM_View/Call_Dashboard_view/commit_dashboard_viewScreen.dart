@@ -193,6 +193,25 @@ class CommitDashboardViewscreen extends StatelessWidget{
                                     ),
                                   );
                                 }),
+                                Obx((){
+                                  if(dashboard_view_Controller.commitDashboardList.isNotEmpty ) {
+                                    return Text(
+                                      "Total value: ${dashboard_view_Controller
+                                          .commitDashboardList[0].records?[0]
+                                          .totalEstimatedAmount}",
+                                      style: GoogleFonts.poppins(
+                                        color: AllColors.primaryDark1,
+                                        fontSize: AllFontSize.fourtine,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    );
+                                  }
+                                  else{
+                                    return Text("");
+                                  }
+
+                                }),
+
                               ],
                             )
 

@@ -53,6 +53,8 @@ class QuoteApprovalListVm extends GetxController{
   var createdByController=TextEditingController().obs;
   var companyProfileTypeController=TextEditingController().obs;
   var filterQuoteStatusController=TextEditingController().obs;
+  var filterQuoteAcceptedController = TextEditingController().obs;
+  RxList<String> qouteAcceptedList = ["All", "Open", "Loss", "Won"].obs;
 
   RxString isAdminWritePermission = "".obs;
   RxString isHeadofficePermission = "".obs;
@@ -230,6 +232,7 @@ class QuoteApprovalListVm extends GetxController{
         "filter_branch_head_value": RegionName_controller.value.text.isEmpty?"":RegionName_controller.value.text,
         "filter_zone_head_value": zone_head_value_controller.value.text.isEmpty?"":zone_head_value_controller.value.text,
         "filter_clusture_head_value": clusterName_controller.value.text.isEmpty?"":clusterName_controller.value.text,
+        "filter_quote_accepted":  filterQuoteAcceptedController.value.text,
         "row_per_page": rowsPerPage,
         "page_number": pageNumberForQuote
       };
@@ -291,6 +294,7 @@ class QuoteApprovalListVm extends GetxController{
     createdOnStartToEnd.value = "";
     extClosureStartToEnd.value = "";
     quoteValidityStartToEnd.value = "";
+    filterQuoteAcceptedController.value.clear();
 
     SelectedCluster_list.value = [];
     SelectedRegion_list.value = [];
@@ -322,6 +326,7 @@ class QuoteApprovalListVm extends GetxController{
       'createdOnStartToEnd': createdOnStartToEnd.value,
       'product_category': productCategoryController.value.text,
       'product_category_type': product_category_type_Controller.value.text,
+      'filterQuoteAcceptedController': filterQuoteAcceptedController.value.text,
 
     });
     filterDataChecker.value='';
@@ -352,6 +357,7 @@ class QuoteApprovalListVm extends GetxController{
       createdOnStartToEnd.value=getFilterData["createdOnStartToEnd"];
       productCategoryController.value.text=getFilterData["product_category"];
       product_category_type_Controller.value.text=getFilterData["product_category_type"];
+      filterQuoteAcceptedController.value.text=getFilterData["filterQuoteAcceptedController"]??"";
 
       if(getFilterData["region_name"].toString().isNotEmpty && getFilterData["region_name"].toString()!=""){
         RegionName_controller.value.text = "";

@@ -61,6 +61,9 @@ class PendingDraftQuoteVm extends GetxController{
   var StandardCostController=TextEditingController().obs;
   var product_category_type_Controller = TextEditingController().obs;
 
+  var filterQuoteAcceptedController = TextEditingController().obs;
+  RxList<String> qouteAcceptedList = ["All", "Open", "Loss", "Won"].obs;
+
 
   RxList<Pending_Draft_Quote_Model> PendingDraftQuoteList=<Pending_Draft_Quote_Model>[].obs;
   RxList<String> QuoteStatusList = ["All", "DRAFT", "PENDING FOR APPROVAL", ].obs;
@@ -78,9 +81,11 @@ class PendingDraftQuoteVm extends GetxController{
   RxList<ItemCategoryMstModel> Item_Category_master_list_without_task = <ItemCategoryMstModel>[].obs;
   RxList<ItemCategoryMstModel> Selected_Item_Category_master_list_without_task = <ItemCategoryMstModel>[].obs;
   RxList<String> productCategoryTypeList = <String>["Contains","Equals To"].obs;
+
   String filterRouting = "";
   String title="";
   String userType = "";
+
   @override
   Future<void> onInit() async {
     title = Get.arguments??"";
@@ -292,6 +297,7 @@ class PendingDraftQuoteVm extends GetxController{
           "filter_map": MAPFilterController.value.text.isEmpty?"":MAPFilterController.value.text,
           "filter_btp": BTPFilterController.value.text.isEmpty?"":BTPFilterController.value.text,
           "filter_standard_cost": StandardCostController.value.text.isEmpty?"":StandardCostController.value.text,
+          "filter_quote_accepted": filterQuoteAcceptedController.value.text,
           "row_per_page": rowsPerPage,
           "page_number": pageNumberForQuote
       };
@@ -358,6 +364,8 @@ class PendingDraftQuoteVm extends GetxController{
     MAPFilterController.value.clear();
     StandardCostController.value.clear();
 
+    filterQuoteAcceptedController.value.clear();
+
     SelectedCluster_list.value = [];
     SelectedRegion_list.value = [];
     //RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join(',');
@@ -392,6 +400,7 @@ class PendingDraftQuoteVm extends GetxController{
       'product_category': productCategoryController.value.text,
       'parentProductCategoryController': parentProductCategoryController.value.text,
       'product_category_type': product_category_type_Controller.value.text,
+      'filterQuoteAcceptedController': filterQuoteAcceptedController.value.text,
     });
     filterDataChecker.value='';
 
@@ -421,6 +430,7 @@ class PendingDraftQuoteVm extends GetxController{
       productCategoryController.value.text=getFilterData["product_category"]??"";
       parentProductCategoryController.value.text=getFilterData["parentProductCategoryController"]??"";
       product_category_type_Controller.value.text=getFilterData["product_category_type"]??"";
+      filterQuoteAcceptedController.value.text=getFilterData["filterQuoteAcceptedController"]??"";
 
       if(getFilterData["region_name"].toString().isNotEmpty && getFilterData["region_name"].toString()!=""){
         RegionName_controller.value.text = "";
@@ -472,6 +482,7 @@ class PendingDraftQuoteVm extends GetxController{
       'product_category': productCategoryController.value.text,
       'parentProductCategoryController': parentProductCategoryController.value.text,
       'product_category_type': product_category_type_Controller.value.text,
+      'filterQuoteAcceptedController': filterQuoteAcceptedController.value.text,
     });
     filterDataChecker.value='';
 
@@ -501,6 +512,7 @@ class PendingDraftQuoteVm extends GetxController{
       productCategoryController.value.text=getFilterData["product_category"]??"";
       parentProductCategoryController.value.text=getFilterData["parentProductCategoryController"]??"";
       product_category_type_Controller.value.text=getFilterData["product_category_type"]??"";
+      filterQuoteAcceptedController.value.text=getFilterData["filterQuoteAcceptedController"]??"";
 
       if(getFilterData["region_name"].toString().isNotEmpty && getFilterData["region_name"].toString()!=""){
         RegionName_controller.value.text = "";
@@ -551,6 +563,7 @@ class PendingDraftQuoteVm extends GetxController{
       'product_category': productCategoryController.value.text,
       'parentProductCategoryController': parentProductCategoryController.value.text,
       'product_category_type': product_category_type_Controller.value.text,
+      'filterQuoteAcceptedController': filterQuoteAcceptedController.value.text,
     });
     filterDataChecker.value='';
     getPendingDraftQuoteList(pageNumberForQuote, filterFlag);
@@ -581,6 +594,7 @@ class PendingDraftQuoteVm extends GetxController{
       productCategoryController.value.text=getFilterData["product_category"]??"";
       parentProductCategoryController.value.text=getFilterData["parentProductCategoryController"]??"";
       product_category_type_Controller.value.text=getFilterData["product_category_type"]??"";
+      filterQuoteAcceptedController.value.text=getFilterData["filterQuoteAcceptedController"]??"";
 
       if(getFilterData["region_name"].toString().isNotEmpty && getFilterData["region_name"].toString()!=""){
         RegionName_controller.value.text = "";
@@ -641,6 +655,7 @@ class PendingDraftQuoteVm extends GetxController{
       'product_category': productCategoryController.value.text,
       'parentProductCategoryController': parentProductCategoryController.value.text,
       'product_category_type': product_category_type_Controller.value.text,
+      'filterQuoteAcceptedController': filterQuoteAcceptedController.value.text,
     });
     filterDataChecker.value='';
     getPendingDraftQuoteList(pageNumberForQuote, filterFlag);
@@ -681,6 +696,8 @@ class PendingDraftQuoteVm extends GetxController{
       productCategoryController.value.text=getFilterData["product_category"]??"";
       parentProductCategoryController.value.text=getFilterData["parentProductCategoryController"]??"";
       product_category_type_Controller.value.text=getFilterData["product_category_type"]??"";
+      filterQuoteAcceptedController.value.text=getFilterData["filterQuoteAcceptedController"]??"";
+
 
       if(getFilterData["region_name"].toString().isNotEmpty && getFilterData["region_name"].toString()!=""){
         RegionName_controller.value.text = "";

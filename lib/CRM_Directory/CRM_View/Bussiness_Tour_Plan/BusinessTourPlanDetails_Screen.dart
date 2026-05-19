@@ -394,7 +394,8 @@ class BusinessTourPlanDeatil extends StatelessWidget {
 
   showApprovRejectDialog(context, String TaskId) {
     businessTourPlanController.ApproveReject_Controller.clear();
-    businessTourPlanController.RejectReason_Controller.clear();
+    businessTourPlanController.RejectReason_Controller.value.clear();
+    businessTourPlanController.manager_remark_Controller.value.clear();
    // businessTourPlanController.ApproveBool.value = false;
     businessTourPlanController.RejectBool.value = false;
     showDialog(
@@ -411,44 +412,20 @@ class BusinessTourPlanDeatil extends StatelessWidget {
               ),
               content: Wrap(
                 children: [
-                  Divider(
+                  const Divider(
                     height: 1,
                     thickness: 1,
                   ),
-                  SizedBox(height: 15,),
+                  const SizedBox(height: 15,),
                   bindApprovRejectDropDown(context),
-                  SizedBox(height: 55,),
+                  const SizedBox(height: 15,),
+                  bindInputData(businessTourPlanController.remarkController.value,"Enter Manager Remark"),
+                  const SizedBox(height: 55,),
                   Obx(() {
                     return Visibility(
                       visible: businessTourPlanController.RejectBool
                           .value,
-                      child: Container(
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(10)
-                        ),
-                        //padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                        child: TextFormField(
-                          controller: businessTourPlanController
-                              .RejectReason_Controller,
-                          decoration: InputDecoration(
-                              hintText: "Reject Reason",
-                              labelText: "Reject Reason",
-                              //suffixIcon: Icon(Icons.email),
-                              contentPadding: EdgeInsets.symmetric(
-                                  vertical: AllFontSize.ten,
-                                  horizontal: AllFontSize.ten),
-
-                              /*focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.blue)
-                              ),*/
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10)
-                              )
-                          ),
-
-                        ),
-                      ),
+                      child: bindInputData(businessTourPlanController.RejectReason_Controller.value,"Reject Reason"),
                     );
                   }),
                   SizedBox(height: 55,),
@@ -508,10 +485,8 @@ class BusinessTourPlanDeatil extends StatelessWidget {
                                 if (businessTourPlanController
                                     .ApproveReject_Controller.text ==
                                     "Reject") {
-                                  if (businessTourPlanController
-                                      .RejectReason_Controller.text.isEmpty ||
-                                      businessTourPlanController
-                                          .RejectReason_Controller == null) {
+                                  if (businessTourPlanController.RejectReason_Controller.value.text.isEmpty ||
+                                      businessTourPlanController.RejectReason_Controller.value == null) {
                                     Utils.sanckBarError('Error : ',
                                         'Please Enter Reject Reason.');
                                   } else {
@@ -542,6 +517,40 @@ class BusinessTourPlanDeatil extends StatelessWidget {
           );
         });
   }
+  Widget bindInputData(TextEditingController controller,String hintdata){
+    return  Container(
+      decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(10)
+      ),
+      child: TextFormField(
+        controller: controller,
+        decoration: InputDecoration(
+            hintText: hintdata,
+            labelText: hintdata,
+            hintStyle: GoogleFonts.poppins(
+                color: AllColors.lightblackColor,
+                fontWeight: FontWeight.w300,
+                fontSize: AllFontSize.ten),
+            labelStyle: GoogleFonts.poppins(
+                color: AllColors.primaryDark1,
+                fontWeight: FontWeight.w500,
+                fontSize: AllFontSize.sisxteen),
+            contentPadding: EdgeInsets.symmetric(
+                vertical: AllFontSize.ten,
+                horizontal: AllFontSize.ten),
+
+            focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: AllColors.primaryDark1)
+            ),
+            border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10)
+            )
+        ),
+
+      ),
+    );
+  }
 
   Widget bindApprovRejectDropDown(context) {
     return Autocomplete<String>(
@@ -551,11 +560,8 @@ class BusinessTourPlanDeatil extends StatelessWidget {
           return businessTourPlanController.approveRejectList;
           // return const Iterable<VehicleTypeResponse>.empty();
         }
-        return businessTourPlanController.approveRejectList
-            .where((String option) {
-          return option
-              .toString()
-              .toLowerCase()
+        return businessTourPlanController.approveRejectList.where((String option) {
+          return option.toString().toLowerCase()
               .contains(textEditingValue.text.toLowerCase());
         }).toList();
       },
@@ -907,41 +913,34 @@ class BusinessTourPlanDeatil extends StatelessWidget {
               child: Column(
                 children: [
                   _buildLabelWithValue(label: "Tour ID: ", value: businessTourPlanController.BusinessTourPlanDetails_list[0].tourId ?? "",),
-                  SizedBox(
-                    height: 3,
-                  ),
+                  const SizedBox(height: 3,),
                   _buildLabelWithValue(label: "Cluster: ", value: businessTourPlanController.BusinessTourPlanDetails_list[0].cluster ?? "",),
-                  SizedBox(
-                    height: 3,
-                  ),
+                  const SizedBox(height: 3,),
                   _buildLabelWithValue(label: "Region: ", value: businessTourPlanController.BusinessTourPlanDetails_list[0].region ?? "",),
-                  SizedBox(
-                    height: 3,
-                  ),
+                  const SizedBox(height: 3,),
                   _buildLabelWithValue(label: "Touring Region: ", value: businessTourPlanController.BusinessTourPlanDetails_list[0].touringRegion ?? "",),
-                  SizedBox(
-                    height: 3,
-                  ),
+                  const SizedBox(height: 3,),
                   _buildLabelWithValue(label: "Reporting Manager: ", value: businessTourPlanController.BusinessTourPlanDetails_list[0].reportingFullName ?? "",),
-                  SizedBox(
-                    height: 3,
-                  ),
+                  const SizedBox(height: 3,),
                   _buildLabelWithValue(label: "Status: ", value: Status, color:  getStatusColor(Status)),
-                  SizedBox(
-                    height: 3,
-                  ),
+                  const SizedBox(height: 3,),
                   _buildLabelWithValue(label: "Start Date: ", value:StartDate ?? "",),
-                  SizedBox(
-                    height: 3,
-                  ),
+                  const SizedBox(height: 3,),
                   _buildLabelWithValue(label: "End Date: ", value:EndDate ?? "",),
-                  SizedBox(
-                    height: 3,
-                  ),
+                  const SizedBox(height: 3,),
                   _buildLabelWithValue(label: "Created On: ", value:dateTimeCreatedOn ?? "",),
-                  SizedBox(
-                    height: 3,
+                  const SizedBox(height: 3,),
+                  _buildLabelWithValue(
+                    label: "Remark: ",
+                    value: businessTourPlanController.BusinessTourPlanDetails_list[0].remarks??"",
                   ),
+                  const SizedBox(height: 3,),
+                  Visibility(
+                    visible: (Status=="Rejected" || Status=="REJECTED" || Status=="APPROVED"|| Status=="Approved"),
+                    child: _buildLabelWithValue(
+                      label: "Manager Remark: ",
+                      value: businessTourPlanController.BusinessTourPlanDetails_list[0].managerRemarks??"",
+                    ),),
 
                 ],
               ),

@@ -50,6 +50,8 @@ class AppUrl {
   static const String checkOutComplete="$BASE_URL/api/Travel/CheckOutComplete";
   static const String userLocationInsert="$BASE_URL/api/Travel/UserLocationInsert";
   static const String expanseLineSaveSaveData="$BASE_URL/api/Travel/CheckOutLineExpenseSubmit";
+  static const String RegionMasterGet="$BASE_URL/api/CRM/Master/RegionMasterGet";
+  static const String BusinessTourplanReportingManagerGet="$BASE_URL/api/CRM/BusinessTourPlan/BusinessTourplanReportingManagerGet";
    //todo for checkInApproval.........
   static const String employeeTeamMemberGet="$BASE_URL/api/Employee/EmployeeTeamMemberGet";
   static const String check_in_approverData="$BASE_URL/api/Travel/CheckInApproverGet";
@@ -329,6 +331,7 @@ class AppUrl {
      static const String employeeLeaveRequestMark="$BASE_URL/api/CRM/EmployeeAttendance/EmployeeLeaveRequestMark";
      static const String employeeLeaveRequestRejectApproveDataGet="$BASE_URL/api/CRM/EmployeeAttendance/EmployeeLeaveRequestRejectApproveDataGet";
      static const String employeeLeaveRequestApproveReject="$BASE_URL/api/CRM/EmployeeAttendance/EmployeeLeaveRequestApproveReject";
+     static const String EmployeeLeaveRequestDelete="$BASE_URL/api/CRM/EmployeeAttendance/EmployeeLeaveRequestDelete";
 
      //todo business tour plan
      static const String businessPlanListGet="$BASE_URL/api/CRM/BusinessTourPlan/BusinessTourPlanListGet";

@@ -34,6 +34,9 @@ class AllQuoteScreen extends StatelessWidget{
 
   static String _displaySaleCycleActiveForOption(String option) =>
       option;
+  static String _displaySaleCycleStatusForOption(String option) =>
+      option;
+
 
   @override
   Widget build(BuildContext context) {
@@ -242,6 +245,7 @@ class AllQuoteScreen extends StatelessWidget{
               _buildLabelWithValue(label: "Product Category: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].productCategory ?? "",color:AllColors.textColor),
               _buildLabelWithValue(label: "Parent Product Category: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].parentProductCategory ?? "",color:AllColors.textColor),
               _buildLabelWithValue(label: "Quote Status: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].quoteStatus ?? "",color:getStatusColor(saleCycleStatus)),
+              _buildLabelWithValue(label: "Quote Accepted: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].quoteAccepted ?? "",color:AllColors.textColor),
               _buildLabelWithValue(label: "Quote Validity: ", value:  quoteValidityDate.toString(),color:AllColors.textColor),
               _buildLabelWithValue(label: "Expected Closure Date: ", value: expectedClosuredateDate.toString(),color:AllColors.textColor),
               _buildLabelWithValue(label: "Quote Commit: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].quoteCommit.toString() ?? "",color:AllColors.textColor),
@@ -428,6 +432,8 @@ class AllQuoteScreen extends StatelessWidget{
                               const SizedBox(height: 10,),
                               filterWithQuoteStatus(context),
                               const SizedBox(height: 10),
+                              bindQuoteAccepted(context),
+                              const SizedBox(height: 10,),
                               filterWithQuoteValidity(context),
                               const SizedBox(height: 10),
                               filterWithQuoteClosureDate(context),
@@ -454,6 +460,7 @@ class AllQuoteScreen extends StatelessWidget{
                               const SizedBox(height: 10,),
                               bindProductCategoryTypeDropDown(context),
                               const SizedBox(height: 10,),
+
 
                             ],
                           ),
@@ -899,6 +906,61 @@ class AllQuoteScreen extends StatelessWidget{
       }).toList(),
     );
 
+  }
+  bindQuoteAccepted(BuildContext context) {
+    return Container(
+
+      child: DropdownMenu<String>(
+        width: MediaQuery.of(context).size.width-15,
+        controller: pendingDraftQuoteController.filterQuoteAcceptedController.value,
+        label: Text(
+          "Select Quote Accepted",
+          style: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontSize: AllFontSize.sisxteen,
+              fontWeight: FontWeight.w500),
+        ),
+
+        inputDecorationTheme: const InputDecorationTheme(
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+              color: AllColors.primaryDark1,),
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+                color: AllColors.primaryDark1), // Change the color to green
+          ),
+          border: OutlineInputBorder(
+            borderSide: BorderSide(
+                color: AllColors.primaryDark1), // Change the color to green
+          ),
+          filled: false,
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.two, horizontal: AllFontSize.ten),
+        ),
+
+
+        onSelected: (String? selection) {
+          print(selection);
+          if(selection=="All"){
+            pendingDraftQuoteController.filterQuoteAcceptedController.value.text = '';
+          }
+          else{
+            pendingDraftQuoteController.filterQuoteAcceptedController.value.text = selection??"";
+          }
+
+        },
+        dropdownMenuEntries:
+        pendingDraftQuoteController.qouteAcceptedList.map<
+            DropdownMenuEntry<String>>((String e) {
+          return DropdownMenuEntry<String>(
+              value: e, label: e!, style: ButtonStyle(
+            foregroundColor: MaterialStateProperty.all<Color>(
+                AllColors.primaryDark1),));
+        }).toList(),
+      ),
+    );
   }
 
   Widget filterWithQuoteStatus(BuildContext context){

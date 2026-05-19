@@ -89,6 +89,7 @@ class EmpMarkLeaveRequestVm extends GetxController{
   RxList<RegionWithClusterFilterModal> SelectedRegion_list = <RegionWithClusterFilterModal>[].obs;
 
   RxString isHeadOfficePermission = "".obs;
+  RxString isAdminWritePermission = "".obs;
 
   @override
   Future<void> onInit() async {
@@ -96,6 +97,7 @@ class EmpMarkLeaveRequestVm extends GetxController{
     super.onInit();
     email = await sessionManagement.getEmail()??"";
     isHeadOfficePermission.value = await sessionManagement.getisHeadofficePermission() ?? '';
+    isAdminWritePermission.value = await sessionManagement.getIsAdminPermission() ?? '';
     getLeaveTypeData();
     getClustersGetByEmail();
     //getEmployeeLeaveData(filterStatus.value, pageNumber);
@@ -233,6 +235,45 @@ class EmpMarkLeaveRequestVm extends GetxController{
           }
         }
       }catch(e){
+        print(e);
+      }finally{
+
+        loading.value=false;
+      }
+    },).onError((error, stackTrace) {
+      loading.value=false;
+    },).whenComplete(() {
+      loading.value=false;
+    },);
+  }
+
+  EmployeeLeaveRequestDelete(String leaveId) async{
+    Map data= {
+      "leave_id": leaveId,
+      "email_id": email
+    };
+
+    print(data);
+    loading.value=true;
+    _api.EmployeeLeaveRequestDelete(data, sessionManagement).then((value) {
+      print(value);
+      final Jsonresponse=json.decode(value);
+      try{
+        if(Jsonresponse is List){
+          List<MarkLeaveRequestModal> response=Jsonresponse.map((e) =>
+              MarkLeaveRequestModal.fromJson(e)).toList();
+          print("response...${response.length}");
+          if(response!=null && response.length>0 && response[0].condition?.toLowerCase()=="true"){
+            Utils.sanckBarSuccess("Successfully!", response[0].message??"");
+            pageNumber=0;
+            getEmployeeLeaveData(filterStatus.value, pageNumber);
+          }
+          else{
+            Utils.sanckBarError("Error!", response[0].message??"");
+          }
+        }
+      }catch(e){
+        Utils.sanckBarException("Exception!", e.toString());
         print(e);
       }finally{
 

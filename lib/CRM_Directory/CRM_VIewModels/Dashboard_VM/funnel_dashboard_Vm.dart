@@ -661,8 +661,7 @@ class FunnelDashboardVm extends GetxController{
     }
   }*/
 
-  Future<List<AccountMasterModel>> getAccountMaster(
-      String searchText) async {
+  Future<List<AccountMasterModel>> getAccountMaster(String searchText) async {
     try {
       Map<String, String> data = {
         "filter_account_code": '',

@@ -437,6 +437,8 @@ class AllQuoteLineItemScreen extends StatelessWidget{
                               const SizedBox(height: 10),
                               bindData(context,'Quote Version', pendingDraftQuoteController.filterQuoteVersionController.value),
                               const SizedBox(height: 10),
+                              bindQuoteAccepted(context),
+                              const SizedBox(height: 10),
                               bindData(context,'Sale Cycle Id', pendingDraftQuoteController.filterQuoteSaleCycleController.value),
                               const SizedBox(height: 10),
                               bindData(context,'Customer Code', pendingDraftQuoteController.accountCodeController.value),
@@ -670,6 +672,64 @@ class AllQuoteLineItemScreen extends StatelessWidget{
       onChanged: (value) {
         // Handle the text field value changes if needed
       },
+    );
+  }
+  bindQuoteAccepted(BuildContext context) {
+    return Container(
+
+      child: DropdownMenu<String>(
+        width: MediaQuery.of(context).size.width-15,
+        controller: pendingDraftQuoteController.filterQuoteAcceptedController.value,
+        label: Text(
+          "Select Quote Accepted",
+          style: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontSize: AllFontSize.sisxteen,
+              fontWeight: FontWeight.w500),
+        ),
+
+        inputDecorationTheme: const InputDecorationTheme(
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+              color: AllColors.primaryDark1,),
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+                color: AllColors.primaryDark1), // Change the color to green
+          ),
+          border: OutlineInputBorder(
+            borderSide: BorderSide(
+                color: AllColors.primaryDark1), // Change the color to green
+          ),
+          filled: false,
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.two, horizontal: AllFontSize.ten),
+        ),
+
+
+        onSelected: (String? selection) {
+          if(selection=="Open"){
+            pendingDraftQuoteController.filterQuoteAcceptedController.value.text = '';
+          }
+          else{
+
+            pendingDraftQuoteController.filterQuoteAcceptedController.value.text =selection.toString();
+
+            debugPrint("Quote accepted.... ${pendingDraftQuoteController.filterQuoteAcceptedController.value.text}");
+          }
+
+
+        },
+        dropdownMenuEntries:
+        pendingDraftQuoteController.qouteAcceptedList.map<
+            DropdownMenuEntry<String>>((String e) {
+          return DropdownMenuEntry<String>(
+              value: e, label: e!, style: ButtonStyle(
+            foregroundColor: MaterialStateProperty.all<Color>(
+                AllColors.primaryDark1),));
+        }).toList(),
+      ),
     );
   }
 

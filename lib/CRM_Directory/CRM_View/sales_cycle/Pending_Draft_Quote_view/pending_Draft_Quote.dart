@@ -221,6 +221,7 @@ class PendingDraftQuote extends StatelessWidget{
               _buildLabelWithValue(label: "Product Category: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].productCategory ?? "",color:AllColors.textColor),
               _buildLabelWithValue(label: "Parent Product Category: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].parentProductCategory ?? "",color:AllColors.textColor),
               _buildLabelWithValue(label: "Quote Status: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].quoteStatus ?? "",color:getStatusColor(saleCycleStatus)),
+              _buildLabelWithValue(label: "Quote Accepted: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].quoteAccepted ?? "",color:AllColors.textColor),
               _buildLabelWithValue(label: "Quote Validity: ", value:  quoteValidityDate.toString(),color:AllColors.textColor),
               _buildLabelWithValue(label: "Expected Closure Date: ", value: expectedClosuredateDate.toString(),color:AllColors.textColor),
               _buildLabelWithValue(label: "Quote Commit: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].quoteCommit.toString() ?? "",color:AllColors.textColor),
@@ -397,6 +398,8 @@ class PendingDraftQuote extends StatelessWidget{
                               bindData(context,'Quote Id',pendingDraftQuoteController.filterQuoteIdController.value),
                               const SizedBox(height: 10),
                               bindData(context,'Quote Version',pendingDraftQuoteController.filterQuoteVersionController.value),
+                              const SizedBox(height: 10),
+                              bindQuoteAccepted(context),
                               const SizedBox(height: 10),
                               bindData(context,'Sale Cycle Id',pendingDraftQuoteController.filterQuoteSaleCycleController.value),
                               const SizedBox(height: 10),
@@ -609,6 +612,64 @@ class PendingDraftQuote extends StatelessWidget{
       onChanged: (value) {
         // Handle the text field value changes if needed
       },
+    );
+  }
+  bindQuoteAccepted(BuildContext context) {
+    return Container(
+
+      child: DropdownMenu<String>(
+        width: MediaQuery.of(context).size.width-15,
+        controller: pendingDraftQuoteController.filterQuoteAcceptedController.value,
+        label: Text(
+          "Select Quote Accepted",
+          style: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontSize: AllFontSize.sisxteen,
+              fontWeight: FontWeight.w500),
+        ),
+
+        inputDecorationTheme: const InputDecorationTheme(
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+              color: AllColors.primaryDark1,),
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+                color: AllColors.primaryDark1), // Change the color to green
+          ),
+          border: OutlineInputBorder(
+            borderSide: BorderSide(
+                color: AllColors.primaryDark1), // Change the color to green
+          ),
+          filled: false,
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.two, horizontal: AllFontSize.ten),
+        ),
+
+
+        onSelected: (String? selection) {
+          if(selection=="Open"){
+            pendingDraftQuoteController.filterQuoteAcceptedController.value.text = '';
+          }
+          else{
+
+            pendingDraftQuoteController.filterQuoteAcceptedController.value.text =selection.toString();
+
+            debugPrint("Quote accepted.... ${pendingDraftQuoteController.filterQuoteAcceptedController.value.text}");
+          }
+
+
+        },
+        dropdownMenuEntries:
+        pendingDraftQuoteController.qouteAcceptedList.map<
+            DropdownMenuEntry<String>>((String e) {
+          return DropdownMenuEntry<String>(
+              value: e, label: e!, style: ButtonStyle(
+            foregroundColor: MaterialStateProperty.all<Color>(
+                AllColors.primaryDark1),));
+        }).toList(),
+      ),
     );
   }
 

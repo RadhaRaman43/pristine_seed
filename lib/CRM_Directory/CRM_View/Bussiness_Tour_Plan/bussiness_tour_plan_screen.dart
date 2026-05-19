@@ -1,3 +1,4 @@
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -14,6 +15,8 @@ import '../../../view/custom_drawer.dart';
 import '../../CRM_Models/AccountMaster_model/Employee_Member_Model.dart';
 import '../../CRM_Models/AccountMaster_model/cluster_modal.dart';
 import '../../CRM_Models/AccountMaster_model/region_with_cluster_filter_modal.dart';
+import '../../CRM_Models/Bussiness_Tour_Plan_Model/region_master_modal.dart';
+import '../../CRM_Models/Bussiness_Tour_Plan_Model/reporting_manager_modal.dart';
 import '../../CRM_VIewModels/Bussiness_Tour_Plan_Vm/BusinessPlanTour_Vm.dart';
 
 class BussinessTourPlanScreen extends StatelessWidget{
@@ -21,6 +24,14 @@ class BussinessTourPlanScreen extends StatelessWidget{
 
   BusinessPlanTourViewModel businessTourPlanController=Get.put(BusinessPlanTourViewModel());
   Size size=Get.size;
+  static String _displayAccNameForOption(RegionMasterModal option) =>
+      option.regionName??"";
+  static String _displayReportingManagerOption(ReportingManagerModal option) =>
+      option.userFullName??"";
+
+  static String _displayApprovalStatusForOption(String option) =>
+      option;
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(onWillPop: () async {
@@ -52,13 +63,20 @@ class BussinessTourPlanScreen extends StatelessWidget{
               ),
 
               Obx(() {
+                bool addTuourPlan = true;
+                if(businessTourPlanController.isHeadOfficePermission == "1"  || businessTourPlanController.isAdminWritePermission == "1"){
+                  addTuourPlan = false;
+                }
+                debugPrint("show condition $addTuourPlan");
                 return Visibility(
-                  visible: businessTourPlanController.isHeadOfficePermission != "1",
+                  // visible: /*businessTourPlanController.isHeadOfficePermission != "1"*/  ,
+                  visible: addTuourPlan  ,
                   child: IconButton(
                     onPressed: () {
                       businessTourPlanController.startDateController.value.clear();
                       businessTourPlanController.endDateController.value.clear();
                       businessTourPlanController.touringRegionController.value.clear();
+                      businessTourPlanController.remarkController.value.clear();
                       OpenDialogToCreateBTP(context);
                     },
                     icon: Icon(Icons.add),
@@ -356,36 +374,36 @@ class BussinessTourPlanScreen extends StatelessWidget{
           children: [
             _buildLabelWithValue(
               label: "Cluster: ",
-              value: businessTourPlanController.BusinessTourPlanList[position].cluster,
+              value: businessTourPlanController.BusinessTourPlanList[position].cluster??"",
             ),
             _buildLabelWithValue(
               label: "Region : ",
-              value: businessTourPlanController.BusinessTourPlanList[position].region,
+              value: businessTourPlanController.BusinessTourPlanList[position].region??"",
             ),
             _buildLabelWithValue(
               label: "Touring Region : ",
-              value: businessTourPlanController.BusinessTourPlanList[position].touringRegion,
+              value: businessTourPlanController.BusinessTourPlanList[position].touringRegion??"",
             ),
             _buildLabelWithValue(
               label: "Status : ",
-              value: businessTourPlanController.BusinessTourPlanList[position].status,
+              value: businessTourPlanController.BusinessTourPlanList[position].status??"",
               color: getStatusColor(saleCycleStatus),
             ),
             _buildLabelWithValue(
               label: "Start Date : ",
-              value: businessTourPlanController.BusinessTourPlanList[position].startDate,
+              value: businessTourPlanController.BusinessTourPlanList[position].startDate??"",
             ),
             _buildLabelWithValue(
               label: "End Date : ",
-              value: businessTourPlanController.BusinessTourPlanList[position].endDate,
+              value: businessTourPlanController.BusinessTourPlanList[position].endDate??"",
             ),
             _buildLabelWithValue(
               label: "Reporting Manager : ",
-              value: businessTourPlanController.BusinessTourPlanList[position].reportingFullName,
+              value: businessTourPlanController.BusinessTourPlanList[position].reportingFullName??"",
             ),
             _buildLabelWithValue(
               label: "Created By: ",
-              value: businessTourPlanController.BusinessTourPlanList[position].createdFullName,
+              value: businessTourPlanController.BusinessTourPlanList[position].createdFullName??"",
             ),
             _buildLabelWithValue(
               label: "Created On: ",
@@ -395,18 +413,29 @@ class BussinessTourPlanScreen extends StatelessWidget{
               visible: (saleCycleStatus=="Rejected" || saleCycleStatus=="REJECTED" || saleCycleStatus=="APPROVED"|| saleCycleStatus=="Approved"),
               child: _buildLabelWithValue(
                 label: "Reject Reason",
-                value: businessTourPlanController.BusinessTourPlanList[position].rejectReason,
+                value: businessTourPlanController.BusinessTourPlanList[position].rejectReason??"",
               ),
             ),
             _buildLabelWithValue(
               label: "Approved/Rejected By: ",
-              value: businessTourPlanController.BusinessTourPlanList[position].approvedFullName,
+              value: businessTourPlanController.BusinessTourPlanList[position].approvedFullName??"",
             ),
+
             Visibility(
                 visible: (saleCycleStatus=="Rejected" || saleCycleStatus=="REJECTED" || saleCycleStatus=="APPROVED"|| saleCycleStatus=="Approved"),
                 child: _buildLabelWithValue(
                 label: "Approve On: ",
                 value: approvedOn,
+              ),),
+            _buildLabelWithValue(
+              label: "Remark: ",
+              value: businessTourPlanController.BusinessTourPlanList[position].remarks??"",
+            ),
+            Visibility(
+              visible: (saleCycleStatus=="Rejected" || saleCycleStatus=="REJECTED" || saleCycleStatus=="APPROVED"|| saleCycleStatus=="Approved"),
+              child: _buildLabelWithValue(
+                label: "Manager Remark: ",
+                value: businessTourPlanController.BusinessTourPlanList[position].managerRemarks??"",
               ),),
 
           ],
@@ -475,49 +504,20 @@ class BussinessTourPlanScreen extends StatelessWidget{
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Divider(
+                  const Divider(
                     height: 1,
                     thickness: 1,
                   ),
-                  SizedBox(height: 15,),
-                  Container(
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(10)
-                    ),
-                    child: TextFormField(
-                      controller: businessTourPlanController.touringRegionController.value,
-                      decoration: InputDecoration(
-                          hintText: "Touring Region",
-                          labelText: "Touring Region",
-                          //suffixIcon: Icon(Icons.email),
-                          hintStyle: GoogleFonts.poppins(
-                              color: AllColors.lightblackColor,
-                              fontWeight: FontWeight.w300,
-                              fontSize: AllFontSize.ten),
-                          labelStyle: GoogleFonts.poppins(
-                              color: AllColors.primaryDark1,
-                              fontWeight: FontWeight.w500,
-                              fontSize: AllFontSize.sisxteen),
-                          contentPadding: EdgeInsets.symmetric(
-                              vertical: AllFontSize.ten,
-                              horizontal: AllFontSize.ten),
-
-                          focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: AllColors.primaryDark1)
-                          ),
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10)
-                          )
-                      ),
-
-                    ),
-                  ),
-                  SizedBox(height: 10,),
+                  const SizedBox(height: 15,),
+                  selectRegionName(context),
+                  //bindInputData(businessTourPlanController.touringRegionController.value,"Touring Region"),
+                  const SizedBox(height: 10,),
                   bindStartDatePicker(context),
-                  SizedBox(height: 10,),
+                  const SizedBox(height: 10,),
                   bindEndDatePicker(context),
-                  SizedBox(height: 15,),
+                  const SizedBox(height: 15,),
+                  bindInputData(businessTourPlanController.remarkController.value,"Enter Remark"),
+                  const SizedBox(height: 15,),
                   Row(
                 children: [
                   Expanded(
@@ -537,6 +537,165 @@ class BussinessTourPlanScreen extends StatelessWidget{
             ),
           );
         }
+    );
+  }
+  selectRegionName(BuildContext context,) {
+    return Autocomplete<RegionMasterModal>(
+      displayStringForOption: _displayAccNameForOption,
+      optionsBuilder: (TextEditingValue textEditingValue) async {
+        if (textEditingValue.text.isEmpty) {
+          return businessTourPlanController.regionMasterList;
+        }
+
+        return businessTourPlanController.regionMasterList.where((region) {
+          return region.regionName!
+              .toLowerCase()
+              .contains(textEditingValue.text.toLowerCase());
+        });
+      },
+      onSelected: (RegionMasterModal selection) {
+        print(selection.regionName);
+        businessTourPlanController.touringRegionController.value.text =
+            _displayAccNameForOption(selection).toString();
+
+      },
+      fieldViewBuilder: (BuildContext context, TextEditingController controller,
+          FocusNode focusNode, VoidCallback onFieldSubmitted) {
+        return Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+              borderRadius: BorderRadius.circular(10)
+          ),
+          child: TextFormField(
+            cursorColor: AllColors.primaryDark1,
+            controller: controller
+              ..text = businessTourPlanController.touringRegionController.value.text,
+            focusNode: focusNode,
+            onTapOutside: (value){
+              FocusNode().unfocus();
+            },
+
+            decoration: InputDecoration(
+              fillColor: Colors.white,
+              suffixIcon: IconButton(
+                color: AllColors.primaryDark1,
+                onPressed: (){
+                  if(focusNode.hasFocus){
+                    focusNode.unfocus();
+                  }else{
+                    focusNode.requestFocus();
+                  }
+                },
+                icon: Icon(Icons.arrow_drop_down),
+              ),
+              contentPadding: EdgeInsets.symmetric(
+                  vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+              hintText: 'Select Region',
+              labelText: 'Select Region',
+              hintStyle: GoogleFonts.poppins(
+                  color: AllColors.lightblackColor,
+                  fontWeight: FontWeight.w300,
+                  fontSize: AllFontSize.ten),
+              labelStyle: GoogleFonts.poppins(
+                  color: AllColors.primaryDark1,
+                  fontWeight: FontWeight.w500,
+                  fontSize: AllFontSize.sisxteen),
+              focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: AllColors.primaryDark1)
+              ),
+
+              border: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(10))
+              ),
+            ),
+          ),
+        );
+      },
+      optionsViewBuilder: (BuildContext context,
+          AutocompleteOnSelected<RegionMasterModal> onSelected,
+          Iterable<RegionMasterModal> suggestions) {
+        return Align(
+          alignment: Alignment.topLeft,
+          child: Material(
+            color: Colors.white,
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+            elevation: 4.0,
+            child: Container(
+              //width: size.width*.9,
+              constraints: BoxConstraints(maxHeight: 200),
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: suggestions.length,
+                itemBuilder: (context, index) {
+                  final RegionMasterModal option =
+                  suggestions.elementAt(index);
+                  return GestureDetector(
+                    onTap: () {
+                      onSelected(option);
+                    },
+                    child: Container(
+                        padding: EdgeInsets.all(8.0),
+                        child:
+                        RichText(
+                          text: TextSpan(
+                            children: [
+                              TextSpan(
+                                text:  option.regionName??"",
+                                style: GoogleFonts.poppins(
+                                    color: AllColors.blackColor,
+                                    fontWeight: FontWeight.w300,
+                                    fontSize: AllFontSize
+                                        .sisxteen // Change the text color here
+                                ),
+                              ),
+                            ],
+                          ),
+                          softWrap: true,
+                        )
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+
+  Widget bindInputData(TextEditingController controller,String hintdata){
+    return  Container(
+      decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(10)
+      ),
+      child: TextFormField(
+        controller: controller,
+        decoration: InputDecoration(
+            hintText: hintdata,
+            labelText: hintdata,
+            hintStyle: GoogleFonts.poppins(
+                color: AllColors.lightblackColor,
+                fontWeight: FontWeight.w300,
+                fontSize: AllFontSize.ten),
+            labelStyle: GoogleFonts.poppins(
+                color: AllColors.primaryDark1,
+                fontWeight: FontWeight.w500,
+                fontSize: AllFontSize.sisxteen),
+            contentPadding: EdgeInsets.symmetric(
+                vertical: AllFontSize.ten,
+                horizontal: AllFontSize.ten),
+
+            focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: AllColors.primaryDark1)
+            ),
+            border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10)
+            )
+        ),
+
+      ),
     );
   }
 
@@ -764,30 +923,38 @@ class BussinessTourPlanScreen extends StatelessWidget{
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
                               bindfilterText(context,'Tour ID',businessTourPlanController.filterTourIdController.value),
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
                               bindClusterNameFilter(context),
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
                               bindRegionNameFilter(context),
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
                               bindfilterText(context,'Touring Region',businessTourPlanController.filterTouringRegionController.value),
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
                               bindFilterStartDate(context),
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
                               bindFilterEndDate(context),
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
                               bindfilterText(context,'Created By',businessTourPlanController.filterCreatedByController.value),
                               //bindAccountOwnerFilter(context),
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
                               bindCrteatedOn(context),
+                              const SizedBox(height: 10,),
+                              bindReportingManager(context),
+                              const SizedBox(height: 10,),
+                              Obx((){
+                                return Visibility(
+                                  visible: businessTourPlanController.filterStatusFlag.value.toLowerCase()=="all",
+                                    child: bindApprovalStatusDropDown(context),);
+                              })
+
                             ],
                           ),
                         ),
                       ),
                     ),
                   ),
-
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                     child: Row(
@@ -872,7 +1039,264 @@ class BussinessTourPlanScreen extends StatelessWidget{
       ),
     );
   }
+  bindReportingManager(BuildContext context) {
+    return Obx(() {
+      if (businessTourPlanController.reporting_manager_Controller.value.text
+          .isNotEmpty &&
+          businessTourPlanController.filterDataChecker.value == '1') {
+        List<String> nameList = businessTourPlanController
+            .reporting_manager_Controller.value.text.split('|');
 
+        businessTourPlanController.selectedReportingMangerList.assignAll(
+          List.generate(nameList.length, (index) {
+            return ReportingManagerModal(
+              userFullName: nameList[index].trim(),
+            );
+          }),
+        );
+      }
+
+      return DropdownSearch<ReportingManagerModal>.multiSelection(
+        compareFn: (item, selectedItem) =>
+        item.emailId == selectedItem.emailId,
+        asyncItems: (String filter) async {
+          return await businessTourPlanController.getReportingManager(filter);
+        },
+        itemAsString: (ReportingManagerModal u) => u.emailId ?? "",
+        selectedItems: businessTourPlanController.selectedReportingMangerList,
+        dropdownBuilder: (context, selectedItems) {
+          if (selectedItems.isEmpty) {
+            return Text(
+              "Select Reporting Manager",
+              style: GoogleFonts.poppins(
+                color: AllColors.primaryDark1, // Match your hint color
+                fontSize: AllFontSize.sisxteen,
+                fontWeight: FontWeight.w500,
+              ),
+            );
+          }return SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Text(
+              selectedItems.map((e) => e.userFullName).join(', '),
+              style: TextStyle(color: Colors.black),
+            ),
+          );
+        },
+
+        dropdownDecoratorProps: DropDownDecoratorProps(
+          dropdownSearchDecoration: InputDecoration(
+            labelText: businessTourPlanController.selectedReportingMangerList
+                .isNotEmpty ? "Reporting Manager" : null,
+            hintText: "Search Reporting Manager",
+            contentPadding: const EdgeInsets.symmetric(
+                horizontal: 12, vertical: 8),
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+          ),
+        ),
+
+        onChanged: (List<ReportingManagerModal> selectedList) {
+          businessTourPlanController.selectedReportingMangerList.assignAll(
+              selectedList);
+          businessTourPlanController.reporting_manager_Controller.value.text =
+              selectedList.map((e) => e.emailId).join('|');
+        },
+
+        popupProps: PopupPropsMultiSelection.dialog(
+          showSearchBox: true,
+          isFilterOnline: true,
+          searchDelay: const Duration(milliseconds: 300),
+          searchFieldProps: TextFieldProps(
+            decoration: InputDecoration(
+              hintText: "Search...",
+              prefixIcon: const Icon(Icons.search),
+              border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8)),
+            ),
+          ),
+
+          itemBuilder: (context, item, isSelected) {
+            return ListTile(
+              title: Text("${item.userFullName ?? ""}",
+                style: TextStyle(
+                  color: isSelected ? Colors.blue : Colors.black,
+                  fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                ),
+              ),
+              selected: isSelected,
+            );
+          },
+        ),
+      );
+    });
+  }
+
+  Widget bindApprovalStatusDropDown(BuildContext context){
+    return Container(
+      child: DropdownMenu<String>(
+        width: MediaQuery
+            .of(context)
+            .size
+            .width-15,
+        controller: businessTourPlanController.ApprovalStatusController.value,
+        label: Text(
+          "Approval Status",
+          style: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontSize: AllFontSize.fourtine,
+              fontWeight: FontWeight.w700),
+        ),
+
+        inputDecorationTheme: const InputDecorationTheme(
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+              color: AllColors.primaryDark1,),
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+                color: AllColors.primaryDark1), // Change the color to green
+          ),
+          border: OutlineInputBorder(
+            borderSide: BorderSide(
+                color: AllColors.primaryDark1), // Change the color to green
+          ),
+          filled: false,
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.two, horizontal: AllFontSize.ten),
+        ),
+
+
+        onSelected: (String? selection) {
+          print(selection);
+          businessTourPlanController.ApprovalStatusController.value.text =
+              _displayApprovalStatusForOption(selection!).toString();
+
+          if(businessTourPlanController.ApprovalStatusController.value.text=="ALL"){
+            businessTourPlanController.filterStatusFlag.value="";
+          }
+          else{
+            businessTourPlanController.filterStatusFlag.value= businessTourPlanController.ApprovalStatusController.value.text;
+          }
+          /*print('IsActive.....${salesCycleController.solutionAcceptedController
+              .value.text}');*/
+
+        },
+        dropdownMenuEntries:
+        businessTourPlanController.ApprovalStatusList.map<
+            DropdownMenuEntry<String>>((String e) {
+          return DropdownMenuEntry<String>(
+              value: e, label: e!, style: ButtonStyle(
+            foregroundColor: MaterialStateProperty.all<Color>(
+                AllColors.primaryDark1),));
+        }).toList(),
+      ),
+    );
+
+    //todo commented by nirupma because dropdown is not working properly
+    /* return Autocomplete<String>(
+      displayStringForOption: _displayApprovalStatusForOption,
+      optionsBuilder: (TextEditingValue textEditingValue) {
+        if (textEditingValue.text.isEmpty) {
+          return salesCycleController.ApprovalStatusList;
+        }
+        return salesCycleController.ApprovalStatusList
+            .where((String option) {
+          return option
+              .toString()
+              .toLowerCase()
+              .contains(textEditingValue.text.toLowerCase());
+        }).toList();
+      },
+      onSelected: (String selection) {
+        print(selection);
+        // Update the TextField with the selected
+        salesCycleController.ApprovalStatusController.value.text =
+            _displayApprovalStatusForOption(selection).toString();
+        //print('IsActive.....${salesCycleController.Task_status_controller.text}');
+      },
+      fieldViewBuilder: (BuildContext context, TextEditingController controller,
+          FocusNode focusNode, VoidCallback onFieldSubmitted) {
+        return TextField(
+          cursorColor: AllColors.primaryDark1,
+          controller: controller
+            ..text = salesCycleController.ApprovalStatusController.value
+                .text,
+          focusNode: focusNode,
+          //onSubmitted: onFieldSubmitted,
+          decoration: InputDecoration(
+              suffixIcon: IconButton(
+                color: AllColors.primaryDark1,
+                onPressed: (){
+                  if(focusNode.hasFocus){
+                    focusNode.unfocus();
+                  }else{
+                    focusNode.requestFocus();
+                  }
+                },
+                icon: Icon(Icons.arrow_drop_down),
+              ),
+              contentPadding: EdgeInsets.symmetric(
+                  vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+              hintText: 'Approval Status',
+              labelText: 'Approval Status',
+              hintStyle: GoogleFonts.poppins(
+                  color: AllColors.lightblackColor,
+                  fontWeight: FontWeight.w300,
+                  fontSize: AllFontSize.ten),
+              labelStyle: GoogleFonts.poppins(
+                  color: AllColors.primaryDark1,
+                  fontWeight: FontWeight.w500,
+                  fontSize: AllFontSize.sisxteen),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+              ),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+              )
+          ),
+        );
+      },
+      optionsViewBuilder: (BuildContext context,
+          AutocompleteOnSelected<String> onSelected,
+          Iterable<String> suggestions) {
+        return Align(
+          alignment: Alignment.topLeft,
+          child: Material(
+            elevation: 4.0,
+            child: Container(
+              width: size.width*.9,
+              constraints: BoxConstraints(maxHeight: 200),
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: suggestions.length,
+                itemBuilder: (context, index) {
+                  final String option =
+                  suggestions.elementAt(index);
+                  return GestureDetector(
+                    onTap: () {
+                      onSelected(option);
+                    },
+                    child: Container(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text(
+                        option,
+                        style: GoogleFonts.poppins(
+                            color: AllColors.blackColor,
+                            fontWeight: FontWeight.w300,
+                            fontSize: AllFontSize
+                                .sisxteen // Change the text color here
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+        );
+      },
+    );*/
+  }
 
   bindFilterStartDate(BuildContext context) {
     return  TextFormField(
@@ -1819,8 +2243,6 @@ class BussinessTourPlanScreen extends StatelessWidget{
     });
   }
 
-
-
   showConfirmCompleteDialog(BuildContext context, int index){
     showDialog(
       context: context,
@@ -1887,5 +2309,4 @@ class BussinessTourPlanScreen extends StatelessWidget{
       },
     );
   }
-
 }

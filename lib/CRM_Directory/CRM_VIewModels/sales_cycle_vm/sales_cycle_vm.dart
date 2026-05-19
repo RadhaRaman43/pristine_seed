@@ -335,8 +335,7 @@ class SalesCycleVm extends GetxController {
   RxList<String> salesAdviseStatusList = ["Draft", "Completed"].obs;
   RxList<String> SaleCycleStatusList =
       ["All", "Suspect", "Prospect", "Propose"].obs;
-  RxList<String> qouteAcceptedList =
-      ["All", "Open", "Loss", "Won"].obs;
+  RxList<String> qouteAcceptedList = ["All", "Open", "Loss", "Won"].obs;
   RxList<String> ApprovalStatusList =
       ["All", "PENDING", "PENDING FOR APPROVAL", "APPROVED", "REJECTED"].obs;
 

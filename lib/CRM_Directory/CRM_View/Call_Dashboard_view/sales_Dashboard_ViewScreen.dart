@@ -213,7 +213,6 @@ class SalesDashboardViewscreen extends StatelessWidget{
                         ),
                       ),
                       const SizedBox(height: 10,),
-
                       Card(
                         color: AllColors.whiteColor,
                         elevation: 10,
@@ -271,9 +270,7 @@ class SalesDashboardViewscreen extends StatelessWidget{
                           ],
                         ),
                       ),
-
-                     const SizedBox(height: 10,),
-
+                      const SizedBox(height: 10,),
                       Card(
                         color: AllColors.whiteColor,
                         elevation: 10,
@@ -342,9 +339,7 @@ class SalesDashboardViewscreen extends StatelessWidget{
                           ],
                         ),
                       ),
-
                       const SizedBox(height: 10,),
-
                       Card(
                         color: AllColors.whiteColor,
                         elevation: 10,

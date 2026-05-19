@@ -83,5 +83,14 @@ class BusinessTourPlanRepo{
     return _apiService.postApi(data, AppUrl.get_employee_master,sessionManagement);
   }
 
+  Future<String> RegionMasterGet(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.RegionMasterGet,sessionManagement);
+  }
+
+  Future<String> BusinessTourplanReportingManagerGet(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.BusinessTourplanReportingManagerGet,sessionManagement);
+  }
+
+
 
 }
