@@ -42,6 +42,7 @@ class BusinessPlanTourViewModel extends GetxController{
   RxBool loading = false.obs;
   RxBool meetingWith = true.obs;
   RxBool tourType = true.obs;
+  RxBool customerVisible = true.obs;
   RxBool selectMeetingWith = false.obs;
   String StartDate = '', EndDate = '', Tour_Id = '', CustomerId = '';
   RxString isSendForApproval = ''.obs;
@@ -663,6 +664,7 @@ class BusinessPlanTourViewModel extends GetxController{
             jsonResponse.map((e) => BussinessTourPlanModel.fromJson(e)).toList();
             if (response.length > 0 && response[0].condition == "True") {
               loading.value = false;
+              customerVisible.value =true;
               Utils.showToastification("Message !", response[0].message.toString());
               getBusinessTourPlanDetailsApi(response[0].tourId, "");
 

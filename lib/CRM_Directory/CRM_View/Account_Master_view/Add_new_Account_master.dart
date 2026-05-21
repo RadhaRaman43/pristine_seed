@@ -104,6 +104,7 @@ class AddNewAccountMaster extends StatelessWidget{
           }
           else if(accountMaster_page_controller.FromPage == "AddTourLine"){
             Get.back();
+            Get.toNamed(RoutesName.BusinessTourPlanDetails);
           }
           else{
             accountMaster_page_controller.isReferral.value=false;

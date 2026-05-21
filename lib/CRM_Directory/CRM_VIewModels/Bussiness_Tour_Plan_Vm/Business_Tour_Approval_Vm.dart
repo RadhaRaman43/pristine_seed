@@ -35,11 +35,14 @@ class BusinessTourApprovalVm extends GetxController{
   final createdOn_filter_controller=TextEditingController().obs;
   var filterCreatedByController = TextEditingController().obs;
   var reporting_manager_Controller = TextEditingController().obs;
+  var ApprovalStatusController = TextEditingController().obs;
 
   RxList<ClusterModal> clusterGetByEmailList = <ClusterModal>[].obs;
   RxList<ClusterModal> SelectedCluster_list = <ClusterModal>[].obs;
   RxList<RegionWithClusterFilterModal> regionwithclusterGetByEmailList = <RegionWithClusterFilterModal>[].obs;
   RxList<RegionWithClusterFilterModal> SelectedRegion_list = <RegionWithClusterFilterModal>[].obs;
+  RxList<String> ApprovalStatusList = ["All", "PENDING", "PENDING FOR APPROVAL", "APPROVED", "REJECTED"].obs;
+
 
   @override
   Future<void> onInit() async {
@@ -69,6 +72,7 @@ class BusinessTourApprovalVm extends GetxController{
     filterCreatedByController.value.clear();
     createdOn_filter_controller.value.clear();
     reporting_manager_Controller.value.clear();
+    ApprovalStatusController.value.clear();
     selectedReportingMangerList.value=[];
 
     SelectedCluster_list.value=[];
@@ -268,6 +272,7 @@ class BusinessTourApprovalVm extends GetxController{
       'filterCreatedByController': filterCreatedByController.value.text,
       'createdOn_filter_controller': createdOn_filter_controller.value.text,
       'reporting_manager_Controller': reporting_manager_Controller.value.text,
+      'ApprovalStatusController': ApprovalStatusController.value.text,
 
     });
     filterDataChecker.value='';
@@ -285,6 +290,7 @@ class BusinessTourApprovalVm extends GetxController{
       filterCreatedByController.value.text=getFilterData["filterCreatedByController"]??"";
       createdOn_filter_controller.value.text=getFilterData["createdOn_filter_controller"]??"";
       reporting_manager_Controller.value.text=getFilterData["reporting_manager_Controller"]??"";
+      ApprovalStatusController.value.text=getFilterData["ApprovalStatusController"]??"";
       filterDataChecker.value='1';
 
 

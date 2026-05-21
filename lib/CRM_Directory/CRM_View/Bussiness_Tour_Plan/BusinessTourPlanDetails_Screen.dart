@@ -258,28 +258,24 @@ class BusinessTourPlanDeatil extends StatelessWidget {
                                   child: Container(
                                     child: Padding(
                                       padding: const EdgeInsets.all(7.0),
-                                      child: Icon(
+                                      child:const Icon(
                                         Icons.add,
                                         color: AllColors.primaryDark1,
                                       ),
                                     ),
                                     decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(30),
-                                        border:
-                                        Border.all(color: AllColors.primaryDark1)),
+                                        border: Border.all(color: AllColors.primaryDark1)),
                                   ),
                                 ),
                               ),
                             ],
                           ),
                         ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Divider(
+                        const SizedBox(height: 10,),
+                       const Divider(
                           height: 1,
-                          color: AllColors.bluegrayColor,
-                        ),
+                          color: AllColors.bluegrayColor,),
                         Obx(() {
                           return bindTourLinesData(context);
                         }),

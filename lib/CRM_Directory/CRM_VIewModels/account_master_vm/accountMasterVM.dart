@@ -241,8 +241,8 @@ class Accountmastervm extends GetxController{
       IsActiveTypeAllList.value = ['All', 'Yes', 'No'];
       UploadImageTypeList.value = ['Upload Image', 'Url'];
       getAccCategoryApi();
-    getCompanyTypeMasterGet();
-       getClustersGetByEmail();
+      getCompanyTypeMasterGet();
+      getClustersGetByEmail();
       getAccountTypeApi();
       getCompanyProfileTypeApi("");
       getGstRegistrationTypeApi();
@@ -258,17 +258,18 @@ class Accountmastervm extends GetxController{
 
   }
 
-  getCompanyTypeMasterGet() {
-    this.loading.value = true;
+  getCompanyTypeMasterGet() async {
+
+    try {
     Map<String, dynamic> data = {
       "filter_description": "",
       "row_per_page": 999,
       "page_number": 0
     };
-
-    _api.getCompanyTypeMasterGet(data, sessionManagement).then((value) {
+    this.loading.value = true;
+    String value = await _api.getCompanyTypeMasterGet(data, sessionManagement);
       print("company profile...${value}");
-      try {
+
         List<CompanyTypeModal> Response =
         (json.decode(value) as List<dynamic>)
             .map((i) => CompanyTypeModal.fromJson(i as Map<String, dynamic>))
@@ -282,12 +283,9 @@ class Accountmastervm extends GetxController{
       } catch (e) {
         print('catch....${e.toString()}');
       }
-    }).onError((error, stackTrace) {
-      Utils.sanckBarError('Api Exception onError', error.toString());
-      print('catchEx....${error.toString()}');
-    }).whenComplete(() {
-      this.loading.value = false;
-    });
+      finally{
+        loading.value = false;
+      }
   }
 
   Future<Iterable<EmployeeMemberModel>> EmployeeMasterGet(String query) async {
@@ -334,7 +332,41 @@ class Accountmastervm extends GetxController{
     return employee_Member_list.value;
   }
 
-  AccountMstDelete(String? account_code, int index) async{
+
+  DraftAccountMstDelete(String? account_code, int index,) async{
+    Map data = {
+      "account_code": account_code,
+      "created_by": email
+    };
+    print(data);
+    loading.value = true;
+    try {
+      String value = await _api.DraftAccountMstDelete(data, sessionManagement);
+      print(value);
+      final JsonResponse = json.decode(value);
+      if (JsonResponse is List) {
+        List<AccountMasterGetByCodeModel> response =
+        JsonResponse.map((e) => AccountMasterGetByCodeModel.fromJson(e)).toList();
+        if (response != null && response.length > 0 && response[0].condition == "True") {
+          getDraftAccountMaster(pageNumber ,'All');
+          Utils.sanckBarSuccess('Success Message!',response[0].message.toString());
+          loading.value = false;
+        } else {
+          loading.value = false;
+          Utils.sanckBarError("False Message !", response[0].message.toString());
+        }
+      } else {
+        loading.value = false;
+        Utils.sanckBarException("Api Error!", JsonResponse);
+      }
+
+    } catch (e) {
+      loading.value = false;
+      print(e);
+    }
+  }
+
+  AccountMstDelete(String? account_code, int index,) async{
     Map data = {
       "account_code": account_code,
       "created_by": email
@@ -1413,7 +1445,7 @@ class Accountmastervm extends GetxController{
             }
             else if(FromPage == "AddTourLine"){
               clearController();
-              Get.toNamed(RoutesName.AddTourLinesPage);
+              Get.toNamed(RoutesName.BusinessTourPlanDetails);
             }else{
               clearAccoundController();
               //deleteAccountData(DraftId);

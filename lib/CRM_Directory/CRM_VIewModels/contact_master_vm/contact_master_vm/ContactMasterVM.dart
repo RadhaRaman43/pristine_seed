@@ -379,11 +379,16 @@ class ContactMasterVM extends GetxController{
             contact_master_list.value=response;
 
             resetAllContactCreativeField('Icon');
-            if(insideOut == true){
-              Get.toNamed(RoutesName.contactMaster_screen);
+          if(FromPage.value== "AddTourLine"){
+            FromPage.value ="";
+            Get.toNamed(RoutesName.BusinessTourPlanDetails);
+          }
+          else if(insideOut == true){
               pageNumber=0;
               getContactMasterList(pageNumber,"","","");
-            }else if(insideOut == false){
+              Get.toNamed(RoutesName.contactMaster_screen);
+            }
+            else if(insideOut == false){
               Get.toNamed(RoutesName.viewContacts_screen);
               account_vm_controller.getContactMasterList(0, account_name_controller.text.toString(), '', accountCode.value.toString());
             }

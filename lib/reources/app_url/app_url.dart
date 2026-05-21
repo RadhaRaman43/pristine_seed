@@ -207,6 +207,7 @@ class AppUrl {
      static const String AccountCategoryTypeMstGet = "$BASE_URL/api/CRM/Master/AccountCategoryTypeMstGet";
      //todo radha raman
      static const String AccountMstDelete = "$BASE_URL/api/CRM/Account/AccountMstDelete";
+     static const String DraftAccountMstDelete = "$BASE_URL/api/CRM/Account/DraftAccountMstDelete";
      static const String ContactMstDelete = "$BASE_URL/api/CRM/Contact/ContactMstDelete";
 
      //todo contact master repo.....

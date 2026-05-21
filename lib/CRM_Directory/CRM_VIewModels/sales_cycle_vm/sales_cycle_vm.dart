@@ -413,6 +413,44 @@ class SalesCycleVm extends GetxController {
   RxString contact_code="".obs;
   String filterRouting = "";
 
+
+  var quote_item_name_flt = TextEditingController().obs;
+  var quote_qty_flt = TextEditingController().obs;
+  var quote_lsp_flt = TextEditingController().obs;
+  var quote_map_flt = TextEditingController().obs;
+  var quote_seeking_per_flt = TextEditingController().obs;
+  var quote_seeking_amt_flt = TextEditingController().obs;
+  var quote_btp_flt = TextEditingController().obs;
+  var quote_st_cost_flt = TextEditingController().obs;
+  var quote_app_dis_per_flt = TextEditingController().obs;
+  var quote_app_amt_flt = TextEditingController().obs;
+  var quote_sales_credit_flt = TextEditingController().obs;
+  var quote_gm_per_flt = TextEditingController().obs;
+  var quote_gm_total_amt_flt = TextEditingController().obs;
+  var quote_total_app_price_flt = TextEditingController().obs;
+  var quote_bm_per_flt = TextEditingController().obs;
+  var quote_total_seeking_price_flt = TextEditingController().obs;
+  var quote_category_name_flt = TextEditingController().obs;
+  clearQuoteLineFil(){
+    quote_item_name_flt.value.clear();
+    quote_qty_flt.value.clear();
+    quote_lsp_flt.value.clear();
+    quote_map_flt.value.clear();
+    quote_seeking_per_flt.value.clear();
+    quote_seeking_amt_flt.value.clear();
+    quote_btp_flt.value.clear();
+    quote_st_cost_flt.value.clear();
+    quote_app_dis_per_flt.value.clear();
+    quote_app_amt_flt.value.clear();
+    quote_sales_credit_flt.value.clear();
+    quote_gm_per_flt.value.clear();
+    quote_gm_total_amt_flt.value.clear();
+    quote_total_app_price_flt.value.clear();
+    quote_bm_per_flt.value.clear();
+    quote_total_seeking_price_flt.value.clear();
+    quote_category_name_flt.value.clear();
+  }
+
   @override
   Future<void> onInit() async {
     try {
@@ -1462,7 +1500,27 @@ class SalesCycleVm extends GetxController {
     try {
       Map<String, String> data = {
         "quote_id": quoteId.toString(),
-        "created_by": email
+        "created_by": email,
+        "item_code": "",
+        "item_name": quote_item_name_flt.value.text.isEmpty?"":quote_item_name_flt.value.text,
+        "quantity": quote_qty_flt.value.text.isEmpty?"":quote_qty_flt.value.text,
+        "lsp": quote_lsp_flt.value.text.isEmpty?"":quote_lsp_flt.value.text,
+        "seeking_dis_per": quote_seeking_per_flt.value.text.isEmpty?"":quote_seeking_per_flt.value.text,
+        "seeking_price_per_unit":  quote_seeking_amt_flt.value.text.isEmpty?"":quote_seeking_amt_flt.value.text,
+        "approved_dis_per": quote_app_dis_per_flt.value.text.isEmpty?"":quote_app_dis_per_flt.value.text,
+        "approved_price_per_unit": quote_app_amt_flt.value.text.isEmpty?"":quote_app_amt_flt.value.text,
+        "sales_credit": quote_sales_credit_flt.value.text.isEmpty?"":quote_sales_credit_flt.value.text,
+        "approved_price": quote_total_app_price_flt.value.text.isEmpty?"":quote_total_app_price_flt.value.text,
+        "seeking_price": quote_total_seeking_price_flt.value.text.isEmpty?"":quote_total_seeking_price_flt.value.text,
+        "product_category": quote_category_name_flt.value.text.isEmpty?"":quote_category_name_flt.value.text,
+        "price_per_unit": "",
+        "gm_per": quote_gm_per_flt.value.text.isEmpty ? "" : quote_gm_per_flt.value.text,
+        "bm_per": quote_bm_per_flt.value.text.isEmpty?"":quote_bm_per_flt.value.text,
+        "map": quote_map_flt.value.text.isEmpty?"":quote_map_flt.value.text,
+        "btp": quote_btp_flt.value.text.isEmpty?"":quote_btp_flt.value.text,
+        "standard_cost": quote_st_cost_flt.value.text.isEmpty?"":quote_st_cost_flt.value.text,
+        "gm_absolute_amount": quote_gm_total_amt_flt.value.text.isEmpty?"":quote_gm_total_amt_flt.value.text,
+        "created_on": ""
       };
 
       _api.quoteHeaderGetByQuoteIdApiHit(data, sessionManagement).then(

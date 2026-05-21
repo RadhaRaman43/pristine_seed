@@ -2052,7 +2052,7 @@ class SalesDashboardViewscreen extends StatelessWidget{
       }
 
       final selected = dashboard_view_Controller.SelectedEmployee_Member_list;
-      final selectedText = selected.isEmpty ? null : selected.map((e) => e.fullName).join(', ');
+      final selectedText = selected.isEmpty ? null : selected.map((e) => "${e.fullName ?? ""}(${e.salesPersonEmpCode ?? ""})").join(', ');
 
       return GestureDetector(
         onTap: () async {
@@ -2181,7 +2181,7 @@ class SalesDashboardViewscreen extends StatelessWidget{
                               (s.fullName ?? "") ==
                                   (item.fullName ?? ""));
                               return CheckboxListTile(
-                                title: Text(item.fullName ?? ""),
+                                title: Text("${item.fullName ?? ""}(${item.salesPersonEmpCode ?? ""})"),
                                 value: isSel,
                                 onChanged: (v) {
                                   setState(() {

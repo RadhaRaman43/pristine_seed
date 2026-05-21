@@ -1,3 +1,4 @@
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -10,6 +11,7 @@ import '../../../constants/app_colors.dart';
 import '../../../constants/app_font_size.dart';
 import '../../../reources/routes/routes_name.dart';
 import '../../../view/custom_drawer.dart';
+import '../../CRM_Models/TaskMaster_model/Item_Category_Mast_model.dart';
 import '../../CRM_VIewModels/item_master_vm/item_mater_vm.dart';
 
 class NonStandardItemsScreen extends StatelessWidget{
@@ -18,6 +20,9 @@ class NonStandardItemsScreen extends StatelessWidget{
   final item_master_controller=Get.put(ItemMasterVm());
   ScrollController scrollController = ScrollController();
   Size size=Get.size;
+
+  static String _displaySaleCycleActiveForOption(String option) =>
+      option;
 
 
   @override
@@ -452,7 +457,8 @@ class NonStandardItemsScreen extends StatelessWidget{
                               const SizedBox(height: 10,),
                               bindFilterData('Name',item_master_controller.name_Controller.value),
                               const SizedBox(height: 10,),
-                              bindFilterData('Category',item_master_controller.category_Controller.value),
+                              bindProductCategoryDropDown(context),
+                              //bindFilterData('Category',item_master_controller.category_Controller.value),
                               const SizedBox(height: 10,),
                               bindFilterData('HSN Code',item_master_controller.HSN_code_Controller.value),
                               const SizedBox(height: 10,),
@@ -645,6 +651,74 @@ class NonStandardItemsScreen extends StatelessWidget{
             item_master_controller.expired_on_Controller.value.text = "";
         }
     );
+  }
+  bindProductCategoryDropDown(BuildContext context) {
+    return Obx(() {
+      if (item_master_controller.category_Controller.value.text.isNotEmpty && item_master_controller.filterDataChecker.value=='1') {
+        List<String> nameList = item_master_controller.category_Controller.value.text.split(',');
+
+        item_master_controller.Selected_Item_Category_master_list_without_task.value =
+            List.generate(nameList.length, (index) {
+              return ItemCategoryMstModel(
+                categoryName: nameList[index].trim(),
+              );
+            });
+      }
+      return DropdownSearch<ItemCategoryMstModel>.multiSelection(
+        items: item_master_controller.Item_Category_master_list_without_task,
+        itemAsString: (ItemCategoryMstModel u) => u.categoryName ?? "",
+        selectedItems: item_master_controller.Selected_Item_Category_master_list_without_task,
+        dropdownDecoratorProps: DropDownDecoratorProps(
+          baseStyle: TextStyle(color: Colors.black),
+          dropdownSearchDecoration: InputDecoration(
+            filled: false,
+            labelText: item_master_controller.Selected_Item_Category_master_list_without_task.isNotEmpty ? "Product Category" : null,
+            hintText:  "Product Category" ,
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+          ),
+        ),
+        dropdownBuilder: (context, selectedItems) {
+          if (selectedItems.isEmpty) {
+            return Text(
+              "Product Category",
+              style: GoogleFonts.poppins(
+                color: AllColors.primaryDark1, // Match your hint color
+                fontSize: AllFontSize.sisxteen,
+                fontWeight: FontWeight.w500,
+              ),
+            );
+          }
+          return SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Text(
+              selectedItems.map((e) => e.categoryName).join(', '),
+              style: TextStyle(color: Colors.black), // Only black text
+            ),
+          );
+        },
+        onChanged: (List<ItemCategoryMstModel> selectedList) {
+          item_master_controller.Selected_Item_Category_master_list_without_task.value = selectedList;
+          item_master_controller.category_Controller.value.text =
+              selectedList.map((e) => e.categoryName).join('|');
+        },
+        popupProps: PopupPropsMultiSelection.dialog(
+          showSearchBox: true,
+          searchFieldProps: TextFieldProps(
+            decoration: InputDecoration(
+              contentPadding: EdgeInsets.only(top: 20, left: 12, right: 12),
+              // Top margin here
+              hintText: "Search...",
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+          ),
+          itemBuilder: (context, item, isSelected) => ListTile(
+            title: Text(item.categoryName ?? ""),
+          ),
+        ),
+      );
+    });
   }
 
 }

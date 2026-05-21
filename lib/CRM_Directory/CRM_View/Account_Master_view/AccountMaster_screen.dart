@@ -386,7 +386,7 @@ class AccountmasterScreen extends StatelessWidget{
               onPressed: () {
                 Navigator.pop(context);
                 //print("position account master.....${index}");
-                accountMaster_page_controller.AccountMstDelete(account_code,index);
+                accountMaster_page_controller.AccountMstDelete(account_code,index,);
               },
               child: Text("Delete",style: TextStyle(color: AllColors.greenblue),),
             ),
@@ -876,7 +876,7 @@ class AccountmasterScreen extends StatelessWidget{
           return SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Text(
-              selectedItems.map((e) => e.fullName).join(', '),
+              selectedItems.map((e) => "${e.fullName ?? ""}(${e.salesPersonEmpCode ?? ""})").join(', '),
               style: TextStyle(
               color: AllColors.primaryDark1,
               fontWeight: FontWeight.w500,
@@ -908,8 +908,7 @@ class AccountmasterScreen extends StatelessWidget{
 
           itemBuilder: (context, item, isSelected) =>
               ListTile(
-                title: Text(item.fullName??"",
-                ),
+                title: Text("${item.fullName ?? ""}(${item.salesPersonEmpCode ?? ""})"),
               ),
         ),
       );

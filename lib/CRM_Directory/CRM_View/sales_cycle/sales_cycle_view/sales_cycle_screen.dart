@@ -734,59 +734,57 @@ class SalesCycleScreen extends StatelessWidget{
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
                               bindSaleCycleStagesDropDown(context),
-                              SizedBox(height: 5,),
+                              const SizedBox(height: 5,),
                               bindFilterData(salesCycleController.saleCycleController.value, 'Sale Cycle Id'),
-                              SizedBox(height: 5,),
+                              const SizedBox(height: 5,),
                               Obx((){
                                 return Visibility(
                                   visible: salesCycleController.filterQuoteAcceptedFlag.value=='',
                                     child:Column(
                                   children: [
                                     bindQuoteAccepted(context),
-                                    SizedBox(
-                                      height: 5,
-                                    ),
+                                    const SizedBox(height: 5,),
                                   ],
                                 ) );
                               }),
                               bindFilterData(salesCycleController.filterTask_Id_controller.value, 'Task Id'),
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
                               bindApprovalStatusDropDown(context),
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
                               bindFilterData(salesCycleController.accountNameController.value, 'Customer Name'),
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
                               bindFilterData(salesCycleController.accountCodeController.value, 'Customer Code'),
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
                               bindProductCategoryDropDown(context),
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
                               bindProductCategoryTypeDropDown(context),
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
                               bindFilterData(salesCycleController.purchaseProcessController.value, 'Purchase Process'),
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
                               bindCompProfileTypeDropDown(context),
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
                               bindIsCommintdrpdown(context),
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
                               bindSolutionAccepted(context),
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
                               bindFilterData(salesCycleController.postalCodeController.value, 'Pin Code'),
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
                               bindFilterData(salesCycleController.district_controller.value, 'District'),
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
                               bindExpectedClosureDate(context),
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
                               bindFilterData(salesCycleController.createdByController.value, 'Created By'),
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
                               bindCreatedOn(context),
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
                               bindClusterNameFilter(context),
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
                               bindRegionNameFilter(context),
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
                               bindSaleCycleOwnerFilter(context),
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
 
                             ],
                           ),
@@ -1138,7 +1136,7 @@ class SalesCycleScreen extends StatelessWidget{
           return SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Text(
-              selectedItems.map((e) => e.fullName).join(', '),
+              selectedItems.map((e) => "${e.fullName ?? ""}(${e.salesPersonEmpCode ?? ""})").join(', '),
               style: TextStyle(color: Colors.black), // Only black text
             ),
           );
@@ -1167,7 +1165,7 @@ class SalesCycleScreen extends StatelessWidget{
           itemBuilder: (context, item, isSelected) =>
               ListTile(
 
-                title: Text(item.fullName??""),
+                title: Text("${item.fullName ?? ""}(${item.salesPersonEmpCode ?? ""})"),
               ),
         ),
       );

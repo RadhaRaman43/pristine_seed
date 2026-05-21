@@ -659,6 +659,7 @@ class TaskApprovalvm extends GetxController{
     }
     try{
       Map data={
+        "filter_task_owner_new":  AccountOwnerForApi.isEmpty?"":AccountOwnerForApi,
         "filter_task_id":filterTask_Id_controller.value.text.isEmpty?"":filterTask_Id_controller.value.text,
         "filter_account_code": account_code_controller.value.text.isEmpty?"":account_code_controller.value.text,
         "filter_account_name": account_Name_controller.value.text.isEmpty?"":account_Name_controller.value.text,
@@ -685,7 +686,7 @@ class TaskApprovalvm extends GetxController{
         "filter_branch_head_value": RegionName_controller.value.text.isEmpty?"":RegionName_controller.value.text,
         "filter_zone_head_value": "",
         "filter_clusture_head_value": clusterName_controller.value.text.isEmpty?"":clusterName_controller.value.text,
-        "filter_task_owner_new":  AccountOwnerForApi.isEmpty?"":AccountOwnerForApi,
+
         "row_per_page": rowsPerPage.toString(),
         "page_number": page_no.toString()
       };

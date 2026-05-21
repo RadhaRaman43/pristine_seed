@@ -61,6 +61,11 @@ class AddNewcontactMasterContact extends StatelessWidget{
         else if(contact_vm_controller.FromPage.value== "AccountUpdate"){
           Get.toNamed(RoutesName.viewContacts_screen);
         }
+        else if(contact_vm_controller.FromPage.value== "AddTourLine"){
+          contact_vm_controller.FromPage.value ="";
+          Get.toNamed(RoutesName.BusinessTourPlanDetails);
+        }
+
         else{
           contact_vm_controller.filterIconColor.value=false;
           contact_vm_controller.account_name_controller.clear();
@@ -137,6 +142,7 @@ class AddNewcontactMasterContact extends StatelessWidget{
                 contact_vm_controller.createNewContactMstApi("Update");
               }
               else{
+                debugPrint("radha debug");
                 contact_vm_controller.contact_code="";
                 contact_vm_controller.createNewContactMstApi("Create");
               }
@@ -504,8 +510,9 @@ class AddNewcontactMasterContact extends StatelessWidget{
 
 
   Widget bindAccountOwnerDropDown(context){
+    //debugPrint("update contact ${contact_vm_controller.updateContact} and ${contact_vm_controller.insideOut}");
     return IgnorePointer(
-      ignoring: contact_vm_controller.updateContact || contact_vm_controller.insideOut == false,
+      ignoring:contact_vm_controller.updateContact /*contact_vm_controller.updateContact || contact_vm_controller.insideOut?false:true*/,
       child: Autocomplete<AccountMasterModel>(
         displayStringForOption: _displayAccNameForOption,
         optionsBuilder: (TextEditingValue textEditingValue) async {
@@ -530,7 +537,7 @@ class AddNewcontactMasterContact extends StatelessWidget{
               controller.clear();
               contact_vm_controller.account_name_controller.clear();
             },
-            readOnly: contact_vm_controller.updateContact || contact_vm_controller.insideOut == false,
+            readOnly:contact_vm_controller.updateContact/* contact_vm_controller.updateContact || contact_vm_controller.insideOut == false*/,
             cursorColor: AllColors.primaryDark1,
             controller: controller
               ..text = contact_vm_controller.account_name_controller.text,

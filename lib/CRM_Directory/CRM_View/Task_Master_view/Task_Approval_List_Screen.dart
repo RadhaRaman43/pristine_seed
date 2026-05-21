@@ -1462,7 +1462,7 @@ class TaskApprovalListScreen extends StatelessWidget{
           return SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Text(
-              selectedItems.map((e) => e.fullName).join(', '),
+              selectedItems.map((e) => "${e.fullName ?? ""}(${e.salesPersonEmpCode ?? ""})").join(', '),
               style: TextStyle(color: Colors.black), // Only black text
             ),
           );
@@ -1490,7 +1490,7 @@ class TaskApprovalListScreen extends StatelessWidget{
 
           itemBuilder: (context, item, isSelected) =>
               ListTile(
-                title: Text(item.fullName??""),
+                title: Text("${item.fullName ?? ""}(${item.salesPersonEmpCode ?? ""})"),
               ),
         ),
       );

@@ -551,6 +551,12 @@ class QuoteInformationScreen extends StatelessWidget {
                                 ),
                               );
                             }),
+
+                            IconButton(onPressed: () {
+                                  showDialogForFilter(context);
+                                  }, icon: Icon(Icons.filter_alt_sharp)
+                            ),
+
                           ],
                         ),
                       ),
@@ -3960,6 +3966,29 @@ class QuoteInformationScreen extends StatelessWidget {
                     ),
                   ),
                   Spacer(),
+                 /* Visibility(
+                    visible: ((saleCycleController.isAdminWritePermission == "1" ||
+                        saleCycleController.userType.toLowerCase() == "bh" ||
+                        saleCycleController.saleCycleList[0].createdBy?.toLowerCase() == saleCycleController.email.toLowerCase()) &&
+                        *//* saleCycleController.filter.value == 'Sales cycle' &&*//*
+                        saleCycleController.saleCycleList[0].quoteAccepted?.toLowerCase() == 'open') &&
+                        !(saleCycleController.saleCycleList[0].actualSalesCycleApprovalStatus?.toLowerCase() == 'rejected') &&
+                        !(saleCycleController.FromPage.value == "FromDashboard"),
+                    child:*/ CircleAvatar(
+                      child: InkWell(
+                        onTap: () {
+                          String ProductCategory = saleCycleController.saleCycleList[0].productCategoryCode ?? "";
+                          String PipeProdCate = ProductCategory.replaceAll(', ', '|');
+                          saleCycleController.pageNumberForItem = 0;
+                          saleCycleController.itemMstGetBySalesIdApiHit(saleCycleController.pageNumberForItem,
+                              saleCycleController.saleCycleList[0].salesCycleId, PipeProdCate);
+                        },
+                        child: Icon(Icons.add),
+                      ),
+                    ),
+                 // ),
+
+                  const SizedBox(width: 5,),
                   CircleAvatar(
                     child: InkWell(
                       onTap: () {
@@ -5615,6 +5644,285 @@ class QuoteInformationScreen extends StatelessWidget {
             ),
           );
         });
+  }
+
+  void showDialogForFilter(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        return DraggableScrollableSheet(
+          expand: false,
+          initialChildSize: 0.85,
+          minChildSize: 0.5,
+          maxChildSize: 0.95,
+          builder: (_, scrollController) {
+            return Padding(
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom,
+              ),
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Icon(Icons.shield_moon_rounded, color: AllColors.primaryDark1,),
+                        SizedBox(width: 5,),
+                        Text(
+                          "Quote Filter ",
+                          style: GoogleFonts.poppins(
+                            color: AllColors.primaryDark1,
+                            fontSize: AllFontSize.twentee,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        Spacer(),
+                        InkWell(
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.only(right: 18.0),
+                            child: Icon(
+                              Icons.cancel,
+                              color: AllColors.primaryDark1,
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                  Center(
+                      child: Divider(
+                        height: 1,
+                        color: AllColors.primaryDark1,
+                      )),
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: Container(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const SizedBox(height: 5,),
+                              bindFilterData(context,'Item Name', saleCycleController.quote_item_name_flt.value),
+                              const SizedBox(height: 10),
+                              bindFilterData(context,'Quantity', saleCycleController.quote_qty_flt.value),
+                              const SizedBox(height: 10),
+                              bindFilterData(context,'LSP', saleCycleController.quote_lsp_flt.value),
+                              const SizedBox(height: 10),
+                              Obx(() {
+                                return Visibility(
+                                  visible: saleCycleController.userType?.toLowerCase()=='bh' ||
+                                      saleCycleController.userType?.toLowerCase()=='ch'||
+                                      saleCycleController.isAdminWritePermission=="1" ||
+                                      saleCycleController.userType?.toLowerCase()=='gm',
+                                  child: bindFilterData(context,'MAP', saleCycleController.quote_map_flt.value),
+                                );
+                              }),
+                              const SizedBox(height: 10),
+                              bindFilterData(context,'Seeking%', saleCycleController.quote_seeking_per_flt.value),
+                              const SizedBox(height: 10),
+                              bindFilterData(context,'Seeking Amt P/U', saleCycleController.quote_seeking_amt_flt.value),
+                              Obx(() {
+                                return Visibility(
+                                  visible: saleCycleController.userType?.toLowerCase()=='bh' ||
+                                      saleCycleController.userType?.toLowerCase()=='ch'||
+                                      saleCycleController.isAdminWritePermission=="1" ||
+                                      saleCycleController.userType?.toLowerCase()=='gm',
+                                  child: Column(
+                                    children: [
+                                      const SizedBox(height: 10),
+                                      bindFilterData(context,'BTP', saleCycleController.quote_btp_flt.value),
+
+                                    ],
+                                  )
+
+                                );
+                              }),
+                              Obx(() {
+                                return Visibility(
+                                  visible: saleCycleController.userType?.toLowerCase()=='bh' ||
+                                      saleCycleController.userType?.toLowerCase()=='ch'||
+                                      saleCycleController.isAdminWritePermission=="1" ||
+                                      saleCycleController.userType?.toLowerCase()=='gm',
+                                  child: Column(
+                                    children: [
+                                      const SizedBox(height: 10),
+                                      bindFilterData(context,'Std. Cost', saleCycleController.quote_st_cost_flt.value),
+                                      const SizedBox(height: 10),
+                                    ],
+                                  )
+
+                                );
+                              }),
+                              const SizedBox(height: 10),
+                              bindFilterData(context,'Approved Dis. %', saleCycleController.quote_app_dis_per_flt.value),
+                              const SizedBox(height: 10),
+                              bindFilterData(context,'Approved Amt P/U', saleCycleController.quote_app_amt_flt.value),
+                              const SizedBox(height: 10),
+                              bindFilterData(context,'Sales Credit', saleCycleController.quote_sales_credit_flt.value),
+                              Obx(() {
+                                return Visibility(
+                                  visible: saleCycleController.userType?.toLowerCase()=='bh' ||
+                                      saleCycleController.userType?.toLowerCase()=='ch'||
+                                      saleCycleController.isAdminWritePermission=="1" ||
+                                      saleCycleController.userType?.toLowerCase()=='gm',
+                                  child:Column(
+                                    children: [
+                                      const SizedBox(height: 10),
+                                      bindFilterData(context,'GM %', saleCycleController.quote_gm_per_flt.value),
+                                      const SizedBox(height: 10),
+
+                                    ],
+                                  )
+
+                                );
+                              }),
+                              Obx(() {
+                                return Visibility(
+                                  visible: saleCycleController.userType?.toLowerCase()=='bh' ||
+                                      saleCycleController.userType?.toLowerCase()=='ch'||
+                                      saleCycleController.isAdminWritePermission=="1" ||
+                                      saleCycleController.userType?.toLowerCase()=='gm',
+                                  child:bindFilterData(context,'GM Total Amt.', saleCycleController.quote_gm_total_amt_flt.value),
+                                );
+                              }),
+                              const SizedBox(height: 10),
+                              bindFilterData(context,'Total Approved Price', saleCycleController.quote_total_app_price_flt.value),
+                              Obx(() {
+                                return Visibility(
+                                  visible: saleCycleController.userType?.toLowerCase()=='bh' ||
+                                      saleCycleController.userType?.toLowerCase()=='ch'||
+                                      saleCycleController.isAdminWritePermission=="1" ||
+                                      saleCycleController.userType?.toLowerCase()=='gm',
+                                  child:Column(
+                                    children: [
+                                      const SizedBox(height: 10),
+                                      bindFilterData(context,'BM %', saleCycleController.quote_bm_per_flt.value),
+                                    ],
+                                  )
+
+                                );
+                              }),
+                              const SizedBox(height: 10),
+                              bindFilterData(context,'Total Seeking Price', saleCycleController.quote_total_seeking_price_flt.value),
+                              const SizedBox(height: 10),
+                              bindFilterData(context,'Category Name', saleCycleController.quote_category_name_flt.value),
+                              const SizedBox(height: 10),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                    child: Row(
+                      children: [
+                        Expanded(child: _buildButton(
+                          text: 'Clear',
+                          borderColor: AllColors.redColor,
+                          textColor: AllColors.redColor,
+                          onTap: () {
+                            saleCycleController.clearQuoteLineFil();
+                            saleCycleController.getQuoteHeaderInformation(saleCycleController.quoteHeaderdata[0].quoteId, "ALLSPRMAPPING");
+                            Get.back();
+                          },
+                        )),
+                        const SizedBox(width: 6),
+                        Expanded(child: _buildButton(
+                          text: 'Apply',
+                          borderColor: AllColors.primaryDark,
+                          textColor: AllColors.primaryDark1,
+                          onTap: () {
+                            saleCycleController.getQuoteHeaderInformation(saleCycleController.quoteHeaderdata[0].quoteId, "ALLSPRMAPPING");
+                            Get.back();
+                          },
+                        )),
+                        const SizedBox(width: 6),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+
+        );
+      },
+    );
+  }
+  bindFilterData(BuildContext context, String labelText, TextEditingController controller,) {
+    String keybordType = "no";
+    if(labelText== "Item Name" && labelText=="Category Name"){
+      keybordType="text";
+    }
+    return TextField(
+      controller: controller,
+      keyboardType:keybordType=="no"? TextInputType.number:TextInputType.text,
+      decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+          labelText: labelText,
+          hintText: labelText,
+          hintStyle: GoogleFonts.poppins(
+              color: AllColors.lightblackColor,
+              fontWeight: FontWeight.w300,
+              fontSize: AllFontSize.ten),
+          labelStyle: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontWeight: FontWeight.w500,
+              fontSize: AllFontSize.sisxteen),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          )
+      ),
+      cursorColor: AllColors.primaryDark1,
+      onChanged: (value) {
+        // Handle the text field value changes if needed
+      },
+    );
+  }
+  Widget _buildButton({
+    required String text,
+    required Color borderColor,
+    required Color textColor,
+    required VoidCallback onTap,
+  }) {
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: AllColors.whiteColor,
+        foregroundColor: AllColors.lightgreyColor,
+        padding: const EdgeInsets.symmetric(vertical: 12),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15),
+          side: BorderSide(color: borderColor, width: 1),
+        ),
+      ),
+      onPressed: onTap,
+      child: Center(
+        child: FittedBox( // 🔥 PREVENTS OVERFLOW
+          fit: BoxFit.scaleDown,
+          child: Text(
+            text,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: GoogleFonts.poppins(
+              color: textColor,
+              fontSize: AllFontSize.sisxteen,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ),
+      ),
+    );
   }
 
 }

@@ -71,6 +71,10 @@ class ItemMasterVm extends GetxController{
   RxList<ItemCategoryMstModel> productCategoryList = <ItemCategoryMstModel>[].obs;
   RxList<String> productTypeList = <String>["Non Standard", "Rate Contractor"].obs;
   RxList<String> IsActiveTypeList = <String>["Yes","No"].obs;
+
+  RxList<ItemCategoryMstModel> Item_Category_master_list_without_task = <ItemCategoryMstModel>[].obs;
+  RxList<ItemCategoryMstModel> Selected_Item_Category_master_list_without_task = <ItemCategoryMstModel>[].obs;
+
   NonStandardItemDataModal item= NonStandardItemDataModal();
   String checkForExcel = "";
   @override
@@ -79,6 +83,7 @@ class ItemMasterVm extends GetxController{
     userType = await sessionManagement.getUserType() ?? '';
     isAdminWritePermission.value = await sessionManagement.getIsAdminPermission() ?? '';
     isHeadofficePermission.value = await sessionManagement.getisHeadofficePermission() ?? '';
+    getItemCategoryMstApi();
 
     itemMstSalesCycleGet(page_no:0,row_Per_Page: rowsPerPage);
 
@@ -94,7 +99,7 @@ class ItemMasterVm extends GetxController{
         "item_code": item_code_Controller.value.text.isNotEmpty? item_code_Controller.value.text:"",
         "name": name_Controller.value.text.isNotEmpty? name_Controller.value.text:"",
         "description": "",
-        "category_code": "",
+        "category_code": category_Controller.value.text.isEmpty?"":category_Controller.value.text,
         "gst_group_code": GST_group_code_Controller.value.text.isNotEmpty? GST_group_code_Controller.value.text:"",
         "hsn_code": HSN_code_Controller.value.text.isNotEmpty? HSN_code_Controller.value.text:"",
         "location_code": "",
@@ -176,6 +181,8 @@ class ItemMasterVm extends GetxController{
   }
 
 
+
+
   getItemCategoryMstApi() async{
     try {
     Map<String, String> data = {};
@@ -186,9 +193,14 @@ class ItemMasterVm extends GetxController{
         as List<dynamic>).map((i) => ItemCategoryMstModel.fromJson(i as Map<String, dynamic>)).toList();
         if (Response.isNotEmpty &&
             Response[0]?.condition.toString() == "True") {
+          Item_Category_master_list_without_task.value=Response;
           productCategoryList.value = Response!;
         }
+        else{
+          Item_Category_master_list_without_task.value=[];
+        }
       } catch (e) {
+      Item_Category_master_list_without_task.value=[];
        Utils.sanckBarError("Error!", e.toString());
       }
       finally{
@@ -409,6 +421,7 @@ class ItemMasterVm extends GetxController{
   }
 
   clearFilterData(){
+    Selected_Item_Category_master_list_without_task.value=[];
     item_code_Controller.value.clear();
     customer_code_Controller.value.clear();
     sale_cycle_id_Controller.value.clear();

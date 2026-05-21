@@ -2023,7 +2023,7 @@ class CommitDashboardViewscreen extends StatelessWidget{
       final selected = dashboard_view_Controller.SelectedEmployee_Member_list;
       final selectedText = selected.isEmpty
           ? null
-          : selected.map((e) => e.fullName).join(', ');
+          : selected.map((e) => "${e.fullName ?? ""}(${e.salesPersonEmpCode ?? ""})").join(', ');
 
       return GestureDetector(
         onTap: () async {
@@ -2148,7 +2148,7 @@ class CommitDashboardViewscreen extends StatelessWidget{
                               (s.fullName ?? "") ==
                                   (item.fullName ?? ""));
                               return CheckboxListTile(
-                                title: Text(item.fullName ?? ""),
+                                title: Text("${item.fullName ?? ""}(${item.salesPersonEmpCode ?? ""})"),
                                 value: isSel,
                                 onChanged: (v) {
                                   setState(() {
