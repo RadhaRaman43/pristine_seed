@@ -594,9 +594,11 @@ class ItemMasterVm extends GetxController{
       await OpenFilex.open(filePath);
       debugPrint("Excel saved at: $filePath");
     }catch(e){
+      print("Failed to download file! ${e.toString()}");
       Utils.sanckBarError("Failed to download file!", e.toString());
     }
   }
+
   Map<String, dynamic> removeExcelKeys(NonStandardItemDataModal item, String sheetName) {
     final map = Map<String, dynamic>.from(item.toJson());
 
@@ -615,6 +617,7 @@ class ItemMasterVm extends GetxController{
 
     return map;
   }
+
   void showExcelProgressDialog(BuildContext context) {
     Get.dialog(
       Obx(() => AlertDialog(

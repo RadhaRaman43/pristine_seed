@@ -26,11 +26,11 @@ class UpdateSaleInfraDetailScreen extends StatelessWidget{
       option.categoryName!;
 
   static String _displayAccountNameForOption(AccountMasterModel option) =>
-      //option.accountName!+"(${option.accountCode!})";
-      option.accountCode!;
+      option.accountName!+"(${option.accountCode!})";
+      //option.accountCode!;
 
   static String _displayContactNameForOption(ContactMstGetListModal option) =>
-      option.contactCode!;
+      "${option.contactName ?? ""}(${option.contactCode ??""})";
 
 
   @override
@@ -530,15 +530,20 @@ class UpdateSaleInfraDetailScreen extends StatelessWidget{
         if(labelText=='Name Of Infra Department'){
           saleCycleController.nameofInfradepUpdateController.text =
               _displayAccountNameForOption(selection).toString();
+          saleCycleController.nameofInfradepUpdate = selection.accountCode??"";
           saleCycleController.executiveEngineerUpdateController.text="";
           saleCycleController.assistantEngineerController.text="";
+          saleCycleController.executiveEn="";
+          saleCycleController.assistantEn="";
           saleCycleController.isInfraYes.value = false;
           saleCycleController.isInfraYes.value = true;
         }
         else if(labelText=='Customer Name'){
           saleCycleController.customerNameController.text =
               _displayAccountNameForOption(selection).toString();
+          saleCycleController.customerName = selection.accountCode??"";
           saleCycleController.contactPersonHODController.text="";
+          saleCycleController.contactPersonHOD="";
           saleCycleController.isInfraYes.value = false;
           saleCycleController.isInfraYes.value = true;
 
@@ -546,15 +551,20 @@ class UpdateSaleInfraDetailScreen extends StatelessWidget{
         else if(labelText=='Name Of Agency/Contractor'){
           saleCycleController.agencyContractorUpdateController.text =
               _displayAccountNameForOption(selection).toString();
+          saleCycleController.agencyContractorUpdate = selection.accountCode??"";
           saleCycleController.ownerOfContractorController.text="";
+          saleCycleController.ownerOfContractor="";
           saleCycleController.siteManagerController.text="";
+          saleCycleController.siteManager="";
           saleCycleController.isInfraYes.value = false;
           saleCycleController.isInfraYes.value = true;
         }
         else if(labelText=='Name Of Architect Firm'){
           saleCycleController.nameOfArchitecfirmUpdateController.text =
               _displayAccountNameForOption(selection).toString();
+          saleCycleController.nameOfArchitecfirmUpdate = selection.accountCode??"";
           saleCycleController.architectUpdateController.text="";
+          saleCycleController.architectUpdate="";
           saleCycleController.isInfraYes.value = false;
           saleCycleController.isInfraYes.value = true;
         }
@@ -621,9 +631,9 @@ class UpdateSaleInfraDetailScreen extends StatelessWidget{
                     },
                     child: Container(
                       padding: EdgeInsets.all(8.0),
-                      child: Text(
+                      child: Text("${option.accountName!}(${option.accountCode!})"
                         //option.accountName!+"(${option.accountCode!})",
-                        option.accountCode!,
+                        ,
                         style: GoogleFonts.poppins(
                             color: AllColors.blackColor,
                             fontWeight: FontWeight.w300,
@@ -648,38 +658,45 @@ class UpdateSaleInfraDetailScreen extends StatelessWidget{
         if (textEditingValue.text.isEmpty) {
           return saleCycleController.infra_contact_master_list;
         }
-        return saleCycleController.infra_contact_master_list
+        return saleCycleController.getContactMasterList("","");
+        /*return saleCycleController.infra_contact_master_list
             .where((ContactMstGetListModal option) {
           return option.contactName
               .toString()
               .toLowerCase()
               .contains(textEditingValue.text.toLowerCase());
-        }).toList();
+        }).toList();*/
       },
       onSelected: (ContactMstGetListModal selection) {
         if(labelText=='Executive Engineer') {
           saleCycleController.executiveEngineerUpdateController.text =
               _displayContactNameForOption(selection).toString();
+          saleCycleController.executiveEn = selection.contactCode ?? "";
         }
         else if(labelText=='Assistant Engineer'){
           saleCycleController.assistantEngineerController.text =
               _displayContactNameForOption(selection).toString();
+          saleCycleController.assistantEn = selection.contactCode ?? "";
         }
         else if(labelText=='Contact Person (HOD)/Decision Maker'){
           saleCycleController.contactPersonHODController.text =
               _displayContactNameForOption(selection).toString();
+          saleCycleController.contactPersonHOD= selection.contactCode ?? "";
         }
         else if(labelText=='Owner Of Contractor'){
           saleCycleController.ownerOfContractorController.text =
               _displayContactNameForOption(selection).toString();
+          saleCycleController.ownerOfContractor= selection.contactCode ?? "";
         }
         else if(labelText=='Project Site Manager'){
           saleCycleController.siteManagerController.text =
               _displayContactNameForOption(selection).toString();
+          saleCycleController.siteManager= selection.contactCode ?? "";
         }
         else if(labelText=='Architect'){
           saleCycleController.architectUpdateController.text =
               _displayContactNameForOption(selection).toString();
+          saleCycleController.architectUpdate= selection.contactCode ?? "";
         }
 
       },
@@ -740,8 +757,7 @@ class UpdateSaleInfraDetailScreen extends StatelessWidget{
                     },
                     child: Container(
                       padding: EdgeInsets.all(8.0),
-                      child: Text(
-                        option.contactCode.toString(),
+                      child: Text("${option.contactName ?? ""}(${option.contactCode ??""})",
                         style: GoogleFonts.poppins(
                             color: AllColors.blackColor,
                             fontWeight: FontWeight.w300,

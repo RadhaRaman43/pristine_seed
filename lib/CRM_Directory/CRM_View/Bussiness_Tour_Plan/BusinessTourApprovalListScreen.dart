@@ -366,8 +366,8 @@ class BusinessTourApprovalListScreen extends StatelessWidget{
                               const SizedBox(height: 10,),
                               bindReportingManager(context),
                               const SizedBox(height: 10,),
-                              bindApprovalStatusDropDown(context),
-                              const SizedBox(height: 10,),
+                             /* bindApprovalStatusDropDown(context),
+                              const SizedBox(height: 10,),*/
 
                             ],
                           ),

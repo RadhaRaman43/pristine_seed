@@ -175,7 +175,7 @@ class Itemlist_by_sales_cycle_Screen extends StatelessWidget{
                 return Checkbox(
                   value: saleCycleController.itemMstGetBySalesIdList[index].isSelected==1?true:false,
                   onChanged: (bool? value) {
-                    saleCycleController.toggleSalesCheckbox(index);
+                    saleCycleController.toggleSalesCheckbox(index,context);
                   },
                 );
               }),
@@ -813,8 +813,8 @@ class Itemlist_by_sales_cycle_Screen extends StatelessWidget{
                                       ),
                                     ),
                                     onPressed: ()  {
-                                      String ProductCategory = saleCycleController.saleCycleList[0].productCategoryCode??"";
-                                      String PipeProdCate = ProductCategory.replaceAll(', ', '|');
+                                     /* String ProductCategory = saleCycleController.itemMstGetBySalesIdList[0].categoryCode??"";
+                                      String PipeProdCate = ProductCategory.replaceAll(', ', '|');*/
                                       try{
                                         saleCycleController.itemSalesCodeController.value.clear();
                                         saleCycleController.nameSalesController.value.clear();
@@ -822,7 +822,7 @@ class Itemlist_by_sales_cycle_Screen extends StatelessWidget{
                                         saleCycleController.categoryCodeSalesController.value.clear();
                                         saleCycleController.gstGrpCodeSalesController.value.clear();
                                         saleCycleController.hsnCodeSalesController.value.clear();
-                                        saleCycleController.itemMstGetBySalesIdApiHit(0,saleCycleController.saleCycleList[0].salesCycleId, PipeProdCate);
+                                        saleCycleController.itemMstGetBySalesIdApiHit(0,saleCycleController.salesCycleId.value, saleCycleController.productCategory);
                                         Navigator.pop(context);
                                       }catch(e){
                                         print("Exception..${e.toString()}");
@@ -849,9 +849,9 @@ class Itemlist_by_sales_cycle_Screen extends StatelessWidget{
                                       ),
                                     ),
                                     onPressed: ()  {
-                                      String ProductCategory = saleCycleController.saleCycleList[0].productCategoryCode??"";
-                                      String PipeProdCate = ProductCategory.replaceAll(', ', '|');
-                                      saleCycleController.itemMstGetBySalesIdApiHit(0,saleCycleController.saleCycleList[0].salesCycleId, PipeProdCate);
+                                      /*String ProductCategory = saleCycleController.itemMstGetBySalesIdList[0].categoryCode??"";
+                                      String PipeProdCate = ProductCategory.replaceAll(', ', '|');*/
+                                      saleCycleController.itemMstGetBySalesIdApiHit(0,saleCycleController.salesCycleId.value, saleCycleController.productCategory);
                                       Navigator.pop(context);
                                       saleCycleController.itemSalesCodeController.value.clear();
                                       saleCycleController.nameSalesController.value.clear();

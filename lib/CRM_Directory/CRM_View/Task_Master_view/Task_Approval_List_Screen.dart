@@ -1471,7 +1471,7 @@ class TaskApprovalListScreen extends StatelessWidget{
           TaskMaster_page_controller.SelectedEmployee_Member_list.value =
               selectedList;
           TaskMaster_page_controller.AccountOwner_controller.value.text =
-              selectedList.map((e) => e.fullName).join(', ');
+              selectedList.map((e) => e.empId).join(', ');
         },
 
         popupProps: PopupPropsMultiSelection.dialog(

@@ -2209,7 +2209,7 @@ class SalesDashboardViewscreen extends StatelessWidget{
                                 child: ElevatedButton(
                                   onPressed: () {
                                     dashboard_view_Controller.SelectedEmployee_Member_list.assignAll(tempSelected);
-                                    dashboard_view_Controller.EmployeeNameFilter_controller.value.text = tempSelected.map((e) => e.fullName).join(', ');
+                                    dashboard_view_Controller.EmployeeNameFilter_controller.value.text = tempSelected.map((e) => e.empId).join(', ');
 
                                     Navigator.of(context).pop();
                                   },

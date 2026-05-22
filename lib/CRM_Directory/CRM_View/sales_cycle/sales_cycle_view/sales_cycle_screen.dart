@@ -1145,7 +1145,7 @@ class SalesCycleScreen extends StatelessWidget{
           salesCycleController.SelectedEmployee_Member_list.value =
               selectedList;
           salesCycleController.AccountOwner_controller.value.text =
-              selectedList.map((e) => e.fullName).join(', ');
+              selectedList.map((e) => e.empId).join(', ');
         },
 
         popupProps: PopupPropsMultiSelection.dialog(

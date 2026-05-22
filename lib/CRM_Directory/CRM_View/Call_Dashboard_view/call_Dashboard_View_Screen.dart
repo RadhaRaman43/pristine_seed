@@ -2218,7 +2218,7 @@ class CallDashboardViewScreen extends StatelessWidget {
                                   onPressed: () {
                                     dashboard_view_Controller.SelectedEmployee_Member_list.assignAll(tempSelected);
                                     dashboard_view_Controller.AccountOwner_controller.value.text =
-                                        tempSelected.map((e) => e.fullName).join(', ');
+                                        tempSelected.map((e) => e.empId).join(', ');
 
                                     Navigator.of(context).pop();
                                   },

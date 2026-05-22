@@ -3977,11 +3977,13 @@ class QuoteInformationScreen extends StatelessWidget {
                     child:*/ CircleAvatar(
                       child: InkWell(
                         onTap: () {
-                          String ProductCategory = saleCycleController.saleCycleList[0].productCategoryCode ?? "";
+                          String ProductCategory = saleCycleController.quoteHeaderdata[0].productCategoryCode ?? "";
                           String PipeProdCate = ProductCategory.replaceAll(', ', '|');
                           saleCycleController.pageNumberForItem = 0;
+                          saleCycleController.productCategory = PipeProdCate;
+                          saleCycleController.salesCycleId.value=saleCycleController.quoteHeaderdata[0].salesCycleId?? "";
                           saleCycleController.itemMstGetBySalesIdApiHit(saleCycleController.pageNumberForItem,
-                              saleCycleController.saleCycleList[0].salesCycleId, PipeProdCate);
+                              saleCycleController.quoteHeaderdata[0].salesCycleId, PipeProdCate);
                         },
                         child: Icon(Icons.add),
                       ),
@@ -4110,6 +4112,98 @@ class QuoteInformationScreen extends StatelessWidget {
         ));
       },
     );
+  }
+  showSalesProductConfirmationDialog(context, String SalesId, int LineNo) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Icon(
+                  Icons.check_circle,
+                  color: AllColors.lightredColor,
+                ),
+                const SizedBox(
+                  width: 5,
+                ),
+                Text('Delete!',
+                    style: GoogleFonts.poppins(
+                      fontSize: AllFontSize.sisxteen,
+                      fontWeight: FontWeight.w700,
+                      color: AllColors.primaryDark1,
+                    ))
+              ],
+            ),
+            content: Wrap(children: [
+              Column(
+                children: [
+                  Text('Do you want to delete this sales line ?',
+                      style: GoogleFonts.poppins(
+                        fontSize: AllFontSize.fourtine,
+                        fontWeight: FontWeight.w500,
+                        color: AllColors.primaryDark1,
+                      )),
+                  const SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      ElevatedButton(
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all<Color>(
+                            AllColors.lightredColor,
+                          ),
+                        ),
+                        onPressed: () {
+                          Navigator.pop(context);
+                          //Get.back();
+                        },
+                        child: Container(
+                          width: 60,
+                          alignment: Alignment.center,
+                          child: Text(
+                            'Cancel',
+                            style: GoogleFonts.poppins(
+                              color: AllColors.blackColor,
+                              fontSize: AllFontSize.twelve,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                      ),
+                      ElevatedButton(
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all<Color>(
+                            AllColors.greenblue,
+                          ),
+                        ),
+                        onPressed: () {
+                          saleCycleController.SalesCycleLineDeleteApiHit(
+                              LineNo, SalesId);
+                          Navigator.pop(context);
+                          // Get.back();
+                        },
+                        child: Container(
+                          width: 60,
+                          alignment: Alignment.center,
+                          child: Text(
+                            'Confirm',
+                            style: GoogleFonts.poppins(
+                              color: AllColors.blackColor,
+                              fontSize: AllFontSize.twelve,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
+                  )
+                ],
+              ),
+            ]),
+          );
+        });
   }
 
   void showDialogSalesCycleProductFilter(BuildContext context) {
@@ -4453,25 +4547,40 @@ class QuoteInformationScreen extends StatelessWidget {
       child: ListTile(
         contentPadding: EdgeInsets.only(left: 5, right: 10),
         title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              "Item Code : ",
+              "Item Code : ${saleCycleController.get_SalesCycleProductById_List[index].itemCode ?? ""} ",
               style: GoogleFonts.poppins(
                 color: AllColors.primaryDark1,
                 fontSize: AllFontSize.fourtine,
                 fontWeight: FontWeight.w800,
               ),
             ),
-            Text(
-              saleCycleController
-                      .get_SalesCycleProductById_List[index].itemCode ??
-                  "",
+            /*Text(
+              saleCycleController.get_SalesCycleProductById_List[index].itemCode ?? "",
               style: GoogleFonts.poppins(
                 color: AllColors.textColor,
                 fontSize: AllFontSize.fourtine,
                 fontWeight: FontWeight.w800,
               ),
-            ),
+            ),*/
+             GestureDetector(
+                  onTap: () {
+                    showSalesProductConfirmationDialog(
+                      context,
+                      saleCycleController
+                          .get_SalesCycleProductById_List[index].salesCycleId
+                          .toString(),
+                      saleCycleController
+                          .get_SalesCycleProductById_List[index].lineNo!,
+                    );
+                  },
+                  child: Icon(
+                    Icons.delete_forever,
+                    color: AllColors.redColor,
+                  ),
+                )
           ],
         ),
         subtitle: Column(
@@ -5858,9 +5967,12 @@ class QuoteInformationScreen extends StatelessWidget {
   }
   bindFilterData(BuildContext context, String labelText, TextEditingController controller,) {
     String keybordType = "no";
-    if(labelText== "Item Name" && labelText=="Category Name"){
+    print("label text  $labelText");
+    if(labelText.toLowerCase()== "item name" || labelText=="Category Name"){
       keybordType="text";
+      print("label text else $labelText");
     }
+    print("keyboard type $keybordType");
     return TextField(
       controller: controller,
       keyboardType:keybordType=="no"? TextInputType.number:TextInputType.text,

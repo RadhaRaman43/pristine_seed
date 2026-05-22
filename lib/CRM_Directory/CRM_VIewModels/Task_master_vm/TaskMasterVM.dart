@@ -154,6 +154,17 @@ class Taskmastervm extends GetxController{
     var dateOfDrawingReceivedController = TextEditingController();
     //var Sale_cycle_Id_controller = TextEditingController();
 
+    String executiveEn ="";
+    String assistantEn ="";
+    String contactPersonHOD ="";
+    String ownerOfContractor ="";
+    String siteManager ="";
+    String architectUpdate ="";
+    String nameofInfradepUpdate ="";
+    String customerName ="";
+    String agencyContractorUpdate ="";
+    String nameOfArchitecfirmUpdate ="";
+
     RxList<TaskMasterGetModel> Task_Master_list=<TaskMasterGetModel>[].obs;
     RxList<String> TaskStatusListTypeList = <String>[].obs;
     RxList<String> SaleCycleActiveTypeList = <String>[].obs;
@@ -793,7 +804,7 @@ class Taskmastervm extends GetxController{
     }
 
 
-    getContactMasterList(String accountCode, String accountName) async {
+    Future<Iterable<ContactMstGetListModal>> getContactMasterList(String accountCode, String accountName) async {
         try{
             Map<String, String> data={
                 "filter_contact_name": '',
@@ -803,7 +814,7 @@ class Taskmastervm extends GetxController{
                 "row_per_page": rowsPerPage.toString(),
                 "page_number": '0'
             };
-
+            loading.value=true;
             print("data is ${data}");
             String onValue = await _api.contactMstGetList(data, sessionManagement);
                 final jsonResponse = json.decode(onValue);
@@ -827,6 +838,10 @@ class Taskmastervm extends GetxController{
         }catch(e){
             print(e);
         }
+        finally{
+          loading.value=false;
+        }
+        return contact_master_list;
 
     }
 
@@ -889,7 +904,6 @@ class Taskmastervm extends GetxController{
             String onValue = await _api.AccountMasterGetApiHit(data, sessionManagement);
                 final jsonResponse = json.decode(onValue);
                 if(jsonResponse is List){
-                  loading.value = false;
                     List<AccountMasterModel> response = jsonResponse.map((e) => AccountMasterModel.fromJson(e)).toList();
                     if(response!= null && response.length>0 && response[0].condition=="True"){
                         Account_Master_list.value=response;
@@ -900,8 +914,11 @@ class Taskmastervm extends GetxController{
                 }
 
         }catch(e){
-          loading.value = false;
+
             print(e);
+        }
+        finally{
+          loading.value = false;
         }
         return Account_Master_list;
     }
@@ -1353,9 +1370,9 @@ class Taskmastervm extends GetxController{
             "infra_lead_no": InfraNo,
             "user_region": userRegionUpdateController.text.isEmpty?"":userRegionUpdateController.text,
             "user_clusture": userClusterUpdateController.text.isEmpty?"":userClusterUpdateController.text,
-            "name_of_infra_department": nameofInfradepUpdateController.text.isEmpty?"":nameofInfradepUpdateController.text,
-            "executive_engineer": executiveEngineerUpdateController.text.isEmpty?"":executiveEngineerUpdateController.text,
-            "assistant_engineer": assistantEngineerController.text.isEmpty?"":assistantEngineerController.text,
+            "name_of_infra_department": nameofInfradepUpdateController.text.isEmpty?"":nameofInfradepUpdate,
+            "executive_engineer": executiveEngineerUpdateController.text.isEmpty?"":executiveEn,
+            "assistant_engineer": assistantEngineerController.text.isEmpty?"":assistantEn,
             "project_name": nameOfProjectController.text.isEmpty?"":nameOfProjectController.text,
             "location": locationController.text.isEmpty?"":locationController.text,
             "time_period_to_complete_civil_work_in_months": timePeriodToCompleteWorkController.text.isEmpty?"0":timePeriodToCompleteWorkController.text,
@@ -1363,13 +1380,13 @@ class Taskmastervm extends GetxController{
             "project_value": projectValueUpdateController.text.isEmpty?"":projectValueUpdateController.text,
             "expected_revenue": expectedRevenueUpdateController.text.isEmpty?"":expectedRevenueUpdateController.text,
             "furniture_included_in_civil_scope": furnitureIncludedInCivilController.text=="Yes"?1:0,
-            "customer_name": customerNameController.text.isEmpty?"":customerNameController.text,
-            "contact_person_decision_maker": contactPersonHODController.text.isEmpty?"":contactPersonHODController.text,
-            "name_of_agency_contrator": agencyContractorUpdateController.text.isEmpty?"":agencyContractorUpdateController.text,
-            "owner_of_contrator": ownerOfContractorController.text.isEmpty?"":ownerOfContractorController.text,
-            "project_site_manager": siteManagerController.text.isEmpty?"":siteManagerController.text,
-            "name_of_architect_firm": nameOfArchitecfirmUpdateController.text.isEmpty?"":nameOfArchitecfirmUpdateController.text,
-            "architect": architectUpdateController.text.isEmpty?"":architectUpdateController.text,
+            "customer_name": customerNameController.text.isEmpty?"":customerName,
+            "contact_person_decision_maker": contactPersonHODController.text.isEmpty?"":contactPersonHOD,
+            "name_of_agency_contrator": agencyContractorUpdateController.text.isEmpty?"":agencyContractorUpdate,
+            "owner_of_contrator": ownerOfContractorController.text.isEmpty?"":ownerOfContractor,
+            "project_site_manager": siteManagerController.text.isEmpty?"":siteManager,
+            "name_of_architect_firm": nameOfArchitecfirmUpdateController.text.isEmpty?"":nameOfArchitecfirmUpdate,
+            "architect": architectUpdateController.text.isEmpty?"":architectUpdate,
             "lines": lines.map((line) => line.toJson()).toList(),
             "drawing_collected": drawingcollectedUpdateController.text=="Yes"?1:0,
             "date_drawing_received": dateDrawingReceived??"",
@@ -1510,6 +1527,17 @@ class Taskmastervm extends GetxController{
          dateOfDrawingReceivedController.clear();
          dateOfProposalSubmissionController.clear();
          projectValueUpdateController.clear();
+
+         executiveEn = "";
+         assistantEn = "";
+         contactPersonHOD = "";
+         ownerOfContractor = "";
+         siteManager = "";
+         architectUpdate = "";
+         nameofInfradepUpdate = "";
+         customerName = "";
+         agencyContractorUpdate = "";
+         nameOfArchitecfirmUpdate = "";
 
     }
 

@@ -6620,6 +6620,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
 
                               saleCycleController.viewAllDetailsOfSaleCycleInfra(saleCycleList[0]);
                               //TaskMaster_page_controller.isInfraLeadUpdateController.value.text=TaskMaster_page_controller.isInfraLead.value.text;
+                              saleCycleController.getAccountMaster(saleCycleController.rowsPerPage,"");
                               saleCycleController.getItemCategoryMstApiHit(saleCycleList[0].taskId, saleCycleList[0].infraLeadNo,"");
                               Get.toNamed(RoutesName.update_sale_infra_detail_screen);
                             },decoration: TextDecoration.underline,decorationStyle:TextDecorationStyle.wavy ),
@@ -8161,7 +8162,9 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                               onTap: () {
                                 String ProductCategory = saleCycleController.saleCycleList[0].productCategoryCode ?? "";
                                 String PipeProdCate = ProductCategory.replaceAll(', ', '|');
+                                saleCycleController.productCategory = PipeProdCate;
                                 saleCycleController.pageNumberForItem = 0;
+                                saleCycleController.salesCycleId.value = saleCycleController.saleCycleList[0].salesCycleId ??"";
                                 saleCycleController.itemMstGetBySalesIdApiHit(saleCycleController.pageNumberForItem,
                                     saleCycleController.saleCycleList[0].salesCycleId, PipeProdCate);
                               },
