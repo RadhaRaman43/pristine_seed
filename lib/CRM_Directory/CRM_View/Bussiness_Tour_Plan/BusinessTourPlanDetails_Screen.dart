@@ -993,13 +993,9 @@ class BusinessTourPlanDeatil extends StatelessWidget {
             child: ListView.separated(
                 controller: scrollController,
                 padding: EdgeInsets.only(bottom: 10),
-                separatorBuilder: (context, index) => Divider(
-                      height: .05,
-                      color: Colors.transparent,
-                    ),
+                separatorBuilder: (context, index) => Divider(height: .05, color: Colors.transparent,),
                 shrinkWrap: true,
-                itemCount: businessTourPlanController
-                    .BusinessTourHourLines.value.length,
+                itemCount: businessTourPlanController.BusinessTourHourLines.value.length,
                 itemBuilder: (BuildContext context, int index) {
                   return bindLinesListView(context, index);
                 }),
@@ -1024,10 +1020,8 @@ class BusinessTourPlanDeatil extends StatelessWidget {
 
   Widget bindLinesListView(BuildContext context, int index) {
     String? dateCreatedOn = StaticMethod.convertDateFormat1(
-        businessTourPlanController.BusinessTourHourLines[index].createdOn ??
-            "");
-    String? TourDate = StaticMethod.convertDateFormat1(
-        businessTourPlanController.BusinessTourHourLines[index].tourDate ?? "");
+        businessTourPlanController.BusinessTourHourLines[index].createdOn ?? "");
+    String? TourDate = StaticMethod.convertDateFormat1(businessTourPlanController.BusinessTourHourLines[index].tourDate ?? "");
 
     String MeetingWith = businessTourPlanController.formattedNames(businessTourPlanController.BusinessTourHourLines[index].meetingWith??"");
     String AccompaniedWith = businessTourPlanController.formattedNames(businessTourPlanController.BusinessTourHourLines[index].accompaniedWith??"");
@@ -1081,7 +1075,6 @@ class BusinessTourPlanDeatil extends StatelessWidget {
             SizedBox(
               height: 10,
             ),
-            bindLineData(context,"Tour ID :",businessTourPlanController.BusinessTourHourLines[index].tourId.toString()),
             bindLineData(context,"Line No. :",businessTourPlanController.BusinessTourHourLines[index].lineNo.toString()),
             bindLineData(context,"Touring District : ",businessTourPlanController.BusinessTourHourLines[index].touringDistrict ?? ""),
             bindLineData(context,"Tour Date : ",TourDate.toString()),
@@ -1089,7 +1082,7 @@ class BusinessTourPlanDeatil extends StatelessWidget {
             bindLineData(context,"Accompanied With : ", AccompaniedWith),
             bindLineData(context,"Customer : ", businessTourPlanController.BusinessTourHourLines[index].customer ?? ""),
             bindLineData(context,"Customer Name : ", businessTourPlanController.BusinessTourHourLines[index].customerName ?? ""),
-            bindLineData(context,"Meeting With : ", MeetingWith),
+            bindLineData(context,"Meeting With : ",/*businessTourPlanController.BusinessTourHourLines[index].meetingWith??""*/ MeetingWith),
             bindLineData(context,"Objective : ", businessTourPlanController.BusinessTourHourLines[index].objective ?? ""),
             bindLineData(context,"Remark : ", businessTourPlanController.BusinessTourHourLines[index].remark ?? ""),
             bindLineData(context,"Created On : ", dateCreatedOn.toString()),

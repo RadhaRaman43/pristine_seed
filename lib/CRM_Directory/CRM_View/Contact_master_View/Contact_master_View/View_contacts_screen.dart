@@ -116,6 +116,7 @@ class ViewContactsScreen extends StatelessWidget{
                                 contact_vm_controller.getAccountMaster("");
                                 contact_vm_controller.getDecisionRoleMaster();
                                 contact_vm_controller.account_name_controller.text=accountMaster_page_controller.accountName;
+                                contact_vm_controller.FullAddress_Controller.value.text=accountMaster_page_controller.fullAddress;
                                 Get.toNamed(RoutesName.addNewContactMaster_screen);
                               },
                                 icon: Icon(Icons.add, size: 40, color: AllColors.textColor,),
@@ -200,7 +201,8 @@ class ViewContactsScreen extends StatelessWidget{
         onTap: () {
           if(contact_vm_controller.FromPage.value == 'Contact'|| accountMaster_page_controller.FromPage.value == 'Account'){
             contact_vm_controller.insideOut = false;
-            contact_vm_controller.upDateContact('Inside',position);
+            debugPrint("Length of list ${accountMaster_page_controller.view_contract_list.length}");
+            contact_vm_controller.upDateContact('Inside',position,view_contract_list:accountMaster_page_controller.view_contract_list[position]);
           }else{
             print('');
           }
@@ -274,7 +276,7 @@ class ViewContactsScreen extends StatelessWidget{
               ],
             ),
             SizedBox(
-              height: 2,
+              height: 3,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -311,9 +313,7 @@ class ViewContactsScreen extends StatelessWidget{
                 ),
               ],
             ),
-            SizedBox(
-              height: 2,
-            ),
+            /*SizedBox(height: 3,),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -343,11 +343,9 @@ class ViewContactsScreen extends StatelessWidget{
                   ),
                 ),
               ],
-            ),
-            SizedBox(height: 3),
-            Row
-
-              (
+            ),*/
+            const SizedBox(height: 3),
+            Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
@@ -372,7 +370,7 @@ class ViewContactsScreen extends StatelessWidget{
                 ),
               ],
             ),
-            SizedBox(height: 3),
+            const SizedBox(height: 3),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -403,7 +401,7 @@ class ViewContactsScreen extends StatelessWidget{
                 ),
               ],
             ),
-            SizedBox(height: 3),
+            const SizedBox(height: 3),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -434,7 +432,7 @@ class ViewContactsScreen extends StatelessWidget{
                 ),
               ],
             ),
-            SizedBox(height: 3),
+            const SizedBox(height: 3),
 
           ],
         ),

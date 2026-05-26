@@ -5147,6 +5147,51 @@ class SalesCycleVm extends GetxController {
     clusterName_controller.value.text = clusterGetByEmailList.map((e) => e.geoValue).join('|');
     getRegionsWithClusterFilterGetByEmail();
   }
+  void clearAllFieldOfFunnelDashboardFilter() {
+    print("Clear Filed");
+    Selected_Item_Category_master_list_without_task.value=[];
+    selected_company_type_list.value=[];
+    createdOnCnontroller.value.clear();
+    product_category_type_Controller.value.text="Contains";
+    saleCycleController.value.clear();
+    salesCycleOwnerController.value.clear();
+    filterTask_Id_controller.value.clear();
+    //SaleCycleStatusController.value.clear();
+    //ApprovalStatusController.value.clear();
+    accountNameController.value.clear();
+    accountCodeController.value.clear();
+    productCategoryController.value.clear();
+    purchaseProcessController.value.clear();
+    companyProfileTypeController.value.clear();
+    isCommitController.value.clear();
+    solutionAcceptedController.value.clear();
+    proposedSolutionController.value.clear();
+    postalCodeController.value.clear();
+    district_controller.value.clear();
+    //RegionName_controller.value.clear();
+    //zone_head_value_controller.value.clear();
+    clusterName_controller.value.clear();
+    createdByController.value.clear();
+    reportingManagerController.value.clear();
+    createdOnCnontroller.value.clear();
+    createdOnStartToEnd.value = "";
+    if(quoteAcceptedForFilterOnSaleCycle.value!="Overdue"){
+      extClosureStartToEnd.value = "";
+      filterExpectedClosuredateController.value.clear();
+    }
+    SaleCycleStatusController.value.text = 'All';
+    ApprovalStatusController.value.text = 'All';
+
+    AccountOwnerForApi = '';
+    AccountOwner_controller.value.clear();
+    SelectedEmployee_Member_list.value = [];
+
+    SelectedCluster_list.value=[];
+    SelectedRegion_list.value=[];
+    //RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join('|');
+    clusterName_controller.value.text = clusterGetByEmailList.map((e) => e.geoValue).join('|');
+    //getRegionsWithClusterFilterGetByEmail();
+  }
 
   void clearAllFieldOfQuoteFilter() {
     salesAdviseStatusController.value.clear();

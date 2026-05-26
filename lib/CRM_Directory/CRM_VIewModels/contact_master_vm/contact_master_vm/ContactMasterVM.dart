@@ -234,12 +234,14 @@ class ContactMasterVM extends GetxController{
               loading.value = false;
               AccountMasterGetCode_list.value=response;
               if(AccountMasterGetCode_list[0].permanentAddress != null){
-                FullAddress_Controller.value.text = AccountMasterGetCode_list[0].permanentAddress!.address! + ", "
-                    + AccountMasterGetCode_list[0].permanentAddress!.address2! + ", "
-                    + AccountMasterGetCode_list[0].permanentAddress!.city! + ", "
-                    + AccountMasterGetCode_list[0].permanentAddress!.district! + ", "
-                    + AccountMasterGetCode_list[0].permanentAddress!.stateName! + ", "
-                    + AccountMasterGetCode_list[0].permanentAddress!.postCode! + ", " ;
+                FullAddress_Controller.value.text ="${AccountMasterGetCode_list[0].permanentAddress!.address??""},"
+                    "${AccountMasterGetCode_list[0].permanentAddress!.address2??""},"
+                    "${AccountMasterGetCode_list[0].permanentAddress!.city??""},"
+                    "${AccountMasterGetCode_list[0].permanentAddress!.district??""},"
+                    "${AccountMasterGetCode_list[0].permanentAddress!.stateName??""},"
+                    "(${AccountMasterGetCode_list[0].permanentAddress!.postCode??""})";
+
+
 
               }
 
@@ -257,7 +259,7 @@ class ContactMasterVM extends GetxController{
           }
         }catch(e){
           loading.value = false;
-          print(e);
+          print("null checker $e");
         }
        /* finally{
           loading.value=false;
@@ -419,45 +421,65 @@ class ContactMasterVM extends GetxController{
     }*/
   }
 
-  upDateContact(String flag, int index){
-    updateContact=true;
-    designation_dropDown.value=true;
-    if(flag == 'OutSide'){print('Flage...${flag}');
-      contact_code=contact_master_list[index].contactCode?? "";
-      account_name_controller.text=contact_master_list[index].accountName?? "";
-      accountCode.value=contact_master_list[index].accountCode??"";
-    contact_name_controller.text=contact_master_list[index].contactName?? "";
-    depart_name_controller.text=contact_master_list[index].departmentName?? "";
-    phone_no_controller.text=contact_master_list[index].phoneNo?? "";
-    emailId_controller.text=contact_master_list[index].emailId?? "";
-    alternate_no_controller.text=contact_master_list[index].alternateNo?? "";
-    reporting_person_controller.text=contact_master_list[index].reportingPerson?? "";
-    contact_title_controller.text=contact_master_list[index].contactTitle?? "";
-    designation_name_controller.text=contact_master_list[index].designationName ?? "";
-    contact_code_controller.text=contact_master_list[index].contactCode ?? "";
-    FullAddress_Controller.value.text=contact_master_list[index].fullAddress ?? "";
-    IsHeDecisionMakerController.value.text=contact_master_list[index].contactRole??"";
-    }
-    else if(flag == 'Inside'){
-      contact_code=account_vm_controller.view_contract_list[index].contactCode?? "";
-      account_name_controller.text=account_vm_controller.view_contract_list[index].accountName?? "";
-      contact_name_controller.text=account_vm_controller.view_contract_list[index].contactName?? "";
-      depart_name_controller.text=account_vm_controller.view_contract_list[index].departmentName?? "";
-      phone_no_controller.text=account_vm_controller.view_contract_list[index].phoneNo?? "";
-      emailId_controller.text=account_vm_controller.view_contract_list[index].emailId?? "";
-      alternate_no_controller.text=account_vm_controller.view_contract_list[index].alternateNo?? "";
-      reporting_person_controller.text=account_vm_controller.view_contract_list[index].reportingPerson?? "";
-      contact_title_controller.text=account_vm_controller.view_contract_list[index].contactTitle?? "";
-      designation_name_controller.text=account_vm_controller.view_contract_list[index].designationName ?? "";
-      contact_code_controller.text=account_vm_controller.view_contract_list[index].contactCode ?? "";
-      IsHeDecisionMakerController.value.text=account_vm_controller.view_contract_list[index].contactRole??"";
-    }
+  upDateContact(String flag, int index, {ContactMstGetListModal? view_contract_list}  ){
 
-    getAccountMaster("");
-    //getDepartNameList();
-    //getDesignationList();
-    getDecisionRoleMaster();
-    Get.toNamed(RoutesName.addNewContactMaster_screen);
+    try {
+      updateContact = true;
+      designation_dropDown.value = true;
+      if (flag == 'OutSide') {
+        print('Flage...${flag}');
+        contact_code = contact_master_list[index].contactCode ?? "";
+        account_name_controller.text = contact_master_list[index].accountName ?? "";
+        accountCode.value = contact_master_list[index].accountCode ?? "";
+        contact_name_controller.text = contact_master_list[index].contactName ?? "";
+        depart_name_controller.text = contact_master_list[index].departmentName ?? "";
+        phone_no_controller.text = contact_master_list[index].phoneNo ?? "";
+        emailId_controller.text = contact_master_list[index].emailId ?? "";
+        alternate_no_controller.text = contact_master_list[index].alternateNo ?? "";
+        reporting_person_controller.text = contact_master_list[index].reportingPerson ?? "";
+        contact_title_controller.text = contact_master_list[index].contactTitle ?? "";
+        designation_name_controller.text = contact_master_list[index].designationName ?? "";
+        contact_code_controller.text = contact_master_list[index].contactCode ?? "";
+        FullAddress_Controller.value.text = contact_master_list[index].fullAddress ?? "";
+        IsHeDecisionMakerController.value.text = contact_master_list[index].contactRole ?? "";
+      }
+      else if (flag == 'Inside') {
+       /* contact_code = account_vm_controller.view_contract_list[index].contactCode ?? "";
+        account_name_controller.text = account_vm_controller.view_contract_list[index].accountName ?? "";
+        contact_name_controller.text = account_vm_controller.view_contract_list[index].contactName ?? "";
+        depart_name_controller.text = account_vm_controller.view_contract_list[index].departmentName ?? "";
+        phone_no_controller.text = account_vm_controller.view_contract_list[index].phoneNo ?? "";
+        emailId_controller.text = account_vm_controller.view_contract_list[index].emailId ?? "";
+        alternate_no_controller.text = account_vm_controller.view_contract_list[index].alternateNo ?? "";
+        reporting_person_controller.text = account_vm_controller.view_contract_list[index].reportingPerson ?? "";
+        contact_title_controller.text = account_vm_controller.view_contract_list[index].contactTitle ?? "";
+        designation_name_controller.text = account_vm_controller.view_contract_list[index].designationName ?? "";
+        contact_code_controller.text = account_vm_controller.view_contract_list[index].contactCode ?? "";
+        IsHeDecisionMakerController.value.text = account_vm_controller.view_contract_list[index].contactRole ?? "";
+*/
+  contact_code = view_contract_list?.contactCode ?? "";
+  account_name_controller.text = view_contract_list?.accountName ?? "";
+  contact_name_controller.text = view_contract_list?.contactName ?? "";
+  depart_name_controller.text = view_contract_list?.departmentName ?? "";
+  phone_no_controller.text = view_contract_list?.phoneNo ?? "";
+  emailId_controller.text = view_contract_list?.emailId ?? "";
+  alternate_no_controller.text = view_contract_list?.alternateNo ?? "";
+  reporting_person_controller.text = view_contract_list?.reportingPerson ?? "";
+  contact_title_controller.text = view_contract_list?.contactTitle ?? "";
+  designation_name_controller.text = view_contract_list?.designationName ?? "";
+  contact_code_controller.text = view_contract_list?.contactCode ?? "";
+  IsHeDecisionMakerController.value.text = view_contract_list?.contactRole ?? "";
+
+  }
+      getAccountMaster("");
+      //getDepartNameList();
+      //getDesignationList();
+      getDecisionRoleMaster();
+      Get.toNamed(RoutesName.addNewContactMaster_screen);
+    }
+    catch(e){
+      Utils.sanckBarError("Exception! ", e.toString());
+    }
   }
 
   getDesignationList() async{

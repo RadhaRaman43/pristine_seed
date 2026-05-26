@@ -655,16 +655,14 @@ class FunnelDashboardView extends StatelessWidget{
               ),
               InkWell(
                   onTap: (){
-
                     if(dashboard_view_Controller.funnelDashboardUserWiseDataList[position].salesCycleStatus.toString().toLowerCase() =="suspect"){
                       saleCycleController.getPurchaseProcessApi();
                       saleCycleController.getPurchaseTimeFrameApi();
                     }
-
                     saleCycleController.ProductCategoryWiseAmtGet(0, dashboard_view_Controller.funnelDashboardUserWiseDataList[position].salesCycleId!);
                     saleCycleController.pageNumber = 0;
                     saleCycleController.filterQuoteAcceptedFlag.value="";
-                    saleCycleController.clearAllFieldOfFilter();
+                    saleCycleController.clearAllFieldOfFunnelDashboardFilter();
                     saleCycleController.getsalesCycleData(saleCycleController.pageNumber, dashboard_view_Controller.funnelDashboardUserWiseDataList[position]
                         .salesCycleId!, "ViewHeader", "FromFunnelDashboard");
                   },
@@ -718,6 +716,7 @@ class FunnelDashboardView extends StatelessWidget{
       ),
     );
   }
+
   Widget _buildLabelWithValue({
     required String label,
     required String? value,

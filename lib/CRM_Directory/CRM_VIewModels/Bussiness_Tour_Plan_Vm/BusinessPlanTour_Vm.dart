@@ -43,6 +43,7 @@ class BusinessPlanTourViewModel extends GetxController{
   RxBool meetingWith = true.obs;
   RxBool tourType = true.obs;
   RxBool customerVisible = true.obs;
+  RxBool addCustomer = false.obs;
   RxBool selectMeetingWith = false.obs;
   String StartDate = '', EndDate = '', Tour_Id = '', CustomerId = '';
   RxString isSendForApproval = ''.obs;
@@ -142,10 +143,8 @@ class BusinessPlanTourViewModel extends GetxController{
     RegionMasterGet();
     EmployeeMasterGet("");
     getClustersGetByEmail();
-
     super.onInit();
   }
-
   Future<void> refreshList() async {
     pageNumber = 0;
     getBusinessTourPlanData(pageNumber);
@@ -155,12 +154,15 @@ class BusinessPlanTourViewModel extends GetxController{
     getBusinessTourPlanAllLineGet(pageNumber);
   }
 
-  String formattedNames(String encodedString) {
+  String formattedNames(String value) {
     try {
-      List<dynamic> names = jsonDecode(encodedString);
-      return names.join(", ");
+      if (value.startsWith('[') && value.endsWith(']')) {
+        List<dynamic> names = jsonDecode(value);
+        return names.join(", ");
+      }
+      return value;
     } catch (e) {
-      return ""; // or fallback to original string if needed
+      return value;
     }
   }
 
@@ -369,7 +371,7 @@ class BusinessPlanTourViewModel extends GetxController{
         "start_date": StartDate_filter_controller.value.text.isEmpty?"":StartDate_filter_controller.value.text,
         "end_date": EndDate_filter_controller.value.text.isEmpty?"":EndDate_filter_controller.value.text,
         "filter_created_on": createdOn_filter_controller.value.text.isEmpty?"":createdOn_filter_controller.value.text,
-        "status": filterStatusFlag.value=='All'?'':filterStatusFlag.value,
+        "status":  ApprovalStatusController.value.text.toUpperCase()=='ALL'?'':ApprovalStatusController.value.text,
         "reporting_manager": reporting_manager_Controller.value.text.isEmpty?"":reporting_manager_Controller.value.text,
         "rowsPerPage": rowsPerPage,
         "pageNumber": page_no
@@ -665,6 +667,7 @@ class BusinessPlanTourViewModel extends GetxController{
             if (response.length > 0 && response[0].condition == "True") {
               loading.value = false;
               customerVisible.value =true;
+              addCustomer.value = false;
               Utils.showToastification("Message !", response[0].message.toString());
               getBusinessTourPlanDetailsApi(response[0].tourId, "");
 
@@ -1251,6 +1254,7 @@ class BusinessPlanTourViewModel extends GetxController{
     createdOnStartToEnd.value="";
     selectedReportingMangerList.value=[];
     filterStatusFlag.value = 'PENDING';
+    ApprovalStatusController.value.text='PENDING';
 
     SelectedCluster_list.value=[];
     SelectedRegion_list.value=[];

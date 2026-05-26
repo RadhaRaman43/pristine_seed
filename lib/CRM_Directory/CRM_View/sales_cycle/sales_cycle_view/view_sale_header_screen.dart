@@ -1309,15 +1309,11 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                         ?.toUpperCase() !=
                                     "rejected" &&
                                 saleCycleController.saleCycleList[0].quoteAccepted
-                                        ?.toUpperCase() !=
-                                    "LOSS" &&
+                                        ?.toUpperCase() != "LOSS" &&
                                 saleCycleController
-                                        .saleCycleList[0].salesCycleStatus!
-                                        .toUpperCase() ==
+                                        .saleCycleList[0].salesCycleStatus!.toUpperCase() ==
                                     "SUSPECT" &&
-                                saleCycleController
-                                        .saleCycleList[0].salesCycleApprovalStatus
-                                        ?.toLowerCase() ==
+                                saleCycleController.saleCycleList[0].salesCycleApprovalStatus?.toLowerCase() ==
                                     "pending" &&
                                 (saleCycleController
                                         .saleCycleList[0].salesCycleOwner

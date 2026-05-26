@@ -121,11 +121,11 @@ class BussinessTourPlanScreen extends StatelessWidget{
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Obx(() {
+                            bool value = (businessTourPlanController.filterStatusFlag.value == 'PENDING' && businessTourPlanController.ApprovalStatusController.value.text.toUpperCase() !="ALL");
                             return ActionChip(
                               elevation: 2,
                               padding: EdgeInsets.symmetric(horizontal: 30, vertical: 2),
-                              backgroundColor:
-                              businessTourPlanController.filterStatusFlag.value == 'PENDING'
+                              backgroundColor:value
                                   ? AllColors.primaryDark1
                                   : AllColors.grayColor,
                               shadowColor: Colors.black,
@@ -134,14 +134,14 @@ class BussinessTourPlanScreen extends StatelessWidget{
                               ),
                               label: Text('Pending',
                                 style: TextStyle(
-                                  color: businessTourPlanController.filterStatusFlag.value == 'PENDING'
-                                      ? AllColors.whiteColor : AllColors.primaryDark1,
+                                  color: value ? AllColors.whiteColor : AllColors.primaryDark1,
                                   fontSize: AllFontSize.fourtine,
                                   fontWeight: FontWeight.w500,
                                 ),
                               ),
                               onPressed: () {
                                 businessTourPlanController.filterStatusFlag.value = 'PENDING';
+                                businessTourPlanController.ApprovalStatusController.value.text = 'PENDING';
                                 businessTourPlanController.pageNumber=0;
                                 businessTourPlanController.getBusinessTourPlanData(businessTourPlanController.pageNumber);
                               },
@@ -149,11 +149,11 @@ class BussinessTourPlanScreen extends StatelessWidget{
                           }),
                           const SizedBox(width: 8),
                           Obx(() {
+                            bool value =(businessTourPlanController.filterStatusFlag.value == 'PENDING FOR APPROVAL'&& businessTourPlanController.ApprovalStatusController.value.text.toUpperCase() !="ALL");
                             return ActionChip(
                               elevation: 2,
                               padding: EdgeInsets.symmetric(horizontal: 35, vertical: 2),
-                              backgroundColor:
-                              businessTourPlanController.filterStatusFlag.value == 'PENDING FOR APPROVAL'
+                              backgroundColor:value
                                   ? AllColors.primaryDark1
                                   : AllColors.grayColor,
                               shadowColor: Colors.black,
@@ -163,15 +163,14 @@ class BussinessTourPlanScreen extends StatelessWidget{
                               label: Text(
                                 'Pending For Approval',
                                 style: TextStyle(
-                                  color: businessTourPlanController.filterStatusFlag.value == 'PENDING FOR APPROVAL'
-                                      ? AllColors.whiteColor
-                                      : AllColors.primaryDark1,
+                                  color: value ? AllColors.whiteColor : AllColors.primaryDark1,
                                   fontSize: AllFontSize.fourtine,
                                   fontWeight: FontWeight.w500,
                                 ),
                               ),
                               onPressed: () {
                                 businessTourPlanController.filterStatusFlag.value = 'PENDING FOR APPROVAL';
+                                businessTourPlanController.ApprovalStatusController.value.text = 'PENDING FOR APPROVAL';
                                 businessTourPlanController.pageNumber=0;
                                 businessTourPlanController.getBusinessTourPlanData(businessTourPlanController.pageNumber);
                               },
@@ -179,13 +178,12 @@ class BussinessTourPlanScreen extends StatelessWidget{
                           }),
                           const SizedBox(width: 8), // optional spacing between chips
                           Obx(() {
+                            bool value = (businessTourPlanController.filterStatusFlag.value == 'APPROVED'
+                                && businessTourPlanController.ApprovalStatusController.value.text.toUpperCase() !="ALL" );
                             return ActionChip(
                               elevation: 2,
                               padding: EdgeInsets.symmetric(horizontal: 35, vertical: 2),
-                              backgroundColor:
-                              businessTourPlanController.filterStatusFlag.value == 'APPROVED'
-                                  ? AllColors.primaryDark1
-                                  : AllColors.grayColor,
+                              backgroundColor: value ? AllColors.primaryDark1 : AllColors.grayColor,
                               shadowColor: Colors.black,
                               shape: StadiumBorder(
                                 side: BorderSide(color: AllColors.grayColor),
@@ -193,7 +191,7 @@ class BussinessTourPlanScreen extends StatelessWidget{
                               label: Text(
                                 'Approved / Reject',
                                 style: TextStyle(
-                                  color: businessTourPlanController.filterStatusFlag.value == 'APPROVED'
+                                  color: value
                                       ? AllColors.whiteColor
                                       : AllColors.primaryDark1,
                                   fontSize: AllFontSize.fourtine,
@@ -202,6 +200,7 @@ class BussinessTourPlanScreen extends StatelessWidget{
                               ),
                               onPressed: () {
                                 businessTourPlanController.filterStatusFlag.value = 'APPROVED';
+                                businessTourPlanController.ApprovalStatusController.value.text= 'APPROVED';
                                 businessTourPlanController.pageNumber=0;
                                 businessTourPlanController.getBusinessTourPlanData(businessTourPlanController.pageNumber);
                               },
@@ -214,7 +213,7 @@ class BussinessTourPlanScreen extends StatelessWidget{
                               elevation: 2,
                               padding: EdgeInsets.symmetric(horizontal: 35, vertical: 2),
                               backgroundColor:
-                              businessTourPlanController.filterStatusFlag.value == 'All'
+                              businessTourPlanController.filterStatusFlag.value == ''
                                   ? AllColors.primaryDark1
                                   : AllColors.grayColor,
                               shadowColor: Colors.black,
@@ -224,7 +223,7 @@ class BussinessTourPlanScreen extends StatelessWidget{
                               label: Text(
                                 'All',
                                 style: TextStyle(
-                                  color: businessTourPlanController.filterStatusFlag.value == 'All'
+                                  color: businessTourPlanController.filterStatusFlag.value == ''
                                       ? AllColors.whiteColor
                                       : AllColors.primaryDark1,
                                   fontSize: AllFontSize.fourtine,
@@ -232,7 +231,8 @@ class BussinessTourPlanScreen extends StatelessWidget{
                                 ),
                               ),
                               onPressed: () {
-                                businessTourPlanController.filterStatusFlag.value = 'All';
+                                businessTourPlanController.filterStatusFlag.value = '';
+                                businessTourPlanController.ApprovalStatusController.value.text= 'All';
                                 businessTourPlanController.pageNumber=0;
                                 businessTourPlanController.getBusinessTourPlanData(businessTourPlanController.pageNumber);
                               },
@@ -944,8 +944,10 @@ class BussinessTourPlanScreen extends StatelessWidget{
                               bindReportingManager(context),
                               const SizedBox(height: 10,),
                               Obx((){
+                                bool value = (/*businessTourPlanController.ApprovalStatusController.value.text.toUpperCase()=="ALL" &&*/
+                                    businessTourPlanController.filterStatusFlag.value=="");
                                 return Visibility(
-                                  visible: businessTourPlanController.filterStatusFlag.value.toLowerCase()=="all",
+                                  visible: value,
                                     child: bindApprovalStatusDropDown(context),);
                               })
 
@@ -1138,8 +1140,7 @@ class BussinessTourPlanScreen extends StatelessWidget{
             .size
             .width-15,
         controller: businessTourPlanController.ApprovalStatusController.value,
-        label: Text(
-          "Approval Status",
+        label: Text("Approval Status",
           style: GoogleFonts.poppins(
               color: AllColors.primaryDark1,
               fontSize: AllFontSize.fourtine,
@@ -1171,14 +1172,14 @@ class BussinessTourPlanScreen extends StatelessWidget{
           businessTourPlanController.ApprovalStatusController.value.text =
               _displayApprovalStatusForOption(selection!).toString();
 
-          if(businessTourPlanController.ApprovalStatusController.value.text=="ALL"){
+          if(businessTourPlanController.ApprovalStatusController.value.text=="All"){
             businessTourPlanController.filterStatusFlag.value="";
           }
-          else{
+          /*else{
             businessTourPlanController.filterStatusFlag.value= businessTourPlanController.ApprovalStatusController.value.text;
-          }
-          /*print('IsActive.....${salesCycleController.solutionAcceptedController
-              .value.text}');*/
+            //debugPrint("adasf ${businessTourPlanController.filterStatusFlag.value}");
+          }*/
+
 
         },
         dropdownMenuEntries:

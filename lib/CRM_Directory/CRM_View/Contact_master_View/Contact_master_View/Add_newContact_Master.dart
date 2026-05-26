@@ -173,7 +173,7 @@ class AddNewcontactMasterContact extends StatelessWidget{
                   child: Container(
                     padding: EdgeInsets.only(left: 15.0, right: 15.0),
                     child: TextFormField(
-                      readOnly: contact_vm_controller.updateContact,
+                      readOnly: contact_vm_controller.updateContact ,
                       controller: contact_vm_controller.contact_code_controller,
                       decoration: InputDecoration(
                         //hintText: "Alternate No",
@@ -512,7 +512,7 @@ class AddNewcontactMasterContact extends StatelessWidget{
   Widget bindAccountOwnerDropDown(context){
     //debugPrint("update contact ${contact_vm_controller.updateContact} and ${contact_vm_controller.insideOut}");
     return IgnorePointer(
-      ignoring:contact_vm_controller.updateContact /*contact_vm_controller.updateContact || contact_vm_controller.insideOut?false:true*/,
+      ignoring: contact_vm_controller.updateContact || contact_vm_controller.insideOut==false,
       child: Autocomplete<AccountMasterModel>(
         displayStringForOption: _displayAccNameForOption,
         optionsBuilder: (TextEditingValue textEditingValue) async {
@@ -527,6 +527,11 @@ class AddNewcontactMasterContact extends StatelessWidget{
               _displayAccNameForOption(selection).toString();
           contact_vm_controller.accountName.value=selection.accountName??"";
           contact_vm_controller.accountCode.value=selection.accountCode??"";
+          /*contact_vm_controller.FullAddress_Controller.value.text= "${selection.permanentAddress?.address??""},"
+              "${selection.permanentAddress?.address??""},"
+              "${selection.permanentAddress?.stateName??""},"
+              "${selection.permanentAddress?.district??""},"
+              "(${selection.permanentAddress?.postCode??""})";*/
           contact_vm_controller.getAccMasterBuyCodeApi(selection.accountCode??"");
 
         },

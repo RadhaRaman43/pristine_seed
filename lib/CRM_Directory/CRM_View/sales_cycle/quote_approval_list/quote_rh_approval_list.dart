@@ -373,7 +373,7 @@ class QuoteRHApprovalList extends StatelessWidget{
                               const SizedBox(height: 10),
                               filterWithQuoteClosureDate(context),
                               const SizedBox(height: 10,),
-                              bindData(context,'Rh Approval',quoteApprovalController.rh_Approval_controller.value),
+                              bindData(context,'RH Approval',quoteApprovalController.rh_Approval_controller.value),
                               const SizedBox(height: 10,),
                               bindData(context,'CBH Approval',quoteApprovalController.cbh_Approval_controller.value),
                               const SizedBox(height: 10,),

@@ -68,6 +68,7 @@ class Accountmastervm extends GetxController{
   String UserName="";
   String UserCode="";
   String accountName='';
+  String fullAddress='';
   String AccountOwner = '';
   String tatResponseType = '', SalesRepresentativeEmail = '', RegionalHeadEmail = '';
   String AccountCode = '';
@@ -1328,7 +1329,13 @@ class Accountmastervm extends GetxController{
               if (response != null && response.length > 0 && response[0].condition == "True") {
                 AccountMasterGetCode_list.value=response;
                 accountName=AccountMasterGetCode_list[0].accountName.toString();
-                print('Api Hit Mster....${AccountMasterGetCode_list[0].profile.toString()}');
+                fullAddress="${AccountMasterGetCode_list[0].permanentAddress?.address??""},"
+                    "${AccountMasterGetCode_list[0].permanentAddress?.address2??""},"
+                    "${AccountMasterGetCode_list[0].permanentAddress?.stateName??""},"
+                    "${AccountMasterGetCode_list[0].permanentAddress?.district??""},"
+                    " ${AccountMasterGetCode_list[0].permanentAddress?.city??""},"
+                    "(${AccountMasterGetCode_list[0].permanentAddress?.postCode??""})" ;
+                //print('Api Hit Mster....${AccountMasterGetCode_list[0].permanentAddress.toString()} and ${fullAddress}');
                 await viewRequestDetails(response);
                 Get.toNamed(RoutesName.update_AccountMaster_screen);
 
