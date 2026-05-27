@@ -246,6 +246,7 @@ class ItemMasterVm extends GetxController{
         final item = itemList[i];
         String hsn_code = double.parse(item.hsnCode?? "0").toInt().toString();
         String? expired_on = StaticMethod.convertDateFormat(item.expiredOn??"");
+        String? rate_contract = StaticMethod.convertDateFormat(item.rateContractValidDate??"");
         items.add({
           "account_code": item.accountCode??"",
           "active": item.active=="0"?0:1,
@@ -283,7 +284,7 @@ class ItemMasterVm extends GetxController{
           "product_group_code": "",
           "product_group_name": "",
           "purchase_uom": "PCS",
-          "rate_contract_valid_date": item.rateContractValidDate??"",
+          "rate_contract_valid_date": rate_contract??"",
           "rsp": 0,
           "specification": item.specification??"",
           "sales_cycle_id": item.salesCycleId??"",

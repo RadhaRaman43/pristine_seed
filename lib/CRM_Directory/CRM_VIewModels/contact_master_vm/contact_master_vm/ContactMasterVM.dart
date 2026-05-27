@@ -379,6 +379,7 @@ class ContactMasterVM extends GetxController{
           if(response!= null && response.length>0 && response[0].condition=="True"){
 
             contact_master_list.value=response;
+            String account_name = account_name_controller.text.toString();
 
             resetAllContactCreativeField('Icon');
           if(FromPage.value== "AddTourLine"){
@@ -392,7 +393,7 @@ class ContactMasterVM extends GetxController{
             }
             else if(insideOut == false){
               Get.toNamed(RoutesName.viewContacts_screen);
-              account_vm_controller.getContactMasterList(0, account_name_controller.text.toString(), '', accountCode.value.toString());
+              account_vm_controller.getContactMasterList(0, account_name, '', accountCode.value.toString());
             }
 
             loading.value = false;
