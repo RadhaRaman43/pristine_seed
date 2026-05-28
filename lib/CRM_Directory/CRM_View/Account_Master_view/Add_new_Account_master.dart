@@ -88,6 +88,7 @@ class AddNewAccountMaster extends StatelessWidget{
           if(accountMaster_page_controller.view == 'FromDraft'){
             accountMaster_page_controller.clearFilterController();
             accountMaster_page_controller.pageNumber = 0;
+            accountMaster_page_controller.addDraftAccount.value="";
             accountMaster_page_controller.getDraftAccountMaster(accountMaster_page_controller.pageNumber ,accountMaster_page_controller.is_Active.toString());
             Get.toNamed(RoutesName.Draft_item_list);
           }else if(accountMaster_page_controller.FromPage == "Task"){
@@ -206,7 +207,7 @@ class AddNewAccountMaster extends StatelessWidget{
       drawer: CustomDrawer(),
       floatingActionButton:  Visibility(
         //visible: accountMaster_page_controller.isAdminWritePermission=='0'?true:false,
-        visible: accountMaster_page_controller.isHeadofficePermission!='1'?true:false,
+         visible: accountMaster_page_controller.addDraftAccount.value!="FromDraft" && accountMaster_page_controller.isHeadofficePermission!='1'?true:false,
         child: Container(
           margin: EdgeInsets.only(left: 30),
           child: DefaultButton(

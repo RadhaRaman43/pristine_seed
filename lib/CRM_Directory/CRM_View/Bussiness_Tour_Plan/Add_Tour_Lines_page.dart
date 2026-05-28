@@ -614,6 +614,7 @@ class AddTourLinesPage extends StatelessWidget{
         optionsBuilder: (TextEditingValue textEditingValue) async {
           if (textEditingValue.text.isEmpty) {
             businessTourPlanController.TourPlanContact_List.value= [];
+            businessTourPlanController.TourPlanAccount_Controller.value.text="";
             return businessTourPlanController.TourPlanAccount_List;
             // return const Iterable<VehicleTypeResponse>.empty();
           }
@@ -627,11 +628,20 @@ class AddTourLinesPage extends StatelessWidget{
           businessTourPlanController.CustomerId  = selection.accountCode??"";
           businessTourPlanController.addCustomer.value= true;
           businessTourPlanController.BusinessTourPlanContactGet(selection.accountCode??"");
-
         },
         fieldViewBuilder: (BuildContext context, TextEditingController controller,
             FocusNode focusNode, VoidCallback onFieldSubmitted) {
           return TextField(
+            onChanged: (value){
+              if(value.isEmpty){
+                businessTourPlanController.TourPlanAccount_Controller.value.text="";
+                businessTourPlanController.MeetingWith_controller.value.text = "";
+                businessTourPlanController.SelectedMeetingWith_List.value=[];
+                businessTourPlanController.SelectedMeetingWith_List1.value=[];
+                businessTourPlanController.meetingWith.value = false;
+                businessTourPlanController.meetingWith.value = true;
+              }
+            },
             onTap: (){
               if(focusNode.hasFocus){
                 focusNode.unfocus();
@@ -743,6 +753,7 @@ class AddTourLinesPage extends StatelessWidget{
                         contact_vm_page_controller.insideOut=true;
                         contact_vm_page_controller.FromPage.value="AddTourLine";
                         contact_vm_page_controller.resetAllContactCreativeField("Icon");
+                        contact_vm_page_controller.createAccount.value=true;
                         Get.toNamed(RoutesName.addNewContactMaster_screen);
                       }, icon: Icon(Icons.add)),
                 ),

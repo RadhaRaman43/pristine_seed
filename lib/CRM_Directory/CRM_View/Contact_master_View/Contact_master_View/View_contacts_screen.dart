@@ -110,6 +110,7 @@ class ViewContactsScreen extends StatelessWidget{
                             child: Center(
                               child: IconButton(onPressed: () {
                                 contact_vm_controller.insideOut = false;
+                                contact_vm_controller.createAccount.value=false;
                                 contact_vm_controller.resetAllContactCreativeField('Card');
                                 // contact_vm_controller.IsHeDecisionMakerController.value.text = "No";
 

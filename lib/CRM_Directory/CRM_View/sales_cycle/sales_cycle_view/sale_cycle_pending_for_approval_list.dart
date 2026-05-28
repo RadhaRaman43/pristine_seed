@@ -1349,7 +1349,7 @@ class SaleCyclePendingForApprovalList extends StatelessWidget{
           return SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Text(
-              selectedItems.map((e) => e.fullName).join(', '),
+              selectedItems.map((e) => "${e.fullName ?? ""}(${e.salesPersonEmpCode ?? ""})").join(', '),
               style: TextStyle(color: Colors.black), // Only black text
             ),
           );
@@ -1358,7 +1358,7 @@ class SaleCyclePendingForApprovalList extends StatelessWidget{
           salesCyclePendingForApprovalController.SelectedEmployee_Member_list.value =
               selectedList;
           salesCyclePendingForApprovalController.AccountOwner_controller.value.text =
-              selectedList.map((e) => e.fullName).join(', ');
+              selectedList.map((e) => e.empId).join(', ');
         },
 
         popupProps: PopupPropsMultiSelection.dialog(
@@ -1377,7 +1377,7 @@ class SaleCyclePendingForApprovalList extends StatelessWidget{
 
           itemBuilder: (context, item, isSelected) =>
               ListTile(
-                title: Text(item.fullName??""),
+                title: Text("${item.fullName ?? ""}(${item.salesPersonEmpCode ?? ""})"),
               ),
         ),
       );

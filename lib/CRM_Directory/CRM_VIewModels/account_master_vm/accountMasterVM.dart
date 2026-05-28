@@ -64,6 +64,7 @@ class Accountmastervm extends GetxController{
   RxString FromPage="".obs;
   RxString isAdminWritePermission = "".obs;
   RxString isHeadofficePermission = "".obs;
+  RxString addDraftAccount = "".obs;
   String email="";
   String UserName="";
   String UserCode="";
@@ -1563,6 +1564,7 @@ class Accountmastervm extends GetxController{
         List<AccountMasterGetByCodeModel> response =
         JsonResponse.map((e) => AccountMasterGetByCodeModel.fromJson(e)).toList();
         if (response != null && response.length > 0 && response[0].condition == "True") {
+          addDraftAccount.value="";
           if(flag == 'Create'){
             print("ttttttttttt");
             Utils.sanckBarSuccess("Success!", "Account is Save In Draft Successful");

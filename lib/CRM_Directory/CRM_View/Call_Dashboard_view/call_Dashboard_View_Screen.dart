@@ -2058,8 +2058,7 @@ class CallDashboardViewScreen extends StatelessWidget {
             });
       }
       final selected = dashboard_view_Controller.SelectedEmployee_Member_list;
-      final selectedText = selected.isEmpty
-          ? null
+      final selectedText = selected.isEmpty ? null
           : selected.map((e) => "${e.fullName ?? ""}(${e.salesPersonEmpCode ?? ""})").join(', ');
 
       return GestureDetector(

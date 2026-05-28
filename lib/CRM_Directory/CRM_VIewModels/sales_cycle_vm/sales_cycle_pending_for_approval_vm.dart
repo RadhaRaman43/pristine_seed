@@ -339,6 +339,7 @@ class SalesCyclePendingForApprovalVm extends GetxController{
   getsalesCycleData(int page_no) async{
     try {
       AccountOwnerForApi = '';
+      debugPrint("accoutn owner ${AccountOwner_controller.value.text}");
       if(AccountOwner_controller.value.text.isNotEmpty){
         AccountOwnerForApi = AccountOwner_controller.value.text.split(',').map((e) => e.trim()).join('|');
       }
@@ -365,11 +366,11 @@ class SalesCyclePendingForApprovalVm extends GetxController{
         "filter_postal_code": postalCodeController.value.text.isEmpty ? "" : postalCodeController.value.text,
         "filter_district": district_controller.value.text.isEmpty ? "" : district_controller.value.text,
         "filter_frontliner_value": "",
-        "filter_branch_head_value": RegionName_controller.value.text.isEmpty ? "" : RegionName_controller.value.text,
         "filter_zone_head_value": "",
-        "filter_clusture_head_value": clusterName_controller.value.text.isEmpty ? "" : clusterName_controller.value.text,
         "item_code_name": "",
         "filter_sales_cycle_owner_new": AccountOwnerForApi.isEmpty?"":AccountOwnerForApi,
+        "filter_clusture_head_value": clusterName_controller.value.text.isEmpty ? "" : clusterName_controller.value.text,
+        "filter_branch_head_value": RegionName_controller.value.text.isEmpty ? "" : RegionName_controller.value.text,
         "row_per_page": rowsPerPage,
         "page_number": page_no
       };

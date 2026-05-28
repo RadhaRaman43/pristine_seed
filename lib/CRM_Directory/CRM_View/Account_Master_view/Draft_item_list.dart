@@ -55,7 +55,25 @@ class DraftItemList extends StatelessWidget{
                 ),
               ),
               Spacer(),
-
+              Obx((){
+                return Visibility(
+                  //visible:accountMaster_page_controller.isAdminWritePermission=="0"  ? true:false ,
+                  visible:accountMaster_page_controller.isHeadofficePermission!="1"|| accountMaster_page_controller.UserCode?.toLowerCase() == 'cce'  ?true:false ,
+                  child: IconButton(onPressed: () {
+                    accountMaster_page_controller.yesNoValue.value="No";
+                    accountMaster_page_controller.DraftId = '';
+                    accountMaster_page_controller.account_type_controller.text='New Account';
+                    accountMaster_page_controller.clearController();
+                    accountMaster_page_controller.getCompanyProfileSubTypeApi();
+                    accountMaster_page_controller.getCompanyProfileTypeApi("");
+                    accountMaster_page_controller.getGeoPostalCodeApi(50,'',accountMaster_page_controller.email);
+                    accountMaster_page_controller.ReferralBy_Controller.text= "";
+                    accountMaster_page_controller.view= "FromDraft";
+                    accountMaster_page_controller.addDraftAccount.value="FromDraft";
+                    Get.toNamed(RoutesName.add_New_AccountMaster_screen,arguments: 'Create');
+                  }, icon: Icon(Icons.add)),
+                );
+              }),
               IconButton(onPressed: () {
                 showFilterBottomSheet(context);
               }, icon: Icon(Icons.filter_alt_sharp))

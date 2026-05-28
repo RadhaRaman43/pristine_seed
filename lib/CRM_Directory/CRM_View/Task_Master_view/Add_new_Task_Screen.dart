@@ -228,6 +228,7 @@ class AddNewTaskScreen extends StatelessWidget{
                             //contact_vm_controller.IsHeDecisionMakerController.value.text = "No";
                             contact_vm_controller.getAccountMaster("");
                             contact_vm_controller.getDecisionRoleMaster();
+                            contact_vm_controller.createAccount.value=true;
                             Get.toNamed(RoutesName.addNewContactMaster_screen);
                           }, icon: Icon(Icons.add)),
                     )

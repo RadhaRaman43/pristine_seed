@@ -34,7 +34,8 @@ class ContactMasterVM extends GetxController{
   String email="";
   RxString isAdminWritePermission = "".obs;
   RxString isHeadofficePermission = "".obs;
-  bool updateContact=false;
+  RxBool updateContact=false.obs;
+  RxBool createAccount=false.obs;
   bool insideOut=false;
   RxString FromPage="".obs;
   String contact_code='';
@@ -240,9 +241,6 @@ class ContactMasterVM extends GetxController{
                     "${AccountMasterGetCode_list[0].permanentAddress!.district??""},"
                     "${AccountMasterGetCode_list[0].permanentAddress!.stateName??""},"
                     "(${AccountMasterGetCode_list[0].permanentAddress!.postCode??""})";
-
-
-
               }
 
             } else {
@@ -298,7 +296,7 @@ class ContactMasterVM extends GetxController{
   }
 
   resetAllContactCreativeField(String flag){
-    updateContact=false;
+    updateContact.value=false;
     pageNumber=0;
     try {
       if (flag == 'Card') {
@@ -425,8 +423,9 @@ class ContactMasterVM extends GetxController{
   upDateContact(String flag, int index, {ContactMstGetListModal? view_contract_list}  ){
 
     try {
-      updateContact = true;
+      updateContact.value = true;
       designation_dropDown.value = true;
+      createAccount.value=false;
       if (flag == 'OutSide') {
         print('Flage...${flag}');
         contact_code = contact_master_list[index].contactCode ?? "";
@@ -469,6 +468,7 @@ class ContactMasterVM extends GetxController{
   contact_title_controller.text = view_contract_list?.contactTitle ?? "";
   designation_name_controller.text = view_contract_list?.designationName ?? "";
   contact_code_controller.text = view_contract_list?.contactCode ?? "";
+  FullAddress_Controller.value.text = view_contract_list?.fullAddress ?? "";
   IsHeDecisionMakerController.value.text = view_contract_list?.contactRole ?? "";
 
   }
