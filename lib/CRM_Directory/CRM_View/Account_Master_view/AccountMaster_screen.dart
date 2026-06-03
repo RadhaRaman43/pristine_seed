@@ -831,7 +831,255 @@ class AccountmasterScreen extends StatelessWidget{
       ),
     );
   }
-  bindAccountOwnerFilter(BuildContext context) {
+
+
+  Widget bindAccountOwnerFilter(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {});
+    return Obx(() {
+      if (accountMaster_page_controller.AccountOwner_controller.value.text.isNotEmpty && accountMaster_page_controller.filterDataChecker.value=='1') {
+        List<String> nameList = accountMaster_page_controller.AccountOwner_controller.value.text.split(',');
+        accountMaster_page_controller.SelectedEmployee_Member_list.value = List.generate(nameList.length, (index) {
+          return EmployeeMemberModel(
+            userFullName: nameList[index].trim(),
+          );
+        });
+      }
+      print("list length ${accountMaster_page_controller.employee_Member_list.length}");
+      final selected = accountMaster_page_controller.SelectedEmployee_Member_list;
+      final selectedText = selected.isEmpty ? null : selected.map((e) =>
+      "${accountMaster_page_controller.isAdminWritePermission=="1"?e.userFullName ?? "":e.fullName ?? ""}(${e.salesPersonEmpCode ?? ""})").join(', ');
+      return GestureDetector(
+        onTap: ()  {
+          openBottomSheet(context);
+        },
+        child: InputDecorator(
+          decoration: InputDecoration(
+            labelText: selectedText != null ?  "Account Owner Name": "", // 👈 Label restored here
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            contentPadding:
+            const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+          ),
+          child: Row(
+            children: [
+              Expanded(
+                child: selectedText == null
+                    ? Text(
+                  "Account Owner Name",
+                  style: GoogleFonts.poppins(
+                    color: Colors.black,
+                    fontSize: AllFontSize.sisxteen,
+                  ),
+                )
+                    : SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Text(
+                    selectedText,
+                    style: const TextStyle(color: Colors.black),
+                  ),
+                ),
+              ),
+              const Icon(Icons.arrow_drop_down),
+            ],
+          ),
+        ),
+      );
+    });
+  }
+
+  openBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(16)),),
+        builder: (context){
+          accountMaster_page_controller.tempSelected.value = [];
+          accountMaster_page_controller.tempSelected.addAll(accountMaster_page_controller.SelectedEmployee_Member_list);
+          accountMaster_page_controller.filtered.value = accountMaster_page_controller.employee_Member_list;
+          return Obx((){
+            accountMaster_page_controller.allSelected.value = accountMaster_page_controller.filtered.isNotEmpty
+                && accountMaster_page_controller.tempSelected.length == accountMaster_page_controller.filtered.length;
+            return Visibility(
+                visible: accountMaster_page_controller.selectOwner.value,
+                child: Padding(
+                  padding: EdgeInsets.only(
+                      bottom: MediaQuery.of(context).viewInsets.bottom),
+                  child: SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.75,
+                    child: Column(
+                      children: [
+                        const SizedBox(height: 8),
+                        Container(
+                          width: 50,
+                          height: 4,
+                          decoration: BoxDecoration(
+                              color: Colors.grey[400],
+                              borderRadius: BorderRadius.circular(2)),
+                        ),
+                        const SizedBox(height: 12),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  'Select Account Owner Name',
+                                  style: GoogleFonts.poppins(
+                                      fontSize: 16, fontWeight: FontWeight.w600,color: Colors.black),
+                                ),
+                              ),
+                              IconButton(onPressed: () {
+                                Navigator.of(context).pop();
+                              }, icon: const Icon(Icons.close,color: AllColors.primaryDark1,weight: 700,))
+
+                            ],
+                          ),
+                        ),
+                        // Search Field
+                        Padding(
+                          padding:
+                          const EdgeInsets.symmetric(horizontal: 16.0),
+                          child: TextField(
+                            controller: accountMaster_page_controller.searchController.value,
+                            decoration: InputDecoration(
+                              hintText: 'Search...',
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8)),
+                              isDense: true,
+                              suffixIcon: accountMaster_page_controller.searchController.value.text.isNotEmpty ? IconButton(
+                                icon: const Icon(Icons.clear),
+                                onPressed: () {
+                                  accountMaster_page_controller.searchController.value.clear();
+                                  if(accountMaster_page_controller.isAdminWritePermission=="1") {
+                                    accountMaster_page_controller.EmployeeMasterGet(accountMaster_page_controller.searchController.value.text);
+                                  }
+                                  else{
+                                    accountMaster_page_controller.filtered.value =accountMaster_page_controller.searchController.value.text.isEmpty ?
+                                    accountMaster_page_controller.employee_Member_list:accountMaster_page_controller.employee_Member_list.where((c) =>
+                                        (c.fullName ?? "").toLowerCase().contains(accountMaster_page_controller.searchController.value.text)).toList();
+                                  }
+
+
+                                },
+                              ) : null,
+                            ),
+                            onChanged: (v)
+                            {
+                              if(accountMaster_page_controller.isAdminWritePermission=="1") {
+                                accountMaster_page_controller.EmployeeMasterGet(accountMaster_page_controller.searchController.value.text);
+                              }
+                              else{
+                                accountMaster_page_controller.filtered.value =accountMaster_page_controller.searchController.value.text.isEmpty ?
+                                accountMaster_page_controller.employee_Member_list:accountMaster_page_controller.employee_Member_list.where((c) =>
+                                    (c.fullName ?? "").toLowerCase().contains(accountMaster_page_controller.searchController.value.text)).toList();
+                              }
+
+                            },
+                          ),
+                        ),
+
+                        const SizedBox(height: 8),
+
+                        // Select All
+                       /* Padding(
+                          padding:
+                          const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: CheckboxListTile(
+                            title:accountMaster_page_controller.allSelected.value?const Text('UnSelect All'): const Text('Select All'),
+                            value: accountMaster_page_controller.allSelected.value,
+                            onChanged: (val) {
+                              if (val == true) {
+                                accountMaster_page_controller.tempSelected.clear();
+                                accountMaster_page_controller.allSelected.value=true;
+                                accountMaster_page_controller.tempSelected.addAll(accountMaster_page_controller.filtered);
+                              } else {
+                                accountMaster_page_controller.allSelected.value=false;
+                                accountMaster_page_controller.tempSelected.clear();
+                              }
+                              accountMaster_page_controller.selectOwner.value=false;
+                              accountMaster_page_controller.selectOwner.value=true;
+                            },
+                          ),
+                        ),*/
+
+                        const Divider(height: 1),
+
+                        // List
+                        Expanded(
+                          child: accountMaster_page_controller.filtered.isEmpty ? const Center(child: Text('No Record Found!')) : ListView.builder(
+                            padding: const EdgeInsets.symmetric(vertical: 8),
+                            itemCount: accountMaster_page_controller.filtered.length,
+                            itemBuilder: (context, idx) {
+                              final item = accountMaster_page_controller.filtered[idx];
+                              accountMaster_page_controller.isSel.value = accountMaster_page_controller.tempSelected.any((s) =>
+                              (accountMaster_page_controller.isAdminWritePermission=="1"?s.userFullName ?? "":s.fullName ?? "") ==
+                                  (accountMaster_page_controller.isAdminWritePermission=="1"?item.userFullName ?? "":item.fullName ?? ""));
+                              return CheckboxListTile(
+                                title: Text("${accountMaster_page_controller.isAdminWritePermission=="1"?
+                                item.userFullName ?? "":item.fullName ?? ""}(${item.salesPersonEmpCode ?? ""})"),
+                                value: accountMaster_page_controller.isSel.value,
+                                onChanged: (v) {
+                                  if (v == true) {
+                                    accountMaster_page_controller.isSel.value=true;
+                                    accountMaster_page_controller.tempSelected.add(item);
+                                  } else {
+                                    accountMaster_page_controller.isSel.value=false;
+                                    accountMaster_page_controller.tempSelected.removeWhere((s) =>
+                                    (accountMaster_page_controller.isAdminWritePermission=="1"?s.userFullName ?? "":s.fullName ?? "") ==
+                                        (accountMaster_page_controller.isAdminWritePermission=="1"?item.userFullName ?? "":item.fullName ?? ""));
+                                    //(s.userFullName ?? "") == (item.userFullName ?? ""));
+                                  }
+                                  accountMaster_page_controller.selectOwner.value=false;
+                                  accountMaster_page_controller.selectOwner.value=true;
+                                },
+                              );
+                            },
+                          ),
+                        ),
+
+                        // Done button
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16.0, vertical: 12),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: ElevatedButton(
+                                  onPressed: () {
+                                    accountMaster_page_controller.SelectedEmployee_Member_list
+                                        .assignAll(accountMaster_page_controller.tempSelected);
+                                    accountMaster_page_controller.AccountOwner_controller.value.text =
+                                        accountMaster_page_controller.tempSelected.map((e) => e.empId).join(', ');
+
+                                    Navigator.of(context).pop();
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: AllColors.primaryDark1,
+                                    shadowColor: AllColors.primaryDark1,
+                                    foregroundColor: AllColors.primaryDark1,
+                                    side: BorderSide(color: AllColors.primaryDark1, width: 1),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                  ),
+                                  child: Text('Done',style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w600,color: Colors.white),),
+
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ));
+          });
+        }
+    );
+  }
+
+ /* bindAccountOwnerFilter(BuildContext context) {
     return Obx((){
       if (accountMaster_page_controller.AccountOwner_controller.value.text.isNotEmpty && accountMaster_page_controller.filterDataChecker.value=='1') {
         List<String> nameList = accountMaster_page_controller.AccountOwner_controller.value.text.split(',');
@@ -886,10 +1134,8 @@ class AccountmasterScreen extends StatelessWidget{
           );
         },
         onChanged: (List<EmployeeMemberModel> selectedList) {
-          accountMaster_page_controller.SelectedEmployee_Member_list.value =
-              selectedList;
-          accountMaster_page_controller.AccountOwner_controller.value.text =
-              selectedList.map((e) => e.empId).join(', ');
+          accountMaster_page_controller.SelectedEmployee_Member_list.value = selectedList;
+          accountMaster_page_controller.AccountOwner_controller.value.text = selectedList.map((e) => e.empId).join(', ');
         },
 
         popupProps: PopupPropsMultiSelection.dialog(
@@ -914,7 +1160,7 @@ class AccountmasterScreen extends StatelessWidget{
       );
     });
 
-  }
+  }*/
 
   Widget bindAccCatogeryTypeDropDown(context){
     return Autocomplete<GetMasterTypeModel>(

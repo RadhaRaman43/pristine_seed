@@ -26,6 +26,9 @@ class FunnelDashboardVm extends GetxController{
   RxBool loading = false.obs;
   RxBool isShimmerLoading = false.obs;
   RxBool isSelectAllClusterValue = true.obs;
+  RxBool selectOwner = true.obs;
+  RxBool allSelected = false.obs;
+  RxBool isSel = false.obs;
   String email = "";
   String isAdminWritePermission = "";
 
@@ -51,6 +54,8 @@ class FunnelDashboardVm extends GetxController{
   RxList<String> selectedSalesStageStatusList = ['ALL','Suspect', 'Prospect', 'Propose'].obs;
   RxList<EmployeeMemberModel> employee_Member_list = <EmployeeMemberModel>[].obs;
   RxList<EmployeeMemberModel> SelectedEmployee_Member_list = <EmployeeMemberModel>[].obs;
+  RxList<EmployeeMemberModel> tempSelected = <EmployeeMemberModel>[].obs;
+  RxList<EmployeeMemberModel> filtered = <EmployeeMemberModel>[].obs;
   RxList<ItemCategoryMstModel> Item_Category_master_list_without_task = <ItemCategoryMstModel>[].obs;
   RxList<ItemCategoryMstModel> SelectedProductCategory_list = <ItemCategoryMstModel>[].obs;
   RxList<ClusterModal> clusterGetByEmailList = <ClusterModal>[].obs;
@@ -61,6 +66,9 @@ class FunnelDashboardVm extends GetxController{
   RxList<AccountMasterModel> SelectedAccount_Master_list=<AccountMasterModel>[].obs;
   RxList<String> quoteAcceptedList = ["ALL","OPEN","WON", "LOSS"].obs;
   RxList<String> isCommitList = ["ALL","YES", "NO"].obs;
+
+  var searchController=TextEditingController().obs;
+
 
   var filterCustomDateController=TextEditingController().obs;
   var AccountOwner_controller=TextEditingController().obs;
@@ -109,7 +117,7 @@ class FunnelDashboardVm extends GetxController{
       getClustersGetByEmail();
       //funnelDashboardData();
 
-      if (this.isAdminWritePermission == 1) {
+      if (this.isAdminWritePermission == '1') {
         EmployeeMasterGet('');
       }
       else {
@@ -437,17 +445,32 @@ class FunnelDashboardVm extends GetxController{
   }
 
   Future<Iterable<EmployeeMemberModel>> EmployeeMasterGet(String query) async {
-    if (query == '') {
+    /*if (query == '') {
       return const Iterable<EmployeeMemberModel>.empty();
+    }*/
+
+    ClusterNameForApi = '';
+    if(clusterName_controller.value.text.isNotEmpty){
+      ClusterNameForApi = clusterName_controller.value.text
+          .split(',')
+          .map((e) => e.trim())
+          .join('|');
+    }
+    RegionNameForApi = '';
+    if(RegionName_controller.value.text.isNotEmpty){
+      RegionNameForApi = RegionName_controller.value.text
+          .split(',')
+          .map((e) => e.trim())
+          .join('|');
     }
     Map data = {
       'filter_name': query,
       'filter_email': "",
       'filter_location_id': '',
       'email_id': email,
-      "filter_cluster_name": "",
-      "filter_region_name": "",
-      'rowsPerPage': 50,
+      "filter_cluster_name": ClusterNameForApi,
+      "filter_region_name": RegionNameForApi,
+      'rowsPerPage': 10,
       'pageNumber': 0,
     };
     String employee_response =await _api.EmployeeMatserGetApiHit(data, sessionManagement);
@@ -462,6 +485,7 @@ class FunnelDashboardVm extends GetxController{
         if (response[0].condition == 'True') {
           print(jsonResponse);
           employee_Member_list.value = response;
+
 
         } else {
           // Utils.sanckBarException('False!', response[0].message!);

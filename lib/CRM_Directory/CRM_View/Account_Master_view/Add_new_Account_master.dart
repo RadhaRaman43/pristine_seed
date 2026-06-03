@@ -205,139 +205,136 @@ class AddNewAccountMaster extends StatelessWidget{
 
       ),
       drawer: CustomDrawer(),
-      floatingActionButton:  Visibility(
-        //visible: accountMaster_page_controller.isAdminWritePermission=='0'?true:false,
-         visible: accountMaster_page_controller.addDraftAccount.value!="FromDraft" && accountMaster_page_controller.isHeadofficePermission!='1'?true:false,
-        child: Container(
-          margin: EdgeInsets.only(left: 30),
-          child: DefaultButton(
-            press: (){
-              if(accountMaster_page_controller.account_name_controller.text.isEmpty || accountMaster_page_controller.account_name_controller == null){
-                Utils.sanckBarError('Customer Name!', "Please Enter Customer Name");
-                return  ;
-              }
-              if(defaultFullName == "" && accountMaster_page_controller.account_owner_Controller.text.isEmpty){
-                Utils.sanckBarError('Account Owner!', "Please Enter account Owner");
-                return  ;
-              }
-              if(accountMaster_page_controller.account_type_controller.text.isEmpty || accountMaster_page_controller.account_type_controller == null){
-                Utils.sanckBarError('Account Type!', "Please Enter Account Type");
-                return  ;
-              }
-              if(accountMaster_page_controller.PhoneNo_Controller.text.isEmpty || accountMaster_page_controller.PhoneNo_Controller == null){
-                Utils.sanckBarError('Phone No.!', "Please Enter Phone No.");
-                if(accountMaster_page_controller.PhoneNo_Controller.text.isNotEmpty){
-                  if(accountMaster_page_controller.PhoneNo_Controller.text.length < 10){
-                    Utils.sanckBarError('Phone No.!', "Please Enter 10 Digit Phone No");
-                    return  ;
-                  }
-                }
-                return  ;
-              }
-
-             /* if(accountMaster_page_controller.EmailId_Controller.text.isNotEmpty && EmailValidator.validate(accountMaster_page_controller.EmailId_Controller.text) == false){
-                Utils.sanckBarError('Email ID!', "Please Enter A valid Email ID");
-                return  ;
-              }*/
-
-              if(accountMaster_page_controller.account_cat_type_controller.text.isEmpty || accountMaster_page_controller.account_cat_type_controller == null){
-                Utils.sanckBarError('Account Category Type!', "Please Enter Account Category Type");
-                return  ;
-              }
-
-              if(accountMaster_page_controller.comp_prof_type_controller.value.text.isEmpty || accountMaster_page_controller.comp_prof_type_controller.value.text == null){
-                Utils.sanckBarError('Company profile Type!', "Please Enter Company profile Type");
-                return  ;
-              }
-
-
-              if(!accountMaster_page_controller.compProfileRemrk.value  && accountMaster_page_controller.comp_prof_sub_type_controller.value.text.isEmpty || accountMaster_page_controller.comp_prof_sub_type_controller == null){
-                Utils.sanckBarError('Company profile sub Type!', "Please Enter Company profile sub Type");
-                return  ;
-              }
-
-              if(accountMaster_page_controller.gst_registration_type_controller.value.text.isEmpty || accountMaster_page_controller.gst_registration_type_controller == null){
-                Utils.sanckBarError('GST Type!', "Please Enter GST Type");
-                return  ;
-              }
-
-              if(accountMaster_page_controller.gst_registration_type_controller.value.text == 'Registered' && accountMaster_page_controller.GstNo_Controller.text.isEmpty){
-                Utils.sanckBarError('GST No.!', "Please Enter A valid GST No.");
-                return  ;
-              }
-
-              if(accountMaster_page_controller.GstNo_Controller.text.isNotEmpty && GSTValidator.validate(accountMaster_page_controller.GstNo_Controller.text) == false){
-                Utils.sanckBarError('GST No.!', "Please Enter A valid GST No.");
-                return  ;
-              }
-
-              if(accountMaster_page_controller.gst_registration_type_controller.value.text == 'Registered' && accountMaster_page_controller.PanNo_Controller.value.text != accountMaster_page_controller.GstPanNo.value){
-                Utils.sanckBarError('Pan No!', "Please Enter Valid Pan No");
-                return  ;
-              }
-
-              //debugPrint("${accountMaster_page_controller.gst_registration_type_controller.value.text}");
-              //debugPrint("${accountMaster_page_controller.PanNo_Controller.value.text.length }");
-              if(accountMaster_page_controller.gst_registration_type_controller.value.text == 'UnRegistered' &&
-                  accountMaster_page_controller.PanNo_Controller.value.text.length !=10 &&
-                  accountMaster_page_controller.PanNo_Controller.value.text.isNotEmpty){
-                Utils.sanckBarError('Pan No!', "Pan No Should be in 10 digits");
-                return  ;
-              }
-              if(accountMaster_page_controller.PanNo_Controller.value.text.isNotEmpty && !accountMaster_page_controller.isValidPan(accountMaster_page_controller.PanNo_Controller.value.text)){
-                Utils.sanckBarError('Pan No!', "Please Enter valid PAN No.");
-                return ;
-              }
-
-              if(accountMaster_page_controller.IfscCode_Controller.text.isNotEmpty){
-                if(accountMaster_page_controller.IfscCode_Controller.text.length < 11){
-                  Utils.sanckBarError('IFSC Code!', "IFSC Code Should be in 11 digits");
+      floatingActionButton:  accountMaster_page_controller.addDraftAccount.value!="FromDraft"
+          && accountMaster_page_controller.isHeadofficePermission!='1'? Container(
+            margin: EdgeInsets.only(left: 30),
+            child: DefaultButton(
+              press: (){
+                if(accountMaster_page_controller.account_name_controller.text.isEmpty || accountMaster_page_controller.account_name_controller == null){
+                  Utils.sanckBarError('Customer Name!', "Please Enter Customer Name");
                   return  ;
                 }
-                if (!accountMaster_page_controller.isValidIFSC(accountMaster_page_controller.IfscCode_Controller.text)) {
-                  Utils.sanckBarError('IFSC Code!', "Please Enter valid IFSC Code");
+                if(defaultFullName == "" && accountMaster_page_controller.account_owner_Controller.text.isEmpty){
+                  Utils.sanckBarError('Account Owner!', "Please Enter account Owner");
+                  return  ;
+                }
+                if(accountMaster_page_controller.account_type_controller.text.isEmpty || accountMaster_page_controller.account_type_controller == null){
+                  Utils.sanckBarError('Account Type!', "Please Enter Account Type");
+                  return  ;
+                }
+                if(accountMaster_page_controller.PhoneNo_Controller.text.isEmpty || accountMaster_page_controller.PhoneNo_Controller == null){
+                  Utils.sanckBarError('Phone No.!', "Please Enter Phone No.");
+                  if(accountMaster_page_controller.PhoneNo_Controller.text.isNotEmpty){
+                    if(accountMaster_page_controller.PhoneNo_Controller.text.length < 10){
+                      Utils.sanckBarError('Phone No.!', "Please Enter 10 Digit Phone No");
+                      return  ;
+                    }
+                  }
+                  return  ;
+                }
+
+               /* if(accountMaster_page_controller.EmailId_Controller.text.isNotEmpty && EmailValidator.validate(accountMaster_page_controller.EmailId_Controller.text) == false){
+                  Utils.sanckBarError('Email ID!', "Please Enter A valid Email ID");
+                  return  ;
+                }*/
+
+                if(accountMaster_page_controller.account_cat_type_controller.text.isEmpty || accountMaster_page_controller.account_cat_type_controller == null){
+                  Utils.sanckBarError('Account Category Type!', "Please Enter Account Category Type");
+                  return  ;
+                }
+
+                if(accountMaster_page_controller.comp_prof_type_controller.value.text.isEmpty || accountMaster_page_controller.comp_prof_type_controller.value.text == null){
+                  Utils.sanckBarError('Company profile Type!', "Please Enter Company profile Type");
+                  return  ;
+                }
+
+
+                if(!accountMaster_page_controller.compProfileRemrk.value  && accountMaster_page_controller.comp_prof_sub_type_controller.value.text.isEmpty || accountMaster_page_controller.comp_prof_sub_type_controller == null){
+                  Utils.sanckBarError('Company profile sub Type!', "Please Enter Company profile sub Type");
+                  return  ;
+                }
+
+                if(accountMaster_page_controller.gst_registration_type_controller.value.text.isEmpty || accountMaster_page_controller.gst_registration_type_controller == null){
+                  Utils.sanckBarError('GST Type!', "Please Enter GST Type");
+                  return  ;
+                }
+
+                if(accountMaster_page_controller.gst_registration_type_controller.value.text == 'Registered' && accountMaster_page_controller.GstNo_Controller.text.isEmpty){
+                  Utils.sanckBarError('GST No.!', "Please Enter A valid GST No.");
+                  return  ;
+                }
+
+                if(accountMaster_page_controller.GstNo_Controller.text.isNotEmpty && GSTValidator.validate(accountMaster_page_controller.GstNo_Controller.text) == false){
+                  Utils.sanckBarError('GST No.!', "Please Enter A valid GST No.");
+                  return  ;
+                }
+
+                if(accountMaster_page_controller.gst_registration_type_controller.value.text == 'Registered' && accountMaster_page_controller.PanNo_Controller.value.text != accountMaster_page_controller.GstPanNo.value){
+                  Utils.sanckBarError('Pan No!', "Please Enter Valid Pan No");
+                  return  ;
+                }
+
+                //debugPrint("${accountMaster_page_controller.gst_registration_type_controller.value.text}");
+                //debugPrint("${accountMaster_page_controller.PanNo_Controller.value.text.length }");
+                if(accountMaster_page_controller.gst_registration_type_controller.value.text == 'UnRegistered' &&
+                    accountMaster_page_controller.PanNo_Controller.value.text.length !=10 &&
+                    accountMaster_page_controller.PanNo_Controller.value.text.isNotEmpty){
+                  Utils.sanckBarError('Pan No!', "Pan No Should be in 10 digits");
+                  return  ;
+                }
+                if(accountMaster_page_controller.PanNo_Controller.value.text.isNotEmpty && !accountMaster_page_controller.isValidPan(accountMaster_page_controller.PanNo_Controller.value.text)){
+                  Utils.sanckBarError('Pan No!', "Please Enter valid PAN No.");
                   return ;
                 }
-              }
-              if(accountMaster_page_controller.Account_Master_list != null &&
-                  accountMaster_page_controller.Account_Master_list.isNotEmpty && accountMaster_page_controller.Account_Master_list[0].isManager == 1 && accountMaster_page_controller.IsActive_controller.text.isEmpty || accountMaster_page_controller.IsActive_controller == null){
-                Utils.sanckBarError('Active!', "Please Enter Active Type");
-                return  ;
-              }
 
-              if(accountMaster_page_controller.PostCode_Controller.text.isEmpty || accountMaster_page_controller.PostCode_Controller == null){
-                Utils.sanckBarError('Pin Code!', "Please Enter Pin Code");
-                return  ;
-              }
+                if(accountMaster_page_controller.IfscCode_Controller.text.isNotEmpty){
+                  if(accountMaster_page_controller.IfscCode_Controller.text.length < 11){
+                    Utils.sanckBarError('IFSC Code!', "IFSC Code Should be in 11 digits");
+                    return  ;
+                  }
+                  if (!accountMaster_page_controller.isValidIFSC(accountMaster_page_controller.IfscCode_Controller.text)) {
+                    Utils.sanckBarError('IFSC Code!', "Please Enter valid IFSC Code");
+                    return ;
+                  }
+                }
+                if(accountMaster_page_controller.Account_Master_list != null &&
+                    accountMaster_page_controller.Account_Master_list.isNotEmpty && accountMaster_page_controller.Account_Master_list[0].isManager == 1 && accountMaster_page_controller.IsActive_controller.text.isEmpty || accountMaster_page_controller.IsActive_controller == null){
+                  Utils.sanckBarError('Active!', "Please Enter Active Type");
+                  return  ;
+                }
 
-              if(accountMaster_page_controller.State_Controller.text.isEmpty || accountMaster_page_controller.State_Controller == null){
-                Utils.sanckBarError('Billing State!', "Please Enter Billing State");
-                return  ;
-              }else if(accountMaster_page_controller.gst_registration_type_controller.value.text == 'Registered' && accountMaster_page_controller.GovtStateCode.value != accountMaster_page_controller.GstStateCode.value){
-                Utils.sanckBarError('Wrong State!', "Please Enter Valid State");
-                return  ;
-              }
-              if(accountMaster_page_controller.City_Controller.text.isEmpty || accountMaster_page_controller.City_Controller == null){
-                Utils.sanckBarError('City!', "Please Enter City");
-                return  ;
-              }
+                if(accountMaster_page_controller.PostCode_Controller.text.isEmpty || accountMaster_page_controller.PostCode_Controller == null){
+                  Utils.sanckBarError('Pin Code!', "Please Enter Pin Code");
+                  return  ;
+                }
 
-              if(accountMaster_page_controller.District_Controller.text.isEmpty || accountMaster_page_controller.District_Controller == null){
-                Utils.sanckBarError('District!', "Please Enter District");
-                return  ;
-              }
+                if(accountMaster_page_controller.State_Controller.text.isEmpty || accountMaster_page_controller.State_Controller == null){
+                  Utils.sanckBarError('Billing State!', "Please Enter Billing State");
+                  return  ;
+                }else if(accountMaster_page_controller.gst_registration_type_controller.value.text == 'Registered' && accountMaster_page_controller.GovtStateCode.value != accountMaster_page_controller.GstStateCode.value){
+                  Utils.sanckBarError('Wrong State!', "Please Enter Valid State");
+                  return  ;
+                }
+                if(accountMaster_page_controller.City_Controller.text.isEmpty || accountMaster_page_controller.City_Controller == null){
+                  Utils.sanckBarError('City!', "Please Enter City");
+                  return  ;
+                }
 
-              /* if(accountMaster_page_controller.TatResponse_Controller.text.isEmpty || accountMaster_page_controller.TatResponse_Controller == null){
-                Utils.sanckBarError('Tat Response!', "Please Enter Tat Response Type");
-                return  ;
-              }*/
+                if(accountMaster_page_controller.District_Controller.text.isEmpty || accountMaster_page_controller.District_Controller == null){
+                  Utils.sanckBarError('District!', "Please Enter District");
+                  return  ;
+                }
 
-              accountMaster_page_controller.AccountMstUploaderApiHit('Create', "", accountMaster_page_controller.SalesRepresentativeEmail, accountMaster_page_controller.RegionalHeadEmail);
-            },
-            text: "${headerTitle} Account",
-          ),
-        ),
-      ),
+                /* if(accountMaster_page_controller.TatResponse_Controller.text.isEmpty || accountMaster_page_controller.TatResponse_Controller == null){
+                  Utils.sanckBarError('Tat Response!', "Please Enter Tat Response Type");
+                  return  ;
+                }*/
+
+                accountMaster_page_controller.AccountMstUploaderApiHit('Create', "", accountMaster_page_controller.SalesRepresentativeEmail, accountMaster_page_controller.RegionalHeadEmail);
+              },
+              text: "${headerTitle} Account",
+            ),
+          ):null,
       body: Container(
         padding: EdgeInsets.only(bottom: 70),
         width: double.infinity,

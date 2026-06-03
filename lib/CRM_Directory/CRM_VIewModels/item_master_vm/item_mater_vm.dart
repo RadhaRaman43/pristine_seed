@@ -242,6 +242,15 @@ class ItemMasterVm extends GetxController{
     List<Map<String,dynamic>> items = [];
     //print("excel file upload ${itemList[0].accountCode??""} and active ${itemList[0].active??""}");
     if(updateExcel!= null && updateExcel=="uploadExcel"){
+      if(itemList.length<=0){
+        Utils.sanckBarError("Input error!", "Please enter valid values");
+      }
+      else if(itemList[0].itemCode==null && itemList[0].itemCode!.isEmpty){
+        Utils.sanckBarError("Item Code!", "Please enter valid item code");
+      }
+      else if(itemList[0].categoryName==null && itemList[0].categoryName!.isEmpty){
+        Utils.sanckBarError("Item Code!", "Please enter valid item code");
+      }
       for(int i=0;i<itemList.length;i++){
         final item = itemList[i];
         String hsn_code = double.parse(item.hsnCode?? "0").toInt().toString();
@@ -395,7 +404,7 @@ class ItemMasterVm extends GetxController{
       }
     } catch (e) {
       Utils.sanckBarError("Exception error!", e.toString());
-      print('Exception..$e');
+      print('Exception..${e.toString()}');
     }
     finally{
       loading.value = false;
@@ -836,15 +845,23 @@ class ItemMasterVm extends GetxController{
       if (file == null){
         return;
       }
-      print("File name ${file}");
       List<Map<String, dynamic>> excelData = await readExcelFile(file);
-      List<NonStandardItemDataModal> modelList = convertToModel(excelData);
-      if(modelList[0].accountCode!.isNotEmpty)
-      updateItemMasterCreateFromCRM(item, "uploadExcel",modelList);
+      if(excelData.length>=1 && excelData!=null) {
+        List<NonStandardItemDataModal> modelList = convertToModel(excelData);
+        if (modelList[0].accountCode!.isNotEmpty) {
+          updateItemMasterCreateFromCRM(item, "uploadExcel", modelList);
+        }
+        else{
+          Utils.sanckBarError("Data Input Error!", "Can't insert null value into column 'account code'");
+        }
+      }
+      else{
+        Utils.sanckBarError("Data Input Error!", "Can't insert null value into column");
+      }
 
     }catch(e){
       Utils.sanckBarError("failed to upload file!", e.toString());
-      print(e.toString());
+      print("fa........${e.toString() }");
     }
   }
 
@@ -889,15 +906,14 @@ class ItemMasterVm extends GetxController{
 
       for (int i = 1; i < rows.length; i++) {
         Map<String, dynamic> rowMap = {};
-
         for (int j = 0; j < headers.length; j++) {
+            String header = headers[j]?.value?.toString() ?? "";
+            String value = rows[i].length > j ? rows[i][j]?.value?.toString() ?? "" : "";
+            rowMap[header] = value;
 
-            rowMap[headers[j]!.value.toString()] = rows[i][j]?.value.toString();
-
-
-          debugPrint("value...... ${rows[i][j]?.value.toString()} and ${headers[j]!.value.toString()}");
+            //rowMap[headers[j]!.value.toString()] = rows[i][j]?.value.toString();
+          //debugPrint("value...... ${rows[i][j]?.value.toString()} and ${headers[j]!.value.toString()}");
         }
-
         excelData.add(rowMap);
       }
     }

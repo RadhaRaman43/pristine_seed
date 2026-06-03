@@ -1291,9 +1291,7 @@ class FunnelDashboardView extends StatelessWidget{
 
   bindCustomerNameFilter(BuildContext context) {
     return Obx(() {
-      if (dashboard_view_Controller.CustomerName_controller.value.text
-          .isNotEmpty &&
-          dashboard_view_Controller.filterDataChecker.value == '1') {
+      if (dashboard_view_Controller.CustomerName_controller.value.text.isNotEmpty && dashboard_view_Controller.filterDataChecker.value == '1') {
         List<String> nameList = dashboard_view_Controller
             .CustomerName_controller.value.text.split(',');
 
@@ -1381,197 +1379,23 @@ class FunnelDashboardView extends StatelessWidget{
   }
 
   Widget bindAccountOwnerFilter(BuildContext context) {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-
-    });
-
+    WidgetsBinding.instance.addPostFrameCallback((_) {});
     return Obx(() {
       if (dashboard_view_Controller.AccountOwner_controller.value.text.isNotEmpty && dashboard_view_Controller.filterDataChecker.value=='1') {
         List<String> nameList = dashboard_view_Controller.AccountOwner_controller.value.text.split(',');
-
-        dashboard_view_Controller.SelectedEmployee_Member_list.value =
-            List.generate(nameList.length, (index) {
-              return EmployeeMemberModel(
-                fullName: nameList[index].trim(),
-              );
-            });
-      }
-      final selected = dashboard_view_Controller.SelectedEmployee_Member_list;
-      final selectedText = selected.isEmpty ? null : selected.map((e) => "${e.fullName ?? ""}(${e.salesPersonEmpCode ?? ""})").join(', ');
-
-      return GestureDetector(
-        onTap: () async {
-          await showModalBottomSheet(
-            context: context,
-            isScrollControlled: true,
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-            ),
-            builder: (context) {
-              final searchController = TextEditingController();
-              final tempSelected = <EmployeeMemberModel>[];
-              tempSelected.addAll(dashboard_view_Controller.SelectedEmployee_Member_list);
-
-              List<EmployeeMemberModel> allItems =
-                  dashboard_view_Controller.employee_Member_list;
-
-              return StatefulBuilder(builder: (context, setState) {
-                final query = searchController.text.toLowerCase();
-                final filtered = query.isEmpty ? allItems : allItems.where((c) =>
-                    (c.fullName ?? "").toLowerCase().contains(query)).toList();
-
-                final allSelected = allItems.isNotEmpty && tempSelected.length == allItems.length;
-
-                return Padding(
-                  padding: EdgeInsets.only(
-                      bottom: MediaQuery.of(context).viewInsets.bottom),
-                  child: SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.75,
-                    child: Column(
-                      children: [
-                        const SizedBox(height: 8),
-                        Container(
-                          width: 50,
-                          height: 4,
-                          decoration: BoxDecoration(
-                              color: Colors.grey[400],
-                              borderRadius: BorderRadius.circular(2)),
-                        ),
-                        const SizedBox(height: 12),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: Text(
-                                  'Select Sale Cycle Owner',
-                                  style: GoogleFonts.poppins(
-                                      fontSize: 16, fontWeight: FontWeight.w600,color: Colors.black),
-                                ),
-                              ),
-                              IconButton(onPressed: () {
-                                Navigator.of(context).pop();
-                              }, icon: const Icon(Icons.close,color: AllColors.primaryDark1,weight: 700,))
-
-                            ],
-                          ),
-                        ),
-
-                        // Search Field
-                        Padding(
-                          padding:
-                          const EdgeInsets.symmetric(horizontal: 16.0),
-                          child: TextField(
-                            controller: searchController,
-                            decoration: InputDecoration(
-                              hintText: 'Search...',
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(8)),
-                              isDense: true,
-                              suffixIcon: searchController.text.isNotEmpty ? IconButton(
-                                icon: const Icon(Icons.clear),
-                                onPressed: () {
-                                  searchController.clear();
-                                  setState(() {});
-                                },
-                              ) : null,
-                            ),
-                            onChanged: (v) => setState(() {}),
-                          ),
-                        ),
-
-                        const SizedBox(height: 8),
-
-                        // Select All
-                        Padding(
-                          padding:
-                          const EdgeInsets.symmetric(horizontal: 8.0),
-                          child: CheckboxListTile(
-                            title: const Text('Select All'),
-                            value: allSelected,
-                            onChanged: (val) {
-                              setState(() {
-                                if (val == true) {
-                                  tempSelected.clear();
-                                  tempSelected.addAll(allItems);
-                                } else {
-                                  tempSelected.clear();
-                                }
-                              });
-                            },
-                          ),
-                        ),
-
-                        const Divider(height: 1),
-
-                        // List
-                        Expanded(
-                          child: filtered.isEmpty ? const Center(child: Text('No Record Found!')) : ListView.builder(
-                            padding:
-                            const EdgeInsets.symmetric(vertical: 8),
-                            itemCount: filtered.length,
-                            itemBuilder: (context, idx) {
-                              final item = filtered[idx];
-                              final isSel = tempSelected.any((s) =>
-                              (s.fullName ?? "") ==
-                                  (item.fullName ?? ""));
-                              return CheckboxListTile(
-                                title: Text("${item.fullName ?? ""}(${item.salesPersonEmpCode ?? ""})"),
-                                value: isSel,
-                                onChanged: (v) {
-                                  setState(() {
-                                    if (v == true) {
-                                      if (!isSel) tempSelected.add(item);
-                                    } else {
-                                      tempSelected.removeWhere((s) =>
-                                      (s.fullName ?? "") == (item.fullName ?? ""));
-                                    }
-                                  });
-                                },
-                              );
-                            },
-                          ),
-                        ),
-
-                        // Done button
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 16.0, vertical: 12),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: ElevatedButton(
-                                  onPressed: () {
-                                    dashboard_view_Controller.SelectedEmployee_Member_list
-                                        .assignAll(tempSelected);
-                                    dashboard_view_Controller.AccountOwner_controller.value.text =
-                                        tempSelected.map((e) => e.empId).join(', ');
-
-                                    Navigator.of(context).pop();
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: AllColors.primaryDark1,
-                                    shadowColor: AllColors.primaryDark1,
-                                    foregroundColor: AllColors.primaryDark1,
-                                    side: BorderSide(color: AllColors.primaryDark1, width: 1),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20),
-                                    ),
-                                  ),
-                                  child: Text('Done',style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w600,color: Colors.white),),
-
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              });
-            },
+        dashboard_view_Controller.SelectedEmployee_Member_list.value = List.generate(nameList.length, (index) {
+          return EmployeeMemberModel(
+            userFullName: nameList[index].trim(),
           );
+        });
+      }
+      print("list length ${dashboard_view_Controller.employee_Member_list.length}");
+      final selected = dashboard_view_Controller.SelectedEmployee_Member_list;
+      final selectedText = selected.isEmpty ? null : selected.map((e) =>
+      "${dashboard_view_Controller.isAdminWritePermission=="1"?e.userFullName ?? "":e.fullName ?? ""}(${e.salesPersonEmpCode ?? ""})").join(', ');
+      return GestureDetector(
+        onTap: ()  {
+          openBottomSheet(context);
         },
         child: InputDecorator(
           decoration: InputDecoration(
@@ -1608,6 +1432,423 @@ class FunnelDashboardView extends StatelessWidget{
       );
     });
   }
+
+  openBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(16)),),
+        builder: (context){
+          dashboard_view_Controller.tempSelected.value = [];
+          dashboard_view_Controller.tempSelected.addAll(dashboard_view_Controller.SelectedEmployee_Member_list);
+          dashboard_view_Controller.filtered.value = dashboard_view_Controller.employee_Member_list;
+          return Obx((){
+            dashboard_view_Controller.allSelected.value = dashboard_view_Controller.filtered.isNotEmpty
+                && dashboard_view_Controller.tempSelected.length == dashboard_view_Controller.filtered.length;
+            return Visibility(
+              visible: dashboard_view_Controller.selectOwner.value,
+                child: Padding(
+                  padding: EdgeInsets.only(
+                      bottom: MediaQuery.of(context).viewInsets.bottom),
+                  child: SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.75,
+                    child: Column(
+                      children: [
+                        const SizedBox(height: 8),
+                        Container(
+                          width: 50,
+                          height: 4,
+                          decoration: BoxDecoration(
+                              color: Colors.grey[400],
+                              borderRadius: BorderRadius.circular(2)),
+                        ),
+                        const SizedBox(height: 12),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  'Select Sale Cycle Owner',
+                                  style: GoogleFonts.poppins(
+                                      fontSize: 16, fontWeight: FontWeight.w600,color: Colors.black),
+                                ),
+                              ),
+                              IconButton(onPressed: () {
+                                Navigator.of(context).pop();
+                              }, icon: const Icon(Icons.close,color: AllColors.primaryDark1,weight: 700,))
+
+                            ],
+                          ),
+                        ),
+                        // Search Field
+                        Padding(
+                          padding:
+                          const EdgeInsets.symmetric(horizontal: 16.0),
+                          child: TextField(
+                            controller: dashboard_view_Controller.searchController.value,
+                            decoration: InputDecoration(
+                              hintText: 'Search...',
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8)),
+                              isDense: true,
+                              suffixIcon: dashboard_view_Controller.searchController.value.text.isNotEmpty ? IconButton(
+                                icon: const Icon(Icons.clear),
+                                onPressed: () {
+                                  dashboard_view_Controller.searchController.value.clear();
+                                  if(dashboard_view_Controller.isAdminWritePermission=="1") {
+                                    dashboard_view_Controller.EmployeeMasterGet(dashboard_view_Controller.searchController.value.text);
+                                  }
+                                  else{
+                                    dashboard_view_Controller.filtered.value =dashboard_view_Controller.searchController.value.text.isEmpty ?
+                                    dashboard_view_Controller.employee_Member_list:dashboard_view_Controller.employee_Member_list.where((c) =>
+                                        (c.fullName ?? "").toLowerCase().contains(dashboard_view_Controller.searchController.value.text)).toList();
+                                  }
+
+
+                                },
+                              ) : null,
+                            ),
+                            onChanged: (v)
+                            {
+                              if(dashboard_view_Controller.isAdminWritePermission=="1") {
+                                dashboard_view_Controller.EmployeeMasterGet(dashboard_view_Controller.searchController.value.text);
+                              }
+                              else{
+                                dashboard_view_Controller.filtered.value =dashboard_view_Controller.searchController.value.text.isEmpty ?
+                                dashboard_view_Controller.employee_Member_list:dashboard_view_Controller.employee_Member_list.where((c) =>
+                                    (c.fullName ?? "").toLowerCase().contains(dashboard_view_Controller.searchController.value.text)).toList();
+                              }
+
+                            },
+                          ),
+                        ),
+
+                        const SizedBox(height: 8),
+
+                        // Select All
+                        Padding(
+                          padding:
+                          const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: CheckboxListTile(
+                            title:dashboard_view_Controller.allSelected.value?const Text('UnSelect All'): const Text('Select All'),
+                            value: dashboard_view_Controller.allSelected.value,
+                            onChanged: (val) {
+                              if (val == true) {
+                                dashboard_view_Controller.tempSelected.clear();
+                                dashboard_view_Controller.allSelected.value=true;
+                                dashboard_view_Controller.tempSelected.addAll(dashboard_view_Controller.filtered);
+                              } else {
+                                dashboard_view_Controller.allSelected.value=false;
+                                dashboard_view_Controller.tempSelected.clear();
+                              }
+                              dashboard_view_Controller.selectOwner.value=false;
+                              dashboard_view_Controller.selectOwner.value=true;
+                            },
+                          ),
+                        ),
+
+                        const Divider(height: 1),
+
+                        // List
+                        Expanded(
+                          child: dashboard_view_Controller.filtered.isEmpty ? const Center(child: Text('No Record Found!')) : ListView.builder(
+                            padding: const EdgeInsets.symmetric(vertical: 8),
+                            itemCount: dashboard_view_Controller.filtered.length,
+                            itemBuilder: (context, idx) {
+                              final item = dashboard_view_Controller.filtered[idx];
+                              dashboard_view_Controller.isSel.value = dashboard_view_Controller.tempSelected.any((s) =>
+                              (dashboard_view_Controller.isAdminWritePermission=="1"?s.userFullName ?? "":s.fullName ?? "") ==
+                                  (dashboard_view_Controller.isAdminWritePermission=="1"?item.userFullName ?? "":item.fullName ?? ""));
+                              return CheckboxListTile(
+                                title: Text("${dashboard_view_Controller.isAdminWritePermission=="1"?
+                                item.userFullName ?? "":item.fullName ?? ""}(${item.salesPersonEmpCode ?? ""})"),
+                                value: dashboard_view_Controller.isSel.value,
+                                onChanged: (v) {
+                                    if (v == true) {
+                                      dashboard_view_Controller.isSel.value=true;
+                                      dashboard_view_Controller.tempSelected.add(item);
+                                    } else {
+                                      dashboard_view_Controller.isSel.value=false;
+                                      dashboard_view_Controller.tempSelected.removeWhere((s) =>
+                                      (dashboard_view_Controller.isAdminWritePermission=="1"?s.userFullName ?? "":s.fullName ?? "") ==
+                                          (dashboard_view_Controller.isAdminWritePermission=="1"?item.userFullName ?? "":item.fullName ?? ""));
+                                      //(s.userFullName ?? "") == (item.userFullName ?? ""));
+                                    }
+                                    dashboard_view_Controller.selectOwner.value=false;
+                                    dashboard_view_Controller.selectOwner.value=true;
+                                },
+                              );
+                            },
+                          ),
+                        ),
+
+                        // Done button
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16.0, vertical: 12),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: ElevatedButton(
+                                  onPressed: () {
+                                    dashboard_view_Controller.SelectedEmployee_Member_list
+                                        .assignAll(dashboard_view_Controller.tempSelected);
+                                    dashboard_view_Controller.AccountOwner_controller.value.text =
+                                        dashboard_view_Controller.tempSelected.map((e) => e.empId).join(', ');
+
+                                    Navigator.of(context).pop();
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: AllColors.primaryDark1,
+                                    shadowColor: AllColors.primaryDark1,
+                                    foregroundColor: AllColors.primaryDark1,
+                                    side: BorderSide(color: AllColors.primaryDark1, width: 1),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                  ),
+                                  child: Text('Done',style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w600,color: Colors.white),),
+
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ));
+          });
+        }
+    );
+  }
+
+
+  // Widget bindAccountOwnerFilter(BuildContext context) {
+  //   WidgetsBinding.instance.addPostFrameCallback((_) {});
+  //   return Obx(() {
+  //     if (dashboard_view_Controller.AccountOwner_controller.value.text.isNotEmpty && dashboard_view_Controller.filterDataChecker.value=='1') {
+  //       List<String> nameList = dashboard_view_Controller.AccountOwner_controller.value.text.split(',');
+  //       dashboard_view_Controller.SelectedEmployee_Member_list.value = List.generate(nameList.length, (index) {
+  //             return EmployeeMemberModel(
+  //               userFullName: nameList[index].trim(),
+  //             );
+  //           });
+  //     }
+  //     print("list length ${dashboard_view_Controller.employee_Member_list.length}");
+  //     final selected = dashboard_view_Controller.SelectedEmployee_Member_list;
+  //     final selectedText = selected.isEmpty ? null : selected.map((e) => "${e.userFullName ?? ""}(${e.salesPersonEmpCode ?? ""})").join(', ');
+  //     return GestureDetector(
+  //       onTap: () async {
+  //         await showModalBottomSheet(
+  //           context: context,
+  //           isScrollControlled: true,
+  //           shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(16)),),
+  //           builder: (context) {
+  //             final searchController = TextEditingController();
+  //             final tempSelected = <EmployeeMemberModel>[];
+  //             tempSelected.addAll(dashboard_view_Controller.SelectedEmployee_Member_list);
+  //             List<EmployeeMemberModel> allItems = dashboard_view_Controller.employee_Member_list;
+  //
+  //             return StatefulBuilder(builder: (context, setState) {
+  //               final query = searchController.text.toLowerCase();
+  //               final  filtered = allItems;
+  //               /*final filtered = query.isEmpty ? allItems:allItems.where((c) =>
+  //                   (c.fullName ?? "").toLowerCase().contains(query)).toList();*/
+  //               final allSelected = allItems.isNotEmpty && tempSelected.length == allItems.length;
+  //               return Padding(
+  //                 padding: EdgeInsets.only(
+  //                     bottom: MediaQuery.of(context).viewInsets.bottom),
+  //                 child: SizedBox(
+  //                   height: MediaQuery.of(context).size.height * 0.75,
+  //                   child: Column(
+  //                     children: [
+  //                       const SizedBox(height: 8),
+  //                       Container(
+  //                         width: 50,
+  //                         height: 4,
+  //                         decoration: BoxDecoration(
+  //                             color: Colors.grey[400],
+  //                             borderRadius: BorderRadius.circular(2)),
+  //                       ),
+  //                       const SizedBox(height: 12),
+  //                       Padding(
+  //                         padding: const EdgeInsets.symmetric(horizontal: 16.0),
+  //                         child: Row(
+  //                           children: [
+  //                             Expanded(
+  //                               child: Text(
+  //                                 'Select Sale Cycle Owner',
+  //                                 style: GoogleFonts.poppins(
+  //                                     fontSize: 16, fontWeight: FontWeight.w600,color: Colors.black),
+  //                               ),
+  //                             ),
+  //                             IconButton(onPressed: () {
+  //                               Navigator.of(context).pop();
+  //                             }, icon: const Icon(Icons.close,color: AllColors.primaryDark1,weight: 700,))
+  //
+  //                           ],
+  //                         ),
+  //                       ),
+  //                       // Search Field
+  //                       Padding(
+  //                         padding:
+  //                         const EdgeInsets.symmetric(horizontal: 16.0),
+  //                         child: TextField(
+  //                           controller: searchController,
+  //                           decoration: InputDecoration(
+  //                             hintText: 'Search...',
+  //                             border: OutlineInputBorder(
+  //                                 borderRadius: BorderRadius.circular(8)),
+  //                             isDense: true,
+  //                             suffixIcon: searchController.text.isNotEmpty ? IconButton(
+  //                               icon: const Icon(Icons.clear),
+  //                               onPressed: () {
+  //                                 searchController.clear();
+  //                                 setState(() {});
+  //                               },
+  //                             ) : null,
+  //                           ),
+  //                           onChanged: (v)
+  //                           {
+  //                             dashboard_view_Controller.EmployeeMasterGet(searchController.text);
+  //                             setState(() {});
+  //
+  //                             /*=> setState(() {
+  //                             dashboard_view_Controller.EmployeeMasterGet(searchController.text);
+  //                           })*/
+  //                           },
+  //                         ),
+  //                       ),
+  //
+  //                       const SizedBox(height: 8),
+  //
+  //                       // Select All
+  //                       Padding(
+  //                         padding:
+  //                         const EdgeInsets.symmetric(horizontal: 8.0),
+  //                         child: CheckboxListTile(
+  //                           title: const Text('Select All'),
+  //                           value: allSelected,
+  //                           onChanged: (val) {
+  //                             setState(() {
+  //                               if (val == true) {
+  //                                 tempSelected.clear();
+  //                                 tempSelected.addAll(allItems);
+  //                               } else {
+  //                                 tempSelected.clear();
+  //                               }
+  //                             });
+  //                           },
+  //                         ),
+  //                       ),
+  //
+  //                       const Divider(height: 1),
+  //
+  //                       // List
+  //                       Expanded(
+  //                         child: filtered.isEmpty ? const Center(child: Text('No Record Found!')) : ListView.builder(
+  //                           padding:
+  //                           const EdgeInsets.symmetric(vertical: 8),
+  //                           itemCount: filtered.length,
+  //                           itemBuilder: (context, idx) {
+  //                             final item = filtered[idx];
+  //                             final isSel = tempSelected.any((s) =>
+  //                             (s.userFullName ?? "") == (item.userFullName ?? ""));
+  //                             return CheckboxListTile(
+  //                               title: Text("${item.userFullName ?? ""}(${item.salesPersonEmpCode ?? ""})"),
+  //                               value: isSel,
+  //                               onChanged: (v) {
+  //                                 setState(() {
+  //                                   if (v == true) {
+  //                                     if (!isSel) tempSelected.add(item);
+  //                                   } else {
+  //                                     tempSelected.removeWhere((s) =>
+  //                                     (s.userFullName ?? "") == (item.userFullName ?? ""));
+  //                                   }
+  //                                 });
+  //                               },
+  //                             );
+  //                           },
+  //                         ),
+  //                       ),
+  //
+  //                       // Done button
+  //                       Padding(
+  //                         padding: const EdgeInsets.symmetric(
+  //                             horizontal: 16.0, vertical: 12),
+  //                         child: Row(
+  //                           children: [
+  //                             Expanded(
+  //                               child: ElevatedButton(
+  //                                 onPressed: () {
+  //                                   dashboard_view_Controller.SelectedEmployee_Member_list
+  //                                       .assignAll(tempSelected);
+  //                                   dashboard_view_Controller.AccountOwner_controller.value.text =
+  //                                       tempSelected.map((e) => e.empId).join(', ');
+  //
+  //                                   Navigator.of(context).pop();
+  //                                 },
+  //                                 style: ElevatedButton.styleFrom(
+  //                                   backgroundColor: AllColors.primaryDark1,
+  //                                   shadowColor: AllColors.primaryDark1,
+  //                                   foregroundColor: AllColors.primaryDark1,
+  //                                   side: BorderSide(color: AllColors.primaryDark1, width: 1),
+  //                                   shape: RoundedRectangleBorder(
+  //                                     borderRadius: BorderRadius.circular(20),
+  //                                   ),
+  //                                 ),
+  //                                 child: Text('Done',style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w600,color: Colors.white),),
+  //
+  //                               ),
+  //                             ),
+  //                           ],
+  //                         ),
+  //                       ),
+  //                     ],
+  //                   ),
+  //                 ),
+  //               );
+  //             });
+  //           },
+  //         );
+  //       },
+  //       child: InputDecorator(
+  //         decoration: InputDecoration(
+  //           labelText: selectedText != null ?  "Sales Cycle Owner": "", // 👈 Label restored here
+  //           border: OutlineInputBorder(
+  //             borderRadius: BorderRadius.circular(10),
+  //           ),
+  //           contentPadding:
+  //           const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+  //         ),
+  //         child: Row(
+  //           children: [
+  //             Expanded(
+  //               child: selectedText == null
+  //                   ? Text(
+  //                 "Sale Cycle Owner",
+  //                 style: GoogleFonts.poppins(
+  //                   color: Colors.black,
+  //                   fontSize: AllFontSize.sisxteen,
+  //                 ),
+  //               )
+  //                   : SingleChildScrollView(
+  //                 scrollDirection: Axis.horizontal,
+  //                 child: Text(
+  //                   selectedText,
+  //                   style: const TextStyle(color: Colors.black),
+  //                 ),
+  //               ),
+  //             ),
+  //             const Icon(Icons.arrow_drop_down),
+  //           ],
+  //         ),
+  //       ),
+  //     );
+  //   });
+  // }
 
   bindProductCategoryFilter(BuildContext context) {
     return Obx((){
@@ -2335,6 +2576,7 @@ class FunnelDashboardView extends StatelessWidget{
       }).toList(),
     );
   }
+
 
 
 }

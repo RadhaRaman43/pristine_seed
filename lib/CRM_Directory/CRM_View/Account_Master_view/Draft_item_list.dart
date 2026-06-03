@@ -55,7 +55,7 @@ class DraftItemList extends StatelessWidget{
                 ),
               ),
               Spacer(),
-              Obx((){
+              /*Obx((){
                 return Visibility(
                   //visible:accountMaster_page_controller.isAdminWritePermission=="0"  ? true:false ,
                   visible:accountMaster_page_controller.isHeadofficePermission!="1"|| accountMaster_page_controller.UserCode?.toLowerCase() == 'cce'  ?true:false ,
@@ -73,7 +73,7 @@ class DraftItemList extends StatelessWidget{
                     Get.toNamed(RoutesName.add_New_AccountMaster_screen,arguments: 'Create');
                   }, icon: Icon(Icons.add)),
                 );
-              }),
+              }),*/
               IconButton(onPressed: () {
                 showFilterBottomSheet(context);
               }, icon: Icon(Icons.filter_alt_sharp))
