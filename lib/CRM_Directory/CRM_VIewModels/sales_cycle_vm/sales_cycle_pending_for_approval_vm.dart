@@ -73,6 +73,13 @@ class SalesCyclePendingForApprovalVm extends GetxController{
   RxList<ItemCategoryMstModel> Selected_Item_Category_master_list_without_task = <ItemCategoryMstModel>[].obs;
   RxList<String> productCategoryTypeList = <String>["Contains","Equals To"].obs;
 
+  RxList<EmployeeMemberModel> tempSelected = <EmployeeMemberModel>[].obs;
+  RxList<EmployeeMemberModel> filtered = <EmployeeMemberModel>[].obs;
+  RxBool selectOwner = true.obs;
+  RxBool allSelected = false.obs;
+  RxBool isSel = false.obs;
+  var searchController=TextEditingController().obs;
+
   @override
   Future<void> onInit() async {
     super.onInit();
@@ -82,7 +89,7 @@ class SalesCyclePendingForApprovalVm extends GetxController{
     product_category_type_Controller.value.text="Contains";
     getItemCategoryMstWithoutTaskIdApi();
     getCompanyTypeMasterGet();
-    if(this.isAdminWritePermission==1){
+    if(this.isAdminWritePermission=="1"){
       EmployeeMasterGet('');
     }
     else{
@@ -159,15 +166,17 @@ class SalesCyclePendingForApprovalVm extends GetxController{
   }
 
   Future<Iterable<EmployeeMemberModel>> EmployeeMasterGet(String query) async {
-    if (query == '') {
+   /* if (query == '') {
       return const Iterable<EmployeeMemberModel>.empty();
-    }
+    }*/
     Map data = {
-      'filter_name': '',
-      'filter_email': query,
+      'filter_name': query,
+      'filter_email': "",
       'filter_location_id': '',
       'email_id': email,
-      'rowsPerPage': 50,
+      "filter_cluster_name": clusterName_controller.value.text.isEmpty?"":clusterName_controller.value.text,
+      "filter_region_name": RegionName_controller.value.text.isEmpty?"":RegionName_controller.value.text,
+      'rowsPerPage': 10,
       'pageNumber': 0,
     };
     String employee_response =await _api.EmployeeMatserGetApiHit(data, sessionManagement);
@@ -286,6 +295,7 @@ class SalesCyclePendingForApprovalVm extends GetxController{
       loading.value = false;
     }
   }
+
   void getRegionsWithClusterFilterGetByEmail() {
     var selectedCluster="";
     if(clusterName_controller.value.text.isNotEmpty){

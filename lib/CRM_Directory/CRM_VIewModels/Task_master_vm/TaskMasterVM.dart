@@ -204,6 +204,12 @@ class Taskmastervm extends GetxController{
     RxList<RegionWithClusterFilterModal> SelectedRegion_list = <RegionWithClusterFilterModal>[].obs;
     RxList<CallStatusMasterModel> selectedDSARStatusList = <CallStatusMasterModel>[].obs;
 
+    RxList<EmployeeMemberModel> tempSelected = <EmployeeMemberModel>[].obs;
+    RxList<EmployeeMemberModel> filtered = <EmployeeMemberModel>[].obs;
+    RxBool selectOwner = true.obs;
+    RxBool allSelected = false.obs;
+    RxBool isSel = false.obs;
+    var searchController=TextEditingController().obs;
 
     @override
     void onInit() async {
@@ -239,7 +245,7 @@ class Taskmastervm extends GetxController{
         MethodOfCallMasterApiHit();
         CallDSARsMasterApiHit();
 
-        if (this.isAdminWritePermission.value == 1) {
+        if (this.isAdminWritePermission.value == "1") {
           EmployeeMasterGet('');
         }
         else {
@@ -272,16 +278,18 @@ class Taskmastervm extends GetxController{
     }
 
     Future<Iterable<EmployeeMemberModel>> EmployeeMasterGet(String query) async {
-        if (query == '') {
-            return const Iterable<EmployeeMemberModel>.empty();
-        }
+        // if (query == '') {
+        //     return const Iterable<EmployeeMemberModel>.empty();
+        // }
         Map data = {
-            'filter_name': '',
-            'filter_email': query,
-            'filter_location_id': '',
-            'email_id': email,
-            'rowsPerPage': 50,
-            'pageNumber': 0,
+          'filter_name': query,
+          'filter_email': "",
+          'filter_location_id': '',
+          'email_id': email,
+          "filter_cluster_name": clusterName_controller.value.text.isEmpty?"":clusterName_controller.value.text,
+          "filter_region_name": RegionName_controller.value.text.isEmpty?"":RegionName_controller.value.text,
+          'rowsPerPage': 10,
+          'pageNumber': 0,
         };
         loading.value = true;
         String employee_response =await _api.EmployeeMatserGetApiHit(data, sessionManagement);
@@ -490,6 +498,7 @@ class Taskmastervm extends GetxController{
                 "filter_task_id": taskId!.isNotEmpty?taskId:filterTask_Id_controller.text,
                 "filter_account_code": account_code_controller.text.isEmpty?"":account_code_controller.text,
                 "filter_account_name": account_Name_controller.text.isEmpty?"":account_Name_controller.text,
+                "filter_task_owner_new": AccountOwnerForApi.isEmpty?"":AccountOwnerForApi,
                 "filter_task_status": status == 'All'?"":status,
                 "filter_product_category": product_category_controller.value.text.isEmpty?"":product_category_controller.value.text,
                 "filter_product_category_type": product_category_type_Controller.value.text.isEmpty?"":product_category_type_Controller.value.text,
@@ -514,7 +523,6 @@ class Taskmastervm extends GetxController{
                 "filter_branch_head_value": RegionName_controller.value.text.isEmpty?"":RegionName_controller.value.text,
                 "filter_zone_head_value": "",
                 "filter_clusture_head_value": clusterName_controller.value.text.isEmpty?"":clusterName_controller.value.text,
-                "filter_task_owner_new": AccountOwnerForApi.isEmpty?"":AccountOwnerForApi,
                 "row_per_page": rowsPerPage.toString(),
                 "page_number": page_no.toString()
                 //"filter_account_owner": account_owner_controller.value.text.isEmpty?"":account_owner_controller.value.text,

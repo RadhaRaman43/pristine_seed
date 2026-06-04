@@ -2037,7 +2037,7 @@ class CommitDashboardViewscreen extends StatelessWidget{
               Expanded(
                 child: selectedText == null
                     ? Text(
-                  "Sale Cycle Owner",
+                  "Sales Cycle Owner",
                   style: GoogleFonts.poppins(
                     color: Colors.black,
                     fontSize: AllFontSize.sisxteen,
@@ -2095,7 +2095,7 @@ class CommitDashboardViewscreen extends StatelessWidget{
                             children: [
                               Expanded(
                                 child: Text(
-                                  'Select Sale Cycle Owner',
+                                  'Select Sales Cycle Owner',
                                   style: GoogleFonts.poppins(
                                       fontSize: 16, fontWeight: FontWeight.w600,color: Colors.black),
                                 ),

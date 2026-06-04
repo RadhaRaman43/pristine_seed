@@ -2118,7 +2118,253 @@ class TaskMasterScreen extends StatelessWidget {
     });
   }
 
-  bindTaskOwnerFilter(BuildContext context) {
+  Widget bindTaskOwnerFilter(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {});
+    return Obx(() {
+      if (TaskMaster_page_controller.AccountOwner_controller.value.text.isNotEmpty && TaskMaster_page_controller.filterDataChecker.value=='1') {
+        List<String> nameList = TaskMaster_page_controller.AccountOwner_controller.value.text.split(',');
+        TaskMaster_page_controller.SelectedEmployee_Member_list.value = List.generate(nameList.length, (index) {
+          return EmployeeMemberModel(
+            userFullName: nameList[index].trim(),
+          );
+        });
+      }
+      print("list length ${TaskMaster_page_controller.employee_Member_list.length}");
+      final selected = TaskMaster_page_controller.SelectedEmployee_Member_list;
+      final selectedText = selected.isEmpty ? null : selected.map((e) =>
+      "${TaskMaster_page_controller.isAdminWritePermission=="1"?e.userFullName ?? "":e.fullName ?? ""}(${e.salesPersonEmpCode ?? ""})").join(', ');
+      return GestureDetector(
+        onTap: ()  {
+          openBottomSheet(context);
+        },
+        child: InputDecorator(
+          decoration: InputDecoration(
+            labelText: selectedText != null ?  "Task Owner": "", // 👈 Label restored here
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            contentPadding:
+            const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+          ),
+          child: Row(
+            children: [
+              Expanded(
+                child: selectedText == null
+                    ? Text(
+                  "Task Owner",
+                  style: GoogleFonts.poppins(
+                    color: Colors.black,
+                    fontSize: AllFontSize.sisxteen,
+                  ),
+                )
+                    : SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Text(
+                    selectedText,
+                    style: const TextStyle(color: Colors.black),
+                  ),
+                ),
+              ),
+              const Icon(Icons.arrow_drop_down),
+            ],
+          ),
+        ),
+      );
+    });
+  }
+
+  openBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(16)),),
+        builder: (context){
+          TaskMaster_page_controller.tempSelected.value = [];
+          TaskMaster_page_controller.tempSelected.addAll(TaskMaster_page_controller.SelectedEmployee_Member_list);
+          TaskMaster_page_controller.filtered.value = TaskMaster_page_controller.employee_Member_list;
+          return Obx((){
+            TaskMaster_page_controller.allSelected.value = TaskMaster_page_controller.filtered.isNotEmpty
+                && TaskMaster_page_controller.tempSelected.length == TaskMaster_page_controller.filtered.length;
+            return Visibility(
+                visible: TaskMaster_page_controller.selectOwner.value,
+                child: Padding(
+                  padding: EdgeInsets.only(
+                      bottom: MediaQuery.of(context).viewInsets.bottom),
+                  child: SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.75,
+                    child: Column(
+                      children: [
+                        const SizedBox(height: 8),
+                        Container(
+                          width: 50,
+                          height: 4,
+                          decoration: BoxDecoration(
+                              color: Colors.grey[400],
+                              borderRadius: BorderRadius.circular(2)),
+                        ),
+                        const SizedBox(height: 12),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  'Select Task Owner',
+                                  style: GoogleFonts.poppins(
+                                      fontSize: 16, fontWeight: FontWeight.w600,color: Colors.black),
+                                ),
+                              ),
+                              IconButton(onPressed: () {
+                                Navigator.of(context).pop();
+                              }, icon: const Icon(Icons.close,color: AllColors.primaryDark1,weight: 700,))
+
+                            ],
+                          ),
+                        ),
+                        // Search Field
+                        Padding(
+                          padding:
+                          const EdgeInsets.symmetric(horizontal: 16.0),
+                          child: TextField(
+                            controller: TaskMaster_page_controller.searchController.value,
+                            decoration: InputDecoration(
+                              hintText: 'Search...',
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8)),
+                              isDense: true,
+                              suffixIcon: TaskMaster_page_controller.searchController.value.text.isNotEmpty ? IconButton(
+                                icon: const Icon(Icons.clear),
+                                onPressed: () {
+                                  TaskMaster_page_controller.searchController.value.clear();
+                                  if(TaskMaster_page_controller.isAdminWritePermission=="1") {
+                                    TaskMaster_page_controller.EmployeeMasterGet(TaskMaster_page_controller.searchController.value.text);
+                                  }
+                                  else{
+                                    TaskMaster_page_controller.filtered.value =TaskMaster_page_controller.searchController.value.text.isEmpty ?
+                                    TaskMaster_page_controller.employee_Member_list:TaskMaster_page_controller.employee_Member_list.where((c) =>
+                                        (c.fullName ?? "").toLowerCase().contains(TaskMaster_page_controller.searchController.value.text)).toList();
+                                  }
+
+
+                                },
+                              ) : null,
+                            ),
+                            onChanged: (v)
+                            {
+                              if(TaskMaster_page_controller.isAdminWritePermission=="1") {
+                                TaskMaster_page_controller.EmployeeMasterGet(TaskMaster_page_controller.searchController.value.text);
+                              }
+                              else{
+                                TaskMaster_page_controller.filtered.value =TaskMaster_page_controller.searchController.value.text.isEmpty ?
+                                TaskMaster_page_controller.employee_Member_list:TaskMaster_page_controller.employee_Member_list.where((c) =>
+                                    (c.fullName ?? "").toLowerCase().contains(TaskMaster_page_controller.searchController.value.text)).toList();
+                              }
+
+                            },
+                          ),
+                        ),
+
+                        const SizedBox(height: 8),
+
+                        // Select All
+                        /* Padding(
+                          padding:
+                          const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: CheckboxListTile(
+                            title:TaskMaster_page_controller.allSelected.value?const Text('UnSelect All'): const Text('Select All'),
+                            value: TaskMaster_page_controller.allSelected.value,
+                            onChanged: (val) {
+                              if (val == true) {
+                                TaskMaster_page_controller.tempSelected.clear();
+                                TaskMaster_page_controller.allSelected.value=true;
+                                TaskMaster_page_controller.tempSelected.addAll(TaskMaster_page_controller.filtered);
+                              } else {
+                                TaskMaster_page_controller.allSelected.value=false;
+                                TaskMaster_page_controller.tempSelected.clear();
+                              }
+                              TaskMaster_page_controller.selectOwner.value=false;
+                              TaskMaster_page_controller.selectOwner.value=true;
+                            },
+                          ),
+                        ),*/
+
+                        const Divider(height: 1),
+
+                        // List
+                        Expanded(
+                          child: TaskMaster_page_controller.filtered.isEmpty ? const Center(child: Text('No Record Found!')) : ListView.builder(
+                            padding: const EdgeInsets.symmetric(vertical: 8),
+                            itemCount: TaskMaster_page_controller.filtered.length,
+                            itemBuilder: (context, idx) {
+                              final item = TaskMaster_page_controller.filtered[idx];
+                              TaskMaster_page_controller.isSel.value = TaskMaster_page_controller.tempSelected.any((s) =>
+                              (TaskMaster_page_controller.isAdminWritePermission=="1"?s.userFullName ?? "":s.fullName ?? "") ==
+                                  (TaskMaster_page_controller.isAdminWritePermission=="1"?item.userFullName ?? "":item.fullName ?? ""));
+                              return CheckboxListTile(
+                                title: Text("${TaskMaster_page_controller.isAdminWritePermission=="1"?
+                                item.userFullName ?? "":item.fullName ?? ""}(${item.salesPersonEmpCode ?? ""})"),
+                                value: TaskMaster_page_controller.isSel.value,
+                                onChanged: (v) {
+                                  if (v == true) {
+                                    TaskMaster_page_controller.isSel.value=true;
+                                    TaskMaster_page_controller.tempSelected.add(item);
+                                  } else {
+                                    TaskMaster_page_controller.isSel.value=false;
+                                    TaskMaster_page_controller.tempSelected.removeWhere((s) =>
+                                    (TaskMaster_page_controller.isAdminWritePermission=="1"?s.userFullName ?? "":s.fullName ?? "") ==
+                                        (TaskMaster_page_controller.isAdminWritePermission=="1"?item.userFullName ?? "":item.fullName ?? ""));
+                                    //(s.userFullName ?? "") == (item.userFullName ?? ""));
+                                  }
+                                  TaskMaster_page_controller.selectOwner.value=false;
+                                  TaskMaster_page_controller.selectOwner.value=true;
+                                },
+                              );
+                            },
+                          ),
+                        ),
+
+                        // Done button
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16.0, vertical: 12),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: ElevatedButton(
+                                  onPressed: () {
+                                    TaskMaster_page_controller.SelectedEmployee_Member_list
+                                        .assignAll(TaskMaster_page_controller.tempSelected);
+                                    TaskMaster_page_controller.AccountOwner_controller.value.text =
+                                        TaskMaster_page_controller.tempSelected.map((e) => e.empId).join(', ');
+
+                                    Navigator.of(context).pop();
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: AllColors.primaryDark1,
+                                    shadowColor: AllColors.primaryDark1,
+                                    foregroundColor: AllColors.primaryDark1,
+                                    side: BorderSide(color: AllColors.primaryDark1, width: 1),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                  ),
+                                  child: Text('Done',style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w600,color: Colors.white),),
+
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ));
+          });
+        }
+    );
+  }
+
+ /* bindTaskOwnerFilter(BuildContext context) {
     return Obx((){
       if (TaskMaster_page_controller.AccountOwner_controller.value.text.isNotEmpty && TaskMaster_page_controller.filterDataChecker.value=='1') {
         List<String> nameList = TaskMaster_page_controller.AccountOwner_controller.value.text.split(',');
@@ -2200,7 +2446,7 @@ class TaskMasterScreen extends StatelessWidget {
       );
     });
 
-  }
+  }*/
 
 
   Widget bindTaskStatusDropDown(context) {
