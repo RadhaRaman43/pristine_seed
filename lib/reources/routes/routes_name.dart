@@ -177,6 +177,11 @@ class RoutesName{
   static const nonStandardItemList="/non_standard_item_list.dart";
   static const updateNonStandardItemList="/update_non_standard_item.dart";
 
+  //todo sales forecast screen
+  static const SalesForeCastScreen="/SalesForeCastScreen.dart";
+  static const createSalesForeCastScreen="/create_sales_force_cast_screen.dart";
+
+
 
   //todo image not found...
 

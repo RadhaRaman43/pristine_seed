@@ -477,10 +477,8 @@ class SalesCycleVm extends GetxController {
       email = await sessionManagement.getEmail() ?? '';
       filterRouting = await sessionManagement.getfilterRouting() ?? '';
       userType = await sessionManagement.getUserType() ?? '';
-      isAdminWritePermission.value =
-          await sessionManagement.getIsAdminPermission() ?? '';
-      isHeadofficePermission.value =
-          await sessionManagement.getisHeadofficePermission() ?? '';
+      isAdminWritePermission.value = await sessionManagement.getIsAdminPermission() ?? '';
+      isHeadofficePermission.value = await sessionManagement.getisHeadofficePermission() ?? '';
       //clearAllFieldOfFilter();
       product_category_type_Controller.value.text = "Contains";
 

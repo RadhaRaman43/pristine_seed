@@ -530,6 +530,21 @@ class SessionManagement {
     prefs.remove("sale_cycle_Competitor_data");
   }
 
+  //todo sale cycle Competitor
+  Future<void> saveSaleForeCastData(Map<String, dynamic> data) async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString("sale_fore_cast_data", jsonEncode(data));
+  }
+  Future<Map<String, dynamic>> getSaleForeCastData() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? data = prefs.getString("sale_fore_cast_data");
+    return data != null ? jsonDecode(data) : {};
+  }
+  Future<void> clearSaleForeCastData() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.remove("sale_fore_cast_data");
+  }
+
   //todo sale advise list
   Future<void> saveSaleAdviseListData(Map<String, dynamic> data) async {
     final prefs = await SharedPreferences.getInstance();
