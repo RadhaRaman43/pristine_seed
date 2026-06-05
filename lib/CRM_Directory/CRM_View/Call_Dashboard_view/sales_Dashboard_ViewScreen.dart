@@ -2207,6 +2207,14 @@ class SalesDashboardViewscreen extends StatelessWidget{
                         ),
 
                         const Divider(height: 1),
+                        Obx((){
+                          return Visibility(visible:dashboard_view_Controller.loading.value,
+                            child:LinearProgressIndicator(
+                              backgroundColor: AllColors.primaryDark1,
+                              color: AllColors.textColor,
+                            ), );
+                        }),
+
 
                         // List
                         Expanded(

@@ -1656,6 +1656,10 @@ class Taskmastervm extends GetxController{
        SaleCycleActive_Controller.text = "All";
        AccountOwnerForApi = '';
        AccountOwner_controller.value.clear();
+       searchController.value.clear();
+       if(isAdminWritePermission=="1") {
+         EmployeeMasterGet("");
+       }
        SelectedEmployee_Member_list.value = [];
 
       SelectedCluster_list.value=[];

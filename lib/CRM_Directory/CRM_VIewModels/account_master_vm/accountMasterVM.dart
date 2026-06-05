@@ -329,20 +329,20 @@ class Accountmastervm extends GetxController{
         if (response[0].condition == 'True') {
           print(jsonResponse);
           employee_Member_list.value = response;
-          loading.value=false;
         } else {
-          loading.value=false;
           employee_Member_list.value = [];
         }
       } else {
-        loading.value=false;
         Utils.sanckBarException('False!', jsonResponse.message);
         employee_Member_list.value = [];
       }
     } catch (e) {
-      loading.value=false;
+
       Utils.sanckBarException('Exception!', e.toString());
       employee_Member_list.value = [];
+    }
+    finally{
+      loading.value=false;
     }
     return employee_Member_list.value;
   }
@@ -1764,6 +1764,10 @@ class Accountmastervm extends GetxController{
     //RegionName_controller.value.clear();
     zone_head__value_controller.value.clear();
     //clusterName_controller.value.clear();
+    searchController.value.clear();
+    if(isAdminWritePermission=="1") {
+      EmployeeMasterGet("");
+    }
     pageNumber=0;
 
     selected_company_type_list.value=[];

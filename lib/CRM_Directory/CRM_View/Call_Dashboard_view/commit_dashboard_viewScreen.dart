@@ -1857,7 +1857,7 @@ class CommitDashboardViewscreen extends StatelessWidget{
         asyncItems: (String filter) async {
           return await dashboard_view_Controller.getAccountMaster(filter);
         },
-        itemAsString: (AccountMasterModel u) => u.accountName ?? "",
+        itemAsString: (AccountMasterModel u) => "${u.accountName ?? ""}(${u.accountCode ?? ""})",
         selectedItems: dashboard_view_Controller.SelectedAccount_Master_list,
         dropdownBuilder: (context, selectedItems) {
           if (selectedItems.isEmpty) {
@@ -1872,7 +1872,7 @@ class CommitDashboardViewscreen extends StatelessWidget{
           }return SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Text(
-              selectedItems.map((e) => e.accountName).join(', '),
+              selectedItems.map((e) => "${e.accountName ?? ""}(${e.accountCode ?? ""})").join(', '),
               style: TextStyle(color: Colors.black),
             ),
           );
@@ -1893,7 +1893,7 @@ class CommitDashboardViewscreen extends StatelessWidget{
           dashboard_view_Controller.SelectedAccount_Master_list.assignAll(
               selectedList);
           dashboard_view_Controller.CustomerName_controller.value.text =
-              selectedList.map((e) => e.accountName).join(', ');
+              selectedList.map((e) => e.accountCode).join(', ');
         },
 
         popupProps: PopupPropsMultiSelection.dialog(
@@ -2175,6 +2175,14 @@ class CommitDashboardViewscreen extends StatelessWidget{
                         ),
 
                         const Divider(height: 1),
+                        Obx((){
+                          return Visibility(visible:dashboard_view_Controller.loading.value,
+                            child:LinearProgressIndicator(
+                              backgroundColor: AllColors.primaryDark1,
+                              color: AllColors.textColor,
+                            ), );
+                        }),
+
 
                         // List
                         Expanded(

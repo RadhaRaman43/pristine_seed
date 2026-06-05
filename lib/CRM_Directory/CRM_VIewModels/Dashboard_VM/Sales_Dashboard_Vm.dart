@@ -345,6 +345,7 @@ class SalesDashboardVm extends GetxController{
       'rowsPerPage': 10,
       'pageNumber': 0,
     };
+    loading.value = true;
     String employee_response =await _api.EmployeeMatserGetApiHit(data, sessionManagement);
     try {
       final jsonResponse = json.decode(employee_response);
@@ -369,6 +370,9 @@ class SalesDashboardVm extends GetxController{
     } catch (e) {
       Utils.sanckBarException('Exception!', e.toString());
       employee_Member_list.value = [];
+    }
+    finally{
+      loading.value=false;
     }
     return employee_Member_list.value;
   }
@@ -610,6 +614,10 @@ class SalesDashboardVm extends GetxController{
     filterCustomDateController.value.clear();
     EmployeeNameFilter_controller.value.clear();
     DepartmentNameFilter_controller.value.clear();
+    searchController.value.clear();
+    if(isAdminWritePermission=="1") {
+      EmployeeMasterGet("");
+    }
     SelectedCluster_list.value = [];
     SelectedRegion_list.value = [];
     SelectDepartment_List.value = [];

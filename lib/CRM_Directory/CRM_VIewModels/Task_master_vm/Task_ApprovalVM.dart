@@ -553,6 +553,10 @@ class TaskApprovalvm extends GetxController{
 
     AccountOwnerForApi = '';
     AccountOwner_controller.value.clear();
+    searchController.value.clear();
+    if(isAdminWritePermission=="1") {
+      EmployeeMasterGet("");
+    }
     SelectedEmployee_Member_list.value = [];
 
     SelectedCluster_list.value=[];

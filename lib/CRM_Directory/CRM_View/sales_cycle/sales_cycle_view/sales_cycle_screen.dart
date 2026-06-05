@@ -1344,6 +1344,13 @@ class SalesCycleScreen extends StatelessWidget{
                         ),*/
 
                         const Divider(height: 1),
+                        Obx((){
+                          return Visibility(visible:salesCycleController.loading.value,
+                            child:LinearProgressIndicator(
+                              backgroundColor: AllColors.primaryDark1,
+                              color: AllColors.textColor,
+                            ), );
+                        }),
 
                         // List
                         Expanded(

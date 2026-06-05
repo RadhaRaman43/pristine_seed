@@ -473,6 +473,7 @@ class FunnelDashboardVm extends GetxController{
       'rowsPerPage': 10,
       'pageNumber': 0,
     };
+    loading.value = true;
     String employee_response =await _api.EmployeeMatserGetApiHit(data, sessionManagement);
     try {
       final jsonResponse = json.decode(employee_response);
@@ -498,6 +499,9 @@ class FunnelDashboardVm extends GetxController{
     } catch (e) {
       Utils.sanckBarException('Exception!', e.toString());
       employee_Member_list.value = [];
+    }
+    finally{
+      loading.value = false;
     }
     return employee_Member_list.value;
   }
@@ -690,6 +694,7 @@ class FunnelDashboardVm extends GetxController{
       Map<String, String> data = {
         "filter_account_code": '',
         "filter_account_name": searchText,
+        "filter_account_owner":isAdminWritePermission=="1"?"": email,
         "filter_account_type": '',
         "filter_email_id": '',
         "filter_phone_no": '',
@@ -698,7 +703,6 @@ class FunnelDashboardVm extends GetxController{
         "filter_postal_code": '',
         "filter_district": '',
         "filter_created_by": '',
-        "filter_account_owner": email,
         "filter_frontliner_value": "",
         "filter_branch_head_value": '',
         "filter_zone_head_value": "",
@@ -753,6 +757,10 @@ class FunnelDashboardVm extends GetxController{
     filter_created_on_star_to_cont.value.clear();
     //clusterName_controller.value.clear();
     CustomerName_controller.value.clear();
+    searchController.value.clear();
+    if(isAdminWritePermission=="1") {
+      EmployeeMasterGet("");
+    }
     //RegionName_controller.value.clear();
     SelectedAccount_Master_list.value = [];
     SelectedEmployee_Member_list.value = [];

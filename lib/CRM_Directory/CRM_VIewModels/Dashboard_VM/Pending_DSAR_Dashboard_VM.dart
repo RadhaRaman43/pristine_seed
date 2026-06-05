@@ -32,7 +32,7 @@ class PendingDsarDashboardVm extends GetxController{
   var selectedOption = 'Employee'.obs;
   RxString formattedStartDate = "".obs;
   RxString formattedEndDate = "".obs;
-  RxString character = 'Month'.obs;
+  RxString character = 'Monthly'.obs;
   RxString rodName = ''.obs;
   RxString geoValueName = ''.obs;
   RxString isAdminWritePermission = "".obs;
@@ -103,12 +103,13 @@ class PendingDsarDashboardVm extends GetxController{
       userType = await sessionManagement.getUserType() ?? '';
       isAdminWritePermission.value =
           await sessionManagement.getIsAdminPermission() ?? '';
+      DateRange("month");
       //TaskStatusListTypeList.value = ['Pending','Pending For Approval', 'Approved', 'Rejected'];
       task_Status_controller.value.text = 'All';
       selectedTypeCallList.insert(0, CallStatusMasterModel(taskStatus: "All"));
       selectedDSARStatusList.insert(
           0, CallStatusMasterModel(taskStatus: 'All'));
-      DateRange("month");
+
       filterCustomDateController.value.text =
       '${formattedStartDate} - ${formattedEndDate}';
       //getDashboardUserWiseData(pageNumber);
@@ -263,12 +264,12 @@ class PendingDsarDashboardVm extends GetxController{
         "end_date": formattedEndDate.value,
         "filter_type_of_call": TypeOfCallForApi.isEmpty?"All":TypeOfCallForApi,
         "filter_owner_name": AccountOwnerForApi.isEmpty?"":AccountOwnerForApi,
-        "filter_region_name": RegionNameForApi.isEmpty?"":RegionNameForApi,
-        "filter_cluster_name": ClusterNameForApi.isEmpty?"":ClusterNameForApi,
         "filter_product_category": ProductCategoryForApi.isEmpty?"":ProductCategoryForApi,
         "filter_activity_status": lastActivityStatusForApi.isEmpty?"All":lastActivityStatusForApi,
         "filter_customer_name": CustomerNameApi.isEmpty?"":CustomerNameApi,
         "filter_task_approval_status": TaskStatusForApi.isEmpty?"Approved":TaskStatusForApi,
+        "filter_region_name": RegionNameForApi.isEmpty?"":RegionNameForApi,
+        "filter_cluster_name": ClusterNameForApi.isEmpty?"":ClusterNameForApi,
       };
 
       print(data);
@@ -316,12 +317,12 @@ class PendingDsarDashboardVm extends GetxController{
         "end_date": formattedEndDate.value,
         "filter_type_of_call": TypeOfCallForApi.isEmpty?"All":TypeOfCallForApi,
         "filter_owner_name": AccountOwnerForApi.isEmpty?"":AccountOwnerForApi,
-        "filter_region_name": RegionNameForApi.isEmpty?"":RegionNameForApi,
-        "filter_cluster_name": ClusterNameForApi.isEmpty?"":ClusterNameForApi,
-        "filter_product_category": ProductCategoryForApi.isEmpty?"":ProductCategoryForApi,
         "filter_activity_status": lastActivityStatusForApi.isEmpty?"All":lastActivityStatusForApi,
         "filter_customer_name": CustomerNameApi.isEmpty?"":CustomerNameApi,
         "filter_task_approval_status": TaskStatusForApi.isEmpty?"Approved":TaskStatusForApi,
+        "filter_region_name": RegionNameForApi.isEmpty?"":RegionNameForApi,
+        "filter_cluster_name": ClusterNameForApi.isEmpty?"":ClusterNameForApi,
+        "filter_product_category": ProductCategoryForApi.isEmpty?"":ProductCategoryForApi,
         "rowsPerPage": rowsPerPage,
         "pageNumber": pageNumber
       };
@@ -515,6 +516,7 @@ class PendingDsarDashboardVm extends GetxController{
       'rowsPerPage': 10,
       'pageNumber': 0,
     };
+    loading.value=true;
     String employee_response =await _api.EmployeeMatserGetApiHit(data, sessionManagement);
     try {
       final jsonResponse = json.decode(employee_response);
@@ -539,6 +541,9 @@ class PendingDsarDashboardVm extends GetxController{
     } catch (e) {
       Utils.sanckBarException('Exception!', e.toString());
       employee_Member_list.value = [];
+    }
+    finally{
+      loading.value = false;
     }
     return employee_Member_list.value;
   }
@@ -820,7 +825,7 @@ class PendingDsarDashboardVm extends GetxController{
   }
 
   clearAllFilterController(){
-    character.value = 'Month';
+    character.value = 'Monthly';
     rodName.value = '';
     geoValueName.value = '';
     TypeOfCallForApi = '';
@@ -840,6 +845,10 @@ class PendingDsarDashboardVm extends GetxController{
     //clusterName_controller.value.clear();
     CustomerName_controller.value.clear();
     //RegionName_controller.value.clear();
+    searchController.value.clear();
+    if(isAdminWritePermission=="1") {
+      EmployeeMasterGet("");
+    }
     selectedDSARStatusList.value = [];
     SelectedAccount_Master_list.value = [];
     selectedTypeCallList.value = [];

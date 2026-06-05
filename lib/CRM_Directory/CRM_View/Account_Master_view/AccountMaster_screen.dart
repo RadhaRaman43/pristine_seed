@@ -1005,6 +1005,14 @@ class AccountmasterScreen extends StatelessWidget{
 
                         const Divider(height: 1),
 
+                        Obx((){
+                          return Visibility(visible:accountMaster_page_controller.loading.value,
+                            child:LinearProgressIndicator(
+                              backgroundColor: AllColors.primaryDark1,
+                              color: AllColors.textColor,
+                            ), );
+                        }),
+
                         // List
                         Expanded(
                           child: accountMaster_page_controller.filtered.isEmpty ? const Center(child: Text('No Record Found!')) : ListView.builder(

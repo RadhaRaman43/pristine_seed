@@ -266,16 +266,16 @@ class CallDashboardVm extends GetxController{
       Map<String, String> data = {
         "flag": selectedOption.value,
         "email_id": email,
+        "filter_customer_name": CustomerNameApi.isEmpty?"":CustomerNameApi,
         "start_date": formattedStartDate.value,
         "end_date": formattedEndDate.value,
         "filter_type_of_call": TypeOfCallForApi.isEmpty?"All":TypeOfCallForApi,
         "filter_owner_name": AccountOwnerForApi.isEmpty?"":AccountOwnerForApi,
-        "filter_region_name": RegionNameForApi.isEmpty?"":RegionNameForApi,
-        "filter_cluster_name": ClusterNameForApi.isEmpty?"":ClusterNameForApi,
         "filter_product_category": ProductCategoryForApi.isEmpty?"":ProductCategoryForApi,
         "filter_activity_status": lastActivityStatusForApi.isEmpty?"All":lastActivityStatusForApi,
-        "filter_customer_name": CustomerNameApi.isEmpty?"":CustomerNameApi,
         "filter_task_approval_status": TaskStatusForApi.isEmpty?"All":TaskStatusForApi,
+        "filter_region_name": RegionNameForApi.isEmpty?"":RegionNameForApi,
+        "filter_cluster_name": ClusterNameForApi.isEmpty?"":ClusterNameForApi,
       };
 
       print(data);
@@ -320,17 +320,17 @@ class CallDashboardVm extends GetxController{
       Map data={
         "flag": selectedOption.value,
         "email_id": email,
+        "filter_customer_name": CustomerNameApi.isEmpty?"":CustomerNameApi,
         "emp_email_id": EmployeeEmailIdForApi.isEmpty?"":EmployeeEmailIdForApi,
         "start_date": formattedStartDate.value,
         "end_date": formattedEndDate.value,
         "filter_type_of_call": TypeOfCallForApi.isEmpty?"All":TypeOfCallForApi,
         "filter_owner_name": AccountOwnerForApi.isEmpty?"":AccountOwnerForApi,
-        "filter_region_name": RegionNameForApi.isEmpty?"":RegionNameForApi,
-        "filter_cluster_name": ClusterNameForApi.isEmpty?"":ClusterNameForApi,
         "filter_product_category": ProductCategoryForApi.isEmpty?"":ProductCategoryForApi,
         "filter_activity_status": lastActivityStatusForApi.isEmpty?"All":lastActivityStatusForApi,
-        "filter_customer_name": CustomerNameApi.isEmpty?"":CustomerNameApi,
         "filter_task_approval_status": TaskStatusForApi.isEmpty?"All":TaskStatusForApi,
+        "filter_region_name": RegionNameForApi.isEmpty?"":RegionNameForApi,
+        "filter_cluster_name": ClusterNameForApi.isEmpty?"":ClusterNameForApi,
         "rowsPerPage": rowsPerPage,
         "pageNumber": pageNumber
       };
@@ -514,6 +514,7 @@ class CallDashboardVm extends GetxController{
           .map((e) => e.trim())
           .join('|');
     }
+    loading.value = true;
     Map data = {
       'filter_name': query,
       'filter_email': "",
@@ -549,6 +550,9 @@ class CallDashboardVm extends GetxController{
       Utils.sanckBarException('Exception!', e.toString());
       employee_Member_list.value = [];
     }
+    finally{
+      loading.value = false;
+  }
     return employee_Member_list.value;
   }
 
@@ -850,6 +854,10 @@ class CallDashboardVm extends GetxController{
     //clusterName_controller.value.clear();
     CustomerName_controller.value.clear();
     //RegionName_controller.value.clear();
+    searchController.value.clear();
+    if(isAdminWritePermission=="1") {
+      EmployeeMasterGet("");
+    }
     selectedDSARStatusList.value = [];
     SelectedAccount_Master_list.value = [];
     selectedTypeCallList.value = [];

@@ -433,6 +433,7 @@ class CommitDashboardVm extends GetxController{
           .map((e) => e.trim())
           .join('|');
     }
+    loading.value= true;
     Map data = {
       'filter_name': query,
       'filter_email': "",
@@ -467,6 +468,9 @@ class CommitDashboardVm extends GetxController{
     } catch (e) {
       Utils.sanckBarException('Exception!', e.toString());
       employee_Member_list.value = [];
+    }
+    finally{
+      loading.value=false;
     }
     return employee_Member_list.value;
   }
@@ -664,7 +668,7 @@ class CommitDashboardVm extends GetxController{
         "filter_postal_code": '',
         "filter_district": '',
         "filter_created_by": '',
-        "filter_account_owner": ""/*email*/,
+        "filter_account_owner": isAdminWritePermission=="1"?"":email,
         "filter_frontliner_value": "",
         "filter_branch_head_value": '',
         "filter_zone_head_value": "",
@@ -772,6 +776,10 @@ class CommitDashboardVm extends GetxController{
     CustomerName_controller.value.clear();
     filter_created_on_cont.value.clear();
     filter_created_on_star_to_cont.value.clear();
+    searchController.value.clear();
+    if(isAdminWritePermission=="1") {
+      EmployeeMasterGet("");
+    }
 
   //  RegionName_controller.value.clear();
     SelectedAccount_Master_list.value = [];

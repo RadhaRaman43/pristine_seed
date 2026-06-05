@@ -556,6 +556,7 @@ class SalesCycleVm extends GetxController {
       'rowsPerPage': 10,
       'pageNumber': 0,
     };
+    loading.value= true;
     String employee_response =await _api.EmployeeMatserGetApiHit(data, sessionManagement);
     try {
       final jsonResponse = json.decode(employee_response);
@@ -578,6 +579,9 @@ class SalesCycleVm extends GetxController {
     } catch (e) {
       Utils.sanckBarException('Exception!', e.toString());
       employee_Member_list.value = [];
+    }
+    finally{
+      loading.value= false;
     }
     return employee_Member_list.value;
   }
@@ -5148,6 +5152,10 @@ class SalesCycleVm extends GetxController {
 
     AccountOwnerForApi = '';
     AccountOwner_controller.value.clear();
+    searchController.value.clear();
+    if(isAdminWritePermission=="1") {
+      EmployeeMasterGet("");
+    }
     SelectedEmployee_Member_list.value = [];
 
     SelectedCluster_list.value=[];
