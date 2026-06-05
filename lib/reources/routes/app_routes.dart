@@ -83,6 +83,8 @@ import '../../CRM_Directory/CRM_View/sales_cycle/sales_cycle_view/update_bussine
 import '../../CRM_Directory/CRM_View/sales_cycle/sales_cycle_view/update_quote_line_data_screen.dart';
 import '../../CRM_Directory/CRM_View/sales_cycle/sales_cycle_view/update_sale_infra_detail_screen.dart';
 import '../../CRM_Directory/CRM_View/sales_cycle/sales_cycle_view/view_sale_header_screen.dart';
+import '../../CRM_Directory/CRM_View/salesforecast/SalesForeCastScreen.dart';
+import '../../CRM_Directory/CRM_View/salesforecast/create_sales_force_cast_screen.dart';
 import '../../view/check_in_approval/check_in_approval_header_view_screen.dart';
 import '../../view/check_in_view/check_in_screen.dart';
 import '../../view/check_out_view/add_expense_screen.dart';
@@ -893,6 +895,17 @@ class AppRoutes{
 
     GetPage(name: RoutesName.updateNonStandardItemList,
         page: ()=>UpdateNonStandardItemScreen(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
+
+    GetPage(name: RoutesName.SalesForeCastScreen,
+        page: ()=>SalesForceCastScreen(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
+    GetPage(name: RoutesName.createSalesForeCastScreen,
+        page: ()=>CreateSalesForceCastScreen(),
         transitionDuration: Duration(microseconds: 180),
         transition: Transition.rightToLeftWithFade
     ),

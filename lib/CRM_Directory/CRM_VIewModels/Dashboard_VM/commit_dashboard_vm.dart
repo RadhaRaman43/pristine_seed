@@ -60,6 +60,13 @@ class CommitDashboardVm extends GetxController{
   RxList<String> quoteAcceptedList = ["ALL","OPEN","WON", "LOSS"].obs;
   RxList<String> isCommitList = ["All","Yes", "No"].obs;
 
+  RxList<EmployeeMemberModel> tempSelected = <EmployeeMemberModel>[].obs;
+  RxList<EmployeeMemberModel> filtered = <EmployeeMemberModel>[].obs;
+  RxBool selectOwner = true.obs;
+  RxBool allSelected = false.obs;
+  RxBool isSel = false.obs;
+  var searchController=TextEditingController().obs;
+
   var filterCustomDateController=TextEditingController().obs;
   var AccountOwner_controller=TextEditingController().obs;
   var typeOfCall_controller=TextEditingController().obs;
@@ -107,7 +114,7 @@ class CommitDashboardVm extends GetxController{
       filterCustomDateController.value.text =
       '${formattedStartDate} - ${formattedEndDate}';
       //commitDashboardData();
-      isAdminWritePermission == 1
+      isAdminWritePermission == "1"
           ? EmployeeMasterGet("")
           : getEmployeeTeamMemberGetByClusterRegionApi();
 
@@ -409,17 +416,32 @@ class CommitDashboardVm extends GetxController{
   }
 
   Future<Iterable<EmployeeMemberModel>> EmployeeMasterGet(String query) async {
-    if (query == '') {
+    /*if (query == '') {
       return const Iterable<EmployeeMemberModel>.empty();
+    }*/
+    ClusterNameForApi = '';
+    if(clusterName_controller.value.text.isNotEmpty){
+      ClusterNameForApi = clusterName_controller.value.text
+          .split(',')
+          .map((e) => e.trim())
+          .join('|');
     }
+    RegionNameForApi = '';
+    if(RegionName_controller.value.text.isNotEmpty){
+      RegionNameForApi = RegionName_controller.value.text
+          .split(',')
+          .map((e) => e.trim())
+          .join('|');
+    }
+    loading.value= true;
     Map data = {
-      'filter_name': '',
-      'filter_email': query,
+      'filter_name': query,
+      'filter_email': "",
       'filter_location_id': '',
       'email_id': email,
-      "filter_cluster_name": "",
-      "filter_region_name": "",
-      'rowsPerPage': 50,
+      "filter_cluster_name": ClusterNameForApi,
+      "filter_region_name": RegionNameForApi,
+      'rowsPerPage': 10,
       'pageNumber': 0,
     };
     String employee_response =await _api.EmployeeMatserGetApiHit(data, sessionManagement);
@@ -446,6 +468,9 @@ class CommitDashboardVm extends GetxController{
     } catch (e) {
       Utils.sanckBarException('Exception!', e.toString());
       employee_Member_list.value = [];
+    }
+    finally{
+      loading.value=false;
     }
     return employee_Member_list.value;
   }
@@ -643,7 +668,7 @@ class CommitDashboardVm extends GetxController{
         "filter_postal_code": '',
         "filter_district": '',
         "filter_created_by": '',
-        "filter_account_owner": ""/*email*/,
+        "filter_account_owner": isAdminWritePermission=="1"?"":email,
         "filter_frontliner_value": "",
         "filter_branch_head_value": '',
         "filter_zone_head_value": "",
@@ -751,6 +776,10 @@ class CommitDashboardVm extends GetxController{
     CustomerName_controller.value.clear();
     filter_created_on_cont.value.clear();
     filter_created_on_star_to_cont.value.clear();
+    searchController.value.clear();
+    if(isAdminWritePermission=="1") {
+      EmployeeMasterGet("");
+    }
 
   //  RegionName_controller.value.clear();
     SelectedAccount_Master_list.value = [];

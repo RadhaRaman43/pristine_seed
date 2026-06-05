@@ -111,6 +111,7 @@ class AddTourLinesPage extends StatelessWidget{
                  return  ;
                }
 
+
                ConfirmationDialog(context, businessTourPlanController.Tour_Id);
 
                //accountMaster_page_controller.AccountMstUploaderApiHit('Create', "", accountMaster_page_controller.SalesRepresentativeEmail, accountMaster_page_controller.RegionalHeadEmail);
@@ -152,10 +153,15 @@ class AddTourLinesPage extends StatelessWidget{
                                    " " +
                                    (category.middleName?.toString() ?? "") +
                                    " " +
-                                   (category.lastName?.toString() ?? "")
-                               ),
+                                   (category.lastName?.toString() ?? "")),
                                onDeleted: () {
-                                 businessTourPlanController.SelectedAlongPersonWith_list.remove(category);
+                                   businessTourPlanController.SelectedAlongPersonWith_list.remove(category);
+                                   String name = (category.firstName?.toString() ?? "") +
+                                       " " +
+                                       (category.middleName?.toString() ?? "") +
+                                       " " +
+                                       (category.lastName?.toString() ?? "");
+                                   businessTourPlanController.SelectedAlongPersonWith_list1.remove(name);
                                },
                              );
                            }).toList(),
@@ -923,7 +929,7 @@ class AddTourLinesPage extends StatelessWidget{
         },
         onSelected: (AlongWithPersonModel selection) {
           // Update the TextField with the selected
-          businessTourPlanController.AlongPersonWith_controller.text =
+          businessTourPlanController.AlongPersonWith_controller.value.text =
               _displayAlongPersonForOption(selection).toString();
 
           if (!businessTourPlanController.SelectedAlongPersonWith_list.contains(selection)) {
@@ -944,24 +950,28 @@ class AddTourLinesPage extends StatelessWidget{
             FocusNode focusNode, VoidCallback onFieldSubmitted) {
           return TextField(
             onTap: (){
-              businessTourPlanController.AlongPersonWith_controller.clear();
+              businessTourPlanController.AlongPersonWith_controller.value.clear();
               if(focusNode.hasFocus){
                 focusNode.unfocus();
               }else{
                 focusNode.requestFocus();
               }
             },
+            onChanged:(value){
+              if(value.isEmpty){
+                businessTourPlanController.AlongPersonWith_controller.value.text="";
+              }
+            } ,
             cursorColor: AllColors.primaryDark1,
             controller: controller
-              ..text = businessTourPlanController.AlongPersonWith_controller
-                  .text,
+              ..text = businessTourPlanController.AlongPersonWith_controller.value.text,
             focusNode: focusNode,
             //onSubmitted: onFieldSubmitted,
             decoration: InputDecoration(
               suffixIcon: IconButton(
                 color: AllColors.primaryDark1,
                 onPressed: (){
-                  businessTourPlanController.AlongPersonWith_controller.clear();
+                  businessTourPlanController.AlongPersonWith_controller.value.clear();
                   if(focusNode.hasFocus){
                     focusNode.unfocus();
                   }else{

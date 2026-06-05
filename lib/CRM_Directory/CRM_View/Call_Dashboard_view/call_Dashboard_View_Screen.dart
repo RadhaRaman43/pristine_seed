@@ -1419,8 +1419,7 @@ class CallDashboardViewScreen extends StatelessWidget {
                       ),
                       value: 'Monthly',
                       dense: true,
-                      groupValue:
-                          dashboard_view_Controller.character.value.toString(),
+                      groupValue: dashboard_view_Controller.character.value.toString(),
                       onChanged: (value) {
                         dashboard_view_Controller.character.value = value ?? "";
                         dashboard_view_Controller.DateRange('month');
@@ -1973,7 +1972,7 @@ class CallDashboardViewScreen extends StatelessWidget {
         asyncItems: (String filter) async {
           return await dashboard_view_Controller.getAccountMaster(filter);
         },
-        itemAsString: (AccountMasterModel u) => u.accountName ?? "",
+        itemAsString: (AccountMasterModel u) => "${u.accountName ?? ""}(${u.accountCode ?? ""})",
         selectedItems: dashboard_view_Controller.SelectedAccount_Master_list,
         dropdownBuilder: (context, selectedItems) {
           if (selectedItems.isEmpty) {
@@ -1988,7 +1987,7 @@ class CallDashboardViewScreen extends StatelessWidget {
           }return SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Text(
-              selectedItems.map((e) => e.accountName).join(', '),
+              selectedItems.map((e) => "${e.accountName ?? ""}(${e.accountCode ?? ""})").join(', '),
               style: TextStyle(color: Colors.black),
             ),
           );
@@ -2006,10 +2005,9 @@ class CallDashboardViewScreen extends StatelessWidget {
         ),
 
         onChanged: (List<AccountMasterModel> selectedList) {
-          dashboard_view_Controller.SelectedAccount_Master_list.assignAll(
-              selectedList);
+          dashboard_view_Controller.SelectedAccount_Master_list.assignAll(selectedList);
           dashboard_view_Controller.CustomerName_controller.value.text =
-              selectedList.map((e) => e.accountName).join(', ');
+              selectedList.map((e) => e.accountCode).join(', ');
         },
         popupProps: PopupPropsMultiSelection.dialog(
           showSearchBox: true,
@@ -2025,8 +2023,7 @@ class CallDashboardViewScreen extends StatelessWidget {
           ),
           itemBuilder: (context, item, isSelected) {
             return ListTile(
-              title: Text(
-                item.accountName ?? "",
+              title: Text("${item.accountName ?? ""}(${item.accountCode ?? ""})",
                 style: TextStyle(
                   color: isSelected ? Colors.blue : Colors.black,
                   fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
@@ -2040,8 +2037,261 @@ class CallDashboardViewScreen extends StatelessWidget {
       );
     });
   }
-
   Widget bindAccountOwnerFilter(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {});
+    return Obx(() {
+      if (dashboard_view_Controller.AccountOwner_controller.value.text.isNotEmpty && dashboard_view_Controller.filterDataChecker.value=='1') {
+        List<String> nameList = dashboard_view_Controller.AccountOwner_controller.value.text.split(',');
+        dashboard_view_Controller.SelectedEmployee_Member_list.value = List.generate(nameList.length, (index) {
+          return EmployeeMemberModel(
+            userFullName: nameList[index].trim(),
+          );
+        });
+      }
+      print("list length ${dashboard_view_Controller.employee_Member_list.length}");
+      final selected = dashboard_view_Controller.SelectedEmployee_Member_list;
+      final selectedText = selected.isEmpty ? null : selected.map((e) =>
+      "${dashboard_view_Controller.isAdminWritePermission=="1"?e.userFullName ?? "":e.fullName ?? ""}(${e.salesPersonEmpCode ?? ""})").join(', ');
+      return GestureDetector(
+        onTap: ()  {
+          openBottomSheet(context);
+        },
+        child: InputDecorator(
+          decoration: InputDecoration(
+            labelText: selectedText != null ?  "Task Owner": "", // 👈 Label restored here
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            contentPadding:
+            const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+          ),
+          child: Row(
+            children: [
+              Expanded(
+                child: selectedText == null
+                    ? Text(
+                  "Task Owner",
+                  style: GoogleFonts.poppins(
+                    color: Colors.black,
+                    fontSize: AllFontSize.sisxteen,
+                  ),
+                )
+                    : SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Text(
+                    selectedText,
+                    style: const TextStyle(color: Colors.black),
+                  ),
+                ),
+              ),
+              const Icon(Icons.arrow_drop_down),
+            ],
+          ),
+        ),
+      );
+    });
+  }
+
+  openBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(16)),),
+        builder: (context){
+          dashboard_view_Controller.tempSelected.value = [];
+          dashboard_view_Controller.tempSelected.addAll(dashboard_view_Controller.SelectedEmployee_Member_list);
+          dashboard_view_Controller.filtered.value = dashboard_view_Controller.employee_Member_list;
+          return Obx((){
+            dashboard_view_Controller.allSelected.value = dashboard_view_Controller.filtered.isNotEmpty
+                && dashboard_view_Controller.tempSelected.length == dashboard_view_Controller.filtered.length;
+            return Visibility(
+                visible: dashboard_view_Controller.selectOwner.value,
+                child: Padding(
+                  padding: EdgeInsets.only(
+                      bottom: MediaQuery.of(context).viewInsets.bottom),
+                  child: SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.75,
+                    child: Column(
+                      children: [
+                        const SizedBox(height: 8),
+                        Container(
+                          width: 50,
+                          height: 4,
+                          decoration: BoxDecoration(
+                              color: Colors.grey[400],
+                              borderRadius: BorderRadius.circular(2)),
+                        ),
+                        const SizedBox(height: 12),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  'Select Task Owner',
+                                  style: GoogleFonts.poppins(
+                                      fontSize: 16, fontWeight: FontWeight.w600,color: Colors.black),
+                                ),
+                              ),
+                              IconButton(onPressed: () {
+                                Navigator.of(context).pop();
+                              }, icon: const Icon(Icons.close,color: AllColors.primaryDark1,weight: 700,))
+
+                            ],
+                          ),
+                        ),
+                        // Search Field
+                        Padding(
+                          padding:
+                          const EdgeInsets.symmetric(horizontal: 16.0),
+                          child: TextField(
+                            controller: dashboard_view_Controller.searchController.value,
+                            decoration: InputDecoration(
+                              hintText: 'Search...',
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8)),
+                              isDense: true,
+                              suffixIcon: dashboard_view_Controller.searchController.value.text.isNotEmpty ? IconButton(
+                                icon: const Icon(Icons.clear),
+                                onPressed: () {
+                                  dashboard_view_Controller.searchController.value.clear();
+                                  if(dashboard_view_Controller.isAdminWritePermission=="1") {
+                                    dashboard_view_Controller.EmployeeMasterGet(dashboard_view_Controller.searchController.value.text);
+                                  }
+                                  else{
+                                    dashboard_view_Controller.filtered.value =dashboard_view_Controller.searchController.value.text.isEmpty ?
+                                    dashboard_view_Controller.employee_Member_list:dashboard_view_Controller.employee_Member_list.where((c) =>
+                                        (c.fullName ?? "").toLowerCase().contains(dashboard_view_Controller.searchController.value.text)).toList();
+                                  }
+
+
+                                },
+                              ) : null,
+                            ),
+                            onChanged: (v)
+                            {
+                              if(dashboard_view_Controller.isAdminWritePermission=="1") {
+                                dashboard_view_Controller.EmployeeMasterGet(dashboard_view_Controller.searchController.value.text);
+                              }
+                              else{
+                                dashboard_view_Controller.filtered.value =dashboard_view_Controller.searchController.value.text.isEmpty ?
+                                dashboard_view_Controller.employee_Member_list:dashboard_view_Controller.employee_Member_list.where((c) =>
+                                    (c.fullName ?? "").toLowerCase().contains(dashboard_view_Controller.searchController.value.text)).toList();
+                              }
+
+                            },
+                          ),
+                        ),
+
+                        const SizedBox(height: 8),
+
+                        // Select All
+                        Padding(
+                          padding:
+                          const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: CheckboxListTile(
+                            title:dashboard_view_Controller.allSelected.value?const Text('UnSelect All'): const Text('Select All'),
+                            value: dashboard_view_Controller.allSelected.value,
+                            onChanged: (val) {
+                              if (val == true) {
+                                dashboard_view_Controller.tempSelected.clear();
+                                dashboard_view_Controller.allSelected.value=true;
+                                dashboard_view_Controller.tempSelected.addAll(dashboard_view_Controller.filtered);
+                              } else {
+                                dashboard_view_Controller.allSelected.value=false;
+                                dashboard_view_Controller.tempSelected.clear();
+                              }
+                              dashboard_view_Controller.selectOwner.value=false;
+                              dashboard_view_Controller.selectOwner.value=true;
+                            },
+                          ),
+                        ),
+
+                        const Divider(height: 1),
+                        Obx((){
+                          return Visibility(visible:dashboard_view_Controller.loading.value,
+                            child:LinearProgressIndicator(
+                              backgroundColor: AllColors.primaryDark1,
+                              color: AllColors.textColor,
+                            ), );
+                        }),
+
+
+                        // List
+                        Expanded(
+                          child: dashboard_view_Controller.filtered.isEmpty ? const Center(child: Text('No Record Found!')) : ListView.builder(
+                            padding: const EdgeInsets.symmetric(vertical: 8),
+                            itemCount: dashboard_view_Controller.filtered.length,
+                            itemBuilder: (context, idx) {
+                              final item = dashboard_view_Controller.filtered[idx];
+                              dashboard_view_Controller.isSel.value = dashboard_view_Controller.tempSelected.any((s) =>
+                              (dashboard_view_Controller.isAdminWritePermission=="1"?s.userFullName ?? "":s.fullName ?? "") ==
+                                  (dashboard_view_Controller.isAdminWritePermission=="1"?item.userFullName ?? "":item.fullName ?? ""));
+                              return CheckboxListTile(
+                                title: Text("${dashboard_view_Controller.isAdminWritePermission=="1"?
+                                item.userFullName ?? "":item.fullName ?? ""}(${item.salesPersonEmpCode ?? ""})"),
+                                value: dashboard_view_Controller.isSel.value,
+                                onChanged: (v) {
+                                  if (v == true) {
+                                    dashboard_view_Controller.isSel.value=true;
+                                    dashboard_view_Controller.tempSelected.add(item);
+                                  } else {
+                                    dashboard_view_Controller.isSel.value=false;
+                                    dashboard_view_Controller.tempSelected.removeWhere((s) =>
+                                    (dashboard_view_Controller.isAdminWritePermission=="1"?s.userFullName ?? "":s.fullName ?? "") ==
+                                        (dashboard_view_Controller.isAdminWritePermission=="1"?item.userFullName ?? "":item.fullName ?? ""));
+                                    //(s.userFullName ?? "") == (item.userFullName ?? ""));
+                                  }
+                                  dashboard_view_Controller.selectOwner.value=false;
+                                  dashboard_view_Controller.selectOwner.value=true;
+                                },
+                              );
+                            },
+                          ),
+                        ),
+
+                        // Done button
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16.0, vertical: 12),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: ElevatedButton(
+                                  onPressed: () {
+                                    dashboard_view_Controller.SelectedEmployee_Member_list
+                                        .assignAll(dashboard_view_Controller.tempSelected);
+                                    dashboard_view_Controller.AccountOwner_controller.value.text =
+                                        dashboard_view_Controller.tempSelected.map((e) => e.empId).join(', ');
+
+                                    Navigator.of(context).pop();
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: AllColors.primaryDark1,
+                                    shadowColor: AllColors.primaryDark1,
+                                    foregroundColor: AllColors.primaryDark1,
+                                    side: BorderSide(color: AllColors.primaryDark1, width: 1),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                  ),
+                                  child: Text('Done',style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w600,color: Colors.white),),
+
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ));
+          });
+        }
+    );
+  }
+
+  /*Widget bindAccountOwnerFilter(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
 
     });
@@ -2280,72 +2530,8 @@ class CallDashboardViewScreen extends StatelessWidget {
         ),
       );
     });
-  }
-
-  /*bindAccountOwnerFilter(BuildContext context) {
-    return Obx(() {
-      return DropdownSearch<EmployeeMemberModel>.multiSelection(
-        items: dashboard_view_Controller.employee_Member_list,
-        itemAsString: (EmployeeMemberModel u) => u.fullName ?? "",
-        selectedItems: dashboard_view_Controller.SelectedEmployee_Member_list,
-        dropdownDecoratorProps: DropDownDecoratorProps(
-          baseStyle: TextStyle(color: Colors.black),
-          dropdownSearchDecoration: InputDecoration(
-            filled: false,
-            labelText: dashboard_view_Controller
-                    .SelectedEmployee_Member_list.isNotEmpty
-                ? "Account Owner"
-                : null,
-            hintText: "Account Owner",
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-          ),
-        ),
-        dropdownBuilder: (context, selectedItems) {
-          // Custom builder to just show comma-separated names
-          if (selectedItems.isEmpty) {
-            return Text(
-              " Account Owner",
-              style: GoogleFonts.poppins(
-                color: AllColors.primaryDark1, // Match your hint color
-                fontSize: AllFontSize.sisxteen,
-                fontWeight: FontWeight.w500,
-              ),
-            );
-          }
-          return SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Text(
-              selectedItems.map((e) => e.fullName).join(', '),
-              style: TextStyle(color: Colors.black), // Only black text
-            ),
-          );
-        },
-        onChanged: (List<EmployeeMemberModel> selectedList) {
-          dashboard_view_Controller.SelectedEmployee_Member_list.value =
-              selectedList;
-          dashboard_view_Controller.AccountOwner_controller.value.text =
-              selectedList.map((e) => e.fullName).join(', ');
-        },
-        popupProps: PopupPropsMultiSelection.dialog(
-          showSearchBox: true,
-          searchFieldProps: TextFieldProps(
-            padding: EdgeInsets.only(top: 20, left: 10, right: 10),
-            decoration: InputDecoration(
-              contentPadding: EdgeInsets.only(top: 20, left: 12, right: 12),
-              // Top margin here
-              hintText: "Search...",
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-            ),
-          ),
-          itemBuilder: (context, item, isSelected) => ListTile(
-            title: Text(item.fullName ?? ""),
-          ),
-        ),
-      );
-    });
   }*/
+
 
   bindProductCategoryFilter(BuildContext context) {
     return Obx(() {

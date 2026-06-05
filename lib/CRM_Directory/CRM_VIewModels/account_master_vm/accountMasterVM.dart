@@ -210,6 +210,13 @@ class Accountmastervm extends GetxController{
   RxList<CompanyTypeModal> company_profile_type_list = <CompanyTypeModal>[].obs;
   RxList<CompanyTypeModal> selected_company_type_list = <CompanyTypeModal>[].obs;
 
+  RxList<EmployeeMemberModel> tempSelected = <EmployeeMemberModel>[].obs;
+  RxList<EmployeeMemberModel> filtered = <EmployeeMemberModel>[].obs;
+  RxBool selectOwner = true.obs;
+  RxBool allSelected = false.obs;
+  RxBool isSel = false.obs;
+  var searchController=TextEditingController().obs;
+
   //todo new filter controller
   //var account_code_controller = TextEditingController().obs;
   var postal_code_controller = TextEditingController().obs;
@@ -249,12 +256,15 @@ class Accountmastervm extends GetxController{
       getCompanyProfileTypeApi("");
       getGstRegistrationTypeApi();
 
-      getEmployeeMemberApi();
+
       getGeoPostalCodeApi(50,'',email);
       getSateListApi();
       getTatResponseMasterApi();
-      if (this.isAdminWritePermission == 1) {
+      if (this.isAdminWritePermission == "1") {
         EmployeeMasterGet('');
+      }
+      else{
+        getEmployeeMemberApi();
       }
 
 
@@ -291,17 +301,20 @@ class Accountmastervm extends GetxController{
   }
 
   Future<Iterable<EmployeeMemberModel>> EmployeeMasterGet(String query) async {
-    if (query == '') {
+    /*if (query == '') {
       return const Iterable<EmployeeMemberModel>.empty();
-    }
+    }*/
     try {
+
     Map data = {
-      'filter_name': '',
-      'filter_email': query,
-      'filter_location_id': '',
-      'email_id': email,
-      'rowsPerPage': 50,
-      'pageNumber': 0,
+    'filter_name': query,
+    'filter_email': "",
+    'filter_location_id': '',
+    'email_id': email,
+    "filter_cluster_name": clusterName_controller.value.text.isEmpty?"":clusterName_controller.value.text,
+    "filter_region_name": RegionName_controller.value.text.isEmpty?"":RegionName_controller.value.text,
+    'rowsPerPage': 10,
+    'pageNumber': 0,
     };
     loading.value=true;
     String employee_response =await _api.EmployeeMatserGetApiHit(data, sessionManagement);
@@ -316,20 +329,20 @@ class Accountmastervm extends GetxController{
         if (response[0].condition == 'True') {
           print(jsonResponse);
           employee_Member_list.value = response;
-          loading.value=false;
         } else {
-          loading.value=false;
           employee_Member_list.value = [];
         }
       } else {
-        loading.value=false;
         Utils.sanckBarException('False!', jsonResponse.message);
         employee_Member_list.value = [];
       }
     } catch (e) {
-      loading.value=false;
+
       Utils.sanckBarException('Exception!', e.toString());
       employee_Member_list.value = [];
+    }
+    finally{
+      loading.value=false;
     }
     return employee_Member_list.value;
   }
@@ -809,9 +822,8 @@ class Accountmastervm extends GetxController{
     print("get account type ${data}");
     String value = await _api.getMasterTypeApiHit(data, sessionManagement);
         List<GetMasterTypeModel> emp_masterResponse =
-        (json.decode(value) as List<dynamic>)
-            .map((i) => GetMasterTypeModel.fromJson(i as Map<String, dynamic>))
-            .toList();
+        (json.decode(value) as List<dynamic>).map((i) =>
+            GetMasterTypeModel.fromJson(i as Map<String, dynamic>)).toList();
 
         if (emp_masterResponse.isNotEmpty && emp_masterResponse[0]?.condition.toString() == "True") {
           loading.value = false;
@@ -1196,8 +1208,7 @@ class Accountmastervm extends GetxController{
         final http.Response response = await http.get(imageUrl);
         if (response.statusCode == 200) {
           clientRequest.files.add(http.MultipartFile.fromBytes(
-            'Url',
-            response.bodyBytes,
+            'Url', response.bodyBytes,
             filename: 'image.jpg',
           ));
         } else {
@@ -1753,6 +1764,10 @@ class Accountmastervm extends GetxController{
     //RegionName_controller.value.clear();
     zone_head__value_controller.value.clear();
     //clusterName_controller.value.clear();
+    searchController.value.clear();
+    if(isAdminWritePermission=="1") {
+      EmployeeMasterGet("");
+    }
     pageNumber=0;
 
     selected_company_type_list.value=[];

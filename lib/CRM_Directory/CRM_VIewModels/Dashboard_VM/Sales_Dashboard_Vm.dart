@@ -76,6 +76,12 @@ class SalesDashboardVm extends GetxController{
   RxList<RegionWithClusterFilterModal> regionwithclusterGetByEmailList = <RegionWithClusterFilterModal>[].obs;
   RxList<RegionWithClusterFilterModal> SelectedRegion_list = <RegionWithClusterFilterModal>[].obs;
 
+  RxList<EmployeeMemberModel> tempSelected = <EmployeeMemberModel>[].obs;
+  RxList<EmployeeMemberModel> filtered = <EmployeeMemberModel>[].obs;
+  RxBool selectOwner = true.obs;
+  RxBool allSelected = false.obs;
+  RxBool isSel = false.obs;
+  var searchController=TextEditingController().obs;
 
   var filterCustomDateController=TextEditingController().obs;
 
@@ -91,7 +97,7 @@ class SalesDashboardVm extends GetxController{
     //salesDashboardData();
     getClustersGetByEmail();
     getDepartmentList();
-    if(this.isAdminWritePermission==1){
+    if(this.isAdminWritePermission=="1"){
       EmployeeMasterGet('');
     }
     else{
@@ -309,17 +315,37 @@ class SalesDashboardVm extends GetxController{
   }
 
   Future<Iterable<EmployeeMemberModel>> EmployeeMasterGet(String query) async {
-    if (query == '') {
+   /* if (query == '') {
       return const Iterable<EmployeeMemberModel>.empty();
+    }*/
+    ClusterNameForApi = '';
+    if(clusterName_controller.value.text.isNotEmpty){
+      ClusterNameForApi = clusterName_controller.value.text
+          .split(',')
+          .map((e) => e.trim())
+          .join('|');
     }
+    RegionNameForApi = '';
+    debugPrint("print region cont ${RegionName_controller.value.text}");
+
+    if(RegionName_controller.value.text.isNotEmpty){
+      RegionNameForApi = RegionName_controller.value.text
+          .split(',')
+          .map((e) => e.trim())
+          .join('|');
+    }
+
     Map data = {
-      'filter_name': '',
-      'filter_email': '',
+      'filter_name': query,
+      'filter_email': "",
       'filter_location_id': '',
       'email_id': email,
-      'rowsPerPage': 50,
+      "filter_cluster_name": ClusterNameForApi,
+      "filter_region_name": RegionNameForApi,
+      'rowsPerPage': 10,
       'pageNumber': 0,
     };
+    loading.value = true;
     String employee_response =await _api.EmployeeMatserGetApiHit(data, sessionManagement);
     try {
       final jsonResponse = json.decode(employee_response);
@@ -344,6 +370,9 @@ class SalesDashboardVm extends GetxController{
     } catch (e) {
       Utils.sanckBarException('Exception!', e.toString());
       employee_Member_list.value = [];
+    }
+    finally{
+      loading.value=false;
     }
     return employee_Member_list.value;
   }
@@ -585,6 +614,10 @@ class SalesDashboardVm extends GetxController{
     filterCustomDateController.value.clear();
     EmployeeNameFilter_controller.value.clear();
     DepartmentNameFilter_controller.value.clear();
+    searchController.value.clear();
+    if(isAdminWritePermission=="1") {
+      EmployeeMasterGet("");
+    }
     SelectedCluster_list.value = [];
     SelectedRegion_list.value = [];
     SelectDepartment_List.value = [];

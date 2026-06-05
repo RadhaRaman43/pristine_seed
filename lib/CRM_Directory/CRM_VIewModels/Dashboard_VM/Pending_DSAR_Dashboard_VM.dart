@@ -32,7 +32,7 @@ class PendingDsarDashboardVm extends GetxController{
   var selectedOption = 'Employee'.obs;
   RxString formattedStartDate = "".obs;
   RxString formattedEndDate = "".obs;
-  RxString character = 'Month'.obs;
+  RxString character = 'Monthly'.obs;
   RxString rodName = ''.obs;
   RxString geoValueName = ''.obs;
   RxString isAdminWritePermission = "".obs;
@@ -61,6 +61,13 @@ class PendingDsarDashboardVm extends GetxController{
   RxList<ClusterModal> SelectedCluster_list = <ClusterModal>[].obs;
   RxList<RegionWithClusterFilterModal> regionwithclusterGetByEmailList = <RegionWithClusterFilterModal>[].obs;
   RxList<RegionWithClusterFilterModal> SelectedRegion_list = <RegionWithClusterFilterModal>[].obs;
+
+  RxList<EmployeeMemberModel> tempSelected = <EmployeeMemberModel>[].obs;
+  RxList<EmployeeMemberModel> filtered = <EmployeeMemberModel>[].obs;
+  RxBool selectOwner = true.obs;
+  RxBool allSelected = false.obs;
+  RxBool isSel = false.obs;
+  var searchController=TextEditingController().obs;
 
   var filterCustomDateController=TextEditingController().obs;
   var task_Status_controller=TextEditingController().obs;
@@ -96,18 +103,19 @@ class PendingDsarDashboardVm extends GetxController{
       userType = await sessionManagement.getUserType() ?? '';
       isAdminWritePermission.value =
           await sessionManagement.getIsAdminPermission() ?? '';
+      DateRange("month");
       //TaskStatusListTypeList.value = ['Pending','Pending For Approval', 'Approved', 'Rejected'];
       task_Status_controller.value.text = 'All';
       selectedTypeCallList.insert(0, CallStatusMasterModel(taskStatus: "All"));
       selectedDSARStatusList.insert(
           0, CallStatusMasterModel(taskStatus: 'All'));
-      DateRange("month");
+
       filterCustomDateController.value.text =
       '${formattedStartDate} - ${formattedEndDate}';
       //getDashboardUserWiseData(pageNumber);
       CallDSARsMasterApiHit();
       CallMasterApiHit();
-      isAdminWritePermission == 1
+      isAdminWritePermission == "1"
           ? EmployeeMasterGet("")
           : getEmployeeTeamMemberGetByClusterRegionApi();
       getItemCategoryMstWithoutTaskIdApi();
@@ -256,12 +264,12 @@ class PendingDsarDashboardVm extends GetxController{
         "end_date": formattedEndDate.value,
         "filter_type_of_call": TypeOfCallForApi.isEmpty?"All":TypeOfCallForApi,
         "filter_owner_name": AccountOwnerForApi.isEmpty?"":AccountOwnerForApi,
-        "filter_region_name": RegionNameForApi.isEmpty?"":RegionNameForApi,
-        "filter_cluster_name": ClusterNameForApi.isEmpty?"":ClusterNameForApi,
         "filter_product_category": ProductCategoryForApi.isEmpty?"":ProductCategoryForApi,
         "filter_activity_status": lastActivityStatusForApi.isEmpty?"All":lastActivityStatusForApi,
         "filter_customer_name": CustomerNameApi.isEmpty?"":CustomerNameApi,
         "filter_task_approval_status": TaskStatusForApi.isEmpty?"Approved":TaskStatusForApi,
+        "filter_region_name": RegionNameForApi.isEmpty?"":RegionNameForApi,
+        "filter_cluster_name": ClusterNameForApi.isEmpty?"":ClusterNameForApi,
       };
 
       print(data);
@@ -309,12 +317,12 @@ class PendingDsarDashboardVm extends GetxController{
         "end_date": formattedEndDate.value,
         "filter_type_of_call": TypeOfCallForApi.isEmpty?"All":TypeOfCallForApi,
         "filter_owner_name": AccountOwnerForApi.isEmpty?"":AccountOwnerForApi,
-        "filter_region_name": RegionNameForApi.isEmpty?"":RegionNameForApi,
-        "filter_cluster_name": ClusterNameForApi.isEmpty?"":ClusterNameForApi,
-        "filter_product_category": ProductCategoryForApi.isEmpty?"":ProductCategoryForApi,
         "filter_activity_status": lastActivityStatusForApi.isEmpty?"All":lastActivityStatusForApi,
         "filter_customer_name": CustomerNameApi.isEmpty?"":CustomerNameApi,
         "filter_task_approval_status": TaskStatusForApi.isEmpty?"Approved":TaskStatusForApi,
+        "filter_region_name": RegionNameForApi.isEmpty?"":RegionNameForApi,
+        "filter_cluster_name": ClusterNameForApi.isEmpty?"":ClusterNameForApi,
+        "filter_product_category": ProductCategoryForApi.isEmpty?"":ProductCategoryForApi,
         "rowsPerPage": rowsPerPage,
         "pageNumber": pageNumber
       };
@@ -481,19 +489,34 @@ class PendingDsarDashboardVm extends GetxController{
   }
 
   Future<Iterable<EmployeeMemberModel>> EmployeeMasterGet(String query) async {
-    if (query == '') {
-      return const Iterable<EmployeeMemberModel>.empty();
+    // if (query == '') {
+    //   return const Iterable<EmployeeMemberModel>.empty();
+    // }
+    ClusterNameForApi = '';
+    if(clusterName_controller.value.text.isNotEmpty){
+      ClusterNameForApi = clusterName_controller.value.text
+          .split(',')
+          .map((e) => e.trim())
+          .join('|');
+    }
+    RegionNameForApi = '';
+    if(RegionName_controller.value.text.isNotEmpty){
+      RegionNameForApi = RegionName_controller.value.text
+          .split(',')
+          .map((e) => e.trim())
+          .join('|');
     }
     Map data = {
-      'filter_name': '',
-      'filter_email': query,
+      'filter_name': query,
+      'filter_email': "",
       'filter_location_id': '',
       'email_id': email,
-      "filter_cluster_name": "",
-      "filter_region_name": "",
-      'rowsPerPage': 50,
+      "filter_cluster_name": ClusterNameForApi,
+      "filter_region_name": RegionNameForApi,
+      'rowsPerPage': 10,
       'pageNumber': 0,
     };
+    loading.value=true;
     String employee_response =await _api.EmployeeMatserGetApiHit(data, sessionManagement);
     try {
       final jsonResponse = json.decode(employee_response);
@@ -518,6 +541,9 @@ class PendingDsarDashboardVm extends GetxController{
     } catch (e) {
       Utils.sanckBarException('Exception!', e.toString());
       employee_Member_list.value = [];
+    }
+    finally{
+      loading.value = false;
     }
     return employee_Member_list.value;
   }
@@ -799,7 +825,7 @@ class PendingDsarDashboardVm extends GetxController{
   }
 
   clearAllFilterController(){
-    character.value = 'Month';
+    character.value = 'Monthly';
     rodName.value = '';
     geoValueName.value = '';
     TypeOfCallForApi = '';
@@ -819,6 +845,10 @@ class PendingDsarDashboardVm extends GetxController{
     //clusterName_controller.value.clear();
     CustomerName_controller.value.clear();
     //RegionName_controller.value.clear();
+    searchController.value.clear();
+    if(isAdminWritePermission=="1") {
+      EmployeeMasterGet("");
+    }
     selectedDSARStatusList.value = [];
     SelectedAccount_Master_list.value = [];
     selectedTypeCallList.value = [];

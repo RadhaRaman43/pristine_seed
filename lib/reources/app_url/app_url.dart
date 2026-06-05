@@ -373,4 +373,8 @@ class AppUrl {
 
 
      static const String QuoteHeaderParentCategoryUpdate="$BASE_URL/api/CRM/Quote/QuoteHeaderParentCategoryUpdate";
+
+     //todo SalesForeCast
+     static const String SalesForecastHeaderGet="$BASE_URL/api/CRM/SalesForecast/SalesForecastHeaderGet";
+
 }

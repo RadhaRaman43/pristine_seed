@@ -59,8 +59,7 @@ class NetworkApiServices<T> extends BaseApiServices {
   }
 
   @override
-  Future<String> postApi(
-      var data, String url, SessionManagement sessionManagement) async {
+  Future<String> postApi(var data, String url, SessionManagement sessionManagement) async {
     if (kDebugMode) {
       print(url);
       print(data);
@@ -69,8 +68,7 @@ class NetworkApiServices<T> extends BaseApiServices {
     var request_host_name = await sessionManagement.getRequestHostName();
     var company_id = await sessionManagement.getCompanyId();
     String adminCheck = await sessionManagement.getIsAdminPermission() ?? '';
-
-print(token);
+    print(token);
     Map<String, String> headers ={
       'Content-Type': 'application/json; charset=UTF-8',
     };

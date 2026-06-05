@@ -110,7 +110,7 @@ class BusinessPlanTourViewModel extends GetxController{
   var endDateController = TextEditingController().obs;
   var remarkController = TextEditingController().obs;
 
-  var AlongPersonWith_controller = TextEditingController();
+  var AlongPersonWith_controller = TextEditingController().obs;
   var TourPlanDistrict_Controller = TextEditingController();
   var TourPlanAccount_Controller = TextEditingController().obs;
   var MeetingWith_controller = TextEditingController().obs;
@@ -1265,7 +1265,7 @@ class BusinessPlanTourViewModel extends GetxController{
   }
 
   void clearAllCreateLinePlanController(){
-    AlongPersonWith_controller.clear();
+    AlongPersonWith_controller.value.clear();
     TourPlanDistrict_Controller.clear();
     TourPlanAccount_Controller.value.clear();
     MeetingWith_controller.value.clear();
@@ -1274,6 +1274,7 @@ class BusinessPlanTourViewModel extends GetxController{
     tourDate_Controller.clear();
     TourType_Controller.value.clear();
     SelectedAlongPersonWith_list.value=[];
+    SelectedAlongPersonWith_list1.value=[];
     SelectedMeetingWith_List.value=[];
 
     SelectedCluster_list.value=[];

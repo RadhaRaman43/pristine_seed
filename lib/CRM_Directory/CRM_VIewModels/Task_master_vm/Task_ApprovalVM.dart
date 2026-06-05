@@ -81,6 +81,13 @@ class TaskApprovalvm extends GetxController{
   RxList<EmployeeMemberModel> employee_Member_list = <EmployeeMemberModel>[].obs;
   RxList<EmployeeMemberModel> SelectedEmployee_Member_list = <EmployeeMemberModel>[].obs;
 
+  RxList<EmployeeMemberModel> tempSelected = <EmployeeMemberModel>[].obs;
+  RxList<EmployeeMemberModel> filtered = <EmployeeMemberModel>[].obs;
+  RxBool selectOwner = true.obs;
+  RxBool allSelected = false.obs;
+  RxBool isSel = false.obs;
+  var searchController=TextEditingController().obs;
+
   void toggle() {
     isExpandDetails.value = !isExpandDetails.value;
   }
@@ -145,7 +152,7 @@ class TaskApprovalvm extends GetxController{
       CallStatusMasterApiHit('Call');
       MethodOfCallMasterApiHit();
       CallDSARsMasterApiHit();
-      if (isAdminWritePermission == 1) {
+      if (isAdminWritePermission == "1") {
         EmployeeMasterGet('');
       }
       else {
@@ -262,18 +269,20 @@ class TaskApprovalvm extends GetxController{
   }
 
   Future<Iterable<EmployeeMemberModel>> EmployeeMasterGet(String query) async {
-    if (query == '') {
+    /*if (query == '') {
       return const Iterable<EmployeeMemberModel>.empty();
-    }
+    }*/
     Map data = {
-      'filter_name': '',
-      'filter_email': query,
+      'filter_name': query,
+      'filter_email': "",
       'filter_location_id': '',
       'email_id': email,
-      'rowsPerPage': 50,
+      "filter_cluster_name": clusterName_controller.value.text.isEmpty?"":clusterName_controller.value.text,
+      "filter_region_name": RegionName_controller.value.text.isEmpty?"":RegionName_controller.value.text,
+      'rowsPerPage': 10,
       'pageNumber': 0,
     };
-   // loading.value = true;
+    loading.value = true;
     String employee_response =await _api.EmployeeMatserGetApiHit(data, sessionManagement);
     try {
       final jsonResponse = json.decode(employee_response);
@@ -299,9 +308,9 @@ class TaskApprovalvm extends GetxController{
       Utils.sanckBarException('Exception!', e.toString());
       employee_Member_list.value = [];
     }
-   /* finally{
+    finally{
       loading.value = false;
-    }*/
+    }
     return employee_Member_list.value;
   }
   getEmployeeMemberApi() {
@@ -544,6 +553,10 @@ class TaskApprovalvm extends GetxController{
 
     AccountOwnerForApi = '';
     AccountOwner_controller.value.clear();
+    searchController.value.clear();
+    if(isAdminWritePermission=="1") {
+      EmployeeMasterGet("");
+    }
     SelectedEmployee_Member_list.value = [];
 
     SelectedCluster_list.value=[];

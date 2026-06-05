@@ -416,6 +416,13 @@ class SalesCycleVm extends GetxController {
   RxList<ItemCategoryMstModel> Item_Category_Infra_list = <ItemCategoryMstModel>[].obs;
   RxList<String> isInfraLeadList =["Yes", "No"].obs;
 
+  RxList<EmployeeMemberModel> tempSelected = <EmployeeMemberModel>[].obs;
+  RxList<EmployeeMemberModel> filtered = <EmployeeMemberModel>[].obs;
+  RxBool selectOwner = true.obs;
+  RxBool allSelected = false.obs;
+  RxBool isSel = false.obs;
+  var searchController=TextEditingController().obs;
+
 
   RxList<AccountMasterModel> Account_Master_list=<AccountMasterModel>[].obs;
   RxList<ContactMstGetListModal> infra_contact_master_list=<ContactMstGetListModal>[].obs;
@@ -470,10 +477,8 @@ class SalesCycleVm extends GetxController {
       email = await sessionManagement.getEmail() ?? '';
       filterRouting = await sessionManagement.getfilterRouting() ?? '';
       userType = await sessionManagement.getUserType() ?? '';
-      isAdminWritePermission.value =
-          await sessionManagement.getIsAdminPermission() ?? '';
-      isHeadofficePermission.value =
-          await sessionManagement.getisHeadofficePermission() ?? '';
+      isAdminWritePermission.value = await sessionManagement.getIsAdminPermission() ?? '';
+      isHeadofficePermission.value = await sessionManagement.getisHeadofficePermission() ?? '';
       //clearAllFieldOfFilter();
       product_category_type_Controller.value.text = "Contains";
 
@@ -483,7 +488,7 @@ class SalesCycleVm extends GetxController {
       }else{
         getItemCategoryMstWithoutTaskIdApi();
         getCompanyTypeMasterGet();
-        if (this.isAdminWritePermission.value == 1) {
+        if (this.isAdminWritePermission.value == "1") {
           EmployeeMasterGet('');
         }
         else {
@@ -540,13 +545,16 @@ class SalesCycleVm extends GetxController {
 
   Future<List<EmployeeMemberModel>> EmployeeMasterGet(String query) async {
     Map data = {
-      'filter_name': '',
-      'filter_email': query,
+      'filter_name': query,
+      'filter_email': "",
       'filter_location_id': '',
       'email_id': email,
-      'rowsPerPage': 500,
+      "filter_cluster_name": clusterName_controller.value.text.isEmpty?"":clusterName_controller.value.text,
+      "filter_region_name": RegionName_controller.value.text.isEmpty?"":RegionName_controller.value.text,
+      'rowsPerPage': 10,
       'pageNumber': 0,
     };
+    loading.value= true;
     String employee_response =await _api.EmployeeMatserGetApiHit(data, sessionManagement);
     try {
       final jsonResponse = json.decode(employee_response);
@@ -569,6 +577,9 @@ class SalesCycleVm extends GetxController {
     } catch (e) {
       Utils.sanckBarException('Exception!', e.toString());
       employee_Member_list.value = [];
+    }
+    finally{
+      loading.value= false;
     }
     return employee_Member_list.value;
   }
@@ -5139,6 +5150,10 @@ class SalesCycleVm extends GetxController {
 
     AccountOwnerForApi = '';
     AccountOwner_controller.value.clear();
+    searchController.value.clear();
+    if(isAdminWritePermission=="1") {
+      EmployeeMasterGet("");
+    }
     SelectedEmployee_Member_list.value = [];
 
     SelectedCluster_list.value=[];
