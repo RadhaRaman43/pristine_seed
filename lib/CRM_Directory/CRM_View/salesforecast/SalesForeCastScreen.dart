@@ -43,6 +43,8 @@ class SalesForceCastScreen extends StatelessWidget{
                 ),
                 Spacer(),
                 IconButton(onPressed: () {
+                      sales_force_cast_vm.showList.value = false;
+                      sales_force_cast_vm.getQuoteList(sales_force_cast_vm.pageNumberForQuote,);
                       Get.toNamed(RoutesName.createSalesForeCastScreen);
                     }, icon: Icon(Icons.add)),
 

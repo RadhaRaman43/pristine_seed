@@ -8,6 +8,9 @@ class SalesForeCastRepo{
   Future<String> SalesForecastHeaderGet(var data,SessionManagement sessionManagement) async{
     return _apiService.postApi(data, AppUrl.SalesForecastHeaderGet,sessionManagement);
   }
+  Future<String> QuoteHeaderGetForSalesForecast(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.QuoteHeaderGetForSalesForecast,sessionManagement);
+  }
 
   Future<String> RegionsWithClusterFilterGetByEmailApiHit(var data,SessionManagement sessionManagement) async{
     return _apiService.getApi(AppUrl.RegionsWithClusterFilterGetByEmail, sessionManagement, data);

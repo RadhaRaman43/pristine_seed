@@ -165,6 +165,8 @@ class BusinessTourPlanDeatil extends StatelessWidget {
                         icon: Icon(Icons.more_vert, color: AllColors.whiteColor),
                         onSelected: (value) {
                           if (value == "edit") {
+                            businessTourPlanController.remarkController.value.text="";
+                            businessTourPlanController.RejectReason_Controller.value.text="";
                             showApprovRejectDialog(
                                 context,
                                 businessTourPlanController.BusinessTourPlanDetails_list[0].tourId ?? "");
@@ -363,6 +365,7 @@ class BusinessTourPlanDeatil extends StatelessWidget {
                                 businessTourPlanController.BusinessTourPlanApproveReject(TourId, 'REJECTED');
                               }
                               Navigator.pop(context);
+                              Navigator.pop(context);
 
                             },
                             child: Container(
@@ -390,8 +393,6 @@ class BusinessTourPlanDeatil extends StatelessWidget {
 
   showApprovRejectDialog(context, String TaskId) {
     businessTourPlanController.ApproveReject_Controller.clear();
-    businessTourPlanController.RejectReason_Controller.value.clear();
-    businessTourPlanController.manager_remark_Controller.value.clear();
    // businessTourPlanController.ApproveBool.value = false;
     businessTourPlanController.RejectBool.value = false;
     showDialog(
@@ -406,7 +407,8 @@ class BusinessTourPlanDeatil extends StatelessWidget {
                   color: AllColors.primaryDark1,
                 ),
               ),
-              content: Wrap(
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   const Divider(
                     height: 1,
@@ -416,7 +418,7 @@ class BusinessTourPlanDeatil extends StatelessWidget {
                   bindApprovRejectDropDown(context),
                   const SizedBox(height: 15,),
                   bindInputData(businessTourPlanController.remarkController.value,"Enter Manager Remark"),
-                  const SizedBox(height: 55,),
+                  const SizedBox(height: 15,),
                   Obx(() {
                     return Visibility(
                       visible: businessTourPlanController.RejectBool
@@ -424,7 +426,7 @@ class BusinessTourPlanDeatil extends StatelessWidget {
                       child: bindInputData(businessTourPlanController.RejectReason_Controller.value,"Reject Reason"),
                     );
                   }),
-                  SizedBox(height: 55,),
+                  SizedBox(height: 15,),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
@@ -446,7 +448,6 @@ class BusinessTourPlanDeatil extends StatelessWidget {
                                     'Error : ', 'Please select Type.');
                                 return;
                               }
-                              Navigator.pop(context);
                               ConfirmationDialog(context, TaskId, 'Approve', 'Do you want to Approve this header?' );
                             },
                             child: Container(

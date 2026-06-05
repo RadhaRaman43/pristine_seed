@@ -1182,7 +1182,7 @@ class BusinessPlanTourViewModel extends GetxController{
 
   BusinessTourPlanApproveReject(String TourId, String Status) {
     try {
-      if(manager_remark_Controller.value.text.isEmpty){
+      if(remarkController.value.text.isEmpty){
         Utils.sanckBarError("Manager Remark!", "Please Enter Manager Remark");
         return;
       }
@@ -1191,7 +1191,7 @@ class BusinessPlanTourViewModel extends GetxController{
         "status": Status,
         "reject_remark": RejectReason_Controller.value.text.isNotEmpty?RejectReason_Controller.value.text:'',
         "email_id": email,
-        "manager_remarks": manager_remark_Controller.value.text
+        "manager_remarks": remarkController.value.text
       };
       loading.value = true;
       _api.BusinessTourPlanApproveReject(data, sessionManagement).then(
