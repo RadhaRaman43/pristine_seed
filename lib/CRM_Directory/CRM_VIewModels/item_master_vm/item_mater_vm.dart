@@ -627,8 +627,9 @@ class ItemMasterVm extends GetxController{
       excelProgress.value = 0;
       showExcelProgressDialog(context);
       /// STORAGE PERMISSION
-      if (Platform.isAndroid) {
-        var status = await Permission.manageExternalStorage.request();
+      /*if (Platform.isAndroid) {
+        directory = Directory('/storage/emulated/0/Download');
+        *//*var status = await Permission.manageExternalStorage.request();
         if (!status.isGranted) {
           Get.back();
           Utils.sanckBarError(
@@ -636,8 +637,8 @@ class ItemMasterVm extends GetxController{
             "Storage permission denied",
           );
           return;
-        }
-      }
+        }*//*
+      }*/
       /// CREATE EXCEL
       final excel = Excel.createExcel();
       excel.rename('Sheet1', sheetName);
