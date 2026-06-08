@@ -253,6 +253,7 @@ class ItemMasterVm extends GetxController{
       }
       for(int i=0;i<itemList.length;i++){
         final item = itemList[i];
+        debugPrint("Debug print1 ${item.hsnCode}");
         String hsn_code = double.parse(item.hsnCode?? "0").toInt().toString();
         String? expired_on = StaticMethod.convertDateFormat(item.expiredOn??"");
         String? rate_contract = StaticMethod.convertDateFormat(item.rateContractValidDate??"");
@@ -315,6 +316,7 @@ class ItemMasterVm extends GetxController{
           "width": 0,
         });
       }
+      debugPrint("Debug print ${item}");
     }
     else{
       items.add({
@@ -521,12 +523,24 @@ class ItemMasterVm extends GetxController{
     exportNonStandardExcelWithProgress(context,'Sample Non Standard Items','sample_non_standard_items');
   }
 
-  /*Future<void> exportNonStandardExcelWithProgress(BuildContext context, String sheetName, String saveFileName) async {
+  Future<void> exportNonStandardExcelWithProgress(BuildContext context, String sheetName, String saveFileName) async {
     try {
-
       excelLoading.value = true;
       excelProgress.value = 0;
       showExcelProgressDialog(context);
+      /// STORAGE PERMISSION
+      /* late Directory? directory;
+      if (Platform.isAndroid) {
+        directory = Directory('/storage/emulated/0/Download');
+        var status = await Permission.manageExternalStorage.request();
+        if (!status.isGranted) {
+          Get.back();
+          Utils.sanckBarError(
+            "Permission", "Storage permission denied",
+          );
+          return;
+        }
+      }*/
       final excel = Excel.createExcel();
       excel.rename('Sheet1', sheetName);
       final sheet = excel[sheetName];
@@ -585,22 +599,38 @@ class ItemMasterVm extends GetxController{
       late Directory? dir;
       if (Platform.isAndroid) {
         dir = Directory('/storage/emulated/0/Download');
+        //dir = await getExternalStorageDirectory();
+        //dir = await getTemporaryDirectory();
+
       } else {
-        //dir = await getApplicationDocumentsDirectory();
-        dir = await getExternalStorageDirectory();
+        dir = await getApplicationDocumentsDirectory();
+        //dir = await getExternalStorageDirectory();
+      }
+
+
+
+      // Ensure the directory exists
+      if (!await dir.exists()) {
+        await dir.create(recursive: true);
       }
 
       //final fileName = "non_standard_items_${DateTime.now().millisecondsSinceEpoch}.xlsx";
       final fileName = "${saveFileName}.xlsx";
-      final filePath = "${dir?.path}/$fileName";
+      String filePath = "${dir?.path}/$fileName";
+      int counter = 1;
+
+      while (await File(filePath).exists()) {
+        filePath = '${dir.path}/($counter)$fileName';
+        counter++;
+      }
       final file = File(filePath);
+      debugPrint("Excel saved at1: $filePath");
       // Delete old file if exists
-      *//*if (await file.exists()) {
-        await file.delete();
-      }*//*
       try {
+        debugPrint("Excel saved at2: $filePath");
         if (await file.exists()) {
           await file.delete();
+          debugPrint("Excel saved at3: $filePath");
         }
       } catch (e) {
         debugPrint("Delete skipped: $e");
@@ -611,7 +641,7 @@ class ItemMasterVm extends GetxController{
       Get.back();
       // Open File
       await OpenFilex.open(filePath);
-      debugPrint("Excel saved at: $filePath");
+      debugPrint("Excel saved at4: $filePath");
     }catch(e){
       excelProgress.value = 100;
       excelLoading.value = false;
@@ -619,17 +649,16 @@ class ItemMasterVm extends GetxController{
       Utils.sanckBarError("Failed to download file!", e.toString());
     }
   }
-*/
 
-  Future<void> exportNonStandardExcelWithProgress(BuildContext context, String sheetName, String saveFileName,) async {
+ /* Future<void> exportNonStandardExcelWithProgress(BuildContext context, String sheetName, String saveFileName,) async {
     try {
       excelLoading.value = true;
       excelProgress.value = 0;
       showExcelProgressDialog(context);
       /// STORAGE PERMISSION
-      /*if (Platform.isAndroid) {
+      if (Platform.isAndroid) {
         directory = Directory('/storage/emulated/0/Download');
-        *//*var status = await Permission.manageExternalStorage.request();
+        var status = await Permission.manageExternalStorage.request();
         if (!status.isGranted) {
           Get.back();
           Utils.sanckBarError(
@@ -637,8 +666,8 @@ class ItemMasterVm extends GetxController{
             "Storage permission denied",
           );
           return;
-        }*//*
-      }*/
+        }
+      }
       /// CREATE EXCEL
       final excel = Excel.createExcel();
       excel.rename('Sheet1', sheetName);
@@ -691,7 +720,7 @@ class ItemMasterVm extends GetxController{
           await Future.delayed(const Duration(milliseconds: 5));
         }
       }
-    /*  /// WRITE HEADERS
+    *//*  /// WRITE HEADERS
       for (int col = 0; col < headers.length; col++) {
 
         sheet
@@ -728,7 +757,7 @@ class ItemMasterVm extends GetxController{
         await Future.delayed(
           const Duration(milliseconds: 5),
         );
-      }*/
+      }*//*
 
       /// DOWNLOAD DIRECTORY
       Directory dir = Directory(
@@ -799,7 +828,7 @@ class ItemMasterVm extends GetxController{
       );
     }
   }
-
+*/
   Map<String, dynamic> removeExcelKeys(NonStandardItemDataModal item, String sheetName) {
     final map = Map<String, dynamic>.from(item.toJson());
 
@@ -913,7 +942,7 @@ class ItemMasterVm extends GetxController{
             rowMap[header] = value;
 
             //rowMap[headers[j]!.value.toString()] = rows[i][j]?.value.toString();
-          //debugPrint("value...... ${rows[i][j]?.value.toString()} and ${headers[j]!.value.toString()}");
+          debugPrint("value...... ${rows[i][j]?.value.toString()} and ${headers[j]!.value.toString()}");
         }
         excelData.add(rowMap);
       }
