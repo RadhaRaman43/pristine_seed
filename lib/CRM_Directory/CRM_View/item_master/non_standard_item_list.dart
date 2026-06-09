@@ -44,7 +44,9 @@ class NonStandardItemsScreen extends StatelessWidget{
                   child: Row(
                     children: [
                       Icon(Icons.download, color: Colors.black),
-                      Text('Download Non Standard Items Data'),
+                      Flexible(child: Tooltip(
+                        message: "Download Non Standard Items Data",
+                          child: Text('Download Non Standard Items Data'))),
                     ],
                   ),
                   onTap: () {

@@ -3031,7 +3031,7 @@ class SalesCycleVm extends GetxController {
         await file.writeAsBytes(bytes);
         print("${file.path}");
 
-        Directory? dir = await getExternalStorageDirectory();
+        /*Directory? dir = await getExternalStorageDirectory();
 
         if (dir != null) {
           // Make sure the directory exists
@@ -3056,7 +3056,9 @@ class SalesCycleVm extends GetxController {
           print("File saved successfully at ${file.path}");
         } else {
           print("Failed to get the download directory");
-        }
+        }*/
+
+        showNotification(file.path, flag);
       } else {
         print("Failed to download file: ${response.statusCode}");
       }
@@ -3211,8 +3213,7 @@ class SalesCycleVm extends GetxController {
               loading.value = false;
               itemQuoteReportList.value = response;
 
-              fileDownload(
-                  itemQuoteReportList[0].quoteReportUrl!, "quoteReport");
+              fileDownload(itemQuoteReportList[0].quoteReportUrl!, "quoteReport");
             } else {
               print("Else....");
               Utils.sanckBarError(

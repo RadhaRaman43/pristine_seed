@@ -12,6 +12,7 @@ import 'package:navigation_drawer_flutter/utils/app_utils.dart';
 import 'package:open_filex/open_filex.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:share_plus/share_plus.dart';
 
 import '../../../reources/routes/routes_name.dart';
 import '../../../viewModel/SessionManagment/session_managment.dart';
@@ -528,19 +529,7 @@ class ItemMasterVm extends GetxController{
       excelLoading.value = true;
       excelProgress.value = 0;
       showExcelProgressDialog(context);
-      /// STORAGE PERMISSION
-      /* late Directory? directory;
-      if (Platform.isAndroid) {
-        directory = Directory('/storage/emulated/0/Download');
-        var status = await Permission.manageExternalStorage.request();
-        if (!status.isGranted) {
-          Get.back();
-          Utils.sanckBarError(
-            "Permission", "Storage permission denied",
-          );
-          return;
-        }
-      }*/
+
       final excel = Excel.createExcel();
       excel.rename('Sheet1', sheetName);
       final sheet = excel[sheetName];
@@ -640,7 +629,15 @@ class ItemMasterVm extends GetxController{
       excelLoading.value = false;
       Get.back();
       // Open File
-      await OpenFilex.open(filePath);
+      //await OpenFilex.open(filePath);
+      if(Platform.isIOS){
+        await Share.shareXFiles([XFile(filePath)],
+        text: fileName);
+      }
+      else{
+        await OpenFilex.open(filePath);
+      }
+
       debugPrint("Excel saved at4: $filePath");
     }catch(e){
       excelProgress.value = 100;
@@ -898,7 +895,7 @@ class ItemMasterVm extends GetxController{
   Future<File?> pickExcelFile() async {
     final result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
-      allowedExtensions: ['xlsx'],
+      allowedExtensions: ['xlsx', 'xls'],
     );
 
     if (result != null && result.files.single.path != null) {

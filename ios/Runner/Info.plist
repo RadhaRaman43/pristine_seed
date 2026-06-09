@@ -103,5 +103,14 @@
 	</array>
 	<key>io.flutter.embedded_views_preview</key>
 	<true/>
+
+	<key>LSSupportsOpeningDocumentsInPlace</key>
+    <true/>
+
+    <key>LSSupportsOpeningDocumentsInPlace</key>
+    <true/>
+
+    <key>UIFileSharingEnabled</key>
+    <true/>
 </dict>
 </plist>
