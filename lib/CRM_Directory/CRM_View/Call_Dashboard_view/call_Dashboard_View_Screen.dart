@@ -2176,7 +2176,7 @@ class CallDashboardViewScreen extends StatelessWidget {
                               else{
                                 dashboard_view_Controller.filtered.value =dashboard_view_Controller.searchController.value.text.isEmpty ?
                                 dashboard_view_Controller.employee_Member_list:dashboard_view_Controller.employee_Member_list.where((c) =>
-                                    (c.fullName ?? "").toLowerCase().contains(dashboard_view_Controller.searchController.value.text)).toList();
+                                    ("${c.fullName ?? ""} ${c.salesPersonEmpCode ?? ""}").toLowerCase().contains(dashboard_view_Controller.searchController.value.text)).toList();
                               }
 
                             },

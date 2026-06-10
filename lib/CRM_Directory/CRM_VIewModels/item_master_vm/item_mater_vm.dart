@@ -873,6 +873,7 @@ class ItemMasterVm extends GetxController{
         return;
       }
       List<Map<String, dynamic>> excelData = await readExcelFile(file);
+      print("excel length ${excelData.length}");
       if(excelData.length>=1 && excelData!=null) {
         List<NonStandardItemDataModal> modelList = convertToModel(excelData);
         if (modelList[0].accountCode!.isNotEmpty) {
@@ -922,24 +923,22 @@ class ItemMasterVm extends GetxController{
   Future<List<Map<String, dynamic>>> readExcelFile(File file) async {
     var bytes = file.readAsBytesSync();
     var excel = Excel.decodeBytes(bytes);
-
     List<Map<String, dynamic>> excelData = [];
 
     for (var table in excel.tables.keys) {
-
       var rows = excel.tables[table]!.rows;
-
       List headers = rows.first;
-
+      //debugPrint("lenght r...ssss${headers.length} ${rows.length} and ${excel.tables.values}");
       for (int i = 1; i < rows.length; i++) {
         Map<String, dynamic> rowMap = {};
         for (int j = 0; j < headers.length; j++) {
             String header = headers[j]?.value?.toString() ?? "";
+            debugPrint("lenght r...ssss${header}");
             String value = rows[i].length > j ? rows[i][j]?.value?.toString() ?? "" : "";
             rowMap[header] = value;
 
             //rowMap[headers[j]!.value.toString()] = rows[i][j]?.value.toString();
-          debugPrint("value...... ${rows[i][j]?.value.toString()} and ${headers[j]!.value.toString()}");
+          debugPrint("value......commit ${rows[i][j]?.value.toString()} and ${headers[j]!.value.toString()}");
         }
         excelData.add(rowMap);
       }
@@ -947,6 +946,7 @@ class ItemMasterVm extends GetxController{
 
     return excelData;
   }
+
   List<NonStandardItemDataModal> convertToModel(List<Map<String, dynamic>> data) {
     print("excel data ${data}");
     return data.map((e) {

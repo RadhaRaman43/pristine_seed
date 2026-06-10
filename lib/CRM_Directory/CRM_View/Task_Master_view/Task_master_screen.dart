@@ -2257,7 +2257,7 @@ class TaskMasterScreen extends StatelessWidget {
                               else{
                                 TaskMaster_page_controller.filtered.value =TaskMaster_page_controller.searchController.value.text.isEmpty ?
                                 TaskMaster_page_controller.employee_Member_list:TaskMaster_page_controller.employee_Member_list.where((c) =>
-                                    (c.fullName ?? "").toLowerCase().contains(TaskMaster_page_controller.searchController.value.text)).toList();
+                                    ("${c.fullName ?? ""} ${c.salesPersonEmpCode ?? ""}").toLowerCase().contains(TaskMaster_page_controller.searchController.value.text)).toList();
                               }
 
                             },

@@ -1448,7 +1448,7 @@ class SaleCyclePendingForApprovalList extends StatelessWidget{
                               else{
                                 salesCyclePendingForApprovalController.filtered.value =salesCyclePendingForApprovalController.searchController.value.text.isEmpty ?
                                 salesCyclePendingForApprovalController.employee_Member_list:salesCyclePendingForApprovalController.employee_Member_list.where((c) =>
-                                    (c.fullName ?? "").toLowerCase().contains(salesCyclePendingForApprovalController.searchController.value.text)).toList();
+                                    ("${c.fullName ?? ""} ${c.salesPersonEmpCode ?? ""}").toLowerCase().contains(salesCyclePendingForApprovalController.searchController.value.text)).toList();
                               }
 
                             },

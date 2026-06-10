@@ -1312,7 +1312,7 @@ class SalesCycleScreen extends StatelessWidget{
                               else{
                                 salesCycleController.filtered.value =salesCycleController.searchController.value.text.isEmpty ?
                                 salesCycleController.employee_Member_list:salesCycleController.employee_Member_list.where((c) =>
-                                    (c.fullName ?? "").toLowerCase().contains(salesCycleController.searchController.value.text)).toList();
+                                    ("${c.fullName ?? ""} ${c.salesPersonEmpCode ?? ""}").toLowerCase().contains(salesCycleController.searchController.value.text)).toList();
                               }
 
                             },

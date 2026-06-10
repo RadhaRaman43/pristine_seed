@@ -972,7 +972,7 @@ class AccountmasterScreen extends StatelessWidget{
                               else{
                                 accountMaster_page_controller.filtered.value =accountMaster_page_controller.searchController.value.text.isEmpty ?
                                 accountMaster_page_controller.employee_Member_list:accountMaster_page_controller.employee_Member_list.where((c) =>
-                                    (c.fullName ?? "").toLowerCase().contains(accountMaster_page_controller.searchController.value.text)).toList();
+                                    ("${c.fullName ?? ""} ${c.salesPersonEmpCode ?? ""}").toLowerCase().contains(accountMaster_page_controller.searchController.value.text)).toList();
                               }
 
                             },

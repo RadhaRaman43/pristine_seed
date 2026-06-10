@@ -180,6 +180,7 @@ class RoutesName{
   //todo sales forecast screen
   static const SalesForeCastScreen="/SalesForeCastScreen.dart";
   static const createSalesForeCastScreen="/create_sales_force_cast_screen.dart";
+  static const SalesForeCastHeaderDetailsScreen="/sales_force_cast_header_details.dart";
 
 
 

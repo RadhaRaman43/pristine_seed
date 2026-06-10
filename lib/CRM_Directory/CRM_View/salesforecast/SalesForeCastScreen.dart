@@ -217,8 +217,7 @@ class SalesForceCastScreen extends StatelessWidget{
       margin: EdgeInsets.all(5),
       child: ListTile(
         onTap: () {
-
-
+          Get.toNamed(RoutesName.homeScreen);
         },
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
