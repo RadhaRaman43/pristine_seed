@@ -924,27 +924,31 @@ class ItemMasterVm extends GetxController{
     var excel = Excel.decodeBytes(bytes);
 
     List<Map<String, dynamic>> excelData = [];
+try {
+  //for (var table in excel.tables.keys) {
+  var table = excel.tables.keys.first;
+    var rows = excel.tables[table]!.rows;
+    List headers = rows.first;
+    debugPrint("rows len.... ${rows.length} ${headers.length}");
+    for (int i = 1; i < rows.length; i++) {
+      Map<String, dynamic> rowMap = {};
+      for (int j = 0; j < headers.length; j++) {
+        String header = headers[j]?.value?.toString() ?? "";
+        String value = rows[i].length > j ? rows[i][j]?.value?.toString() ?? "" : "";
+        rowMap[header] = value;
 
-    for (var table in excel.tables.keys) {
-
-      var rows = excel.tables[table]!.rows;
-
-      List headers = rows.first;
-
-      for (int i = 1; i < rows.length; i++) {
-        Map<String, dynamic> rowMap = {};
-        for (int j = 0; j < headers.length; j++) {
-            String header = headers[j]?.value?.toString() ?? "";
-            String value = rows[i].length > j ? rows[i][j]?.value?.toString() ?? "" : "";
-            rowMap[header] = value;
-
-            //rowMap[headers[j]!.value.toString()] = rows[i][j]?.value.toString();
-          debugPrint("value...... ${rows[i][j]?.value.toString()} and ${headers[j]!.value.toString()}");
-        }
-        excelData.add(rowMap);
+        //rowMap[headers[j]!.value.toString()] = rows[i][j]?.value.toString();
+        //debugPrint("value...... ${rows[i][j]?.value.toString()} and ${headers[j]!.value.toString()}");
       }
+      excelData.add(rowMap);
     }
 
+  //}
+}
+catch(e){
+  debugPrint("Expection! ${e.toString()}");
+}
+    debugPrint("list......data is3 ${excelData}");
     return excelData;
   }
   List<NonStandardItemDataModal> convertToModel(List<Map<String, dynamic>> data) {
