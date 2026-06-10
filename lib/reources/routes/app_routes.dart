@@ -84,6 +84,7 @@ import '../../CRM_Directory/CRM_View/sales_cycle/sales_cycle_view/update_quote_l
 import '../../CRM_Directory/CRM_View/sales_cycle/sales_cycle_view/update_sale_infra_detail_screen.dart';
 import '../../CRM_Directory/CRM_View/sales_cycle/sales_cycle_view/view_sale_header_screen.dart';
 import '../../CRM_Directory/CRM_View/salesforecast/SalesForeCastScreen.dart';
+import '../../CRM_Directory/CRM_View/salesforecast/fore_cast_item_list_screen.dart';
 import '../../CRM_Directory/CRM_View/salesforecast/create_sales_force_cast_screen.dart';
 import '../../CRM_Directory/CRM_View/salesforecast/sales_force_cast_header_details.dart';
 import '../../view/check_in_approval/check_in_approval_header_view_screen.dart';
@@ -915,6 +916,13 @@ class AppRoutes{
         transitionDuration: Duration(microseconds: 180),
         transition: Transition.rightToLeftWithFade
     ),
+
+    GetPage(name: RoutesName.ForeCastItemScreen,
+        page: ()=>CreateForeCastIyemScreen(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
+
 
 
 

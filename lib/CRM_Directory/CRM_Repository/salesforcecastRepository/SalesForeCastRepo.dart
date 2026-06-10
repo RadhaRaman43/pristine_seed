@@ -8,6 +8,23 @@ class SalesForeCastRepo{
   Future<String> SalesForecastHeaderGet(var data,SessionManagement sessionManagement) async{
     return _apiService.postApi(data, AppUrl.SalesForecastHeaderGet,sessionManagement);
   }
+  Future<String> SalesForecastHeaderGetBySalesForecastId(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.SalesForecastHeaderGetBySalesForecastId,sessionManagement);
+  }
+  Future<String> QuoteHeaderGetNewApiHit(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.QuoteHeaderGetNew,sessionManagement);
+  }
+  Future<String> ParentItemCategoryMstGet(var data,SessionManagement sessionManagement) async{
+    return _apiService.getApi(AppUrl.ParentItemCategoryMstGet, sessionManagement, data);
+  }
+  Future<String> getItemCategoryMstWithoutTaskIdApiHit(var data,SessionManagement sessionManagement) async{
+    return _apiService.getApi(AppUrl.ItemCategoryMstGet, sessionManagement, data);
+  }
+  Future<String> SalesForecastHeaderCreate(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.SalesForecastHeaderCreate,sessionManagement);
+  }
+
+
   Future<String> QuoteHeaderGetForSalesForecast(var data,SessionManagement sessionManagement) async{
     return _apiService.postApi(data, AppUrl.QuoteHeaderGetForSalesForecast,sessionManagement);
   }

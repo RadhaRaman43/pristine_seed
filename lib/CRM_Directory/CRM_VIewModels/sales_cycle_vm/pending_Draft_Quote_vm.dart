@@ -260,7 +260,6 @@ class PendingDraftQuoteVm extends GetxController{
   }
 
   getPendingDraftQuoteList(int pageNumberForQuote,String flagFilter) async{
-
     try{
 
       Map data={

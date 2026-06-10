@@ -44,7 +44,8 @@ class SalesForceCastScreen extends StatelessWidget{
                 Spacer(),
                 IconButton(onPressed: () {
                       sales_force_cast_vm.showList.value = false;
-                      sales_force_cast_vm.getQuoteList(sales_force_cast_vm.pageNumberForQuote,);
+                      sales_force_cast_vm.clearAllFieldOfQuoteFilter("SalesForeCastScreen");
+
                       Get.toNamed(RoutesName.createSalesForeCastScreen);
                     }, icon: Icon(Icons.add)),
 
@@ -217,7 +218,8 @@ class SalesForceCastScreen extends StatelessWidget{
       margin: EdgeInsets.all(5),
       child: ListTile(
         onTap: () {
-          Get.toNamed(RoutesName.homeScreen);
+          sales_force_cast_vm.getSalesForecastHeaderGetBySalesForecastId(sales_force_cast_vm.sales_force_cast_list[position].salesForecastId??"");
+
         },
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -410,7 +412,7 @@ class SalesForceCastScreen extends StatelessWidget{
                           onTap: () {
                             Get.back();
                             sales_force_cast_vm.filterDataChecker.value='';
-                            sales_force_cast_vm.clearSaleFrrceCastListFilters();
+                            sales_force_cast_vm.clearSaleFrrceCastListFilters('ClearSalesForeCast');
                             sales_force_cast_vm.clearFilterData();
                             sales_force_cast_vm.pageNumber = 0;
                             sales_force_cast_vm.getSalesForecastListGet(sales_force_cast_vm.pageNumber,);
@@ -587,7 +589,7 @@ class SalesForceCastScreen extends StatelessWidget{
         if (availableItems.isNotEmpty && sales_force_cast_vm.SelectedCluster_list.isEmpty) {
           sales_force_cast_vm.SelectedCluster_list.assignAll(availableItems);
           sales_force_cast_vm.clusterName_controller.value.text = availableItems.map((e) => e.geoValue).join('|');
-          sales_force_cast_vm.getRegionsWithClusterFilterGetByEmail();
+          sales_force_cast_vm.getRegionsWithClusterFilterGetByEmail("");
         }
       }
 
@@ -737,7 +739,6 @@ class SalesForceCastScreen extends StatelessWidget{
                           ),
                         ),
 
-                        // Done button
                         Padding(
                           padding: const EdgeInsets.symmetric(
                               horizontal: 16.0, vertical: 12),
@@ -755,12 +756,10 @@ class SalesForceCastScreen extends StatelessWidget{
                                     ),
                                   ),
                                   onPressed: () {
-
                                     sales_force_cast_vm.filterDataChecker.value='';
                                     sales_force_cast_vm.SelectedCluster_list.assignAll(tempSelected);
                                     sales_force_cast_vm.clusterName_controller.value.text = tempSelected.map((e) => e.geoValue).join('| ');
-                                    sales_force_cast_vm.getRegionsWithClusterFilterGetByEmail();
-
+                                    sales_force_cast_vm.getRegionsWithClusterFilterGetByEmail("");
                                     Navigator.of(context).pop();
                                   },
                                   child: Text('Done',style: GoogleFonts.poppins(

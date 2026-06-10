@@ -49,7 +49,7 @@ class SalesForceHeaderDetails extends StatelessWidget{
                       ),
                     ),
                     Text(
-                      '()',
+                      '(${sales_force_cast_vm.salesForceCastHeader_list[0].salesForecastId})',
                       style: GoogleFonts.poppins(
                         color: AllColors.whiteColor,
                         fontSize: 18.0,
@@ -76,29 +76,73 @@ class SalesForceHeaderDetails extends StatelessWidget{
                   ),
                 );
               }),
-              Expanded(
-                child: ListView(children: [
-                  Obx(() {
-                    return BindSalesData(context);
-                  }),
-                ]),
+              BindSalesData(context),
+              const SizedBox(height: 10,),
+              Padding(
+                padding:
+                const EdgeInsets.only(left: 10.0, right: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Forcast Lines",
+                      style: GoogleFonts.poppins(
+                        color: AllColors.primaryDark1,
+                        fontSize: AllFontSize.eighteen,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    /*Row(
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            showDialogForFilter(context);
+                          },
+                          child: Container(
+                            child: Padding(
+                              padding: const EdgeInsets.all(7.0),
+                              child: Icon(
+                                Icons.filter_alt_rounded,
+                                color: AllColors.primaryDark1,
+                              ),
+                            ),
+                            decoration: BoxDecoration(
+                                borderRadius:
+                                BorderRadius.circular(30),
+                                border: Border.all(
+                                    color:
+                                    AllColors.primaryDark1)),
+                          ),
+                        ),
+                      ],
+                    )*/
+                  ],
+                ),
               ),
+              const SizedBox(height: 10,),
+              Divider(height: 1, color: AllColors.bluegrayColor,),
+              const SizedBox(height: 10,),
+              bindForeCastLinesData(context),
+
             ],
           )),
     );
   }
+  Color getStatusColor(String status) {
+    switch (status) {
+      case 'DRAFT' || "Draft" ||'REGRET' || 'Regret' ||'PENDING'
+      || 'pending' ||'Rejected' || 'rejected':
+        return Colors.red[900]!;
+      case 'Approved'|| 'APPROVED'|| 'approved' || 'WON':
+        return Colors.green;
+      case 'PENDING FOR APPROVAL' || 'pending for approval':
+        return Colors.yellow[700]!;
+      default:
+        return Colors.black;
+    }
+  }
   Widget BindSalesData(BuildContext context) {
-  /*  String? dateTimeCreatedOn = StaticMethod.dateTimeToDate(
-        saleCycleController.saleCycleList[0].createdOn ?? "");
-    String? dateTimeApprovedOn = StaticMethod.dateTimeToDate(
-        saleCycleController.saleCycleList[0].approvedOn ?? "");
-    String? expClosureDate = StaticMethod.convertDateFormat1(
-        saleCycleController.saleCycleList[0].estClosureDate ?? "");
-    String saleCycleStatus =
-        saleCycleController.saleCycleList[0].salesCycleApprovalStatus?.toLowerCase() ?? "";
-
-*/
-
+    var createdOn=StaticMethod.dateTimeToDate(sales_force_cast_vm.salesForceCastHeader_list[0].createdOn??"");
     return Container(
       width: double.infinity,
       child: Column(
@@ -115,7 +159,7 @@ class SalesForceHeaderDetails extends StatelessWidget{
             ),
             child: InputDecorator(
               decoration: InputDecoration(
-                labelText: 'Sales Details',
+                labelText: 'Sales ForeCast Details',
                 labelStyle: GoogleFonts.poppins(
                     color: AllColors.primaryDark1,
                     fontWeight: FontWeight.w700,
@@ -127,7 +171,17 @@ class SalesForceHeaderDetails extends StatelessWidget{
               ),
               child: Column(
                 children: [
-                  //bindData(fixText: "Task ID : ",data:saleCycleController.saleCycleList[0].taskId ?? ""),
+                  bindData(fixText: "Month Year : ",data:sales_force_cast_vm.salesForceCastHeader_list[0].monthYear ?? ""),
+                  const SizedBox(height: 3,),
+                  bindData(fixText: "Status : ",data:sales_force_cast_vm.salesForceCastHeader_list[0].salesForecastStatus ?? "",color:getStatusColor(sales_force_cast_vm.salesForceCastHeader_list[0].salesForecastStatus ?? "")),
+                  const SizedBox(height: 3,),
+                  bindData(fixText: "Cluster Name : ",data:sales_force_cast_vm.salesForceCastHeader_list[0].clusterName ?? ""),
+                  const SizedBox(height: 3,),
+                  bindData(fixText: "Region Name : ",data:sales_force_cast_vm.salesForceCastHeader_list[0].regionName ?? ""),
+                  const SizedBox(height: 3,),
+                  bindData(fixText: "Created By : ",data:sales_force_cast_vm.salesForceCastHeader_list[0].createdFullName ?? ""),
+                  const SizedBox(height: 3,),
+                  bindData(fixText: "Created On : ",data:createdOn??""),
                   const SizedBox(height: 3,),
 
                 ],
@@ -138,15 +192,8 @@ class SalesForceHeaderDetails extends StatelessWidget{
       ),
     );
   }
-
   Widget bindData({required String fixText,required String data,Color color = AllColors.textColor,
     VoidCallback? onTap, TextDecoration? decoration, TextDecorationStyle? decorationStyle,}){
-
-    if(fixText=="Budget Amount" || fixText=="Expected Amount"){
-      String formattedAmount = '₹ ${data}';
-      data= formattedAmount;
-    }
-
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -181,6 +228,116 @@ class SalesForceHeaderDetails extends StatelessWidget{
       ],
     );
   }
+
+
+  Widget bindForeCastLinesData(BuildContext context) {
+
+    if (sales_force_cast_vm.salesForceCastHeader_list[0].lines!.isNotEmpty && sales_force_cast_vm.salesForceCastHeader_list[0].lines!.length > 0) {
+      return Obx(
+            () {
+          return Expanded(
+            child: ListView.separated(
+                controller: scrollController,
+                padding: EdgeInsets.only(bottom: 10),
+                separatorBuilder: (context, index) => Divider(
+                  height: .05,
+                  color: Colors.transparent,
+                ),
+                shrinkWrap: true,
+                itemCount: sales_force_cast_vm.salesForceCastHeader_list[0].lines!.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return bindPendingListView(context, index);
+                }),
+          );
+        },
+      );
+    } else {
+      return Center(
+        child: Padding(
+          padding: const EdgeInsets.only(top: 18.0),
+          child: Text(
+            'No Record Found.',
+            style: GoogleFonts.poppins(
+                color: AllColors.primaryDark1,
+                fontSize: AllFontSize.twentee,
+                fontWeight: FontWeight.w700),
+          ),
+        ),
+      );
+    }
+  }
+
+  Widget bindPendingListView(BuildContext context, int index,) {
+
+    return Card(
+      //margin: EdgeInsets.all(5),
+      child: ListTile(
+        contentPadding: EdgeInsets.only(left: 5 , right: 10),
+        subtitle: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            const SizedBox(
+              height: 10,
+            ),
+            _buildLabelWithValue(label: "Sales Cycle ID : ", value: sales_force_cast_vm.salesForceCastHeader_list[0].lines?[index].salesCycleId ?? "",),
+            _buildLabelWithValue(label: "Quote  ID : ", value: sales_force_cast_vm.salesForceCastHeader_list[0].lines?[index].quoteId ?? "",),
+            _buildLabelWithValue(label: "Item Code : ", value: sales_force_cast_vm.salesForceCastHeader_list[0].lines?[index].itemCode ?? "",),
+            _buildLabelWithValue(label: "Item Name : ", value: sales_force_cast_vm.salesForceCastHeader_list[0].lines?[index].itemName ?? "",),
+            _buildLabelWithValue(label: "Item Category : ", value: sales_force_cast_vm.salesForceCastHeader_list[0].lines?[index].itemCategoryCode ?? "",),
+            _buildLabelWithValue(label: "Quote Qty : ", value: sales_force_cast_vm.salesForceCastHeader_list[0].lines?[index].quoteQty.toString() ?? "",),
+            _buildLabelWithValue(label: "Approved Price : ", value: sales_force_cast_vm.salesForceCastHeader_list[0].lines?[index].quoteApprovedAmountPerUnit.toString() ?? "",),
+            _buildLabelWithValue(label: "Item Variant : ", value: sales_force_cast_vm.salesForceCastHeader_list[0].lines?[index].itemVarient ?? "",),
+            _buildLabelWithValue(label: "Region Name : ", value: sales_force_cast_vm.salesForceCastHeader_list[0].lines?[index].requiredRegionName ?? "",),
+            _buildLabelWithValue(label: "Cluster  Name : ", value: sales_force_cast_vm.salesForceCastHeader_list[0].lines?[index].requiredClusterName ?? "",),
+            _buildLabelWithValue(label: "Cluster  Name : ", value: sales_force_cast_vm.salesForceCastHeader_list[0].lines?[index].requiredClusterName ?? "",),
+
+          ],
+        ),
+
+      ),
+    );
+  }
+  Widget _buildLabelWithValue({
+    required String label,
+    required String? value,
+    Color color = AllColors.textColor,
+    BuildContext? context,
+  }) {
+    return Row(
+      children: [
+        Text(
+          label,
+          style: GoogleFonts.poppins(
+            color: AllColors.primaryDark1,
+            fontSize: AllFontSize.fourtine,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+
+        const SizedBox(width: 8),
+
+        Expanded(
+          child: Align(
+            alignment: Alignment.centerRight,
+            child: Tooltip(
+              message: value ?? "",
+              child: Text(
+                value ?? "",
+                overflow: TextOverflow.ellipsis,
+                style: GoogleFonts.poppins(
+                  color: color,
+                  fontSize: AllFontSize.fourtine,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ),
+          ),
+        ),
+
+      ],
+    );
+  }
+
 
 
 }

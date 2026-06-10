@@ -97,15 +97,10 @@ class Itemlist_by_sales_cycle_Screen extends StatelessWidget{
 
     if (saleCycleController.itemMstGetBySalesIdList.value.isNotEmpty) {
       ScrollController scrollController = ScrollController();
-
       scrollController.addListener(() {
-        print("ghdjhgf");
-        if (scrollController.position.pixels ==
-            scrollController.position.maxScrollExtent) {
-
+        if (scrollController.position.pixels == scrollController.position.maxScrollExtent) {
           int total_page = (saleCycleController.total_rows_items /
-              saleCycleController.rowsPerPage)
-              .toInt();
+              saleCycleController.rowsPerPage).toInt();
           if ((saleCycleController.total_rows_items %
               saleCycleController.rowsPerPage) >
               0) total_page += 1;

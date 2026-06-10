@@ -638,6 +638,21 @@ class SessionManagement {
     prefs.remove("PendingDraftQuote_data");
   }
 
+  //todo create Sales Force Cast Quote
+  Future<void> saveSalesForceCastQuoteData(Map<String, dynamic> data) async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString("SalesForceCastQuote_data", jsonEncode(data));
+  }
+  Future<Map<String, dynamic>> getSalesForceCastQuoteData() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? data = prefs.getString("SalesForceCastQuote_data");
+    return data != null ? jsonDecode(data) : {};
+  }
+  Future<void> clearSalesForceCastQuoteData() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.remove("PendingDraftQuote_data");
+  }
+
   //todo Quote rejected and approve
   Future<void> saveApproveRejectedQuoteData(Map<String, dynamic> data) async {
     final prefs = await SharedPreferences.getInstance();

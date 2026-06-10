@@ -377,5 +377,7 @@ class AppUrl {
      //todo SalesForeCast
      static const String SalesForecastHeaderGet="$BASE_URL/api/CRM/SalesForecast/SalesForecastHeaderGet";
      static const String QuoteHeaderGetForSalesForecast="$BASE_URL/api/CRM/SalesForecast/QuoteHeaderGetForSalesForecast";
+     static const String SalesForecastHeaderGetBySalesForecastId="$BASE_URL/api/CRM/SalesForecast/SalesForecastHeaderGetBySalesForecastId";
+     static const String SalesForecastHeaderCreate="$BASE_URL/api/CRM/SalesForecast/SalesForecastHeaderCreate";
 
 }

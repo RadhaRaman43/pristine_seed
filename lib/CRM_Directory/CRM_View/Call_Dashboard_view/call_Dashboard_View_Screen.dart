@@ -2163,8 +2163,6 @@ class CallDashboardViewScreen extends StatelessWidget {
                                     dashboard_view_Controller.employee_Member_list:dashboard_view_Controller.employee_Member_list.where((c) =>
                                         (c.fullName ?? "").toLowerCase().contains(dashboard_view_Controller.searchController.value.text)).toList();
                                   }
-
-
                                 },
                               ) : null,
                             ),
@@ -2178,13 +2176,10 @@ class CallDashboardViewScreen extends StatelessWidget {
                                 dashboard_view_Controller.employee_Member_list:dashboard_view_Controller.employee_Member_list.where((c) =>
                                     ("${c.fullName ?? ""} ${c.salesPersonEmpCode ?? ""}").toLowerCase().contains(dashboard_view_Controller.searchController.value.text)).toList();
                               }
-
                             },
                           ),
                         ),
-
                         const SizedBox(height: 8),
-
                         // Select All
                         Padding(
                           padding:
@@ -2206,7 +2201,6 @@ class CallDashboardViewScreen extends StatelessWidget {
                             },
                           ),
                         ),
-
                         const Divider(height: 1),
                         Obx((){
                           return Visibility(visible:dashboard_view_Controller.loading.value,
@@ -2215,8 +2209,6 @@ class CallDashboardViewScreen extends StatelessWidget {
                               color: AllColors.textColor,
                             ), );
                         }),
-
-
                         // List
                         Expanded(
                           child: dashboard_view_Controller.filtered.isEmpty ? const Center(child: Text('No Record Found!')) : ListView.builder(
@@ -2249,7 +2241,6 @@ class CallDashboardViewScreen extends StatelessWidget {
                             },
                           ),
                         ),
-
                         // Done button
                         Padding(
                           padding: const EdgeInsets.symmetric(

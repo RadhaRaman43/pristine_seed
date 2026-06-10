@@ -104,6 +104,8 @@ class Pending_Draft_Quote_Model {
   String? lineStatus;
   String? itemCategoryName;
 
+  int? isSelected;
+
   Pending_Draft_Quote_Model(
       {this.condition,
         this.totalRows,
@@ -208,7 +210,8 @@ class Pending_Draft_Quote_Model {
         this.grossAmount,
         this.salesCredit,
         this.lineStatus,
-        this.itemCategoryName});
+        this.itemCategoryName,
+        this.isSelected=0,});
 
   Pending_Draft_Quote_Model.fromJson(Map<String, dynamic> json) {
     condition = json['condition'];
@@ -315,6 +318,7 @@ class Pending_Draft_Quote_Model {
     salesCredit = json['sales_credit'];
     lineStatus = json['line_status'];
     itemCategoryName = json['item_category_name'];
+    isSelected = json['is_selected'];
   }
 
   Map<String, dynamic> toJson() {
@@ -423,6 +427,7 @@ class Pending_Draft_Quote_Model {
     data['sales_credit'] = this.salesCredit;
     data['line_status'] = this.lineStatus;
     data['item_category_name'] = this.itemCategoryName;
+    data['is_selected'] = this.isSelected;
     return data;
   }
 }
