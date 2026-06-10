@@ -647,7 +647,7 @@ class _Drawer extends State<CustomDrawer> {
                                                 Navigator.of(context);
                                                 break;
 
-                                              case 'Rolling Forecast List':
+                                              /*case 'Rolling Forecast List':
                                                 sessionManagement.setfilterRouting('Rolling Forecast List');
                                                 IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
                                                 home_vm.openMenu(cTitle, iconData);
@@ -655,7 +655,7 @@ class _Drawer extends State<CustomDrawer> {
                                                 Get.toNamed(RoutesName.SalesForeCastScreen);
                                                 Navigator.of(context);
                                                 break;
-
+*/
 
 
 
