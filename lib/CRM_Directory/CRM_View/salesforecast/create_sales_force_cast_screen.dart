@@ -29,7 +29,13 @@ class CreateSalesForceCastScreen extends StatelessWidget{
   Widget build(BuildContext context) {
     return WillPopScope(onWillPop:  () async {
       sales_force_cast_vm.clearSelectQuoteItemList();
-      Get.toNamed(RoutesName.SalesForeCastScreen);
+      if(sales_force_cast_vm.fromPage == "ForeCastHeaderDetails"){
+        Get.toNamed(RoutesName.SalesForeCastHeaderDetailsScreen);
+      }
+      else{
+        Get.offAllNamed(RoutesName.SalesForeCastScreen);
+      }
+
       return false;
     },
         child: Scaffold(
@@ -67,86 +73,137 @@ class CreateSalesForceCastScreen extends StatelessWidget{
                     ),
                   );
                 }),
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: ConstrainedBox(
-                    constraints: BoxConstraints(minWidth: MediaQuery.of(context).size.width),
-                    child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 8), // optional spacing
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Obx(() {
-                            return ActionChip(
-                              elevation: 2,
-                              padding: EdgeInsets.symmetric(horizontal: 30, vertical: 2),
-                              backgroundColor: AllColors.grayColor,
-                              shadowColor: Colors.black,
-                              shape: StadiumBorder(
-                                side: BorderSide(color: AllColors.grayColor),
-                              ),
-                              label: Text(sales_force_cast_vm.month_controller.value.text,
+                Visibility(
+                  visible:  sales_force_cast_vm.fromPage == "ForeCastListScreen",
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(minWidth: MediaQuery.of(context).size.width),
+                      child: Container(
+                        padding: EdgeInsets.only(left: 20,right: 20), // optional spacing
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Obx(() {
+                              return ActionChip(
+                                elevation: 2,
+                                padding: EdgeInsets.symmetric(horizontal: 30, vertical: 2),
+                                backgroundColor: AllColors.grayColor,
+                                shadowColor: Colors.black,
+                                shape: StadiumBorder(
+                                  side: BorderSide(color: AllColors.grayColor),
+                                ),
+                                label: Text(sales_force_cast_vm.month_controller.value.text,
+                                    style: TextStyle(
+                                      color:  AllColors.primaryDark1,
+                                      fontSize: AllFontSize.fourtine,
+                                      fontWeight: FontWeight.w500,
+                                    )
+                                ),
+                                onPressed: () {
+                                },
+                              );
+                            }),
+                            const SizedBox(width: 8),
+                            Obx(() {
+                              return ActionChip(
+                                elevation: 2,
+                                padding: EdgeInsets.symmetric(horizontal: 35, vertical: 2),
+                                backgroundColor: AllColors.grayColor,
+                                shadowColor: Colors.black,
+                                shape: StadiumBorder(
+                                  side: BorderSide(color: AllColors.grayColor),
+                                ),
+                                label: Text(sales_force_cast_vm.year_controller.value.text,
                                   style: TextStyle(
-                                    color:  AllColors.primaryDark1,
+                                    color: AllColors.primaryDark1,
                                     fontSize: AllFontSize.fourtine,
                                     fontWeight: FontWeight.w500,
-                                  )
-                              ),
-                              onPressed: () {
-                              },
-                            );
-                          }),
-                          const SizedBox(width: 8),
-                          Obx(() {
-                            return ActionChip(
-                              elevation: 2,
-                              padding: EdgeInsets.symmetric(horizontal: 35, vertical: 2),
-                              backgroundColor: AllColors.grayColor,
-                              shadowColor: Colors.black,
-                              shape: StadiumBorder(
-                                side: BorderSide(color: AllColors.grayColor),
-                              ),
-                              label: Text(sales_force_cast_vm.year_controller.value.text,
-                                style: TextStyle(
-                                  color: AllColors.primaryDark1,
-                                  fontSize: AllFontSize.fourtine,
-                                  fontWeight: FontWeight.w500,
+                                  ),
                                 ),
-                              ),
-                              onPressed: () {
+                                onPressed: () {
 
-                              },
-                            );
-                          }),
-                          const SizedBox(width: 8),
-                          ActionChip(
-                              elevation: 2,
-                              padding: EdgeInsets.symmetric(horizontal: 35, vertical: 2),
-                              backgroundColor: AllColors.bluegrayColor,
-                              shadowColor: Colors.black,
-                              shape: StadiumBorder(
-                                side: BorderSide(color: AllColors.grayColor),
-                              ),
-                              label: Text("Get Quote",
-                                style: TextStyle(
-                                  color: AllColors.primaryDark1,
-                                  fontSize: AllFontSize.fourtine,
-                                  fontWeight: FontWeight.w500,
+                                },
+                              );
+                            }),
+                            const SizedBox(width: 8),
+                            ActionChip(
+                                  elevation: 2,
+                                  padding: EdgeInsets.symmetric(horizontal: 35, vertical: 2),
+                                  backgroundColor: AllColors.bluegrayColor,
+                                  shadowColor: Colors.black,
+                                  shape: StadiumBorder(
+                                    side: BorderSide(color: AllColors.grayColor),
+                                  ),
+                                  label: Text("Get Quote",
+                                    style: TextStyle(
+                                      color: AllColors.primaryDark1,
+                                      fontSize: AllFontSize.fourtine,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                  onPressed: () {
+                                    sales_force_cast_vm.showList.value=true;
+                                  },
                                 ),
-                              ),
-                              onPressed: () {
-                                sales_force_cast_vm.showList.value=true;
-                              },
-                            ),
-                          const SizedBox(width: 8),
+                            const SizedBox(width: 8),
 
-
-
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   ),
                 ),
+                Visibility(
+                  visible: sales_force_cast_vm.fromPage == "ForeCastHeaderDetails",
+                    child: Row(
+                      mainAxisAlignment:MainAxisAlignment.spaceBetween,
+                      children: [
+                      const SizedBox(width: 8),
+                      Obx(() {
+                        return ActionChip(
+                          elevation: 2,
+                          padding: EdgeInsets.symmetric(horizontal: 30, vertical: 2),
+                          backgroundColor: AllColors.grayColor,
+                          shadowColor: Colors.black,
+                          shape: StadiumBorder(
+                            side: BorderSide(color: AllColors.grayColor),
+                          ),
+                          label: Text(sales_force_cast_vm.month_controller.value.text,
+                              style: TextStyle(
+                                color:  AllColors.primaryDark1,
+                                fontSize: AllFontSize.fourtine,
+                                fontWeight: FontWeight.w500,
+                              )
+                          ),
+                          onPressed: () {
+                          },
+                        );
+                      }),
+                      const SizedBox(width: 8),
+                      Obx(() {
+                        return ActionChip(
+                          elevation: 2,
+                          padding: EdgeInsets.symmetric(horizontal: 35, vertical: 2),
+                          backgroundColor: AllColors.grayColor,
+                          shadowColor: Colors.black,
+                          shape: StadiumBorder(
+                            side: BorderSide(color: AllColors.grayColor),
+                          ),
+                          label: Text(sales_force_cast_vm.year_controller.value.text,
+                            style: TextStyle(
+                              color: AllColors.primaryDark1,
+                              fontSize: AllFontSize.fourtine,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          onPressed: () {
+
+                          },
+                        );
+                      }),
+                      const SizedBox(width: 8),
+                    ],)),
                 Obx((){
                   return Visibility(
                       visible: sales_force_cast_vm.showList.value,
@@ -330,8 +387,6 @@ class CreateSalesForceCastScreen extends StatelessWidget{
   Widget BindQuoteDataListView(context, int position) {
     String? quoteValidityDate=StaticMethod.convertDateFormat1(sales_force_cast_vm.QuoteList[position].quoteValidity ?? "");
     String? expectedClosuredateDate=StaticMethod.convertDateFormat1(sales_force_cast_vm.QuoteList[position].expClosureDate ?? "");
-    String? createdOn=StaticMethod.dateTimeToDate(sales_force_cast_vm.QuoteList[position].createdOn ?? "");
-    String saleCycleStatus = sales_force_cast_vm.QuoteList[position].quoteStatus?.toLowerCase()??"";
     return Card(
       //margin: EdgeInsets.all(5),
       child: ListTile(
@@ -514,30 +569,30 @@ class CreateSalesForceCastScreen extends StatelessWidget{
                               const SizedBox(height: 5,),
                               bindData(context,'Quote Id',sales_force_cast_vm.filterQuoteIdController.value),
                               const SizedBox(height: 10),
-                              bindData(context,'Quote Version',sales_force_cast_vm.filterQuoteVersionController.value),
+                             /* bindData(context,'Quote Version',sales_force_cast_vm.filterQuoteVersionController.value),
                               const SizedBox(height: 10),
                               bindQuoteAccepted(context),
-                              const SizedBox(height: 10),
+                              const SizedBox(height: 10),*/
                               bindData(context,'Sale Cycle Id',sales_force_cast_vm.filterQuoteSaleCycleController.value),
-                              const SizedBox(height: 10),
-                              bindData(context,'Customer Code',sales_force_cast_vm.accountCodeController.value),
+                              //const SizedBox(height: 10),
+                             // bindData(context,'Customer Code',sales_force_cast_vm.accountCodeController.value),
                               const SizedBox(height: 10),
                               bindData(context,'Customer Name',sales_force_cast_vm.accountNameController.value),
-                              const SizedBox(height: 10,),
+                              /*const SizedBox(height: 10,),
                               filterWithQuoteStatus(context),
                               const SizedBox(height: 10),
-                              filterWithQuoteValidity(context),
+                              filterWithQuoteValidity(context),*/
                               const SizedBox(height: 10),
                               filterWithQuoteClosureDate(context),
                               const SizedBox(height: 10),
-                              bindData(context,'Rh Approval',sales_force_cast_vm.rh_Approval_controller.value),
+                              /*bindData(context,'Rh Approval',sales_force_cast_vm.rh_Approval_controller.value),
                               const SizedBox(height: 10,),
                               bindData(context,'CBH Approval',sales_force_cast_vm.cbh_Approval_controller.value),
                               const SizedBox(height: 10,),
                               bindData(context,'Category Approval',sales_force_cast_vm.category_Approval_controller.value),
                               const SizedBox(height: 10,),
                               bindData(context,'Gm Approval',sales_force_cast_vm.gm_Approval_controller.value),
-                              const SizedBox(height: 10,),
+                              const SizedBox(height: 10,),*/
                               bindClusterNameFilter(context),
                               const SizedBox(height: 10,),
                               bindRegionNameFilter(context),

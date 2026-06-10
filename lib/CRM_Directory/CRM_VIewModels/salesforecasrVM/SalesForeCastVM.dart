@@ -38,6 +38,7 @@ class SalesForeCastVM extends GetxController{
   String filterRouting = "";
   String userType = "";
   String quoteIds = "";
+  String fromPage = "";
 
   RxString foreCastStatus = "Pending".obs;
   RxList<SalesForceCastListModal> sales_force_cast_list  = <SalesForceCastListModal>[].obs;
@@ -151,6 +152,12 @@ class SalesForeCastVM extends GetxController{
 
       SelectedQuoteList.value=[];
       SelectedQuoteList.value=QuoteList;
+    }
+    else{
+      for(int i=0;i<QuoteList.length;i++){
+        QuoteList[i].isSelected=0;
+      }
+      SelectedQuoteList.value=[];
     }
     showList.value = false;
     showList.value = true;
@@ -278,14 +285,11 @@ class SalesForeCastVM extends GetxController{
           regionwithclusterGetByEmailList.value=response;
           RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join('|');
           SelectedRegion_list.assignAll(regionwithclusterGetByEmailList);
-          if(fromPage=="SalesForeCastScreen"){
+          if(fromPage=="SalesForeCastScreen" || fromPage=="CreateSalesForeCastScreen"){
             getSalesForceCastQuoteData();
           }
           else if(fromPage=="ClearSalesForeCast"){
             getFilterData();
-          }
-          else if(fromPage=="CreateSalesForeCastScreen"){
-            getSalesForceCastQuoteData();
           }
           else{
             getFilterData();

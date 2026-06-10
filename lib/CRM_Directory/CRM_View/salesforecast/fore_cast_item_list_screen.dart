@@ -7,7 +7,6 @@ import 'package:navigation_drawer_flutter/utils/app_utils.dart';
 
 import '../../../constants/app_colors.dart';
 import '../../../constants/app_font_size.dart';
-import '../../../constants/static_methods.dart';
 import '../../../reources/routes/routes_name.dart';
 import '../../../view/custom_drawer.dart';
 import '../../CRM_VIewModels/salesforecasrVM/SalesForeCastVM.dart';

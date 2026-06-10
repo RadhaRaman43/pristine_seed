@@ -76,6 +76,65 @@ class SalesForceHeaderDetails extends StatelessWidget{
                   ),
                 );
               }),
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(minWidth: MediaQuery.of(context).size.width),
+                  child: Container(
+                    padding: EdgeInsets.only(left: 20,right: 20), // optional spacing
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        ActionChip(
+                            elevation: 2,
+                            padding: EdgeInsets.symmetric(horizontal: 30, vertical: 2),
+                            backgroundColor: Colors.black,
+                            shadowColor: Colors.black,
+                            shape: StadiumBorder(
+                              side: BorderSide(color: AllColors.grayColor),
+                            ),
+                            label: Text("Get Quote",
+                                style: TextStyle(
+                                  color:  AllColors.whiteColor,
+                                  fontSize: AllFontSize.fourtine,
+                                  fontWeight: FontWeight.w500,
+                                )
+                            ),
+                            onPressed: () {
+                              sales_force_cast_vm.showList.value = true;
+                              sales_force_cast_vm.fromPage = "ForeCastHeaderDetails";
+                              sales_force_cast_vm.QuoteList.value=[];
+                              sales_force_cast_vm.clearAllFieldOfQuoteFilter("SalesForeCastScreen");
+                              Get.toNamed(RoutesName.createSalesForeCastScreen);
+                              },
+                          ),
+                        const SizedBox(width: 8),
+                       ActionChip(
+                            elevation: 2,
+                            padding: EdgeInsets.symmetric(horizontal: 35, vertical: 2),
+                            backgroundColor: Colors.black,
+                            shadowColor: Colors.black,
+                            shape: StadiumBorder(
+                              side: BorderSide(color: AllColors.grayColor),
+                            ),
+                            label: Text("Complete",
+                              style: TextStyle(
+                                color: AllColors.whiteColor,
+                                fontSize: AllFontSize.fourtine,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            onPressed: () {
+
+                            },
+                          ),
+
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 10,),
               BindSalesData(context),
               const SizedBox(height: 10,),
               Padding(
