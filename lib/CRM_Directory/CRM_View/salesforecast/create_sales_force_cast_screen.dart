@@ -37,8 +37,7 @@ class CreateSalesForceCastScreen extends StatelessWidget{
       }
 
       return false;
-    },
-        child: Scaffold(
+    }, child: Scaffold(
           appBar: AppBar(
               backgroundColor: AllColors.primaryDark1,
               iconTheme: IconThemeData(
@@ -88,14 +87,14 @@ class CreateSalesForceCastScreen extends StatelessWidget{
                               return ActionChip(
                                 elevation: 2,
                                 padding: EdgeInsets.symmetric(horizontal: 30, vertical: 2),
-                                backgroundColor: AllColors.grayColor,
+                                backgroundColor: AllColors.primaryDark1,
                                 shadowColor: Colors.black,
                                 shape: StadiumBorder(
                                   side: BorderSide(color: AllColors.grayColor),
                                 ),
                                 label: Text(sales_force_cast_vm.month_controller.value.text,
                                     style: TextStyle(
-                                      color:  AllColors.primaryDark1,
+                                      color:  AllColors.whiteColor,
                                       fontSize: AllFontSize.fourtine,
                                       fontWeight: FontWeight.w500,
                                     )
@@ -109,14 +108,14 @@ class CreateSalesForceCastScreen extends StatelessWidget{
                               return ActionChip(
                                 elevation: 2,
                                 padding: EdgeInsets.symmetric(horizontal: 35, vertical: 2),
-                                backgroundColor: AllColors.grayColor,
+                                backgroundColor: AllColors.primaryDark1,
                                 shadowColor: Colors.black,
                                 shape: StadiumBorder(
                                   side: BorderSide(color: AllColors.grayColor),
                                 ),
                                 label: Text(sales_force_cast_vm.year_controller.value.text,
                                   style: TextStyle(
-                                    color: AllColors.primaryDark1,
+                                    color: AllColors.whiteColor,
                                     fontSize: AllFontSize.fourtine,
                                     fontWeight: FontWeight.w500,
                                   ),
@@ -130,14 +129,14 @@ class CreateSalesForceCastScreen extends StatelessWidget{
                             ActionChip(
                                   elevation: 2,
                                   padding: EdgeInsets.symmetric(horizontal: 35, vertical: 2),
-                                  backgroundColor: AllColors.bluegrayColor,
+                                  backgroundColor: AllColors.primaryDark1,
                                   shadowColor: Colors.black,
                                   shape: StadiumBorder(
                                     side: BorderSide(color: AllColors.grayColor),
                                   ),
                                   label: Text("Get Quote",
                                     style: TextStyle(
-                                      color: AllColors.primaryDark1,
+                                      color: AllColors.whiteColor,
                                       fontSize: AllFontSize.fourtine,
                                       fontWeight: FontWeight.w500,
                                     ),
@@ -164,14 +163,14 @@ class CreateSalesForceCastScreen extends StatelessWidget{
                         return ActionChip(
                           elevation: 2,
                           padding: EdgeInsets.symmetric(horizontal: 30, vertical: 2),
-                          backgroundColor: AllColors.grayColor,
+                          backgroundColor: AllColors.primaryDark1,
                           shadowColor: Colors.black,
                           shape: StadiumBorder(
                             side: BorderSide(color: AllColors.grayColor),
                           ),
                           label: Text(sales_force_cast_vm.month_controller.value.text,
                               style: TextStyle(
-                                color:  AllColors.primaryDark1,
+                                color:  AllColors.whiteColor,
                                 fontSize: AllFontSize.fourtine,
                                 fontWeight: FontWeight.w500,
                               )
@@ -185,14 +184,14 @@ class CreateSalesForceCastScreen extends StatelessWidget{
                         return ActionChip(
                           elevation: 2,
                           padding: EdgeInsets.symmetric(horizontal: 35, vertical: 2),
-                          backgroundColor: AllColors.grayColor,
+                          backgroundColor: AllColors.primaryDark1,
                           shadowColor: Colors.black,
                           shape: StadiumBorder(
                             side: BorderSide(color: AllColors.grayColor),
                           ),
                           label: Text(sales_force_cast_vm.year_controller.value.text,
                             style: TextStyle(
-                              color: AllColors.primaryDark1,
+                              color: AllColors.whiteColor,
                               fontSize: AllFontSize.fourtine,
                               fontWeight: FontWeight.w500,
                             ),
@@ -229,23 +228,24 @@ class CreateSalesForceCastScreen extends StatelessWidget{
                               child: ActionChip(
                                 elevation: 2,
                                 padding: EdgeInsets.symmetric(horizontal: 35, vertical: 2),
-                                backgroundColor: AllColors.grayColor,
+                                backgroundColor: AllColors.primaryDark1,
                                 shadowColor: Colors.black,
                                 shape: StadiumBorder(
                                   side: BorderSide(color: AllColors.grayColor),
                                 ),
                                 label: Text("Get Quote Item",
                                   style: TextStyle(
-                                    color: AllColors.primaryDark1,
+                                    color: AllColors.whiteColor,
                                     fontSize: AllFontSize.fourtine,
                                     fontWeight: FontWeight.w500,
                                   ),
                                 ),
                                 onPressed: () {
-
-                                  sales_force_cast_vm.filterQuoteIdController.value.text = sales_force_cast_vm.SelectedQuoteList.map((e) => e.quoteId).join(' | ');
+                                  sales_force_cast_vm.clearForeCastItemData();
+                                  sales_force_cast_vm.clearAllFieldForecastItemFilter("ForeCastItemScreen");
+                                 /* sales_force_cast_vm.filterQuoteIdController.value.text = sales_force_cast_vm.SelectedQuoteList.map((e) => e.quoteId).join(' | ');
                                   sales_force_cast_vm.quoteIds = sales_force_cast_vm.filterQuoteIdController.value.text;
-                                  sales_force_cast_vm.getForeCastQuoteList(0,"ALLQuoteLineItemsForSalesForecast");
+                                  sales_force_cast_vm.getForeCastQuoteList(0,"ALLQuoteLineItemsForSalesForecast");*/
 
                                 },
                               ),
@@ -603,8 +603,6 @@ class CreateSalesForceCastScreen extends StatelessWidget{
                               const SizedBox(height: 10,),
                               filterWithQuoteProductCategory(context),
                               const SizedBox(height: 10,),
-                              filterWithQuoteParentProductCategory(context),
-                              const SizedBox(height: 10,),
                               bindProductCategoryTypeDropDown(context),
                               const SizedBox(height: 10,),
                             ],
@@ -622,11 +620,9 @@ class CreateSalesForceCastScreen extends StatelessWidget{
                           borderColor: AllColors.redColor,
                           textColor: AllColors.redColor,
                           onTap: () {
-                            sales_force_cast_vm.SelectedQuoteList.value = [];
+                            //sales_force_cast_vm.SelectedQuoteList.value = [];
                             sales_force_cast_vm.clearSalesForceCastQuoteData();
                             sales_force_cast_vm.clearAllFieldOfQuoteFilter("CreateSalesForeCastScreen");
-                            sales_force_cast_vm.pageNumberForQuote = 0;
-                            sales_force_cast_vm.getQuoteList(sales_force_cast_vm.pageNumberForQuote, );
                             Get.back();
                           },
                         )),
@@ -647,8 +643,8 @@ class CreateSalesForceCastScreen extends StatelessWidget{
                           borderColor: AllColors.green,
                           textColor: AllColors.green,
                           onTap: () {
-                            Get.back();
                             sales_force_cast_vm.saveSalesForceCastQuoteData();
+                            Get.back();
                           },
                         )),
                       ],
@@ -784,13 +780,11 @@ class CreateSalesForceCastScreen extends StatelessWidget{
       ),
     );
   }
-
-
   filterWithQuoteProductCategory(BuildContext context) {
     return Obx(() {
       if (sales_force_cast_vm.productCategoryController.value.text.isNotEmpty && sales_force_cast_vm.filterDataChecker.value=='1') {
         List<String> nameList = sales_force_cast_vm.productCategoryController.value.text.split('|');
-        sales_force_cast_vm.Selected_Item_Category_master_list_without_task.value =
+        sales_force_cast_vm.Selected_item_product_cat_list.value =
             List.generate(nameList.length, (index) {
               return ItemCategoryMstModel(
                 categoryName: nameList[index].trim(),
@@ -798,14 +792,14 @@ class CreateSalesForceCastScreen extends StatelessWidget{
             });
       }
       return DropdownSearch<ItemCategoryMstModel>.multiSelection(
-        items: sales_force_cast_vm.Item_Category_master_list_without_task,
+        items: sales_force_cast_vm.item_product_cat_list,
         itemAsString: (ItemCategoryMstModel u) => u.categoryName ?? "",
-        selectedItems: sales_force_cast_vm.Selected_Item_Category_master_list_without_task,
+        selectedItems: sales_force_cast_vm.Selected_item_product_cat_list,
         dropdownDecoratorProps: DropDownDecoratorProps(
           baseStyle: TextStyle(color: Colors.black),
           dropdownSearchDecoration: InputDecoration(
             filled: false,
-            labelText: sales_force_cast_vm.Selected_Item_Category_master_list_without_task.isNotEmpty ? "Product Category" : null,
+            labelText: sales_force_cast_vm.Selected_item_product_cat_list.isNotEmpty ? "Product Category" : null,
             hintText:  "Product Category" ,
             hintStyle: GoogleFonts.poppins(
                 color: AllColors.lightblackColor,
@@ -838,7 +832,7 @@ class CreateSalesForceCastScreen extends StatelessWidget{
           );
         },
         onChanged: (List<ItemCategoryMstModel> selectedList) {
-          sales_force_cast_vm.Selected_Item_Category_master_list_without_task.value = selectedList;
+          sales_force_cast_vm.Selected_item_product_cat_list.value = selectedList;
           sales_force_cast_vm.productCategoryController.value.text =
               selectedList.map((e) => e.categoryName).join('|');
         },
@@ -861,84 +855,6 @@ class CreateSalesForceCastScreen extends StatelessWidget{
       );
     });
   }
-
-  filterWithQuoteParentProductCategory(BuildContext context) {
-    return Obx(() {
-      if (sales_force_cast_vm.parentProductCategoryController.value.text.isNotEmpty && sales_force_cast_vm.filterDataChecker.value=='1') {
-        List<String> nameList = sales_force_cast_vm.parentProductCategoryController.value.text.split('|');
-        sales_force_cast_vm.parentItemCategorySelectedList.value =
-            List.generate(nameList.length, (index) {
-              return ItemCategoryMstModel(
-                parentCategoryCode: nameList[index].trim(),
-              );
-            });
-      }
-      return DropdownSearch<ItemCategoryMstModel>.multiSelection(
-        items: sales_force_cast_vm.parentProductCategoryList,
-        itemAsString: (ItemCategoryMstModel u) => u.parentCategoryCode ?? "",
-        selectedItems: sales_force_cast_vm.parentItemCategorySelectedList,
-        dropdownDecoratorProps: DropDownDecoratorProps(
-          baseStyle: TextStyle(color: Colors.black),
-          dropdownSearchDecoration: InputDecoration(
-            filled: false,
-            labelText: sales_force_cast_vm.parentItemCategorySelectedList.isNotEmpty ? "Parent Product Category" : null,
-            hintText:  "Parent Product Category" ,
-            hintStyle: GoogleFonts.poppins(
-                color: AllColors.lightblackColor,
-                fontWeight: FontWeight.w300,
-                fontSize: AllFontSize.ten),
-            labelStyle: GoogleFonts.poppins(
-                color: AllColors.primaryDark1,
-                fontWeight: FontWeight.w500,
-                fontSize: AllFontSize.sisxteen),
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-          ),
-        ),
-        dropdownBuilder: (context, selectedItems) {
-          if (selectedItems.isEmpty) {
-            return Text(
-              "Parent Product Category",
-              style: GoogleFonts.poppins(
-                color: AllColors.primaryDark1, // Match your hint color
-                fontSize: AllFontSize.sisxteen,
-                fontWeight: FontWeight.w500,
-              ),
-            );
-          }
-          return SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Text(
-              selectedItems.map((e) => e.parentCategoryCode).join(', '),
-              style: TextStyle(color: Colors.black), // Only black text
-            ),
-          );
-        },
-        onChanged: (List<ItemCategoryMstModel> selectedList) {
-          sales_force_cast_vm.parentItemCategorySelectedList.value = selectedList;
-          sales_force_cast_vm.parentProductCategoryController.value.text =
-              selectedList.map((e) => e.parentCategoryCode).join('|');
-        },
-        popupProps: PopupPropsMultiSelection.dialog(
-          showSearchBox: true,
-          searchFieldProps: TextFieldProps(
-            decoration: InputDecoration(
-              contentPadding: EdgeInsets.only(top: 20, left: 12, right: 12),
-              // Top margin here
-              hintText: "Search...",
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-            ),
-          ),
-          itemBuilder: (context, item, isSelected) => ListTile(
-            title: Text(item.parentCategoryCode ?? ""),
-          ),
-        ),
-      );
-    });
-  }
-
-
   Widget bindProductCategoryTypeDropDown(context) {
     return DropdownMenu<String>(
       width: MediaQuery.of(context).size.width - 15,
@@ -985,8 +901,6 @@ class CreateSalesForceCastScreen extends StatelessWidget{
     );
 
   }
-
-
   Widget filterWithQuoteStatus(BuildContext context){
     return Container(
       child: DropdownMenu<String>(
@@ -1042,7 +956,6 @@ class CreateSalesForceCastScreen extends StatelessWidget{
     );
 
   }
-
   filterWithQuoteValidity(BuildContext context) {
     return TextField(
       cursorColor: AllColors.primaryDark1,
@@ -1102,8 +1015,6 @@ class CreateSalesForceCastScreen extends StatelessWidget{
       },
     );
   }
-
-
   filterWithQuoteClosureDate(BuildContext context) {
     return TextField(
       cursorColor: AllColors.primaryDark1,
@@ -1167,7 +1078,6 @@ class CreateSalesForceCastScreen extends StatelessWidget{
       },
     );
   }
-
   Widget bindClusterNameFilter(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final availableItems = sales_force_cast_vm.clusterGetByEmailList;
@@ -1644,8 +1554,6 @@ class CreateSalesForceCastScreen extends StatelessWidget{
       );
     });
   }
-
-
   filterWithQuoteCreatedOn(BuildContext context) {
     return TextField(
       cursorColor: AllColors.primaryDark1,
@@ -1709,4 +1617,5 @@ class CreateSalesForceCastScreen extends StatelessWidget{
       },
     );
   }
+
 }

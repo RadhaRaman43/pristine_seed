@@ -77,9 +77,8 @@ class Lines {
   String? itemVarient;
   String? requiredRegionName;
   String? requiredClusterName;
-  dynamic? i7Jul2026;
-  dynamic? i8Aug2026;
-  dynamic? i9Sep2026;
+
+  List<ForecastMonth> forecastMonths = [];
 
   Lines(
       {this.salesForecastId,
@@ -95,10 +94,7 @@ class Lines {
         this.quoteApprovedAmountPerUnit,
         this.itemVarient,
         this.requiredRegionName,
-        this.requiredClusterName,
-        this.i7Jul2026,
-        this.i8Aug2026,
-        this.i9Sep2026});
+        this.requiredClusterName});
 
   Lines.fromJson(Map<String, dynamic> json) {
     salesForecastId = json['sales_forecast_id'];
@@ -115,9 +111,20 @@ class Lines {
     itemVarient = json['item_varient'];
     requiredRegionName = json['required_region_name'];
     requiredClusterName = json['required_cluster_name'];
-    i7Jul2026 = json['7|Jul|2026'];
-    i8Aug2026 = json['8|Aug|2026'];
-    i9Sep2026 = json['9|Sep|2026'];
+
+    json.forEach((key, value) {
+      if (key.contains('|')) {List<String> parts = key.split('|');
+        forecastMonths.add(
+          ForecastMonth(
+            key: key,
+            monthNo: parts[0],
+            month: parts[1],
+            year: parts[2],
+            value: value,
+          ),
+        );
+      }
+    });
   }
 
   Map<String, dynamic> toJson() {
@@ -136,9 +143,24 @@ class Lines {
     data['item_varient'] = this.itemVarient;
     data['required_region_name'] = this.requiredRegionName;
     data['required_cluster_name'] = this.requiredClusterName;
-    data['7|Jul|2026'] = this.i7Jul2026;
-    data['8|Aug|2026'] = this.i8Aug2026;
-    data['9|Sep|2026'] = this.i9Sep2026;
+    for (var month in forecastMonths) {
+      data[month.key] = month.value;
+    }
     return data;
   }
+}
+class ForecastMonth {
+  String key;
+  String monthNo;
+  String month;
+  String year;
+  dynamic value;
+
+  ForecastMonth({
+    required this.key,
+    required this.monthNo,
+    required this.month,
+    required this.year,
+    required this.value,
+  });
 }

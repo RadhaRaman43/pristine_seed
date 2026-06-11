@@ -653,6 +653,21 @@ class SessionManagement {
     prefs.remove("PendingDraftQuote_data");
   }
 
+  //todo Force Cast Item Screen
+  Future<void> saveForceCastItemData(Map<String, dynamic> data) async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString("ForceCastItem_data", jsonEncode(data));
+  }
+  Future<Map<String, dynamic>> getForceCastItemData() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? data = prefs.getString("ForceCastItem_data");
+    return data != null ? jsonDecode(data) : {};
+  }
+  Future<void> clearForceCastItemData() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.remove("PendingDraftQuote_data");
+  }
+
   //todo Quote rejected and approve
   Future<void> saveApproveRejectedQuoteData(Map<String, dynamic> data) async {
     final prefs = await SharedPreferences.getInstance();

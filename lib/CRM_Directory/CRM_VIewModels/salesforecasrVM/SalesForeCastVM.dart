@@ -39,6 +39,7 @@ class SalesForeCastVM extends GetxController{
   String userType = "";
   String quoteIds = "";
   String fromPage = "";
+  String forceCastId = "";
 
   RxString foreCastStatus = "Pending".obs;
   RxList<SalesForceCastListModal> sales_force_cast_list  = <SalesForceCastListModal>[].obs;
@@ -93,14 +94,37 @@ class SalesForeCastVM extends GetxController{
   var StandardCostController=TextEditingController().obs;
   var product_category_type_Controller = TextEditingController().obs;
 
+
+  //todo download excel filter
+  var quoteId_ex_Ctrl = TextEditingController().obs;
+  var saleCycleId_ex_Ctrl = TextEditingController().obs;
+  var closerMonth_ex_Ctrl = TextEditingController().obs;
+  var closerYear_ex_Ctrl = TextEditingController().obs;
+  var cluster_name_ex_Ctrl = TextEditingController().obs;
+  var region_name_ex_Ctrl = TextEditingController().obs;
+  var itemCode_ex_Ctrl = TextEditingController().obs;
+  var itemName_ex_Ctrl = TextEditingController().obs;
+  var itemVarient_ex_Ctrl = TextEditingController().obs;
+
+
+  var product_category_ex_Ctrl = TextEditingController().obs;
+  var parent_product_category_ex_Ctrl = TextEditingController().obs;
+  var item_category_type_ex_Ctrl = TextEditingController().obs;
+
+
+
   var filterQuoteAcceptedController = TextEditingController().obs;
   RxList<String> qouteAcceptedList = ["All", "Open", "Loss", "Won"].obs;
   RxList<ItemCategoryMstModel> parentProductCategoryList = <ItemCategoryMstModel>[].obs;
   RxList<ItemCategoryMstModel> parentItemCategorySelectedList = <ItemCategoryMstModel>[].obs;
-  RxList<ItemCategoryMstModel> Item_Category_master_list_without_task = <ItemCategoryMstModel>[].obs;
-  RxList<ItemCategoryMstModel> Selected_Item_Category_master_list_without_task = <ItemCategoryMstModel>[].obs;
-  RxList<String> productCategoryTypeList = <String>["Contains","Equals To"].obs;
+  RxList<ItemCategoryMstModel> item_product_cat_list = <ItemCategoryMstModel>[].obs;
+  RxList<ItemCategoryMstModel> Selected_item_product_cat_list = <ItemCategoryMstModel>[].obs;
   RxList<String> QuoteStatusList = ["All", "DRAFT", "PENDING FOR APPROVAL", ].obs;
+  List<String> productCategoryTypeList = ["Contains","Equals To"];
+  List<String> months = [
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December'];
+  List<String> years = [];
 
   RxString createdOnStartToEnd = "".obs;
   RxString extClosureStartToEnd = "".obs;
@@ -117,15 +141,81 @@ class SalesForeCastVM extends GetxController{
     userType = await sessionManagement.getUserType() ?? '';
     isAdminWritePermission.value = await sessionManagement.getIsAdminPermission() ?? '';
     isHeadofficePermission.value = await sessionManagement.getisHeadofficePermission() ?? '';
+    getItemCategoryMstWithoutTaskIdApi();
+    getParentItemCategoryMstGet();
     getCurrentDate();
     getClustersGetByEmail();
   }
   Future<void> refreshList() async {
     pageNumber = 0;
     product_category_type_Controller.value.text="Contains";
-    getItemCategoryMstWithoutTaskIdApi();
-    getParentItemCategoryMstGet();
     getSalesForecastListGet(pageNumber, );
+  }
+  clearExcelController(){
+    quoteId_ex_Ctrl.value.clear();
+    saleCycleId_ex_Ctrl.value.clear();
+    closerMonth_ex_Ctrl.value.clear();
+    closerYear_ex_Ctrl.value.clear();
+    cluster_name_ex_Ctrl.value.clear();
+    region_name_ex_Ctrl.value.clear();
+    itemCode_ex_Ctrl.value.clear();
+    itemName_ex_Ctrl.value.clear();
+    itemVarient_ex_Ctrl.value.clear();
+    product_category_ex_Ctrl.value.clear();
+
+    item_category_type_ex_Ctrl.value.clear();
+    parentItemCategorySelectedList.value=[];
+    Selected_item_product_cat_list.value=[];
+  }
+  SalesForecastLinesGetForUpload() async{
+    String productCat = "";
+    String parentProductCat = "";
+    try{
+      if(parentItemCategorySelectedList.length>0 &&parentItemCategorySelectedList.isNotEmpty){
+        productCat=parentItemCategorySelectedList.map((item)=>item.categoryCode).join("|");
+      }
+      if(Selected_item_product_cat_list.length>0 &&Selected_item_product_cat_list.isNotEmpty){
+        productCat=Selected_item_product_cat_list.map((item)=>item.parentCategoryCode).join("|");
+      }
+      Map data={
+        "filter_sales_forecast_id": "",
+        "filter_quote_id": quoteId_ex_Ctrl.value.text.isEmpty?"":quoteId_ex_Ctrl.value.text,
+        "filter_sales_cycle_id": saleCycleId_ex_Ctrl.value.text.isEmpty?"":saleCycleId_ex_Ctrl.value.text,
+        "filter_closure_month": closerMonth_ex_Ctrl.value.text.isEmpty?"":closerMonth_ex_Ctrl.value.text,
+        "filter_closure_year": closerYear_ex_Ctrl.value.text.isEmpty?"":closerYear_ex_Ctrl.value.text,
+        "filter_item_code": itemCode_ex_Ctrl.value.text.isEmpty?"":itemCode_ex_Ctrl.value.text,
+        "filter_item_name": itemName_ex_Ctrl.value.text.isEmpty?"":itemName_ex_Ctrl.value.text,
+        "filter_item_varient": itemVarient_ex_Ctrl.value.text.isEmpty?"":itemVarient_ex_Ctrl.value.text,
+        "filter_item_category_type": item_category_type_ex_Ctrl.value.text.isEmpty?"":item_category_type_ex_Ctrl.value.text,
+        "filter_item_category_code": productCat,
+        "filter_item_parent_category_code": parentProductCat,
+        "filter_required_region_name": region_name_ex_Ctrl.value.text.isEmpty?"":region_name_ex_Ctrl.value.text,
+        "filter_required_cluster_name": cluster_name_ex_Ctrl.value.text.isEmpty?"":cluster_name_ex_Ctrl.value.text
+      };
+      loading.value=true;
+
+      String onValue = await _api.SalesForecastLinesGetForUpload(data, sessionManagement);
+      final jsonResponse = json.decode(onValue);
+      print(onValue);
+      if(jsonResponse is List){
+        List<ForecastCreateResponseModal> response = jsonResponse.map((e) => ForecastCreateResponseModal.fromJson(e)).toList();
+        if(response!= null && response.length>0 && response[0].condition=="True"){
+          forcastResponseList.value = response;
+          Utils.sanckBarSuccess("Successfully", response[0].message.toString());
+          Get.offAllNamed(RoutesName.SalesForeCastScreen);
+
+        }else {
+          Utils.sanckBarError("Data Not Found", response[0].message.toString());
+        }
+      }
+    }catch(e){
+      print(e);
+      Utils.sanckBarError("Exception!", e.toString());
+    }
+    finally{
+      loading.value = false;
+    }
+
   }
 
   void toggleSalesCheckbox(int index, BuildContext context) {
@@ -136,7 +226,9 @@ class SalesForeCastVM extends GetxController{
       SelectedQuoteList.add(item);
     } else {
       QuoteList[index].isSelected=0;
-      SelectedQuoteList.remove(item);
+      SelectedQuoteList.removeWhere((element) => element.quoteId==item.quoteId);
+      //SelectedQuoteList.remove(item);
+      debugPrint("length..... ${SelectedQuoteList.length} ${""}");
     }
     showList.value = false;
     showList.value = true;
@@ -172,7 +264,9 @@ class SalesForeCastVM extends GetxController{
       selectedForeCastQuote_list.add(item);
     } else {
       ForeCastQuote_list[index].isSelected=0;
-      selectedForeCastQuote_list.remove(item);
+      //selectedForeCastQuote_list.remove(item);
+      selectedForeCastQuote_list.removeWhere((e)=>(e.quoteId==item.quoteId
+          && e.itemCode==item.itemCode && e.lineNo==item.lineNo));
     }
     showForeCstList.value = false;
     showForeCstList.value = true;
@@ -209,14 +303,12 @@ class SalesForeCastVM extends GetxController{
 
   getCurrentDate(){
     DateTime now = DateTime.now();
-    const months = [
-      'January', 'February', 'March', 'April', 'May', 'June',
-      'July', 'August', 'September', 'October', 'November', 'December'
-    ];
-
     String currentMonthName = months[DateTime.now().month - 1];
     month_controller.value.text=currentMonthName;
     int year = now.year;
+    years.add((year-1).toString());
+    years.add((year).toString());
+    years.add((year+1).toString());
     year_controller.value.text = year.toString();
     print("year and month $currentMonthName $year ${month_controller.value.text} ${year_controller.value.text}");
 
@@ -291,10 +383,14 @@ class SalesForeCastVM extends GetxController{
           else if(fromPage=="ClearSalesForeCast"){
             getFilterData();
           }
+          else if(fromPage=="ForeCastItemScreen"){
+            filterQuoteIdController.value.text = SelectedQuoteList.map((e) => e.quoteId).join(' | ');
+            quoteIds = filterQuoteIdController.value.text;
+            getForeCastQuoteList(0,"ALLQuoteLineItemsForSalesForecast");
+          }
           else{
             getFilterData();
           }
-
 
         }else {
           regionwithclusterGetByEmailList.value=[];
@@ -360,6 +456,10 @@ class SalesForeCastVM extends GetxController{
         List<SalesForceCastHeaderModal> response = jsonResponse.map((e) => SalesForceCastHeaderModal.fromJson(e)).toList();
         if(response.length>0 && response[0].condition=="True"){
           salesForceCastHeader_list.value = response;
+          List<String> parts = salesForceCastHeader_list[0].monthYear!.split('-');
+          month_controller.value.text = parts[0];
+          year_controller.value.text = parts[1];
+          forceCastId= salesForceCastHeader_list[0].salesForecastId??"";
           Get.toNamed(RoutesName.SalesForeCastHeaderDetailsScreen);
         }else {
           salesForceCastHeader_list.value=[];
@@ -436,6 +536,15 @@ class SalesForeCastVM extends GetxController{
             showList.value = false;
             showList.value = true;
           }
+          else if(SelectedQuoteList.length>0){
+            for(var selectedItem in SelectedQuoteList){
+              int index = QuoteList.indexWhere((item) => item.quoteId == selectedItem.quoteId,);
+              if (index != -1) {
+                QuoteList[index].isSelected = 1;
+              }
+            }
+          }
+          //QuoteList.refresh();
         }else {
           QuoteList.value=[];
         }
@@ -449,10 +558,10 @@ class SalesForeCastVM extends GetxController{
 
   }
 
-  getForeCastQuoteList(int pageNumberForQuote, String flagFilter,) async{
+  getForeCastQuoteList(int pageNumberForQuote, String flagFilter) async{
     try{
       Map data={
-        "filter_quote_id": filterQuoteIdController.value.text.isEmpty?"":filterQuoteIdController.value.text,
+        "filter_quote_id": quoteIds.isEmpty?"":quoteIds,
         "filter_sales_cycle_id": filterQuoteSaleCycleController.value.text.isEmpty?"":filterQuoteSaleCycleController.value.text,
         "filter_account_code": accountCodeController.value.text.isEmpty?"":accountCodeController.value.text,
         "filter_account_name": accountNameController.value.text.isEmpty?"":accountNameController.value.text,
@@ -501,8 +610,26 @@ class SalesForeCastVM extends GetxController{
             ForeCastQuote_list.clear();
           }
           ForeCastQuote_list.addAll(response);
-          print("${ForeCastQuote_list.length}");
           total_Quote_List_rows=int.parse(ForeCastQuote_list[0].totalRows!);
+
+          if (selectAllForeCastList.value) {
+            for(int i=0;i<QuoteList.length;i++){
+              ForeCastQuote_list[i].isSelected=1;
+            }
+            selectedForeCastQuote_list.value=[];
+            selectedForeCastQuote_list.value=ForeCastQuote_list;
+            showForeCstList.value = false;
+            showForeCstList.value = true;
+          }
+          else if(selectedForeCastQuote_list.length>0){
+            for(var selectedItem in selectedForeCastQuote_list){
+              int index = ForeCastQuote_list.indexWhere((item) =>
+              (item.quoteId == selectedItem.quoteId && item.itemCode == selectedItem.itemCode && item.lineNo == selectedItem.lineNo ));
+              if (index != -1) {
+                ForeCastQuote_list[index].isSelected = 1;
+              }
+            }
+          }
           Get.toNamed(RoutesName.ForeCastItemScreen);
         }else {
           ForeCastQuote_list.value=[];
@@ -555,15 +682,13 @@ class SalesForeCastVM extends GetxController{
       (json.decode(value) as List<dynamic>).map((i) => ItemCategoryMstModel.fromJson(i as Map<String, dynamic>)).toList();
 
       if (Response.isNotEmpty && Response[0]?.condition.toString() == "True") {
-        Item_Category_master_list_without_task.value = Response!;
-
-        // print('master list....${get_Acc_type_list.length.toString()}');
+        item_product_cat_list.value = Response!;
+        debugPrint("Product category liust length ${item_product_cat_list.length}");
       } else {
-        Item_Category_master_list_without_task.value = [];
-        //print('master listelsse....${get_Acc_type_list.length.toString()}');
+        item_product_cat_list.value = [];
       }
     } catch (e) {
-      Item_Category_master_list_without_task.value = [];
+      item_product_cat_list.value = [];
       print('catch....${e.toString()}');
     }
     finally{
@@ -591,6 +716,83 @@ class SalesForeCastVM extends GetxController{
       loading.value=true;
 
       String onValue = await _api.SalesForecastHeaderCreate(data, sessionManagement);
+      final jsonResponse = json.decode(onValue);
+      print(onValue);
+      if(jsonResponse is List){
+        List<ForecastCreateResponseModal> response = jsonResponse.map((e) => ForecastCreateResponseModal.fromJson(e)).toList();
+        if(response!= null && response.length>0 && response[0].condition=="True"){
+          forcastResponseList.value = response;
+          Utils.sanckBarSuccess("Successfully", response[0].message.toString());
+          Get.offAllNamed(RoutesName.SalesForeCastScreen);
+
+        }else {
+          Utils.sanckBarError("Data Not Found", response[0].message.toString());
+        }
+      }
+    }catch(e){
+      print(e);
+      Utils.sanckBarError("Exception!", e.toString());
+    }
+    finally{
+      loading.value = false;
+    }
+
+  }
+
+  SalesForecastAddQuoteItems() async{
+    try{
+      List<Map<String,dynamic>> lines = [];
+      for(int i=0;i<selectedForeCastQuote_list.length;i++){
+        Map<String,dynamic> input = {
+          "quote_id": selectedForeCastQuote_list[i].quoteId,
+          "quote_line_no": selectedForeCastQuote_list[i].lineNo,
+          "item_code": selectedForeCastQuote_list[i].itemCode
+        };
+        lines.add(input);
+      }
+      Map data={
+        "sales_forecast_id": forceCastId,
+        "created_by": email,
+        "lines": lines
+      };
+      loading.value=true;
+
+      String onValue = await _api.SalesForecastAddQuoteItems(data, sessionManagement);
+      final jsonResponse = json.decode(onValue);
+      print(onValue);
+      if(jsonResponse is List){
+        List<ForecastCreateResponseModal> response = jsonResponse.map((e) => ForecastCreateResponseModal.fromJson(e)).toList();
+        if(response!= null && response.length>0 && response[0].condition=="True"){
+          forcastResponseList.value = response;
+          Utils.sanckBarSuccess("Successfully", response[0].message.toString());
+          selectedForeCastQuote_list.value=[];
+          SelectedQuoteList.value=[];
+          getSalesForecastHeaderGetBySalesForecastId(forceCastId);
+
+        }else {
+          Utils.sanckBarError("Data Not Found", response[0].message.toString());
+        }
+      }
+    }catch(e){
+      print(e);
+      Utils.sanckBarError("Exception!", e.toString());
+    }
+    finally{
+      loading.value = false;
+    }
+
+  }
+
+  SalesForecastHeaderCompleted(String foreCastId) async{
+    try{
+
+      Map data={
+          "sales_forecast_id": foreCastId,
+          "created_by": email
+      };
+      loading.value=true;
+
+      String onValue = await _api.SalesForecastHeaderCompleted(data, sessionManagement);
       final jsonResponse = json.decode(onValue);
       print(onValue);
       if(jsonResponse is List){
@@ -670,7 +872,7 @@ class SalesForeCastVM extends GetxController{
   void clearAllFieldOfQuoteFilter(String fromPage) {
     product_category_type_Controller.value.text="Contains";
     parentProductCategoryController.value.clear();
-    Selected_Item_Category_master_list_without_task.value=[];
+    Selected_item_product_cat_list.value=[];
     parentItemCategorySelectedList.value=[];
 
     filterQuoteIdController.value.clear();
@@ -739,6 +941,8 @@ class SalesForeCastVM extends GetxController{
       'filterQuoteAcceptedController': filterQuoteAcceptedController.value.text,
     });
     filterDataChecker.value='';
+    pageNumberForQuote = 0;
+    getQuoteList(pageNumberForQuote,);
 
   }
 
@@ -788,6 +992,105 @@ class SalesForeCastVM extends GetxController{
   void clearSalesForceCastQuoteData() {
     filterDataChecker.value='';
     sessionManagement.clearSalesForceCastQuoteData();
+  }
+
+  void clearAllFieldForecastItemFilter(String fromPage) {
+
+
+    product_category_type_Controller.value.text="Contains";
+    parentProductCategoryController.value.clear();
+    Selected_item_product_cat_list.value=[];
+    parentItemCategorySelectedList.value=[];
+
+    filterQuoteIdController.value.clear();
+    filterQuoteVersionController.value.clear();
+    filterExpectedClosuredateController.value.clear();
+    filterQuoteValidityController.value.clear();
+    accountNameController.value.clear();
+    accountCodeController.value.clear();
+    rh_Approval_controller.value.clear();
+    cbh_Approval_controller.value.clear();
+    category_Approval_controller.value.clear();
+    gm_Approval_controller.value.clear();
+    productCategoryController.value.clear();
+    createdOnCnontroller.value.clear();
+    filterQuoteSaleCycleController.value.clear();
+    createdByCnontroller.value.clear();
+    quoteStatusController.value.clear();
+    createdOnStartToEnd.value = "";
+    extClosureStartToEnd.value = "";
+    quoteValidityStartToEnd.value = "";
+    itemCodeController.value.clear();
+    itemNameController.value.clear();
+    quantityFilterController.value.clear();
+    GmDiscountPerController.value.clear();
+    BmDiscountPerController.value.clear();
+    SalesCreditController.value.clear();
+    LSPFilterController.value.clear();
+    BTPFilterController.value.clear();
+    MAPFilterController.value.clear();
+    StandardCostController.value.clear();
+
+    filterQuoteAcceptedController.value.clear();
+
+    SelectedCluster_list.value = [];
+    SelectedRegion_list.value = [];
+    //RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join(',');
+    clusterName_controller.value.text = clusterGetByEmailList.map((e) => e.geoValue).join('|');
+    getRegionsWithClusterFilterGetByEmail(fromPage);
+
+
+  }
+  void saveForceCastItemData() async{
+    await sessionManagement.saveForceCastItemData({
+      'filterQuoteIdController': filterQuoteIdController.value.text,
+      'filterQuoteSaleCycleController': filterQuoteSaleCycleController.value.text,
+      'itemCodeController': itemCodeController.value.text,
+      'product_category': productCategoryController.value.text,
+      'product_category_type': product_category_type_Controller.value.text,
+      'region_name': RegionName_controller.value.text,
+      'cluster_name': clusterName_controller.value.text,
+    });
+
+    filterDataChecker.value='';
+    pageNumberForQuote = 0;
+    getForeCastQuoteList( pageNumberForQuote,"ALLQuoteLineItemsForSalesForecast");
+
+
+  }
+
+  void getForceCastItemData() async{
+    Map getFilterData=await sessionManagement.getForceCastItemData();
+    if(getFilterData.isNotEmpty){
+      filterDataChecker.value='1';
+      filterQuoteIdController.value.text=getFilterData["filterQuoteIdController"]??"";
+      filterQuoteSaleCycleController.value.text=getFilterData["filterQuoteSaleCycleController"]??"";
+      itemCodeController.value.text=getFilterData["itemCodeController"]??"";
+      productCategoryController.value.text=getFilterData["product_category"]??"";
+      product_category_type_Controller.value.text=getFilterData["product_category_type"]??"";
+
+      if(getFilterData["region_name"].toString().isNotEmpty && getFilterData["region_name"].toString()!=""){
+        RegionName_controller.value.text = "";
+        RegionName_controller.value.text = getFilterData["region_name"].toString()??"";
+      }
+      if(getFilterData["cluster_name"].toString().isNotEmpty && getFilterData["cluster_name"].toString()!=""){
+        clusterName_controller.value.text="";
+        clusterName_controller.value.text=getFilterData["cluster_name"].toString()??"";
+        print("clusterName_controller.value.text.....${clusterName_controller.value.text}");
+      }
+    }
+    else{
+      print("else condition");
+    }
+    pageNumberForQuote=0;
+    getQuoteList(pageNumberForQuote,);
+
+  }
+
+
+  clearForeCastItemData(){
+    filterDataChecker.value='';
+    sessionManagement.clearForceCastItemData();
   }
 
 }

@@ -379,5 +379,8 @@ class AppUrl {
      static const String QuoteHeaderGetForSalesForecast="$BASE_URL/api/CRM/SalesForecast/QuoteHeaderGetForSalesForecast";
      static const String SalesForecastHeaderGetBySalesForecastId="$BASE_URL/api/CRM/SalesForecast/SalesForecastHeaderGetBySalesForecastId";
      static const String SalesForecastHeaderCreate="$BASE_URL/api/CRM/SalesForecast/SalesForecastHeaderCreate";
+     static const String SalesForecastHeaderCompleted="$BASE_URL/api/CRM/SalesForecast/SalesForecastHeaderCompleted";
+     static const String SalesForecastAddQuoteItems="$BASE_URL/api/CRM/SalesForecast/SalesForecastAddQuoteItems";
+     static const String SalesForecastLinesGetForUpload="$BASE_URL/api/CRM/SalesForecast/SalesForecastLinesGetForUpload";
 
 }

@@ -43,8 +43,10 @@ class SalesForceCastScreen extends StatelessWidget{
                 ),
                 Spacer(),
                 IconButton(onPressed: () {
+                      sales_force_cast_vm.getCurrentDate();
                       sales_force_cast_vm.showList.value = false;
                       sales_force_cast_vm.fromPage = "ForeCastListScreen";
+                      sales_force_cast_vm.clearSalesForceCastQuoteData();
                       sales_force_cast_vm.clearAllFieldOfQuoteFilter("SalesForeCastScreen");
 
                       Get.toNamed(RoutesName.createSalesForeCastScreen);
@@ -73,7 +75,80 @@ class SalesForceCastScreen extends StatelessWidget{
                     ),
                   );
                 }),
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(minWidth: MediaQuery.of(context).size.width),
+                    child: Container(
+                      padding: EdgeInsets.symmetric(horizontal: 8), // optional spacing
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Obx(() {
+                            return ActionChip(
+                              elevation: 2,
+                              padding: EdgeInsets.symmetric(horizontal: 30, vertical: 2),
+                              backgroundColor:
+                              sales_force_cast_vm.foreCastStatus.value=="Pending"
+                                  ? AllColors.primaryDark1
+                                  : AllColors.grayColor,
+                              shadowColor: Colors.black,
+                              shape: StadiumBorder(
+                                side: BorderSide(color: AllColors.grayColor),
+                              ),
+                              label: Text(
+                                  'Pending',
+                                  style: TextStyle(
+                                    color: sales_force_cast_vm.foreCastStatus.value=="Pending"
+                                        ? AllColors.whiteColor
+                                        : AllColors.primaryDark1,
+                                    fontSize: AllFontSize.fourtine,
+                                    fontWeight: FontWeight.w500,
+                                  )
+                              ),
+                              onPressed: () {
+                                sales_force_cast_vm.foreCastStatus.value ="Pending";
+                                sales_force_cast_vm.pageNumber=0;
+                                sales_force_cast_vm.getSalesForecastListGet(sales_force_cast_vm.pageNumber, );
+                              },
+                            );
+                          }),
+                          const SizedBox(width: 8),
+                          Obx(() {
+                            return ActionChip(
+                              elevation: 2,
+                              padding: EdgeInsets.symmetric(horizontal: 35, vertical: 2),
+                              backgroundColor:sales_force_cast_vm.foreCastStatus.value=="Completed"
+                                  ? AllColors.primaryDark1
+                                  : AllColors.grayColor,
+                              shadowColor: Colors.black,
+                              shape: StadiumBorder(
+                                side: BorderSide(color: AllColors.grayColor),
+                              ),
+                              label: Text(
+                                'Completed',
+                                style: TextStyle(
+                                  color: sales_force_cast_vm.foreCastStatus.value=="Completed"
+                                      ? AllColors.whiteColor
+                                      : AllColors.primaryDark1,
+                                  fontSize: AllFontSize.fourtine,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              onPressed: () {
+                                sales_force_cast_vm.foreCastStatus.value ="Completed";
+                                sales_force_cast_vm.pageNumber=0;
+                                sales_force_cast_vm.getSalesForecastListGet(sales_force_cast_vm.pageNumber, );
+                              },
+                            );
+                          }),
+                          const SizedBox(width: 8), // optional spacing between chips
 
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
                 Flexible(
                   fit: FlexFit.loose,
                   child: Container(
@@ -309,7 +384,7 @@ class SalesForceCastScreen extends StatelessWidget{
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               const SizedBox(height: 5,),
-                              bindFilterData(sales_force_cast_vm.salesForceCastId.value, 'Sales force Cast Id'),
+                              bindFilterData(sales_force_cast_vm.salesForceCastId.value, 'Rolling Forecast ID'),
                               /*const SizedBox(height: 5,),
                               bindFilterData(sales_force_cast_vm.filterTask_Id_controller.value, 'Task Id'),
                               const SizedBox(height: 10,),

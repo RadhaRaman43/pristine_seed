@@ -23,6 +23,16 @@ class SalesForeCastRepo{
   Future<String> SalesForecastHeaderCreate(var data,SessionManagement sessionManagement) async{
     return _apiService.postApi(data, AppUrl.SalesForecastHeaderCreate,sessionManagement);
   }
+  Future<String> SalesForecastHeaderCompleted(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.SalesForecastHeaderCompleted,sessionManagement);
+  }
+  Future<String> SalesForecastAddQuoteItems(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.SalesForecastAddQuoteItems,sessionManagement);
+  }
+  Future<String> SalesForecastLinesGetForUpload(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.SalesForecastLinesGetForUpload,sessionManagement);
+  }
+
 
 
   Future<String> QuoteHeaderGetForSalesForecast(var data,SessionManagement sessionManagement) async{
@@ -35,4 +45,6 @@ class SalesForeCastRepo{
   Future<String> clustersGetByEmailApiHit(var data,SessionManagement sessionManagement) async{
     return _apiService.getApi(AppUrl.ClustersGetByEmail, sessionManagement, data);
   }
+
+
 }
