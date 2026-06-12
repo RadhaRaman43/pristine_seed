@@ -86,6 +86,7 @@ import '../../CRM_Directory/CRM_View/sales_cycle/sales_cycle_view/view_sale_head
 import '../../CRM_Directory/CRM_View/salesforecast/SalesForeCastScreen.dart';
 import '../../CRM_Directory/CRM_View/salesforecast/fore_cast_item_list_screen.dart';
 import '../../CRM_Directory/CRM_View/salesforecast/create_sales_force_cast_screen.dart';
+import '../../CRM_Directory/CRM_View/salesforecast/rolling_forecast_rh_list_screen.dart';
 import '../../CRM_Directory/CRM_View/salesforecast/sales_force_cast_header_details.dart';
 import '../../view/check_in_approval/check_in_approval_header_view_screen.dart';
 import '../../view/check_in_view/check_in_screen.dart';
@@ -922,6 +923,13 @@ class AppRoutes{
         transitionDuration: Duration(microseconds: 180),
         transition: Transition.rightToLeftWithFade
     ),
+
+    GetPage(name: RoutesName.rollingForeCastRhListScreen,
+        page: ()=>RollingForeCastRHListScreen(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
+
 
 
 

@@ -32,6 +32,14 @@ class SalesForeCastRepo{
   Future<String> SalesForecastLinesGetForUpload(var data,SessionManagement sessionManagement) async{
     return _apiService.postApi(data, AppUrl.SalesForecastLinesGetForUpload,sessionManagement);
   }
+  Future<String> SalesForecastUploadItem(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.SalesForecastUploadItem,sessionManagement);
+  }
+  Future<String> SalesForecastLinesGetNew(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.SalesForecastLinesGetNew,sessionManagement);
+  }
+
+
 
 
 

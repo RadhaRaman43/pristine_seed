@@ -172,32 +172,33 @@ class SalesForceHeaderDetails extends StatelessWidget{
                     Spacer(),
                     GestureDetector(
                       onTap: (){
+                        sales_force_cast_vm.clearExcelController();
                         showFilterBottomSheet(context);
                       },
-                      child: Flexible(child: Tooltip(
+                      child: Tooltip(
                         message: "Download Data With Filter",
                         child: Icon(Icons.download, color: Colors.black),
-                      )),
+                      ),
                     ),
                     const SizedBox(width: 10,),
                     GestureDetector(
                       onTap: (){
-
+                        sales_force_cast_vm.downloadQuoteDetailsWithProgress(context,"all_line_details","All Line Details");
                       },
-                      child: Flexible(child: Tooltip(
+                      child: Tooltip(
                         message: "Download Data",
                         child: Icon(Icons.download, color: Colors.black),
-                      )),
+                      ),
                     ),
                     const SizedBox(width: 10,),
                     GestureDetector(
                       onTap: (){
-
+                        sales_force_cast_vm.uploadExcelToServer();
                       },
-                      child: Flexible(child: Tooltip(
+                      child: Tooltip(
                         message: "Upload Data",
                         child: Icon(Icons.upload, color: Colors.black),
-                      )),
+                      ),
                     ),
                     const SizedBox(width: 10,),
                   ],
@@ -372,15 +373,10 @@ class SalesForceHeaderDetails extends StatelessWidget{
             _buildLabelWithValue(label: "Item Variant : ", value: sales_force_cast_vm.salesForceCastHeader_list[0].lines?[index].itemVarient ?? "",),
             _buildLabelWithValue(label: "Region Name : ", value: sales_force_cast_vm.salesForceCastHeader_list[0].lines?[index].requiredRegionName ?? "",),
             _buildLabelWithValue(label: "Cluster  Name : ", value: sales_force_cast_vm.salesForceCastHeader_list[0].lines?[index].requiredClusterName ?? "",),
-            ...sales_force_cast_vm
-                .salesForceCastHeader_list[0]
-                .lines![index]
-                .forecastMonths
-                .map(
-                  (e) => _buildLabelWithValue(
+            ...sales_force_cast_vm.salesForceCastHeader_list[0].lines![index].forecastMonths
+                .map((e) => _buildLabelWithValue(
                 label: "${e.month} ${e.year} : ",
-                value: (e.value ?? 0).toString(),
-              ),
+                value: (e.value ?? 0).toString(),),
             ).toList(),
 
           ],
@@ -569,18 +565,8 @@ class SalesForceHeaderDetails extends StatelessWidget{
                               bindDropDownType(context,sales_force_cast_vm.closerYear_ex_Ctrl.value,
                                   'Closure Year',sales_force_cast_vm.years),
                               const SizedBox(height: 10,),
-
-                              bindFilterData(sales_force_cast_vm.cluster_name_ex_Ctrl.value, 'Cluster Name'),
-                              const SizedBox(height: 10,),
-                              bindFilterData(sales_force_cast_vm.region_name_ex_Ctrl.value, 'Region Name'),
-                              const SizedBox(height: 10,),
-                              bindFilterData(sales_force_cast_vm.itemCode_ex_Ctrl.value, 'Item Code'),
-                              const SizedBox(height: 10,),
-                              bindFilterData(sales_force_cast_vm.itemName_ex_Ctrl.value, 'Item Name'),
-                              const SizedBox(height: 10,),
                               bindDropDownType(context,sales_force_cast_vm.item_category_type_ex_Ctrl.value,
                                   "Item Category Type",sales_force_cast_vm.productCategoryTypeList),
-                              const SizedBox(height: 10,),
                               const SizedBox(height: 10,),
                               bindProductCategoryDropDown(context),
                               Obx(() {
@@ -621,6 +607,16 @@ class SalesForceHeaderDetails extends StatelessWidget{
                                   ),
                                 );
                               }),
+                              const SizedBox(height: 10,),
+                              bindFilterData(sales_force_cast_vm.cluster_name_ex_Ctrl.value, 'Cluster Name'),
+                              const SizedBox(height: 10,),
+                              bindFilterData(sales_force_cast_vm.region_name_ex_Ctrl.value, 'Region Name'),
+                              const SizedBox(height: 10,),
+                              bindFilterData(sales_force_cast_vm.itemCode_ex_Ctrl.value, 'Item Code'),
+                              const SizedBox(height: 10,),
+                              bindFilterData(sales_force_cast_vm.itemName_ex_Ctrl.value, 'Item Name'),
+                              const SizedBox(height: 10,),
+
                             ],
                           ),
                         ),
@@ -636,7 +632,7 @@ class SalesForceHeaderDetails extends StatelessWidget{
                           borderColor: AllColors.green,
                           textColor: AllColors.green,
                           onTap: () {
-                            sales_force_cast_vm.SalesForecastLinesGetForUpload();
+                            sales_force_cast_vm.SalesForecastLinesGetForUpload(context);
                             Get.back();
                           },
                         )),

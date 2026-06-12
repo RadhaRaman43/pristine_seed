@@ -1,15 +1,24 @@
 import 'dart:convert';
+import 'dart:io';
 
+import 'package:excel/excel.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:navigation_drawer_flutter/utils/app_utils.dart';
+import 'package:open_filex/open_filex.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:share_plus/share_plus.dart';
 
 import '../../../reources/routes/routes_name.dart';
 import '../../../viewModel/SessionManagment/session_managment.dart';
 import '../../CRM_Models/AccountMaster_model/cluster_modal.dart';
 import '../../CRM_Models/AccountMaster_model/region_with_cluster_filter_modal.dart';
 import '../../CRM_Models/SalesForceCastModals/ForceCastListModal.dart';
+import '../../CRM_Models/SalesForceCastModals/ForeCastQuoteDowExcelModal.dart';
 import '../../CRM_Models/SalesForceCastModals/SalesForceCastHeaderModal.dart';
 import '../../CRM_Models/SalesForceCastModals/SalesForceCastListModal.dart';
 import '../../CRM_Models/SalesForceCastModals/forecastCreateResponseModal.dart';
@@ -40,6 +49,8 @@ class SalesForeCastVM extends GetxController{
   String quoteIds = "";
   String fromPage = "";
   String forceCastId = "";
+  RxBool excelLoading = false.obs;
+  RxDouble excelProgress = 0.0.obs;
 
   RxString foreCastStatus = "Pending".obs;
   RxList<SalesForceCastListModal> sales_force_cast_list  = <SalesForceCastListModal>[].obs;
@@ -55,7 +66,8 @@ class SalesForeCastVM extends GetxController{
   RxList<Pending_Draft_Quote_Model> QuoteList=<Pending_Draft_Quote_Model>[].obs;
   RxList<Pending_Draft_Quote_Model> SelectedQuoteList=<Pending_Draft_Quote_Model>[].obs;
   RxList<ForecastCreateResponseModal> forcastResponseList=<ForecastCreateResponseModal>[].obs;
-
+  RxList<ForeCastQuoteDowExcelModal> quoteDowExcelList=<ForeCastQuoteDowExcelModal>[].obs;
+  ForeCastQuoteDowExcelModal item= ForeCastQuoteDowExcelModal();
   //filter fields
   var salesForceCastId = TextEditingController().obs;
   var createdOnCnontroller = TextEditingController().obs;
@@ -135,7 +147,7 @@ class SalesForeCastVM extends GetxController{
   void onInit() async{
     // TODO: implement onInit
     super.onInit();
-    loading.value=true;
+
     email = await sessionManagement.getEmail() ?? '';
     filterRouting = await sessionManagement.getfilterRouting() ?? '';
     userType = await sessionManagement.getUserType() ?? '';
@@ -167,56 +179,7 @@ class SalesForeCastVM extends GetxController{
     parentItemCategorySelectedList.value=[];
     Selected_item_product_cat_list.value=[];
   }
-  SalesForecastLinesGetForUpload() async{
-    String productCat = "";
-    String parentProductCat = "";
-    try{
-      if(parentItemCategorySelectedList.length>0 &&parentItemCategorySelectedList.isNotEmpty){
-        productCat=parentItemCategorySelectedList.map((item)=>item.categoryCode).join("|");
-      }
-      if(Selected_item_product_cat_list.length>0 &&Selected_item_product_cat_list.isNotEmpty){
-        productCat=Selected_item_product_cat_list.map((item)=>item.parentCategoryCode).join("|");
-      }
-      Map data={
-        "filter_sales_forecast_id": "",
-        "filter_quote_id": quoteId_ex_Ctrl.value.text.isEmpty?"":quoteId_ex_Ctrl.value.text,
-        "filter_sales_cycle_id": saleCycleId_ex_Ctrl.value.text.isEmpty?"":saleCycleId_ex_Ctrl.value.text,
-        "filter_closure_month": closerMonth_ex_Ctrl.value.text.isEmpty?"":closerMonth_ex_Ctrl.value.text,
-        "filter_closure_year": closerYear_ex_Ctrl.value.text.isEmpty?"":closerYear_ex_Ctrl.value.text,
-        "filter_item_code": itemCode_ex_Ctrl.value.text.isEmpty?"":itemCode_ex_Ctrl.value.text,
-        "filter_item_name": itemName_ex_Ctrl.value.text.isEmpty?"":itemName_ex_Ctrl.value.text,
-        "filter_item_varient": itemVarient_ex_Ctrl.value.text.isEmpty?"":itemVarient_ex_Ctrl.value.text,
-        "filter_item_category_type": item_category_type_ex_Ctrl.value.text.isEmpty?"":item_category_type_ex_Ctrl.value.text,
-        "filter_item_category_code": productCat,
-        "filter_item_parent_category_code": parentProductCat,
-        "filter_required_region_name": region_name_ex_Ctrl.value.text.isEmpty?"":region_name_ex_Ctrl.value.text,
-        "filter_required_cluster_name": cluster_name_ex_Ctrl.value.text.isEmpty?"":cluster_name_ex_Ctrl.value.text
-      };
-      loading.value=true;
 
-      String onValue = await _api.SalesForecastLinesGetForUpload(data, sessionManagement);
-      final jsonResponse = json.decode(onValue);
-      print(onValue);
-      if(jsonResponse is List){
-        List<ForecastCreateResponseModal> response = jsonResponse.map((e) => ForecastCreateResponseModal.fromJson(e)).toList();
-        if(response!= null && response.length>0 && response[0].condition=="True"){
-          forcastResponseList.value = response;
-          Utils.sanckBarSuccess("Successfully", response[0].message.toString());
-          Get.offAllNamed(RoutesName.SalesForeCastScreen);
-
-        }else {
-          Utils.sanckBarError("Data Not Found", response[0].message.toString());
-        }
-      }
-    }catch(e){
-      print(e);
-      Utils.sanckBarError("Exception!", e.toString());
-    }
-    finally{
-      loading.value = false;
-    }
-
-  }
 
   void toggleSalesCheckbox(int index, BuildContext context) {
     var item = QuoteList[index];
@@ -415,7 +378,7 @@ class SalesForeCastVM extends GetxController{
         "filter_created_by": email,
         "filter_created_on": createdOnCnontroller.value.text.isEmpty?"":createdOnCnontroller.value.text,
         "filter_created_by_new": isAdminWritePermission=="1"?"":email,
-        "row_per_page": 10,
+        "row_per_page": rowsPerPage,
         "page_number": page_no
       };
       loading.value=true;
@@ -460,6 +423,7 @@ class SalesForeCastVM extends GetxController{
           month_controller.value.text = parts[0];
           year_controller.value.text = parts[1];
           forceCastId= salesForceCastHeader_list[0].salesForecastId??"";
+          print("cjnge screen .....");
           Get.toNamed(RoutesName.SalesForeCastHeaderDetailsScreen);
         }else {
           salesForceCastHeader_list.value=[];
@@ -1092,5 +1056,447 @@ class SalesForeCastVM extends GetxController{
     filterDataChecker.value='';
     sessionManagement.clearForceCastItemData();
   }
+
+  SalesForecastLinesGetForUpload(BuildContext context) async{
+    String productCat = "";
+    String parentProductCat = "";
+    try{
+      debugPrint("length....${parentItemCategorySelectedList.length} and ${Selected_item_product_cat_list.length}");
+      if(parentItemCategorySelectedList.length>0 &&parentItemCategorySelectedList.isNotEmpty){
+        productCat=parentItemCategorySelectedList.map((item)=>item.parentCategoryCode).join("|");
+      }
+      if(Selected_item_product_cat_list.length>0 &&Selected_item_product_cat_list.isNotEmpty){
+        productCat=Selected_item_product_cat_list.map((item)=>item.categoryCode).join("|");
+      }
+      Map data={
+        "filter_sales_forecast_id": forceCastId,
+        "filter_quote_id": quoteId_ex_Ctrl.value.text.isEmpty?"":quoteId_ex_Ctrl.value.text,
+        "filter_sales_cycle_id": saleCycleId_ex_Ctrl.value.text.isEmpty?"":saleCycleId_ex_Ctrl.value.text,
+        "filter_closure_month": closerMonth_ex_Ctrl.value.text.isEmpty?"":closerMonth_ex_Ctrl.value.text,
+        "filter_closure_year": closerYear_ex_Ctrl.value.text.isEmpty?"":closerYear_ex_Ctrl.value.text,
+        "filter_item_code": itemCode_ex_Ctrl.value.text.isEmpty?"":itemCode_ex_Ctrl.value.text,
+        "filter_item_name": itemName_ex_Ctrl.value.text.isEmpty?"":itemName_ex_Ctrl.value.text,
+        "filter_item_varient": itemVarient_ex_Ctrl.value.text.isEmpty?"":itemVarient_ex_Ctrl.value.text,
+        "filter_item_category_type": item_category_type_ex_Ctrl.value.text.isEmpty?"":item_category_type_ex_Ctrl.value.text,
+        "filter_item_category_code": productCat,
+        "filter_item_parent_category_code": parentProductCat,
+        "filter_required_region_name": region_name_ex_Ctrl.value.text.isEmpty?"":region_name_ex_Ctrl.value.text,
+        "filter_required_cluster_name": cluster_name_ex_Ctrl.value.text.isEmpty?"":cluster_name_ex_Ctrl.value.text
+      };
+      loading.value=true;
+      debugPrint("print values ${data}");
+      String onValue = await _api.SalesForecastLinesGetForUpload(data, sessionManagement);
+      final jsonResponse = json.decode(onValue);
+      print(onValue);
+      if(jsonResponse is List){
+        List<ForeCastQuoteDowExcelModal> response = jsonResponse.map((e) => ForeCastQuoteDowExcelModal.fromJson(e)).toList();
+        if(response!= null && response.length>0 && response[0].condition=="True"){
+          quoteDowExcelList.value = response;
+          downloadForeCastLineDetaisForUploadWithProgress(context,'forcast_line_details_for_upload','Forcast Line Details For Upload');
+
+          //Utils.sanckBarSuccess("Successfully", response[0].message.toString());
+        }else {
+          // Utils.sanckBarError("Data Not Found", response[0].message.toString());
+        }
+      }
+    }catch(e){
+      print(e);
+      Utils.sanckBarError("Exception!", e.toString());
+    }
+    finally{
+      loading.value = false;
+    }
+
+  }
+  Future<void> downloadForeCastLineDetaisForUploadWithProgress(BuildContext context, String sheetName, String saveFileName) async {
+    try {
+      excelLoading.value = true;
+      excelProgress.value = 0;
+      showExcelProgressDialog(context);
+
+      final excel = Excel.createExcel();
+      excel.rename('Sheet1', sheetName);
+      final sheet = excel[sheetName];
+      List<String> headers = [];
+
+      final firstRowMap = headerExcelKeys(quoteDowExcelList.first);
+      headers = firstRowMap.keys.toList();
+
+
+
+      // Write Headers
+      for (int col = 0; col < headers.length; col++) {
+        sheet.cell(CellIndex.indexByColumnRow(columnIndex: col, rowIndex: 0)).value
+        = TextCellValue(headers[col]);
+      }
+
+      final totalRows = quoteDowExcelList.length;
+
+      //if(sheetName=='Non Standard Items'){
+        for (int row = 0; row < totalRows; row++) {
+          final rowMap = headerExcelKeys(quoteDowExcelList.first);
+          for (int col = 0; col < headers.length; col++) {
+            final value = rowMap[headers[col]];
+            sheet.cell(CellIndex.indexByColumnRow(
+                columnIndex: col, rowIndex: row + 1)).value = value == null
+                ? TextCellValue('') : TextCellValue(value.toString());
+          }
+          excelProgress.value = ((row + 1) / totalRows) * 100;
+          await Future.delayed(const Duration(milliseconds: 5));
+        }
+      //}
+
+      late Directory? dir;
+      if (Platform.isAndroid) {
+        dir = Directory('/storage/emulated/0/Download');
+        //dir = await getExternalStorageDirectory();
+        //dir = await getTemporaryDirectory();
+
+      } else {
+        dir = await getApplicationDocumentsDirectory();
+        //dir = await getExternalStorageDirectory();
+      }
+
+
+
+      // Ensure the directory exists
+      if (!await dir.exists()) {
+        await dir.create(recursive: true);
+      }
+
+      //final fileName = "non_standard_items_${DateTime.now().millisecondsSinceEpoch}.xlsx";
+      final fileName = "${saveFileName}.xlsx";
+      String filePath = "${dir?.path}/$fileName";
+      int counter = 1;
+
+      while (await File(filePath).exists()) {
+        filePath = '${dir.path}/($counter)$fileName';
+        counter++;
+      }
+      final file = File(filePath);
+      try {
+        debugPrint("Excel saved at2: $filePath");
+        if (await file.exists()) {
+          await file.delete();
+        }
+      } catch (e) {
+        debugPrint("Delete skipped: $e");
+      }
+      await file.writeAsBytes(excel.encode()!);
+      excelProgress.value = 100;
+      excelLoading.value = false;
+      Get.back();
+      // Open File
+      //await OpenFilex.open(filePath);
+      if(Platform.isIOS){
+        await Share.shareXFiles([XFile(filePath)],
+            text: fileName);
+      }
+      else{
+        await OpenFilex.open(filePath);
+      }
+
+      debugPrint("Excel saved at4: $filePath");
+    }catch(e){
+      excelProgress.value = 100;
+      excelLoading.value = false;
+      //print("Failed to download file! ${e.toString()}");
+      Utils.sanckBarError("Failed to download file!", e.toString());
+    }
+  }
+  Map<String, dynamic> headerExcelKeys(ForeCastQuoteDowExcelModal item) {
+    final map = Map<String, dynamic>.from(item.toJson());
+    map.remove('condition');
+    return map;
+  }
+
+  Future<void> downloadQuoteDetailsWithProgress(BuildContext context, String sheetName, String saveFileName) async {
+    try {
+      excelLoading.value = true;
+      excelProgress.value = 0;
+      showExcelProgressDialog(context);
+
+      final excel = Excel.createExcel();
+      excel.rename('Sheet1', sheetName);
+      final sheet = excel[sheetName];
+      List<String> headers = [];
+
+      final firstRowMap = detailsExcelKeys(salesForceCastHeader_list[0].lines!.first);
+      headers = firstRowMap.keys.toList();
+
+
+
+      // Write Headers
+      for (int col = 0; col < headers.length; col++) {
+        sheet.cell(CellIndex.indexByColumnRow(columnIndex: col, rowIndex: 0)).value
+        = TextCellValue(headers[col]);
+      }
+
+      final totalRows = salesForceCastHeader_list[0].lines!.length;
+
+      //if(sheetName=='Non Standard Items'){
+      for (int row = 0; row < totalRows; row++) {
+        final rowMap = detailsExcelKeys(salesForceCastHeader_list[0].lines!.first);
+        for (int col = 0; col < headers.length; col++) {
+          final value = rowMap[headers[col]];
+          sheet.cell(CellIndex.indexByColumnRow(
+              columnIndex: col, rowIndex: row + 1)).value = value == null
+              ? TextCellValue('') : TextCellValue(value.toString());
+        }
+        excelProgress.value = ((row + 1) / totalRows) * 100;
+        await Future.delayed(const Duration(milliseconds: 5));
+      }
+      //}
+
+      late Directory? dir;
+      if (Platform.isAndroid) {
+        dir = Directory('/storage/emulated/0/Download');
+        //dir = await getExternalStorageDirectory();
+        //dir = await getTemporaryDirectory();
+
+      } else {
+        dir = await getApplicationDocumentsDirectory();
+        //dir = await getExternalStorageDirectory();
+      }
+
+
+
+      // Ensure the directory exists
+      if (!await dir.exists()) {
+        await dir.create(recursive: true);
+      }
+
+      //final fileName = "non_standard_items_${DateTime.now().millisecondsSinceEpoch}.xlsx";
+      final fileName = "${saveFileName}.xlsx";
+      String filePath = "${dir?.path}/$fileName";
+      int counter = 1;
+
+      while (await File(filePath).exists()) {
+        filePath = '${dir.path}/($counter)$fileName';
+        counter++;
+      }
+      final file = File(filePath);
+      try {
+        debugPrint("Excel saved at2: $filePath");
+        if (await file.exists()) {
+          await file.delete();
+        }
+      } catch (e) {
+        debugPrint("Delete skipped: $e");
+      }
+      await file.writeAsBytes(excel.encode()!);
+      excelProgress.value = 100;
+      excelLoading.value = false;
+      Get.back();
+      // Open File
+      //await OpenFilex.open(filePath);
+      if(Platform.isIOS){
+        await Share.shareXFiles([XFile(filePath)],
+            text: fileName);
+      }
+      else{
+        await OpenFilex.open(filePath);
+      }
+
+      debugPrint("Excel saved at4: $filePath");
+    }catch(e){
+      excelProgress.value = 100;
+      excelLoading.value = false;
+      //print("Failed to download file! ${e.toString()}");
+      Utils.sanckBarError("Failed to download file!", e.toString());
+    }
+  }
+  Map<String, dynamic> detailsExcelKeys(Lines item) {
+   /* final map = Map<String, dynamic>.from(item.toJson());
+    map.remove('condition');
+    return map;*/
+    final originalMap = Map<String, dynamic>.from(item.toJson());
+
+    final Map<String, dynamic> newMap = {};
+
+    originalMap.forEach((key, value) {
+      if (key.contains('|')) {
+        final parts = key.split('|');
+        if (parts.length == 3) {
+          // 7|Jul|2026 -> Jul-2026
+          newMap['${parts[1]}-${parts[2]}'] = value;
+        } else {
+          newMap[key] = value;
+        }
+      } else {
+        newMap[key] = value;
+      }
+    });
+
+    newMap.remove('condition');
+
+    return newMap;
+  }
+
+  void showExcelProgressDialog(BuildContext context) {
+    Get.dialog(
+      Obx(() => AlertDialog(
+        title: const Text("Generating Excel"),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            LinearProgressIndicator(
+              value: excelProgress.value / 100,
+            ),
+            const SizedBox(height: 12),
+            Text("${excelProgress.value.toStringAsFixed(0)} %"),
+          ],
+        ),
+      )),
+      barrierDismissible: false,
+    );
+  }
+
+  SalesForecastUploadItem(ForeCastQuoteDowExcelModal item, List<ForeCastQuoteDowExcelModal> modelList) async{
+    try{
+      List<Map<String,dynamic>> lines = [];
+      for(int i=0;i<modelList.length;i++){
+        Map<String,dynamic> input = {
+          "line_no": modelList[i].lineNo==0?"-1":modelList[i].lineNo.toString(),
+          "quote_id":  modelList[i].quoteId,
+          "quote_line_no":  modelList[i].quoteLineNo.toString(),
+          "closure_month":  modelList[i].closureMonth,
+          "closure_year":  modelList[i].closureYear,
+          "item_code":  modelList[i].itemCode,
+          "item_varient":  modelList[i].itemVarient,
+          "qty":  modelList[i].qty??0,
+          "required_region_name":  modelList[i].requiredRegionName,
+          "required_cluster_name":  modelList[i].requiredClusterName
+        };
+        lines.add(input);
+      }
+      Map data={
+        "sales_forecast_id": forceCastId,
+        "created_by": email,
+        "lines": lines
+      };
+      debugPrint("Alll data is ${data}");
+      loading.value=true;
+
+      String onValue = await _api.SalesForecastUploadItem(data, sessionManagement);
+      final jsonResponse = json.decode(onValue);
+      print(onValue);
+      if(jsonResponse is List){
+        List<ForecastCreateResponseModal> response = jsonResponse.map((e) => ForecastCreateResponseModal.fromJson(e)).toList();
+        if(response!= null && response.length>0 && response[0].condition=="True"){
+          forcastResponseList.value = response;
+          Utils.sanckBarSuccess("Successfully", response[0].message.toString());
+          getSalesForecastHeaderGetBySalesForecastId(forceCastId);
+
+        }else {
+          Utils.sanckBarError("Data Not Found", response[0].message.toString());
+        }
+      }
+    }catch(e){
+      print(e);
+      Utils.sanckBarError("Exception!", e.toString());
+    }
+    finally{
+      loading.value = false;
+    }
+
+  }
+
+  Future<void> uploadExcelToServer() async {
+    try {
+      File? file = await pickExcelFile();
+      if (file == null){
+        return;
+      }
+      debugPrint("read excel file feom step 1");
+      List<Map<String, dynamic>> excelData = await readExcelFile(file);
+      if(excelData.length>=1 && excelData!=null) {
+        List<ForeCastQuoteDowExcelModal> modelList = convertToModel(excelData);
+        if (modelList[0].quoteId!.isNotEmpty) {
+          SalesForecastUploadItem(item, modelList);
+        }
+        else{
+          Utils.sanckBarError("Data Input Error!", "Can't insert null value into column 'account code'");
+        }
+      }
+      else{
+        Utils.sanckBarError("Data Input Error!", "Can't insert null value into column");
+      }
+
+    }catch(e){
+      Utils.sanckBarError("failed to upload file!", e.toString());
+      print("fa........${e.toString() }");
+    }
+  }
+
+  Future<File?> pickExcelFile() async {
+    final result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['xlsx', 'xls'],
+    );
+    if (result != null && result.files.single.path != null) {
+      return File(result.files.single.path!);
+    }
+    return null;
+  }
+
+  Future<List<Map<String, dynamic>>> readExcelFile(File file) async {
+
+    var bytes = file.readAsBytesSync();
+
+    var excel = Excel.decodeBytes(bytes);
+
+    List<Map<String, dynamic>> excelData = [];
+    if (excel.tables.isEmpty) {
+      debugPrint("No sheets found in excel");
+      return excelData;
+    }
+
+    String tableName = excel.tables.keys.first;
+
+    debugPrint("Sheet Name: $tableName");
+
+    var sheet = excel.tables[tableName];
+
+    if (sheet == null || sheet.rows.isEmpty) {
+      debugPrint("Sheet is empty");
+      return excelData;
+    }
+
+    var rows = sheet.rows;
+
+    List headers = rows.first;
+   /* //for (var table in excel.tables.keys) {
+    var table =  excel.tables.keys;
+    debugPrint("read excel file feom step 2");
+    var rows = excel.tables[table]!.rows;
+    debugPrint("read excel file feom step 3");
+    List headers = rows.first;*/
+
+    for (int i = 1; i < rows.length; i++) {
+
+      Map<String, dynamic> rowMap = {};
+      for (int j = 0; j < headers.length; j++) {
+        String header = headers[j]?.value?.toString() ?? "";
+        String value = rows[i].length > j ? rows[i][j]?.value?.toString() ?? "" : "";
+        rowMap[header] = value;
+        //debugPrint("value...... ${rows[i][j]?.value.toString()} and ${headers[j]!.value.toString()}");
+      }
+      excelData.add(rowMap);
+    }
+    // }
+
+    return excelData;
+  }
+
+  List<ForeCastQuoteDowExcelModal> convertToModel(List<Map<String, dynamic>> data) {
+    print("excel data ${data}");
+    return data.map((e) {
+      e['line_no'] = int.tryParse(e['line_no'])==null?0:int.tryParse(e['line_no']);
+      e['quote_line_no'] = int.tryParse(e['quote_line_no'])==null?0:int.tryParse(e['quote_line_no']);
+      return ForeCastQuoteDowExcelModal.fromJson(e);
+    }).toList();
+  }
+
 
 }

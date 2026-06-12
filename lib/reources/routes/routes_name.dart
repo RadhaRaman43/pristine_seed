@@ -182,6 +182,7 @@ class RoutesName{
   static const createSalesForeCastScreen="/create_sales_force_cast_screen.dart";
   static const SalesForeCastHeaderDetailsScreen="/sales_force_cast_header_details.dart";
   static const ForeCastItemScreen="/fore_cast_item_list_screen.dart";
+  static const rollingForeCastRhListScreen="/rolling_forecast_rh_list_screen.dart";
 
 
 

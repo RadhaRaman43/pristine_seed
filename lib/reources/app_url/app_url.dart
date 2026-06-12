@@ -382,5 +382,7 @@ class AppUrl {
      static const String SalesForecastHeaderCompleted="$BASE_URL/api/CRM/SalesForecast/SalesForecastHeaderCompleted";
      static const String SalesForecastAddQuoteItems="$BASE_URL/api/CRM/SalesForecast/SalesForecastAddQuoteItems";
      static const String SalesForecastLinesGetForUpload="$BASE_URL/api/CRM/SalesForecast/SalesForecastLinesGetForUpload";
+     static const String SalesForecastUploadItem="$BASE_URL/api/CRM/SalesForecast/SalesForecastUploadItem";
+     static const String SalesForecastLinesGetNew="$BASE_URL/api/CRM/SalesForecast/SalesForecastLinesGetNew";
 
 }

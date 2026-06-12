@@ -29,6 +29,7 @@ import '../CRM_Directory/CRM_VIewModels/sales_cycle_vm/sales_advise_all_list_vm.
 import '../CRM_Directory/CRM_VIewModels/sales_cycle_vm/sales_cycle_competitor_product_infor_vm.dart';
 import '../CRM_Directory/CRM_VIewModels/sales_cycle_vm/sales_cycle_vm.dart';
 import '../CRM_Directory/CRM_VIewModels/salesforecasrVM/SalesForeCastVM.dart';
+import '../CRM_Directory/CRM_VIewModels/salesforecasrVM/rolling_forecast_rh_vm.dart';
 import '../constants/app_colors.dart';
 import '../constants/app_font_size.dart';
 import '../constants/static_methods.dart';
@@ -654,6 +655,15 @@ class _Drawer extends State<CustomDrawer> {
                                                 home_vm.openMenu(cTitle, iconData);
                                                 Get.delete<SalesForeCastVM>();
                                                 Get.toNamed(RoutesName.SalesForeCastScreen);
+                                                Navigator.of(context);
+                                                break;
+
+                                              case 'Rolling Forecast RH List':
+                                                sessionManagement.setfilterRouting('Rolling Forecast RH List');
+                                                IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
+                                                home_vm.openMenu(cTitle, iconData);
+                                                Get.delete<RollingForeCastRHVM>();
+                                                Get.toNamed(RoutesName.rollingForeCastRhListScreen);
                                                 Navigator.of(context);
                                                 break;
 

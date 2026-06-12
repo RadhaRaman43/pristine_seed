@@ -925,10 +925,30 @@ class ItemMasterVm extends GetxController{
 
     List<Map<String, dynamic>> excelData = [];
 
-    //for (var table in excel.tables.keys) {
+    if (excel.tables.isEmpty) {
+      debugPrint("No sheets found in excel");
+      return excelData;
+    }
+
+    String tableName = excel.tables.keys.first;
+
+    debugPrint("Sheet Name: $tableName");
+
+    var sheet = excel.tables[tableName];
+
+    if (sheet == null || sheet.rows.isEmpty) {
+      debugPrint("Sheet is empty");
+      return excelData;
+    }
+
+    var rows = sheet.rows;
+
+    List headers = rows.first;
+
+   /* //for (var table in excel.tables.keys) {
       var table =  excel.tables.keys;
       var rows = excel.tables[table]!.rows;
-      List headers = rows.first;
+      List headers = rows.first;*/
       for (int i = 1; i < rows.length; i++) {
         Map<String, dynamic> rowMap = {};
         for (int j = 0; j < headers.length; j++) {
