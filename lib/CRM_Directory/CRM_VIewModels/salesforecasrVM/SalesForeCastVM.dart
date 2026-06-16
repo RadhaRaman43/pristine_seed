@@ -49,6 +49,7 @@ class SalesForeCastVM extends GetxController{
   String quoteIds = "";
   String fromPage = "";
   String forceCastId = "";
+  String monthNameForApi = "";
   RxBool excelLoading = false.obs;
   RxDouble excelProgress = 0.0.obs;
 
@@ -174,7 +175,7 @@ class SalesForeCastVM extends GetxController{
     itemName_ex_Ctrl.value.clear();
     itemVarient_ex_Ctrl.value.clear();
     product_category_ex_Ctrl.value.clear();
-
+    monthNameForApi = "";
     item_category_type_ex_Ctrl.value.clear();
     parentItemCategorySelectedList.value=[];
     Selected_item_product_cat_list.value=[];
@@ -1072,7 +1073,7 @@ class SalesForeCastVM extends GetxController{
         "filter_sales_forecast_id": forceCastId,
         "filter_quote_id": quoteId_ex_Ctrl.value.text.isEmpty?"":quoteId_ex_Ctrl.value.text,
         "filter_sales_cycle_id": saleCycleId_ex_Ctrl.value.text.isEmpty?"":saleCycleId_ex_Ctrl.value.text,
-        "filter_closure_month": closerMonth_ex_Ctrl.value.text.isEmpty?"":closerMonth_ex_Ctrl.value.text,
+        "filter_closure_month": monthNameForApi,
         "filter_closure_year": closerYear_ex_Ctrl.value.text.isEmpty?"":closerYear_ex_Ctrl.value.text,
         "filter_item_code": itemCode_ex_Ctrl.value.text.isEmpty?"":itemCode_ex_Ctrl.value.text,
         "filter_item_name": itemName_ex_Ctrl.value.text.isEmpty?"":itemName_ex_Ctrl.value.text,
@@ -1496,6 +1497,48 @@ class SalesForeCastVM extends GetxController{
       e['quote_line_no'] = int.tryParse(e['quote_line_no'])==null?0:int.tryParse(e['quote_line_no']);
       return ForeCastQuoteDowExcelModal.fromJson(e);
     }).toList();
+  }
+
+  String setMonthNameInShort(String monthName) {
+    String month = '';
+    if(monthName=="January"){
+      month='Jan';
+    }
+    else if(monthName=='February'){
+      month='Feb';
+    }
+    else if(monthName=='March'){
+      month='Mar';
+    }
+    else if(monthName=='April'){
+      month='Apr';
+    }
+    else if(monthName=='May'){
+      month='May';
+    }
+    else if(monthName=='June'){
+      month='Jun';
+    }
+    else if(monthName=='July'){
+      month='Jul';
+    }
+    else if(monthName=='August'){
+      month='Aug';
+    }
+    else if(monthName=='September'){
+      month='Sep';
+    }
+    else if(monthName=='October'){
+      month='Oct';
+    }
+    else if(monthName=='November'){
+      month='Nov';
+    }
+    else if(monthName=='December'){
+      month='Dec';
+    }
+    return month;
+
   }
 
 

@@ -39,10 +39,6 @@ class SalesForeCastRepo{
     return _apiService.postApi(data, AppUrl.SalesForecastLinesGetNew,sessionManagement);
   }
 
-
-
-
-
   Future<String> QuoteHeaderGetForSalesForecast(var data,SessionManagement sessionManagement) async{
     return _apiService.postApi(data, AppUrl.QuoteHeaderGetForSalesForecast,sessionManagement);
   }

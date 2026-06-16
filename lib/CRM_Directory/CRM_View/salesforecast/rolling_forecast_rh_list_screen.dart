@@ -1,3 +1,4 @@
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -12,12 +13,15 @@ import '../../../reources/routes/routes_name.dart';
 import '../../../view/custom_drawer.dart';
 import '../../CRM_Models/AccountMaster_model/cluster_modal.dart';
 import '../../CRM_Models/AccountMaster_model/region_with_cluster_filter_modal.dart';
+import '../../CRM_Models/TaskMaster_model/Item_Category_Mast_model.dart';
 import '../../CRM_VIewModels/salesforecasrVM/rolling_forecast_rh_vm.dart';
 
 class RollingForeCastRHListScreen extends StatelessWidget{
 
   final rh_vm = Get.put(RollingForeCastRHVM());
   ScrollController scrollController = ScrollController();
+  static String _displayStringTypeDropDownForOption(String option) =>
+      option;
 
   @override
   Widget build(BuildContext context) {
@@ -43,8 +47,9 @@ class RollingForeCastRHListScreen extends StatelessWidget{
                   ),
                   Spacer(),
                   IconButton(onPressed: () {
-                    
-                    
+                    rh_vm.downloadForeCastLineDetaisForUploadWithProgress(context,'Rolling Forecast RH Data','Rolling Forecast RH Data');
+
+
                   }, icon: Icon(Icons.download)),
 
                   IconButton(onPressed: () {
@@ -181,7 +186,7 @@ class RollingForeCastRHListScreen extends StatelessWidget{
         subtitle:Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            //_buildLabelWithValue(label: "MSQT No. : ", value: rh_vm.rolling_fore_cast_list[position].,),
+            _buildLabelWithValue(label: "Quote Id : ", value: rh_vm.rolling_fore_cast_list[position].quoteId??"",),
             _buildLabelWithValue(label: "Sale Cycle Id : ", value: rh_vm.rolling_fore_cast_list[position].salesCycleId??"",),
             _buildLabelWithValue(label: "Customer Name : ", value: rh_vm.rolling_fore_cast_list[position].clusterName??"",),
             _buildLabelWithValue(label: "Cluster Name : ", value: rh_vm.rolling_fore_cast_list[position].clusterName??"",),
@@ -189,18 +194,13 @@ class RollingForeCastRHListScreen extends StatelessWidget{
             _buildLabelWithValue(label: "Created By : ", value: rh_vm.rolling_fore_cast_list[position].createdFullName??"",),
             _buildLabelWithValue(label: "Item Code : ", value: rh_vm.rolling_fore_cast_list[position].itemCode??"",),
             _buildLabelWithValue(label: "Item Name : ", value: rh_vm.rolling_fore_cast_list[position].itemName??"",),
-            _buildLabelWithValue(label: "Product Variant : ", value: rh_vm.rolling_fore_cast_list[position].itemVarient??"",),
-            _buildLabelWithValue(label: "Parent Product Category : ", value: rh_vm.rolling_fore_cast_list[position].itemParentCategoryCode??"",),
-            _buildLabelWithValue(label: "Product Category : ", value: rh_vm.rolling_fore_cast_list[position].itemCategoryCode??"",),
-            //_buildLabelWithValue(label: "Pricing Document No. : ", value: rh_vm.rolling_fore_cast_list[position].??"",),
-            //_buildLabelWithValue(label: "Approved Price : ", value: rh_vm.rolling_fore_cast_list[position]."",),
+            _buildLabelWithValue(label: "Item Variant : ", value: rh_vm.rolling_fore_cast_list[position].itemVarient??"",),
+            _buildLabelWithValue(label: "Parent Category Code : ", value: rh_vm.rolling_fore_cast_list[position].itemParentCategoryCode??"",),
+            _buildLabelWithValue(label: "Item Category Code : ", value: rh_vm.rolling_fore_cast_list[position].itemCategoryCode??"",),
             _buildLabelWithValue(label: "Closer Month : ", value: rh_vm.rolling_fore_cast_list[position].closureMonth??"",),
             _buildLabelWithValue(label: "Closer Year : ", value: rh_vm.rolling_fore_cast_list[position].closureYear??"",),
             _buildLabelWithValue(label: "Created On : ", value: createdOn,),
-            _buildLabelWithValue(label: "Quote Validity : ", value: rh_vm.rolling_fore_cast_list[position].quoteValidity??"",),
-            _buildLabelWithValue(label: "Approved By : ", value: rh_vm.rolling_fore_cast_list[position].approvedBy??"",),
-            _buildLabelWithValue(label: "Approved On : ", value: rh_vm.rolling_fore_cast_list[position].approvedBy??"",),
-            _buildLabelWithValue(label: "Approved On : ", value: rh_vm.rolling_fore_cast_list[position].approvedBy??"",),
+            _buildLabelWithValue(label: "Required Region Name : ", value: rh_vm.rolling_fore_cast_list[position].requiredRegionName??"",),
 
           ],
         ),
@@ -246,7 +246,6 @@ class RollingForeCastRHListScreen extends StatelessWidget{
   }
 
   void showFilterBottomSheet(BuildContext context) {
-    // rh_vm.IsActive_controller.clear();
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -328,13 +327,17 @@ class RollingForeCastRHListScreen extends StatelessWidget{
                               const SizedBox(height: 10,),
                               bindFilterData(rh_vm.itemVarient_Ctrl.value, 'Item Variant'),
                               const SizedBox(height: 10,),
-                              bindFilterData(rh_vm.parentCategoryCodeController.value, 'Parent Category Code'),
+                              bindItemProductCategoryFilter(context),
                               const SizedBox(height: 10,),
-                              bindFilterData(rh_vm.itemCategoryCodeController.value, 'Item Category Code'),
+                              bindDropDownType(context,rh_vm.closerYear_Ctrl.value,
+                                  'Product Category Type',rh_vm.productCategoryTypeList),
                               const SizedBox(height: 10,),
-                              bindFilterData(rh_vm.closerMonth_Ctrl.value, 'Closure Month'),
+                              bindParentProductCategoryFilter(context),
                               const SizedBox(height: 10,),
-                              bindFilterData(rh_vm.closerYear_Ctrl.value, 'Closure Year'),
+                              bindDropDownType(context,rh_vm.closerMonth_Ctrl.value,
+                                  'Closure Month',rh_vm.months),
+                              const SizedBox(height: 10,),
+                              bindDropDownType(context,rh_vm.closerYear_Ctrl.value, 'Closure Year',rh_vm.years),
                               const SizedBox(height: 10,),
                               bindCreatedOn(context),
                               const SizedBox(height: 10,),
@@ -358,6 +361,7 @@ class RollingForeCastRHListScreen extends StatelessWidget{
                             Get.back();
                             rh_vm.filterDataChecker.value='';
                             rh_vm.clearFilterData();
+                            rh_vm.clearFilterSessionData();
                             rh_vm.pageNumber = 0;
                             rh_vm.SalesForecastLinesGetNew(rh_vm.pageNumber,);
                           },
@@ -533,7 +537,7 @@ class RollingForeCastRHListScreen extends StatelessWidget{
         if (availableItems.isNotEmpty && rh_vm.SelectedCluster_list.isEmpty) {
           rh_vm.SelectedCluster_list.assignAll(availableItems);
           rh_vm.clusterName_controller.value.text = availableItems.map((e) => e.geoValue).join('|');
-          rh_vm.getRegionsWithClusterFilterGetByEmail("");
+          rh_vm.getRegionsWithClusterFilterGetByEmail();
         }
       }
 
@@ -701,7 +705,7 @@ class RollingForeCastRHListScreen extends StatelessWidget{
                                     rh_vm.filterDataChecker.value='';
                                     rh_vm.SelectedCluster_list.assignAll(tempSelected);
                                     rh_vm.clusterName_controller.value.text = tempSelected.map((e) => e.geoValue).join('| ');
-                                    rh_vm.getRegionsWithClusterFilterGetByEmail("");
+                                    rh_vm.getRegionsWithClusterFilterGetByEmail();
                                     Navigator.of(context).pop();
                                   },
                                   child: Text('Done',style: GoogleFonts.poppins(
@@ -991,6 +995,209 @@ class RollingForeCastRHListScreen extends StatelessWidget{
       );
     });
   }
+
+  bindParentProductCategoryFilter(BuildContext context) {
+    return Obx((){
+      if (rh_vm.parentCategoryCodeController.value.text.isNotEmpty && rh_vm.filterDataChecker.value=='1') {
+        List<String> nameList = rh_vm.parentCategoryCodeController.value.text.split(',');
+
+        rh_vm.parentItemCategorySelectedList.value =
+            List.generate(nameList.length, (index) {
+              return ItemCategoryMstModel(
+                parentCategoryCode: nameList[index].trim(),
+              );
+            });
+      }
+      return  DropdownSearch<ItemCategoryMstModel>.multiSelection(
+        items: rh_vm.parentProductCategoryList,
+        itemAsString: (ItemCategoryMstModel u) => u.parentCategoryCode??"",
+        selectedItems: rh_vm.parentItemCategorySelectedList,
+        dropdownDecoratorProps: DropDownDecoratorProps(
+          baseStyle: TextStyle(color: Colors.black),
+          dropdownSearchDecoration: InputDecoration(
+            filled: false,
+            labelText: rh_vm.parentItemCategorySelectedList.isNotEmpty?"Parent Category Code":null,
+            hintText: "Parent Category Code",
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+          ),
+        ),
+        dropdownBuilder: (context, selectedItems) {
+          // Custom builder to just show comma-separated names
+          if (selectedItems.isEmpty) {
+            return Text(
+              "Parent Category Code",
+              style: GoogleFonts.poppins(
+                color: AllColors.primaryDark1, // Match your hint color
+                fontSize: AllFontSize.sisxteen,
+                fontWeight: FontWeight.w500,
+              ),
+            );
+          }
+          return SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Text(
+              selectedItems.map((e) => e.parentCategoryCode).join(', '),
+              style: TextStyle(color: Colors.black), // Only black text
+            ),
+          );
+        },
+        onChanged: (List<ItemCategoryMstModel> selectedList) {
+          rh_vm.parentItemCategorySelectedList.value = selectedList;
+          rh_vm.parentCategoryCodeController.value.text =
+              selectedList.map((e) => e.parentCategoryCode).join(', ');
+        },
+        popupProps: PopupPropsMultiSelection.dialog(
+          showSearchBox: true,
+          searchFieldProps: TextFieldProps(
+            padding: EdgeInsets.only(top: 20, left: 10, right: 10),
+            decoration: InputDecoration(
+              contentPadding: EdgeInsets.only(top: 20, left: 12, right: 12),
+              hintText: "Search...",
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+          ),
+
+          itemBuilder: (context, item, isSelected) =>
+              ListTile(
+                title: Text(item.parentCategoryCode??""),
+              ),
+        ),
+      );
+    });
+
+  }
+
+  bindItemProductCategoryFilter(BuildContext context) {
+    return Obx((){
+      if (rh_vm.itemCategoryCodeController.value.text.isNotEmpty && rh_vm.filterDataChecker.value=='1') {
+        List<String> nameList = rh_vm.itemCategoryCodeController.value.text.split(',');
+
+        rh_vm.Selected_item_product_cat_list.value =
+            List.generate(nameList.length, (index) {
+              return ItemCategoryMstModel(
+                categoryName: nameList[index].trim(),
+              );
+            });
+      }
+      return  DropdownSearch<ItemCategoryMstModel>.multiSelection(
+        items: rh_vm.item_product_cat_list,
+        itemAsString: (ItemCategoryMstModel u) => u.categoryName??"",
+        selectedItems: rh_vm.Selected_item_product_cat_list,
+        dropdownDecoratorProps: DropDownDecoratorProps(
+          baseStyle: TextStyle(color: Colors.black),
+          dropdownSearchDecoration: InputDecoration(
+            filled: false,
+            labelText: rh_vm.Selected_item_product_cat_list.isNotEmpty?"Product Category":null,
+            hintText: "Product Category",
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+          ),
+        ),
+        dropdownBuilder: (context, selectedItems) {
+          // Custom builder to just show comma-separated names
+          if (selectedItems.isEmpty) {
+            return Text(
+              "Product Category",
+              style: GoogleFonts.poppins(
+                color: AllColors.primaryDark1, // Match your hint color
+                fontSize: AllFontSize.sisxteen,
+                fontWeight: FontWeight.w500,
+              ),
+            );
+          }
+          return SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Text(
+              selectedItems.map((e) => e.categoryName).join(', '),
+              style: TextStyle(color: Colors.black), // Only black text
+            ),
+          );
+        },
+        onChanged: (List<ItemCategoryMstModel> selectedList) {
+          rh_vm.Selected_item_product_cat_list.value = selectedList;
+          rh_vm.itemCategoryCodeController.value.text =
+              selectedList.map((e) => e.categoryName).join(', ');
+        },
+        popupProps: PopupPropsMultiSelection.dialog(
+          showSearchBox: true,
+          searchFieldProps: TextFieldProps(
+            padding: EdgeInsets.only(top: 20, left: 10, right: 10),
+            decoration: InputDecoration(
+              contentPadding: EdgeInsets.only(top: 20, left: 12, right: 12),
+              hintText: "Search...",
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+          ),
+
+          itemBuilder: (context, item, isSelected) =>
+              ListTile(
+                title: Text(item.categoryName??""),
+              ),
+        ),
+      );
+    });
+
+  }
+
+
+  Widget bindDropDownType(context, TextEditingController ctrl, String hintData, List<String> list) {
+    return DropdownMenu<String>(
+      width: MediaQuery.of(context).size.width - 15,
+      controller: ctrl,
+      label: Text(hintData,
+        style: GoogleFonts.poppins(
+            color: AllColors.primaryDark1,
+            fontSize: AllFontSize.sisxteen,
+            fontWeight: FontWeight.w500),
+      ),
+      inputDecorationTheme: const InputDecorationTheme(
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+          borderSide: BorderSide(
+            color: AllColors.primaryDark1,),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+              color: AllColors.primaryDark1), // Change the color to green
+        ),
+
+        border: OutlineInputBorder(
+          borderSide: BorderSide(
+              color: AllColors.primaryDark1), // Change the color to green
+        ),
+        filled: false,
+        contentPadding: EdgeInsets.symmetric(
+            vertical: AllFontSize.two, horizontal: AllFontSize.ten),
+      ),
+      onSelected: (String? selection) {
+        print(selection);
+        if(hintData=='Closure Month'){
+          String monthName = _displayStringTypeDropDownForOption(selection!).toString();
+          rh_vm.monthNameForApi = rh_vm.setMonthNameInShort(monthName);;
+          rh_vm.closerMonth_Ctrl.value.text = _displayStringTypeDropDownForOption(selection!).toString();
+        }
+        else if(hintData =='Closure Year'){
+          rh_vm.closerYear_Ctrl.value.text =
+              _displayStringTypeDropDownForOption(selection!).toString();
+        }
+        else{
+          rh_vm.item_category_type_controller.value.text =
+              _displayStringTypeDropDownForOption(selection!).toString();
+        }
+      },
+      dropdownMenuEntries: list
+          .map<DropdownMenuEntry<String>>((String e) {
+        return DropdownMenuEntry<String>(
+            value: e, label: e!, style: ButtonStyle(
+          foregroundColor: MaterialStateProperty.all<Color>(
+              AllColors.primaryDark1),));
+      }).toList(),
+    );
+  }
+
 
 
 }

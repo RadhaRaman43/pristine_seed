@@ -15,7 +15,6 @@ class ClusterRegionMethod {
         required RxList<ClusterModal> selectedList,
         required VoidCallback onDone,
       }) {
-
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (controller.text.isNotEmpty) {
         final names = controller.text.split(',');
@@ -31,7 +30,6 @@ class ClusterRegionMethod {
         }
       }
     });
-
     return Obx(() {
       final selected = selectedList;
       final selectedText =

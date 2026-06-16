@@ -29,14 +29,9 @@ class SalesCycleScreen extends StatelessWidget{
   ScrollController scrollController = ScrollController();
   SalesCycleVm salesCycleController=Get.put(SalesCycleVm());
 
-  static String _displaySaleCycleStatusForOption(String option) =>
+  static String _displayStringTypeDropDownForOption(String option) =>
       option;
 
-  static String _displayApprovalStatusForOption(String option) =>
-      option;
-
-  static String _displayCustomerNeedIdentityStatusForOption(String option) =>
-      option;
 
  /* static String _displayItemCatMasterForOption(ItemCategoryMstModel option) =>
       option.categoryName!;*/
@@ -917,7 +912,7 @@ class SalesCycleScreen extends StatelessWidget{
         onSelected: (String? selection) {
           print(selection);
           salesCycleController.SaleCycleStatusController.value.text =
-              _displaySaleCycleStatusForOption(selection!)
+              _displayStringTypeDropDownForOption(selection!)
                   .toString();
           /*print('IsActive.....${salesCycleController.solutionAcceptedController
               .value.text}');*/
@@ -975,7 +970,7 @@ class SalesCycleScreen extends StatelessWidget{
         onSelected: (String? selection) {
           print(selection);
           salesCycleController.ApprovalStatusController.value.text =
-              _displayApprovalStatusForOption(selection!)
+              _displayStringTypeDropDownForOption(selection!)
                   .toString();
           /*print('IsActive.....${salesCycleController.solutionAcceptedController
               .value.text}');*/
@@ -1833,7 +1828,7 @@ class SalesCycleScreen extends StatelessWidget{
         onSelected: (String? selection) {
           print(selection);
           salesCycleController.solutionAcceptedController.value.text =
-              _displayCustomerNeedIdentityStatusForOption(selection!)
+              _displayStringTypeDropDownForOption(selection!)
                   .toString();
           print('IsActive.....${salesCycleController.solutionAcceptedController
               .value.text}');
@@ -1956,7 +1951,7 @@ class SalesCycleScreen extends StatelessWidget{
       onSelected: (String? selection) {
         print(selection);
         salesCycleController.isCommitController.value.text =
-            _displayCustomerNeedIdentityStatusForOption(selection!)
+            _displayStringTypeDropDownForOption(selection!)
                 .toString();
       },
       dropdownMenuEntries:
@@ -2142,8 +2137,7 @@ class SalesCycleScreen extends StatelessWidget{
             salesCycleController.filterQuoteAcceptedFlag.value = '';
           }
           salesCycleController.filterQuoteAcceptedController.value.text =
-              _displaySaleCycleStatusForOption(selection!)
-                  .toString();
+              _displayStringTypeDropDownForOption(selection!).toString();
         },
         dropdownMenuEntries:
         salesCycleController.qouteAcceptedList.map<

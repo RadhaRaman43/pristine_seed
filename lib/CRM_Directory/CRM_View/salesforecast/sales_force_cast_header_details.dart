@@ -743,8 +743,10 @@ class SalesForceHeaderDetails extends StatelessWidget{
       onSelected: (String? selection) {
         print(selection);
         if(hintData=='Closure Month'){
-          sales_force_cast_vm.closerMonth_ex_Ctrl.value.text =
-              _displaySaleCycleActiveForOption(selection!).toString();
+          String monthName = _displaySaleCycleActiveForOption(selection!).toString();
+          sales_force_cast_vm.closerMonth_ex_Ctrl.value.text = _displaySaleCycleActiveForOption(selection!).toString();
+          sales_force_cast_vm.monthNameForApi = sales_force_cast_vm.setMonthNameInShort(monthName);;
+
         }
         else if(hintData =='Closure Year'){
           sales_force_cast_vm.closerYear_ex_Ctrl.value.text =
