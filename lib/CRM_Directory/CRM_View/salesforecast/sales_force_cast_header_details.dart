@@ -369,7 +369,7 @@ class SalesForceHeaderDetails extends StatelessWidget{
             _buildLabelWithValue(label: "Item Name : ", value: sales_force_cast_vm.salesForceCastHeader_list[0].lines?[index].itemName ?? "",),
             _buildLabelWithValue(label: "Item Category : ", value: sales_force_cast_vm.salesForceCastHeader_list[0].lines?[index].itemCategoryCode ?? "",),
             _buildLabelWithValue(label: "Quote Qty : ", value: sales_force_cast_vm.salesForceCastHeader_list[0].lines?[index].quoteQty.toInt().toString() ?? "",),
-            _buildLabelWithValue(label: "Approved Price : ", value: sales_force_cast_vm.salesForceCastHeader_list[0].lines?[index].quoteApprovedAmountPerUnit.toString() ?? "",),
+            _buildLabelWithValue(label: "Approved Price : ", value: sales_force_cast_vm.salesForceCastHeader_list[0].lines?[index].quoteApprovedAmountPerUnit.toString() ?? "",index: index),
             _buildLabelWithValue(label: "Item Variant : ", value: sales_force_cast_vm.salesForceCastHeader_list[0].lines?[index].itemVarient ?? "",),
             _buildLabelWithValue(label: "Region Name : ", value: sales_force_cast_vm.salesForceCastHeader_list[0].lines?[index].requiredRegionName ?? "",),
             _buildLabelWithValue(label: "Cluster  Name : ", value: sales_force_cast_vm.salesForceCastHeader_list[0].lines?[index].requiredClusterName ?? "",),
@@ -387,9 +387,10 @@ class SalesForceHeaderDetails extends StatelessWidget{
   }
   Widget _buildLabelWithValue({
     required String label,
-    required String? value,
+    required String value,
     Color color = AllColors.textColor,
     BuildContext? context,
+    int index=0
   }) {
     return Row(
       children: [
@@ -421,8 +422,59 @@ class SalesForceHeaderDetails extends StatelessWidget{
             ),
           ),
         ),
+        Visibility(visible:(label=='Item Variant : ' && value.isNotEmpty),child: const SizedBox(width: 8),),
+        Visibility(visible:label=='Item Variant : ',child: GestureDetector(
+          onTap: (){
+            showDialogForChangeVarient(context!,index);
+          },
+            child:(value.isEmpty || value==null)? 
+            Icon(Icons.add_circle_sharp,color: AllColors.primaryDark1,):Icon(Icons.edit,color: AllColors.primaryDark1,size: 15,)))
 
       ],
+    );
+  }
+  showDialogForChangeVarient(BuildContext context, int index,){
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: Colors.green.shade100, // light red background
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(
+                  Icons.info_outline,
+                  color: Colors.green,
+                  size: 28,
+                ),
+              ),
+              SizedBox(width: 20,),
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                  ],
+                ),
+              ),
+
+            ],
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+               Navigator.pop(context);
+
+              },
+              child: Text("Complete",style: TextStyle(color: AllColors.greenblue),),
+            ),
+          ],
+        );
+      },
     );
   }
 
