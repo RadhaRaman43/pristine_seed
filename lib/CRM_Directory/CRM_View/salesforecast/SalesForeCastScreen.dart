@@ -11,6 +11,7 @@ import '../../../constants/app_font_size.dart';
 import '../../../constants/static_methods.dart';
 import '../../../reources/routes/routes_name.dart';
 import '../../../view/custom_drawer.dart';
+import '../../CRM_Models/AccountMaster_model/Employee_Member_Model.dart';
 import '../../CRM_Models/AccountMaster_model/cluster_modal.dart';
 import '../../CRM_Models/AccountMaster_model/region_with_cluster_filter_modal.dart';
 
@@ -385,18 +386,16 @@ class SalesForceCastScreen extends StatelessWidget{
                             children: [
                               const SizedBox(height: 5,),
                               bindFilterData(sales_force_cast_vm.salesForceCastId.value, 'Rolling Forecast ID'),
-                              /*const SizedBox(height: 5,),
-                              bindFilterData(sales_force_cast_vm.filterTask_Id_controller.value, 'Task Id'),
-                              const SizedBox(height: 10,),
-                              bindFilterData(sales_force_cast_vm.accountNameController.value, 'Customer Name'),
-                              const SizedBox(height: 10,),
-                              bindFilterData(sales_force_cast_vm.accountCodeController.value, 'Customer Code'),*/
-                              const SizedBox(height: 10,),
-                              bindCreatedOn(context),
+                              const SizedBox(height: 5,),
+                              bindFilterData(sales_force_cast_vm.month_year_controller.value, 'Month Year'),
                               const SizedBox(height: 10,),
                               bindClusterNameFilter(context),
                               const SizedBox(height: 10,),
                               bindRegionNameFilter(context),
+                              const SizedBox(height: 10),
+                              bindCreatedBYFilter(context),
+                              const SizedBox(height: 10,),
+                              bindCreatedOn(context),
                               const SizedBox(height: 10,),
                             ],
                           ),
@@ -521,62 +520,67 @@ class SalesForceCastScreen extends StatelessWidget{
 
   bindCreatedOn(BuildContext context) {
     return TextField(
-        cursorColor: AllColors.primaryDark1,
-        controller: sales_force_cast_vm.createdOnCnontroller.value,
-        decoration: InputDecoration(
-            contentPadding: EdgeInsets.symmetric(
-                vertical: AllFontSize.two, horizontal: AllFontSize.ten
-            ),
-            suffixIcon: Icon(Icons.calendar_month),
-            hintText: 'Created On',
-            labelText: 'Created On',
-            hintStyle: GoogleFonts.poppins(
-                color: AllColors.lightblackColor,
-                fontWeight: FontWeight.w300,
-                fontSize: AllFontSize.ten),
-            labelStyle: GoogleFonts.poppins(
-                color: AllColors.primaryDark1,
-                fontWeight: FontWeight.w500,
-                fontSize: AllFontSize.sisxteen),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-            )
+      cursorColor: AllColors.primaryDark1,
+      controller:sales_force_cast_vm.createdOn_from_to_date_Controller.value,
+      readOnly: true,
+      decoration: InputDecoration(
+        contentPadding: EdgeInsets.symmetric(
+            vertical: AllFontSize.two, horizontal: AllFontSize.ten),
+        suffixIcon: Icon(Icons.calendar_month),
+        hintText: 'Select Start Date -End Date',
+        labelText: 'Created On',
+        hintStyle: GoogleFonts.poppins(
+            color: AllColors.lightblackColor,
+            fontWeight: FontWeight.w300,
+            fontSize: AllFontSize.ten),
+        labelStyle: GoogleFonts.poppins(
+            color: AllColors.primaryDark1,
+            fontWeight: FontWeight.w500,
+            fontSize: AllFontSize.sisxteen),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
         ),
-        onTap: () async {
-          DateTime start_date = new DateTime(1900);
-          DateTime ending_date = new DateTime(2200);
-          FocusScope.of(context).requestFocus(new FocusNode());
-          DateTime? date = await showDatePicker(
-            context: context,
-            initialDate: DateTime.now(),
-            firstDate: start_date,
-            lastDate: ending_date,
-            builder: (BuildContext context, Widget? child) {
-              return Theme(
-                data: ThemeData.light().copyWith(
-                  primaryColor: AllColors.primaryDark1,
-                  colorScheme: ColorScheme.light(
-                      primary: AllColors.primaryDark1),
-                  buttonTheme: ButtonThemeData(
-                      textTheme: ButtonTextTheme.primary),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+        ),
+      ),
+      onTap: () async {
+        FocusScope.of(context).requestFocus(FocusNode()); // hide keyboard
+        DateTimeRange? picked = await showDateRangePicker(
+          context: context,
+          firstDate: DateTime(1900),
+          lastDate: DateTime(2200),
+          /* initialDateRange: DateTimeRange(
+            start: DateTime.now(),
+            end: DateTime.now().add(Duration(days: 7)),
+          ),*/
+          builder: (BuildContext context, Widget? child) {
+            return Theme(
+              data: ThemeData.light().copyWith(
+                primaryColor: AllColors.primaryDark1,
+                colorScheme: ColorScheme.light(primary: AllColors.primaryDark1),
+                buttonTheme: ButtonThemeData(
+                  textTheme: ButtonTextTheme.primary,
                 ),
-                child: child!,
-              );
-            },
+              ),
+              child: child!,
+            );
+          },
+        );
 
-          );
-          var outputFormat = DateFormat('yyyy-MM-dd');
-          if (date != null && date != "")
-            sales_force_cast_vm.createdOnCnontroller.value.text = outputFormat.format(date);
-          else
-            sales_force_cast_vm.createdOnCnontroller.value.text = "";
+        if (picked != null) {
+          final startDate = DateFormat('yyyy-MM-dd').format(picked.start);
+          final endDate = DateFormat('yyyy-MM-dd').format(picked.end);
+          sales_force_cast_vm.createdOnCnontroller.value.text="$startDate@$endDate";
+          sales_force_cast_vm.createdOn_from_to_date_Controller.value.text = '$startDate - $endDate';
+        } else {
+          sales_force_cast_vm.createdOnCnontroller.value.text = '';
+          sales_force_cast_vm.createdOn_from_to_date_Controller.value.text="";
         }
-
+      },
     );
   }
+  
   Widget bindClusterNameFilter(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final availableItems = sales_force_cast_vm.clusterGetByEmailList;
@@ -1052,6 +1056,258 @@ class SalesForceCastScreen extends StatelessWidget{
       );
     });
   }
+  
+  Widget bindCreatedBYFilter(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {});
+    return Obx(() {
+      if (sales_force_cast_vm.AccountOwner_controller.value.text.isNotEmpty && sales_force_cast_vm.filterDataChecker.value=='1') {
+        List<String> nameList = sales_force_cast_vm.AccountOwner_controller.value.text.split(',');
+        sales_force_cast_vm.SelectedEmployee_Member_list.value = List.generate(nameList.length, (index) {
+          return EmployeeMemberModel(
+            userFullName: nameList[index].trim(),
+          );
+        });
+      }
+      print("list length ${sales_force_cast_vm.employee_Member_list.length}");
+      final selected = sales_force_cast_vm.SelectedEmployee_Member_list;
+      final selectedText = selected.isEmpty ? null : selected.map((e) =>
+      "${sales_force_cast_vm.isAdminWritePermission=="1"?e.userFullName ?? "":e.fullName ?? ""}(${e.salesPersonEmpCode ?? ""})").join(', ');
+      return GestureDetector(
+        onTap: ()  {
+          openBottomSheet(context);
+        },
+        child: InputDecorator(
+          decoration: InputDecoration(
+            labelText: selectedText != null ?  "Created By": "", // 👈 Label restored here
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            contentPadding:
+            const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+          ),
+          child: Row(
+            children: [
+              Expanded(
+                child: selectedText == null
+                    ? Text(
+                  "Created By",
+                  style: GoogleFonts.poppins(
+                      color: AllColors.primaryDark1,
+                      fontWeight: FontWeight.w500,
+                      fontSize: AllFontSize.sisxteen
+                  ),
+                )
+                    : SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Text(
+                    selectedText,
+                    style: const TextStyle(color: Colors.black),
+                  ),
+                ),
+              ),
+              const Icon(Icons.arrow_drop_down),
+            ],
+          ),
+        ),
+      );
+    });
+  }
+  openBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(16)),),
+        builder: (context){
+          sales_force_cast_vm.tempSelected.value = [];
+          sales_force_cast_vm.tempSelected.addAll(sales_force_cast_vm.SelectedEmployee_Member_list);
+          sales_force_cast_vm.filtered.value = sales_force_cast_vm.employee_Member_list;
+          return Obx((){
+            sales_force_cast_vm.allSelected.value = sales_force_cast_vm.filtered.isNotEmpty
+                && sales_force_cast_vm.tempSelected.length == sales_force_cast_vm.filtered.length;
+            return Visibility(
+                visible: sales_force_cast_vm.selectOwner.value,
+                child: Padding(
+                  padding: EdgeInsets.only(
+                      bottom: MediaQuery.of(context).viewInsets.bottom),
+                  child: SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.75,
+                    child: Column(
+                      children: [
+                        const SizedBox(height: 8),
+                        Container(
+                          width: 50,
+                          height: 4,
+                          decoration: BoxDecoration(
+                              color: Colors.grey[400],
+                              borderRadius: BorderRadius.circular(2)),
+                        ),
+                        const SizedBox(height: 12),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  'Select Created By',
+                                  style: GoogleFonts.poppins(
+                                      fontSize: 16, fontWeight: FontWeight.w600,color: Colors.black),
+                                ),
+                              ),
+                              IconButton(onPressed: () {
+                                Navigator.of(context).pop();
+                              }, icon: const Icon(Icons.close,color: AllColors.primaryDark1,weight: 700,))
 
+                            ],
+                          ),
+                        ),
+                        // Search Field
+                        Padding(
+                          padding:
+                          const EdgeInsets.symmetric(horizontal: 16.0),
+                          child: TextField(
+                            controller: sales_force_cast_vm.searchController.value,
+                            decoration: InputDecoration(
+                              hintText: 'Search...',
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8)),
+                              isDense: true,
+                              suffixIcon: sales_force_cast_vm.searchController.value.text.isNotEmpty ? IconButton(
+                                icon: const Icon(Icons.clear),
+                                onPressed: () {
+                                  sales_force_cast_vm.searchController.value.clear();
+                                  if(sales_force_cast_vm.isAdminWritePermission=="1") {
+                                    sales_force_cast_vm.EmployeeMasterGet(sales_force_cast_vm.searchController.value.text);
+                                  }
+                                  else{
+                                    sales_force_cast_vm.filtered.value =sales_force_cast_vm.searchController.value.text.isEmpty ?
+                                    sales_force_cast_vm.employee_Member_list:sales_force_cast_vm.employee_Member_list.where((c) =>
+                                        (c.fullName ?? "").toLowerCase().contains(sales_force_cast_vm.searchController.value.text)).toList();
+                                  }
+
+
+                                },
+                              ) : null,
+                            ),
+                            onChanged: (v)
+                            {
+                              if(sales_force_cast_vm.isAdminWritePermission=="1") {
+                                sales_force_cast_vm.EmployeeMasterGet(sales_force_cast_vm.searchController.value.text);
+                              }
+                              else{
+                                sales_force_cast_vm.filtered.value =sales_force_cast_vm.searchController.value.text.isEmpty ?
+                                sales_force_cast_vm.employee_Member_list:sales_force_cast_vm.employee_Member_list.where((c) =>
+                                    ("${c.fullName ?? ""} ${c.salesPersonEmpCode ?? ""}").toLowerCase().contains(sales_force_cast_vm.searchController.value.text)).toList();
+                              }
+
+                            },
+                          ),
+                        ),
+
+                        const SizedBox(height: 8),
+
+                        // Select All
+                        /* Padding(
+                          padding:
+                          const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: CheckboxListTile(
+                            title:sales_force_cast_vm.allSelected.value?const Text('UnSelect All'): const Text('Select All'),
+                            value: sales_force_cast_vm.allSelected.value,
+                            onChanged: (val) {
+                              if (val == true) {
+                                sales_force_cast_vm.tempSelected.clear();
+                                sales_force_cast_vm.allSelected.value=true;
+                                sales_force_cast_vm.tempSelected.addAll(sales_force_cast_vm.filtered);
+                              } else {
+                                sales_force_cast_vm.allSelected.value=false;
+                                sales_force_cast_vm.tempSelected.clear();
+                              }
+                              sales_force_cast_vm.selectOwner.value=false;
+                              sales_force_cast_vm.selectOwner.value=true;
+                            },
+                          ),
+                        ),*/
+
+                        const Divider(height: 1),
+                        Obx((){
+                          return Visibility(visible:sales_force_cast_vm.loading.value,
+                            child:LinearProgressIndicator(
+                              backgroundColor: AllColors.primaryDark1,
+                              color: AllColors.textColor,
+                            ), );
+                        }),
+
+                        // List
+                        Expanded(
+                          child: sales_force_cast_vm.filtered.isEmpty ? const Center(child: Text('No Record Found!')) : ListView.builder(
+                            padding: const EdgeInsets.symmetric(vertical: 8),
+                            itemCount: sales_force_cast_vm.filtered.length,
+                            itemBuilder: (context, idx) {
+                              final item = sales_force_cast_vm.filtered[idx];
+                              sales_force_cast_vm.isSel.value = sales_force_cast_vm.tempSelected.any((s) =>
+                              (sales_force_cast_vm.isAdminWritePermission=="1"?s.userFullName ?? "":s.fullName ?? "") ==
+                                  (sales_force_cast_vm.isAdminWritePermission=="1"?item.userFullName ?? "":item.fullName ?? ""));
+                              return CheckboxListTile(
+                                title: Text("${sales_force_cast_vm.isAdminWritePermission=="1"?
+                                item.userFullName ?? "":item.fullName ?? ""}(${item.salesPersonEmpCode ?? ""})"),
+                                value: sales_force_cast_vm.isSel.value,
+                                onChanged: (v) {
+                                  if (v == true) {
+                                    sales_force_cast_vm.isSel.value=true;
+                                    sales_force_cast_vm.tempSelected.add(item);
+                                  } else {
+                                    sales_force_cast_vm.isSel.value=false;
+                                    sales_force_cast_vm.tempSelected.removeWhere((s) =>
+                                    (sales_force_cast_vm.isAdminWritePermission=="1"?s.userFullName ?? "":s.fullName ?? "") ==
+                                        (sales_force_cast_vm.isAdminWritePermission=="1"?item.userFullName ?? "":item.fullName ?? ""));
+                                    //(s.userFullName ?? "") == (item.userFullName ?? ""));
+                                  }
+                                  sales_force_cast_vm.selectOwner.value=false;
+                                  sales_force_cast_vm.selectOwner.value=true;
+                                },
+                              );
+                            },
+                          ),
+                        ),
+
+                        // Done button
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16.0, vertical: 12),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: ElevatedButton(
+                                  onPressed: () {
+                                    sales_force_cast_vm.SelectedEmployee_Member_list
+                                        .assignAll(sales_force_cast_vm.tempSelected);
+                                    sales_force_cast_vm.AccountOwner_controller.value.text =
+                                        sales_force_cast_vm.tempSelected.map((e) => e.empId).join(', ');
+
+                                    Navigator.of(context).pop();
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: AllColors.primaryDark1,
+                                    shadowColor: AllColors.primaryDark1,
+                                    foregroundColor: AllColors.primaryDark1,
+                                    side: BorderSide(color: AllColors.primaryDark1, width: 1),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                  ),
+                                  child: Text('Done',style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w600,color: Colors.white),),
+
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ));
+          });
+        }
+    );
+  }
 
 }

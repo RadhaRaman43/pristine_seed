@@ -350,7 +350,8 @@ class CreateForeCastIyemScreen extends StatelessWidget{
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-
+                              const SizedBox(height: 10),
+                              bindData(context,'Quote Id',sales_force_cast_vm.filterQuoteIdController.value),
                               const SizedBox(height: 10),
                               bindData(context,'Sale Cycle Id',sales_force_cast_vm.filterQuoteSaleCycleController.value),
                               const SizedBox(height: 10),
@@ -391,8 +392,15 @@ class CreateForeCastIyemScreen extends StatelessWidget{
                           textColor: AllColors.primaryDark1,
                           onTap: () {
                             sales_force_cast_vm.pageNumberForQuote = 0;
-                            sales_force_cast_vm.getForeCastQuoteList( sales_force_cast_vm.pageNumberForQuote,
-                                "ALLQuoteLineItemsForSalesForecast",);
+                            if(sales_force_cast_vm.filterQuoteIdController.value.text.isEmpty){
+                              sales_force_cast_vm.quoteIds = sales_force_cast_vm.SelectedQuoteList.map((e) => e.quoteId).join(' | ');
+                            }
+                            else{
+                              sales_force_cast_vm.quoteIds = sales_force_cast_vm.filterQuoteIdController.value.text;
+
+                            }
+                            sales_force_cast_vm.getForeCastQuoteList(sales_force_cast_vm.pageNumberForQuote,
+                              "ALLQuoteLineItemsForSalesForecast",);
                             Get.back();
                           },
                         )),

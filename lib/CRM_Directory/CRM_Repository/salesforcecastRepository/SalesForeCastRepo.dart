@@ -49,6 +49,13 @@ class SalesForeCastRepo{
   Future<String> clustersGetByEmailApiHit(var data,SessionManagement sessionManagement) async{
     return _apiService.getApi(AppUrl.ClustersGetByEmail, sessionManagement, data);
   }
+  Future<String> EmployeeTeamMemberGetByClusterRegion(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.EmployeeTeamMemberGetByClusterRegion,sessionManagement);
+  }
+  Future<String> EmployeeMatserGetApiHit(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.get_employee_master,sessionManagement);
+  }
+
 
 
 }

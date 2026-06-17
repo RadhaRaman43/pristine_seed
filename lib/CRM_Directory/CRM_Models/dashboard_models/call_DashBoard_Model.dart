@@ -38,6 +38,7 @@ class Records {
   int? newCall;
   int? followUpCall;
   int? paymentCall;
+  int? totalCalls;
 
   Records(
       {this.geoName,
@@ -46,7 +47,8 @@ class Records {
         this.employee,
         this.newCall,
         this.followUpCall,
-        this.paymentCall});
+        this.paymentCall,
+        this.totalCalls});
 
   Records.fromJson(Map<String, dynamic> json) {
     geoName = json['geo_name'];
@@ -56,6 +58,7 @@ class Records {
     newCall = json['new_call'];
     followUpCall = json['Follow_Up_call'];
     paymentCall = json['Payment_call'];
+    totalCalls = json['Total_Calls'];
   }
 
   Map<String, dynamic> toJson() {
@@ -67,6 +70,7 @@ class Records {
     data['new_call'] = this.newCall;
     data['Follow_Up_call'] = this.followUpCall;
     data['Payment_call'] = this.paymentCall;
+    data['Total_Calls'] = this.totalCalls;
     return data;
   }
 }

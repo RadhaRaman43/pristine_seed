@@ -969,7 +969,6 @@ class CallDashboardVm extends GetxController{
       }
 
       final totalRows = callDashboardRecordList.length;
-
         for (int row = 0; row < totalRows; row++) {
           final rowMap = removeExcelKeys(callDashboardRecordList[row],);
           for (int col = 0; col < headers.length; col++) {
@@ -1009,6 +1008,7 @@ class CallDashboardVm extends GetxController{
       Get.back();
     }
   }
+
   void showExcelProgressDialog(BuildContext context) {
     Get.dialog(
       Obx(() => AlertDialog(

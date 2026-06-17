@@ -15,6 +15,7 @@ import 'package:share_plus/share_plus.dart';
 
 import '../../../reources/routes/routes_name.dart';
 import '../../../viewModel/SessionManagment/session_managment.dart';
+import '../../CRM_Models/AccountMaster_model/Employee_Member_Model.dart';
 import '../../CRM_Models/AccountMaster_model/cluster_modal.dart';
 import '../../CRM_Models/AccountMaster_model/region_with_cluster_filter_modal.dart';
 import '../../CRM_Models/SalesForceCastModals/ForceCastListModal.dart';
@@ -72,24 +73,31 @@ class SalesForeCastVM extends GetxController{
   //filter fields
   var salesForceCastId = TextEditingController().obs;
   var createdOnCnontroller = TextEditingController().obs;
+  var createdOn_from_to_date_Controller = TextEditingController().obs;
   var RegionName_controller = TextEditingController().obs;
   var clusterName_controller = TextEditingController().obs;
+  var month_year_controller = TextEditingController().obs;
+  var AccountOwner_controller=TextEditingController().obs;
 
-  //
   var month_controller = TextEditingController().obs;
   var year_controller = TextEditingController().obs;
 
   //todo quote filter
+
   var filterQuoteIdController=TextEditingController().obs;
-  var filterQuoteVersionController=TextEditingController().obs;
   var filterQuoteSaleCycleController=TextEditingController().obs;
-  var accountCodeController=TextEditingController().obs;
   var accountNameController=TextEditingController().obs;
-  var productCategoryController=TextEditingController().obs;
-  var parentProductCategoryController=TextEditingController().obs;
-  var quoteStatusController=TextEditingController().obs;
   var filterQuoteValidityController=TextEditingController().obs;
+  var accountCodeController=TextEditingController().obs;
+  var filterQuoteVersionController=TextEditingController().obs;
   var filterExpectedClosuredateController=TextEditingController().obs;
+  var productCategoryController=TextEditingController().obs;
+  var product_category_type_Controller = TextEditingController().obs;
+  var parentProductCategoryController=TextEditingController().obs;
+
+
+  //todo there is no use these controllers yet now
+  var quoteStatusController=TextEditingController().obs;
   var rh_Approval_controller=TextEditingController().obs;
   var cbh_Approval_controller=TextEditingController().obs;
   var category_Approval_controller=TextEditingController().obs;
@@ -105,7 +113,7 @@ class SalesForeCastVM extends GetxController{
   var BTPFilterController=TextEditingController().obs;
   var MAPFilterController=TextEditingController().obs;
   var StandardCostController=TextEditingController().obs;
-  var product_category_type_Controller = TextEditingController().obs;
+
 
 
   //todo download excel filter
@@ -139,6 +147,16 @@ class SalesForeCastVM extends GetxController{
     'July', 'August', 'September', 'October', 'November', 'December'];
   List<String> years = [];
 
+  RxList<EmployeeMemberModel> employee_Member_list = <EmployeeMemberModel>[].obs;
+  RxList<EmployeeMemberModel> SelectedEmployee_Member_list = <EmployeeMemberModel>[].obs;
+  RxList<EmployeeMemberModel> tempSelected = <EmployeeMemberModel>[].obs;
+  RxList<EmployeeMemberModel> filtered = <EmployeeMemberModel>[].obs;
+  RxBool selectOwner = true.obs;
+  RxBool allSelected = false.obs;
+  RxBool isSel = false.obs;
+  var searchController=TextEditingController().obs;
+  var AccountOwnerForApi;
+
   RxString createdOnStartToEnd = "".obs;
   RxString extClosureStartToEnd = "".obs;
   RxString quoteValidityStartToEnd = "".obs;
@@ -158,6 +176,12 @@ class SalesForeCastVM extends GetxController{
     getParentItemCategoryMstGet();
     getCurrentDate();
     getClustersGetByEmail();
+    if (this.isAdminWritePermission == '1') {
+      EmployeeMasterGet('');
+    }
+    else {
+      getEmployeeTeamMemberGetByClusterRegionApi();
+    }
   }
   Future<void> refreshList() async {
     pageNumber = 0;
@@ -286,6 +310,102 @@ class SalesForeCastVM extends GetxController{
     return formatter.format(num.parse(number.toString()));
   }
 
+  Future<Iterable<EmployeeMemberModel>> EmployeeMasterGet(String query) async {
+    /*if (query == '') {
+      return const Iterable<EmployeeMemberModel>.empty();
+    }*/
+
+    Map data = {
+      'filter_name': query,
+      'filter_email': "",
+      'filter_location_id': '',
+      'email_id': email,
+      "filter_cluster_name": clusterName_controller.value.text.isNotEmpty?clusterName_controller.value.text:"",
+      "filter_region_name": RegionName_controller.value.text.isNotEmpty?RegionName_controller.value.text:"",
+      'rowsPerPage': 10,
+      'pageNumber': 0,
+    };
+    loading.value = true;
+    String employee_response =await _api.EmployeeMatserGetApiHit(data, sessionManagement);
+    try {
+      final jsonResponse = json.decode(employee_response);
+
+      if (jsonResponse is List) {
+        print(jsonResponse);
+        List<EmployeeMemberModel> response =
+        jsonResponse.map((data) => EmployeeMemberModel.fromJson(data)).toList();
+        print('condition..'+response[0].condition.toString());
+        if (response[0].condition == 'True') {
+          print(jsonResponse);
+          employee_Member_list.value = response;
+
+
+        } else {
+          // Utils.sanckBarException('False!', response[0].message!);
+          employee_Member_list.value = [];
+        }
+      } else {
+        Utils.sanckBarException('False!', jsonResponse.message);
+        employee_Member_list.value = [];
+      }
+    } catch (e) {
+      Utils.sanckBarException('Exception!', e.toString());
+      employee_Member_list.value = [];
+    }
+    finally{
+      loading.value = false;
+    }
+    return employee_Member_list.value;
+  }
+  getEmployeeTeamMemberGetByClusterRegionApi() {
+    Map data = {
+      "cluster_name": "",
+      "email_id": email,
+      "region_name": "",
+      "flag": "GeoLevelLowerWithClusterRegion"
+    };
+    print(data);
+    loading.value = true;
+    try {
+      _api.EmployeeTeamMemberGetByClusterRegion(data, sessionManagement).then(
+            (value) {
+          print(value);
+          final JsonResponse = json.decode(value);
+          if (JsonResponse is List) {
+            List<EmployeeMemberModel> response =
+            JsonResponse.map((e) => EmployeeMemberModel.fromJson(e))
+                .toList();
+            if (response != null &&
+                response.length > 0 &&
+                response[0].condition == "True") {
+              loading.value = false;
+              employee_Member_list.value=response;
+              //Get.toNamed(RoutesName.create_preventive_calender_view_screen);
+
+            } else {
+              loading.value = false;
+              employee_Member_list.value=[];
+              //Utils.showErrorToastification("Error!", "No Date Found");
+              //service_installation_details_list.value=[];
+            }
+          } else {
+            loading.value = false;
+            // service_indent_header_list.value = [];
+            Utils.showExceptionToastification("Api Error!", JsonResponse);
+          }
+        },
+      ).onError(
+            (error, stackTrace) {
+          print(error);
+          //service_indent_header_list.value = [];
+        },
+      );
+    } catch (e) {
+      loading.value = false;
+      employee_Member_list.value = [];
+      print(e);
+    }
+  }
 
   void getClustersGetByEmail() async{
     try{
@@ -348,8 +468,9 @@ class SalesForeCastVM extends GetxController{
             getFilterData();
           }
           else if(fromPage=="ForeCastItemScreen"){
-            filterQuoteIdController.value.text = SelectedQuoteList.map((e) => e.quoteId).join(' | ');
-            quoteIds = filterQuoteIdController.value.text;
+            /*filterQuoteIdController.value.text = SelectedQuoteList.map((e) => e.quoteId).join(' | ');
+            quoteIds = filterQuoteIdController.value.text;*/
+            filterQuoteIdController.value.text="";
             getForeCastQuoteList(0,"ALLQuoteLineItemsForSalesForecast");
           }
           else{
@@ -368,17 +489,21 @@ class SalesForeCastVM extends GetxController{
   }
   void getSalesForecastListGet(int page_no) async{
     try{
+      AccountOwnerForApi = '';
+      if(AccountOwner_controller.value.text.isNotEmpty){
+        AccountOwnerForApi = AccountOwner_controller.value.text.split(',').map((e) => e.trim()).join('|');
+      }
       Map<String, dynamic> data={
         "filter_sales_forecast_id":salesForceCastId.value.text.isEmpty? "":salesForceCastId.value.text,
         "filter_quote_id": "",
         "filter_sales_cycle_id": "",
-        "filter_month_year": "",
+        "filter_month_year": ""/*month_year_controller.value.text.isEmpty?"":month_year_controller.value.text*/,
         "filter_sales_forecast_status": foreCastStatus.value,
-        "filter_branch_head_value": "",
-        "filter_clusture_head_value": "",
-        "filter_created_by": email,
+       "filter_created_by": email,
         "filter_created_on": createdOnCnontroller.value.text.isEmpty?"":createdOnCnontroller.value.text,
-        "filter_created_by_new": isAdminWritePermission=="1"?"":email,
+        "filter_created_by_new": AccountOwnerForApi,
+        "filter_branch_head_value": RegionName_controller.value.text.isEmpty?"":RegionName_controller.value.text,
+        "filter_clusture_head_value": clusterName_controller.value.text.isEmpty?"":clusterName_controller.value.text,
         "row_per_page": rowsPerPage,
         "page_number": page_no
       };
@@ -441,6 +566,10 @@ class SalesForeCastVM extends GetxController{
 
   getQuoteList(int pageNumberForQuote,) async{
     try{
+      AccountOwnerForApi = '';
+      if(AccountOwner_controller.value.text.isNotEmpty){
+        AccountOwnerForApi = AccountOwner_controller.value.text.split(',').map((e) => e.trim()).join('|');
+      }
       Map data={
         "filter_quote_id": filterQuoteIdController.value.text.isEmpty?"":filterQuoteIdController.value.text,
         "filter_sales_cycle_id": filterQuoteSaleCycleController.value.text.isEmpty?"":filterQuoteSaleCycleController.value.text,
@@ -525,6 +654,13 @@ class SalesForeCastVM extends GetxController{
 
   getForeCastQuoteList(int pageNumberForQuote, String flagFilter) async{
     try{
+      if(filterQuoteIdController.value.text.isEmpty){
+        quoteIds = SelectedQuoteList.map((e) => e.quoteId).join(' | ');
+      }
+      else{
+        quoteIds = filterQuoteIdController.value.text;
+
+      }
       Map data={
         "filter_quote_id": quoteIds.isEmpty?"":quoteIds,
         "filter_sales_cycle_id": filterQuoteSaleCycleController.value.text.isEmpty?"":filterQuoteSaleCycleController.value.text,
@@ -784,7 +920,13 @@ class SalesForeCastVM extends GetxController{
   clearSaleFrrceCastListFilters(String fromPage){
     salesForceCastId.value.clear();
     createdOnCnontroller.value.clear();
+    createdOn_from_to_date_Controller.value.clear();
+    month_year_controller.value.clear();
+    AccountOwner_controller.value.clear();
+    searchController.value.clear();
+    AccountOwnerForApi='';
 
+    SelectedEmployee_Member_list.value = [];
     SelectedCluster_list.value=[];
     SelectedRegion_list.value=[];
     //RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join('|');
@@ -793,18 +935,17 @@ class SalesForeCastVM extends GetxController{
   }
 
 
-  void clearFilterData() {
-    filterDataChecker.value='';
-    sessionManagement.clearSaleForeCastData();
-  }
 
   RxString filterDataChecker = ''.obs;
   void SaveFilterData() async{
     await sessionManagement.saveSaleForeCastData({
       'salesForceCastId': salesForceCastId.value.text,
       'createdOnCnontroller': createdOnCnontroller.value.text,
+      'createdOn_from_to_date_Controller': createdOn_from_to_date_Controller.value.text,
+      'month_year_controller': month_year_controller.value.text,
       'region_name': RegionName_controller.value.text,
       'cluster_name': clusterName_controller.value.text,
+      'AccountOwner_controller': AccountOwner_controller.value.text,
 
     });
     filterDataChecker.value='';
@@ -814,11 +955,13 @@ class SalesForeCastVM extends GetxController{
 
   void getFilterData() async{
     Map getFilterData=await sessionManagement.getSaleForeCastData();
-
     if(getFilterData.isNotEmpty){
       filterDataChecker.value='1';
       salesForceCastId.value.text=getFilterData["salesForceCastId"]??"";
       createdOnCnontroller.value.text=getFilterData["createdOnCnontroller"]??"";
+      createdOn_from_to_date_Controller.value.text=getFilterData["createdOn_from_to_date_Controller"]??"";
+      month_year_controller.value.text=getFilterData["month_year_controller"]??"";
+      AccountOwner_controller.value.text=getFilterData["AccountOwner_controller"]??"";
 
 
       if(getFilterData["region_name"].toString().isNotEmpty && getFilterData["region_name"].toString()!=""){
@@ -833,43 +976,33 @@ class SalesForeCastVM extends GetxController{
     }
     getSalesForecastListGet(pageNumber,);
   }
+  void clearFilterData() {
+    filterDataChecker.value='';
+    sessionManagement.clearSaleForeCastData();
+  }
+
 
   void clearAllFieldOfQuoteFilter(String fromPage) {
+    searchController.value.clear();
+
     product_category_type_Controller.value.text="Contains";
+    productCategoryController.value.clear();
     parentProductCategoryController.value.clear();
     Selected_item_product_cat_list.value=[];
     parentItemCategorySelectedList.value=[];
 
     filterQuoteIdController.value.clear();
+    filterQuoteSaleCycleController.value.clear();
+    accountNameController.value.clear();
+    extClosureStartToEnd.value='';
+    filterQuoteValidityController.value.clear();
+    quoteValidityStartToEnd.value="";
+    createdOnCnontroller.value.clear();
+    createdOnStartToEnd.value='';
+    accountCodeController.value.clear();
     filterQuoteVersionController.value.clear();
     filterExpectedClosuredateController.value.clear();
-    filterQuoteValidityController.value.clear();
-    accountNameController.value.clear();
-    accountCodeController.value.clear();
-    rh_Approval_controller.value.clear();
-    cbh_Approval_controller.value.clear();
-    category_Approval_controller.value.clear();
-    gm_Approval_controller.value.clear();
-    productCategoryController.value.clear();
-    createdOnCnontroller.value.clear();
-    filterQuoteSaleCycleController.value.clear();
-    createdByCnontroller.value.clear();
-    quoteStatusController.value.clear();
-    createdOnStartToEnd.value = "";
-    extClosureStartToEnd.value = "";
-    quoteValidityStartToEnd.value = "";
-    itemCodeController.value.clear();
-    itemNameController.value.clear();
-    quantityFilterController.value.clear();
-    GmDiscountPerController.value.clear();
-    BmDiscountPerController.value.clear();
-    SalesCreditController.value.clear();
-    LSPFilterController.value.clear();
-    BTPFilterController.value.clear();
-    MAPFilterController.value.clear();
-    StandardCostController.value.clear();
-
-    filterQuoteAcceptedController.value.clear();
+    extClosureStartToEnd.value='';
 
     SelectedCluster_list.value = [];
     SelectedRegion_list.value = [];
@@ -882,28 +1015,22 @@ class SalesForeCastVM extends GetxController{
   void saveSalesForceCastQuoteData() async{
     await sessionManagement.saveSalesForceCastQuoteData({
       'filterQuoteIdController': filterQuoteIdController.value.text,
-      'filterQuoteVersionController': filterQuoteVersionController.value.text,
       'filterQuoteSaleCycleController': filterQuoteSaleCycleController.value.text,
       'customer_name': accountNameController.value.text,
-      'customer_code': accountCodeController.value.text,
-      'quoteStatusController': quoteStatusController.value.text,
       'filterQuoteValidityController': filterQuoteValidityController.value.text,
       'quoteValidityStartToEnd': quoteValidityStartToEnd.value,
-      'filterExpectedClosuredateController': filterExpectedClosuredateController.value.text,
-      'extClosureStartToEnd': extClosureStartToEnd.value,
-      'rh_Approval_controller': rh_Approval_controller.value.text,
-      'cbh_Approval_controller': cbh_Approval_controller.value.text,
-      'category_Approval_controller': category_Approval_controller.value.text,
-      'gm_Approval_controller': gm_Approval_controller.value.text,
-      'region_name': RegionName_controller.value.text,
-      'cluster_name': clusterName_controller.value.text,
-      'createdByCnontroller': createdByCnontroller.value.text,
       'createdOn_Controller': createdOnCnontroller.value.text,
       'createdOnStartToEnd': createdOnStartToEnd.value,
+      'customer_code': accountCodeController.value.text,
+      'filterQuoteVersionController': filterQuoteVersionController.value.text,
+      'filterExpectedClosuredateController': filterExpectedClosuredateController.value.text,
+      'extClosureStartToEnd': extClosureStartToEnd.value,
+      'region_name': RegionName_controller.value.text,
+      'cluster_name': clusterName_controller.value.text,
       'product_category': productCategoryController.value.text,
-      'parentProductCategoryController': parentProductCategoryController.value.text,
       'product_category_type': product_category_type_Controller.value.text,
-      'filterQuoteAcceptedController': filterQuoteAcceptedController.value.text,
+      'parentProductCategoryController': parentProductCategoryController.value.text,
+
     });
     filterDataChecker.value='';
     pageNumberForQuote = 0;
@@ -916,26 +1043,20 @@ class SalesForeCastVM extends GetxController{
     if(getFilterData.isNotEmpty){
       filterDataChecker.value='1';
       filterQuoteIdController.value.text=getFilterData["filterQuoteIdController"]??"";
-      filterQuoteVersionController.value.text=getFilterData["filterQuoteVersionController"]??"";
       filterQuoteSaleCycleController.value.text=getFilterData["filterQuoteSaleCycleController"]??"";
       accountNameController.value.text=getFilterData["customer_name"]??"";
-      accountCodeController.value.text=getFilterData["customer_code"]??"";
-      quoteStatusController.value.text=getFilterData["quoteStatusController"]??"";
       filterQuoteValidityController.value.text=getFilterData["filterQuoteValidityController"]??"";
       quoteValidityStartToEnd.value=getFilterData["quoteValidityStartToEnd"]??"";
-      extClosureStartToEnd.value=getFilterData["extClosureStartToEnd"]??"";
-      filterExpectedClosuredateController.value.text=getFilterData["filterExpectedClosuredateController"]??"";
-      rh_Approval_controller.value.text=getFilterData["rh_Approval_controller"]??"";
-      cbh_Approval_controller.value.text=getFilterData["cbh_Approval_controller"]??"";
-      category_Approval_controller.value.text=getFilterData["category_Approval_controller"]??"";
-      gm_Approval_controller.value.text=getFilterData["gm_Approval_controller"]??"";
-      createdByCnontroller.value.text=getFilterData["createdByCnontroller"]??"";
       createdOnCnontroller.value.text=getFilterData["createdOn_Controller"]??"";
       createdOnStartToEnd.value=getFilterData["createdOnStartToEnd"]??"";
+      accountCodeController.value.text=getFilterData["customer_code"]??"";
+      filterQuoteVersionController.value.text=getFilterData["filterQuoteVersionController"]??"";
+      filterExpectedClosuredateController.value.text=getFilterData["filterExpectedClosuredateController"]??"";
+      extClosureStartToEnd.value=getFilterData["extClosureStartToEnd"]??"";
       productCategoryController.value.text=getFilterData["product_category"]??"";
-      parentProductCategoryController.value.text=getFilterData["parentProductCategoryController"]??"";
       product_category_type_Controller.value.text=getFilterData["product_category_type"]??"";
-      filterQuoteAcceptedController.value.text=getFilterData["filterQuoteAcceptedController"]??"";
+      parentProductCategoryController.value.text=getFilterData["parentProductCategoryController"]??"";
+
 
       if(getFilterData["region_name"].toString().isNotEmpty && getFilterData["region_name"].toString()!=""){
         RegionName_controller.value.text = "";
@@ -960,43 +1081,15 @@ class SalesForeCastVM extends GetxController{
   }
 
   void clearAllFieldForecastItemFilter(String fromPage) {
-
-
     product_category_type_Controller.value.text="Contains";
     parentProductCategoryController.value.clear();
     Selected_item_product_cat_list.value=[];
     parentItemCategorySelectedList.value=[];
+    productCategoryController.value.clear();
 
     filterQuoteIdController.value.clear();
-    filterQuoteVersionController.value.clear();
-    filterExpectedClosuredateController.value.clear();
-    filterQuoteValidityController.value.clear();
-    accountNameController.value.clear();
-    accountCodeController.value.clear();
-    rh_Approval_controller.value.clear();
-    cbh_Approval_controller.value.clear();
-    category_Approval_controller.value.clear();
-    gm_Approval_controller.value.clear();
-    productCategoryController.value.clear();
-    createdOnCnontroller.value.clear();
     filterQuoteSaleCycleController.value.clear();
-    createdByCnontroller.value.clear();
-    quoteStatusController.value.clear();
-    createdOnStartToEnd.value = "";
-    extClosureStartToEnd.value = "";
-    quoteValidityStartToEnd.value = "";
     itemCodeController.value.clear();
-    itemNameController.value.clear();
-    quantityFilterController.value.clear();
-    GmDiscountPerController.value.clear();
-    BmDiscountPerController.value.clear();
-    SalesCreditController.value.clear();
-    LSPFilterController.value.clear();
-    BTPFilterController.value.clear();
-    MAPFilterController.value.clear();
-    StandardCostController.value.clear();
-
-    filterQuoteAcceptedController.value.clear();
 
     SelectedCluster_list.value = [];
     SelectedRegion_list.value = [];
@@ -1023,7 +1116,6 @@ class SalesForeCastVM extends GetxController{
 
 
   }
-
   void getForceCastItemData() async{
     Map getFilterData=await sessionManagement.getForceCastItemData();
     if(getFilterData.isNotEmpty){
@@ -1051,8 +1143,6 @@ class SalesForeCastVM extends GetxController{
     getQuoteList(pageNumberForQuote,);
 
   }
-
-
   clearForeCastItemData(){
     filterDataChecker.value='';
     sessionManagement.clearForceCastItemData();
