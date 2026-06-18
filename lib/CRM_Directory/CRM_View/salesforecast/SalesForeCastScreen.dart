@@ -217,7 +217,7 @@ class SalesForceCastScreen extends StatelessWidget{
     }
   }
   Widget BindCustomerRequestListView(context, int position) {
-    var createdOn=StaticMethod.dateTimeToDate(sales_force_cast_vm.sales_force_cast_list[position].createdOn??"");
+    var createdOn=StaticMethod.onlyDate(sales_force_cast_vm.sales_force_cast_list[position].createdOn??"");
     return Card(
       margin: EdgeInsets.all(5),
       child: ListTile(
@@ -786,7 +786,15 @@ class SalesForceCastScreen extends StatelessWidget{
         },
         child: InputDecorator(
           decoration: InputDecoration(
-            labelText: "Cluster Name", // 👈 Label restored here
+            labelText: "Cluster Name",
+            hintStyle: GoogleFonts.poppins(
+                color: AllColors.lightblackColor,
+                fontWeight: FontWeight.w300,
+                fontSize: AllFontSize.ten),
+            labelStyle: GoogleFonts.poppins(
+                color: AllColors.primaryDark1,
+                fontWeight: FontWeight.w500,
+                fontSize: AllFontSize.sisxteen),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
             ),
@@ -1023,7 +1031,15 @@ class SalesForceCastScreen extends StatelessWidget{
         },
         child: InputDecorator(
           decoration: InputDecoration(
-            labelText: "Region Name", // 👈 Label like before
+            labelText: "Region Name",
+            hintStyle: GoogleFonts.poppins(
+                color: AllColors.lightblackColor,
+                fontWeight: FontWeight.w300,
+                fontSize: AllFontSize.ten),
+            labelStyle: GoogleFonts.poppins(
+                color: AllColors.primaryDark1,
+                fontWeight: FontWeight.w500,
+                fontSize: AllFontSize.sisxteen),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
             ),
@@ -1062,6 +1078,7 @@ class SalesForceCastScreen extends StatelessWidget{
     return Obx(() {
       if (sales_force_cast_vm.AccountOwner_controller.value.text.isNotEmpty && sales_force_cast_vm.filterDataChecker.value=='1') {
         List<String> nameList = sales_force_cast_vm.AccountOwner_controller.value.text.split(',');
+        //List<String> nameList = sales_force_cast_vm.accountNameCode.split(',');
         sales_force_cast_vm.SelectedEmployee_Member_list.value = List.generate(nameList.length, (index) {
           return EmployeeMemberModel(
             userFullName: nameList[index].trim(),
@@ -1078,7 +1095,15 @@ class SalesForceCastScreen extends StatelessWidget{
         },
         child: InputDecorator(
           decoration: InputDecoration(
-            labelText: selectedText != null ?  "Created By": "", // 👈 Label restored here
+            labelText: selectedText != null ?  "Created By": "",
+            hintStyle: GoogleFonts.poppins(
+                color: AllColors.lightblackColor,
+                fontWeight: FontWeight.w300,
+                fontSize: AllFontSize.ten),
+            labelStyle: GoogleFonts.poppins(
+                color: AllColors.primaryDark1,
+                fontWeight: FontWeight.w500,
+                fontSize: AllFontSize.sisxteen),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
             ),
@@ -1278,8 +1303,9 @@ class SalesForceCastScreen extends StatelessWidget{
                               Expanded(
                                 child: ElevatedButton(
                                   onPressed: () {
-                                    sales_force_cast_vm.SelectedEmployee_Member_list
-                                        .assignAll(sales_force_cast_vm.tempSelected);
+                                    sales_force_cast_vm.SelectedEmployee_Member_list.assignAll(sales_force_cast_vm.tempSelected);
+                                    sales_force_cast_vm.accountNameCode= sales_force_cast_vm.tempSelected.map((nameCode)
+                                    =>"${sales_force_cast_vm.isAdminWritePermission=="1"?nameCode.userFullName??"":nameCode.fullName??""}(${nameCode.empId})" ).join(', ') ;
                                     sales_force_cast_vm.AccountOwner_controller.value.text =
                                         sales_force_cast_vm.tempSelected.map((e) => e.empId).join(', ');
 

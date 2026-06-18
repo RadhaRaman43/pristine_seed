@@ -227,7 +227,7 @@ class SalesForceHeaderDetails extends StatelessWidget{
     }
   }
   Widget BindSalesData(BuildContext context) {
-    var createdOn=StaticMethod.dateTimeToDate(sales_force_cast_vm.salesForceCastHeader_list[0].createdOn??"");
+    var createdOn=StaticMethod.onlyDate(sales_force_cast_vm.salesForceCastHeader_list[0].createdOn??"");
     return Container(
       width: double.infinity,
       child: Column(
@@ -316,7 +316,6 @@ class SalesForceHeaderDetails extends StatelessWidget{
 
 
   Widget bindForeCastLinesData(BuildContext context) {
-
     if (sales_force_cast_vm.salesForceCastHeader_list[0].lines!.isNotEmpty && sales_force_cast_vm.salesForceCastHeader_list[0].lines!.length > 0) {
       return Obx(
             () {
@@ -370,7 +369,9 @@ class SalesForceHeaderDetails extends StatelessWidget{
             _buildLabelWithValue(label: "Item Category : ", value: sales_force_cast_vm.salesForceCastHeader_list[0].lines?[index].itemCategoryCode ?? "",),
             _buildLabelWithValue(label: "Quote Qty : ", value: sales_force_cast_vm.salesForceCastHeader_list[0].lines?[index].quoteQty.toInt().toString() ?? "",),
             _buildLabelWithValue(label: "Approved Price : ", value: sales_force_cast_vm.salesForceCastHeader_list[0].lines?[index].quoteApprovedAmountPerUnit.toString() ?? "",index: index),
-            _buildLabelWithValue(label: "Item Variant : ", value: sales_force_cast_vm.salesForceCastHeader_list[0].lines?[index].itemVarient ?? "",),
+            bindEditableData(label: "Item Variant : ",
+              value: sales_force_cast_vm.salesForceCastHeader_list[0].lines?[index].itemVarient ?? "",context: context,index: index
+            ),
             _buildLabelWithValue(label: "Region Name : ", value: sales_force_cast_vm.salesForceCastHeader_list[0].lines?[index].requiredRegionName ?? "",),
             _buildLabelWithValue(label: "Cluster  Name : ", value: sales_force_cast_vm.salesForceCastHeader_list[0].lines?[index].requiredClusterName ?? "",),
             ...sales_force_cast_vm.salesForceCastHeader_list[0].lines![index].forecastMonths
@@ -422,55 +423,166 @@ class SalesForceHeaderDetails extends StatelessWidget{
             ),
           ),
         ),
-        Visibility(visible:(label=='Item Variant : ' && value.isNotEmpty),child: const SizedBox(width: 8),),
-        Visibility(visible:label=='Item Variant : ',child: GestureDetector(
-          onTap: (){
-            showDialogForChangeVarient(context!,index);
-          },
-            child:(value.isEmpty || value==null)? 
-            Icon(Icons.add_circle_sharp,color: AllColors.primaryDark1,):Icon(Icons.edit,color: AllColors.primaryDark1,size: 15,)))
 
       ],
     );
   }
-  showDialogForChangeVarient(BuildContext context, int index,){
+  Widget bindEditableData({
+    required String label,
+    required String value,
+    Color color = AllColors.textColor,
+    required BuildContext context,
+    required int index
+  }) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          label,
+          style: GoogleFonts.poppins(
+            color: AllColors.primaryDark1,
+            fontSize: AllFontSize.fourtine,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+
+        Flexible(
+            child: Align(
+              alignment: Alignment.centerRight,
+              child: Tooltip(
+                message: value ?? "",
+                child: Text(
+                  value ?? "",
+                  overflow: TextOverflow.ellipsis,
+                  style: GoogleFonts.poppins(
+                    color: color,
+                    fontSize: AllFontSize.fourtine,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        const SizedBox(width: 10),
+        Visibility(
+           visible:value.isNotEmpty ,
+           child: GestureDetector(
+              onTap: (){
+                sales_force_cast_vm.itemVariantCtrl.value.text=value;
+                sales_force_cast_vm.editableDataApi(sales_force_cast_vm.salesForceCastHeader_list[0].lines![index],"edit");
+                showDialogForChangeVarient(context,index,"Edit Item Variant");
+              },
+              child: Icon(Icons.edit,color: AllColors.yellowColor,size: 15,)),
+         ),
+        const SizedBox(width: 10),
+        GestureDetector(
+            onTap: (){
+              sales_force_cast_vm.itemVariantCtrl.value.text="";
+              sales_force_cast_vm.editableDataApi(sales_force_cast_vm.salesForceCastHeader_list[0].lines![index],"add");
+              showDialogForChangeVarient(context,index,"Add Item Variant");
+            },
+            child:
+            Icon(Icons.add_circle_sharp,color: AllColors.bluegrayColor,)),
+
+      ],
+    );
+  }
+  showDialogForChangeVarient(BuildContext context, int index, String title,){
     showDialog(
       context: context,
+      barrierDismissible: false,
       builder: (context) {
         return AlertDialog(
-          title: Row(
+          title: Column(
             children: [
-              Container(
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  color: Colors.green.shade100, // light red background
-                  shape: BoxShape.circle,
-                ),
-                child: const Icon(
-                  Icons.info_outline,
-                  color: Colors.green,
-                  size: 28,
-                ),
+              Row(
+               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(title,
+                    style: GoogleFonts.poppins(
+                        color: AllColors.primaryDark1,
+                        fontSize: AllFontSize.sisxteen,
+                        fontWeight: FontWeight.w700),
+                  ),
+                  GestureDetector(
+                    onTap: (){
+                      Navigator.pop(context);
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: Colors.red.shade100, // light red background
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(
+                        Icons.close,
+                        color: Colors.red,
+                        size: 16,
+                      ),
+                    ),
+                  ),
+                ],
               ),
-              SizedBox(width: 20,),
-              Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                  ],
-                ),
-              ),
+              const SizedBox(height: 5,),
+              Divider(height: 1,),
+              const SizedBox(height: 20,),
+
+              bindFilterData(sales_force_cast_vm.itemVariantCtrl.value,'Item Variant'),
 
             ],
           ),
           actions: <Widget>[
             TextButton(
               onPressed: () {
+                if(sales_force_cast_vm.itemVariantCtrl.value.text.isNotEmpty) {
+                  if(title=="Add Item Variant") {
+                    for (int i = 0; i < sales_force_cast_vm.quoteDowExcelList.length; i++) {
+                      sales_force_cast_vm.quoteDowExcelList[i].lineNo=0;
+                      sales_force_cast_vm.quoteDowExcelList[i].itemVarient=sales_force_cast_vm.itemVariantCtrl.value.text;
+                    }
+                  }
+                  else{
+                    for (int i = 0; i < sales_force_cast_vm.quoteDowExcelList.length; i++) {
+                      sales_force_cast_vm.quoteDowExcelList[i].itemVarient=sales_force_cast_vm.itemVariantCtrl.value.text;
+                    }
+                  }
+                  //sales_force_cast_vm.SalesForecastUploadItem(sales_force_cast_vm.quoteDowExcelList);
+                }
+                else{
+                  Utils.sanckBarSuccess("Upload!", "Please enter Item Variant");
+                }
+
                Navigator.pop(context);
 
               },
-              child: Text("Complete",style: TextStyle(color: AllColors.greenblue),),
+              child:Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 30,
+                  vertical: 8,
+                ),
+                decoration: BoxDecoration(
+                  color: Colors.green.shade100,
+                  border: Border.all(
+                    color: Colors.green,
+                  ),
+                  borderRadius: BorderRadius.circular(50),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.green.shade100,
+                      blurRadius: 2,
+                      offset: const Offset(0, 1),
+                    ),
+                  ],
+                ),
+                child: Text(
+                  "Add",
+                  style: TextStyle(
+                    color: Colors.green,
+                    fontSize: AllFontSize.fourtine,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              )
             ),
           ],
         );

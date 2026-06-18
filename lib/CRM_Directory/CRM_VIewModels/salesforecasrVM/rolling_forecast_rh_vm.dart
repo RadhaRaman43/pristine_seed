@@ -35,6 +35,7 @@ class RollingForeCastRHVM extends GetxController{
   RxString isHeadofficePermission = "".obs;
   RxBool excelLoading = false.obs;
   RxDouble excelProgress = 0.0.obs;
+  RxString createdOnStartToEnd = "".obs;
 
   var itemCategoryCodeForApi;
   var ParentProductCategoryForApi;
@@ -94,7 +95,6 @@ class RollingForeCastRHVM extends GetxController{
     getItemCategoryMstWithoutTaskIdApi();
     getParentItemCategoryMstGet();
     getClustersGetByEmail();
-    SalesForecastLinesGetNew(0);
   }
   getCurrentDate(){
     DateTime now = DateTime.now();
@@ -244,7 +244,7 @@ class RollingForeCastRHVM extends GetxController{
       }
       ParentProductCategoryForApi='';
       if(parentCategoryCodeController.value.text.isNotEmpty){
-        itemCategoryCodeForApi = parentCategoryCodeController.value.text
+        ParentProductCategoryForApi = parentCategoryCodeController.value.text
             .split(',')
             .map((e) => e.trim())
             .join('|');
@@ -255,10 +255,8 @@ class RollingForeCastRHVM extends GetxController{
         "filter_sales_cycle_id": saleCycleController.value.text.isEmpty?"": saleCycleController.value.text,
         "filter_account_code": "",
         "filter_account_name": customerNameController.value.text.isEmpty?"": customerNameController.value.text,
-        "filter_branch_head_value": RegionName_controller.value.text.isEmpty?"": RegionName_controller.value.text,
-        "filter_clusture_head_value": clusterName_controller.value.text.isEmpty?"": clusterName_controller.value.text,
         "filter_created_by": "",
-        "filter_created_on": createdOnController.value.text.isEmpty?"":createdOnController.value.text,
+        "filter_created_on": createdOnStartToEnd.value,
         "filter_item_code": itemCodeController.value.text.isEmpty?"":itemCodeController.value.text,
         "filter_item_name":itemNameController.value.text.isEmpty?"":itemNameController.value.text,
         "filter_item_varient": itemVarient_Ctrl.value.text.isEmpty?"":itemVarient_Ctrl.value.text,
@@ -273,7 +271,10 @@ class RollingForeCastRHVM extends GetxController{
         "filter_exp_closure_date": "",
         "filter_approved_by": "",
         "filter_approved_on": "",
-        "filter_flag": "string",
+        "filter_flag": "",
+        "filter_branch_head_value": RegionName_controller.value.text.isEmpty?"": RegionName_controller.value.text,
+        "filter_clusture_head_value": clusterName_controller.value.text.isEmpty?"": clusterName_controller.value.text,
+
         "row_per_page": rowsPerPage,
         "page_number": page_no
       };
@@ -317,6 +318,7 @@ class RollingForeCastRHVM extends GetxController{
      closerMonth_Ctrl.value.clear();
      closerYear_Ctrl.value.clear();
      createdOnController.value.clear();
+     createdOnStartToEnd.value='';
      requiredRegionNameController.value.clear();
 
      item_category_type_controller.value.text = "Contains";
@@ -354,6 +356,7 @@ class RollingForeCastRHVM extends GetxController{
       'monthNameForApi': monthNameForApi,
       'closerYear_Ctrl': closerYear_Ctrl.value.text,
       'createdOnController': createdOnController.value.text,
+      'createdOnStartToEnd': createdOnStartToEnd.value,
       'requiredRegionNameController': requiredRegionNameController.value.text,
       'region_name': RegionName_controller.value.text,
       'cluster_name': clusterName_controller.value.text,
@@ -377,7 +380,7 @@ class RollingForeCastRHVM extends GetxController{
       itemCodeController.value.text=getFilterData["itemCodeController"]??"";
       itemNameController.value.text=getFilterData["itemNameController"]??"";
       qtyController.value.text=getFilterData["qtyController"]??"";
-      itemVarient_Ctrl.value.text=getFilterData["qtyController"]??"";
+      itemVarient_Ctrl.value.text=getFilterData["itemVarient_Ctrl"]??"";
       itemCategoryCodeController.value.text=getFilterData["itemCategoryCodeController"]??"";
       item_category_type_controller.value.text=getFilterData["item_category_type_controller"]??"";
       parentCategoryCodeController.value.text=getFilterData["parentCategoryCodeController"]??"";
@@ -385,6 +388,7 @@ class RollingForeCastRHVM extends GetxController{
       monthNameForApi=getFilterData["monthNameForApi"]??"";
       closerYear_Ctrl.value.text=getFilterData["closerYear_Ctrl"]??"";
       createdOnController.value.text=getFilterData["createdOnController"]??"";
+      createdOnStartToEnd.value=getFilterData["createdOnStartToEnd"]??"";
       requiredRegionNameController.value.text=getFilterData["requiredRegionNameController"]??"";
 
 

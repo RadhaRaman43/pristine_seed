@@ -53,6 +53,7 @@ class SalesForeCastVM extends GetxController{
   String monthNameForApi = "";
   RxBool excelLoading = false.obs;
   RxDouble excelProgress = 0.0.obs;
+  String accountNameCode='';
 
   RxString foreCastStatus = "Pending".obs;
   RxList<SalesForceCastListModal> sales_force_cast_list  = <SalesForceCastListModal>[].obs;
@@ -70,6 +71,9 @@ class SalesForeCastVM extends GetxController{
   RxList<ForecastCreateResponseModal> forcastResponseList=<ForecastCreateResponseModal>[].obs;
   RxList<ForeCastQuoteDowExcelModal> quoteDowExcelList=<ForeCastQuoteDowExcelModal>[].obs;
   ForeCastQuoteDowExcelModal item= ForeCastQuoteDowExcelModal();
+
+  var itemVariantCtrl = TextEditingController().obs;
+
   //filter fields
   var salesForceCastId = TextEditingController().obs;
   var createdOnCnontroller = TextEditingController().obs;
@@ -925,6 +929,7 @@ class SalesForeCastVM extends GetxController{
     AccountOwner_controller.value.clear();
     searchController.value.clear();
     AccountOwnerForApi='';
+    accountNameCode='';
 
     SelectedEmployee_Member_list.value = [];
     SelectedCluster_list.value=[];
@@ -946,6 +951,7 @@ class SalesForeCastVM extends GetxController{
       'region_name': RegionName_controller.value.text,
       'cluster_name': clusterName_controller.value.text,
       'AccountOwner_controller': AccountOwner_controller.value.text,
+      'accountNameCode': accountNameCode,
 
     });
     filterDataChecker.value='';
@@ -962,6 +968,7 @@ class SalesForeCastVM extends GetxController{
       createdOn_from_to_date_Controller.value.text=getFilterData["createdOn_from_to_date_Controller"]??"";
       month_year_controller.value.text=getFilterData["month_year_controller"]??"";
       AccountOwner_controller.value.text=getFilterData["AccountOwner_controller"]??"";
+      accountNameCode=getFilterData["accountNameCode"]??"";
 
 
       if(getFilterData["region_name"].toString().isNotEmpty && getFilterData["region_name"].toString()!=""){
@@ -1199,6 +1206,50 @@ class SalesForeCastVM extends GetxController{
     }
 
   }
+
+  editableDataApi(Lines lineData, String editTpeFlag) async{
+   try{
+      Map data={
+        "filter_sales_forecast_id": forceCastId,
+        "filter_quote_id": lineData.quoteId??"",
+        "filter_sales_cycle_id": lineData.salesCycleId??"",
+        "filter_closure_month": "",
+        "filter_closure_year": "",
+        "filter_item_code": lineData.itemCode??"",
+        "filter_item_name": lineData.itemName??"",
+        "filter_item_varient": lineData.itemVarient??"",
+        "filter_item_category_type": "",
+        "filter_item_category_code": lineData.itemCategoryCode??"",
+        "filter_item_parent_category_code":lineData.itemParentCategoryCode??"",
+        "filter_required_region_name": lineData.requiredRegionName??"",
+        "filter_required_cluster_name": lineData.requiredClusterName??""
+      };
+      loading.value=true;
+      debugPrint("print values ${data}");
+      String onValue = await _api.SalesForecastLinesGetForUpload(data, sessionManagement);
+      final jsonResponse = json.decode(onValue);
+      print(onValue);
+      if(jsonResponse is List){
+        List<ForeCastQuoteDowExcelModal> response = jsonResponse.map((e) => ForeCastQuoteDowExcelModal.fromJson(e)).toList();
+        if(response!= null && response.length>0 && response[0].condition=="True"){
+          quoteDowExcelList.value = response;
+          debugPrint("excel length.... ${quoteDowExcelList.length}");
+
+          //Utils.sanckBarSuccess("Successfully", response[0].message.toString());
+        }else {
+          // Utils.sanckBarError("Data Not Found", response[0].message.toString());
+        }
+      }
+    }catch(e){
+      print(e);
+      Utils.sanckBarError("Exception!", e.toString());
+    }
+    finally{
+      loading.value = false;
+    }
+
+  }
+
   Future<void> downloadForeCastLineDetaisForUploadWithProgress(BuildContext context, String sheetName, String saveFileName) async {
     try {
       excelLoading.value = true;
@@ -1443,12 +1494,12 @@ class SalesForeCastVM extends GetxController{
     );
   }
 
-  SalesForecastUploadItem(ForeCastQuoteDowExcelModal item, List<ForeCastQuoteDowExcelModal> modelList) async{
+  SalesForecastUploadItem(List<ForeCastQuoteDowExcelModal> modelList) async{
     try{
       List<Map<String,dynamic>> lines = [];
       for(int i=0;i<modelList.length;i++){
         Map<String,dynamic> input = {
-          "line_no": modelList[i].lineNo==0?"-1":modelList[i].lineNo.toString(),
+          "line_no": modelList[i].lineNo==0||modelList[i].lineNo.toString().isEmpty?"-1":modelList[i].lineNo.toString(),
           "quote_id":  modelList[i].quoteId,
           "quote_line_no":  modelList[i].quoteLineNo.toString(),
           "closure_month":  modelList[i].closureMonth,
@@ -1504,7 +1555,7 @@ class SalesForeCastVM extends GetxController{
       if(excelData.length>=1 && excelData!=null) {
         List<ForeCastQuoteDowExcelModal> modelList = convertToModel(excelData);
         if (modelList[0].quoteId!.isNotEmpty) {
-          SalesForecastUploadItem(item, modelList);
+          SalesForecastUploadItem(modelList);
         }
         else{
           Utils.sanckBarError("Data Input Error!", "Can't insert null value into column 'account code'");

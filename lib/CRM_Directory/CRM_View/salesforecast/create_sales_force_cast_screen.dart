@@ -1732,7 +1732,7 @@ class CreateSalesForceCastScreen extends StatelessWidget{
         contentPadding: EdgeInsets.symmetric(
             vertical: AllFontSize.two, horizontal: AllFontSize.ten),
         suffixIcon: Icon(Icons.calendar_month),
-        hintText: 'Select Start Date -End Date',
+        hintText: 'Select Start Date - End Date',
         labelText: 'Created On',
         hintStyle: GoogleFonts.poppins(
             color: AllColors.lightblackColor,
@@ -1772,7 +1772,6 @@ class CreateSalesForceCastScreen extends StatelessWidget{
             );
           },
         );
-
         if (picked != null) {
           final startDate = DateFormat('yyyy-MM-dd').format(picked.start);
           final endDate = DateFormat('yyyy-MM-dd').format(picked.end);

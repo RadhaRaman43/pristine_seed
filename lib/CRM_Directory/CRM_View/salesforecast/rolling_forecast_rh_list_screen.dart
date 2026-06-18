@@ -28,8 +28,7 @@ class RollingForeCastRHListScreen extends StatelessWidget{
     return WillPopScope(onWillPop:  () async {
       Get.toNamed(RoutesName.homeScreen);
       return false;
-    },
-        child: Scaffold(
+    }, child: Scaffold(
           appBar: AppBar(
               backgroundColor: AllColors.primaryDark1,
               iconTheme: IconThemeData(
@@ -48,10 +47,7 @@ class RollingForeCastRHListScreen extends StatelessWidget{
                   Spacer(),
                   IconButton(onPressed: () {
                     rh_vm.downloadForeCastLineDetaisForUploadWithProgress(context,'Rolling Forecast RH Data','Rolling Forecast RH Data');
-
-
                   }, icon: Icon(Icons.download)),
-
                   IconButton(onPressed: () {
                     showFilterBottomSheet(context);
                   }, icon: Icon(Icons.filter_alt_sharp))
@@ -142,7 +138,7 @@ class RollingForeCastRHListScreen extends StatelessWidget{
     }
   }
   Widget BindCustomerRequestListView(context, int position) {
-    var createdOn=StaticMethod.dateTimeToDate(rh_vm.rolling_fore_cast_list[position].createdOn??"");
+    var createdOn=StaticMethod.onlyDate(rh_vm.rolling_fore_cast_list[position].createdOn??"");
     return Card(
       margin: EdgeInsets.all(5),
       child: ListTile(
@@ -188,12 +184,13 @@ class RollingForeCastRHListScreen extends StatelessWidget{
           children: [
             _buildLabelWithValue(label: "Quote Id : ", value: rh_vm.rolling_fore_cast_list[position].quoteId??"",),
             _buildLabelWithValue(label: "Sale Cycle Id : ", value: rh_vm.rolling_fore_cast_list[position].salesCycleId??"",),
-            _buildLabelWithValue(label: "Customer Name : ", value: rh_vm.rolling_fore_cast_list[position].clusterName??"",),
+            _buildLabelWithValue(label: "Customer Name : ", value: rh_vm.rolling_fore_cast_list[position].accountName??"",),
             _buildLabelWithValue(label: "Cluster Name : ", value: rh_vm.rolling_fore_cast_list[position].clusterName??"",),
             _buildLabelWithValue(label: "Region Name : ", value: rh_vm.rolling_fore_cast_list[position].regionName??"",),
             _buildLabelWithValue(label: "Created By : ", value: rh_vm.rolling_fore_cast_list[position].createdFullName??"",),
             _buildLabelWithValue(label: "Item Code : ", value: rh_vm.rolling_fore_cast_list[position].itemCode??"",),
             _buildLabelWithValue(label: "Item Name : ", value: rh_vm.rolling_fore_cast_list[position].itemName??"",),
+            _buildLabelWithValue(label: "Qty : ", value: (rh_vm.rolling_fore_cast_list[position].qty.toInt().toString())??"",),
             _buildLabelWithValue(label: "Item Variant : ", value: rh_vm.rolling_fore_cast_list[position].itemVarient??"",),
             _buildLabelWithValue(label: "Parent Category Code : ", value: rh_vm.rolling_fore_cast_list[position].itemParentCategoryCode??"",),
             _buildLabelWithValue(label: "Item Category Code : ", value: rh_vm.rolling_fore_cast_list[position].itemCategoryCode??"",),
@@ -329,17 +326,16 @@ class RollingForeCastRHListScreen extends StatelessWidget{
                               const SizedBox(height: 10,),
                               bindItemProductCategoryFilter(context),
                               const SizedBox(height: 10,),
-                              bindDropDownType(context,rh_vm.closerYear_Ctrl.value,
+                              bindDropDownType(context,rh_vm.item_category_type_controller.value,
                                   'Product Category Type',rh_vm.productCategoryTypeList),
                               const SizedBox(height: 10,),
                               bindParentProductCategoryFilter(context),
                               const SizedBox(height: 10,),
-                              bindDropDownType(context,rh_vm.closerMonth_Ctrl.value,
-                                  'Closure Month',rh_vm.months),
+                              bindDropDownType(context,rh_vm.closerMonth_Ctrl.value, 'Closure Month',rh_vm.months),
                               const SizedBox(height: 10,),
                               bindDropDownType(context,rh_vm.closerYear_Ctrl.value, 'Closure Year',rh_vm.years),
                               const SizedBox(height: 10,),
-                              bindCreatedOn(context),
+                              filterWithQuoteCreatedOn(context),
                               const SizedBox(height: 10,),
                               bindFilterData(rh_vm.requiredRegionNameController.value, 'Required Region Name'),
 
@@ -522,6 +518,69 @@ class RollingForeCastRHListScreen extends StatelessWidget{
 
     );
   }
+  filterWithQuoteCreatedOn(BuildContext context) {
+    return TextField(
+      cursorColor: AllColors.primaryDark1,
+      controller: rh_vm.createdOnController.value,
+      readOnly: true,
+      decoration: InputDecoration(
+        contentPadding: EdgeInsets.symmetric(
+            vertical: AllFontSize.two, horizontal: AllFontSize.ten),
+        suffixIcon: Icon(Icons.calendar_month),
+        hintText: 'Select Start Date - End Date',
+        labelText: 'Created On',
+        hintStyle: GoogleFonts.poppins(
+            color: AllColors.lightblackColor,
+            fontWeight: FontWeight.w300,
+            fontSize: AllFontSize.ten),
+        labelStyle: GoogleFonts.poppins(
+            color: AllColors.primaryDark1,
+            fontWeight: FontWeight.w500,
+            fontSize: AllFontSize.sisxteen),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+        ),
+      ),
+      onTap: () async {
+        FocusScope.of(context).requestFocus(FocusNode()); // hide keyboard
+        DateTimeRange? picked = await showDateRangePicker(
+          context: context,
+          firstDate: DateTime(1900),
+          lastDate: DateTime(2200),
+          /* initialDateRange: DateTimeRange(
+            start: DateTime.now(),
+            end: DateTime.now().add(Duration(days: 7)),
+          ),*/
+          builder: (BuildContext context, Widget? child) {
+            return Theme(
+              data: ThemeData.light().copyWith(
+                primaryColor: AllColors.primaryDark1,
+                colorScheme: ColorScheme.light(primary: AllColors.primaryDark1),
+                buttonTheme: ButtonThemeData(
+                  textTheme: ButtonTextTheme.primary,
+                ),
+              ),
+              child: child!,
+            );
+          },
+        );
+
+        if (picked != null) {
+          final startDate = DateFormat('yyyy-MM-dd').format(picked.start);
+          final endDate = DateFormat('yyyy-MM-dd').format(picked.end);
+          rh_vm.createdOnStartToEnd.value = "$startDate@$endDate";
+          rh_vm.createdOnController.value.text = '$startDate - $endDate';
+        } else {
+          rh_vm.createdOnController.value.text = '';
+          rh_vm.createdOnStartToEnd.value = "";
+        }
+      },
+    );
+  }
+
   Widget bindClusterNameFilter(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final availableItems = rh_vm.clusterGetByEmailList;
@@ -545,9 +604,7 @@ class RollingForeCastRHListScreen extends StatelessWidget{
 
     return Obx(() {
       final selected = rh_vm.SelectedCluster_list;
-      final selectedText = selected.isEmpty
-          ? null
-          : selected.map((e) => e.geoValue).join(', ');
+      final selectedText = selected.isEmpty ? null : selected.map((e) => e.geoValue).join(', ');
 
       return GestureDetector(
         onTap: () async {
@@ -561,14 +618,11 @@ class RollingForeCastRHListScreen extends StatelessWidget{
               final searchController = TextEditingController();
               final tempSelected = <ClusterModal>[];
               tempSelected.addAll(rh_vm.SelectedCluster_list);
-
-              List<ClusterModal> allItems =
-                  rh_vm.clusterGetByEmailList;
+              List<ClusterModal> allItems = rh_vm.clusterGetByEmailList;
 
               return StatefulBuilder(builder: (context, setState) {
                 final query = searchController.text.toLowerCase();
                 final filtered = query.isEmpty ? allItems : allItems.where((c) => (c.geoValue ?? "").toLowerCase().contains(query)).toList();
-
                 final allSelected = allItems.isNotEmpty && tempSelected.length == allItems.length;
 
                 return Padding(
@@ -725,7 +779,15 @@ class RollingForeCastRHListScreen extends StatelessWidget{
         },
         child: InputDecorator(
           decoration: InputDecoration(
-            labelText: "Cluster Name", // 👈 Label restored here
+            labelText: "Cluster Name",
+            hintStyle: GoogleFonts.poppins(
+                color: AllColors.lightblackColor,
+                fontWeight: FontWeight.w300,
+                fontSize: AllFontSize.ten),
+            labelStyle: GoogleFonts.poppins(
+                color: AllColors.primaryDark1,
+                fontWeight: FontWeight.w500,
+                fontSize: AllFontSize.sisxteen),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
             ),
@@ -962,7 +1024,15 @@ class RollingForeCastRHListScreen extends StatelessWidget{
         },
         child: InputDecorator(
           decoration: InputDecoration(
-            labelText: "Region Name", // 👈 Label like before
+            labelText: "Region Name",
+            hintStyle: GoogleFonts.poppins(
+                color: AllColors.lightblackColor,
+                fontWeight: FontWeight.w300,
+                fontSize: AllFontSize.ten),
+            labelStyle: GoogleFonts.poppins(
+                color: AllColors.primaryDark1,
+                fontWeight: FontWeight.w500,
+                fontSize: AllFontSize.sisxteen),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
             ),
@@ -1018,6 +1088,14 @@ class RollingForeCastRHListScreen extends StatelessWidget{
             filled: false,
             labelText: rh_vm.parentItemCategorySelectedList.isNotEmpty?"Parent Category Code":null,
             hintText: "Parent Category Code",
+            hintStyle: GoogleFonts.poppins(
+                color: AllColors.lightblackColor,
+                fontWeight: FontWeight.w300,
+                fontSize: AllFontSize.ten),
+            labelStyle: GoogleFonts.poppins(
+                color: AllColors.primaryDark1,
+                fontWeight: FontWeight.w500,
+                fontSize: AllFontSize.sisxteen),
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
           ),
         ),
@@ -1091,6 +1169,14 @@ class RollingForeCastRHListScreen extends StatelessWidget{
             filled: false,
             labelText: rh_vm.Selected_item_product_cat_list.isNotEmpty?"Product Category":null,
             hintText: "Product Category",
+            hintStyle: GoogleFonts.poppins(
+                color: AllColors.lightblackColor,
+                fontWeight: FontWeight.w300,
+                fontSize: AllFontSize.ten),
+            labelStyle: GoogleFonts.poppins(
+                color: AllColors.primaryDark1,
+                fontWeight: FontWeight.w500,
+                fontSize: AllFontSize.sisxteen),
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
           ),
         ),
@@ -1180,8 +1266,7 @@ class RollingForeCastRHListScreen extends StatelessWidget{
           rh_vm.closerMonth_Ctrl.value.text = _displayStringTypeDropDownForOption(selection!).toString();
         }
         else if(hintData =='Closure Year'){
-          rh_vm.closerYear_Ctrl.value.text =
-              _displayStringTypeDropDownForOption(selection!).toString();
+          rh_vm.closerYear_Ctrl.value.text = _displayStringTypeDropDownForOption(selection!).toString();
         }
         else{
           rh_vm.item_category_type_controller.value.text =
