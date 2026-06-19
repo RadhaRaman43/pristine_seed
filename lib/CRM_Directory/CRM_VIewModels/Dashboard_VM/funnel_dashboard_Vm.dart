@@ -26,9 +26,7 @@ class FunnelDashboardVm extends GetxController{
   RxBool loading = false.obs;
   RxBool isShimmerLoading = false.obs;
   RxBool isSelectAllClusterValue = true.obs;
-  RxBool selectOwner = true.obs;
-  RxBool allSelected = false.obs;
-  RxBool isSel = false.obs;
+
   String email = "";
   String isAdminWritePermission = "";
 
@@ -52,10 +50,7 @@ class FunnelDashboardVm extends GetxController{
   RxList<String> SalesCycleStageStatusList = <String>[].obs;
   //RxList<String> selectedSalesStageStatusList = <String>[].obs;
   RxList<String> selectedSalesStageStatusList = ['ALL','Suspect', 'Prospect', 'Propose'].obs;
-  RxList<EmployeeMemberModel> employee_Member_list = <EmployeeMemberModel>[].obs;
-  RxList<EmployeeMemberModel> SelectedEmployee_Member_list = <EmployeeMemberModel>[].obs;
-  RxList<EmployeeMemberModel> tempSelected = <EmployeeMemberModel>[].obs;
-  RxList<EmployeeMemberModel> filtered = <EmployeeMemberModel>[].obs;
+
   RxList<ItemCategoryMstModel> Item_Category_master_list_without_task = <ItemCategoryMstModel>[].obs;
   RxList<ItemCategoryMstModel> SelectedProductCategory_list = <ItemCategoryMstModel>[].obs;
   RxList<ClusterModal> clusterGetByEmailList = <ClusterModal>[].obs;
@@ -67,7 +62,15 @@ class FunnelDashboardVm extends GetxController{
   RxList<String> quoteAcceptedList = ["ALL","OPEN","WON", "LOSS"].obs;
   RxList<String> isCommitList = ["ALL","YES", "NO"].obs;
 
+  RxList<EmployeeMemberModel> employee_Member_list = <EmployeeMemberModel>[].obs;
+  RxList<EmployeeMemberModel> SelectedEmployee_Member_list = <EmployeeMemberModel>[].obs;
+  RxList<EmployeeMemberModel> tempSelected = <EmployeeMemberModel>[].obs;
+  RxList<EmployeeMemberModel> filtered = <EmployeeMemberModel>[].obs;
   var searchController=TextEditingController().obs;
+  RxBool selectOwner = true.obs;
+  RxBool allSelected = false.obs;
+  RxBool isSel = false.obs;
+  String accountNameCode='';
 
 
   var filterCustomDateController=TextEditingController().obs;
@@ -94,6 +97,7 @@ class FunnelDashboardVm extends GetxController{
   var StageNameForApi = '';
   var SelectedTabForApi = '';
   var EmployeeEmailIdForApi = '';
+  var customerNameCode = '';
 
 
   @override
@@ -757,7 +761,9 @@ class FunnelDashboardVm extends GetxController{
     filter_created_on_star_to_cont.value.clear();
     //clusterName_controller.value.clear();
     CustomerName_controller.value.clear();
+    customerNameCode = '';
     searchController.value.clear();
+    accountNameCode='';
     if(isAdminWritePermission=="1") {
       EmployeeMasterGet("");
     }
@@ -786,11 +792,13 @@ class FunnelDashboardVm extends GetxController{
       "filter_stage_name": StageName_controller.value.text,
       "filter_quote_accepted": QuoteAccepted_controller.value.text,
       "filter_customer_name": CustomerName_controller.value.text,
+      "customerNameCode": customerNameCode,
       "filter_product_category": ProductCategory_controller.value.text,
       "filter_commit": IsCommit_controller.value.text,
       "filter_created_on": filter_created_on_cont.value.text,
       "filter_created_on_star_to_cont": filter_created_on_star_to_cont.value.text,
       "filter_owner_name": AccountOwner_controller.value.text,
+      "accountNameCode": accountNameCode,
       "filter_region_name":RegionName_controller.value.text,
       "filter_cluster_name": clusterName_controller.value.text,
     });
@@ -808,11 +816,13 @@ class FunnelDashboardVm extends GetxController{
         StageName_controller.value.text=getFilterData["filter_stage_name"]??"";
         QuoteAccepted_controller.value.text=getFilterData["filter_quote_accepted"]??"";
         CustomerName_controller.value.text=getFilterData["filter_customer_name"]??"";
+        customerNameCode=getFilterData["customerNameCode"]??"";
         ProductCategory_controller.value.text=getFilterData["filter_product_category"]??"";
         IsCommit_controller.value.text=getFilterData["filter_commit"]??"";
         filter_created_on_cont.value.text=getFilterData["filter_created_on"]??"";
         filter_created_on_star_to_cont.value.text=getFilterData["filter_created_on_star_to_cont"]??"";
         AccountOwner_controller.value.text=getFilterData["filter_owner_name"]??"";
+        accountNameCode=getFilterData["accountNameCode"]??"";
         pageNumber=0;
 
         if(getFilterData["start_date"].toString().isNotEmpty && getFilterData["start_date"].toString()!="" ){

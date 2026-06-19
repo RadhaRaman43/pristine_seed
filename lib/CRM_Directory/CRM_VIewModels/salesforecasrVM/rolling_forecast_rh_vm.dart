@@ -12,6 +12,7 @@ import 'package:share_plus/share_plus.dart';
 
 import '../../../utils/app_utils.dart';
 import '../../../viewModel/SessionManagment/session_managment.dart';
+import '../../CRM_Models/AccountMaster_model/Employee_Member_Model.dart';
 import '../../CRM_Models/AccountMaster_model/cluster_modal.dart';
 import '../../CRM_Models/AccountMaster_model/region_with_cluster_filter_modal.dart';
 import '../../CRM_Models/SalesForceCastModals/RollingForeCastListModal.dart';
@@ -65,7 +66,7 @@ class RollingForeCastRHVM extends GetxController{
   var customerNameController=TextEditingController().obs;
   var RegionName_controller = TextEditingController().obs;
   var clusterName_controller = TextEditingController().obs;
-  var createdByCnontroller = TextEditingController().obs;
+  var AccountOwner_controller=TextEditingController().obs;
   var itemCodeController=TextEditingController().obs;
   var itemNameController=TextEditingController().obs;
   var qtyController=TextEditingController().obs;
@@ -77,6 +78,18 @@ class RollingForeCastRHVM extends GetxController{
   var closerYear_Ctrl = TextEditingController().obs;
   var createdOnController = TextEditingController().obs;
   var requiredRegionNameController = TextEditingController().obs;
+
+
+  RxList<EmployeeMemberModel> employee_Member_list = <EmployeeMemberModel>[].obs;
+  RxList<EmployeeMemberModel> SelectedEmployee_Member_list = <EmployeeMemberModel>[].obs;
+  RxList<EmployeeMemberModel> tempSelected = <EmployeeMemberModel>[].obs;
+  RxList<EmployeeMemberModel> filtered = <EmployeeMemberModel>[].obs;
+  RxBool selectOwner = true.obs;
+  RxBool allSelected = false.obs;
+  RxBool isSel = false.obs;
+  var searchController=TextEditingController().obs;
+  var AccountOwnerForApi;
+  String accountNameCode='';
 
 
 
@@ -95,6 +108,12 @@ class RollingForeCastRHVM extends GetxController{
     getItemCategoryMstWithoutTaskIdApi();
     getParentItemCategoryMstGet();
     getClustersGetByEmail();
+    if (this.isAdminWritePermission == '1') {
+      EmployeeMasterGet('');
+    }
+    else {
+      getEmployeeTeamMemberGetByClusterRegionApi();
+    }
   }
   getCurrentDate(){
     DateTime now = DateTime.now();
@@ -232,6 +251,102 @@ class RollingForeCastRHVM extends GetxController{
       loading.value = false;
     }
   }
+  Future<Iterable<EmployeeMemberModel>> EmployeeMasterGet(String query) async {
+    /*if (query == '') {
+      return const Iterable<EmployeeMemberModel>.empty();
+    }*/
+
+    Map data = {
+      'filter_name': query,
+      'filter_email': "",
+      'filter_location_id': '',
+      'email_id': email,
+      "filter_cluster_name": clusterName_controller.value.text.isNotEmpty?clusterName_controller.value.text:"",
+      "filter_region_name": RegionName_controller.value.text.isNotEmpty?RegionName_controller.value.text:"",
+      'rowsPerPage': 10,
+      'pageNumber': 0,
+    };
+    loading.value = true;
+    String employee_response =await _api.EmployeeMatserGetApiHit(data, sessionManagement);
+    try {
+      final jsonResponse = json.decode(employee_response);
+
+      if (jsonResponse is List) {
+        print(jsonResponse);
+        List<EmployeeMemberModel> response =
+        jsonResponse.map((data) => EmployeeMemberModel.fromJson(data)).toList();
+        print('condition..'+response[0].condition.toString());
+        if (response[0].condition == 'True') {
+          print(jsonResponse);
+          employee_Member_list.value = response;
+
+
+        } else {
+          // Utils.sanckBarException('False!', response[0].message!);
+          employee_Member_list.value = [];
+        }
+      } else {
+        Utils.sanckBarException('False!', jsonResponse.message);
+        employee_Member_list.value = [];
+      }
+    } catch (e) {
+      Utils.sanckBarException('Exception!', e.toString());
+      employee_Member_list.value = [];
+    }
+    finally{
+      loading.value = false;
+    }
+    return employee_Member_list.value;
+  }
+  getEmployeeTeamMemberGetByClusterRegionApi() {
+    Map data = {
+      "cluster_name": "",
+      "email_id": email,
+      "region_name": "",
+      "flag": "GeoLevelLowerWithClusterRegion"
+    };
+    print(data);
+    loading.value = true;
+    try {
+      _api.EmployeeTeamMemberGetByClusterRegion(data, sessionManagement).then(
+            (value) {
+          print(value);
+          final JsonResponse = json.decode(value);
+          if (JsonResponse is List) {
+            List<EmployeeMemberModel> response =
+            JsonResponse.map((e) => EmployeeMemberModel.fromJson(e))
+                .toList();
+            if (response != null &&
+                response.length > 0 &&
+                response[0].condition == "True") {
+              loading.value = false;
+              employee_Member_list.value=response;
+              //Get.toNamed(RoutesName.create_preventive_calender_view_screen);
+
+            } else {
+              loading.value = false;
+              employee_Member_list.value=[];
+              //Utils.showErrorToastification("Error!", "No Date Found");
+              //service_installation_details_list.value=[];
+            }
+          } else {
+            loading.value = false;
+            // service_indent_header_list.value = [];
+            Utils.showExceptionToastification("Api Error!", JsonResponse);
+          }
+        },
+      ).onError(
+            (error, stackTrace) {
+          print(error);
+          //service_indent_header_list.value = [];
+        },
+      );
+    } catch (e) {
+      loading.value = false;
+      employee_Member_list.value = [];
+      print(e);
+    }
+  }
 
   void SalesForecastLinesGetNew(int page_no) async{
     try{
@@ -249,13 +364,17 @@ class RollingForeCastRHVM extends GetxController{
             .map((e) => e.trim())
             .join('|');
       }
+      AccountOwnerForApi = '';
+      if(AccountOwner_controller.value.text.isNotEmpty){
+        AccountOwnerForApi = AccountOwner_controller.value.text.split(',').map((e) => e.trim()).join('|');
+      }
       Map<String, dynamic> data={
         "filter_sales_forecast_id": rollingForceCastId.value.text.isEmpty?"": rollingForceCastId.value.text,
         "filter_quote_id": quoteIdController.value.text.isEmpty?"": quoteIdController.value.text,
         "filter_sales_cycle_id": saleCycleController.value.text.isEmpty?"": saleCycleController.value.text,
         "filter_account_code": "",
         "filter_account_name": customerNameController.value.text.isEmpty?"": customerNameController.value.text,
-        "filter_created_by": "",
+        "filter_created_by": AccountOwnerForApi,
         "filter_created_on": createdOnStartToEnd.value,
         "filter_item_code": itemCodeController.value.text.isEmpty?"":itemCodeController.value.text,
         "filter_item_name":itemNameController.value.text.isEmpty?"":itemNameController.value.text,
@@ -308,7 +427,10 @@ class RollingForeCastRHVM extends GetxController{
      quoteIdController.value.clear();
      saleCycleController.value.clear();
      customerNameController.value.clear();
-     createdByCnontroller.value.clear();
+     AccountOwner_controller.value.clear();
+     accountNameCode='';
+     AccountOwnerForApi = '';
+     searchController.value.clear();
      itemCodeController.value.clear();
      itemNameController.value.clear();
      qtyController.value.clear();
@@ -330,6 +452,7 @@ class RollingForeCastRHVM extends GetxController{
      Selected_item_product_cat_list.value=[];
      SelectedCluster_list.value=[];
      SelectedRegion_list.value=[];
+     SelectedEmployee_Member_list.value = [];
      //RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join('|');
      clusterName_controller.value.text = clusterGetByEmailList.map((e) => e.geoValue).join('|');
      pageNumber=0;
@@ -339,12 +462,13 @@ class RollingForeCastRHVM extends GetxController{
 
   RxString filterDataChecker = ''.obs;
   void SaveFilterData() async{
-    await sessionManagement.saveSaleForeCastGMData({
+    await sessionManagement.saveSaleForeCastRhData({
       'rollingForceCastId': rollingForceCastId.value.text,
       'quoteIdController': quoteIdController.value.text,
       'saleCycleController': saleCycleController.value.text,
       'customerNameController': customerNameController.value.text,
-      'createdByCnontroller': createdByCnontroller.value.text,
+      'AccountOwner_controller': AccountOwner_controller.value.text,
+      'accountNameCode': accountNameCode,
       'itemCodeController': itemCodeController.value.text,
       'itemNameController': itemNameController.value.text,
       'qtyController': qtyController.value.text,
@@ -369,14 +493,15 @@ class RollingForeCastRHVM extends GetxController{
   }
 
   void getFilterData() async{
-    Map getFilterData=await sessionManagement.getSaleForeCastGmData();
+    Map getFilterData=await sessionManagement.getSaleForeCastRhData();
     if(getFilterData.isNotEmpty){
       filterDataChecker.value='1';
       rollingForceCastId.value.text=getFilterData["rollingForceCastId"]??"";
       quoteIdController.value.text=getFilterData["quoteIdController"]??"";
       saleCycleController.value.text=getFilterData["saleCycleController"]??"";
       customerNameController.value.text=getFilterData["customerNameController"]??"";
-      createdByCnontroller.value.text=getFilterData["createdByCnontroller"]??"";
+      AccountOwner_controller.value.text=getFilterData["AccountOwner_controller"]??"";
+      accountNameCode=getFilterData["accountNameCode"]??"";
       itemCodeController.value.text=getFilterData["itemCodeController"]??"";
       itemNameController.value.text=getFilterData["itemNameController"]??"";
       qtyController.value.text=getFilterData["qtyController"]??"";
@@ -408,7 +533,7 @@ class RollingForeCastRHVM extends GetxController{
 
   void clearFilterSessionData() {
     filterDataChecker.value='';
-    sessionManagement.clearSaleForeCastGmData();
+    sessionManagement.clearSaleForeCastRhData();
   }
 
   String setMonthNameInShort(String monthName) {

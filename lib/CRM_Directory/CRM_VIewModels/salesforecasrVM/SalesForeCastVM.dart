@@ -53,7 +53,7 @@ class SalesForeCastVM extends GetxController{
   String monthNameForApi = "";
   RxBool excelLoading = false.obs;
   RxDouble excelProgress = 0.0.obs;
-  String accountNameCode='';
+
 
   RxString foreCastStatus = "Pending".obs;
   RxList<SalesForceCastListModal> sales_force_cast_list  = <SalesForceCastListModal>[].obs;
@@ -160,6 +160,7 @@ class SalesForeCastVM extends GetxController{
   RxBool isSel = false.obs;
   var searchController=TextEditingController().obs;
   var AccountOwnerForApi;
+  String accountNameCode='';
 
   RxString createdOnStartToEnd = "".obs;
   RxString extClosureStartToEnd = "".obs;
@@ -1011,6 +1012,12 @@ class SalesForeCastVM extends GetxController{
     filterExpectedClosuredateController.value.clear();
     extClosureStartToEnd.value='';
 
+    AccountOwner_controller.value.clear();
+    searchController.value.clear();
+    AccountOwnerForApi='';
+    accountNameCode='';
+    SelectedEmployee_Member_list.value=[];
+
     SelectedCluster_list.value = [];
     SelectedRegion_list.value = [];
     //RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join(',');
@@ -1024,6 +1031,8 @@ class SalesForeCastVM extends GetxController{
       'filterQuoteIdController': filterQuoteIdController.value.text,
       'filterQuoteSaleCycleController': filterQuoteSaleCycleController.value.text,
       'customer_name': accountNameController.value.text,
+      'AccountOwner_controller': AccountOwner_controller.value.text,
+      'accountNameCode': accountNameCode,
       'filterQuoteValidityController': filterQuoteValidityController.value.text,
       'quoteValidityStartToEnd': quoteValidityStartToEnd.value,
       'createdOn_Controller': createdOnCnontroller.value.text,
@@ -1052,6 +1061,8 @@ class SalesForeCastVM extends GetxController{
       filterQuoteIdController.value.text=getFilterData["filterQuoteIdController"]??"";
       filterQuoteSaleCycleController.value.text=getFilterData["filterQuoteSaleCycleController"]??"";
       accountNameController.value.text=getFilterData["customer_name"]??"";
+      AccountOwner_controller.value.text=getFilterData["AccountOwner_controller"]??"";
+      accountNameCode=getFilterData["accountNameCode"]??"";
       filterQuoteValidityController.value.text=getFilterData["filterQuoteValidityController"]??"";
       quoteValidityStartToEnd.value=getFilterData["quoteValidityStartToEnd"]??"";
       createdOnCnontroller.value.text=getFilterData["createdOn_Controller"]??"";
@@ -1541,7 +1552,6 @@ class SalesForeCastVM extends GetxController{
     finally{
       loading.value = false;
     }
-
   }
 
   Future<void> uploadExcelToServer() async {

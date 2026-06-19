@@ -104,6 +104,7 @@ class Accountmastervm extends GetxController{
   RxString ImageString=''.obs;
   final ImagePicker _picker = ImagePicker();
   //RxString flag="Update".obs;
+  String accountNameCode='';
 
   var account_name_controller = TextEditingController();
   var account_code_controller = TextEditingController();
@@ -1745,6 +1746,7 @@ class Accountmastervm extends GetxController{
     print("reset filter data");
     AccountOwnerForApi = '';
     AccountOwner_controller.value.clear();
+    accountNameCode='';
     SelectedEmployee_Member_list.value = [];
 
     created_on_controller.value.clear();
@@ -2985,6 +2987,7 @@ class Accountmastervm extends GetxController{
       "district_controller": district_controller.value.text,
       "IsActive_controller": IsActive_controller.text,
       "filter_owner_name": AccountOwner_controller.value.text,
+      "accountNameCode": accountNameCode,
       "filter_region_name":RegionName_controller.value.text,
       "filter_cluster_name": clusterName_controller.value.text,
       "created_on_controller": created_on_controller.value.text,
@@ -3011,6 +3014,7 @@ class Accountmastervm extends GetxController{
       district_controller.value.text=getFilterData["district_controller"];
       IsActive_controller.text=getFilterData["IsActive_controller"];
       AccountOwner_controller.value.text=getFilterData["filter_owner_name"];
+      accountNameCode=getFilterData["accountNameCode"];
       created_on_controller.value.text=getFilterData["created_on_controller"];
       filterCreated_from_to_Controller.value.text=getFilterData["filterCreated_from_to_Controller"];
       pageNumber=0;

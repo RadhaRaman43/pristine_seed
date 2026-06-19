@@ -2040,14 +2040,20 @@ class SalesDashboardViewscreen extends StatelessWidget{
     WidgetsBinding.instance.addPostFrameCallback((_) {});
     return Obx(() {
       if (dashboard_view_Controller.EmployeeNameFilter_controller.value.text.isNotEmpty && dashboard_view_Controller.filterDataChecker.value=='1') {
-        List<String> nameList = dashboard_view_Controller.EmployeeNameFilter_controller.value.text.split(',');
+        //List<String> nameList = sale_fore_cast_vm.AccountOwner_controller.value.text.split(',');
+        List<String> nameList = dashboard_view_Controller.accountNameCode.split(',');
         dashboard_view_Controller.SelectedEmployee_Member_list.value = List.generate(nameList.length, (index) {
+          debugPrint("empid.... ${nameList[index].trim().substring(nameList[index].trim().indexOf('(')+1,nameList[index].trim().indexOf(')'))}");
           return EmployeeMemberModel(
-            userFullName: nameList[index].trim(),
+            userFullName: dashboard_view_Controller.isAdminWritePermission=="1" ?
+            nameList[index].trim().substring(0,nameList[index].trim().indexOf('(')):"",
+            fullName: dashboard_view_Controller.isAdminWritePermission!="1"?
+            nameList[index].trim().substring(0,nameList[index].trim().indexOf('(')):"",
+            salesPersonEmpCode:nameList[index].trim().substring(nameList[index].trim().indexOf('(')+1,nameList[index].trim().indexOf(')')),
           );
         });
       }
-      print("list length ${dashboard_view_Controller.employee_Member_list.length}");
+
       final selected = dashboard_view_Controller.SelectedEmployee_Member_list;
       final selectedText = selected.isEmpty ? null : selected.map((e) =>
       "${dashboard_view_Controller.isAdminWritePermission=="1"?e.userFullName ?? "":e.fullName ?? ""}(${e.salesPersonEmpCode ?? ""})").join(', ');
@@ -2181,9 +2187,7 @@ class SalesDashboardViewscreen extends StatelessWidget{
                             },
                           ),
                         ),
-
                         const SizedBox(height: 8),
-
                         // Select All
                         Padding(
                           padding:
@@ -2205,7 +2209,6 @@ class SalesDashboardViewscreen extends StatelessWidget{
                             },
                           ),
                         ),
-
                         const Divider(height: 1),
                         Obx((){
                           return Visibility(visible:dashboard_view_Controller.loading.value,
@@ -2214,8 +2217,6 @@ class SalesDashboardViewscreen extends StatelessWidget{
                               color: AllColors.textColor,
                             ), );
                         }),
-
-
                         // List
                         Expanded(
                           child: dashboard_view_Controller.filtered.isEmpty ? const Center(child: Text('No Record Found!')) : ListView.builder(
@@ -2248,7 +2249,6 @@ class SalesDashboardViewscreen extends StatelessWidget{
                             },
                           ),
                         ),
-
                         // Done button
                         Padding(
                           padding: const EdgeInsets.symmetric(
@@ -2260,9 +2260,11 @@ class SalesDashboardViewscreen extends StatelessWidget{
                                   onPressed: () {
                                     dashboard_view_Controller.SelectedEmployee_Member_list
                                         .assignAll(dashboard_view_Controller.tempSelected);
+
+                                    dashboard_view_Controller.accountNameCode= dashboard_view_Controller.tempSelected.map((nameCode)
+                                    =>"${dashboard_view_Controller.isAdminWritePermission=="1"?nameCode.userFullName??"":nameCode.fullName??""}(${nameCode.salesPersonEmpCode})" ).join(', ') ;
                                     dashboard_view_Controller.EmployeeNameFilter_controller.value.text =
                                         dashboard_view_Controller.tempSelected.map((e) => e.empId).join(', ');
-
                                     Navigator.of(context).pop();
                                   },
                                   style: ElevatedButton.styleFrom(

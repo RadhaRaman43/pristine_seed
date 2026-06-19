@@ -2084,7 +2084,18 @@ class TaskMasterScreen extends StatelessWidget {
         },
         child: InputDecorator(
           decoration: InputDecoration(
-            labelText: "Region Name", // 👈 Label like before
+            labelText: "Region Name",
+            hintStyle: GoogleFonts.poppins(
+                color: AllColors.lightblackColor,
+                fontWeight: FontWeight.w500,
+                fontSize: AllFontSize.sisxteen),
+            labelStyle: GoogleFonts.poppins(
+                color: AllColors.primaryDark1,
+                fontWeight: FontWeight.w500,
+                fontSize: AllFontSize.sisxteen),
+
+
+
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
             ),
@@ -2122,14 +2133,20 @@ class TaskMasterScreen extends StatelessWidget {
     WidgetsBinding.instance.addPostFrameCallback((_) {});
     return Obx(() {
       if (TaskMaster_page_controller.AccountOwner_controller.value.text.isNotEmpty && TaskMaster_page_controller.filterDataChecker.value=='1') {
-        List<String> nameList = TaskMaster_page_controller.AccountOwner_controller.value.text.split(',');
+        //List<String> nameList = sale_fore_cast_vm.AccountOwner_controller.value.text.split(',');
+        List<String> nameList = TaskMaster_page_controller.accountNameCode.split(',');
         TaskMaster_page_controller.SelectedEmployee_Member_list.value = List.generate(nameList.length, (index) {
+          debugPrint("empid.... ${nameList[index].trim().substring(nameList[index].trim().indexOf('(')+1,nameList[index].trim().indexOf(')'))}");
           return EmployeeMemberModel(
-            userFullName: nameList[index].trim(),
+            userFullName: TaskMaster_page_controller.isAdminWritePermission=="1" ?
+            nameList[index].trim().substring(0,nameList[index].trim().indexOf('(')):"",
+            fullName: TaskMaster_page_controller.isAdminWritePermission!="1"?
+            nameList[index].trim().substring(0,nameList[index].trim().indexOf('(')):"",
+            salesPersonEmpCode:nameList[index].trim().substring(nameList[index].trim().indexOf('(')+1,nameList[index].trim().indexOf(')')),
           );
         });
       }
-      print("list length ${TaskMaster_page_controller.employee_Member_list.length}");
+
       final selected = TaskMaster_page_controller.SelectedEmployee_Member_list;
       final selectedText = selected.isEmpty ? null : selected.map((e) =>
       "${TaskMaster_page_controller.isAdminWritePermission=="1"?e.userFullName ?? "":e.fullName ?? ""}(${e.salesPersonEmpCode ?? ""})").join(', ');
@@ -2341,6 +2358,10 @@ class TaskMasterScreen extends StatelessWidget {
                                   onPressed: () {
                                     TaskMaster_page_controller.SelectedEmployee_Member_list
                                         .assignAll(TaskMaster_page_controller.tempSelected);
+
+                                    TaskMaster_page_controller.accountNameCode= TaskMaster_page_controller.tempSelected.map((nameCode)
+                                    =>"${TaskMaster_page_controller.isAdminWritePermission=="1"?nameCode.userFullName??"":nameCode.fullName??""}(${nameCode.salesPersonEmpCode})" ).join(', ') ;
+
                                     TaskMaster_page_controller.AccountOwner_controller.value.text =
                                         TaskMaster_page_controller.tempSelected.map((e) => e.empId).join(', ');
 

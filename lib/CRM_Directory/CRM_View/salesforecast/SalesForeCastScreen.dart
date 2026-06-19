@@ -1077,15 +1077,19 @@ class SalesForceCastScreen extends StatelessWidget{
     WidgetsBinding.instance.addPostFrameCallback((_) {});
     return Obx(() {
       if (sales_force_cast_vm.AccountOwner_controller.value.text.isNotEmpty && sales_force_cast_vm.filterDataChecker.value=='1') {
-        List<String> nameList = sales_force_cast_vm.AccountOwner_controller.value.text.split(',');
-        //List<String> nameList = sales_force_cast_vm.accountNameCode.split(',');
+        //List<String> nameList = sales_force_cast_vm.AccountOwner_controller.value.text.split(',');
+        List<String> nameList = sales_force_cast_vm.accountNameCode.split(',');
         sales_force_cast_vm.SelectedEmployee_Member_list.value = List.generate(nameList.length, (index) {
+          debugPrint("empid.... ${nameList[index].trim().substring(nameList[index].trim().indexOf('(')+1,nameList[index].trim().indexOf(')'))}");
           return EmployeeMemberModel(
-            userFullName: nameList[index].trim(),
+            userFullName: sales_force_cast_vm.isAdminWritePermission=="1" ?
+            nameList[index].trim().substring(0,nameList[index].trim().indexOf('(')):"",
+            fullName: sales_force_cast_vm.isAdminWritePermission!="1"?
+            nameList[index].trim().substring(0,nameList[index].trim().indexOf('(')):"",
+            salesPersonEmpCode:nameList[index].trim().substring(nameList[index].trim().indexOf('(')+1,nameList[index].trim().indexOf(')')),
           );
         });
       }
-      print("list length ${sales_force_cast_vm.employee_Member_list.length}");
       final selected = sales_force_cast_vm.SelectedEmployee_Member_list;
       final selectedText = selected.isEmpty ? null : selected.map((e) =>
       "${sales_force_cast_vm.isAdminWritePermission=="1"?e.userFullName ?? "":e.fullName ?? ""}(${e.salesPersonEmpCode ?? ""})").join(', ');
@@ -1305,9 +1309,8 @@ class SalesForceCastScreen extends StatelessWidget{
                                   onPressed: () {
                                     sales_force_cast_vm.SelectedEmployee_Member_list.assignAll(sales_force_cast_vm.tempSelected);
                                     sales_force_cast_vm.accountNameCode= sales_force_cast_vm.tempSelected.map((nameCode)
-                                    =>"${sales_force_cast_vm.isAdminWritePermission=="1"?nameCode.userFullName??"":nameCode.fullName??""}(${nameCode.empId})" ).join(', ') ;
-                                    sales_force_cast_vm.AccountOwner_controller.value.text =
-                                        sales_force_cast_vm.tempSelected.map((e) => e.empId).join(', ');
+                                    =>"${sales_force_cast_vm.isAdminWritePermission=="1"?nameCode.userFullName??"":nameCode.fullName??""}(${nameCode.salesPersonEmpCode})" ).join(', ') ;
+                                    sales_force_cast_vm.AccountOwner_controller.value.text = sales_force_cast_vm.tempSelected.map((e) => e.empId).join(', ');
 
                                     Navigator.of(context).pop();
                                   },

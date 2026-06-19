@@ -670,7 +670,7 @@ class _Drawer extends State<CustomDrawer> {
                                                 Navigator.of(context);
                                                 break;
 
-                                              /*case 'Rolling Forecast Logistic List':
+                                              case 'Rolling Forecast Logistic List':
                                                 sessionManagement.setfilterRouting('Rolling Forecast Logistic List');
                                                 IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
                                                 home_vm.openMenu(cTitle, iconData);
@@ -693,7 +693,7 @@ class _Drawer extends State<CustomDrawer> {
                                                 Get.delete<RollingForeCastGmVM>();
                                                 Get.toNamed(RoutesName.rollingForeCastGmListScreen);
                                                 Navigator.of(context);
-                                                break;*/
+                                                break;
 
 
 

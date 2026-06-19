@@ -546,7 +546,7 @@ class SalesForceHeaderDetails extends StatelessWidget{
                       sales_force_cast_vm.quoteDowExcelList[i].itemVarient=sales_force_cast_vm.itemVariantCtrl.value.text;
                     }
                   }
-                  //sales_force_cast_vm.SalesForecastUploadItem(sales_force_cast_vm.quoteDowExcelList);
+                  sales_force_cast_vm.SalesForecastUploadItem(sales_force_cast_vm.quoteDowExcelList);
                 }
                 else{
                   Utils.sanckBarSuccess("Upload!", "Please enter Item Variant");

@@ -795,6 +795,7 @@ class AccountmasterScreen extends StatelessWidget{
               fontSize: AllFontSize.sisxteen,
               fontWeight: FontWeight.w500),
         ),
+
        // initialSelection:accountMaster_page_controller.get_Acc_type_list.length>0?accountMaster_page_controller.get_Acc_type_list[1]:null,
         inputDecorationTheme: const InputDecorationTheme(
           enabledBorder: OutlineInputBorder(
@@ -802,6 +803,7 @@ class AccountmasterScreen extends StatelessWidget{
             borderSide: BorderSide(
               color: AllColors.primaryDark1,),
           ),
+
           focusedBorder: OutlineInputBorder(
             borderSide: BorderSide(
                 color: AllColors.primaryDark1), // Change the color to green
@@ -837,14 +839,20 @@ class AccountmasterScreen extends StatelessWidget{
     WidgetsBinding.instance.addPostFrameCallback((_) {});
     return Obx(() {
       if (accountMaster_page_controller.AccountOwner_controller.value.text.isNotEmpty && accountMaster_page_controller.filterDataChecker.value=='1') {
-        List<String> nameList = accountMaster_page_controller.AccountOwner_controller.value.text.split(',');
+        //List<String> nameList = sale_fore_cast_vm.AccountOwner_controller.value.text.split(',');
+        List<String> nameList = accountMaster_page_controller.accountNameCode.split(',');
         accountMaster_page_controller.SelectedEmployee_Member_list.value = List.generate(nameList.length, (index) {
+          debugPrint("empid.... ${nameList[index].trim().substring(nameList[index].trim().indexOf('(')+1,nameList[index].trim().indexOf(')'))}");
           return EmployeeMemberModel(
-            userFullName: nameList[index].trim(),
+            userFullName: accountMaster_page_controller.isAdminWritePermission=="1" ?
+            nameList[index].trim().substring(0,nameList[index].trim().indexOf('(')):"",
+            fullName: accountMaster_page_controller.isAdminWritePermission!="1"?
+            nameList[index].trim().substring(0,nameList[index].trim().indexOf('(')):"",
+            salesPersonEmpCode:nameList[index].trim().substring(nameList[index].trim().indexOf('(')+1,nameList[index].trim().indexOf(')')),
           );
         });
       }
-      print("list length ${accountMaster_page_controller.employee_Member_list.length}");
+
       final selected = accountMaster_page_controller.SelectedEmployee_Member_list;
       final selectedText = selected.isEmpty ? null : selected.map((e) =>
       "${accountMaster_page_controller.isAdminWritePermission=="1"?e.userFullName ?? "":e.fullName ?? ""}(${e.salesPersonEmpCode ?? ""})").join(', ');
@@ -854,7 +862,15 @@ class AccountmasterScreen extends StatelessWidget{
         },
         child: InputDecorator(
           decoration: InputDecoration(
-            labelText: selectedText != null ?  "Account Owner Name": "", // 👈 Label restored here
+            labelText: selectedText != null ?  "Account Owner Name": "",
+            hintStyle: GoogleFonts.poppins(
+                color: AllColors.lightblackColor,
+                fontWeight: FontWeight.w500,
+                fontSize: AllFontSize.sisxteen),
+            labelStyle: GoogleFonts.poppins(
+                color: AllColors.primaryDark1,
+                fontWeight: FontWeight.w500,
+                fontSize: AllFontSize.sisxteen),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
             ),
@@ -868,15 +884,18 @@ class AccountmasterScreen extends StatelessWidget{
                     ? Text(
                   "Account Owner Name",
                   style: GoogleFonts.poppins(
-                    color: Colors.black,
-                    fontSize: AllFontSize.sisxteen,
-                  ),
+                      color: AllColors.primaryDark1,
+                      fontWeight: FontWeight.w400,
+                      fontSize: 15),
                 )
                     : SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Text(
                     selectedText,
-                    style: const TextStyle(color: Colors.black),
+                    style: GoogleFonts.poppins(
+                        color: AllColors.primaryDark1,
+                        fontWeight: FontWeight.w400,
+                        fontSize: 15),
                   ),
                 ),
               ),
@@ -1057,6 +1076,10 @@ class AccountmasterScreen extends StatelessWidget{
                                   onPressed: () {
                                     accountMaster_page_controller.SelectedEmployee_Member_list
                                         .assignAll(accountMaster_page_controller.tempSelected);
+
+                                    accountMaster_page_controller.accountNameCode= accountMaster_page_controller.tempSelected.map((nameCode)
+                                    =>"${accountMaster_page_controller.isAdminWritePermission=="1"?nameCode.userFullName??"":nameCode.fullName??""}(${nameCode.salesPersonEmpCode})" ).join(', ') ;
+
                                     accountMaster_page_controller.AccountOwner_controller.value.text =
                                         accountMaster_page_controller.tempSelected.map((e) => e.empId).join(', ');
 
@@ -1087,209 +1110,6 @@ class AccountmasterScreen extends StatelessWidget{
     );
   }
 
- /* bindAccountOwnerFilter(BuildContext context) {
-    return Obx((){
-      if (accountMaster_page_controller.AccountOwner_controller.value.text.isNotEmpty && accountMaster_page_controller.filterDataChecker.value=='1') {
-        List<String> nameList = accountMaster_page_controller.AccountOwner_controller.value.text.split(',');
-
-        accountMaster_page_controller.SelectedEmployee_Member_list.value =
-            List.generate(nameList.length, (index) {
-              return EmployeeMemberModel(
-                fullName: nameList[index].trim(),
-              );
-            });
-      }
-      return  DropdownSearch<EmployeeMemberModel>.multiSelection(
-        items: accountMaster_page_controller.employee_Member_list,
-        itemAsString: (EmployeeMemberModel u) => u.fullName??"",
-        selectedItems: accountMaster_page_controller.SelectedEmployee_Member_list,
-        dropdownDecoratorProps: DropDownDecoratorProps(
-          baseStyle: TextStyle(color: Colors.black),
-          dropdownSearchDecoration: InputDecoration(
-            filled: false,
-
-            labelText: accountMaster_page_controller.SelectedEmployee_Member_list.isNotEmpty?"Account Owner":null,
-            hintText: "Account Owner Name",
-            labelStyle: GoogleFonts.poppins(
-              color: AllColors.primaryDark1,
-              fontWeight: FontWeight.w500,
-              fontSize: AllFontSize.sisxteen),
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-          ),
-        ),
-        dropdownBuilder: (context, selectedItems) {
-          // Custom builder to just show comma-separated names
-          if (selectedItems.isEmpty) {
-            return Text(
-              "Account Owner Name",
-              style: GoogleFonts.poppins(
-                color: AllColors.primaryDark1, // Match your hint color
-                fontSize: AllFontSize.sisxteen,
-                fontWeight: FontWeight.w500,
-              ),
-            );
-          }
-          return SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Text(
-              selectedItems.map((e) => "${e.fullName ?? ""}(${e.salesPersonEmpCode ?? ""})").join(', '),
-              style: TextStyle(
-              color: AllColors.primaryDark1,
-              fontWeight: FontWeight.w500,
-              fontSize: AllFontSize.sisxteen,
-            ), // Only black text
-            ),
-          );
-        },
-        onChanged: (List<EmployeeMemberModel> selectedList) {
-          accountMaster_page_controller.SelectedEmployee_Member_list.value = selectedList;
-          accountMaster_page_controller.AccountOwner_controller.value.text = selectedList.map((e) => e.empId).join(', ');
-        },
-
-        popupProps: PopupPropsMultiSelection.dialog(
-          showSearchBox: true,
-          searchFieldProps: TextFieldProps(
-            padding: EdgeInsets.only(top: 20, left: 10, right: 10),
-            decoration: InputDecoration(
-              contentPadding: EdgeInsets.only(top: 20, left: 12, right: 12),
-              // Top margin here
-              hintText: "Search...",
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-            ),
-          ),
-
-          itemBuilder: (context, item, isSelected) =>
-              ListTile(
-                title: Text("${item.fullName ?? ""}(${item.salesPersonEmpCode ?? ""})"),
-              ),
-        ),
-      );
-    });
-
-  }*/
-
-  Widget bindAccCatogeryTypeDropDown(context){
-    return Autocomplete<GetMasterTypeModel>(
-      displayStringForOption: _displayAccCategoryForOption,
-      optionsBuilder: (TextEditingValue textEditingValue) {
-        if (textEditingValue.text.isEmpty) {
-          return accountMaster_page_controller.get_Acc_category_list;
-          // return const Iterable<VehicleTypeResponse>.empty();
-        }
-        return accountMaster_page_controller.get_Acc_category_list
-            .where((GetMasterTypeModel option) {
-          return option.code
-              .toString()
-              .toLowerCase()
-              .contains(textEditingValue.text.toLowerCase());
-        }).toList();
-      },
-      onSelected: (GetMasterTypeModel selection) {
-        print(selection.code);
-        // Update the TextField with the selected
-        accountMaster_page_controller.account_cat_type_controller.text =
-            _displayAccCategoryForOption(selection).toString();
-      },
-      fieldViewBuilder: (BuildContext context, TextEditingController controller,
-          FocusNode focusNode, VoidCallback onFieldSubmitted) {
-        return TextField(
-          cursorColor: AllColors.primaryDark1,
-          controller: controller
-            ..text = accountMaster_page_controller.account_cat_type_controller
-                .text,
-          focusNode: focusNode,
-          //onSubmitted: onFieldSubmitted,
-          decoration: InputDecoration(
-              suffixIcon: IconButton(
-                color: AllColors.primaryDark1,
-                onPressed: (){
-                  if(focusNode.hasFocus){
-                    focusNode.unfocus();
-                  }else{
-                    focusNode.requestFocus();
-                  }
-                },
-                icon: Icon(Icons.arrow_drop_down),
-              ),
-            contentPadding: EdgeInsets.symmetric(
-                vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-            hintText: 'Customer Category Type',
-            labelText: 'Customer Category Type',
-              hintStyle: GoogleFonts.poppins(
-                  color: AllColors.lightblackColor,
-                  fontWeight: FontWeight.w300,
-                  fontSize: AllFontSize.ten),
-              labelStyle: GoogleFonts.poppins(
-                  color: AllColors.primaryDark1,
-                  fontWeight: FontWeight.w500,
-                  fontSize: AllFontSize.sisxteen),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-              ),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-              )
-          ),
-        );
-      },
-      optionsViewBuilder: (BuildContext context,
-          AutocompleteOnSelected<GetMasterTypeModel> onSelected,
-          Iterable<GetMasterTypeModel> suggestions) {
-        return Align(
-          alignment: Alignment.topLeft,
-          child: Material(
-            elevation: 4.0,
-            child: Container(
-              constraints: BoxConstraints(maxHeight: 200),
-              child: ListView.builder(
-                shrinkWrap: true,
-                itemCount: suggestions.length,
-                itemBuilder: (context, index) {
-                  final GetMasterTypeModel option =
-                  suggestions.elementAt(index);
-                  return GestureDetector(
-                    onTap: () {
-                      onSelected(option);
-                    },
-                    child: Container(
-                      padding: EdgeInsets.all(8.0),
-                        child: RichText(
-                          text: TextSpan(
-                            children: [
-                              TextSpan(
-                                text:  option.code!,
-                                style: GoogleFonts.poppins(
-                                    color: AllColors.blackColor,
-                                    fontWeight: FontWeight.w300,
-                                    fontSize: AllFontSize
-                                        .sisxteen // Change the text color here
-                                ),
-                              ),
-                              TextSpan(
-                                text: " (${option.description!})",
-                                style: GoogleFonts.poppins(
-                                    color: AllColors.redColor,
-                                    fontWeight: FontWeight.w300,
-                                    fontSize: AllFontSize
-                                        .sisxteen // Change the text color here
-                                ),
-                              ),
-                            ],
-                          ),
-                          softWrap: true,
-                        )
-                    ),
-                  );
-                },
-              ),
-            ),
-          ),
-        );
-      },
-    );
-  }
 
   Widget bindIsActiveDropDown(context) {
     return Container(
@@ -1352,232 +1172,6 @@ class AccountmasterScreen extends StatelessWidget{
     );
   }
 
-  Widget bindAnualRevenueDropDown(context) {
-    return Autocomplete<String>(
-      displayStringForOption: _displayAnualRevenueForOption,
-      optionsBuilder: (TextEditingValue textEditingValue) {
-        if (textEditingValue.text.isEmpty) {
-          return accountMaster_page_controller.AnnualRevenueListFilter;
-          // return const Iterable<VehicleTypeResponse>.empty();
-        }
-        return accountMaster_page_controller.AnnualRevenueListFilter
-            .where((String option) {
-          return option
-              .toString()
-              .toLowerCase()
-              .contains(textEditingValue.text.toLowerCase());
-        }).toList();
-      },
-      onSelected: (String selection) {
-        print(selection);
-        // Update the TextField with the selected
-        accountMaster_page_controller.Annual_Revenue_Controller.text =
-            _displayIsActiveForOption(selection).toString();
-        print('AnualReve.....${accountMaster_page_controller.Annual_Revenue_Controller.text}');
-
-        String AnualRevenue = accountMaster_page_controller.Annual_Revenue_Controller.text.toString();
-        final anualRevenuelist = AnualRevenue.split("-");
-        accountMaster_page_controller.annual_revenue_min = anualRevenuelist[0];
-        accountMaster_page_controller.annual_revenue_max = anualRevenuelist[1];
-        print('amx..${accountMaster_page_controller.annual_revenue_max}');
-        print('amin..${accountMaster_page_controller.annual_revenue_min}');
-
-      },
-      fieldViewBuilder: (BuildContext context, TextEditingController controller,
-          FocusNode focusNode, VoidCallback onFieldSubmitted) {
-        return TextField(
-          cursorColor: AllColors.primaryDark1,
-          controller: controller
-            ..text = accountMaster_page_controller.Annual_Revenue_Controller
-                .text,
-          focusNode: focusNode,
-          //onSubmitted: onFieldSubmitted,
-          decoration: InputDecoration(
-              suffixIcon: IconButton(
-                color: AllColors.primaryDark1,
-                onPressed: (){
-                  if(focusNode.hasFocus){
-                    focusNode.unfocus();
-                  }else{
-                    focusNode.requestFocus();
-                  }
-                },
-                icon: Icon(Icons.arrow_drop_down),
-              ),
-              contentPadding: EdgeInsets.symmetric(
-                  vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-              hintText: 'Annual Revenue',
-              labelText: 'Annual Revenue',
-              hintStyle: GoogleFonts.poppins(
-                  color: AllColors.lightblackColor,
-                  fontWeight: FontWeight.w300,
-                  fontSize: AllFontSize.ten),
-              labelStyle: GoogleFonts.poppins(
-                  color: AllColors.primaryDark1,
-                  fontWeight: FontWeight.w500,
-                  fontSize: AllFontSize.sisxteen),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-              ),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-              )
-          ),
-        );
-      },
-      optionsViewBuilder: (BuildContext context,
-          AutocompleteOnSelected<String> onSelected,
-          Iterable<String> suggestions) {
-        return Align(
-          alignment: Alignment.topLeft,
-          child: Material(
-            elevation: 4.0,
-            child: Container(
-              constraints: BoxConstraints(maxHeight: 200),
-              child: ListView.builder(
-                shrinkWrap: true,
-                itemCount: suggestions.length,
-                itemBuilder: (context, index) {
-                  final String option =
-                  suggestions.elementAt(index);
-                  return GestureDetector(
-                    onTap: () {
-                      onSelected(option);
-                    },
-                    child: Container(
-                      padding: EdgeInsets.all(8.0),
-                      child: Text(
-                        option,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.blackColor,
-                            fontWeight: FontWeight.w300,
-                            fontSize: AllFontSize
-                                .sisxteen // Change the text color here
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  Widget bindNoOfEmpDropDown(context) {
-    return Autocomplete<String>(
-      displayStringForOption: _displayNoOfEmpForOption,
-      optionsBuilder: (TextEditingValue textEditingValue) {
-        if (textEditingValue.text.isEmpty) {
-          return accountMaster_page_controller.NoOfEmpListFilter;
-          // return const Iterable<VehicleTypeResponse>.empty();
-        }
-        return accountMaster_page_controller.NoOfEmpListFilter
-            .where((String option) {
-          return option
-              .toString()
-              .toLowerCase()
-              .contains(textEditingValue.text.toLowerCase());
-        }).toList();
-      },
-      onSelected: (String selection) {
-        print(selection);
-        // Update the TextField with the selected
-        accountMaster_page_controller.No_Of_Emp_Controller.text =
-            _displayIsActiveForOption(selection).toString();
-        print('IsActive.....${accountMaster_page_controller.No_Of_Emp_Controller.text}');
-
-        String AnualRevenue = accountMaster_page_controller.No_Of_Emp_Controller.text.toString();
-        final anualRevenuelist = AnualRevenue.split("-");
-        accountMaster_page_controller.no_of_employees_min = anualRevenuelist[0];
-        accountMaster_page_controller.no_of_employees_max = anualRevenuelist[1];
-        print('emp..${accountMaster_page_controller.no_of_employees_max}');
-        print('emp1..${accountMaster_page_controller.no_of_employees_min}');
-      },
-      fieldViewBuilder: (BuildContext context, TextEditingController controller,
-          FocusNode focusNode, VoidCallback onFieldSubmitted) {
-        return TextField(
-          cursorColor: AllColors.primaryDark1,
-          controller: controller
-            ..text = accountMaster_page_controller.No_Of_Emp_Controller
-                .text,
-          focusNode: focusNode,
-          //onSubmitted: onFieldSubmitted,
-          decoration: InputDecoration(
-              suffixIcon: IconButton(
-                color: AllColors.primaryDark1,
-                onPressed: (){
-                  if(focusNode.hasFocus){
-                    focusNode.unfocus();
-                  }else{
-                    focusNode.requestFocus();
-                  }
-                },
-                icon: Icon(Icons.arrow_drop_down),
-              ),
-              contentPadding: EdgeInsets.symmetric(
-                  vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-              hintText: 'No. Of Employee',
-              labelText: 'No. Of Employee',
-              hintStyle: GoogleFonts.poppins(
-                  color: AllColors.lightblackColor,
-                  fontWeight: FontWeight.w300,
-                  fontSize: AllFontSize.ten),
-              labelStyle: GoogleFonts.poppins(
-                  color: AllColors.primaryDark1,
-                  fontWeight: FontWeight.w500,
-                  fontSize: AllFontSize.sisxteen),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-              ),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-              )
-          ),
-        );
-      },
-      optionsViewBuilder: (BuildContext context,
-          AutocompleteOnSelected<String> onSelected,
-          Iterable<String> suggestions) {
-        return Align(
-          alignment: Alignment.topLeft,
-          child: Material(
-            elevation: 4.0,
-            child: Container(
-              constraints: BoxConstraints(maxHeight: 200),
-              child: ListView.builder(
-                shrinkWrap: true,
-                itemCount: suggestions.length,
-                itemBuilder: (context, index) {
-                  final String option =
-                  suggestions.elementAt(index);
-                  return GestureDetector(
-                    onTap: () {
-                      onSelected(option);
-                    },
-                    child: Container(
-                      padding: EdgeInsets.all(8.0),
-                      child: Text(
-                        option,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.blackColor,
-                            fontWeight: FontWeight.w300,
-                            fontSize: AllFontSize
-                                .sisxteen // Change the text color here
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
-          ),
-        );
-      },
-    );
-  }
 
   Widget bindClusterNameFilter(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -1779,6 +1373,10 @@ class AccountmasterScreen extends StatelessWidget{
         child: InputDecorator(
           decoration: InputDecoration(
             labelText: "Cluster Name",
+            hintStyle: GoogleFonts.poppins(
+                color: AllColors.lightblackColor,
+                fontWeight: FontWeight.w500,
+                fontSize: AllFontSize.sisxteen),
             labelStyle: GoogleFonts.poppins(
                 color: AllColors.primaryDark1,
                 fontWeight: FontWeight.w500,
@@ -1797,18 +1395,17 @@ class AccountmasterScreen extends StatelessWidget{
                   "Select Cluster",
                   style: GoogleFonts.poppins(
                       color: AllColors.primaryDark1,
-                      fontWeight: FontWeight.w500,
-                      fontSize: AllFontSize.sisxteen
-                  ),
+                      fontWeight: FontWeight.w400,
+                      fontSize: 15),
                 )
                     : SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Text(
                     selectedText,
-                      style: GoogleFonts.poppins(
-                          color: AllColors.primaryDark1,
-                          fontWeight: FontWeight.w400,
-                          fontSize: AllFontSize.sisxteen),
+                    style: GoogleFonts.poppins(
+                        color: AllColors.primaryDark1,
+                        fontWeight: FontWeight.w400,
+                        fontSize: 15),
                   ),
                 ),
               ),
@@ -2023,9 +1620,13 @@ class AccountmasterScreen extends StatelessWidget{
         child: InputDecorator(
           decoration: InputDecoration(
             labelText: "Region Name",
+            hintStyle: GoogleFonts.poppins(
+                color: AllColors.lightblackColor,
+                fontWeight: FontWeight.w500,
+                fontSize: AllFontSize.sisxteen),
             labelStyle: GoogleFonts.poppins(
                 color: AllColors.primaryDark1,
-                fontWeight: FontWeight.w400,
+                fontWeight: FontWeight.w500,
                 fontSize: AllFontSize.sisxteen),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
@@ -2036,23 +1637,20 @@ class AccountmasterScreen extends StatelessWidget{
           child: Row(
             children: [
               Expanded(
-                child: selectedText == null
-                    ? Text(
-                  "Select Region",
+                child: selectedText == null ? Text("Select Region",
                   style: GoogleFonts.poppins(
                       color: AllColors.primaryDark1,
-                      fontWeight: FontWeight.w500,
-                      fontSize: AllFontSize.sisxteen
-                  ),
+                      fontWeight: FontWeight.w400,
+                      fontSize: 15),
                 )
                     : SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Text(
                     selectedText,
-                      style: GoogleFonts.poppins(
-                          color: AllColors.primaryDark1,
-                          fontWeight: FontWeight.w500,
-                          fontSize: AllFontSize.sisxteen)
+                    style: GoogleFonts.poppins(
+                        color: AllColors.primaryDark1,
+                        fontWeight: FontWeight.w400,
+                        fontSize: 15),
                   ),
                 ),
               ),

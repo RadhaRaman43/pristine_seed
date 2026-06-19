@@ -67,6 +67,7 @@ class TaskApprovalvm extends GetxController{
   var RejectReason_Controller = TextEditingController();
   var managerRemarksController=TextEditingController().obs;
   var AccountOwner_controller=TextEditingController().obs;
+  String accountNameCode='';
 
   RxBool RejectBool=false.obs;
   RxBool ApproveBool=false.obs;
@@ -553,6 +554,7 @@ class TaskApprovalvm extends GetxController{
 
     AccountOwnerForApi = '';
     AccountOwner_controller.value.clear();
+    accountNameCode='';
     searchController.value.clear();
     if(isAdminWritePermission=="1") {
       EmployeeMasterGet("");
@@ -1224,6 +1226,7 @@ class TaskApprovalvm extends GetxController{
       'region_name': RegionName_controller.value.text,
       'cluster_name': clusterName_controller.value.text,
       'account_owner': AccountOwner_controller.value.text,
+      'accountNameCode':accountNameCode,
       'filterTaskCreationOnController': filterTaskCreationOnController.value.text,
       'product_category': product_category_controller.value.text,
       'product_category_type': product_category_type_Controller.value.text,
@@ -1249,6 +1252,7 @@ class TaskApprovalvm extends GetxController{
       postalCodeController.value.text=getFilterData["pin_code"];
       district_controller.value.text=getFilterData["district"];
       AccountOwner_controller.value.text=getFilterData["account_owner"];
+      accountNameCode=getFilterData["accountNameCode"];
       filterTaskCreationOnController.value.text=getFilterData["filterTaskCreationOnController"];
       product_category_controller.value.text=getFilterData["product_category"];
       product_category_type_Controller.value.text=getFilterData["product_category_type"];

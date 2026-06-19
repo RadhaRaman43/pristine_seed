@@ -11,6 +11,7 @@ import '../../../constants/app_font_size.dart';
 import '../../../constants/static_methods.dart';
 import '../../../reources/routes/routes_name.dart';
 import '../../../view/custom_drawer.dart';
+import '../../CRM_Models/AccountMaster_model/Employee_Member_Model.dart';
 import '../../CRM_Models/AccountMaster_model/cluster_modal.dart';
 import '../../CRM_Models/AccountMaster_model/region_with_cluster_filter_modal.dart';
 import '../../CRM_Models/TaskMaster_model/Item_Category_Mast_model.dart';
@@ -18,7 +19,7 @@ import '../../CRM_VIewModels/salesforecasrVM/rolling_forecast_rh_vm.dart';
 
 class RollingForeCastRHListScreen extends StatelessWidget{
 
-  final rh_vm = Get.put(RollingForeCastRHVM());
+  final sale_fore_cast_vm = Get.put(RollingForeCastRHVM());
   ScrollController scrollController = ScrollController();
   static String _displayStringTypeDropDownForOption(String option) =>
       option;
@@ -36,17 +37,20 @@ class RollingForeCastRHListScreen extends StatelessWidget{
               ),
               title:Row(
                 children: [
-                  Text(
-                    'Rolling For Cast List',
-                    style: GoogleFonts.poppins(
-                      color: AllColors.whiteColor,
-                      fontSize: 20.0,
-                      fontWeight: FontWeight.w700,
+                  Tooltip(
+                    message: 'Rolling Forecast RH List',
+                    child: Text(
+                      'Rolling Forecast RH List',
+                      style: GoogleFonts.poppins(
+                        color: AllColors.whiteColor,
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.w700,
+                      ),
                     ),
                   ),
-                  Spacer(),
+                  //Spacer(),
                   IconButton(onPressed: () {
-                    rh_vm.downloadForeCastLineDetaisForUploadWithProgress(context,'Rolling Forecast RH Data','Rolling Forecast RH Data');
+                    sale_fore_cast_vm.downloadForeCastLineDetaisForUploadWithProgress(context,'Rolling Forecast RH Data','Rolling Forecast RH Data');
                   }, icon: Icon(Icons.download)),
                   IconButton(onPressed: () {
                     showFilterBottomSheet(context);
@@ -56,7 +60,7 @@ class RollingForeCastRHListScreen extends StatelessWidget{
           ),
           drawer: CustomDrawer(),
           body:  RefreshIndicator(
-            onRefresh:rh_vm.refreshList,
+            onRefresh:sale_fore_cast_vm.refreshList,
             child: Container(
               width: double.infinity,
               height: double.infinity,
@@ -64,7 +68,7 @@ class RollingForeCastRHListScreen extends StatelessWidget{
                 children: [
                   Obx((){
                     return Visibility(
-                      visible:rh_vm.loading.value ,
+                      visible:sale_fore_cast_vm.loading.value ,
                       child: LinearProgressIndicator(
                         backgroundColor: AllColors.primaryDark1,
                         color: AllColors.textColor,
@@ -86,20 +90,20 @@ class RollingForeCastRHListScreen extends StatelessWidget{
         ));
   }
   Widget BindRHdetailsListView(context) {
-    if (rh_vm.rolling_fore_cast_list.value.isNotEmpty && rh_vm.rolling_fore_cast_list.value.length > 0) {
+    if (sale_fore_cast_vm.rolling_fore_cast_list.value.isNotEmpty && sale_fore_cast_vm.rolling_fore_cast_list.value.length > 0) {
       scrollController.addListener(() {
         if (scrollController.position.pixels ==
             scrollController.position.maxScrollExtent) {
-          int total_page = (rh_vm.total_rows /
-              rh_vm.rowsPerPage)
+          int total_page = (sale_fore_cast_vm.total_rows /
+              sale_fore_cast_vm.rowsPerPage)
               .toInt();
-          if ((rh_vm.total_rows % rh_vm.rowsPerPage) > 0) total_page += 1;
+          if ((sale_fore_cast_vm.total_rows % sale_fore_cast_vm.rowsPerPage) > 0) total_page += 1;
 
-          print("last index ${rh_vm.pageNumber} ${rh_vm.total_rows} ${rh_vm.rowsPerPage} ${total_page}");
+          print("last index ${sale_fore_cast_vm.pageNumber} ${sale_fore_cast_vm.total_rows} ${sale_fore_cast_vm.rowsPerPage} ${total_page}");
 
-          if (rh_vm.pageNumber + 1 < total_page) {
-            rh_vm.SalesForecastLinesGetNew(rh_vm.pageNumber +1,);
-            rh_vm.pageNumber += 1;
+          if (sale_fore_cast_vm.pageNumber + 1 < total_page) {
+            sale_fore_cast_vm.SalesForecastLinesGetNew(sale_fore_cast_vm.pageNumber +1,);
+            sale_fore_cast_vm.pageNumber += 1;
           }
 
         }
@@ -113,7 +117,7 @@ class RollingForeCastRHListScreen extends StatelessWidget{
             color: Colors.transparent,
           ),
           shrinkWrap: true,
-          itemCount: rh_vm.rolling_fore_cast_list.value.length,
+          itemCount: sale_fore_cast_vm.rolling_fore_cast_list.value.length,
           itemBuilder: (BuildContext context, int index) {
             return BindCustomerRequestListView(context, index);
           });
@@ -138,7 +142,7 @@ class RollingForeCastRHListScreen extends StatelessWidget{
     }
   }
   Widget BindCustomerRequestListView(context, int position) {
-    var createdOn=StaticMethod.onlyDate(rh_vm.rolling_fore_cast_list[position].createdOn??"");
+    var createdOn=StaticMethod.onlyDate(sale_fore_cast_vm.rolling_fore_cast_list[position].createdOn??"");
     return Card(
       margin: EdgeInsets.all(5),
       child: ListTile(
@@ -160,8 +164,8 @@ class RollingForeCastRHListScreen extends StatelessWidget{
                   ),
                   Flexible(
                     child: Tooltip(
-                      message: rh_vm.rolling_fore_cast_list[position].salesForecastId??"",
-                      child: Text(rh_vm.rolling_fore_cast_list[position].salesForecastId??"",
+                      message: sale_fore_cast_vm.rolling_fore_cast_list[position].salesForecastId??"",
+                      child: Text(sale_fore_cast_vm.rolling_fore_cast_list[position].salesForecastId??"",
                         overflow: TextOverflow.ellipsis,
                         style: GoogleFonts.poppins(
                             color: AllColors.textColor,
@@ -182,22 +186,22 @@ class RollingForeCastRHListScreen extends StatelessWidget{
         subtitle:Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildLabelWithValue(label: "Quote Id : ", value: rh_vm.rolling_fore_cast_list[position].quoteId??"",),
-            _buildLabelWithValue(label: "Sale Cycle Id : ", value: rh_vm.rolling_fore_cast_list[position].salesCycleId??"",),
-            _buildLabelWithValue(label: "Customer Name : ", value: rh_vm.rolling_fore_cast_list[position].accountName??"",),
-            _buildLabelWithValue(label: "Cluster Name : ", value: rh_vm.rolling_fore_cast_list[position].clusterName??"",),
-            _buildLabelWithValue(label: "Region Name : ", value: rh_vm.rolling_fore_cast_list[position].regionName??"",),
-            _buildLabelWithValue(label: "Created By : ", value: rh_vm.rolling_fore_cast_list[position].createdFullName??"",),
-            _buildLabelWithValue(label: "Item Code : ", value: rh_vm.rolling_fore_cast_list[position].itemCode??"",),
-            _buildLabelWithValue(label: "Item Name : ", value: rh_vm.rolling_fore_cast_list[position].itemName??"",),
-            _buildLabelWithValue(label: "Qty : ", value: (rh_vm.rolling_fore_cast_list[position].qty.toInt().toString())??"",),
-            _buildLabelWithValue(label: "Item Variant : ", value: rh_vm.rolling_fore_cast_list[position].itemVarient??"",),
-            _buildLabelWithValue(label: "Parent Category Code : ", value: rh_vm.rolling_fore_cast_list[position].itemParentCategoryCode??"",),
-            _buildLabelWithValue(label: "Item Category Code : ", value: rh_vm.rolling_fore_cast_list[position].itemCategoryCode??"",),
-            _buildLabelWithValue(label: "Closer Month : ", value: rh_vm.rolling_fore_cast_list[position].closureMonth??"",),
-            _buildLabelWithValue(label: "Closer Year : ", value: rh_vm.rolling_fore_cast_list[position].closureYear??"",),
+            _buildLabelWithValue(label: "Quote Id : ", value: sale_fore_cast_vm.rolling_fore_cast_list[position].quoteId??"",),
+            _buildLabelWithValue(label: "Sale Cycle Id : ", value: sale_fore_cast_vm.rolling_fore_cast_list[position].salesCycleId??"",),
+            _buildLabelWithValue(label: "Customer Name : ", value: sale_fore_cast_vm.rolling_fore_cast_list[position].accountName??"",),
+            _buildLabelWithValue(label: "Cluster Name : ", value: sale_fore_cast_vm.rolling_fore_cast_list[position].clusterName??"",),
+            _buildLabelWithValue(label: "Region Name : ", value: sale_fore_cast_vm.rolling_fore_cast_list[position].regionName??"",),
+            _buildLabelWithValue(label: "Created By : ", value: sale_fore_cast_vm.rolling_fore_cast_list[position].createdFullName??"",),
+            _buildLabelWithValue(label: "Item Code : ", value: sale_fore_cast_vm.rolling_fore_cast_list[position].itemCode??"",),
+            _buildLabelWithValue(label: "Item Name : ", value: sale_fore_cast_vm.rolling_fore_cast_list[position].itemName??"",),
+            _buildLabelWithValue(label: "Qty : ", value: (sale_fore_cast_vm.rolling_fore_cast_list[position].qty.toInt().toString())??"",),
+            _buildLabelWithValue(label: "Item Variant : ", value: sale_fore_cast_vm.rolling_fore_cast_list[position].itemVarient??"",),
+            _buildLabelWithValue(label: "Parent Category Code : ", value: sale_fore_cast_vm.rolling_fore_cast_list[position].itemParentCategoryCode??"",),
+            _buildLabelWithValue(label: "Item Category Code : ", value: sale_fore_cast_vm.rolling_fore_cast_list[position].itemCategoryCode??"",),
+            _buildLabelWithValue(label: "Closer Month : ", value: sale_fore_cast_vm.rolling_fore_cast_list[position].closureMonth??"",),
+            _buildLabelWithValue(label: "Closer Year : ", value: sale_fore_cast_vm.rolling_fore_cast_list[position].closureYear??"",),
             _buildLabelWithValue(label: "Created On : ", value: createdOn,),
-            _buildLabelWithValue(label: "Required Region Name : ", value: rh_vm.rolling_fore_cast_list[position].requiredRegionName??"",),
+            _buildLabelWithValue(label: "Required Region Name : ", value: sale_fore_cast_vm.rolling_fore_cast_list[position].requiredRegionName??"",),
 
           ],
         ),
@@ -304,40 +308,42 @@ class RollingForeCastRHListScreen extends StatelessWidget{
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               const SizedBox(height: 5,),
-                              bindFilterData(rh_vm.rollingForceCastId.value, 'Rolling Forecast ID'),
+                              bindFilterData(sale_fore_cast_vm.rollingForceCastId.value, 'Rolling Forecast ID'),
                               const SizedBox(height: 10,),
-                              bindFilterData(rh_vm.quoteIdController.value, 'Quote Id'),
+                              bindFilterData(sale_fore_cast_vm.quoteIdController.value, 'Quote Id'),
                               const SizedBox(height: 10,),
-                              bindFilterData(rh_vm.saleCycleController.value, 'Sale Cycle Id'),
+                              bindFilterData(sale_fore_cast_vm.saleCycleController.value, 'Sale Cycle Id'),
                               const SizedBox(height: 10,),
-                              bindFilterData(rh_vm.customerNameController.value, 'Customer Name'),
+                              bindFilterData(sale_fore_cast_vm.customerNameController.value, 'Customer Name'),
                               const SizedBox(height: 10,),
                               bindClusterNameFilter(context),
                               const SizedBox(height: 10,),
                               bindRegionNameFilter(context),
                               const SizedBox(height: 10,),
-                              bindFilterData(rh_vm.itemCodeController.value, 'Item Code'),
+                              bindCreatedBYFilter(context),
                               const SizedBox(height: 10,),
-                              bindFilterData(rh_vm.itemNameController.value, 'Item Name'),
+                              bindFilterData(sale_fore_cast_vm.itemCodeController.value, 'Item Code'),
                               const SizedBox(height: 10,),
-                              bindFilterData(rh_vm.qtyController.value, 'Qty'),
+                              bindFilterData(sale_fore_cast_vm.itemNameController.value, 'Item Name'),
                               const SizedBox(height: 10,),
-                              bindFilterData(rh_vm.itemVarient_Ctrl.value, 'Item Variant'),
+                              bindFilterData(sale_fore_cast_vm.qtyController.value, 'Qty'),
+                              const SizedBox(height: 10,),
+                              bindFilterData(sale_fore_cast_vm.itemVarient_Ctrl.value, 'Item Variant'),
                               const SizedBox(height: 10,),
                               bindItemProductCategoryFilter(context),
                               const SizedBox(height: 10,),
-                              bindDropDownType(context,rh_vm.item_category_type_controller.value,
-                                  'Product Category Type',rh_vm.productCategoryTypeList),
+                              bindDropDownType(context,sale_fore_cast_vm.item_category_type_controller.value,
+                                  'Product Category Type',sale_fore_cast_vm.productCategoryTypeList),
                               const SizedBox(height: 10,),
                               bindParentProductCategoryFilter(context),
                               const SizedBox(height: 10,),
-                              bindDropDownType(context,rh_vm.closerMonth_Ctrl.value, 'Closure Month',rh_vm.months),
+                              bindDropDownType(context,sale_fore_cast_vm.closerMonth_Ctrl.value, 'Closure Month',sale_fore_cast_vm.months),
                               const SizedBox(height: 10,),
-                              bindDropDownType(context,rh_vm.closerYear_Ctrl.value, 'Closure Year',rh_vm.years),
+                              bindDropDownType(context,sale_fore_cast_vm.closerYear_Ctrl.value, 'Closure Year',sale_fore_cast_vm.years),
                               const SizedBox(height: 10,),
                               filterWithQuoteCreatedOn(context),
                               const SizedBox(height: 10,),
-                              bindFilterData(rh_vm.requiredRegionNameController.value, 'Required Region Name'),
+                              bindFilterData(sale_fore_cast_vm.requiredRegionNameController.value, 'Required Region Name'),
 
                             ],
                           ),
@@ -355,11 +361,11 @@ class RollingForeCastRHListScreen extends StatelessWidget{
                           textColor: AllColors.redColor,
                           onTap: () {
                             Get.back();
-                            rh_vm.filterDataChecker.value='';
-                            rh_vm.clearFilterData();
-                            rh_vm.clearFilterSessionData();
-                            rh_vm.pageNumber = 0;
-                            rh_vm.SalesForecastLinesGetNew(rh_vm.pageNumber,);
+                            sale_fore_cast_vm.filterDataChecker.value='';
+                            sale_fore_cast_vm.clearFilterData();
+                            sale_fore_cast_vm.clearFilterSessionData();
+                            sale_fore_cast_vm.pageNumber = 0;
+                            sale_fore_cast_vm.SalesForecastLinesGetNew(sale_fore_cast_vm.pageNumber,);
                           },
                         )),
                         const SizedBox(width: 6),
@@ -369,8 +375,8 @@ class RollingForeCastRHListScreen extends StatelessWidget{
                           textColor: AllColors.primaryDark1,
                           onTap: () {
                             Get.back();
-                            rh_vm.pageNumber = 0;
-                            rh_vm.SalesForecastLinesGetNew(rh_vm.pageNumber,);
+                            sale_fore_cast_vm.pageNumber = 0;
+                            sale_fore_cast_vm.SalesForecastLinesGetNew(sale_fore_cast_vm.pageNumber,);
                           },
                         )),
                         const SizedBox(width: 6),
@@ -380,8 +386,8 @@ class RollingForeCastRHListScreen extends StatelessWidget{
                           textColor: AllColors.green,
                           onTap: () {
                             Get.back();
-                            rh_vm.filterDataChecker.value='';
-                            rh_vm.SaveFilterData();
+                            sale_fore_cast_vm.filterDataChecker.value='';
+                            sale_fore_cast_vm.SaveFilterData();
                           },
                         )),
                       ],
@@ -463,7 +469,7 @@ class RollingForeCastRHListScreen extends StatelessWidget{
   bindCreatedOn(BuildContext context) {
     return TextField(
         cursorColor: AllColors.primaryDark1,
-        controller: rh_vm.createdOnController.value,
+        controller: sale_fore_cast_vm.createdOnController.value,
         decoration: InputDecoration(
             contentPadding: EdgeInsets.symmetric(
                 vertical: AllFontSize.two, horizontal: AllFontSize.ten
@@ -511,9 +517,9 @@ class RollingForeCastRHListScreen extends StatelessWidget{
           );
           var outputFormat = DateFormat('yyyy-MM-dd');
           if (date != null && date != "")
-            rh_vm.createdOnController.value.text = outputFormat.format(date);
+            sale_fore_cast_vm.createdOnController.value.text = outputFormat.format(date);
           else
-            rh_vm.createdOnController.value.text = "";
+            sale_fore_cast_vm.createdOnController.value.text = "";
         }
 
     );
@@ -521,7 +527,7 @@ class RollingForeCastRHListScreen extends StatelessWidget{
   filterWithQuoteCreatedOn(BuildContext context) {
     return TextField(
       cursorColor: AllColors.primaryDark1,
-      controller: rh_vm.createdOnController.value,
+      controller: sale_fore_cast_vm.createdOnController.value,
       readOnly: true,
       decoration: InputDecoration(
         contentPadding: EdgeInsets.symmetric(
@@ -571,11 +577,11 @@ class RollingForeCastRHListScreen extends StatelessWidget{
         if (picked != null) {
           final startDate = DateFormat('yyyy-MM-dd').format(picked.start);
           final endDate = DateFormat('yyyy-MM-dd').format(picked.end);
-          rh_vm.createdOnStartToEnd.value = "$startDate@$endDate";
-          rh_vm.createdOnController.value.text = '$startDate - $endDate';
+          sale_fore_cast_vm.createdOnStartToEnd.value = "$startDate@$endDate";
+          sale_fore_cast_vm.createdOnController.value.text = '$startDate - $endDate';
         } else {
-          rh_vm.createdOnController.value.text = '';
-          rh_vm.createdOnStartToEnd.value = "";
+          sale_fore_cast_vm.createdOnController.value.text = '';
+          sale_fore_cast_vm.createdOnStartToEnd.value = "";
         }
       },
     );
@@ -583,27 +589,27 @@ class RollingForeCastRHListScreen extends StatelessWidget{
 
   Widget bindClusterNameFilter(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final availableItems = rh_vm.clusterGetByEmailList;
-      if (rh_vm.clusterName_controller.value.text.isNotEmpty && rh_vm.filterDataChecker.value=='1') {
-        List<String> nameList = rh_vm.clusterName_controller.value.text.split('|');
-        rh_vm.SelectedCluster_list.value =[];
-        rh_vm.SelectedCluster_list.value =
+      final availableItems = sale_fore_cast_vm.clusterGetByEmailList;
+      if (sale_fore_cast_vm.clusterName_controller.value.text.isNotEmpty && sale_fore_cast_vm.filterDataChecker.value=='1') {
+        List<String> nameList = sale_fore_cast_vm.clusterName_controller.value.text.split('|');
+        sale_fore_cast_vm.SelectedCluster_list.value =[];
+        sale_fore_cast_vm.SelectedCluster_list.value =
             List.generate(nameList.length, (index) {
               return ClusterModal(geoValue: nameList[index].trim(),);
             });
       }
       else{
-        if (availableItems.isNotEmpty && rh_vm.SelectedCluster_list.isEmpty) {
-          rh_vm.SelectedCluster_list.assignAll(availableItems);
-          rh_vm.clusterName_controller.value.text = availableItems.map((e) => e.geoValue).join('|');
-          rh_vm.getRegionsWithClusterFilterGetByEmail();
+        if (availableItems.isNotEmpty && sale_fore_cast_vm.SelectedCluster_list.isEmpty) {
+          sale_fore_cast_vm.SelectedCluster_list.assignAll(availableItems);
+          sale_fore_cast_vm.clusterName_controller.value.text = availableItems.map((e) => e.geoValue).join('|');
+          sale_fore_cast_vm.getRegionsWithClusterFilterGetByEmail();
         }
       }
 
     });
 
     return Obx(() {
-      final selected = rh_vm.SelectedCluster_list;
+      final selected = sale_fore_cast_vm.SelectedCluster_list;
       final selectedText = selected.isEmpty ? null : selected.map((e) => e.geoValue).join(', ');
 
       return GestureDetector(
@@ -617,8 +623,8 @@ class RollingForeCastRHListScreen extends StatelessWidget{
             builder: (context) {
               final searchController = TextEditingController();
               final tempSelected = <ClusterModal>[];
-              tempSelected.addAll(rh_vm.SelectedCluster_list);
-              List<ClusterModal> allItems = rh_vm.clusterGetByEmailList;
+              tempSelected.addAll(sale_fore_cast_vm.SelectedCluster_list);
+              List<ClusterModal> allItems = sale_fore_cast_vm.clusterGetByEmailList;
 
               return StatefulBuilder(builder: (context, setState) {
                 final query = searchController.text.toLowerCase();
@@ -756,10 +762,10 @@ class RollingForeCastRHListScreen extends StatelessWidget{
                                     ),
                                   ),
                                   onPressed: () {
-                                    rh_vm.filterDataChecker.value='';
-                                    rh_vm.SelectedCluster_list.assignAll(tempSelected);
-                                    rh_vm.clusterName_controller.value.text = tempSelected.map((e) => e.geoValue).join('| ');
-                                    rh_vm.getRegionsWithClusterFilterGetByEmail();
+                                    sale_fore_cast_vm.filterDataChecker.value='';
+                                    sale_fore_cast_vm.SelectedCluster_list.assignAll(tempSelected);
+                                    sale_fore_cast_vm.clusterName_controller.value.text = tempSelected.map((e) => e.geoValue).join('| ');
+                                    sale_fore_cast_vm.getRegionsWithClusterFilterGetByEmail();
                                     Navigator.of(context).pop();
                                   },
                                   child: Text('Done',style: GoogleFonts.poppins(
@@ -822,11 +828,11 @@ class RollingForeCastRHListScreen extends StatelessWidget{
   }
   Widget bindRegionNameFilter(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final availableItems = rh_vm.regionwithclusterGetByEmailList;
-      if (rh_vm.RegionName_controller.value.text.isNotEmpty && rh_vm.filterDataChecker.value=='1') {
-        rh_vm.SelectedRegion_list.value=[];
-        List<String> nameList = rh_vm.RegionName_controller.value.text.split('|');
-        rh_vm.SelectedRegion_list.value =
+      final availableItems = sale_fore_cast_vm.regionwithclusterGetByEmailList;
+      if (sale_fore_cast_vm.RegionName_controller.value.text.isNotEmpty && sale_fore_cast_vm.filterDataChecker.value=='1') {
+        sale_fore_cast_vm.SelectedRegion_list.value=[];
+        List<String> nameList = sale_fore_cast_vm.RegionName_controller.value.text.split('|');
+        sale_fore_cast_vm.SelectedRegion_list.value =
             List.generate(nameList.length, (index) {
               return RegionWithClusterFilterModal(
                 geoValue: nameList[index].trim(),
@@ -834,10 +840,10 @@ class RollingForeCastRHListScreen extends StatelessWidget{
             });
       }
       else{
-        if (availableItems.isNotEmpty && rh_vm.SelectedRegion_list.isEmpty) {
-          rh_vm.SelectedRegion_list.assignAll(availableItems);
-          rh_vm.RegionName_controller.value.text = availableItems.map((e) => e.geoValue).join('|');
-          print("bind region ${rh_vm.RegionName_controller.value.text}");
+        if (availableItems.isNotEmpty && sale_fore_cast_vm.SelectedRegion_list.isEmpty) {
+          sale_fore_cast_vm.SelectedRegion_list.assignAll(availableItems);
+          sale_fore_cast_vm.RegionName_controller.value.text = availableItems.map((e) => e.geoValue).join('|');
+          print("bind region ${sale_fore_cast_vm.RegionName_controller.value.text}");
         }
         else{
           print("region does not bind first time");
@@ -845,7 +851,7 @@ class RollingForeCastRHListScreen extends StatelessWidget{
       }
     });
     return Obx(() {
-      final selected = rh_vm.SelectedRegion_list;
+      final selected = sale_fore_cast_vm.SelectedRegion_list;
       final selectedText = selected.isEmpty ? null : selected.map((e) => e.geoValue).join(', ');
 
       return GestureDetector(
@@ -859,9 +865,9 @@ class RollingForeCastRHListScreen extends StatelessWidget{
             builder: (context) {
               final searchController = TextEditingController();
               final tempSelected = <RegionWithClusterFilterModal>[];
-              tempSelected.addAll(rh_vm.SelectedRegion_list);
+              tempSelected.addAll(sale_fore_cast_vm.SelectedRegion_list);
 
-              final allItems = rh_vm.regionwithclusterGetByEmailList;
+              final allItems = sale_fore_cast_vm.regionwithclusterGetByEmailList;
 
               return StatefulBuilder(builder: (context, setState) {
                 final query = searchController.text.toLowerCase();
@@ -1002,9 +1008,9 @@ class RollingForeCastRHListScreen extends StatelessWidget{
                                     ),
                                   ),
                                   onPressed: () {
-                                    rh_vm.filterDataChecker.value='';
-                                    rh_vm.SelectedRegion_list.assignAll(tempSelected);
-                                    rh_vm.RegionName_controller.value.text = tempSelected.map((e) => e.geoValue).join('|');
+                                    sale_fore_cast_vm.filterDataChecker.value='';
+                                    sale_fore_cast_vm.SelectedRegion_list.assignAll(tempSelected);
+                                    sale_fore_cast_vm.RegionName_controller.value.text = tempSelected.map((e) => e.geoValue).join('|');
                                     Navigator.of(context).pop();
                                   },
                                   child: Text('Done',style: GoogleFonts.poppins(
@@ -1068,10 +1074,10 @@ class RollingForeCastRHListScreen extends StatelessWidget{
 
   bindParentProductCategoryFilter(BuildContext context) {
     return Obx((){
-      if (rh_vm.parentCategoryCodeController.value.text.isNotEmpty && rh_vm.filterDataChecker.value=='1') {
-        List<String> nameList = rh_vm.parentCategoryCodeController.value.text.split(',');
+      if (sale_fore_cast_vm.parentCategoryCodeController.value.text.isNotEmpty && sale_fore_cast_vm.filterDataChecker.value=='1') {
+        List<String> nameList = sale_fore_cast_vm.parentCategoryCodeController.value.text.split(',');
 
-        rh_vm.parentItemCategorySelectedList.value =
+        sale_fore_cast_vm.parentItemCategorySelectedList.value =
             List.generate(nameList.length, (index) {
               return ItemCategoryMstModel(
                 parentCategoryCode: nameList[index].trim(),
@@ -1079,14 +1085,14 @@ class RollingForeCastRHListScreen extends StatelessWidget{
             });
       }
       return  DropdownSearch<ItemCategoryMstModel>.multiSelection(
-        items: rh_vm.parentProductCategoryList,
+        items: sale_fore_cast_vm.parentProductCategoryList,
         itemAsString: (ItemCategoryMstModel u) => u.parentCategoryCode??"",
-        selectedItems: rh_vm.parentItemCategorySelectedList,
+        selectedItems: sale_fore_cast_vm.parentItemCategorySelectedList,
         dropdownDecoratorProps: DropDownDecoratorProps(
           baseStyle: TextStyle(color: Colors.black),
           dropdownSearchDecoration: InputDecoration(
             filled: false,
-            labelText: rh_vm.parentItemCategorySelectedList.isNotEmpty?"Parent Category Code":null,
+            labelText: sale_fore_cast_vm.parentItemCategorySelectedList.isNotEmpty?"Parent Category Code":null,
             hintText: "Parent Category Code",
             hintStyle: GoogleFonts.poppins(
                 color: AllColors.lightblackColor,
@@ -1120,8 +1126,8 @@ class RollingForeCastRHListScreen extends StatelessWidget{
           );
         },
         onChanged: (List<ItemCategoryMstModel> selectedList) {
-          rh_vm.parentItemCategorySelectedList.value = selectedList;
-          rh_vm.parentCategoryCodeController.value.text =
+          sale_fore_cast_vm.parentItemCategorySelectedList.value = selectedList;
+          sale_fore_cast_vm.parentCategoryCodeController.value.text =
               selectedList.map((e) => e.parentCategoryCode).join(', ');
         },
         popupProps: PopupPropsMultiSelection.dialog(
@@ -1149,10 +1155,10 @@ class RollingForeCastRHListScreen extends StatelessWidget{
 
   bindItemProductCategoryFilter(BuildContext context) {
     return Obx((){
-      if (rh_vm.itemCategoryCodeController.value.text.isNotEmpty && rh_vm.filterDataChecker.value=='1') {
-        List<String> nameList = rh_vm.itemCategoryCodeController.value.text.split(',');
+      if (sale_fore_cast_vm.itemCategoryCodeController.value.text.isNotEmpty && sale_fore_cast_vm.filterDataChecker.value=='1') {
+        List<String> nameList = sale_fore_cast_vm.itemCategoryCodeController.value.text.split(',');
 
-        rh_vm.Selected_item_product_cat_list.value =
+        sale_fore_cast_vm.Selected_item_product_cat_list.value =
             List.generate(nameList.length, (index) {
               return ItemCategoryMstModel(
                 categoryName: nameList[index].trim(),
@@ -1160,14 +1166,14 @@ class RollingForeCastRHListScreen extends StatelessWidget{
             });
       }
       return  DropdownSearch<ItemCategoryMstModel>.multiSelection(
-        items: rh_vm.item_product_cat_list,
+        items: sale_fore_cast_vm.item_product_cat_list,
         itemAsString: (ItemCategoryMstModel u) => u.categoryName??"",
-        selectedItems: rh_vm.Selected_item_product_cat_list,
+        selectedItems: sale_fore_cast_vm.Selected_item_product_cat_list,
         dropdownDecoratorProps: DropDownDecoratorProps(
           baseStyle: TextStyle(color: Colors.black),
           dropdownSearchDecoration: InputDecoration(
             filled: false,
-            labelText: rh_vm.Selected_item_product_cat_list.isNotEmpty?"Product Category":null,
+            labelText: sale_fore_cast_vm.Selected_item_product_cat_list.isNotEmpty?"Product Category":null,
             hintText: "Product Category",
             hintStyle: GoogleFonts.poppins(
                 color: AllColors.lightblackColor,
@@ -1201,8 +1207,8 @@ class RollingForeCastRHListScreen extends StatelessWidget{
           );
         },
         onChanged: (List<ItemCategoryMstModel> selectedList) {
-          rh_vm.Selected_item_product_cat_list.value = selectedList;
-          rh_vm.itemCategoryCodeController.value.text =
+          sale_fore_cast_vm.Selected_item_product_cat_list.value = selectedList;
+          sale_fore_cast_vm.itemCategoryCodeController.value.text =
               selectedList.map((e) => e.categoryName).join(', ');
         },
         popupProps: PopupPropsMultiSelection.dialog(
@@ -1262,14 +1268,14 @@ class RollingForeCastRHListScreen extends StatelessWidget{
         print(selection);
         if(hintData=='Closure Month'){
           String monthName = _displayStringTypeDropDownForOption(selection!).toString();
-          rh_vm.monthNameForApi = rh_vm.setMonthNameInShort(monthName);;
-          rh_vm.closerMonth_Ctrl.value.text = _displayStringTypeDropDownForOption(selection!).toString();
+          sale_fore_cast_vm.monthNameForApi = sale_fore_cast_vm.setMonthNameInShort(monthName);;
+          sale_fore_cast_vm.closerMonth_Ctrl.value.text = _displayStringTypeDropDownForOption(selection!).toString();
         }
         else if(hintData =='Closure Year'){
-          rh_vm.closerYear_Ctrl.value.text = _displayStringTypeDropDownForOption(selection!).toString();
+          sale_fore_cast_vm.closerYear_Ctrl.value.text = _displayStringTypeDropDownForOption(selection!).toString();
         }
         else{
-          rh_vm.item_category_type_controller.value.text =
+          sale_fore_cast_vm.item_category_type_controller.value.text =
               _displayStringTypeDropDownForOption(selection!).toString();
         }
       },
@@ -1280,6 +1286,272 @@ class RollingForeCastRHListScreen extends StatelessWidget{
           foregroundColor: MaterialStateProperty.all<Color>(
               AllColors.primaryDark1),));
       }).toList(),
+    );
+  }
+
+  Widget bindCreatedBYFilter(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {});
+    return Obx(() {
+      if (sale_fore_cast_vm.AccountOwner_controller.value.text.isNotEmpty && sale_fore_cast_vm.filterDataChecker.value=='1') {
+        //List<String> nameList = sale_fore_cast_vm.AccountOwner_controller.value.text.split(',');
+        List<String> nameList = sale_fore_cast_vm.accountNameCode.split(',');
+        sale_fore_cast_vm.SelectedEmployee_Member_list.value = List.generate(nameList.length, (index) {
+          debugPrint("empid.... ${nameList[index].trim().substring(nameList[index].trim().indexOf('(')+1,nameList[index].trim().indexOf(')'))}");
+          return EmployeeMemberModel(
+            userFullName: sale_fore_cast_vm.isAdminWritePermission=="1" ?
+            nameList[index].trim().substring(0,nameList[index].trim().indexOf('(')):"",
+            fullName: sale_fore_cast_vm.isAdminWritePermission!="1"?
+            nameList[index].trim().substring(0,nameList[index].trim().indexOf('(')):"",
+            salesPersonEmpCode:nameList[index].trim().substring(nameList[index].trim().indexOf('(')+1,nameList[index].trim().indexOf(')')),
+          );
+        });
+      }
+      final selected = sale_fore_cast_vm.SelectedEmployee_Member_list;
+      final selectedText = selected.isEmpty ? null : selected.map((e) =>
+      "${sale_fore_cast_vm.isAdminWritePermission=="1"?e.userFullName ?? "":e.fullName ?? ""}(${e.salesPersonEmpCode ?? ""})").join(', ');
+      return GestureDetector(
+        onTap: ()  {
+          openBottomSheet(context);
+        },
+        child: InputDecorator(
+          decoration: InputDecoration(
+            labelText: selectedText != null ?  "Created By": "",
+            hintStyle: GoogleFonts.poppins(
+                color: AllColors.lightblackColor,
+                fontWeight: FontWeight.w300,
+                fontSize: AllFontSize.ten),
+            labelStyle: GoogleFonts.poppins(
+                color: AllColors.primaryDark1,
+                fontWeight: FontWeight.w500,
+                fontSize: AllFontSize.sisxteen),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            contentPadding:
+            const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+          ),
+          child: Row(
+            children: [
+              Expanded(
+                child: selectedText == null
+                    ? Text(
+                  "Created By",
+                  style: GoogleFonts.poppins(
+                      color: AllColors.primaryDark1,
+                      fontWeight: FontWeight.w500,
+                      fontSize: AllFontSize.sisxteen
+                  ),
+                )
+                    : SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Text(
+                    selectedText,
+                    style: const TextStyle(color: Colors.black),
+                  ),
+                ),
+              ),
+              const Icon(Icons.arrow_drop_down),
+            ],
+          ),
+        ),
+      );
+    });
+  }
+  openBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(16)),),
+        builder: (context){
+          sale_fore_cast_vm.tempSelected.value = [];
+          sale_fore_cast_vm.tempSelected.addAll(sale_fore_cast_vm.SelectedEmployee_Member_list);
+          sale_fore_cast_vm.filtered.value = sale_fore_cast_vm.employee_Member_list;
+          return Obx((){
+            sale_fore_cast_vm.allSelected.value = sale_fore_cast_vm.filtered.isNotEmpty
+                && sale_fore_cast_vm.tempSelected.length == sale_fore_cast_vm.filtered.length;
+            return Visibility(
+                visible: sale_fore_cast_vm.selectOwner.value,
+                child: Padding(
+                  padding: EdgeInsets.only(
+                      bottom: MediaQuery.of(context).viewInsets.bottom),
+                  child: SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.75,
+                    child: Column(
+                      children: [
+                        const SizedBox(height: 8),
+                        Container(
+                          width: 50,
+                          height: 4,
+                          decoration: BoxDecoration(
+                              color: Colors.grey[400],
+                              borderRadius: BorderRadius.circular(2)),
+                        ),
+                        const SizedBox(height: 12),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  'Select Created By',
+                                  style: GoogleFonts.poppins(
+                                      fontSize: 16, fontWeight: FontWeight.w600,color: Colors.black),
+                                ),
+                              ),
+                              IconButton(onPressed: () {
+                                Navigator.of(context).pop();
+                              }, icon: const Icon(Icons.close,color: AllColors.primaryDark1,weight: 700,))
+
+                            ],
+                          ),
+                        ),
+                        // Search Field
+                        Padding(
+                          padding:
+                          const EdgeInsets.symmetric(horizontal: 16.0),
+                          child: TextField(
+                            controller: sale_fore_cast_vm.searchController.value,
+                            decoration: InputDecoration(
+                              hintText: 'Search...',
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8)),
+                              isDense: true,
+                              suffixIcon: sale_fore_cast_vm.searchController.value.text.isNotEmpty ? IconButton(
+                                icon: const Icon(Icons.clear),
+                                onPressed: () {
+                                  sale_fore_cast_vm.searchController.value.clear();
+                                  if(sale_fore_cast_vm.isAdminWritePermission=="1") {
+                                    sale_fore_cast_vm.EmployeeMasterGet(sale_fore_cast_vm.searchController.value.text);
+                                  }
+                                  else{
+                                    sale_fore_cast_vm.filtered.value =sale_fore_cast_vm.searchController.value.text.isEmpty ?
+                                    sale_fore_cast_vm.employee_Member_list:sale_fore_cast_vm.employee_Member_list.where((c) =>
+                                        (c.fullName ?? "").toLowerCase().contains(sale_fore_cast_vm.searchController.value.text)).toList();
+                                  }
+
+
+                                },
+                              ) : null,
+                            ),
+                            onChanged: (v)
+                            {
+                              if(sale_fore_cast_vm.isAdminWritePermission=="1") {
+                                sale_fore_cast_vm.EmployeeMasterGet(sale_fore_cast_vm.searchController.value.text);
+                              }
+                              else{
+                                sale_fore_cast_vm.filtered.value =sale_fore_cast_vm.searchController.value.text.isEmpty ?
+                                sale_fore_cast_vm.employee_Member_list:sale_fore_cast_vm.employee_Member_list.where((c) =>
+                                    ("${c.fullName ?? ""} ${c.salesPersonEmpCode ?? ""}").toLowerCase().contains(sale_fore_cast_vm.searchController.value.text)).toList();
+                              }
+
+                            },
+                          ),
+                        ),
+
+                        const SizedBox(height: 8),
+
+                        // Select All
+                        /* Padding(
+                          padding:
+                          const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: CheckboxListTile(
+                            title:sale_fore_cast_vm.allSelected.value?const Text('UnSelect All'): const Text('Select All'),
+                            value: sale_fore_cast_vm.allSelected.value,
+                            onChanged: (val) {
+                              if (val == true) {
+                                sale_fore_cast_vm.tempSelected.clear();
+                                sale_fore_cast_vm.allSelected.value=true;
+                                sale_fore_cast_vm.tempSelected.addAll(sale_fore_cast_vm.filtered);
+                              } else {
+                                sale_fore_cast_vm.allSelected.value=false;
+                                sale_fore_cast_vm.tempSelected.clear();
+                              }
+                              sale_fore_cast_vm.selectOwner.value=false;
+                              sale_fore_cast_vm.selectOwner.value=true;
+                            },
+                          ),
+                        ),*/
+
+                        const Divider(height: 1),
+                        Obx((){
+                          return Visibility(visible:sale_fore_cast_vm.loading.value,
+                            child:LinearProgressIndicator(
+                              backgroundColor: AllColors.primaryDark1,
+                              color: AllColors.textColor,
+                            ), );
+                        }),
+
+                        // List
+                        Expanded(
+                          child: sale_fore_cast_vm.filtered.isEmpty ? const Center(child: Text('No Record Found!')) : ListView.builder(
+                            padding: const EdgeInsets.symmetric(vertical: 8),
+                            itemCount: sale_fore_cast_vm.filtered.length,
+                            itemBuilder: (context, idx) {
+                              final item = sale_fore_cast_vm.filtered[idx];
+                              sale_fore_cast_vm.isSel.value = sale_fore_cast_vm.tempSelected.any((s) =>
+                              (sale_fore_cast_vm.isAdminWritePermission=="1"?s.userFullName ?? "":s.fullName ?? "") ==
+                                  (sale_fore_cast_vm.isAdminWritePermission=="1"?item.userFullName ?? "":item.fullName ?? ""));
+                              return CheckboxListTile(
+                                title: Text("${sale_fore_cast_vm.isAdminWritePermission=="1"?
+                                item.userFullName ?? "":item.fullName ?? ""}(${item.salesPersonEmpCode ?? ""})"),
+                                value: sale_fore_cast_vm.isSel.value,
+                                onChanged: (v) {
+                                  if (v == true) {
+                                    sale_fore_cast_vm.isSel.value=true;
+                                    sale_fore_cast_vm.tempSelected.add(item);
+                                  } else {
+                                    sale_fore_cast_vm.isSel.value=false;
+                                    sale_fore_cast_vm.tempSelected.removeWhere((s) =>
+                                    (sale_fore_cast_vm.isAdminWritePermission=="1"?s.userFullName ?? "":s.fullName ?? "") ==
+                                        (sale_fore_cast_vm.isAdminWritePermission=="1"?item.userFullName ?? "":item.fullName ?? ""));
+                                    //(s.userFullName ?? "") == (item.userFullName ?? ""));
+                                  }
+                                  sale_fore_cast_vm.selectOwner.value=false;
+                                  sale_fore_cast_vm.selectOwner.value=true;
+                                },
+                              );
+                            },
+                          ),
+                        ),
+
+                        // Done button
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16.0, vertical: 12),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: ElevatedButton(
+                                  onPressed: () {
+                                    sale_fore_cast_vm.SelectedEmployee_Member_list.assignAll(sale_fore_cast_vm.tempSelected);
+                                    sale_fore_cast_vm.accountNameCode= sale_fore_cast_vm.tempSelected.map((nameCode)
+                                    =>"${sale_fore_cast_vm.isAdminWritePermission=="1"?nameCode.userFullName??"":nameCode.fullName??""}(${nameCode.salesPersonEmpCode})" ).join(', ') ;
+                                    sale_fore_cast_vm.AccountOwner_controller.value.text = sale_fore_cast_vm.tempSelected.map((e) => e.empId).join(', ');
+
+                                    Navigator.of(context).pop();
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: AllColors.primaryDark1,
+                                    shadowColor: AllColors.primaryDark1,
+                                    foregroundColor: AllColors.primaryDark1,
+                                    side: BorderSide(color: AllColors.primaryDark1, width: 1),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                  ),
+                                  child: Text('Done',style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w600,color: Colors.white),),
+
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ));
+          });
+        }
     );
   }
 

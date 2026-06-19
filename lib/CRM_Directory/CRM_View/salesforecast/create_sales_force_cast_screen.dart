@@ -632,6 +632,7 @@ class CreateSalesForceCastScreen extends StatelessWidget{
       },
     );
   }
+
   Widget _buildButton({
     required String text,
     required Color borderColor,
@@ -695,6 +696,7 @@ class CreateSalesForceCastScreen extends StatelessWidget{
       },
     );
   }
+
   Widget bindCreatedBYFilter(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {});
     return Obx(() {
@@ -947,6 +949,7 @@ class CreateSalesForceCastScreen extends StatelessWidget{
         }
     );
   }
+
   filterWithQuoteProductCategory(BuildContext context) {
     return Obx(() {
       if (sales_force_cast_vm.productCategoryController.value.text.isNotEmpty && sales_force_cast_vm.filterDataChecker.value=='1') {

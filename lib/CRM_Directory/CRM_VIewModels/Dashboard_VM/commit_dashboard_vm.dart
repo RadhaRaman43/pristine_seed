@@ -91,6 +91,8 @@ class CommitDashboardVm extends GetxController{
   var StageNameForApi;
   var isCommitForApi;
   var EmployeeEmailIdForApi = '';
+  var customerNameCode = '';
+  String accountNameCode='';
 
   RxBool excelLoading = false.obs;
   RxDouble excelProgress = 0.0.obs;
@@ -766,6 +768,7 @@ class CommitDashboardVm extends GetxController{
     QuoteAcceptedForApi = '';
     filterCustomDateController.value.clear();
     AccountOwner_controller.value.clear();
+    accountNameCode='';
     typeOfCall_controller.value.clear();
     filter_sale_cycle_id_cont.value.clear();
     ProductCategory_controller.value.clear();
@@ -774,6 +777,7 @@ class CommitDashboardVm extends GetxController{
     StageName_controller.value.text="All";
   //  clusterName_controller.value.clear();
     CustomerName_controller.value.clear();
+    customerNameCode='';
     filter_created_on_cont.value.clear();
     filter_created_on_star_to_cont.value.clear();
     searchController.value.clear();
@@ -807,14 +811,19 @@ class CommitDashboardVm extends GetxController{
       "filter_stage_name": StageName_controller.value.text,
       "filter_quote_accepted": QuoteAccepted_controller.value.text,
       "filter_customer_name": CustomerName_controller.value.text,
+      "customerNameCode": customerNameCode,
       "filter_product_category": ProductCategory_controller.value.text,
       "filter_commit": IsCommit_controller.value.text,
       "filter_created_on": filter_created_on_cont.value.text,
       "filter_created_on_star_to_cont": filter_created_on_star_to_cont.value.text,
       "filter_owner_name": AccountOwner_controller.value.text,
+      "accountNameCode": accountNameCode,
       "filter_region_name":RegionName_controller.value.text,
       "filter_cluster_name": clusterName_controller.value.text,
     });
+
+    pageNumber = 0;
+    commitDashboardData();
     /*Map getFilterData=await sessionManagement.getFunnelDashboardData();
     print("filter data save ${getFilterData}");*/
 
@@ -830,11 +839,13 @@ class CommitDashboardVm extends GetxController{
       StageName_controller.value.text=getFilterData["filter_stage_name"]??"";
       QuoteAccepted_controller.value.text=getFilterData["filter_quote_accepted"]??"";
       CustomerName_controller.value.text=getFilterData["filter_customer_name"]??"";
+      customerNameCode=getFilterData["customerNameCode"]??"";
       ProductCategory_controller.value.text=getFilterData["filter_product_category"]??"";
       IsCommit_controller.value.text=getFilterData["filter_commit"]??"";
       filter_created_on_cont.value.text=getFilterData["filter_created_on"]??"";
       filter_created_on_star_to_cont.value.text=getFilterData["filter_created_on_star_to_cont"]??"";
       AccountOwner_controller.value.text=getFilterData["filter_owner_name"]??"";
+      accountNameCode=getFilterData["accountNameCode"]??"";
       pageNumber=0;
 
       if(getFilterData["start_date"].toString().isNotEmpty && getFilterData["start_date"].toString()!="" ){

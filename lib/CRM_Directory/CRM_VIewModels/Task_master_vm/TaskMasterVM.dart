@@ -123,6 +123,7 @@ class Taskmastervm extends GetxController{
     var method_of_call_controller=TextEditingController().obs;
     //var account_owner_controller=TextEditingController().obs;
     var AccountOwner_controller=TextEditingController().obs;
+    String accountNameCode='';
 
     //todo update task controllers
     var userRegionUpdateController = TextEditingController();
@@ -1656,6 +1657,7 @@ class Taskmastervm extends GetxController{
        SaleCycleActive_Controller.text = "All";
        AccountOwnerForApi = '';
        AccountOwner_controller.value.clear();
+       accountNameCode='';
        searchController.value.clear();
        if(isAdminWritePermission=="1") {
          EmployeeMasterGet("");
@@ -1691,6 +1693,7 @@ class Taskmastervm extends GetxController{
         'region_name': RegionName_controller.value.text,
         'cluster_name': clusterName_controller.value.text,
         'account_owner': AccountOwner_controller.value.text,
+        'accountNameCode': accountNameCode,
         'filterTaskCreationOnController': filterTaskCreationOnController.value.text,
         'filterTaskCreationOn_from_to_date_Controller': filterTaskCreationOn_from_to_date_Controller.value.text,
         'product_category': product_category_controller.value.text,
@@ -1723,6 +1726,7 @@ class Taskmastervm extends GetxController{
         postalCodeController.value.text=getFilterData["pin_code"]??"";
         district_controller.value.text=getFilterData["district"]??"";
         AccountOwner_controller.value.text=getFilterData["account_owner"]??"";
+        accountNameCode=getFilterData["accountNameCode"]??"";
         filterTaskCreationOnController.value.text=getFilterData["filterTaskCreationOnController"]??"";
         filterTaskCreationOn_from_to_date_Controller.value.text=getFilterData["filterTaskCreationOn_from_to_date_Controller"]??"";
         product_category_controller.value.text=getFilterData["product_category"]??"";

@@ -49,6 +49,7 @@ class SalesDashboardVm extends GetxController{
   var RegionNameForApi;
   var EmployeeNameForApi;
   var DepartNameForApi;
+  var accountNameCode="";
 
   var PeriodTo_Controller = TextEditingController().obs;
   var PeriodFrom_Controller = TextEditingController().obs;
@@ -613,6 +614,7 @@ class SalesDashboardVm extends GetxController{
     //RegionName_controller.value.clear();
     filterCustomDateController.value.clear();
     EmployeeNameFilter_controller.value.clear();
+    accountNameCode='';
     DepartmentNameFilter_controller.value.clear();
     searchController.value.clear();
     if(isAdminWritePermission=="1") {
@@ -638,6 +640,7 @@ class SalesDashboardVm extends GetxController{
       "filter_custom_date": filterCustomDateController.value.text,
       "Department_Name_Filter": DepartmentNameFilter_controller.value.text,
       "Employee_Name_Filter": EmployeeNameFilter_controller.value.text,
+      "accountNameCode": accountNameCode,
       "filter_region_name":RegionName_controller.value.text,
       "filter_cluster_name": clusterName_controller.value.text,
 
@@ -658,6 +661,7 @@ class SalesDashboardVm extends GetxController{
       filterCustomDateController.value.text=getFilterData["filter_custom_date"];
       DepartmentNameFilter_controller.value.text=getFilterData["Department_Name_Filter"];
       EmployeeNameFilter_controller.value.text=getFilterData["Employee_Name_Filter"];
+      accountNameCode=getFilterData["accountNameCode"];
       pageNumber=0;
 
       if(getFilterData["start_date"].toString().isNotEmpty && getFilterData["start_date"].toString()!="" ){

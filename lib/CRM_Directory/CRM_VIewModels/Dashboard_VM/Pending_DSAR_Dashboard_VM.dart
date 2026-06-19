@@ -89,6 +89,8 @@ class PendingDsarDashboardVm extends GetxController{
   var ClusterNameForApi;
   var RegionNameForApi;
   var EmployeeEmailIdForApi = '';
+  String accountNameCode='';
+  var customerNameCode = '';
 
   RxBool excelLoading = false.obs;
   RxDouble excelProgress = 0.0.obs;
@@ -840,10 +842,12 @@ class PendingDsarDashboardVm extends GetxController{
     task_Status_controller.value.clear();
     lastActivity_Status_controller.value.clear();
     AccountOwner_controller.value.clear();
+    accountNameCode='';
     typeOfCall_controller.value.clear();
     ProductCategory_controller.value.clear();
     //clusterName_controller.value.clear();
     CustomerName_controller.value.clear();
+    customerNameCode='';
     //RegionName_controller.value.clear();
     searchController.value.clear();
     if(isAdminWritePermission=="1") {
@@ -876,10 +880,12 @@ class PendingDsarDashboardVm extends GetxController{
       "filter_custom_date": filterCustomDateController.value.text,
       "filter_task_status": task_Status_controller.value.text,
       "filter_customer_name": CustomerName_controller.value.text,
+      "customerNameCode": customerNameCode,
       "filter_type_of_call": typeOfCall_controller.value.text,
       "last_activity_status": lastActivity_Status_controller.value.text,
       "filter_product_category": ProductCategory_controller.value.text,
       "filter_owner_name": AccountOwner_controller.value.text,
+      "accountNameCode":accountNameCode,
       "filter_region_name":RegionName_controller.value.text,
       "filter_cluster_name": clusterName_controller.value.text,
     });
@@ -895,10 +901,12 @@ class PendingDsarDashboardVm extends GetxController{
       filterCustomDateController.value.text=getFilterData["filter_custom_date"];
       task_Status_controller.value.text=getFilterData["filter_task_status"];
       CustomerName_controller.value.text=getFilterData["filter_customer_name"];
+      customerNameCode=getFilterData["customerNameCode"];
       typeOfCall_controller.value.text=getFilterData["filter_type_of_call"];
       lastActivity_Status_controller.value.text=getFilterData["last_activity_status"];
       ProductCategory_controller.value.text=getFilterData["filter_product_category"];
       AccountOwner_controller.value.text=getFilterData["filter_owner_name"];
+      accountNameCode=getFilterData["accountNameCode"];
 
       pageNumber=0;
 

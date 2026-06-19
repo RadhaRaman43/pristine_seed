@@ -2036,16 +2036,16 @@ class PendingDsarDashboardViewscreen extends StatelessWidget{
   }
   bindCustomerNameFilter(BuildContext context) {
     return Obx(() {
-      if (dashboard_view_Controller.CustomerName_controller.value.text
-          .isNotEmpty &&
+      if (dashboard_view_Controller.CustomerName_controller.value.text.isNotEmpty &&
           dashboard_view_Controller.filterDataChecker.value == '1') {
-        List<String> nameList = dashboard_view_Controller
-            .CustomerName_controller.value.text.split(',');
+        //List<String> nameList = dashboard_view_Controller.CustomerName_controller.value.text.split(',');
+        List<String> nameList = dashboard_view_Controller.customerNameCode.split(',');
 
         dashboard_view_Controller.SelectedAccount_Master_list.assignAll(
           List.generate(nameList.length, (index) {
             return AccountMasterModel(
-              accountName: nameList[index].trim(),
+              accountName: nameList[index].trim().substring(0,nameList[index].trim().indexOf('(')),
+              accountCode: nameList[index].trim().substring(nameList[index].trim().indexOf('(')+1,nameList[index].trim().indexOf(')')),
             );
           }),
         );
@@ -2092,6 +2092,8 @@ class PendingDsarDashboardViewscreen extends StatelessWidget{
         onChanged: (List<AccountMasterModel> selectedList) {
           dashboard_view_Controller.SelectedAccount_Master_list.assignAll(
               selectedList);
+          dashboard_view_Controller.customerNameCode = selectedList.map((e) =>
+          "${e.accountName ?? ""}(${e.accountCode ?? ""})").join(', ');
           dashboard_view_Controller.CustomerName_controller.value.text =
               selectedList.map((e) => e.accountCode).join(', ');
         },
@@ -2209,14 +2211,20 @@ class PendingDsarDashboardViewscreen extends StatelessWidget{
     WidgetsBinding.instance.addPostFrameCallback((_) {});
     return Obx(() {
       if (dashboard_view_Controller.AccountOwner_controller.value.text.isNotEmpty && dashboard_view_Controller.filterDataChecker.value=='1') {
-        List<String> nameList = dashboard_view_Controller.AccountOwner_controller.value.text.split(',');
+        //List<String> nameList = sale_fore_cast_vm.AccountOwner_controller.value.text.split(',');
+        List<String> nameList = dashboard_view_Controller.accountNameCode.split(',');
         dashboard_view_Controller.SelectedEmployee_Member_list.value = List.generate(nameList.length, (index) {
+          debugPrint("empid.... ${nameList[index].trim().substring(nameList[index].trim().indexOf('(')+1,nameList[index].trim().indexOf(')'))}");
           return EmployeeMemberModel(
-            userFullName: nameList[index].trim(),
+            userFullName: dashboard_view_Controller.isAdminWritePermission=="1" ?
+            nameList[index].trim().substring(0,nameList[index].trim().indexOf('(')):"",
+            fullName: dashboard_view_Controller.isAdminWritePermission!="1"?
+            nameList[index].trim().substring(0,nameList[index].trim().indexOf('(')):"",
+            salesPersonEmpCode:nameList[index].trim().substring(nameList[index].trim().indexOf('(')+1,nameList[index].trim().indexOf(')')),
           );
         });
       }
-      print("list length ${dashboard_view_Controller.employee_Member_list.length}");
+
       final selected = dashboard_view_Controller.SelectedEmployee_Member_list;
       final selectedText = selected.isEmpty ? null : selected.map((e) =>
       "${dashboard_view_Controller.isAdminWritePermission=="1"?e.userFullName ?? "":e.fullName ?? ""}(${e.salesPersonEmpCode ?? ""})").join(', ');
@@ -2429,6 +2437,10 @@ class PendingDsarDashboardViewscreen extends StatelessWidget{
                                   onPressed: () {
                                     dashboard_view_Controller.SelectedEmployee_Member_list
                                         .assignAll(dashboard_view_Controller.tempSelected);
+
+                                    dashboard_view_Controller.accountNameCode= dashboard_view_Controller.tempSelected.map((nameCode)
+                                    =>"${dashboard_view_Controller.isAdminWritePermission=="1"?nameCode.userFullName??"":nameCode.fullName??""}(${nameCode.salesPersonEmpCode})" ).join(', ') ;
+
                                     dashboard_view_Controller.AccountOwner_controller.value.text =
                                         dashboard_view_Controller.tempSelected.map((e) => e.empId).join(', ');
 
