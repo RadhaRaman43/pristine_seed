@@ -535,18 +535,7 @@ class SalesForceHeaderDetails extends StatelessWidget{
             TextButton(
               onPressed: () {
                 if(sales_force_cast_vm.itemVariantCtrl.value.text.isNotEmpty) {
-                  if(title=="Add Item Variant") {
-                    for (int i = 0; i < sales_force_cast_vm.quoteDowExcelList.length; i++) {
-                      sales_force_cast_vm.quoteDowExcelList[i].lineNo=0;
-                      sales_force_cast_vm.quoteDowExcelList[i].itemVarient=sales_force_cast_vm.itemVariantCtrl.value.text;
-                    }
-                  }
-                  else{
-                    for (int i = 0; i < sales_force_cast_vm.quoteDowExcelList.length; i++) {
-                      sales_force_cast_vm.quoteDowExcelList[i].itemVarient=sales_force_cast_vm.itemVariantCtrl.value.text;
-                    }
-                  }
-                  sales_force_cast_vm.SalesForecastUploadItem(sales_force_cast_vm.quoteDowExcelList);
+                  sales_force_cast_vm.ChangeSalesForecastUploadItem(sales_force_cast_vm.quoteDowExcelList,title);
                 }
                 else{
                   Utils.sanckBarSuccess("Upload!", "Please enter Item Variant");

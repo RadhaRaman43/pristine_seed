@@ -1554,6 +1554,55 @@ class SalesForeCastVM extends GetxController{
     }
   }
 
+  ChangeSalesForecastUploadItem(List<ForeCastQuoteDowExcelModal> modelList, String title) async{
+    try{
+      List<Map<String,dynamic>> lines = [];
+      for(int i=0;i<modelList.length;i++){
+        Map<String,dynamic> input = {
+          "line_no": title=="Add Item Variant"?-1:modelList[i].lineNo.toString(),
+          "quote_id":  modelList[i].quoteId,
+          "quote_line_no":  modelList[i].quoteLineNo.toString(),
+          "closure_month":  modelList[i].closureMonth,
+          "closure_year":  modelList[i].closureYear,
+          "item_code":  modelList[i].itemCode,
+          "item_varient":  itemVariantCtrl.value.text,
+          "qty":  modelList[i].qty??0,
+          "required_region_name":  modelList[i].requiredRegionName,
+          "required_cluster_name":  modelList[i].requiredClusterName
+        };
+        lines.add(input);
+      }
+      Map data={
+        "sales_forecast_id": forceCastId,
+        "created_by": email,
+        "lines": lines
+      };
+      debugPrint("Alll data is ${data}");
+      loading.value=true;
+
+      String onValue = await _api.SalesForecastUploadItem(data, sessionManagement);
+      final jsonResponse = json.decode(onValue);
+      print(onValue);
+      if(jsonResponse is List){
+        List<ForecastCreateResponseModal> response = jsonResponse.map((e) => ForecastCreateResponseModal.fromJson(e)).toList();
+        if(response!= null && response.length>0 && response[0].condition=="True"){
+          forcastResponseList.value = response;
+          Utils.sanckBarSuccess("Successfully", response[0].message.toString());
+          getSalesForecastHeaderGetBySalesForecastId(forceCastId);
+
+        }else {
+          Utils.sanckBarError("Data Not Found", response[0].message.toString());
+        }
+      }
+    }catch(e){
+      print(e);
+      Utils.sanckBarError("Exception!", e.toString());
+    }
+    finally{
+      loading.value = false;
+    }
+  }
+
   Future<void> uploadExcelToServer() async {
     try {
       File? file = await pickExcelFile();
