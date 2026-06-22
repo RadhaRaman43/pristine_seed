@@ -26,6 +26,11 @@ class SalesForeCastRepo{
   Future<String> SalesForecastHeaderCompleted(var data,SessionManagement sessionManagement) async{
     return _apiService.postApi(data, AppUrl.SalesForecastHeaderCompleted,sessionManagement);
   }
+
+  Future<String> SalesForecastDeleteItems(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.SalesForecastDeleteItems,sessionManagement);
+  }
+
   Future<String> SalesForecastAddQuoteItems(var data,SessionManagement sessionManagement) async{
     return _apiService.postApi(data, AppUrl.SalesForecastAddQuoteItems,sessionManagement);
   }

@@ -73,6 +73,11 @@ class SalesForeCastVM extends GetxController{
   ForeCastQuoteDowExcelModal item= ForeCastQuoteDowExcelModal();
 
   var itemVariantCtrl = TextEditingController().obs;
+  var clusterCtrl = TextEditingController().obs;
+  var regionCtrl = TextEditingController().obs;
+  var qtyCtrl = TextEditingController().obs;
+
+  RxBool regionCtlShow = true.obs;
 
   //filter fields
   var salesForceCastId = TextEditingController().obs;
@@ -492,6 +497,60 @@ class SalesForeCastVM extends GetxController{
       loading.value = false;
     }
   }
+
+  void getClustersGetByRajeshEmail() async{
+    try{
+      Map<String, String> data={
+        "email_id": 'rajesh.kumar1@methodexsystems.com'
+      };
+      loading.value=true;
+      print("data is ${data}");
+      String onValue = await _api.clustersGetByEmailApiHit(data, sessionManagement);
+      print(onValue);
+      final jsonResponse = json.decode(onValue);
+      if(jsonResponse is List){
+        List<ClusterModal> response = jsonResponse.map((e) => ClusterModal.fromJson(e)).toList();
+        if(response.length>0 && response[0].condition=="True"){
+          clusterGetByEmailList.value=response;
+          //getRegionsWithClusterGetByRajeshEmail();
+
+        }else {
+          clusterGetByEmailList.value=[];
+        }
+      }
+    }catch(e){
+      print(e);
+    }finally{
+      loading.value = false;
+    }
+  }
+  void getRegionsWithClusterGetByRajeshEmail() async{
+    try{
+      Map<String, String> data={
+        "email_id":'rajesh.kumar1@methodexsystems.com',
+        "cluster_filter":clusterCtrl.value.text
+      };
+      loading.value=true;
+      print("data is ${data}");
+      String onValue = await _api.RegionsWithClusterFilterGetByEmailApiHit(data, sessionManagement);
+      print(onValue);
+      final jsonResponse = json.decode(onValue);
+      if(jsonResponse is List){
+        List<RegionWithClusterFilterModal> response = jsonResponse.map((e) => RegionWithClusterFilterModal.fromJson(e)).toList();
+        if(response.length>0 && response[0].condition=="True"){
+          regionwithclusterGetByEmailList.value=response;
+
+        }else {
+          regionwithclusterGetByEmailList.value=[];
+        }
+      }
+    }catch(e){
+      print(e);
+    }finally{
+      loading.value = false;
+    }
+  }
+
   void getSalesForecastListGet(int page_no) async{
     try{
       AccountOwnerForApi = '';
@@ -922,6 +981,49 @@ class SalesForeCastVM extends GetxController{
 
   }
 
+  SalesForecastDeleteItems(String foreCastId, RxList<ForeCastQuoteDowExcelModal> modelList) async{
+    try{
+      List<Map<String,dynamic>> lines = [];
+      for(int i=0;i<modelList.length;i++){
+        Map<String,dynamic> input = {
+          "line_no": modelList[i].lineNo.toString(),
+
+        };
+        lines.add(input);
+      }
+
+      Map data={
+        "sales_forecast_id": foreCastId,
+        "created_by": email,
+        "lines": lines
+      };
+      loading.value=true;
+
+      String onValue = await _api.SalesForecastDeleteItems(data, sessionManagement);
+      final jsonResponse = json.decode(onValue);
+      print(onValue);
+      if(jsonResponse is List){
+        List<ForecastCreateResponseModal> response = jsonResponse.map((e) => ForecastCreateResponseModal.fromJson(e)).toList();
+        if(response!= null && response.length>0 && response[0].condition=="True"){
+          forcastResponseList.value = response;
+          Utils.sanckBarSuccess("Successfully", response[0].message.toString());
+          getSalesForecastHeaderGetBySalesForecastId(forceCastId);
+
+
+        }else {
+          Utils.sanckBarError("Data Not Found", response[0].message.toString());
+        }
+      }
+    }catch(e){
+      print(e);
+      Utils.sanckBarError("Exception!", e.toString());
+    }
+    finally{
+      loading.value = false;
+    }
+
+  }
+
   clearSaleFrrceCastListFilters(String fromPage){
     salesForceCastId.value.clear();
     createdOnCnontroller.value.clear();
@@ -1244,7 +1346,6 @@ class SalesForeCastVM extends GetxController{
         List<ForeCastQuoteDowExcelModal> response = jsonResponse.map((e) => ForeCastQuoteDowExcelModal.fromJson(e)).toList();
         if(response!= null && response.length>0 && response[0].condition=="True"){
           quoteDowExcelList.value = response;
-          debugPrint("excel length.... ${quoteDowExcelList.length}");
 
           //Utils.sanckBarSuccess("Successfully", response[0].message.toString());
         }else {
@@ -1554,21 +1655,34 @@ class SalesForeCastVM extends GetxController{
     }
   }
 
-  ChangeSalesForecastUploadItem(List<ForeCastQuoteDowExcelModal> modelList, String title) async{
+  ChangeSalesForecastUploadItem(List<ForeCastQuoteDowExcelModal> modelList, String title, String month, String year) async{
     try{
+
+
       List<Map<String,dynamic>> lines = [];
       for(int i=0;i<modelList.length;i++){
+        int qty = 0;
+        if(title == "Edit Quantity"){
+          if(month== modelList[i].closureMonth!.trim() && year==modelList[i].closureYear!.trim()){
+            qty = int.tryParse(qtyCtrl.value.text) ??0;
+          }
+          else{
+            qty = modelList[i].qty.toInt()??0;
+          }
+        }
         Map<String,dynamic> input = {
-          "line_no": title=="Add Item Variant"?-1:modelList[i].lineNo.toString(),
+          "line_no": title=="Add Item Variant" || title=="Add Cluster/Region" ?-1:modelList[i].lineNo.toString(),
           "quote_id":  modelList[i].quoteId,
           "quote_line_no":  modelList[i].quoteLineNo.toString(),
           "closure_month":  modelList[i].closureMonth,
           "closure_year":  modelList[i].closureYear,
           "item_code":  modelList[i].itemCode,
           "item_varient":  itemVariantCtrl.value.text,
-          "qty":  modelList[i].qty??0,
-          "required_region_name":  modelList[i].requiredRegionName,
-          "required_cluster_name":  modelList[i].requiredClusterName
+          "qty": qty,
+          "required_region_name": (title=="Edit Cluster/Region" ||
+              title=="Add Cluster/Region")? regionCtrl.value.text:modelList[i].requiredRegionName,
+          "required_cluster_name":(title=="Edit Cluster/Region" ||
+              title=="Add Cluster/Region")? clusterCtrl.value.text:modelList[i].requiredClusterName
         };
         lines.add(input);
       }

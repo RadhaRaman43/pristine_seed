@@ -21,7 +21,7 @@ class AllColors{
   static const lightredColor=Color(0xc5ee8282);
   static const whiteColor=Color(0xcfffffff);
   static const customDarkerWhite = Color.fromARGB(255, 240, 240, 240);
-  static const yellowColor=Color(0xf7b338e0);
+  static const yellowColor=Color(0xffb39c0d);
   static const primaryColor=Color(0xFFE02888);
   // /static const primaryDark=Color(0xFFE02888);
   static const childSelectColor=Color(0xFFF19AC8);

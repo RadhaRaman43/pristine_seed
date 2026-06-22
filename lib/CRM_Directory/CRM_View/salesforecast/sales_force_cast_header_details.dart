@@ -11,6 +11,8 @@ import '../../../constants/static_methods.dart';
 import '../../../reources/routes/routes_name.dart';
 import '../../../utils/app_utils.dart';
 import '../../../view/custom_drawer.dart';
+import '../../CRM_Models/AccountMaster_model/cluster_modal.dart';
+import '../../CRM_Models/AccountMaster_model/region_with_cluster_filter_modal.dart';
 import '../../CRM_Models/TaskMaster_model/Item_Category_Mast_model.dart';
 import '../../CRM_VIewModels/salesforecasrVM/SalesForeCastVM.dart';
 
@@ -25,6 +27,11 @@ class SalesForceHeaderDetails extends StatelessWidget{
       option.categoryName!;
   static String _displayparentCategoryCodeForOption(ItemCategoryMstModel option) =>
       option.parentCategoryCode!;
+
+  static String _displayClusterForOption(ClusterModal option) =>
+      option.geoValue!;
+  static String _displayRegionForOption(RegionWithClusterFilterModal option) =>
+      option.geoValue!;
 
   @override
   Widget build(BuildContext context) {
@@ -142,7 +149,7 @@ class SalesForceHeaderDetails extends StatelessWidget{
                                 ),
                               ),
                               onPressed: () {
-                                showConfirmCompleteDialog(context,);
+                                showConfirmCompleteDialog(context,0,"");
                               },
                             ),
                         ),
@@ -356,13 +363,56 @@ class SalesForceHeaderDetails extends StatelessWidget{
     return Card(
       child: ListTile(
         contentPadding: EdgeInsets.only(left: 5 , right: 10),
+        title: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Expanded(
+            child: Row(
+              children: [
+                Text(
+                  "Quote  ID : ",
+                  style: GoogleFonts.poppins(
+                      color: AllColors.primaryDark1,
+                      fontSize: AllFontSize.fourtine,
+                      fontWeight: FontWeight.w500),
+                ),
+                Flexible(
+                  child: Tooltip(
+                    message: sales_force_cast_vm.salesForceCastHeader_list[0].lines?[index].quoteId ?? "",
+                    child: Text(sales_force_cast_vm.salesForceCastHeader_list[0].lines?[index].quoteId ?? "",
+                      overflow: TextOverflow.ellipsis,
+                      style: GoogleFonts.poppins(
+                          color: AllColors.textColor,
+                          fontSize: AllFontSize.fourtine,
+                          fontWeight: FontWeight.w500),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+           Obx(() {
+              return Visibility(
+                visible: sales_force_cast_vm.isAdminWritePermission.value == "1" &&
+                    sales_force_cast_vm.isHeadofficePermission.value == "0",
+                child:  GestureDetector(
+                    onTap: (){
+                      sales_force_cast_vm.editableDataApi(sales_force_cast_vm.salesForceCastHeader_list[0].lines![index],"delete");
+                      showConfirmCompleteDialog(context,index,"delete");
+                    },
+                    child: Icon(Icons.delete, color: Colors.red)),
+              );
+            }),
+
+        ],
+      ),
         subtitle: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             const SizedBox(
               height: 10,
             ),
-            _buildLabelWithValue(label: "Quote  ID : ", value: sales_force_cast_vm.salesForceCastHeader_list[0].lines?[index].quoteId ?? "",),
+            //_buildLabelWithValue(label: "Quote  ID : ", value: sales_force_cast_vm.salesForceCastHeader_list[0].lines?[index].quoteId ?? "",),
             _buildLabelWithValue(label: "Sales Cycle ID : ", value: sales_force_cast_vm.salesForceCastHeader_list[0].lines?[index].salesCycleId ?? "",),
             _buildLabelWithValue(label: "Item Code : ", value: sales_force_cast_vm.salesForceCastHeader_list[0].lines?[index].itemCode ?? "",),
             _buildLabelWithValue(label: "Item Name : ", value: sales_force_cast_vm.salesForceCastHeader_list[0].lines?[index].itemName ?? "",),
@@ -372,12 +422,18 @@ class SalesForceHeaderDetails extends StatelessWidget{
             bindEditableData(label: "Item Variant : ",
               value: sales_force_cast_vm.salesForceCastHeader_list[0].lines?[index].itemVarient ?? "",context: context,index: index
             ),
+            bindEditableData(label: "Cluster  Name : ",
+                value: sales_force_cast_vm.salesForceCastHeader_list[0].lines?[index].requiredClusterName ?? "",
+                index: index,context: context),
             _buildLabelWithValue(label: "Region Name : ", value: sales_force_cast_vm.salesForceCastHeader_list[0].lines?[index].requiredRegionName ?? "",),
-            _buildLabelWithValue(label: "Cluster  Name : ", value: sales_force_cast_vm.salesForceCastHeader_list[0].lines?[index].requiredClusterName ?? "",),
+
             ...sales_force_cast_vm.salesForceCastHeader_list[0].lines![index].forecastMonths
-                .map((e) => _buildLabelWithValue(
+                .map((e) => bindMonthYearData(
                 label: "${e.month} ${e.year} : ",
-                value: (e.value ?? 0).toString(),),
+                value: (e.value ?? 0).toString(),
+              context: context,
+              index: index, month: e.month,year: e.year
+            ),
             ).toList(),
 
           ],
@@ -386,12 +442,14 @@ class SalesForceHeaderDetails extends StatelessWidget{
       ),
     );
   }
+
+
   Widget _buildLabelWithValue({
     required String label,
     required String value,
     Color color = AllColors.textColor,
     BuildContext? context,
-    int index=0
+    int index=0,
   }) {
     return Row(
       children: [
@@ -427,6 +485,58 @@ class SalesForceHeaderDetails extends StatelessWidget{
       ],
     );
   }
+
+  Widget bindMonthYearData({
+    required String label, required String month, required String year,
+    required String value,
+    Color color = AllColors.textColor,
+    required BuildContext context,
+    required int index,
+  }) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          label,
+          style: GoogleFonts.poppins(
+            color: AllColors.primaryDark1,
+            fontSize: AllFontSize.fourtine,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        Flexible(
+            child: Align(
+              alignment: Alignment.centerRight,
+              child: GestureDetector(
+                onTap: (){
+                  sales_force_cast_vm.qtyCtrl.value.text=value;
+                  debugPrint("quantity ${sales_force_cast_vm.qtyCtrl.value.text} ${value}");
+                  sales_force_cast_vm.editableDataApi(sales_force_cast_vm.salesForceCastHeader_list[0].lines![index],"edit");
+                  showDialogForChangeVarient(context,index,"Edit Quantity",month,year);
+                },
+                child: Tooltip(
+                  message: value ?? "",
+                  child: Text(
+                    value ?? "",
+                    overflow: TextOverflow.ellipsis,
+                    style: GoogleFonts.poppins(
+                      color: color,
+                      fontSize: AllFontSize.fourtine,
+                      fontWeight: FontWeight.w500,
+                      decoration: TextDecoration.underline,
+
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+
+
+      ],
+    );
+  }
+
   Widget bindEditableData({
     required String label,
     required String value,
@@ -465,29 +575,58 @@ class SalesForceHeaderDetails extends StatelessWidget{
           ),
         const SizedBox(width: 10),
         Visibility(
-           visible:value.isNotEmpty ,
+           visible:label=="Item Variant : " || label=="Cluster  Name : " ,
            child: GestureDetector(
               onTap: (){
-                sales_force_cast_vm.itemVariantCtrl.value.text=value;
-                sales_force_cast_vm.editableDataApi(sales_force_cast_vm.salesForceCastHeader_list[0].lines![index],"edit");
-                showDialogForChangeVarient(context,index,"Edit Item Variant");
+                if(label=="Item Variant : "){
+                  sales_force_cast_vm.itemVariantCtrl.value.text=value;
+                  sales_force_cast_vm.editableDataApi(sales_force_cast_vm.salesForceCastHeader_list[0].lines![index],"edit");
+                  showDialogForChangeVarient(context,index,"Edit Item Variant",'','');
+                }
+                else if(label=="Cluster  Name : "){
+                  sales_force_cast_vm.clusterCtrl.value.text=value;
+                  sales_force_cast_vm.regionCtrl.value.text=sales_force_cast_vm.salesForceCastHeader_list[0].lines![index].requiredRegionName??"";
+                  sales_force_cast_vm.getClustersGetByRajeshEmail();
+                  sales_force_cast_vm.editableDataApi(sales_force_cast_vm.salesForceCastHeader_list[0].lines![index],"edit");
+                  showDialogForChangeVarient(context,index,"Edit Cluster/Region",'','');
+                }
+                else{
+
+                }
+
               },
               child: Icon(Icons.edit,color: AllColors.yellowColor,size: 15,)),
          ),
         const SizedBox(width: 10),
-        GestureDetector(
-            onTap: (){
-              sales_force_cast_vm.itemVariantCtrl.value.text="";
-              sales_force_cast_vm.editableDataApi(sales_force_cast_vm.salesForceCastHeader_list[0].lines![index],"add");
-              showDialogForChangeVarient(context,index,"Add Item Variant");
-            },
-            child:
-            Icon(Icons.add_circle_sharp,color: AllColors.bluegrayColor,)),
+        Visibility(
+          visible: label=="Item Variant : " || label=="Cluster  Name : ",
+          child: GestureDetector(
+              onTap: (){
+                if(label=="Item Variant : "){
+                  sales_force_cast_vm.itemVariantCtrl.value.text="";
+                  sales_force_cast_vm.editableDataApi(sales_force_cast_vm.salesForceCastHeader_list[0].lines![index],"add");
+                  showDialogForChangeVarient(context,index,"Add Item Variant",'','');
+                }
+                else if(label=="Cluster  Name : "){
+                  sales_force_cast_vm.clusterCtrl.value.text="";
+                  sales_force_cast_vm.regionCtrl.value.text="";
+                  sales_force_cast_vm.editableDataApi(sales_force_cast_vm.salesForceCastHeader_list[0].lines![index],"edit");
+                  showDialogForChangeVarient(context,index,"Add Cluster/Region",'','');
+                }
+                else{
+
+                }
+
+              },
+              child:
+              Icon(Icons.add_circle_sharp,color: AllColors.bluegrayColor,)),
+        ),
 
       ],
     );
   }
-  showDialogForChangeVarient(BuildContext context, int index, String title,){
+
+  showDialogForChangeVarient(BuildContext context, int index, String title,String month, String year,){
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -525,21 +664,69 @@ class SalesForceHeaderDetails extends StatelessWidget{
               ),
               const SizedBox(height: 5,),
               Divider(height: 1,),
+              Obx(() {
+                return Visibility(
+                  visible: sales_force_cast_vm.loading.value,
+                  child: LinearProgressIndicator(
+                    backgroundColor: AllColors.primaryDark1,
+                    color: AllColors.textColor,
+                  ),
+                );
+              }),
               const SizedBox(height: 20,),
 
-              bindFilterData(sales_force_cast_vm.itemVariantCtrl.value,'Item Variant'),
+              Visibility(
+                visible: title=="Edit Item Variant" || title=="Add Item Variant",
+                  child: bindFilterData(sales_force_cast_vm.itemVariantCtrl.value,'Item Variant')),
+
+              Visibility(
+                  visible: title=="Edit Quantity",
+                  child: bindFilterData(sales_force_cast_vm.qtyCtrl.value,'Quantity')),
+
+              Visibility(
+                  visible: title=="Edit Cluster/Region" || title=="Add Cluster/Region",
+                  child: bindClusterDropDown(context)),
+
+              Visibility(visible:title=="Edit Cluster/Region" || title=="Add Cluster/Region",
+                child: const SizedBox(height: 10,),),
+
+              Visibility(
+                    visible: title=="Edit Cluster/Region" || title=="Add Cluster/Region",
+                    child: Obx((){
+                      return Visibility(visible: sales_force_cast_vm.regionCtlShow.value,
+                          child: bindRegionDropDown(context));
+                    })),
 
             ],
           ),
           actions: <Widget>[
             TextButton(
               onPressed: () {
-                if(sales_force_cast_vm.itemVariantCtrl.value.text.isNotEmpty) {
-                  sales_force_cast_vm.ChangeSalesForecastUploadItem(sales_force_cast_vm.quoteDowExcelList,title);
+                if(title=="Edit Item Variant" || title=="Add Item Variant") {
+                  if (sales_force_cast_vm.itemVariantCtrl.value.text.isNotEmpty) {
+
+                  }
+                  else {
+                    Utils.sanckBarSuccess("Upload!", "Please enter Item Variant");
+                    return;
+                  }
                 }
-                else{
-                  Utils.sanckBarSuccess("Upload!", "Please enter Item Variant");
+                else if(title=="Edit Cluster/Region" || title=="Add Cluster/Region"){
+                  if(sales_force_cast_vm.clusterCtrl.value.text.isEmpty){
+                    Utils.sanckBarSuccess("Upload!", "Please Select Cluster Name");
+                    return;
+                  }
+                  if(sales_force_cast_vm.regionCtrl.value.text.isEmpty){
+                    Utils.sanckBarSuccess("Upload!", "Please Select Region Name");
+                    return;
+                  }
                 }
+                else if(sales_force_cast_vm.qtyCtrl.value.text.isEmpty){
+                  Utils.sanckBarSuccess("Upload!", "Please Enter Quantity");
+                  return;
+                }
+                sales_force_cast_vm.ChangeSalesForecastUploadItem(
+                    sales_force_cast_vm.quoteDowExcelList, title,month,year);
 
                Navigator.pop(context);
 
@@ -564,7 +751,7 @@ class SalesForceHeaderDetails extends StatelessWidget{
                   ],
                 ),
                 child: Text(
-                  "Add",
+                  "Save",
                   style: TextStyle(
                     color: Colors.green,
                     fontSize: AllFontSize.fourtine,
@@ -579,7 +766,7 @@ class SalesForceHeaderDetails extends StatelessWidget{
     );
   }
 
-  showConfirmCompleteDialog(BuildContext context,){
+  showConfirmCompleteDialog(BuildContext context, int position, String flag,){
     showDialog(
       context: context,
       builder: (context) {
@@ -589,14 +776,11 @@ class SalesForceHeaderDetails extends StatelessWidget{
               Container(
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                  color: Colors.green.shade100, // light red background
+                  color:flag=='delete'? Colors.red.shade100:Colors.green.shade100, // light red background
                   shape: BoxShape.circle,
                 ),
-                child: const Icon(
-                  Icons.info_outline,
-                  color: Colors.green,
-                  size: 28,
-                ),
+                child:flag=='delete'? const Icon(Icons.delete, color: Colors.red, size: 28,):
+                const Icon(Icons.info_outline, color: Colors.green, size: 28,),
               ),
               SizedBox(width: 20,),
               Expanded(
@@ -604,15 +788,13 @@ class SalesForceHeaderDetails extends StatelessWidget{
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text("Complete",
+                    Text(flag=='delete'?'Delete':"Complete",
                       style: GoogleFonts.poppins(
                           color: AllColors.primaryDark1,
                           fontSize: AllFontSize.sisxteen,
                           fontWeight: FontWeight.w700),
                     ),
-                    Text("Do You Want to  complete Forecast "
-                        "${sales_force_cast_vm.salesForceCastHeader_list[0].salesForecastId ??""}"
-                        ,
+                    Text("Do You Want to  complete Forecast ""${sales_force_cast_vm.salesForceCastHeader_list[0].salesForecastId ??""}",
                       style: GoogleFonts.poppins(
                           color: AllColors.primaryDark1,
                           fontSize: AllFontSize.fourtine,
@@ -635,17 +817,26 @@ class SalesForceHeaderDetails extends StatelessWidget{
             ),
             TextButton(
               onPressed: () {
-                sales_force_cast_vm.SalesForecastHeaderCompleted(sales_force_cast_vm.salesForceCastHeader_list[0].salesForecastId ??"");
+                if(flag=='delete'){
+                  sales_force_cast_vm.SalesForecastDeleteItems(
+                    sales_force_cast_vm.salesForceCastHeader_list[0].salesForecastId ??"",
+                      sales_force_cast_vm.quoteDowExcelList);
+
+                }
+                else{
+                  sales_force_cast_vm.SalesForecastHeaderCompleted(sales_force_cast_vm.salesForceCastHeader_list[0].salesForecastId ??"");
+                }
                 Navigator.pop(context);
 
               },
-              child: Text("Complete",style: TextStyle(color: AllColors.greenblue),),
+              child: Text(flag=='delete'?"Delete":"Complete",style: TextStyle(color:flag=='delete'?AllColors.redColor: AllColors.greenblue),),
             ),
           ],
         );
       },
     );
   }
+
   void showFilterBottomSheet(BuildContext context) {
     showModalBottomSheet(
       context: context,
@@ -803,6 +994,7 @@ class SalesForceHeaderDetails extends StatelessWidget{
   Widget bindFilterData(TextEditingController value,String hintdata){
     return  TextField(
       controller: value,
+      keyboardType: hintdata=='Quantity'?TextInputType.number:TextInputType.text,
       decoration: InputDecoration(
           contentPadding: EdgeInsets.symmetric(
               vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
@@ -826,6 +1018,203 @@ class SalesForceHeaderDetails extends StatelessWidget{
       cursorColor: AllColors.primaryDark1,
       onChanged: (value) {
         // Handle the text field value changes if needed
+      },
+    );
+  }
+
+  Widget bindClusterDropDown(context) {
+    return Autocomplete<ClusterModal>(
+      displayStringForOption: _displayClusterForOption,
+      optionsBuilder: (TextEditingValue textEditingValue) {
+        if (textEditingValue.text.isEmpty) {
+          return sales_force_cast_vm.clusterGetByEmailList;
+          // return const Iterable<VehicleTypeResponse>.empty();
+        }
+        return sales_force_cast_vm.clusterGetByEmailList
+            .where((ClusterModal option) {
+          return option.geoValue
+              .toString()
+              .toLowerCase()
+              .contains(textEditingValue.text.toLowerCase());
+        }).toList();
+      },
+      onSelected: (ClusterModal selection) {
+        // Update the TextField with the selected
+        sales_force_cast_vm.regionCtrl.value.text ="";
+        sales_force_cast_vm.clusterCtrl.value.text =
+            _displayClusterForOption(selection).toString();
+        sales_force_cast_vm.getRegionsWithClusterGetByRajeshEmail();
+        sales_force_cast_vm.regionCtlShow.value=false;
+        sales_force_cast_vm.regionCtlShow.value=true;
+
+
+      },
+      fieldViewBuilder: (BuildContext context, TextEditingController controller,
+          FocusNode focusNode, VoidCallback onFieldSubmitted) {
+        return Container(
+          decoration: BoxDecoration(
+              color: Colors.white, borderRadius: BorderRadius.circular(10)),
+          child: TextField(
+            // onTap: () {
+            //   controller.clear();
+            // },
+            cursorColor: AllColors.primaryDark1,
+            controller: controller
+              ..text = sales_force_cast_vm.clusterCtrl.value.text,
+            focusNode: focusNode,
+            //onSubmitted: onFieldSubmitted,
+            decoration: InputDecoration(
+              suffixIcon: InkWell(
+                  onTap: () {
+                    focusNode.requestFocus();
+                    controller.clear();
+                  },
+                  child: Icon(Icons.arrow_drop_down)),
+              contentPadding: EdgeInsets.symmetric(
+                  vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+              hintText: 'Cluster Name',
+              labelText: 'Cluster Name',
+              border: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(10))),
+            ),
+          ),
+        );
+      },
+      optionsViewBuilder: (BuildContext context,
+          AutocompleteOnSelected<ClusterModal> onSelected,
+          Iterable<ClusterModal> suggestions) {
+        return Align(
+          alignment: Alignment.topLeft,
+          child: Material(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+            elevation: 4.0,
+            child: Container(
+              width: size.width * .7,
+              constraints: BoxConstraints(maxHeight: 200),
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: suggestions.length,
+                itemBuilder: (context, index) {
+                  final ClusterModal option =
+                  suggestions.elementAt(index);
+                  return GestureDetector(
+                    onTap: () {
+                      onSelected(option);
+                    },
+                    child: Container(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text(
+                        option.geoValue.toString(),
+                        style: GoogleFonts.poppins(
+                            color: AllColors.blackColor,
+                            fontWeight: FontWeight.w300,
+                            fontSize: AllFontSize
+                                .sisxteen // Change the text color here
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget bindRegionDropDown(context) {
+    return Autocomplete<RegionWithClusterFilterModal>(
+      displayStringForOption: _displayRegionForOption,
+      optionsBuilder: (TextEditingValue textEditingValue) {
+        if (textEditingValue.text.isEmpty) {
+          return sales_force_cast_vm.regionwithclusterGetByEmailList;
+          // return const Iterable<VehicleTypeResponse>.empty();
+        }
+        return sales_force_cast_vm.regionwithclusterGetByEmailList
+            .where((RegionWithClusterFilterModal option) {
+          return option.geoValue
+              .toString()
+              .toLowerCase()
+              .contains(textEditingValue.text.toLowerCase());
+        }).toList();
+      },
+      onSelected: (RegionWithClusterFilterModal selection) {
+        // Update the TextField with the selected
+        sales_force_cast_vm.regionCtrl.value.text =
+            _displayRegionForOption(selection).toString();
+
+
+      },
+      fieldViewBuilder: (BuildContext context, TextEditingController controller,
+          FocusNode focusNode, VoidCallback onFieldSubmitted) {
+        return Container(
+          decoration: BoxDecoration(
+              color: Colors.white, borderRadius: BorderRadius.circular(10)),
+          child: TextField(
+            // onTap: () {
+            //   controller.clear();
+            // },
+            cursorColor: AllColors.primaryDark1,
+            controller: controller
+              ..text = sales_force_cast_vm.regionCtrl.value.text,
+            focusNode: focusNode,
+            //onSubmitted: onFieldSubmitted,
+            decoration: InputDecoration(
+              suffixIcon: InkWell(
+                  onTap: () {
+                    focusNode.requestFocus();
+                    controller.clear();
+                  },
+                  child: Icon(Icons.arrow_drop_down)),
+              contentPadding: EdgeInsets.symmetric(
+                  vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+              hintText: 'Region Name',
+              labelText: 'Region Name',
+              border: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(10))),
+            ),
+          ),
+        );
+      },
+      optionsViewBuilder: (BuildContext context,
+          AutocompleteOnSelected<RegionWithClusterFilterModal> onSelected,
+          Iterable<RegionWithClusterFilterModal> suggestions) {
+        return Align(
+          alignment: Alignment.topLeft,
+          child: Material(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+            elevation: 4.0,
+            child: Container(
+              width: size.width * .7,
+              constraints: BoxConstraints(maxHeight: 200),
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: suggestions.length,
+                itemBuilder: (context, index) {
+                  final RegionWithClusterFilterModal option =
+                  suggestions.elementAt(index);
+                  return GestureDetector(
+                    onTap: () {
+                      onSelected(option);
+                    },
+                    child: Container(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text(
+                        option.geoValue.toString(),
+                        style: GoogleFonts.poppins(
+                            color: AllColors.blackColor,
+                            fontWeight: FontWeight.w300,
+                            fontSize: AllFontSize.sisxteen // Change the text color here
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+        );
       },
     );
   }

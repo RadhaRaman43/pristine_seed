@@ -384,5 +384,6 @@ class AppUrl {
      static const String SalesForecastLinesGetForUpload="$BASE_URL/api/CRM/SalesForecast/SalesForecastLinesGetForUpload";
      static const String SalesForecastUploadItem="$BASE_URL/api/CRM/SalesForecast/SalesForecastUploadItem";
      static const String SalesForecastLinesGetNew="$BASE_URL/api/CRM/SalesForecast/SalesForecastLinesGetNew";
+     static const String SalesForecastDeleteItems="$BASE_URL/api/CRM/SalesForecast/SalesForecastDeleteItems";
 
 }

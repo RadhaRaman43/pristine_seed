@@ -243,7 +243,7 @@ class CreateForeCastIyemScreen extends StatelessWidget{
             _buildLabelWithValue(label: "Item Qty: ", value:  sales_force_cast_vm.ForeCastQuote_list[position].qty.toString()??""),
             _buildLabelWithValue(label: "Approve Price P/U: ", value:  "₹${sales_force_cast_vm.ForeCastQuote_list[position].approvedAmountPerUnit??"0.0"}"),
             _buildLabelWithValue(label: "Approve Price: ", value:  "₹${sales_force_cast_vm.ForeCastQuote_list[position].approvedAmount??"0.0"}"),
-            _buildLabelWithValue(label: "LSP: ", value:  "₹${sales_force_cast_vm.ForeCastQuote_list[position].listSellingPrice??"0.0"}"),
+           // _buildLabelWithValue(label: "LSP: ", value:  "₹${sales_force_cast_vm.ForeCastQuote_list[position].listSellingPrice??"0.0"}"),
 
 
           ],
