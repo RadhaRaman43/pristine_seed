@@ -61,6 +61,21 @@ class SalesForeCastRepo{
     return _apiService.postApi(data, AppUrl.get_employee_master,sessionManagement);
   }
 
+  Future<String> SalesForecastdashboardDataGetByUser(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.SalesForecastdashboardDataGetByUser,sessionManagement);
+  }
+  Future<String> SalesForecastdashboardDataGet(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.SalesForecastdashboardDataGet,sessionManagement);
+  }
+  Future<String> SalesDashboardPdfReport(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.SalesDashboardPdfReport,sessionManagement);
+  }
+
+
+  Future<String> AccountMasterGetApiHit(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.AccountMstGet,sessionManagement);
+  }
+
 
 
 }

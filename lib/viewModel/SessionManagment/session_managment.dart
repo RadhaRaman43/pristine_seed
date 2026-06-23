@@ -910,6 +910,20 @@ class SessionManagement {
     prefs.remove("commit_dashboard_data");
   }
 
+  Future<void> saveRollingForecastDashboardData(Map<String, dynamic> data) async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString("rolling_forecast_dashboard_data", jsonEncode(data));
+  }
+  Future<Map<String, dynamic>> getRollingForecastDashboardData() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? data = prefs.getString("rolling_forecast_dashboard_data");
+    return data != null ? jsonDecode(data) : {};
+  }
+  Future<void> clearRollingForecastDashboardData() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.remove("rolling_forecast_dashboard_data");
+  }
+
   Future<void> saveCallDashboardData(Map<String, dynamic> data) async {
     final prefs = await SharedPreferences.getInstance();
     prefs.setString("call_dashboard_data", jsonEncode(data));

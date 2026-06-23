@@ -186,6 +186,7 @@ class RoutesName{
   static const rollingForeCastGmListScreen="/rolling_forecast_gm_list_screen.dart";
   static const rollingForeCastCBHListScreen="/rolling_forecast_cbh_list_screen.dart";
   static const rollingForeCastLogisticListScreen="/rolling_forecast_logistic_list_screen.dart";
+  static const rollingforceCastDashBoardScreen="/rollingforceCastDashBoardScreen.dart";
 
 
 

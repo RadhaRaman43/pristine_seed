@@ -15,10 +15,11 @@ import '../../CRM_Models/AccountMaster_model/Employee_Member_Model.dart';
 import '../../CRM_Models/AccountMaster_model/cluster_modal.dart';
 import '../../CRM_Models/AccountMaster_model/region_with_cluster_filter_modal.dart';
 import '../../CRM_Models/TaskMaster_model/Item_Category_Mast_model.dart';
-import '../../CRM_VIewModels/salesforecasrVM/rolling_forecast_gm_vm.dart';
+import '../../CRM_VIewModels/rollingforecastVM/rolling_forecast_rh_vm.dart';
 
-class RollingForeCastGMListScreen extends StatelessWidget{
-  final sale_fore_cast_vm = Get.put(RollingForeCastGmVM());
+class RollingForeCastRHListScreen extends StatelessWidget{
+
+  final sale_fore_cast_vm = Get.put(RollingForeCastRHVM());
   ScrollController scrollController = ScrollController();
   static String _displayStringTypeDropDownForOption(String option) =>
       option;
@@ -29,66 +30,64 @@ class RollingForeCastGMListScreen extends StatelessWidget{
       Get.toNamed(RoutesName.homeScreen);
       return false;
     }, child: Scaffold(
-      appBar: AppBar(
-          backgroundColor: AllColors.primaryDark1,
-          iconTheme: IconThemeData(
-            color: AllColors.whiteColor,
-          ),
-          title:Row(
-            children: [
-              Flexible(
-                child: Tooltip(
-                  message: 'Rolling Forecast GM List',
-                  child: Text(
-                    'Rolling Forecast GM List',
-                    style: GoogleFonts.poppins(
-                      color: AllColors.whiteColor,
-                      fontSize: 16.0,
-                      fontWeight: FontWeight.w700,
+          appBar: AppBar(
+              backgroundColor: AllColors.primaryDark1,
+              iconTheme: IconThemeData(
+                color: AllColors.whiteColor,
+              ),
+              title:Row(
+                children: [
+                  Tooltip(
+                    message: 'Rolling Forecast RH List',
+                    child: Text(
+                      'Rolling Forecast RH List',
+                      style: GoogleFonts.poppins(
+                        color: AllColors.whiteColor,
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.w700,
+                      ),
                     ),
                   ),
-                ),
-              ),
-              //Spacer(),
-              IconButton(onPressed: () {
-                sale_fore_cast_vm.downloadForeCastLineDetaisForUploadWithProgress(context,'Rolling Forecast RH Data','Rolling Forecast RH Data');
-              }, icon: Icon(Icons.download)),
-              IconButton(onPressed: () {
-                showFilterBottomSheet(context);
-              }, icon: Icon(Icons.filter_alt_sharp))
-            ],
-          )
-      ),
-      drawer: CustomDrawer(),
-      body:  RefreshIndicator(
-        onRefresh:sale_fore_cast_vm.refreshList,
-        child: Container(
-          width: double.infinity,
-          height: double.infinity,
-          child: Column(
-            children: [
-              Obx((){
-                return Visibility(
-                  visible:sale_fore_cast_vm.loading.value ,
-                  child: LinearProgressIndicator(
-                    backgroundColor: AllColors.primaryDark1,
-                    color: AllColors.textColor,
-                  ),
-                );
-              }),
-              Flexible(
-                fit: FlexFit.loose,
-                child: Container(
-                  child: Obx(() {
-                    return BindRHdetailsListView(context);
-                  }),
-                ),
+                  //Spacer(),
+                  IconButton(onPressed: () {
+                    sale_fore_cast_vm.downloadForeCastLineDetaisForUploadWithProgress(context,'Rolling Forecast RH Data','Rolling Forecast RH Data');
+                  }, icon: Icon(Icons.download)),
+                  IconButton(onPressed: () {
+                    showFilterBottomSheet(context);
+                  }, icon: Icon(Icons.filter_alt_sharp))
+                ],
               )
-            ],
           ),
-        ),
-      ),
-    ));
+          drawer: CustomDrawer(),
+          body:  RefreshIndicator(
+            onRefresh:sale_fore_cast_vm.refreshList,
+            child: Container(
+              width: double.infinity,
+              height: double.infinity,
+              child: Column(
+                children: [
+                  Obx((){
+                    return Visibility(
+                      visible:sale_fore_cast_vm.loading.value ,
+                      child: LinearProgressIndicator(
+                        backgroundColor: AllColors.primaryDark1,
+                        color: AllColors.textColor,
+                      ),
+                    );
+                  }),
+                  Flexible(
+                    fit: FlexFit.loose,
+                    child: Container(
+                      child: Obx(() {
+                        return BindRHdetailsListView(context);
+                      }),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ),
+        ));
   }
   Widget BindRHdetailsListView(context) {
     if (sale_fore_cast_vm.rolling_fore_cast_list.value.isNotEmpty && sale_fore_cast_vm.rolling_fore_cast_list.value.length > 0) {
@@ -1555,5 +1554,7 @@ class RollingForeCastGMListScreen extends StatelessWidget{
         }
     );
   }
+
+
 
 }

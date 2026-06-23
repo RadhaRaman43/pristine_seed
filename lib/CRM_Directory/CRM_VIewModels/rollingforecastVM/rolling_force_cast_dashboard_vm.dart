@@ -1,0 +1,801 @@
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:excel/excel.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:intl/intl.dart';
+import 'package:navigation_drawer_flutter/CRM_Directory/CRM_Repository/salesforcecastRepository/SalesForeCastRepo.dart';
+import 'package:open_filex/open_filex.dart';
+import 'package:path_provider/path_provider.dart';
+
+import '../../../utils/app_utils.dart';
+import '../../../viewModel/SessionManagment/session_managment.dart';
+import '../../CRM_Models/AccountMaster_model/Account_Master_model.dart';
+import '../../CRM_Models/AccountMaster_model/Employee_Member_Model.dart';
+import '../../CRM_Models/AccountMaster_model/cluster_modal.dart';
+import '../../CRM_Models/AccountMaster_model/region_with_cluster_filter_modal.dart';
+import '../../CRM_Models/SalesForceCastModals/RollingDashBoardModal.dart';
+import '../../CRM_Models/SalesForceCastModals/RollingDashBoardUserWiseModal.dart';
+import '../../CRM_Models/TaskMaster_model/Item_Category_Mast_model.dart';
+
+class RollingForceCastDashboardVm extends GetxController{
+  final _api = SalesForeCastRepo();
+  SessionManagement sessionManagement = SessionManagement();
+  RxBool loading = false.obs;
+  String email = "";
+  String userType = "";
+  var selectedOption = 'Employee'.obs;
+  RxString formattedStartDate = "".obs;
+  RxString formattedEndDate = "".obs;
+  RxString character = 'Monthly'.obs;
+  RxString isAdminWritePermission = "".obs;
+  int pageNumber = 0;
+  int rowsPerPage = 10;
+  RxInt total_rows = 0.obs;
+  RxString filterDataChecker = ''.obs;
+  RxString rodName = ''.obs;
+  RxString geoValueName = ''.obs;
+  RxBool excelLoading = false.obs;
+  RxDouble excelProgress = 0.0.obs;
+
+  var CustomerNameApi;
+  var ProductCategoryForApi;
+  var AccountOwnerForApi;
+  var ClusterNameForApi;
+  var RegionNameForApi;
+  var customerNameCode = '';
+  String accountNameCode='';
+  var EmployeeEmailIdForApi = '';
+
+  var filter_sale_forecast_id_cont=TextEditingController().obs;
+  var filter_quote_id_cont=TextEditingController().obs;
+  var filter_sale_cycle_id_cont=TextEditingController().obs;
+  var CustomerName_controller=TextEditingController().obs;
+  var ProductCategory_controller=TextEditingController().obs;
+  var filter_created_on_cont=TextEditingController().obs;
+  var filter_created_on_star_to_cont=TextEditingController().obs;
+  var filterCustomDateController=TextEditingController().obs;
+  var clusterName_controller=TextEditingController().obs;
+  var RegionName_controller=TextEditingController().obs;
+  var AccountOwner_controller=TextEditingController().obs;
+
+  RxList<EmployeeMemberModel> tempSelected = <EmployeeMemberModel>[].obs;
+  RxList<EmployeeMemberModel> filtered = <EmployeeMemberModel>[].obs;
+  RxBool selectOwner = true.obs;
+  RxBool allSelected = false.obs;
+  RxBool isSel = false.obs;
+  var searchController=TextEditingController().obs;
+
+
+  RxList<RollingDashBoardModal> rollingForecastList = <RollingDashBoardModal>[].obs;
+  RxList<Records> rollingForecastDashboardRecordList = <Records>[].obs;
+  RxList<RollingDashBoardUserWiseModal> rollingForecastUserWiseList = <RollingDashBoardUserWiseModal>[].obs;
+  RxList<EmployeeMemberModel> employee_Member_list = <EmployeeMemberModel>[].obs;
+  RxList<EmployeeMemberModel> SelectedEmployee_Member_list = <EmployeeMemberModel>[].obs;
+  RxList<ItemCategoryMstModel> Item_Category_master_list_without_task = <ItemCategoryMstModel>[].obs;
+  RxList<ItemCategoryMstModel> SelectedProductCategory_list = <ItemCategoryMstModel>[].obs;
+  RxList<ClusterModal> clusterGetByEmailList = <ClusterModal>[].obs;
+  RxList<ClusterModal> SelectedCluster_list = <ClusterModal>[].obs;
+  RxList<RegionWithClusterFilterModal> regionwithclusterGetByEmailList = <RegionWithClusterFilterModal>[].obs;
+  RxList<RegionWithClusterFilterModal> SelectedRegion_list = <RegionWithClusterFilterModal>[].obs;
+  RxList<AccountMasterModel> Account_Master_list=<AccountMasterModel>[].obs;
+  RxList<AccountMasterModel> SelectedAccount_Master_list=<AccountMasterModel>[].obs;
+  @override
+  void onInit() async{
+    // TODO: implement onInit
+    super.onInit();
+
+    email = await sessionManagement.getEmail() ?? '';
+    userType = await sessionManagement.getUserType() ?? '';
+    isAdminWritePermission.value = await sessionManagement.getIsAdminPermission() ?? '';
+
+    DateRange("monthly");
+    filterCustomDateController.value.text =
+    '${formattedStartDate} - ${formattedEndDate}';
+    //commitDashboardData();
+
+
+    getItemCategoryMstWithoutTaskIdApi();
+    getClustersGetByEmail();
+    isAdminWritePermission == "1"
+        ? EmployeeMasterGet("")
+        : getEmployeeTeamMemberGetByClusterRegionApi();
+    getAccountMaster("");
+  }
+  void DateRange(String type) {
+    DateTime now = DateTime.now();
+    late DateTime startDate;
+    late DateTime endDate;
+
+    switch (type.toLowerCase()) {
+      case 'day':
+        startDate = now;
+        endDate = now;
+        break;
+
+      case 'week':
+        int currentWeekday = now.weekday; // 1 (Mon) to 7 (Sun)
+        startDate = now.subtract(Duration(days: currentWeekday - 1));
+        endDate = now.add(Duration(days: 7 - currentWeekday));
+        break;
+
+      case 'monthly':
+        startDate = DateTime(now.year, now.month, 1);
+        endDate = DateTime(now.year, now.month + 1, 0);
+        break;
+
+      case 'quarterly':
+        int currentMonth = now.month;
+        if (currentMonth >= 1 && currentMonth <= 3) {
+          startDate = DateTime(now.year, 1, 1);
+          endDate = DateTime(now.year, 3, 31);
+        } else if (currentMonth >= 4 && currentMonth <= 6) {
+          startDate = DateTime(now.year, 4, 1);
+          endDate = DateTime(now.year, 6, 30);
+        } else if (currentMonth >= 7 && currentMonth <= 9) {
+          startDate = DateTime(now.year, 7, 1);
+          endDate = DateTime(now.year, 9, 30);
+        } else {
+          startDate = DateTime(now.year, 10, 1);
+          endDate = DateTime(now.year, 12, 31);
+        }
+        break;
+
+      case 'financial':
+        if (now.month >= 4) {
+          // Current FY: starts from April this year to March next year
+          startDate = DateTime(now.year, 4, 1);
+          endDate = DateTime(now.year + 1, 3, 31);
+        } else {
+          // Current FY: starts from April last year to March this year
+          startDate = DateTime(now.year - 1, 4, 1);
+          endDate = DateTime(now.year, 3, 31);
+        }
+        break;
+
+      default:
+        print("Invalid type passed. Use: day, week, month, or financial");
+        return;
+    }
+
+    formattedStartDate.value = DateFormat('yyyy-MM-dd').format(startDate);
+    formattedEndDate.value = DateFormat('yyyy-MM-dd').format(endDate);
+
+    print("Start Date: $formattedStartDate");
+    print("End Date: $formattedEndDate");
+
+  }
+  String numberFormatWithComma(dynamic number) {
+    final formatter = NumberFormat('#,##,###', 'en_IN');
+    return formatter.format(number);
+  }
+  Future<Iterable<EmployeeMemberModel>> EmployeeMasterGet(String query) async {
+    /*if (query == '') {
+      return const Iterable<EmployeeMemberModel>.empty();
+    }*/
+    ClusterNameForApi = '';
+    if(clusterName_controller.value.text.isNotEmpty){
+      ClusterNameForApi = clusterName_controller.value.text
+          .split(',')
+          .map((e) => e.trim())
+          .join('|');
+    }
+    RegionNameForApi = '';
+    if(RegionName_controller.value.text.isNotEmpty){
+      RegionNameForApi = RegionName_controller.value.text
+          .split(',')
+          .map((e) => e.trim())
+          .join('|');
+    }
+    loading.value= true;
+    Map data = {
+      'filter_name': query,
+      'filter_email': "",
+      'filter_location_id': '',
+      'email_id': email,
+      "filter_cluster_name": ClusterNameForApi,
+      "filter_region_name": RegionNameForApi,
+      'rowsPerPage': 10,
+      'pageNumber': 0,
+    };
+    String employee_response =await _api.EmployeeMatserGetApiHit(data, sessionManagement);
+    try {
+      final jsonResponse = json.decode(employee_response);
+
+      if (jsonResponse is List) {
+        print(jsonResponse);
+        List<EmployeeMemberModel> response =
+        jsonResponse.map((data) => EmployeeMemberModel.fromJson(data)).toList();
+        print('condition..'+response[0].condition.toString());
+        if (response[0].condition == 'True') {
+          print(jsonResponse);
+          employee_Member_list.value = response;
+
+        } else {
+          // Utils.sanckBarException('False!', response[0].message!);
+          employee_Member_list.value = [];
+        }
+      } else {
+        Utils.sanckBarException('False!', jsonResponse.message);
+        employee_Member_list.value = [];
+      }
+    } catch (e) {
+      Utils.sanckBarException('Exception!', e.toString());
+      employee_Member_list.value = [];
+    }
+    finally{
+      loading.value=false;
+    }
+    return employee_Member_list.value;
+  }
+
+  getEmployeeTeamMemberGetByClusterRegionApi() {
+    Map data = {
+      "cluster_name": "",
+      "email_id": email,
+      "region_name": "",
+      "flag": "GeoLevelLowerWithClusterRegion"
+    };
+    print(data);
+    loading.value = true;
+    try {
+      _api.EmployeeTeamMemberGetByClusterRegion(data, sessionManagement).then(
+            (value) {
+          print(value);
+          final JsonResponse = json.decode(value);
+          if (JsonResponse is List) {
+            List<EmployeeMemberModel> response =
+            JsonResponse.map((e) => EmployeeMemberModel.fromJson(e))
+                .toList();
+            if (response != null &&
+                response.length > 0 &&
+                response[0].condition == "True") {
+              loading.value = false;
+              employee_Member_list.value=response;
+              //Get.toNamed(RoutesName.create_preventive_calender_view_screen);
+
+            } else {
+              loading.value = false;
+              employee_Member_list.value=[];
+              //Utils.showErrorToastification("Error!", "No Date Found");
+              //service_installation_details_list.value=[];
+            }
+          } else {
+            loading.value = false;
+            // service_indent_header_list.value = [];
+            Utils.showExceptionToastification("Api Error!", JsonResponse);
+          }
+        },
+      ).onError(
+            (error, stackTrace) {
+          print(error);
+          //service_indent_header_list.value = [];
+        },
+      );
+    } catch (e) {
+      loading.value = false;
+      employee_Member_list.value = [];
+      print(e);
+    }
+  }
+
+  getItemCategoryMstWithoutTaskIdApi() {
+    this.loading.value = true;
+    Map<String, String> data = {
+
+    };
+
+    _api.getItemCategoryMstWithoutTaskIdApiHit(data, sessionManagement).then((value) {
+      try {
+        List<ItemCategoryMstModel> Response =
+        (json.decode(value) as List<dynamic>)
+            .map((i) => ItemCategoryMstModel.fromJson(i as Map<String, dynamic>))
+            .toList();
+
+        if (Response.isNotEmpty && Response[0]?.condition.toString() == "True") {
+          Item_Category_master_list_without_task.value = Response!;
+
+          // print('master list....${get_Acc_type_list.length.toString()}');
+        } else {
+          Item_Category_master_list_without_task.value = [];
+          //print('master listelsse....${get_Acc_type_list.length.toString()}');
+        }
+      } catch (e) {
+        Item_Category_master_list_without_task.value = [];
+        print('catch....${e.toString()}');
+      }
+    }).onError((error, stackTrace) {
+      Item_Category_master_list_without_task.value = [];
+      Utils.sanckBarError('Api Exception onError', error.toString());
+      print('catchEx....${error.toString()}');
+    }).whenComplete(() {
+      this.loading.value = false;
+    });
+  }
+  void getClustersGetByEmail() {
+    try{
+      Map<String, String> data={
+        "email_id":email
+      };
+      loading.value=true;
+      print("data is ${data}");
+      _api.clustersGetByEmailApiHit(data, sessionManagement).then((onValue){
+        print(onValue);
+        final jsonResponse = json.decode(onValue);
+        if(jsonResponse is List){
+          List<ClusterModal> response = jsonResponse.map((e) => ClusterModal.fromJson(e)).toList();
+          if(response.length>0 && response[0].condition=="True"){
+            loading.value = false;
+            clusterGetByEmailList.value=response;
+            if (clusterGetByEmailList.value.isNotEmpty && SelectedCluster_list.isEmpty) {
+              SelectedCluster_list.assignAll(clusterGetByEmailList.value);
+              clusterName_controller.value.text = clusterGetByEmailList.value.map((e) => e.geoValue).join(', ');
+
+              getRegionsWithClusterFilterGetByEmail();
+
+            }
+          }else {
+            loading.value = false;
+            clusterGetByEmailList.value=[];
+          }
+        } else {
+          loading.value = false;
+        }
+      },
+      ).onError(
+            (error, stackTrace) {
+          print(error);
+        },
+      );
+    }catch(e){
+      loading.value = false;
+      print(e);
+    }finally{
+      loading.value = false;
+    }
+  }
+
+  void getRegionsWithClusterFilterGetByEmail() {
+    var selectedCluster="";
+    if(clusterName_controller.value.text.isNotEmpty){
+      selectedCluster = clusterName_controller.value.text
+          .split(',')
+          .map((e) => e.trim())
+          .join('|');
+    }
+    try{
+      Map<String, String> data={
+        "email_id":email,
+        "cluster_filter":selectedCluster.isEmpty?"":selectedCluster
+      };
+      loading.value=true;
+      print("data is ${data}");
+      _api.RegionsWithClusterFilterGetByEmailApiHit(data, sessionManagement).then((onValue){
+        print(onValue);
+        final jsonResponse = json.decode(onValue);
+        if(jsonResponse is List){
+          List<RegionWithClusterFilterModal> response = jsonResponse.map((e) => RegionWithClusterFilterModal.fromJson(e)).toList();
+          if(response.length>0 && response[0].condition=="True"){
+            loading.value = false;
+            regionwithclusterGetByEmailList.value=response;
+            RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join(', ');
+            SelectedRegion_list.assignAll(regionwithclusterGetByEmailList);
+            getFilterData();
+          }else {
+            loading.value = false;
+            regionwithclusterGetByEmailList.value=[];
+          }
+        } else {
+          loading.value = false;
+        }
+      },
+      ).onError((error, stackTrace) {
+        print(error);
+      },
+      );
+    }catch(e){
+      loading.value = false;
+      print(e);
+    }finally{
+      loading.value = false;
+    }
+  }
+  Future<List<AccountMasterModel>> getAccountMaster(String searchText) async {
+    try {
+      Map<String, String> data = {
+        "filter_account_code": '',
+        "filter_account_name": searchText,
+        "filter_account_type": '',
+        "filter_email_id": '',
+        "filter_phone_no": '',
+        "filter_company_profile_type": '',
+        "filter_state_name": '',
+        "filter_postal_code": '',
+        "filter_district": '',
+        "filter_created_by": '',
+        "filter_account_owner": isAdminWritePermission=="1"?"":email,
+        "filter_frontliner_value": "",
+        "filter_branch_head_value": '',
+        "filter_zone_head_value": "",
+        "filter_clusture_head_value": '',
+        "filter_is_active": '-1',
+        "row_per_page": '20',
+        "page_number": '0'
+      };
+      print("data is master....${data}");
+      final response =
+      await _api.AccountMasterGetApiHit(data, sessionManagement);
+
+      final jsonResponse = json.decode(response);
+
+      if (jsonResponse is List) {
+        List<AccountMasterModel> list =
+        jsonResponse.map((e) => AccountMasterModel.fromJson(e)).toList();
+        if (list.isNotEmpty && list[0].condition?.toLowerCase() == "true") {
+          Account_Master_list.value = list;
+          return list;
+        }
+      }
+      return [];
+    } catch (e) {
+      print(e);
+      return [];
+    }
+  }
+
+  Future<void>  rollingForecastDashboardData() async {
+    CustomerNameApi="";
+    if(CustomerName_controller.value.text.isNotEmpty){
+      CustomerNameApi = CustomerName_controller.value.text
+          .split(',')
+          .map((e) => e.trim())
+          .join('|');
+    }
+    AccountOwnerForApi = '';
+    if(AccountOwner_controller.value.text.isNotEmpty){
+      AccountOwnerForApi = AccountOwner_controller.value.text
+          .split(',')
+          .map((e) => e.trim())
+          .join('|');
+    }
+    ClusterNameForApi = '';
+    if(clusterName_controller.value.text.isNotEmpty){
+      ClusterNameForApi = clusterName_controller.value.text
+          .split(',')
+          .map((e) => e.trim())
+          .join('|');
+    }
+    RegionNameForApi = '';
+    if(RegionName_controller.value.text.isNotEmpty){
+      RegionNameForApi = RegionName_controller.value.text
+          .split(',')
+          .map((e) => e.trim())
+          .join('|');
+    }
+    ProductCategoryForApi = '';
+    if(ProductCategory_controller.value.text.isNotEmpty){
+      ProductCategoryForApi = ProductCategory_controller.value.text
+          .split(',')
+          .map((e) => e.trim())
+          .join('|');
+    }
+
+    try {
+      Map<String, dynamic> data = {
+        "filter_sales_forecast_id": filter_sale_forecast_id_cont.value.text.isEmpty?"":filter_sale_forecast_id_cont.value.text,
+        "filter_quote_id": filter_quote_id_cont.value.text.isEmpty?"":filter_quote_id_cont.value.text,
+        "filter_sales_cycle_id": filter_sale_cycle_id_cont.value.text.isEmpty?"":filter_sale_cycle_id_cont.value.text,
+        "flag": selectedOption.value,
+        "email_id": email,
+        "start_date": formattedStartDate.value,
+        "end_date": formattedEndDate.value,
+        "filter_created_on": filter_created_on_cont.value.text.isEmpty?"": filter_created_on_cont.value.text,
+        "filter_owner_name": AccountOwnerForApi,
+        "filter_product_category": ProductCategoryForApi,
+        "filter_customer_name": CustomerNameApi,
+        "filter_cluster_name": ClusterNameForApi,
+        "filter_region_name": RegionNameForApi,
+      };
+
+      print(data);
+      loading.value = true;
+
+      final onValue = await _api.SalesForecastdashboardDataGet(data, sessionManagement);
+      final jsonResponse = json.decode(onValue);
+      print(onValue);
+      if (jsonResponse is List) {
+        List<RollingDashBoardModal> response = jsonResponse
+            .map((e) => RollingDashBoardModal.fromJson(e))
+            .toList();
+
+        if (response.isNotEmpty &&
+            response[0].condition?.toLowerCase() == "true") {
+          rollingForecastList.value = response;
+          rollingForecastDashboardRecordList.value = response[0].records ?? [];
+          print('baisgdiuasgi du${response}');
+
+        } else {
+          Utils.showErrorToastification(
+              "False Message !", response[0].message.toString());
+          rollingForecastDashboardRecordList.value = [];
+        }
+      }
+
+    } catch (e) {
+      print("API error: $e");
+    } finally {
+      loading.value = false;
+      getDashboardUserWiseData(pageNumber);
+    }
+  }
+  getDashboardUserWiseData(int pageNumber){
+    try{
+      loading.value=true;
+      Map data={
+        "filter_sales_cycle_id": filter_sale_cycle_id_cont.value.text.isEmpty?"":filter_sale_cycle_id_cont.value.text,
+        "filter_quote_id": filter_quote_id_cont.value.text.isEmpty?"":filter_quote_id_cont.value.text,
+        "filter_sales_forecast_id":filter_sale_forecast_id_cont.value.text.isEmpty?"":filter_sale_forecast_id_cont.value.text,
+
+        "flag": selectedOption.value,
+        "email_id": email,
+        "emp_email_id": EmployeeEmailIdForApi.isEmpty?"":EmployeeEmailIdForApi,
+        "start_date": formattedStartDate.value,
+        "end_date": formattedEndDate.value,
+        "filter_created_on": filter_created_on_cont.value.text.isEmpty?"": filter_created_on_cont.value.text,
+        "filter_owner_name":AccountOwnerForApi,
+        "filter_cluster_name": ClusterNameForApi,
+        "filter_region_name": RegionNameForApi,
+        "filter_product_category": ProductCategoryForApi,
+        "filter_customer_name": CustomerNameApi,
+        "rowsPerPage": rowsPerPage,
+        "pageNumber": pageNumber
+
+      };
+      print("user data ${data}");
+
+      _api.SalesForecastdashboardDataGetByUser(data, sessionManagement).then((onValue){
+        final jsonResponse = json.decode(onValue);
+        print(onValue);
+        if(jsonResponse is List){
+          List<RollingDashBoardUserWiseModal> response = jsonResponse.map((e) => RollingDashBoardUserWiseModal.fromJson(e)).toList();
+          if(response!= null && response.length>0 && response[0].condition=="True"){
+            loading.value = false;
+            if(pageNumber==0){
+              rollingForecastUserWiseList.clear();
+            }
+            rollingForecastUserWiseList.addAll(response);
+            print("${rollingForecastUserWiseList.length}");
+            total_rows.value=int.parse(rollingForecastUserWiseList[0].totalRows!);
+          }else {
+            rollingForecastUserWiseList.value=[];
+            total_rows.value = 0;
+            loading.value = false;
+          }
+        } else {
+          loading.value = false;
+        }
+      },).onError(
+            (error, stackTrace) {
+          print(error);
+        },
+      );
+    }catch(e){
+      loading.value = false;
+      print(e);
+    }
+    finally{
+      loading.value = false;
+    }
+  }
+
+
+  clearAllFilterController(){
+    character.value = 'Monthly';
+    rodName.value = '';
+    geoValueName.value = '';
+    ProductCategoryForApi = '';
+    AccountOwnerForApi = '';
+    ClusterNameForApi = '';
+    RegionNameForApi = '';
+    EmployeeEmailIdForApi = '';
+
+    filter_sale_forecast_id_cont.value.clear();
+    filter_sale_cycle_id_cont.value.clear();
+
+    filterCustomDateController.value.clear();
+    AccountOwner_controller.value.clear();
+    accountNameCode='';
+
+    ProductCategory_controller.value.clear();
+    CustomerName_controller.value.clear();
+    customerNameCode='';
+    filter_created_on_cont.value.clear();
+    filter_created_on_star_to_cont.value.clear();
+    searchController.value.clear();
+    if(isAdminWritePermission=="1") {
+      EmployeeMasterGet("");
+    }
+
+    //  RegionName_controller.value.clear();
+    SelectedAccount_Master_list.value = [];
+    SelectedEmployee_Member_list.value = [];
+    SelectedProductCategory_list.value = [];
+    SelectedCluster_list.value = [];
+    SelectedRegion_list.value = [];
+    //selectedSalesStageStatusList.value = [];
+    //selectedSalesStageStatusList.value = ["All"];
+    DateRange("monthly");
+    filterCustomDateController.value.text = '${formattedStartDate} - ${formattedEndDate}';
+    //RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join(',');
+    clusterName_controller.value.text = clusterGetByEmailList.map((e) => e.geoValue).join('|');
+    getRegionsWithClusterFilterGetByEmail();
+
+
+  }
+  void SaveFilterData() async{
+    await sessionManagement.saveRollingForecastDashboardData({
+      "filter_sale_forecast_id_cont": filter_sale_forecast_id_cont.value.text,
+      "filter_sale_cycle_id_cont": filter_sale_cycle_id_cont.value.text,
+      "start_date": formattedStartDate.value,
+      "end_date": formattedEndDate.value,
+      "filter_custom_date": filterCustomDateController.value.text,
+      "filter_customer_name": CustomerName_controller.value.text,
+      "customerNameCode": customerNameCode,
+      "filter_product_category": ProductCategory_controller.value.text,
+      "filter_created_on": filter_created_on_cont.value.text,
+      "filter_created_on_star_to_cont": filter_created_on_star_to_cont.value.text,
+      "filter_owner_name": AccountOwner_controller.value.text,
+      "accountNameCode": accountNameCode,
+      "filter_region_name":RegionName_controller.value.text,
+      "filter_cluster_name": clusterName_controller.value.text,
+    });
+
+    pageNumber = 0;
+    rollingForecastDashboardData();
+
+  }
+
+  void getFilterData() async{
+    Map getFilterData=await sessionManagement.getRollingForecastDashboardData();
+
+    if(getFilterData.isNotEmpty){
+      filterDataChecker.value='1';
+      filter_sale_forecast_id_cont.value.text=getFilterData["filter_sale_forecast_id_cont"]??"";
+      filter_sale_cycle_id_cont.value.text=getFilterData["filter_sale_cycle_id_cont"]??"";
+      filterCustomDateController.value.text=getFilterData["filter_custom_date"]??"";
+      CustomerName_controller.value.text=getFilterData["filter_customer_name"]??"";
+      customerNameCode=getFilterData["customerNameCode"]??"";
+      ProductCategory_controller.value.text=getFilterData["filter_product_category"]??"";
+      filter_created_on_cont.value.text=getFilterData["filter_created_on"]??"";
+      filter_created_on_star_to_cont.value.text=getFilterData["filter_created_on_star_to_cont"]??"";
+      AccountOwner_controller.value.text=getFilterData["filter_owner_name"]??"";
+      accountNameCode=getFilterData["accountNameCode"]??"";
+      pageNumber=0;
+
+      if(getFilterData["start_date"].toString().isNotEmpty && getFilterData["start_date"].toString()!="" ){
+        formattedStartDate.value = "";
+        formattedStartDate.value=getFilterData["start_date"]??"";
+      }
+      if(getFilterData["end_date"].toString().isNotEmpty && getFilterData["end_date"].toString()!=""){
+        formattedEndDate.value = "";
+        formattedEndDate.value=getFilterData["end_date"]??"";
+      }
+      if(getFilterData["filter_region_name"].toString().isNotEmpty && getFilterData["filter_region_name"].toString()!=""){
+        RegionName_controller.value.text = "";
+        RegionName_controller.value.text = getFilterData["filter_region_name"].toString()??"";
+      }
+      if(getFilterData["filter_cluster_name"].toString().isNotEmpty && getFilterData["filter_cluster_name"].toString()!=""){
+        clusterName_controller.value.text="";
+        clusterName_controller.value.text=getFilterData["filter_cluster_name"].toString()??"";
+        print("clusterName_controller.value.text.....${clusterName_controller.value.text}");
+      }
+    }
+    else{
+      print("else condition");
+    }
+
+    rollingForecastDashboardData();
+  }
+  void clearFilterData() {
+    sessionManagement.clearRollingForecastDashboardData();
+  }
+
+  Future<void> exportNonStandardExcelWithProgress(BuildContext context, ) async {
+    try {
+      if(rollingForecastDashboardRecordList.length<=0){
+        Utils.sanckBarError("False!", "No Data Found");
+        return;
+      }
+
+      excelLoading.value = true;
+      excelProgress.value = 0;
+      showExcelProgressDialog(context);
+      final excel = Excel.createExcel();
+      excel.rename('Sheet1', "Rolling Forecast Dashboard Chart Report");
+      final sheet = excel["Rolling Forecast Dashboard Chart Report"];
+
+      sheet.cell(CellIndex.indexByColumnRow(columnIndex: 0, rowIndex: 0)).value = TextCellValue('Dashboard - Rolling Forecast');
+      sheet.cell(CellIndex.indexByColumnRow(columnIndex: 0, rowIndex: 1)).value = TextCellValue('Time Period : ${character.value} (${formattedStartDate} - ${formattedEndDate})');
+      //sheet.cell(CellIndex.indexByColumnRow(columnIndex: 0, rowIndex: 2)).value = TextCellValue('Quote Accepted ${QuoteAccepted_controller.value.text}');
+      sheet.cell(CellIndex.indexByColumnRow(columnIndex: 0, rowIndex: 2)).value = TextCellValue('View : ${selectedOption.value}');
+      sheet.cell(CellIndex.indexByColumnRow(columnIndex: 0, rowIndex: 3)).value = TextCellValue('');
+
+      // Write Headers
+      List<String> headers = [];
+      final firstRowMap = removeExcelKeys(rollingForecastDashboardRecordList.first,);
+      headers = firstRowMap.keys.toList();
+      for (int col = 0; col < headers.length; col++) {
+        sheet.cell(CellIndex.indexByColumnRow(columnIndex: col, rowIndex: 5)).value
+        = TextCellValue(headers[col]);
+      }
+      final totalRows = rollingForecastDashboardRecordList.length;
+
+      for (int row = 0; row < totalRows; row++) {
+        final rowMap = removeExcelKeys(rollingForecastDashboardRecordList[row],);
+        for (int col = 0; col < headers.length; col++) {
+          final value = rowMap[headers[col]];
+          sheet.cell(CellIndex.indexByColumnRow(
+              columnIndex: col, rowIndex: row + 1+5)).value = value == null
+              ? TextCellValue('') : TextCellValue(value.toString());
+        }
+        excelProgress.value = ((row + 1) / totalRows) * 100;
+        await Future.delayed(const Duration(milliseconds: 5));
+      }
+      late Directory dir;
+      if (Platform.isAndroid) {
+        dir = Directory('/storage/emulated/0/Download');
+      }
+      else {
+        dir = await getApplicationDocumentsDirectory();
+      }
+
+      final fileName = "commitment_dashboard_chart_report.xlsx";
+      final filePath = "${dir.path}/$fileName";
+      final file = File(filePath);
+      if (await file.exists()) {
+        await file.delete();
+      }
+      await file.writeAsBytes(excel.encode()!);
+      excelProgress.value = 100;
+      excelLoading.value = false;
+      Get.back();
+      // Open File
+      await OpenFilex.open(filePath);
+      debugPrint("Excel saved at: $filePath");
+    }catch(e){
+      Utils.sanckBarError("Failed to download file!", e.toString());
+      print(e.toString());
+      excelLoading.value = false;
+      Get.back();
+    }
+  }
+  Map<String, dynamic> removeExcelKeys(Records item) {
+    final map = Map<String, dynamic>.from(item.toJson());
+    map.remove('geo_name');
+    map.remove('geo_value');
+    map.remove('email_id');
+    return map;
+  }
+
+  void showExcelProgressDialog(BuildContext context) {
+    Get.dialog(
+      Obx(() => AlertDialog(
+        title: const Text("Generating Excel"),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            LinearProgressIndicator(
+              value: excelProgress.value / 100,
+            ),
+            const SizedBox(height: 12),
+            Text("${excelProgress.value.toStringAsFixed(0)} %"),
+          ],
+        ),
+      )),
+      barrierDismissible: false,
+    );
+  }
+
+}

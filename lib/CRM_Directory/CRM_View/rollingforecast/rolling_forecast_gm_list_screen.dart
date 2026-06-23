@@ -15,14 +15,14 @@ import '../../CRM_Models/AccountMaster_model/Employee_Member_Model.dart';
 import '../../CRM_Models/AccountMaster_model/cluster_modal.dart';
 import '../../CRM_Models/AccountMaster_model/region_with_cluster_filter_modal.dart';
 import '../../CRM_Models/TaskMaster_model/Item_Category_Mast_model.dart';
-import '../../CRM_VIewModels/salesforecasrVM/rolling_forecast_logistic_vm.dart';
+import '../../CRM_VIewModels/rollingforecastVM/rolling_forecast_gm_vm.dart';
 
-
-class RollingForeCastLogisticListScreen extends StatelessWidget{
-  final sale_fore_cast_vm = Get.put(RollingForeCastLogisticVM());
+class RollingForeCastGMListScreen extends StatelessWidget{
+  final sale_fore_cast_vm = Get.put(RollingForeCastGmVM());
   ScrollController scrollController = ScrollController();
   static String _displayStringTypeDropDownForOption(String option) =>
       option;
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(onWillPop:  () async {
@@ -38,9 +38,9 @@ class RollingForeCastLogisticListScreen extends StatelessWidget{
             children: [
               Flexible(
                 child: Tooltip(
-                  message: 'Rolling Forecast Logistic List',
+                  message: 'Rolling Forecast GM List',
                   child: Text(
-                    'Rolling Forecast Logistic List',
+                    'Rolling Forecast GM List',
                     style: GoogleFonts.poppins(
                       color: AllColors.whiteColor,
                       fontSize: 16.0,
@@ -1555,6 +1555,5 @@ class RollingForeCastLogisticListScreen extends StatelessWidget{
         }
     );
   }
-
 
 }

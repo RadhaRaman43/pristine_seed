@@ -320,8 +320,7 @@ class CommitDashboardViewscreen extends StatelessWidget{
 
     try {
       progress.value = 0.10;
-      RenderRepaintBoundary boundary =
-      chartKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
+      RenderRepaintBoundary boundary = chartKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
       ui.Image chartImage = await boundary.toImage(pixelRatio: 3.0);
       progress.value = 0.25;
 
@@ -375,10 +374,9 @@ class CommitDashboardViewscreen extends StatelessWidget{
       }
 
     } catch (e) {
-      Get.back();
       print("Screenshot error: $e");
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error: $e')),
+        SnackBar(content: Text('Error: Data does not found')),
       );
     }
     finally{
@@ -521,7 +519,9 @@ class CommitDashboardViewscreen extends StatelessWidget{
                         if (!event.isInterestedForInteractions || response == null || response.spot == null) return;
                         final rodIndex = response.spot!.touchedRodDataIndex;
                         final groupIndex = response.spot!.touchedBarGroupIndex;
-                        String? record = dashboard_view_Controller.commitDashboardRecordList[groupIndex].geoValue == null?dashboard_view_Controller.commitDashboardRecordList[groupIndex].employee : dashboard_view_Controller.commitDashboardRecordList[groupIndex].geoValue;
+                        String? record = dashboard_view_Controller.commitDashboardRecordList[groupIndex].geoValue == null?
+                        dashboard_view_Controller.commitDashboardRecordList[groupIndex].employee :
+                        dashboard_view_Controller.commitDashboardRecordList[groupIndex].geoValue;
 
                         dashboard_view_Controller.geoValueName.value = record??"";
                         if(dashboard_view_Controller.selectedOption == 'Region'){

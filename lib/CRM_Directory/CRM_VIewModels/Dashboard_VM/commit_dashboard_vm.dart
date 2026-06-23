@@ -105,8 +105,7 @@ class CommitDashboardVm extends GetxController{
       loading.value=true;
       email = await sessionManagement.getEmail() ?? '';
       userType = await sessionManagement.getUserType() ?? '';
-      isAdminWritePermission.value =
-          await sessionManagement.getIsAdminPermission() ?? '';
+      isAdminWritePermission.value = await sessionManagement.getIsAdminPermission() ?? '';
       //SalesCycleStageStatusList.value = ['ALL','Suspect', 'Prospect', 'Propose'];
       // selectedSalesStageStatusList.value = ["All"];
       QuoteAccepted_controller.value.text = "OPEN";
@@ -116,12 +115,12 @@ class CommitDashboardVm extends GetxController{
       filterCustomDateController.value.text =
       '${formattedStartDate} - ${formattedEndDate}';
       //commitDashboardData();
-      isAdminWritePermission == "1"
-          ? EmployeeMasterGet("")
-          : getEmployeeTeamMemberGetByClusterRegionApi();
 
       getItemCategoryMstWithoutTaskIdApi();
       getClustersGetByEmail();
+      isAdminWritePermission == "1"
+          ? EmployeeMasterGet("")
+          : getEmployeeTeamMemberGetByClusterRegionApi();
       getAccountMaster("");
     }
     catch(e){
@@ -296,8 +295,7 @@ class CommitDashboardVm extends GetxController{
           print('baisgdiuasgi du${response}');
 
         } else {
-          Utils.showErrorToastification(
-              "False Message !", response[0].message.toString());
+          Utils.showErrorToastification("False Message !", response[0].message.toString());
           commitDashboardRecordList.value = [];
         }
       }
@@ -632,7 +630,6 @@ class CommitDashboardVm extends GetxController{
             regionwithclusterGetByEmailList.value=response;
             RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join(', ');
             SelectedRegion_list.assignAll(regionwithclusterGetByEmailList);
-            print('region....${RegionName_controller.value.text}');
             //commitDashboardData();
             getFilterData();
           }else {

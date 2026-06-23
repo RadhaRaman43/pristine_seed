@@ -331,10 +331,10 @@ class CallDashboardViewScreen extends StatelessWidget {
         );
       }
     } catch (e) {
-      Get.back();
+
       print("Screenshot error: $e");
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error: $e')),
+        SnackBar(content: Text('Error: Data Does Not Found')),
       );
     }
     finally{

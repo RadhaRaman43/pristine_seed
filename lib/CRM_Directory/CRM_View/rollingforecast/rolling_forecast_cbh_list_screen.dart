@@ -15,79 +15,79 @@ import '../../CRM_Models/AccountMaster_model/Employee_Member_Model.dart';
 import '../../CRM_Models/AccountMaster_model/cluster_modal.dart';
 import '../../CRM_Models/AccountMaster_model/region_with_cluster_filter_modal.dart';
 import '../../CRM_Models/TaskMaster_model/Item_Category_Mast_model.dart';
-import '../../CRM_VIewModels/salesforecasrVM/rolling_forecast_rh_vm.dart';
+import '../../CRM_VIewModels/rollingforecastVM/rolling_forecast_cbh_vm.dart';
 
-class RollingForeCastRHListScreen extends StatelessWidget{
-
-  final sale_fore_cast_vm = Get.put(RollingForeCastRHVM());
+class RollingForeCastCBHListScreen extends StatelessWidget{
+  final sale_fore_cast_vm = Get.put(RollingForeCastCBHVM());
   ScrollController scrollController = ScrollController();
   static String _displayStringTypeDropDownForOption(String option) =>
       option;
-
   @override
   Widget build(BuildContext context) {
     return WillPopScope(onWillPop:  () async {
       Get.toNamed(RoutesName.homeScreen);
       return false;
     }, child: Scaffold(
-          appBar: AppBar(
-              backgroundColor: AllColors.primaryDark1,
-              iconTheme: IconThemeData(
-                color: AllColors.whiteColor,
-              ),
-              title:Row(
-                children: [
-                  Tooltip(
-                    message: 'Rolling Forecast RH List',
-                    child: Text(
-                      'Rolling Forecast RH List',
-                      style: GoogleFonts.poppins(
-                        color: AllColors.whiteColor,
-                        fontSize: 16.0,
-                        fontWeight: FontWeight.w700,
-                      ),
+      appBar: AppBar(
+          backgroundColor: AllColors.primaryDark1,
+          iconTheme: IconThemeData(
+            color: AllColors.whiteColor,
+          ),
+          title:Row(
+            children: [
+              Flexible(
+                child: Tooltip(
+                  message: 'Rolling Forecast CBH List',
+                  child: Text(
+                    'Rolling Forecast CBH List',
+                    style: GoogleFonts.poppins(
+                      color: AllColors.whiteColor,
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.w700,
                     ),
                   ),
-                  //Spacer(),
-                  IconButton(onPressed: () {
-                    sale_fore_cast_vm.downloadForeCastLineDetaisForUploadWithProgress(context,'Rolling Forecast RH Data','Rolling Forecast RH Data');
-                  }, icon: Icon(Icons.download)),
-                  IconButton(onPressed: () {
-                    showFilterBottomSheet(context);
-                  }, icon: Icon(Icons.filter_alt_sharp))
-                ],
-              )
-          ),
-          drawer: CustomDrawer(),
-          body:  RefreshIndicator(
-            onRefresh:sale_fore_cast_vm.refreshList,
-            child: Container(
-              width: double.infinity,
-              height: double.infinity,
-              child: Column(
-                children: [
-                  Obx((){
-                    return Visibility(
-                      visible:sale_fore_cast_vm.loading.value ,
-                      child: LinearProgressIndicator(
-                        backgroundColor: AllColors.primaryDark1,
-                        color: AllColors.textColor,
-                      ),
-                    );
-                  }),
-                  Flexible(
-                    fit: FlexFit.loose,
-                    child: Container(
-                      child: Obx(() {
-                        return BindRHdetailsListView(context);
-                      }),
-                    ),
-                  )
-                ],
+                ),
               ),
-            ),
+              //Spacer(),
+              IconButton(onPressed: () {
+                sale_fore_cast_vm.downloadForeCastLineDetaisForUploadWithProgress(context,'Rolling Forecast RH Data','Rolling Forecast RH Data');
+              }, icon: Icon(Icons.download)),
+              IconButton(onPressed: () {
+                showFilterBottomSheet(context);
+              }, icon: Icon(Icons.filter_alt_sharp))
+            ],
+          )
+      ),
+      drawer: CustomDrawer(),
+      body:  RefreshIndicator(
+        onRefresh:sale_fore_cast_vm.refreshList,
+        child: Container(
+          width: double.infinity,
+          height: double.infinity,
+          child: Column(
+            children: [
+              Obx((){
+                return Visibility(
+                  visible:sale_fore_cast_vm.loading.value ,
+                  child: LinearProgressIndicator(
+                    backgroundColor: AllColors.primaryDark1,
+                    color: AllColors.textColor,
+                  ),
+                );
+              }),
+              Flexible(
+                fit: FlexFit.loose,
+                child: Container(
+                  child: Obx(() {
+                    return BindRHdetailsListView(context);
+                  }),
+                ),
+              )
+            ],
           ),
-        ));
+        ),
+      ),
+    ));
   }
   Widget BindRHdetailsListView(context) {
     if (sale_fore_cast_vm.rolling_fore_cast_list.value.isNotEmpty && sale_fore_cast_vm.rolling_fore_cast_list.value.length > 0) {
@@ -1526,6 +1526,7 @@ class RollingForeCastRHListScreen extends StatelessWidget{
                                     sale_fore_cast_vm.SelectedEmployee_Member_list.assignAll(sale_fore_cast_vm.tempSelected);
                                     sale_fore_cast_vm.accountNameCode= sale_fore_cast_vm.tempSelected.map((nameCode)
                                     =>"${sale_fore_cast_vm.isAdminWritePermission=="1"?nameCode.userFullName??"":nameCode.fullName??""}(${nameCode.salesPersonEmpCode})" ).join(', ') ;
+
                                     sale_fore_cast_vm.AccountOwner_controller.value.text = sale_fore_cast_vm.tempSelected.map((e) => e.empId).join(', ');
 
                                     Navigator.of(context).pop();
@@ -1554,7 +1555,6 @@ class RollingForeCastRHListScreen extends StatelessWidget{
         }
     );
   }
-
 
 
 }

@@ -42,6 +42,7 @@ import '../../CRM_Directory/CRM_View/Call_Dashboard_view/call_Dashboard_View_Scr
 import '../../CRM_Directory/CRM_View/Call_Dashboard_view/commit_dashboard_viewScreen.dart';
 import '../../CRM_Directory/CRM_View/Call_Dashboard_view/funnel_Dashboard_view.dart';
 import '../../CRM_Directory/CRM_View/Call_Dashboard_view/pending_DSAR_Dashboard_ViewScreen.dart';
+import '../../CRM_Directory/CRM_View/Call_Dashboard_view/rollingforceCastDashBoardScreen.dart';
 import '../../CRM_Directory/CRM_View/Call_Dashboard_view/sales_Dashboard_ViewScreen.dart';
 import '../../CRM_Directory/CRM_View/Contact_master_View/Contact_master_View/Add_newContact_Master.dart';
 import '../../CRM_Directory/CRM_View/Contact_master_View/Contact_master_View/Contact_Master_Screen.dart';
@@ -57,6 +58,14 @@ import '../../CRM_Directory/CRM_View/employee_information_system_view/emp_mark_l
 import '../../CRM_Directory/CRM_View/employee_information_system_view/emp_mark_leave_screen.dart';
 import '../../CRM_Directory/CRM_View/employee_information_system_view/leave_request_approval_screen.dart';
 import '../../CRM_Directory/CRM_View/item_master/update_non_standard_item.dart';
+import '../../CRM_Directory/CRM_View/rollingforecast/SalesForeCastScreen.dart';
+import '../../CRM_Directory/CRM_View/rollingforecast/create_rolling_force_cast_screen.dart';
+import '../../CRM_Directory/CRM_View/rollingforecast/fore_cast_item_list_screen.dart';
+import '../../CRM_Directory/CRM_View/rollingforecast/rolling_forecast_cbh_list_screen.dart';
+import '../../CRM_Directory/CRM_View/rollingforecast/rolling_forecast_gm_list_screen.dart';
+import '../../CRM_Directory/CRM_View/rollingforecast/rolling_forecast_logistic_list_screen.dart';
+import '../../CRM_Directory/CRM_View/rollingforecast/rolling_forecast_rh_list_screen.dart';
+import '../../CRM_Directory/CRM_View/rollingforecast/sales_force_cast_header_details.dart';
 import '../../CRM_Directory/CRM_View/sales_cycle/All_Quote_Line_Item_View/All_Quote_Line_Item_Screen.dart';
 import '../../CRM_Directory/CRM_View/sales_cycle/All_Quote_view/All_Quote_Screen.dart';
 import '../../CRM_Directory/CRM_View/sales_cycle/Pending_Draft_Quote_view/pending_Draft_Quote.dart';
@@ -83,14 +92,6 @@ import '../../CRM_Directory/CRM_View/sales_cycle/sales_cycle_view/update_bussine
 import '../../CRM_Directory/CRM_View/sales_cycle/sales_cycle_view/update_quote_line_data_screen.dart';
 import '../../CRM_Directory/CRM_View/sales_cycle/sales_cycle_view/update_sale_infra_detail_screen.dart';
 import '../../CRM_Directory/CRM_View/sales_cycle/sales_cycle_view/view_sale_header_screen.dart';
-import '../../CRM_Directory/CRM_View/salesforecast/SalesForeCastScreen.dart';
-import '../../CRM_Directory/CRM_View/salesforecast/fore_cast_item_list_screen.dart';
-import '../../CRM_Directory/CRM_View/salesforecast/create_sales_force_cast_screen.dart';
-import '../../CRM_Directory/CRM_View/salesforecast/rolling_forecast_cbh_list_screen.dart';
-import '../../CRM_Directory/CRM_View/salesforecast/rolling_forecast_gm_list_screen.dart';
-import '../../CRM_Directory/CRM_View/salesforecast/rolling_forecast_logistic_list_screen.dart';
-import '../../CRM_Directory/CRM_View/salesforecast/rolling_forecast_rh_list_screen.dart';
-import '../../CRM_Directory/CRM_View/salesforecast/sales_force_cast_header_details.dart';
 import '../../view/check_in_approval/check_in_approval_header_view_screen.dart';
 import '../../view/check_in_view/check_in_screen.dart';
 import '../../view/check_out_view/add_expense_screen.dart';
@@ -950,6 +951,12 @@ class AppRoutes{
         transition: Transition.rightToLeftWithFade
     ),
 
+
+    GetPage(name: RoutesName.rollingforceCastDashBoardScreen,
+        page: ()=>RollingForceCastDashBoardScreen(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
 
 
 
