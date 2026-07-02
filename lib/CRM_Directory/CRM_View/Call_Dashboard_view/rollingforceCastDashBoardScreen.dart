@@ -1003,7 +1003,7 @@ class RollingForceCastDashBoardScreen extends StatelessWidget{
               Row(
                 children: [
                   Text(
-                    "Sales Cycle Stage : ",
+                    "Sales Forecast Id : ",
                     style: GoogleFonts.poppins(
                         color: AllColors.primaryDark1,
                         fontSize: AllFontSize.fourtine,
@@ -1060,8 +1060,8 @@ class RollingForceCastDashBoardScreen extends StatelessWidget{
               _buildLabelWithValue(label: "Item Code: ", value:dashboard_view_Controller.rollingForecastUserWiseList[position].itemCode??"" ,color:AllColors.textColor),
               _buildLabelWithValue(label: "Item Name: ", value:dashboard_view_Controller.rollingForecastUserWiseList[position].itemName??"" ,color:AllColors.textColor),
               _buildLabelWithValue(label: "Item Variant: ", value:dashboard_view_Controller.rollingForecastUserWiseList[position].itemVarient??"" ,color:AllColors.textColor),
-              _buildLabelWithValue(label: "Product Category: ", value:dashboard_view_Controller.rollingForecastUserWiseList[position].itemCategoryCode??"" ,color:AllColors.textColor),
-              _buildLabelWithValue(label: "Parent Product Category: ", value:dashboard_view_Controller.rollingForecastUserWiseList[position].itemParentCategoryCode??"" ,color:AllColors.textColor),
+              _buildLabelWithValue(label: "Item Category Code: ", value:dashboard_view_Controller.rollingForecastUserWiseList[position].itemCategoryCode??"" ,color:AllColors.textColor),
+              _buildLabelWithValue(label: "Parent Category Code: ", value:dashboard_view_Controller.rollingForecastUserWiseList[position].itemParentCategoryCode??"" ,color:AllColors.textColor),
               _buildLabelWithValue(label: "Qty: ", value:dashboard_view_Controller.rollingForecastUserWiseList[position].qty.toString()??"" ,color:AllColors.textColor),
               _buildLabelWithValue(label: "Approved Amt.: ", value:dashboard_view_Controller.rollingForecastUserWiseList[position].quoteApprovedAmountPerUnit.toString()??"" ,color:AllColors.textColor),
               _buildLabelWithValue(label: "Closer Month: ", value:dashboard_view_Controller.rollingForecastUserWiseList[position].closureMonth??"" ,color:AllColors.textColor),

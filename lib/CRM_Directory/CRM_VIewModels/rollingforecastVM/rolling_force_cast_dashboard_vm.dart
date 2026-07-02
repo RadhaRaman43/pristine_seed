@@ -495,6 +495,10 @@ class RollingForceCastDashboardVm extends GetxController{
         "filter_owner_name": AccountOwnerForApi,
         "filter_product_category": ProductCategoryForApi,
         "filter_customer_name": CustomerNameApi,
+        "filter_item_code_name": "",
+        "filter_item_varient": "",
+        "filter_req_region": "",
+        "filter_req_cluster": "",
         "filter_cluster_name": ClusterNameForApi,
         "filter_region_name": RegionNameForApi,
       };
@@ -530,6 +534,7 @@ class RollingForceCastDashboardVm extends GetxController{
       getDashboardUserWiseData(pageNumber);
     }
   }
+
   getDashboardUserWiseData(int pageNumber){
     try{
       loading.value=true;

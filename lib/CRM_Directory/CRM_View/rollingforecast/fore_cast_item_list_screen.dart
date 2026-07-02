@@ -45,7 +45,7 @@ class CreateForeCastIyemScreen extends StatelessWidget{
                     ),
                   ),
                   Spacer(),
-                  IconButton(onPressed: () {
+                 /* IconButton(onPressed: () {
                     if(sales_force_cast_vm.selectedForeCastQuote_list.value.isEmpty){
                       Utils.sanckBarError("Condition False!", "please select at least one Item");
                     }
@@ -58,7 +58,7 @@ class CreateForeCastIyemScreen extends StatelessWidget{
                       }
 
                     }
-                  }, icon: Icon(Icons.add)),
+                  }, icon: Icon(Icons.add)),*/
                   GestureDetector(
                     onTap: () {
                       showDialogForFilter(context);
@@ -93,38 +93,74 @@ class CreateForeCastIyemScreen extends StatelessWidget{
                     ),
                   );
                 }),
-                Obx((){
-                  return Visibility(
-                    visible: sales_force_cast_vm.showForeCstList.value,
-                      child: Column(children: [
-                    Padding(
-                      padding: EdgeInsets.only(right: 20),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Obx((){
-                            return Checkbox(
-                              value: sales_force_cast_vm.selectAllForeCastList.value?true:false,
-                              onChanged: (bool? value) {
-                                sales_force_cast_vm.selectAllForeCastCheckbox();
-                              },
-                            );
-                          }),
-                          Text(sales_force_cast_vm.selectAllForeCastList.value?"Unselect All":"Select All",
-                            style: GoogleFonts.poppins(
-                                color: AllColors.primaryDark1,
-                                fontSize: AllFontSize.fourtine,
-                                fontWeight: FontWeight.w500),
-                          ),
-                        ],
+                Row(
+                  children: [
+                    SizedBox(width: 20,),
+                    ActionChip(
+                      elevation: 2,
+                      padding: EdgeInsets.symmetric(horizontal: 35, vertical: 2),
+                      backgroundColor: AllColors.primaryDark1,
+                      shadowColor: Colors.black,
+                      shape: StadiumBorder(
+                        side: BorderSide(color: AllColors.grayColor),
                       ),
+                      label: Text("Create Rolling Forecast",
+                        style: TextStyle(
+                          color: AllColors.whiteColor,
+                          fontSize: AllFontSize.fourtine,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      onPressed: () {
+                        if(sales_force_cast_vm.selectedForeCastQuote_list.value.isEmpty){
+                          Utils.sanckBarError("Condition False!", "please select at least one Item");
+                        }
+                        else{
+                          if(sales_force_cast_vm.fromPage=='ForeCastHeaderDetails'){
+                            sales_force_cast_vm.SalesForecastAddQuoteItems();
+                          }
+                          else{
+                            sales_force_cast_vm.SalesForecastHeaderCreate();
+                          }
+
+                        }
+                      },
                     ),
-                    Divider(
-                      height: 1,
-                      color: AllColors.bluegrayColor,
-                    ),
-                  ],));
-                }),
+                    Spacer(),
+                    Obx((){
+                      return Visibility(
+                        visible: sales_force_cast_vm.showForeCstList.value,
+                          child: Column(children: [
+                        Padding(
+                          padding: EdgeInsets.only(right: 20),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Obx((){
+                                return Checkbox(
+                                  value: sales_force_cast_vm.selectAllForeCastList.value?true:false,
+                                  onChanged: (bool? value) {
+                                    sales_force_cast_vm.selectAllForeCastCheckbox();
+                                  },
+                                );
+                              }),
+                              Text(sales_force_cast_vm.selectAllForeCastList.value?"Unselect All":"Select All",
+                                style: GoogleFonts.poppins(
+                                    color: AllColors.primaryDark1,
+                                    fontSize: AllFontSize.fourtine,
+                                    fontWeight: FontWeight.w500),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Divider(
+                          height: 1,
+                          color: AllColors.bluegrayColor,
+                        ),
+                      ],));
+                    }),
+                  ],
+                ),
                 Obx((){
                   return Visibility(
                     visible: sales_force_cast_vm.showForeCstList.value,

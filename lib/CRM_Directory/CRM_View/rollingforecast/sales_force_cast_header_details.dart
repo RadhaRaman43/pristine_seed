@@ -60,7 +60,7 @@ class SalesForceHeaderDetails extends StatelessWidget{
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'View Forcast',
+                      'View Forecast',
                       style: GoogleFonts.poppins(
                         color: AllColors.whiteColor,
                         fontSize: 18.0,
@@ -100,7 +100,7 @@ class SalesForceHeaderDetails extends StatelessWidget{
                 child: ConstrainedBox(
                   constraints: BoxConstraints(minWidth: MediaQuery.of(context).size.width),
                   child: Container(
-                    padding: EdgeInsets.only(left: 20,right: 20), // optional spacing
+                    padding: EdgeInsets.only(left: 20,right: 20),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -166,10 +166,9 @@ class SalesForceHeaderDetails extends StatelessWidget{
                 padding:
                 const EdgeInsets.only(left: 10.0, right: 10),
                 child: Row(
-
                   children: [
                     Text(
-                      "Forcast Lines",
+                      "Forecast Lines",
                       style: GoogleFonts.poppins(
                         color: AllColors.primaryDark1,
                         fontSize: AllFontSize.eighteen,
@@ -359,7 +358,6 @@ class SalesForceHeaderDetails extends StatelessWidget{
   }
 
   Widget bindPendingListView(BuildContext context, int index,) {
-
     return Card(
       child: ListTile(
         contentPadding: EdgeInsets.only(left: 5 , right: 10),
@@ -393,8 +391,8 @@ class SalesForceHeaderDetails extends StatelessWidget{
           ),
            Obx(() {
               return Visibility(
-                visible: sales_force_cast_vm.isAdminWritePermission.value == "1" &&
-                    sales_force_cast_vm.isHeadofficePermission.value == "0",
+                visible: /*sales_force_cast_vm.isAdminWritePermission.value == "1" &&
+                    sales_force_cast_vm.isHeadofficePermission.value == "0" &&*/ sales_force_cast_vm.foreCastStatus.value =="Completed",
                 child:  GestureDetector(
                     onTap: (){
                       sales_force_cast_vm.editableDataApi(sales_force_cast_vm.salesForceCastHeader_list[0].lines![index],"delete");
