@@ -47,11 +47,12 @@ class PreventiveViewModel extends GetxController {
   RxString image_description_flag = "".obs;
   RxBool isExpand = true.obs;
   String reason_code = "";
-  RxString capture_flag = ''.obs;
+  RxString capture_flag = 'CAMERA'.obs;
   RxString description = "".obs;
   RxString image_flag = "".obs;
   RxString upLoadLocalImagesList = ''.obs;
   final ImagePicker _picker = ImagePicker();
+
   Size size = Get.size;
 
   String item_no = "";
@@ -1316,7 +1317,7 @@ class PreventiveViewModel extends GetxController {
               response_data[0].condition == 'True') {
             loading.value = false;
             upLoadLocalImagesList.value = '';
-            capture_flag.value = '';
+            capture_flag.value = 'CAMERA';
             Navigator.pop(context);
             getServicePreventiveDetails(id, "Refresh");
 
@@ -2038,14 +2039,14 @@ class PreventiveViewModel extends GetxController {
 
   }
 
-  @override
+  /*@override
   void onClose() {
     amcRequestInvoiceNoController.value.dispose();
     warrantyStartDateController.value.dispose();
     warrantyEndDateController.value.dispose();
     frequencyController.value.dispose();
     super.onClose();
-  }
+  }*/
 
   getAMCRequestCreation() {
     Map<String, String> data = {

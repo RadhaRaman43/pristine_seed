@@ -1526,8 +1526,7 @@ class MarkVisit extends StatelessWidget {
                   ),
                   InkWell(
                     onTap: () async {
-                      installation_indent_page_controller.capture_flag.value =
-                          "Capture";
+                      installation_indent_page_controller.capture_flag.value = "CAMERA";
                       installation_indent_page_controller.upLoadImage(context);
                     },
                     child: Padding(
@@ -1582,8 +1581,7 @@ class MarkVisit extends StatelessWidget {
                   ),
                   InkWell(
                     onTap: () async {
-                      installation_indent_page_controller.capture_flag.value =
-                          "Gallery";
+                      installation_indent_page_controller.capture_flag.value = "GALLERY";
                       installation_indent_page_controller
                           .upLoadGalleryImage(context);
                     },

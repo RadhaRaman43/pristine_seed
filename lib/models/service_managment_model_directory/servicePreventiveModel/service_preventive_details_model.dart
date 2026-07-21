@@ -2,6 +2,7 @@ class ServicePreventiveDetailsResponse {
   String? condition;
   int? isGeoTag;
   int? isWarranty;
+  int? isReplaceSerial;
   int? id;
   String? serviceNo;
   int? lineNo;
@@ -58,6 +59,9 @@ class ServicePreventiveDetailsResponse {
   String? completeApprovalRemark;
   double? qty;
   String? completeApprovalStatus;
+  int? visitCharges;
+  String? fromLatitude;
+  String? fromLongitude;
   List<ServiceHistory>? serviceHistory;
   List<FileList>? fileList;
 
@@ -66,6 +70,7 @@ class ServicePreventiveDetailsResponse {
         this.id,
         this.isGeoTag,
         this.isWarranty,
+        this.isReplaceSerial,
         this.serviceNo,
         this.lineNo,
         this.message,
@@ -122,6 +127,9 @@ class ServicePreventiveDetailsResponse {
         this.recheduleApprovalStatus,
         this.completeApprovalStatus,
         this.completeApprovalRemark,
+        this.visitCharges,
+        this.fromLatitude,
+        this.fromLongitude,
         this.fileList});
 
   ServicePreventiveDetailsResponse.fromJson(Map<String, dynamic> json) {
@@ -129,6 +137,7 @@ class ServicePreventiveDetailsResponse {
     id = json['id'];
     isGeoTag = json['is_geo_tag'];
     isWarranty = json['is_warranty'];
+    isReplaceSerial = json['is_replace_serial'];
     message = json['message'];
     serviceNo = json['service_no'];
     lineNo = json['line_no'];
@@ -184,6 +193,9 @@ class ServicePreventiveDetailsResponse {
     completeApprovalRemark = json['complete_approval_remark'];
     qty = json['qty'];
     completeApprovalStatus = json['complete_approval_status'];
+    visitCharges = json['visit_charges'];
+    fromLatitude = json['from_latitude'];
+    fromLongitude = json['from_longitude'];
     if (json['service_history'] != null) {
       serviceHistory = <ServiceHistory>[];
       json['service_history'].forEach((v) {
@@ -203,6 +215,7 @@ class ServicePreventiveDetailsResponse {
     data['condition'] = this.condition;
     data['is_geo_tag'] = this.isGeoTag;
     data['is_warranty'] = this.isWarranty;
+    data['is_replace_serial'] = this.isReplaceSerial;
     data['id'] = this.id;
     data['message'] = this.message;
     data['service_no'] = this.serviceNo;
@@ -257,6 +270,9 @@ class ServicePreventiveDetailsResponse {
     data['rechedule_approval_status'] = this.recheduleApprovalStatus;
     data['rechedule_approval_remark'] = this.recheduleApprovalRemark;
     data['complete_approval_status'] = this.completeApprovalStatus;
+    data['visit_charges'] = this.visitCharges;
+    data['from_latitude'] = this.fromLatitude;
+    data['from_longitude'] = this.fromLongitude;
     data['qty'] = this.qty;
     data['complete_approval_remark'] = this.completeApprovalRemark;
     if (this.serviceHistory != null) {

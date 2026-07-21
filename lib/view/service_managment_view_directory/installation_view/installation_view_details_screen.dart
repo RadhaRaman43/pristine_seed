@@ -44,16 +44,35 @@ class InstallationViewDetailsScreen extends StatelessWidget {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text(
-            'View Installation',
-            style: GoogleFonts.poppins(
-              color: AllColors.whiteColor,
-              fontSize: AllFontSize.twentee,
-              fontWeight: FontWeight.w700,
-            ),
+          title: Row(
+            children: [
+              Text(
+                'View Installation',
+                style: GoogleFonts.poppins(
+                  color: AllColors.whiteColor,
+                  fontSize: AllFontSize.twentee,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+
+              Spacer(),
+              Visibility(
+                visible: installation_deatils_page_controller
+                    .service_installation_details_list[0].serviceStatus?.toLowerCase()=='completed',
+                  child: GestureDetector(
+                    onTap: (){
+
+                    },
+                    child: Chip(
+                    backgroundColor: AllColors.whiteColor,
+                    shape: CircleBorder(),
+                    label: Icon(Icons.location_on, color: AllColors.primaryDark1,size: 18,)),
+                  ))
+
+            ],
           ),
           iconTheme: IconThemeData(
-            color: AllColors.whiteColor, // Change this to the desired color
+            color: AllColors.whiteColor,
           ),
           backgroundColor: AllColors.primaryDark1,
         ),

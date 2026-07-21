@@ -2,6 +2,7 @@ class ServiceCorrectiveDetails {
   String? condition;
   int? isGeoTag;
   int? isWarranty;
+  int? isReplaceSerial;
   int? id;
   String? serviceNo;
   int? lineNo;
@@ -51,6 +52,9 @@ class ServiceCorrectiveDetails {
   String? warrantyEndDate;
   int? frequencyOfPm;
   String? serviceTatDatetime;
+  int? visitCharges;
+  String? fromLatitude;
+  String? fromLongitude;
   String? categoryName;
   int? isUnderApproval;
   String? completeApprovalStatus;
@@ -66,6 +70,7 @@ class ServiceCorrectiveDetails {
         this.id,
         this.isGeoTag,
         this.isWarranty,
+        this.isReplaceSerial,
         this.serviceNo,
         this.lineNo,
         this.message,
@@ -114,6 +119,9 @@ class ServiceCorrectiveDetails {
         this.warrantyEndDate,
         this.frequencyOfPm,
         this.serviceTatDatetime,
+        this.visitCharges,
+        this.fromLatitude,
+        this.fromLongitude,
         this.serviceHistory,
         this.categoryName,
         this.isUnderApproval,
@@ -129,6 +137,7 @@ class ServiceCorrectiveDetails {
     id = json['id'];
     isGeoTag = json['is_geo_tag'];
     isWarranty = json['is_warranty'];
+    isReplaceSerial = json['is_replace_serial'];
     message = json['message'];
     serviceNo = json['service_no'];
     lineNo = json['line_no'];
@@ -177,6 +186,9 @@ class ServiceCorrectiveDetails {
     warrantyEndDate = json['warranty_end_date'];
     frequencyOfPm = json['frequency_of_pm'];
     serviceTatDatetime = json['service_tat_datetime'];
+    visitCharges = json['visit_charges'];
+    fromLatitude = json['from_latitude'];
+    fromLongitude = json['from_longitude'];
     isUnderApproval = json['is_under_approval'];
     categoryName = json['category_name'];
     recheduleApprovalStatus = json['rechedule_approval_status'];
@@ -203,6 +215,7 @@ class ServiceCorrectiveDetails {
     data['condition'] = this.condition;
     data['is_geo_tag'] = this.isGeoTag;
     data['is_warranty'] = this.isWarranty;
+    data['is_replace_serial'] = this.isReplaceSerial;
     data['id'] = this.id;
     data['message'] = this.message;
     data['service_no'] = this.serviceNo;
@@ -252,6 +265,9 @@ class ServiceCorrectiveDetails {
     data['warranty_end_date'] = this.warrantyEndDate;
     data['frequency_of_pm'] = this.frequencyOfPm;
     data['service_tat_datetime'] = this.serviceTatDatetime;
+    data['visit_charges'] = this.visitCharges;
+    data['from_latitude'] = this.fromLatitude;
+    data['from_longitude'] = this.fromLongitude;
     data['category_name'] = this.categoryName;
     data['is_under_approval'] = this.isUnderApproval;
     data['rechedule_approval_status'] = this.recheduleApprovalStatus;

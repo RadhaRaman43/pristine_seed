@@ -81,7 +81,7 @@ class CorrectiveViewModel extends GetxController{
   RxDouble currentLat = 0.0.obs;
   RxDouble currentLng = 0.0.obs;
 
-  RxString capture_flag = ''.obs;
+  RxString capture_flag = 'CAMERA'.obs;
   String item_no = "";
   RxBool is_Showindent=false.obs;
   RxBool is_indent_type_dropDown=false.obs;
@@ -962,7 +962,7 @@ getServiceCorrectiveList(int is_done, int page_no,String date_filter,{String glo
               response_data[0].condition == 'True') {
             loading.value = false;
             upLoadLocalImagesList.value = '';
-            capture_flag.value='';
+            capture_flag.value='CAMERA';
             getServiceCorrectiveDetailsGet(id, "Refresh");
 
             Utils.sanckBarSuccess(

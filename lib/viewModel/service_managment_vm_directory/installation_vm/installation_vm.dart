@@ -123,7 +123,7 @@ class InstallationViewModel extends GetxController {
   int total_rows = 0;
 
 
-  RxString capture_flag = ''.obs;
+  RxString capture_flag = 'CAMERA'.obs;
 
   RxString image_flag = "".obs;
 
@@ -1107,7 +1107,7 @@ class InstallationViewModel extends GetxController {
               response_data[0].condition == 'True') {
             loading.value = false;
             upLoadLocalImagesList.value = '';
-            capture_flag.value="";
+            capture_flag.value="CAMERA";
             Navigator.pop(context);
             getServiceInstallationDetails(id, "Refresh");
 

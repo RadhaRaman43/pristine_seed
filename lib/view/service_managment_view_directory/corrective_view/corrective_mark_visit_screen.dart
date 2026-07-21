@@ -1303,8 +1303,7 @@ class CorrectiveMarkVisitScreen extends StatelessWidget{
                   ),
                   InkWell(
                     onTap: () async {
-                      corrective_indent_page_controller.capture_flag.value =
-                      "Capture";
+                      corrective_indent_page_controller.capture_flag.value = "CAMERA";
                       corrective_indent_page_controller.upLoadImage(context);
                       // installation_indent_page_controller.upLoadImage(context);
                       //Navigator.of(context).pop();
@@ -1363,8 +1362,7 @@ class CorrectiveMarkVisitScreen extends StatelessWidget{
                   ),
                   InkWell(
                     onTap: () async {
-                      corrective_indent_page_controller.capture_flag.value =
-                      "Gallery";
+                      corrective_indent_page_controller.capture_flag.value = "GALLERY";
                       corrective_indent_page_controller.upLoadGalleryImage(context);
 
                       // installation_indent_page_controller.upLoadImage(context);
