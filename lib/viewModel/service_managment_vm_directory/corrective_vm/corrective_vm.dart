@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:get/get_rx/get_rx.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 //import 'package:marquee/marquee.dart';
 
@@ -77,6 +78,7 @@ class CorrectiveViewModel extends GetxController{
   var paybal_amount_controller=TextEditingController();
 
   var item_price_controller=TextEditingController();
+  var serialNoController=TextEditingController();
 
   RxDouble currentLat = 0.0.obs;
   RxDouble currentLng = 0.0.obs;
@@ -110,6 +112,12 @@ class CorrectiveViewModel extends GetxController{
   void toggle() {
     isExpand.value = !isExpand.value;
   }
+
+  GoogleMapController? mapController;
+  LatLng initialPosition =  LatLng(
+    28.6139,
+    77.2090,
+  );
 
   Future<void> refreshCorrectiveDetailsData() async {
     // Implement your refresh logic here
@@ -1273,7 +1281,7 @@ getServiceCorrectiveList(int is_done, int page_no,String date_filter,{String glo
     }
     if(dialog_file_list.length>0){
       upLoadLocalImagesList.value=dialog_file_list[0].fileUrl!;
-      description.value=dialog_file_list[0].fileDesc!;
+      description.value=dialog_file_list[0].fileDesc??""+" (${dialog_file_list[0].captureType??""})";
     }else{
       upLoadLocalImagesList.value="";
       description.value="";
@@ -1408,7 +1416,7 @@ getServiceCorrectiveList(int is_done, int page_no,String date_filter,{String glo
                               return GestureDetector(
                                 onTap: () {
                                   upLoadLocalImagesList.value=dialog_file_list![index].fileUrl!;
-                                  description.value=dialog_file_list![index].fileDesc!;
+                                  description.value=dialog_file_list![index].fileDesc??""+" (${dialog_file_list[0].captureType??""})";
                                 },
                                 child: Stack(
                                   children: [
@@ -1767,4 +1775,53 @@ getServiceCorrectiveList(int is_done, int page_no,String date_filter,{String glo
 
   }
 
+
+
+  serviceSerialNumberUpdate(int id, String oldSerialNo, BuildContext context) {
+    if(serialNoController.text.isEmpty){
+      Utils.sanckBarError('Error', 'Serial No is empty');
+      return ;
+    }
+    Map data = {
+      "id": id,
+      "old_serial_no": oldSerialNo,
+      "new_serial_no": serialNoController.text,
+      "email_id": email
+    };
+    print(data);
+    loading.value = true;
+    try {
+      _api.serviceSerialNumberUpdateApiHit(data, sessionManagement).then(
+            (value) {
+          print(value);
+          final JsonResponse = json.decode(value);
+          if (JsonResponse is List) {
+            List<ServiceCorrectiveDetails> response =
+            JsonResponse.map((e) => ServiceCorrectiveDetails.fromJson(e))
+                .toList();
+            if (response != null &&
+                response.length > 0 &&
+                response[0].condition?.toLowerCase() == "true") {
+              loading.value = false;
+              getServiceCorrectiveDetailsGet(
+                  id,"");
+              Navigator.pop(context);
+            } else {
+              loading.value = false;
+            }
+          } else {
+            loading.value = false;
+            Utils.sanckBarException("Api Error!", JsonResponse);
+          }
+        },
+      ).onError(
+            (error, stackTrace) {
+          print(error);
+        },
+      );
+    } catch (e) {
+      loading.value = false;
+      print(e);
+    }
+  }
 }

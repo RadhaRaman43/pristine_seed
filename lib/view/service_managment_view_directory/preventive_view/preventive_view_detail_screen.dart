@@ -8,7 +8,9 @@ import 'package:get/get_navigation/get_navigation.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:navigation_drawer_flutter/models/service_managment_model_directory/servicePreventiveModel/service_preventive_details_model.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../../../component/default_button.dart';
 import '../../../constants/app_colors.dart';
 import '../../../constants/app_font_size.dart';
 import '../../../constants/static_methods.dart';
@@ -1337,6 +1339,48 @@ class PreventiveViewDetailScreen extends StatelessWidget {
                                                   fontSize:
                                                       AllFontSize.sisxteen,
                                                   fontWeight: FontWeight.w300,
+                                                ),
+                                              )),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                  Obx(
+                                        () {
+                                      return Padding(
+                                        padding: const EdgeInsets.only(left: 2),
+                                        child: Visibility(
+                                          visible: preventive_deatils_page_controller
+                                              .service_preventive_details_list[
+                                          0]
+                                              .serviceStatus
+                                              ?.toLowerCase() !=
+                                              "completed" &&
+                                              preventive_deatils_page_controller
+                                                  .service_preventive_details_list[
+                                              0]
+                                                  .isReplaceSerial ==
+                                                  1,
+                                          child: ElevatedButton(
+                                              style: ElevatedButton.styleFrom(
+                                                  backgroundColor:
+                                                  AllColors.textColor2,
+                                                  side: BorderSide(
+                                                      color: AllColors
+                                                          .primaryDark1,
+                                                      width: 1)),
+                                              onPressed: () {
+                                                updateSerialDialog(context,preventive_deatils_page_controller
+                                                    .service_preventive_details_list[
+                                                0]);
+                                              },
+                                              child: Text(
+                                                "Update Serial",
+                                                style: GoogleFonts.poppins(
+                                                  color: AllColors.primaryDark1,
+                                                  fontSize:
+                                                  AllFontSize.fourtine,
+                                                  fontWeight: FontWeight.w500,
                                                 ),
                                               )),
                                         ),
@@ -2693,5 +2737,71 @@ class PreventiveViewDetailScreen extends StatelessWidget {
     } else {
       print("Can't open dial pad.");
     }
+  }
+
+  Future updateSerialDialog(BuildContext context, ServicePreventiveDetailsResponse service_preventive_details_list) {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title:  Text("Update Serial",
+              style: GoogleFonts.poppins(
+                color: AllColors.primaryDark1,
+                fontSize: AllFontSize.twentee,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            content:  Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextFormField(
+                  controller: preventive_deatils_page_controller
+                      .serialNoController,
+                  decoration: InputDecoration(
+                    labelText: "Enter Serial No.",
+                    labelStyle: TextStyle(color: AllColors.primaryDark1),
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: AllColors.primaryDark1),
+                    ),
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: AllColors.primaryDark1),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: DefaultButton(
+                        text: 'Ok',
+                        press: (){
+                          preventive_deatils_page_controller.serviceSerialNumberUpdate(
+                              service_preventive_details_list.id??0, service_preventive_details_list.serialNo??"", context
+                          );
+                        },
+                      ),
+                    ),
+                    SizedBox(width: 10,),
+                    Expanded(
+                      child: DefaultButton(
+                        text: 'Cancel',
+                        press: (){
+                          Navigator.pop(context);
+                          preventive_deatils_page_controller
+                              .serialNoController
+                              .clear();
+                        },
+                      ),
+                    ),
+
+                  ],
+                )
+              ],
+            ),
+          );
+        });
   }
 }

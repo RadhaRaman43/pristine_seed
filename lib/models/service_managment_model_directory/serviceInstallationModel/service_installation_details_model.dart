@@ -2,6 +2,7 @@ class ServiceInstallationDetails {
   String? condition;
   int? isGeoTag;
   int? isWarranty;
+  int? isReplaceSerial;
   int? id;
   String? serviceNo;
   int? lineNo;
@@ -58,6 +59,9 @@ class ServiceInstallationDetails {
   String? recheduleApprovalRemark;
   String? recheduleApprovalStatus;
   double? qty;
+  dynamic? visitCharges;
+  String? fromLatitude;
+  String? fromLongitude;
   List<ServiceHistory>? serviceHistory;
   List<FileList>? fileList;
 
@@ -66,6 +70,7 @@ class ServiceInstallationDetails {
         this.id,
         this.isGeoTag,
         this.isWarranty,
+        this.isReplaceSerial,
         this.serviceNo,
         this.lineNo,
         this.message,
@@ -122,6 +127,9 @@ class ServiceInstallationDetails {
         this.recheduleApprovalRemark,
         this.qty,
         this.recheduleApprovalStatus,
+        this.visitCharges,
+        this.fromLatitude,
+        this.fromLongitude,
         this.fileList});
 
   ServiceInstallationDetails.fromJson(Map<String, dynamic> json) {
@@ -129,6 +137,7 @@ class ServiceInstallationDetails {
     id = json['id'];
     isGeoTag = json['is_geo_tag'];
     isWarranty = json['is_warranty'];
+    isReplaceSerial = json['is_replace_serial'];
     message = json['message'];
     serviceNo = json['service_no'];
     lineNo = json['line_no'];
@@ -184,6 +193,9 @@ class ServiceInstallationDetails {
     qty = json['qty'];
     completeApprovalRemark = json['complete_approval_remark'];
     completeApprovalStatus = json['complete_approval_status'];
+    visitCharges = json['visit_charges'];
+    fromLatitude = json['from_latitude'];
+    fromLongitude = json['from_longitude'];
     if (json['service_history'] != null) {
       serviceHistory = <ServiceHistory>[];
       json['service_history'].forEach((v) {
@@ -203,6 +215,7 @@ class ServiceInstallationDetails {
     data['condition'] = this.condition;
     data['is_geo_tag'] = this.isGeoTag;
     data['is_warranty'] = this.isWarranty;
+    data['is_replace_serial'] = this.isReplaceSerial;
     data['id'] = this.id;
     data['message'] = this.message;
     data['service_no'] = this.serviceNo;
@@ -259,6 +272,9 @@ class ServiceInstallationDetails {
     data['qty'] = this.qty;
     data['complete_approval_status'] = this.completeApprovalStatus;
     data['complete_approval_remark'] = this.completeApprovalRemark;
+    data['visit_charges'] = this.visitCharges;
+    data['from_latitude'] = this.fromLatitude;
+    data['from_longitude'] = this.fromLongitude;
     if (this.serviceHistory != null) {
       data['service_history'] =
           this.serviceHistory!.map((v) => v.toJson()).toList();
@@ -330,6 +346,7 @@ class FileList {
   String? fileName;
   String? fileDesc;
   String? createdOn;
+  String? captureType;
 
   FileList(
       {this.id,
@@ -341,7 +358,8 @@ class FileList {
         this.fileType,
         this.fileName,
         this.fileDesc,
-        this.createdOn});
+        this.createdOn,
+        this.captureType});
 
   FileList.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -354,6 +372,7 @@ class FileList {
     fileName = json['file_name'];
     fileDesc = json['file_desc'];
     createdOn = json['created_on'];
+    captureType = json['capture_type'];
   }
 
   Map<String, dynamic> toJson() {
@@ -368,6 +387,7 @@ class FileList {
     data['file_name'] = this.fileName;
     data['file_desc'] = this.fileDesc;
     data['created_on'] = this.createdOn;
+    data['capture_type'] = this.captureType;
     return data;
   }
 }

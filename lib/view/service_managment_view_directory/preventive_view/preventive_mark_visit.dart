@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:navigation_drawer_flutter/reources/routes/routes_name.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -34,13 +35,45 @@ class PreventiveMarkVisitScreen extends StatelessWidget {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text(
-            'View Preventive',
-            style: GoogleFonts.poppins(
-              color: AllColors.whiteColor,
-              fontSize: AllFontSize.twentee,
-              fontWeight: FontWeight.w700,
-            ),
+          title: Row(
+            children: [
+              Text(
+                'View Preventive',
+                style: GoogleFonts.poppins(
+                  color: AllColors.whiteColor,
+                  fontSize: AllFontSize.twentee,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              Spacer(),
+              Visibility(
+                visible: preventive_indent_page_controller.service_preventive_details_list[0].serviceStatus?.toLowerCase()=='completed',
+                child: GestureDetector(
+                  onTap: (){
+                    preventive_indent_page_controller.initialPosition = LatLng(
+                      double.tryParse(
+                          preventive_indent_page_controller
+                              .service_preventive_details_list[0]
+                              .fromLatitude ??
+                              '') ??
+                          0.0,
+                      double.tryParse(
+                          preventive_indent_page_controller
+                              .service_preventive_details_list[0]
+                              .fromLongitude ??
+                              '') ??
+                          0.0,
+                    );
+                    showMapBottomSheet(context,preventive_indent_page_controller.service_preventive_details_list[0]);
+                  },
+
+                  child: Chip(
+                    label: Icon(Icons.location_on, color:AllColors.primaryDark1, size: 18,),
+                    shape: CircleBorder(),
+                  ),
+                ),
+              )
+            ],
           ),
           iconTheme: IconThemeData(
             color: AllColors.whiteColor, // Change this to the desired color
@@ -1901,6 +1934,109 @@ class PreventiveMarkVisitScreen extends StatelessWidget {
     } else {
       print("Can't open dial pad.");
     }
+  }
+
+  void showMapBottomSheet(BuildContext context,
+      ServicePreventiveDetailsResponse service_preventive_details_list) {
+    showModalBottomSheet(context: context,
+        backgroundColor: Colors.transparent,
+        useSafeArea: true,
+        builder: (context,){
+      return Container(
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+        ),
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.of(context).viewInsets.bottom,
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Center(
+              child: Container(
+                margin: const EdgeInsets.only(top: 12, bottom: 16),
+                width: 40,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade200,
+                  borderRadius: BorderRadius.circular(4),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: AllColors.primaryDark1,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: const Icon(Icons.zoom_out_map,
+                        color: Colors.white, size: 18),
+                  ),
+                  const SizedBox(width: 10),
+                  Center(
+                    child: Text(
+                      "Map View",
+                      style: GoogleFonts.poppins(
+                        fontWeight: FontWeight.w700,
+                        fontSize: AllFontSize.eighteen,
+                        color: const Color(0xFF1A1A2E),
+                      ),
+                    ),
+                  ),
+
+                  Spacer(),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pop(context);
+                    } ,
+                    child: Container(
+                      padding: const EdgeInsets.all(6),
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade200,
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(Icons.close_rounded,
+                          size: 16, color: Colors.black54),
+                    ),
+                  ),
+
+
+
+                ],
+              ),
+            ),
+            Divider(),
+            Expanded(
+              child: GoogleMap(
+                initialCameraPosition: CameraPosition(
+                  target: preventive_indent_page_controller.initialPosition,
+                  zoom: 15,
+                ),
+                onMapCreated: (GoogleMapController controller) {
+                  preventive_indent_page_controller.mapController = controller;
+                },
+                markers: {
+                  Marker(
+                    markerId: const MarkerId("current"),
+                    position: preventive_indent_page_controller.initialPosition,
+                    infoWindow: const InfoWindow(
+                      title: "My Location",
+                    ),
+                  ),
+                },
+              ),
+            ),
+          ],
+        ),
+      );
+    });
   }
 
 }

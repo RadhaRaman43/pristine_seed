@@ -1,11 +1,11 @@
 class ServiceCorrectiveDetails {
   String? condition;
-  int? isGeoTag;
-  int? isWarranty;
-  int? isReplaceSerial;
-  int? id;
+  dynamic? isGeoTag;
+  dynamic? isWarranty;
+  dynamic? isReplaceSerial;
+  dynamic? id;
   String? serviceNo;
-  int? lineNo;
+  dynamic? lineNo;
   String? message;
   String? serviceType;
   String? invoiceNo;
@@ -31,7 +31,7 @@ class ServiceCorrectiveDetails {
   String? serviceStatus;
   String? parentServiceNo;
   String? parentServiceId;
-  int? isAssignment;
+  dynamic? isAssignment;
   String? assignedPersonEmail;
   String? assignedReasonCode;
   String? assignedReasonDesc;
@@ -47,20 +47,20 @@ class ServiceCorrectiveDetails {
   String? complainRemark;
   String? reopenRemark;
   String? completeRemark;
-  int? isWarrantyReceive;
+  dynamic? isWarrantyReceive;
   String? warrantyStartDate;
   String? warrantyEndDate;
-  int? frequencyOfPm;
+  dynamic? frequencyOfPm;
   String? serviceTatDatetime;
-  int? visitCharges;
+  dynamic? visitCharges;
   String? fromLatitude;
   String? fromLongitude;
   String? categoryName;
-  int? isUnderApproval;
+  dynamic? isUnderApproval;
   String? completeApprovalStatus;
   String? completeApprovalRemark;
   String? recheduleApprovalRemark;
-  double? qty;
+  dynamic? qty;
   String? recheduleApprovalStatus;
   List<ServiceHistory>? serviceHistory;
   List<FileList>? fileList;
@@ -287,7 +287,7 @@ class ServiceCorrectiveDetails {
 }
 
 class ServiceHistory {
-  int? id;
+  dynamic? id;
   String? documentType;
   String? documentNo;
   String? subDocumentNo;
@@ -336,7 +336,7 @@ class ServiceHistory {
 }
 
 class FileList {
-  int? id;
+  dynamic? id;
   String? processType;
   String? documentType;
   String? documentNo;
@@ -346,6 +346,7 @@ class FileList {
   String? fileName;
   String? fileDesc;
   String? createdOn;
+  String? captureType;
 
   FileList(
       {this.id,
@@ -357,7 +358,8 @@ class FileList {
         this.fileType,
         this.fileName,
         this.fileDesc,
-        this.createdOn});
+        this.createdOn,
+        this.captureType});
 
   FileList.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -370,6 +372,7 @@ class FileList {
     fileName = json['file_name'];
     fileDesc = json['file_desc'];
     createdOn = json['created_on'];
+    captureType = json['capture_type'];
   }
 
   Map<String, dynamic> toJson() {
@@ -384,6 +387,7 @@ class FileList {
     data['file_name'] = this.fileName;
     data['file_desc'] = this.fileDesc;
     data['created_on'] = this.createdOn;
+    data['capture_type'] = this.captureType;
     return data;
   }
 }

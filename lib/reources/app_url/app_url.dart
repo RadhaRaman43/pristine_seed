@@ -104,6 +104,7 @@ class AppUrl {
      static const String aMCRequestInvoiceGet="$BASE_URL/api/ServiceActivity/AMCRequestInvoiceGet";
      static const String aMCRequestInvoiceWiseItemGet="$BASE_URL/api/ServiceActivity/AMCRequestInvoiceWiseItemGet";
      static const String aMCRequestCreation="$BASE_URL/api/ServiceActivity/AMCRequestCreation";
+     static const String serviceSerialNumberUpdate="$BASE_URL/api/ServiceActivity/ServiceSerialNumberUpdate";
 
 
 

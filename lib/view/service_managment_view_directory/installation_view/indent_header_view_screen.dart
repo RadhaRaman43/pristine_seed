@@ -41,7 +41,7 @@ class IndentHeaderViewScreen extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           title: Text(
-            'Indent  Details',
+            'Indent Details',
             style: GoogleFonts.poppins(
               color: AllColors.whiteColor,
               fontSize: AllFontSize.twentee,

@@ -11,6 +11,7 @@ import 'package:get/get_rx/get_rx.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:get/state_manager.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:navigation_drawer_flutter/constants/static_methods.dart';
 //import 'package:marquee/marquee.dart';
@@ -54,7 +55,11 @@ class InstallationViewModel extends GetxController {
       <ServiceInstallationDetails>[].obs;
   RxList<ServiceIndentHeaderResponse> service_indent_header_list = <ServiceIndentHeaderResponse>[].obs;
   RxList<IndentHeaderCreateResponse> service_indent_header_create_list = <IndentHeaderCreateResponse>[].obs;
-
+  GoogleMapController? mapController;
+  LatLng initialPosition =  LatLng(
+    28.6139,
+    77.2090,
+  );
   RxBool isExpand = true.obs;
   RxList<ReasonModel> reason_master_list = <ReasonModel>[].obs;
   RxList<ItemDetailsResponse> item_details_list = <ItemDetailsResponse>[].obs;
@@ -95,6 +100,7 @@ class InstallationViewModel extends GetxController {
   var paybal_amount_controller=TextEditingController();
   var indent_date_controller=TextEditingController();
   var item_price_controller=TextEditingController();
+  var serialNoController=TextEditingController();
 
 
   RxBool isCheckBox = false.obs;
@@ -130,6 +136,7 @@ class InstallationViewModel extends GetxController {
   RxString image_description_flag = "".obs;
 
   RxString description="".obs;
+  RxString fileCaptureType="".obs;
 
   RxString screen_route_flag="".obs;
 
@@ -1319,11 +1326,13 @@ class InstallationViewModel extends GetxController {
     }
     if(dialog_file_list.length>0){
       upLoadLocalImagesList.value=dialog_file_list[0].fileUrl!;
-      description.value=dialog_file_list[0].fileDesc!;
+      description.value=dialog_file_list[0].fileDesc??"";
+      fileCaptureType.value= dialog_file_list[0].captureType??"";
     }else{
       print("image Blank......");
       upLoadLocalImagesList.value="";
       description.value="";
+      fileCaptureType.value="";
       Get.toNamed(RoutesName.image_not_found_screen);
       return;
     }
@@ -1452,7 +1461,8 @@ class InstallationViewModel extends GetxController {
                               return GestureDetector(
                                 onTap: () {
                                   upLoadLocalImagesList.value=dialog_file_list![index].fileUrl!;
-                                  description.value=dialog_file_list![index].fileDesc!;
+                                  description.value=dialog_file_list![index].fileDesc??"";
+                                  fileCaptureType.value=dialog_file_list[0].captureType??"";
                                 },
                                 child:
                                 //todo small section close...
@@ -1620,8 +1630,8 @@ class InstallationViewModel extends GetxController {
                   color: Colors.white60,
                 ),
                 child:Tooltip(
-                  message: " " + description.value,
-                  child: Text(" " + description.value,
+                  message: " " + description.value + " (${fileCaptureType.value})",
+                  child: Text(" " + description.value+ " (${fileCaptureType.value})",
                     style: GoogleFonts.poppins(
                         color: AllColors.primaryDark1,
                         fontWeight: FontWeight.w700,
@@ -1771,6 +1781,53 @@ class InstallationViewModel extends GetxController {
     }
 
   }
-
+  serviceSerialNumberUpdate(int id, String oldSerialNo, BuildContext context) {
+    if(serialNoController.text.isEmpty){
+      Utils.sanckBarError('Error', 'Serial No is empty');
+      return ;
+    }
+    Map data = {
+      "id": id,
+      "old_serial_no": oldSerialNo,
+      "new_serial_no": serialNoController.text,
+      "email_id": email
+    };
+    print(data);
+    loading.value = true;
+    try {
+      _api.serviceSerialNumberUpdateApiHit(data, sessionManagement).then(
+            (value) {
+          print(value);
+          final JsonResponse = json.decode(value);
+          if (JsonResponse is List) {
+            List<ServiceInstallationDetails> response =
+            JsonResponse.map((e) => ServiceInstallationDetails.fromJson(e))
+                .toList();
+            if (response != null &&
+                response.length > 0 &&
+                response[0].condition?.toLowerCase() == "true") {
+              loading.value = false;
+              getServiceInstallationDetails(
+                  id,
+                  "");
+              Navigator.pop(context);
+            } else {
+              loading.value = false;
+            }
+          } else {
+            loading.value = false;
+            Utils.sanckBarException("Api Error!", JsonResponse);
+          }
+        },
+      ).onError(
+            (error, stackTrace) {
+          print(error);
+        },
+      );
+    } catch (e) {
+      loading.value = false;
+      print(e);
+    }
+  }
 
 }
