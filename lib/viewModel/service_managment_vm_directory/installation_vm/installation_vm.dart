@@ -1462,7 +1462,7 @@ class InstallationViewModel extends GetxController {
                                 onTap: () {
                                   upLoadLocalImagesList.value=dialog_file_list![index].fileUrl!;
                                   description.value=dialog_file_list![index].fileDesc??"";
-                                  fileCaptureType.value=dialog_file_list[0].captureType??"";
+                                  fileCaptureType.value=dialog_file_list[index].captureType??"";
                                 },
                                 child:
                                 //todo small section close...
@@ -1482,23 +1482,26 @@ class InstallationViewModel extends GetxController {
                                         child: upLoadImageSection(dialog_file_list![index]),
                                       ),
                                     ),
-                                    Positioned(
-                                      right: 5,
-                                      child: InkWell(
-                                        onTap: () {
-                                          CustomConfirmDialog.showDialog(context: context, title: "Confirm", content: "Do You Want to continue", onPress: () {
-                                            Navigator.of(context).pop();
-                                            imageDeleteApiHit(dialog_file_list[index].id.toString(),context);
-                                          }, isLoading: loading);
-                                        },
-                                        child: Container(
-                                          height: 30,
-                                          width: 30,
-                                          decoration: BoxDecoration(
-                                            shape: BoxShape.circle,
-                                            color: AllColors.primaryDark1
+                                    Visibility(
+                                      visible: service_installation_details_list[0].serviceStatus?.toLowerCase()!='completed',
+                                      child: Positioned(
+                                        right: 5,
+                                        child: InkWell(
+                                          onTap: () {
+                                            CustomConfirmDialog.showDialog(context: context, title: "Confirm", content: "Do You Want to continue", onPress: () {
+                                              Navigator.of(context).pop();
+                                              imageDeleteApiHit(dialog_file_list[index].id.toString(),context);
+                                            }, isLoading: loading);
+                                          },
+                                          child: Container(
+                                            height: 30,
+                                            width: 30,
+                                            decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              color: AllColors.primaryDark1
+                                            ),
+                                            child: Icon(Icons.delete,size: 18,color: AllColors.customDarkerWhite,),
                                           ),
-                                          child: Icon(Icons.delete,size: 18,color: AllColors.customDarkerWhite,),
                                         ),
                                       ),
                                     )

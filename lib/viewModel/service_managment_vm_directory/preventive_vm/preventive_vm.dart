@@ -1554,9 +1554,8 @@ class PreventiveViewModel extends GetxController {
                         ),
                         SizedBox(height: 10),
                         // Check if imageUrls is empty, display a message, else display images
-                        dialog_file_list == null &&
-                                dialog_file_list!.length <= 0
-                            ? Center(
+                        if (dialog_file_list == null &&
+                                dialog_file_list!.length <= 0) Center(
                                 child: Text(
                                   'No Images found',
                                   style: GoogleFonts.poppins(
@@ -1564,8 +1563,7 @@ class PreventiveViewModel extends GetxController {
                                       fontWeight: FontWeight.w700,
                                       color: AllColors.primaryDark1),
                                 ),
-                              )
-                            : Container(
+                              ) else Container(
                                 height: 100,
                                 child: ListView.builder(
                                   scrollDirection: Axis.horizontal,
@@ -1599,39 +1597,42 @@ class PreventiveViewModel extends GetxController {
                                                   dialog_file_list![index]),
                                             ),
                                           ),
-                                          Positioned(
-                                            right: 5,
-                                            child: InkWell(
-                                              onTap: () {
-                                                CustomConfirmDialog.showDialog(
-                                                    context: context,
-                                                    title: "Confirm",
-                                                    content:
-                                                        "Do You Want to continue",
-                                                    onPress: () {
-                                                      Navigator.of(context)
-                                                          .pop();
-                                                      imageDeleteApiHit(
-                                                          dialog_file_list[
-                                                                  index]
-                                                              .id
-                                                              .toString(),
-                                                          context);
-                                                    },
-                                                    isLoading: loading);
-                                              },
-                                              child: Container(
-                                                height: 30,
-                                                width: 30,
-                                                decoration: BoxDecoration(
-                                                    shape: BoxShape.circle,
-                                                    color:
-                                                        AllColors.primaryDark1),
-                                                child: Icon(
-                                                  Icons.delete,
-                                                  size: 18,
-                                                  color: AllColors
-                                                      .customDarkerWhite,
+                                          Visibility(
+                                            visible: service_preventive_details_list[0].serviceStatus?.toLowerCase()!='completed',
+                                            child: Positioned(
+                                              right: 5,
+                                              child: InkWell(
+                                                onTap: () {
+                                                  CustomConfirmDialog.showDialog(
+                                                      context: context,
+                                                      title: "Confirm",
+                                                      content:
+                                                          "Do You Want to continue",
+                                                      onPress: () {
+                                                        Navigator.of(context)
+                                                            .pop();
+                                                        imageDeleteApiHit(
+                                                            dialog_file_list[
+                                                                    index]
+                                                                .id
+                                                                .toString(),
+                                                            context);
+                                                      },
+                                                      isLoading: loading);
+                                                },
+                                                child: Container(
+                                                  height: 30,
+                                                  width: 30,
+                                                  decoration: BoxDecoration(
+                                                      shape: BoxShape.circle,
+                                                      color:
+                                                          AllColors.primaryDark1),
+                                                  child: Icon(
+                                                    Icons.delete,
+                                                    size: 18,
+                                                    color: AllColors
+                                                        .customDarkerWhite,
+                                                  ),
                                                 ),
                                               ),
                                             ),

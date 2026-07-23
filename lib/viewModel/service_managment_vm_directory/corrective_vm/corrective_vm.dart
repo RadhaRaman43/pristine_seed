@@ -91,6 +91,7 @@ class CorrectiveViewModel extends GetxController{
   final ImagePicker _picker = ImagePicker();
 
   RxString description="".obs;
+  RxString fileCaptureType="".obs;
 
   RxString date_filter="TODAY".obs;
   RxInt button_select=0.obs;
@@ -1281,10 +1282,13 @@ getServiceCorrectiveList(int is_done, int page_no,String date_filter,{String glo
     }
     if(dialog_file_list.length>0){
       upLoadLocalImagesList.value=dialog_file_list[0].fileUrl!;
-      description.value=dialog_file_list[0].fileDesc??""+" (${dialog_file_list[0].captureType??""})";
+      description.value=dialog_file_list[0].fileDesc??"";
+      fileCaptureType.value=dialog_file_list[0].captureType??"";
     }else{
       upLoadLocalImagesList.value="";
       description.value="";
+
+      fileCaptureType.value="";
       Get.toNamed(RoutesName.image_not_found_screen);
       return;
     }
@@ -1397,8 +1401,7 @@ getServiceCorrectiveList(int is_done, int page_no,String date_filter,{String glo
                         ),
                         SizedBox(height: 10),
                         // Check if imageUrls is empty, display a message, else display images
-                        dialog_file_list ==null && dialog_file_list!.length<=0
-                            ? Center(
+                        if (dialog_file_list ==null && dialog_file_list!.length<=0) Center(
                           child:Text( 'No Images found',
                             style:GoogleFonts.poppins(
                                 fontSize: AllFontSize.eighteen,
@@ -1406,8 +1409,7 @@ getServiceCorrectiveList(int is_done, int page_no,String date_filter,{String glo
                                 color: AllColors.primaryDark1
                             ),
                           ),
-                        )
-                            : Container(
+                        ) else Container(
                           height: 100,
                           child: ListView.builder(
                             scrollDirection: Axis.horizontal,
@@ -1416,7 +1418,8 @@ getServiceCorrectiveList(int is_done, int page_no,String date_filter,{String glo
                               return GestureDetector(
                                 onTap: () {
                                   upLoadLocalImagesList.value=dialog_file_list![index].fileUrl!;
-                                  description.value=dialog_file_list![index].fileDesc??""+" (${dialog_file_list[0].captureType??""})";
+                                  description.value=dialog_file_list![index].fileDesc??"";
+                                  fileCaptureType.value=dialog_file_list[index].captureType??"";
                                 },
                                 child: Stack(
                                   children: [
@@ -1432,23 +1435,26 @@ getServiceCorrectiveList(int is_done, int page_no,String date_filter,{String glo
                                         child: upLoadImageSection(dialog_file_list![index]),
                                       ),
                                     ),
-                                    Positioned(
-                                      right: 5,
-                                      child: InkWell(
-                                        onTap: () {
-                                          CustomConfirmDialog.showDialog(context: context, title: "Confirm", content: "Do You Want to continue", onPress: () {
-                                            Navigator.of(context).pop();
-                                            imageDeleteApiHit(dialog_file_list[index].id.toString(),context);
-                                          }, isLoading: loading);
-                                        },
-                                        child: Container(
-                                          height: 30,
-                                          width: 30,
-                                          decoration: BoxDecoration(
-                                              shape: BoxShape.circle,
-                                              color: AllColors.primaryDark1
+                                    Visibility(
+                                      visible: service_corrective_details_list[0].serviceStatus?.toLowerCase()!='completed',
+                                      child: Positioned(
+                                        right: 5,
+                                        child: InkWell(
+                                          onTap: () {
+                                            CustomConfirmDialog.showDialog(context: context, title: "Confirm", content: "Do You Want to continue", onPress: () {
+                                              Navigator.of(context).pop();
+                                              imageDeleteApiHit(dialog_file_list[index].id.toString(),context);
+                                            }, isLoading: loading);
+                                          },
+                                          child: Container(
+                                            height: 30,
+                                            width: 30,
+                                            decoration: BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                color: AllColors.primaryDark1
+                                            ),
+                                            child: Icon(Icons.delete,size: 18,color: AllColors.customDarkerWhite,),
                                           ),
-                                          child: Icon(Icons.delete,size: 18,color: AllColors.customDarkerWhite,),
                                         ),
                                       ),
                                     )
@@ -1605,8 +1611,8 @@ getServiceCorrectiveList(int is_done, int page_no,String date_filter,{String glo
                       ],color: Colors.white60
                   ),
                   child: Tooltip(
-                    message:" "+description.value,
-                    child: Text(" "+description.value,style:  GoogleFonts.poppins(
+                    message:" "+description.value+" (${fileCaptureType.value})",
+                    child: Text(" "+description.value+" (${fileCaptureType.value})",style:  GoogleFonts.poppins(
                         color: AllColors.primaryDark1,
                         fontWeight: FontWeight.w700,
                         fontSize: AllFontSize.twenteetwo
