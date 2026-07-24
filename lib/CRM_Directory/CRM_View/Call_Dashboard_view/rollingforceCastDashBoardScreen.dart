@@ -162,11 +162,13 @@ class RollingForceCastDashBoardScreen extends StatelessWidget{
                                 }),
 
                                 Obx((){
-                                  if(dashboard_view_Controller.rollingForecastList.isNotEmpty ) {
+                                  if(dashboard_view_Controller.rollingForecastList.isNotEmpty
+                                      && dashboard_view_Controller.rollingForecastList.length>0 &&dashboard_view_Controller
+                                      .rollingForecastList[0].records!.isNotEmpty &&dashboard_view_Controller
+                                      .rollingForecastList[0].records!.length>0) {
                                     return Text(
                                       "Total value: ${dashboard_view_Controller
-                                          .rollingForecastList[0].records?[0]
-                                          .grandTotalAmount.toString()}",
+                                          .rollingForecastList[0].records?[0].grandTotalAmount.toString()??""}",
                                       style: GoogleFonts.poppins(
                                         color: AllColors.primaryDark1,
                                         fontSize: AllFontSize.fourtine,
@@ -681,245 +683,6 @@ class RollingForceCastDashBoardScreen extends StatelessWidget{
     return file.path;
   }
 
- /* Widget BindDashboardBarChartData(BuildContext context) {
-    if (dashboard_view_Controller.rollingForecastDashboardRecordList.isEmpty) {
-      return Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Image.asset("assests/images/data-analytics.png", width: 150, height: 150,),
-              Text('No Record Found',
-                style: GoogleFonts.poppins(
-                    color: AllColors.primaryDark1,
-                    fontSize: AllFontSize.sisxteen,
-                    fontWeight: FontWeight.w700),
-              ),
-              const SizedBox(height: 20,)
-            ],
-          )
-      );
-    } else {
-      double chartWidth = max(MediaQuery.of(context).size.width, _calculateChartWidth());
-      final maxY = _calculateMaxY();
-      final interval = _calculateInterval(maxY);
-
-      return Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: RepaintBoundary(
-            key: _chartKey,
-            child: SizedBox(
-              height: 450,
-              width: chartWidth,
-              child: Padding(
-                padding: const EdgeInsets.only(top: 5.0),
-                child:
-                BarChart(
-                  BarChartData(
-                    alignment: BarChartAlignment.start,
-                    maxY: maxY,
-                    barGroups: _createBarGroups(),
-                    barTouchData: BarTouchData(
-                      enabled: true,
-                      touchCallback: (FlTouchEvent event, BarTouchResponse? response) {
-                        if (!event.isInterestedForInteractions || response == null || response.spot == null) return;
-                        final rodIndex = response.spot!.touchedRodDataIndex;
-                        final groupIndex = response.spot!.touchedBarGroupIndex;
-                        String? record = dashboard_view_Controller.rollingForecastDashboardRecordList[groupIndex].geoValue == null?
-                        dashboard_view_Controller.rollingForecastDashboardRecordList[groupIndex].employee :
-                        dashboard_view_Controller.rollingForecastDashboardRecordList[groupIndex].geoValue;
-
-                        dashboard_view_Controller.geoValueName.value = record??"";
-                        if(dashboard_view_Controller.selectedOption == 'Region'){
-                          dashboard_view_Controller.RegionNameForApi = record??"";
-                        }else if(dashboard_view_Controller.selectedOption == 'Cluster'){
-                          dashboard_view_Controller.ClusterNameForApi = record??"";
-                        }else if(dashboard_view_Controller.selectedOption == 'Employee'){
-                          dashboard_view_Controller.EmployeeEmailIdForApi = dashboard_view_Controller.rollingForecastDashboardRecordList[groupIndex].emailId??"";
-                        }
-
-                        dashboard_view_Controller.rodName.value = dashboard_view_Controller.geoValueName.value;
-                        dashboard_view_Controller.pageNumber = 0;
-                        dashboard_view_Controller.getDashboardUserWiseData(dashboard_view_Controller.pageNumber);
-
-                      },
-                      touchTooltipData: BarTouchTooltipData(
-                        tooltipPadding: EdgeInsets.all(8),
-                        tooltipRoundedRadius: 8,
-                        getTooltipItem: (group, groupIndex, rod, rodIndex) {
-                          final record = dashboard_view_Controller.rollingForecastDashboardRecordList[group.x.toInt()];
-                          String name = dashboard_view_Controller.selectedOption.value == 'Employee'
-                              ? record.employee ?? ""
-                              : record.geoValue ?? "";
-
-                          String valueLabel;
-                          valueLabel = 'Estimated Amount: ${rod.toY.toInt()}';
-                          return BarTooltipItem(
-                            '$name\n$valueLabel',
-                            const TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 12,
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                    titlesData: FlTitlesData(
-                      leftTitles: AxisTitles(
-                        sideTitles: SideTitles(
-                          showTitles: true,
-                          interval: interval,
-                          reservedSize: 80,
-                          getTitlesWidget: (value, meta) {
-                            if (value == meta.max) {
-                              return const SizedBox.shrink();
-                            }
-                            return Text(
-                              formatter.format(value.toInt()),
-                              style: const TextStyle(fontSize: 12, color: Colors.black),
-                            );
-                          },
-                        ),
-                      ),
-                      topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                      rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                      bottomTitles: AxisTitles(
-                        sideTitles: SideTitles(
-                          showTitles: true,
-                          reservedSize: 60,
-                          getTitlesWidget: _getBottomTitles,
-                        ),
-                      ),
-                    ),
-                    borderData: FlBorderData(
-                      show: true,
-                      border: Border(
-                        left: BorderSide(color: Colors.grey, width: 1),
-                        bottom: BorderSide(color: Colors.grey, width: 1),
-                      ),
-                    ),
-                    gridData: FlGridData(
-                      show: true,
-                      drawVerticalLine: false,
-                      getDrawingHorizontalLine: (value) {
-                        return FlLine(
-                          color: Colors.grey.withOpacity(0.2),
-                          strokeWidth: 1,
-                        );
-                      },
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ),
-      );
-    }
-  }
-  double _calculateChartWidth() {
-    final count = dashboard_view_Controller.rollingForecastDashboardRecordList.length;
-
-    double barWidth = 20; // your actual bar width in pixels
-    double barSpacing = 40; // gap between bars in pixels
-
-    // total width = (bar width + spacing) × count
-    return (barWidth + barSpacing) * count;
-  }
-  double _calculateMaxY() {
-    double max = 0;
-    for (var r in dashboard_view_Controller.rollingForecastDashboardRecordList) {
-      max = [
-        max,
-        (r.grandTotalQty ?? 0).toDouble(),
-      ].reduce((a, b) => a > b ? a : b);
-    }
-
-    if (max == 0) return 100;
-    return ((max / 10).ceil() * 11).toDouble();
-  }
-  double _calculateInterval(double maxY) {
-    // Desired number of intervals (around 6–10 is ideal)
-    const desiredSteps = 5;
-
-    // Step 1: Calculate raw step size
-    double rawInterval = maxY / desiredSteps;
-
-    // Step 2: Round it to a clean number (1, 2, 5, 10, 20, 50, 100, 200, etc.)
-    double base = pow(10, (log(rawInterval) / ln10).floor()).toDouble(); // e.g., for 37 → base 10
-    if (rawInterval / base < 2) {
-      return base;
-    } else if (rawInterval / base < 5) {
-      return 2 * base;
-    } else {
-      return 5 * base;
-    }
-  }
-  List<BarChartGroupData> _createBarGroups() {
-    return List.generate(dashboard_view_Controller.rollingForecastDashboardRecordList.length, (index) {
-      final record = dashboard_view_Controller.rollingForecastDashboardRecordList[index];
-      double Width = 50;
-      if(dashboard_view_Controller.userType?.toLowerCase() == 'fl'){
-        Width = 85;
-      }else if(dashboard_view_Controller.userType?.toLowerCase() == 'bh' && dashboard_view_Controller.selectedOption == 'Region') {
-        Width = 85;
-      }else{
-        Width = 50;
-      }
-      return BarChartGroupData(
-        x: index,
-        barRods: [
-          BarChartRodData(
-            toY: (record.grandTotalQty ?? 0).toDouble(),
-            color: Colors.blue,
-            width: Width,
-            borderRadius: BorderRadius.zero,
-          ),
-        ],
-        barsSpace: 4, // Set this to 0 for no spacing (single bar effect)
-      );
-    });
-  }
-  Widget _getBottomTitles(double value, TitleMeta meta) {
-    final index = value.toInt();
-    if (index >= 0 && index < dashboard_view_Controller.rollingForecastDashboardRecordList.length) {
-      String name = dashboard_view_Controller.selectedOption.value == 'Employee'
-          ? dashboard_view_Controller.rollingForecastDashboardRecordList[index].employee ?? ""
-          : dashboard_view_Controller.rollingForecastDashboardRecordList[index].geoValue ?? "";
-
-      double TotalCall = (dashboard_view_Controller.rollingForecastDashboardRecordList[index].grandTotalQty!);
-
-      String formattedName = name.replaceAll(' ', '\n');
-
-      return SideTitleWidget(
-        axisSide: meta.axisSide,
-        space: 10,
-        child: RotatedBox(
-          quarterTurns: 4,
-          child: Column(
-            children: [
-              Text('${formatter.format(TotalCall)}', style: TextStyle(
-                  fontSize: 10, color: AllColors.redColor
-              ),),
-              Text(
-                formattedName,
-                style: TextStyle(fontSize: 10, color: AllColors.blackColor),
-                softWrap: true,
-                maxLines: 2, // or more if needed
-                overflow: TextOverflow.ellipsis, // optional: show "..." if too long
-                textAlign: TextAlign.center,
-              ),
-            ],
-          ),
-        ),
-      );
-    } else {
-      return  const SizedBox.shrink();
-    }
-  }*/
-
   Widget BindDashboardWiseDataList(context) {
     if (dashboard_view_Controller.rollingForecastUserWiseList.value.isNotEmpty && dashboard_view_Controller.rollingForecastUserWiseList.value.length > 0) {
       print("ghd");
@@ -987,6 +750,8 @@ class RollingForceCastDashBoardScreen extends StatelessWidget{
       default:
         return Colors.black;
     }
+
+
   }
 
   Widget BindCustomerRequestListView(context, int position) {
@@ -1047,11 +812,8 @@ class RollingForceCastDashBoardScreen extends StatelessWidget{
               _buildLabelWithValue(label: "Customer Name: ", value:  dashboard_view_Controller.rollingForecastUserWiseList[position].accountName??"",color:AllColors.textColor),
               _buildLabelWithValue(label: "Customer Code: ", value:  dashboard_view_Controller.rollingForecastUserWiseList[position].accountCode??"",color:AllColors.textColor),
               _buildLabelWithValue(label: "Estimate Amount: ", value: "₹ ${
-                  dashboard_view_Controller
-                      .numberFormatWithComma(dashboard_view_Controller
-                      .rollingForecastUserWiseList[position]
-                      .estBudgetAmount)
-                      .toString()
+                  dashboard_view_Controller.numberFormatWithComma(dashboard_view_Controller.rollingForecastUserWiseList[position]
+                      .estBudgetAmount).toString()
               }",color:AllColors.textColor),
               _buildLabelWithValue(label: "Cluster Name: ", value:  dashboard_view_Controller.rollingForecastUserWiseList[position].clusterName??"",color:AllColors.textColor),
               _buildLabelWithValue(label: "Region Name: ", value:  dashboard_view_Controller.rollingForecastUserWiseList[position].regionName??"",color:AllColors.textColor),
@@ -1328,7 +1090,6 @@ class RollingForceCastDashBoardScreen extends StatelessWidget{
                       },
                     );
                   }),
-
                   Obx((){
                     return RadioListTile<String>(
                       title: const Text('Weakly' , style: TextStyle(
@@ -1348,7 +1109,6 @@ class RollingForceCastDashBoardScreen extends StatelessWidget{
                       },
                     );
                   }),
-
                   Obx((){
                     return RadioListTile<String>(
                       title: const Text('Monthly' ,style: TextStyle(
@@ -1368,7 +1128,6 @@ class RollingForceCastDashBoardScreen extends StatelessWidget{
                       },
                     );
                   }),
-
                   Obx((){
                     return  RadioListTile<String>(
                       title: const Text('Quarterly', style: TextStyle(
@@ -1388,7 +1147,6 @@ class RollingForceCastDashBoardScreen extends StatelessWidget{
                       },
                     );
                   }),
-
                   Obx((){
                     return RadioListTile<String>(
                       title: const Text('Financial Year', style: TextStyle(
@@ -1408,7 +1166,6 @@ class RollingForceCastDashBoardScreen extends StatelessWidget{
                       },
                     );
                   }),
-
                   Obx((){
                     return RadioListTile<String>(
                       title: const Text('Custom', style: TextStyle(
@@ -1423,12 +1180,9 @@ class RollingForceCastDashBoardScreen extends StatelessWidget{
 
                     );
                   }),
-
                   Obx((){
                     return filterWithCustomDate(context);
                   })
-
-
                 ],
               ),
             ),
@@ -1436,23 +1190,29 @@ class RollingForceCastDashBoardScreen extends StatelessWidget{
           const SizedBox(height: 10),
           bindData(context,'Sales Forecast Id', dashboard_view_Controller.filter_sale_forecast_id_cont.value),
           const SizedBox(height: 10),
-          bindData(context,'Quote Id', dashboard_view_Controller.filter_quote_id_cont.value),
-          const SizedBox(height: 10),
           bindData(context,'Sales Cycle Id', dashboard_view_Controller.filter_sale_cycle_id_cont.value),
           const SizedBox(height: 10),
-          bindCustomerNameFilter(context),
+          bindData(context,'Quote Id', dashboard_view_Controller.filter_quote_id_cont.value),
           const SizedBox(height: 10),
-          bindProductCategoryFilter(context),
+          bindCustomerNameFilter(context),
           const SizedBox(height: 10),
           bindClusterNameFilter(context),
           const SizedBox(height: 10),
           bindRegionNameFilter(context),
           const SizedBox(height: 10),
-          bindAccountOwnerFilter(context),
+          bindRequiredClusterNameFilter(context),
+          const SizedBox(height: 10),
+          bindRequiredRegionNameFilter(context),
+         /*const SizedBox(height: 10),
+          bindAccountOwnerFilter(context),*/
           const SizedBox(height: 10),
           bindFilterCreatedOn(context),
-
-
+          const SizedBox(height: 10),
+          bindData(context,'Item Variant', dashboard_view_Controller.item_variant_controller.value),
+          const SizedBox(height: 10),
+          bindItemCategoryCategoryFilter(context),
+          const SizedBox(height: 10),
+          bindParentProductCategoryFilter(context)
 
         ],
 
@@ -1651,11 +1411,10 @@ class RollingForceCastDashBoardScreen extends StatelessWidget{
     });
   }
 
-  bindProductCategoryFilter(BuildContext context) {
+  bindItemCategoryCategoryFilter(BuildContext context) {
     return Obx((){
-      if (dashboard_view_Controller.ProductCategory_controller.value.text.isNotEmpty && dashboard_view_Controller.filterDataChecker.value=='1') {
-        List<String> nameList = dashboard_view_Controller.ProductCategory_controller.value.text.split(',');
-
+      if (dashboard_view_Controller.Item_category__code_controller.value.text.isNotEmpty && dashboard_view_Controller.filterDataChecker.value=='1') {
+        List<String> nameList = dashboard_view_Controller.Item_category__code_controller.value.text.split(',');
         dashboard_view_Controller.SelectedProductCategory_list.value =
             List.generate(nameList.length, (index) {
               return ItemCategoryMstModel(
@@ -1699,7 +1458,7 @@ class RollingForceCastDashBoardScreen extends StatelessWidget{
         onChanged: (List<ItemCategoryMstModel> selectedList) {
           dashboard_view_Controller.SelectedProductCategory_list.value =
               selectedList;
-          dashboard_view_Controller.ProductCategory_controller.value.text =
+          dashboard_view_Controller.Item_category__code_controller.value.text =
               selectedList.map((e) => e.categoryName).join(', ');
         },
 
@@ -1726,6 +1485,86 @@ class RollingForceCastDashBoardScreen extends StatelessWidget{
     });
 
   }
+  bindParentProductCategoryFilter(BuildContext context) {
+    return Obx((){
+      if (dashboard_view_Controller.parentCategoryCodeController.value.text.isNotEmpty && dashboard_view_Controller.filterDataChecker.value=='1') {
+        List<String> nameList = dashboard_view_Controller.parentCategoryCodeController.value.text.split(',');
+
+        dashboard_view_Controller.parentItemCategorySelectedList.value =
+            List.generate(nameList.length, (index) {
+              return ItemCategoryMstModel(
+                parentCategoryCode: nameList[index].trim(),
+              );
+            });
+      }
+      return  DropdownSearch<ItemCategoryMstModel>.multiSelection(
+        items: dashboard_view_Controller.parentProductCategoryList,
+        itemAsString: (ItemCategoryMstModel u) => u.parentCategoryCode??"",
+        selectedItems: dashboard_view_Controller.parentItemCategorySelectedList,
+        dropdownDecoratorProps: DropDownDecoratorProps(
+          baseStyle: TextStyle(color: Colors.black),
+          dropdownSearchDecoration: InputDecoration(
+            filled: false,
+            labelText: dashboard_view_Controller.parentItemCategorySelectedList.isNotEmpty?"Parent Category Code":null,
+            hintText: "Parent Category Code",
+            hintStyle: GoogleFonts.poppins(
+                color: AllColors.lightblackColor,
+                fontWeight: FontWeight.w300,
+                fontSize: AllFontSize.ten),
+            labelStyle: GoogleFonts.poppins(
+                color: AllColors.primaryDark1,
+                fontWeight: FontWeight.w500,
+                fontSize: AllFontSize.sisxteen),
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+          ),
+        ),
+        dropdownBuilder: (context, selectedItems) {
+          // Custom builder to just show comma-separated names
+          if (selectedItems.isEmpty) {
+            return Text(
+              "Parent Category Code",
+              style: GoogleFonts.poppins(
+                color: AllColors.primaryDark1, // Match your hint color
+                fontSize: AllFontSize.sisxteen,
+                fontWeight: FontWeight.w500,
+              ),
+            );
+          }
+          return SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Text(
+              selectedItems.map((e) => e.parentCategoryCode).join(', '),
+              style: TextStyle(color: Colors.black), // Only black text
+            ),
+          );
+        },
+        onChanged: (List<ItemCategoryMstModel> selectedList) {
+          dashboard_view_Controller.parentItemCategorySelectedList.value = selectedList;
+          dashboard_view_Controller.parentCategoryCodeController.value.text =
+              selectedList.map((e) => e.parentCategoryCode).join(', ');
+        },
+        popupProps: PopupPropsMultiSelection.dialog(
+          showSearchBox: true,
+          searchFieldProps: TextFieldProps(
+            padding: EdgeInsets.only(top: 20, left: 10, right: 10),
+            decoration: InputDecoration(
+              contentPadding: EdgeInsets.only(top: 20, left: 12, right: 12),
+              hintText: "Search...",
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+          ),
+
+          itemBuilder: (context, item, isSelected) =>
+              ListTile(
+                title: Text(item.parentCategoryCode??""),
+              ),
+        ),
+      );
+    });
+
+  }
 
   Widget bindClusterNameFilter(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -1742,7 +1581,7 @@ class RollingForceCastDashBoardScreen extends StatelessWidget{
         if (availableItems.isNotEmpty && dashboard_view_Controller.SelectedCluster_list.isEmpty) {
           dashboard_view_Controller.SelectedCluster_list.assignAll(availableItems);
           dashboard_view_Controller.clusterName_controller.value.text = availableItems.map((e) => e.geoValue).join(',');
-          dashboard_view_Controller.getRegionsWithClusterFilterGetByEmail();
+          dashboard_view_Controller.getRegionsWithClusterFilterGetByEmail("cluster");
         }
       }
     });
@@ -1907,7 +1746,7 @@ class RollingForceCastDashBoardScreen extends StatelessWidget{
                                     dashboard_view_Controller.filterDataChecker.value='';
                                     dashboard_view_Controller.SelectedCluster_list.assignAll(tempSelected);
                                     dashboard_view_Controller.clusterName_controller.value.text = tempSelected.map((e) => e.geoValue).join(', ');
-                                    dashboard_view_Controller.getRegionsWithClusterFilterGetByEmail();
+                                    dashboard_view_Controller.getRegionsWithClusterFilterGetByEmail("cluster");
 
                                     Navigator.of(context).pop();
                                   },
@@ -1961,7 +1800,6 @@ class RollingForceCastDashBoardScreen extends StatelessWidget{
       );
     });
   }
-
   Widget bindRegionNameFilter(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final availableItems = dashboard_view_Controller.regionwithclusterGetByEmailList;
@@ -2197,11 +2035,475 @@ class RollingForceCastDashBoardScreen extends StatelessWidget{
     });
   }
 
+  Widget bindRequiredClusterNameFilter(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final availableItems = dashboard_view_Controller.clusterGetByEmailList;
+      if (dashboard_view_Controller.required_clusterName_controller.value.text.isNotEmpty && dashboard_view_Controller.filterDataChecker.value=='1') {
+        List<String> nameList = dashboard_view_Controller.required_clusterName_controller.value.text.split(',');
+        dashboard_view_Controller.SelectedRequiredCluster_list.value =[];
+        dashboard_view_Controller.SelectedRequiredCluster_list.value =
+            List.generate(nameList.length, (index) {
+              return ClusterModal(geoValue: nameList[index].trim(),);
+            });
+      }
+      else{
+        if (availableItems.isNotEmpty && dashboard_view_Controller.SelectedRequiredCluster_list.isEmpty) {
+          dashboard_view_Controller.SelectedRequiredCluster_list.assignAll(availableItems);
+          dashboard_view_Controller.required_clusterName_controller.value.text = availableItems.map((e) => e.geoValue).join(',');
+          dashboard_view_Controller.getRegionsWithClusterFilterGetByEmail("required cluster");
+        }
+      }
+    });
+
+    return Obx(() {
+      final selected = dashboard_view_Controller.SelectedRequiredCluster_list;
+      final selectedText = selected.isEmpty
+          ? null
+          : selected.map((e) => e.geoValue).join(', ');
+
+      return GestureDetector(
+        onTap: () async {
+          await showModalBottomSheet(
+            context: context,
+            isScrollControlled: true,
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+            ),
+            builder: (context) {
+              final searchController = TextEditingController();
+              final tempSelected = <ClusterModal>[];
+              tempSelected.addAll(dashboard_view_Controller.SelectedRequiredCluster_list);
+              List<ClusterModal> allItems = dashboard_view_Controller.clusterGetByEmailList;
+              return StatefulBuilder(builder: (context, setState) {
+                final query = searchController.text.toLowerCase();
+                final filtered = query.isEmpty ? allItems : allItems.where((c) => (c.geoValue ?? "").toLowerCase().contains(query)).toList();
+
+                final allSelected = allItems.isNotEmpty && tempSelected.length == allItems.length;
+
+                return Padding(
+                  padding: EdgeInsets.only(
+                      bottom: MediaQuery.of(context).viewInsets.bottom),
+                  child: SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.75,
+                    child: Column(
+                      children: [
+                        const SizedBox(height: 8),
+                        Container(
+                          width: 50,
+                          height: 4,
+                          decoration: BoxDecoration(
+                              color: Colors.grey[400],
+                              borderRadius: BorderRadius.circular(2)),
+                        ),
+                        const SizedBox(height: 12),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  'Select Required Clusters',
+                                  style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w600,color: AllColors.primaryDark1),
+                                ),
+                              ),
+                              IconButton(onPressed: () {
+                                Navigator.of(context).pop();
+                              }, icon: Icon(Icons.close,color: AllColors.primaryDark1,weight: 700,))
+
+                            ],
+                          ),
+                        ),
+
+                        // Search Field
+                        Padding(
+                          padding:
+                          const EdgeInsets.symmetric(horizontal: 16.0),
+                          child: TextField(
+                            controller: searchController,
+                            decoration: InputDecoration(
+                              hintText: 'Search...',
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8)),
+                              isDense: true,
+                              suffixIcon: searchController.text.isNotEmpty
+                                  ? IconButton(
+                                icon: const Icon(Icons.clear),
+                                onPressed: () {
+                                  searchController.clear();
+                                  setState(() {});
+                                },
+                              )
+                                  : null,
+                            ),
+                            onChanged: (v) => setState(() {}),
+                          ),
+                        ),
+
+                        const SizedBox(height: 8),
+
+                        // Select All
+                        Padding(
+                          padding:
+                          const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: CheckboxListTile(
+                            title: const Text('Select All'),
+                            value: allSelected,
+                            onChanged: (val) {
+                              setState(() {
+                                if (val == true) {
+                                  tempSelected
+                                      .clear();
+                                  tempSelected.addAll(allItems);
+                                } else {
+                                  tempSelected.clear();
+                                }
+                              });
+                            },
+                          ),
+                        ),
+
+                        const Divider(height: 1),
+
+                        // List
+                        Expanded(
+                          child: filtered.isEmpty ? Center(child: Text('No required clusters found',style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w600,color: AllColors.primaryDark1),)) : ListView.builder(
+                            padding:
+                            const EdgeInsets.symmetric(vertical: 8),
+                            itemCount: filtered.length,
+                            itemBuilder: (context, idx) {
+                              final item = filtered[idx];
+                              final isSel = tempSelected.any((s) =>
+                              (s.geoValue ?? "") == (item.geoValue ?? ""));
+                              return CheckboxListTile(
+                                title: Text(item.geoValue ?? ""),
+                                value: isSel,
+                                onChanged: (v) {
+                                  setState(() {
+                                    if (v == true) {
+                                      if (!isSel) tempSelected.add(item);
+                                    } else {
+                                      tempSelected.removeWhere((s) =>
+                                      (s.geoValue ?? "") ==
+                                          (item.geoValue ?? ""));
+                                    }
+                                  });
+                                },
+                              );
+                            },
+                          ),
+                        ),
+
+                        // Done button
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 50, vertical: 20),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: AllColors.primaryDark1,
+                                    shadowColor: AllColors.primaryDark1,
+                                    foregroundColor: AllColors.primaryDark1,
+                                    side: BorderSide(color: AllColors.primaryDark1, width: 1),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                  ),
+                                  onPressed: () {
+                                    dashboard_view_Controller.filterDataChecker.value='';
+                                    dashboard_view_Controller.SelectedRequiredCluster_list.assignAll(tempSelected);
+                                    dashboard_view_Controller.required_clusterName_controller.value.text = tempSelected.map((e) => e.geoValue).join(', ');
+                                    dashboard_view_Controller.getRegionsWithClusterFilterGetByEmail("required cluster");
+
+                                    Navigator.of(context).pop();
+                                  },
+                                  child:  Text('Done',style: GoogleFonts.poppins(
+                                      fontSize: 16, fontWeight: FontWeight.w600,color: Colors.white),),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              });
+            },
+          );
+        },
+        child: InputDecorator(
+          decoration: InputDecoration(
+            labelText: "Required Cluster Name", // 👈 Label restored here
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            contentPadding:
+            const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+          ),
+          child: Row(
+            children: [
+              Expanded(
+                child: selectedText == null
+                    ? Text(
+                  "Select Required Cluster",
+                  style: GoogleFonts.poppins(
+                    color: Colors.black,
+                    fontSize: AllFontSize.sisxteen,
+                  ),
+                )
+                    : SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Text(
+                    selectedText,
+                    style: const TextStyle(color: Colors.black),
+                  ),
+                ),
+              ),
+              const Icon(Icons.arrow_drop_down),
+            ],
+          ),
+        ),
+      );
+    });
+  }
+  Widget bindRequiredRegionNameFilter(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final availableItems = dashboard_view_Controller.requiredRegionwithclusterGetByEmailList;
+      if (dashboard_view_Controller.requires_regionName_controller.value.text.isNotEmpty && dashboard_view_Controller.filterDataChecker.value=='1') {
+        dashboard_view_Controller.SelectedRequiredRegion_list.value=[];
+        List<String> nameList = dashboard_view_Controller.requires_regionName_controller.value.text.split(',');
+        dashboard_view_Controller.SelectedRequiredRegion_list.value =
+            List.generate(nameList.length, (index) {
+              return RegionWithClusterFilterModal(
+                geoValue: nameList[index].trim(),
+              );
+            });
+      }
+      else{
+        if (availableItems.isNotEmpty && dashboard_view_Controller.SelectedRequiredRegion_list.isEmpty) {
+          dashboard_view_Controller.SelectedRequiredRegion_list.assignAll(availableItems);
+          dashboard_view_Controller.requires_regionName_controller.value.text = availableItems.map((e) => e.geoValue).join(',');
+        }
+      }
+    });
+    return Obx(() {
+      final selected = dashboard_view_Controller.SelectedRequiredRegion_list;
+      final selectedText = selected.isEmpty ? null : selected.map((e) => e.geoValue).join(', ');
+
+      return GestureDetector(
+        onTap: () async {
+          await showModalBottomSheet(
+            context: context,
+            isScrollControlled: true,
+            shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(16)),),
+            builder: (context) {
+              final searchController = TextEditingController();
+              final tempSelected = <RegionWithClusterFilterModal>[];
+              tempSelected.addAll(dashboard_view_Controller.SelectedRequiredRegion_list);
+
+              final allItems = dashboard_view_Controller.requiredRegionwithclusterGetByEmailList;
+
+              return StatefulBuilder(builder: (context, setState) {
+                final query = searchController.text.toLowerCase();
+                final filtered = query.isEmpty ? allItems : allItems.where((c) => (c.geoValue ?? "").toLowerCase().contains(query)).toList();
+                final allSelected = allItems.isNotEmpty && tempSelected.length == allItems.length;
+                return Padding(
+                  padding: EdgeInsets.only(
+                      bottom: MediaQuery.of(context).viewInsets.bottom),
+                  child: SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.75,
+                    child: Column(
+                      children: [
+                        const SizedBox(height: 8),
+                        Container(
+                          width: 50,
+                          height: 4,
+                          decoration: BoxDecoration(
+                              color: Colors.grey[400],
+                              borderRadius: BorderRadius.circular(2)),
+                        ),
+                        const SizedBox(height: 12),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  'Select Required Regions',
+                                  style: GoogleFonts.poppins(
+                                      fontSize: 16, fontWeight: FontWeight.w600, color: AllColors.primaryDark1),
+                                ),
+                              ),
+                              IconButton(onPressed: () {
+                                Navigator.of(context).pop();
+                              }, icon: Icon(Icons.close,color: AllColors.primaryDark1,weight: 700,))
+
+                            ],
+                          ),
+                        ),
+
+                        // Search Field
+                        Padding(
+                          padding:
+                          const EdgeInsets.symmetric(horizontal: 16.0),
+                          child: TextField(
+                            controller: searchController,
+                            decoration: InputDecoration(
+                              hintText: 'Search...',
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8)),
+                              isDense: true,
+                              suffixIcon: searchController.text.isNotEmpty
+                                  ? IconButton(
+                                icon: const Icon(Icons.clear),
+                                onPressed: () {
+                                  searchController.clear();
+                                  setState(() {});
+                                },
+                              )
+                                  : null,
+                            ),
+                            onChanged: (v) => setState(() {}),
+                          ),
+                        ),
+
+                        const SizedBox(height: 8),
+
+                        // Select All
+                        Padding(
+                          padding:
+                          const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: CheckboxListTile(
+                            title: const Text('Select All'),
+                            value: allSelected,
+                            onChanged: (val) {
+                              setState(() {
+                                if (val == true) {
+                                  tempSelected.clear();
+                                  tempSelected.addAll(allItems);
+                                } else {
+                                  tempSelected.clear();
+                                }
+                              });
+                            },
+                          ),
+                        ),
+
+                        const Divider(height: 1),
+
+                        // List
+                        Expanded(
+                          child: filtered.isEmpty
+                              ? const Center(child: Text('No Required regions found'))
+                              : ListView.builder(
+                            padding:
+                            const EdgeInsets.symmetric(vertical: 8),
+                            itemCount: filtered.length,
+                            itemBuilder: (context, idx) {
+                              final item = filtered[idx];
+                              final isSel = tempSelected.any((s) =>
+                              (s.geoValue ?? "") ==
+                                  (item.geoValue ?? ""));
+                              return CheckboxListTile(
+                                title: Text(item.geoValue ?? ""),
+                                value: isSel,
+                                onChanged: (v) {
+                                  setState(() {
+                                    if (v == true) {
+                                      if (!isSel) tempSelected.add(item);
+                                    } else {
+                                      tempSelected.removeWhere((s) =>
+                                      (s.geoValue ?? "") ==
+                                          (item.geoValue ?? ""));
+                                    }
+                                  });
+                                },
+                              );
+                            },
+                          ),
+                        ),
+
+                        // Done button
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 50, vertical: 20),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: AllColors.primaryDark1,
+                                    shadowColor: AllColors.primaryDark1,
+                                    foregroundColor: AllColors.primaryDark1,
+                                    side: BorderSide(color: AllColors.primaryDark1, width: 1),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                  ),
+                                  onPressed: () {
+                                    dashboard_view_Controller.filterDataChecker.value='';
+                                    dashboard_view_Controller.SelectedRequiredRegion_list.assignAll(tempSelected);
+                                    dashboard_view_Controller.requires_regionName_controller.value.text = tempSelected.map((e) => e.geoValue).join(', ');
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Text('Done',style: GoogleFonts.poppins(
+                                      fontSize: 16, fontWeight: FontWeight.w600,color: Colors.white),),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              });
+            },
+          );
+        },
+        child: InputDecorator(
+          decoration: InputDecoration(
+            labelText: "Required Region Name", // 👈 Label like before
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            contentPadding:
+            const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+          ),
+          child: Row(
+            children: [
+              Expanded(
+                child: selectedText == null
+                    ? Text(
+                  "Select Required Region",
+                  style: GoogleFonts.poppins(
+                    color: Colors.grey.shade600,
+                    fontSize: AllFontSize.sisxteen,
+                  ),
+                )
+                    : SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Text(
+                    selectedText,
+                    style: const TextStyle(color: Colors.black),
+                  ),
+                ),
+              ),
+              const Icon(Icons.arrow_drop_down),
+            ],
+          ),
+        ),
+      );
+    });
+  }
+
   Widget bindAccountOwnerFilter(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {});
     return Obx(() {
       if (dashboard_view_Controller.AccountOwner_controller.value.text.isNotEmpty && dashboard_view_Controller.filterDataChecker.value=='1') {
-        //List<String> nameList = sale_fore_cast_vm.AccountOwner_controller.value.text.split(',');
+        //List<String> nameList = dashboard_view_Controller.AccountOwner_controller.value.text.split(',');
         List<String> nameList = dashboard_view_Controller.accountNameCode.split(',');
         dashboard_view_Controller.SelectedEmployee_Member_list.value = List.generate(nameList.length, (index) {
           debugPrint("empid.... ${nameList[index].trim().substring(nameList[index].trim().indexOf('(')+1,nameList[index].trim().indexOf(')'))}");

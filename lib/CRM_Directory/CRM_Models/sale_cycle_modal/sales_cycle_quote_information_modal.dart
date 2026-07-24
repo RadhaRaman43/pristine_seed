@@ -56,6 +56,8 @@ class SalesCycleQuoteInformationModal {
   double? quoteGstAmount;
   double? quoteApprovedAmtPerUnit;
   double? quoteSalesCreditAverage;
+  double? quoteStandardCostTotal;
+  double? quoteStandardCostWithQtyTotal;
   String? shippingAddress;
   String? shippingAddress2;
   String? shippingPostCode;
@@ -133,6 +135,8 @@ class SalesCycleQuoteInformationModal {
         this.quoteGstAmount,
         this.quoteApprovedAmtPerUnit,
         this.quoteSalesCreditAverage,
+        this.quoteStandardCostTotal,
+        this.quoteStandardCostWithQtyTotal,
         this.shippingAddress,
         this.shippingAddress2,
         this.shippingPostCode,
@@ -211,6 +215,8 @@ class SalesCycleQuoteInformationModal {
     quoteGstAmount = json['quote_gst_amount'];
     quoteApprovedAmtPerUnit = json['quote_approved_amt_per_unit'];
     quoteSalesCreditAverage = json['quote_sales_credit_average'];
+    quoteStandardCostTotal = json['quote_standard_cost_total'];
+    quoteStandardCostWithQtyTotal = json['quote_standard_cost_with_qty_total'];
     shippingAddress = json['shipping_address'];
     shippingAddress2 = json['shipping_address2'];
     shippingPostCode = json['shipping_post_code'];
@@ -297,6 +303,9 @@ class SalesCycleQuoteInformationModal {
     data['quote_gst_amount'] = this.quoteGstAmount;
     data['quote_approved_amt_per_unit'] = this.quoteApprovedAmtPerUnit;
     data['quote_sales_credit_average'] = this.quoteSalesCreditAverage;
+    data['quote_standard_cost_total'] = this.quoteStandardCostTotal;
+    data['quote_standard_cost_with_qty_total'] =
+        this.quoteStandardCostWithQtyTotal;
     data['shipping_address'] = this.shippingAddress;
     data['shipping_address2'] = this.shippingAddress2;
     data['shipping_post_code'] = this.shippingPostCode;
@@ -345,6 +354,7 @@ class QuoteItems {
   double? approvedAmountPerUnit;
   double? discountAmt;
   double? standardCost;
+  double? standardCostWithQty;
   double? branchTransferPrice;
   double? minimalAcceptablePrice;
   double? listSellingPrice;
@@ -395,6 +405,7 @@ class QuoteItems {
         this.discountAmt,
         this.discountAmtPerUnit,
         this.standardCost,
+        this.standardCostWithQty,
         this.branchTransferPrice,
         this.minimalAcceptablePrice,
         this.listSellingPrice,
@@ -446,6 +457,7 @@ class QuoteItems {
     discountAmt = json['discount_amt'];
     discountAmtPerUnit = json['discount_amt_per_unit'];
     standardCost = json['standard_cost'];
+    standardCostWithQty = json['standard_cost_with_qty'];
     branchTransferPrice = json['branch_transfer_price'];
     minimalAcceptablePrice = json['minimal_acceptable_price'];
     listSellingPrice = json['list_selling_price'];
@@ -498,6 +510,7 @@ class QuoteItems {
     data['discount_amt'] = this.discountAmt;
     data['discount_amt_per_unit'] = this.discountAmtPerUnit;
     data['standard_cost'] = this.standardCost;
+    data['standard_cost_with_qty'] = this.standardCostWithQty;
     data['branch_transfer_price'] = this.branchTransferPrice;
     data['minimal_acceptable_price'] = this.minimalAcceptablePrice;
     data['list_selling_price'] = this.listSellingPrice;

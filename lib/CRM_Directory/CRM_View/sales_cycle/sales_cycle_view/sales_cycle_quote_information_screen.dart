@@ -598,6 +598,9 @@ class QuoteInformationScreen extends StatelessWidget {
                               saleCycleController.userType?.toLowerCase()=='gm'||
                               saleCycleController.isAdminWritePermission.value=="1";
 
+                          final bool showStandardCost = saleCycleController.userType?.toLowerCase()=='gm' || saleCycleController.isAdminWritePermission=="1" ||
+                              saleCycleController.GmApproveDetail.value;
+
                           final data = saleCycleController.quoteHeaderdata[0];
 
                           return SingleChildScrollView(
@@ -615,9 +618,10 @@ class QuoteInformationScreen extends StatelessWidget {
                                 TableRow(
                                   children: [
                                     tableHeaderCell("Qty"),
+                                    if(showStandardCost)tableHeaderCell('Std Cost'),
 
                                     if(showbh)tableHeaderCell("BM %"),
-
+                                    if(showStandardCost)tableHeaderCell('Total Std Cost'),
                                     tableHeaderCell("Appr Amt Per Unit"),
                                     tableHeaderCell("Sales Credit"),
                                     tableHeaderCell("Total Approved Price"),
@@ -634,7 +638,17 @@ class QuoteInformationScreen extends StatelessWidget {
                                 TableRow(
                                   children: [
                                     tableValueCell(data.quoteTotalQty?.toInt()),
+                                    if(showStandardCost) tableValueCell(
+                                      "₹ ${saleCycleController.numberFormatWithComma(
+                                        data.quoteStandardCostTotal,
+                                      )}",
+                                    ),
                                     if(showbh)tableValueCell(data.quoteTotalBmPerAverage),
+                                    if(showStandardCost) tableValueCell(
+                                      "₹ ${saleCycleController.numberFormatWithComma(
+                                        data.quoteStandardCostWithQtyTotal,
+                                      )}",
+                                    ),
                                     tableValueCell(
                                       "₹ ${saleCycleController.numberFormatWithComma(
                                         data.quoteApprovedAmtPerUnit,
@@ -938,13 +952,25 @@ class QuoteInformationScreen extends StatelessWidget {
                           }),
                           Obx(() {
                             return Visibility(
-                              visible:
-                              saleCycleController.userType?.toLowerCase()=='gm' || saleCycleController.isAdminWritePermission=="1",
+                              visible: saleCycleController.userType?.toLowerCase()=='gm' || saleCycleController.isAdminWritePermission=="1" ||
+                                  saleCycleController.GmApproveDetail.value,
                               child:  bindData( "Std Cost : ","₹ ${
                                   saleCycleController.numberFormatWithComma(saleCycleController.quoteLinedata[index].standardCost).toString()}",context),
                             );
                           }),
                           bindData( "Approved Dis. % :",saleCycleController.quoteLinedata[index].approvedDiscountPer.toString(),context),
+
+
+                          Obx(() {
+                            return Visibility(
+                              visible: saleCycleController.userType?.toLowerCase()=='gm' || saleCycleController.isAdminWritePermission=="1" ||
+                                  saleCycleController.GmApproveDetail.value,
+                              child:  bindData( "Total Std Cost : ","₹ ${
+                                  saleCycleController.numberFormatWithComma(saleCycleController.quoteLinedata[index].standardCostWithQty).toString()}",context),
+                            );
+                          }),
+
+
                           bindData( "Appr. Amt P/U : ","₹ ${saleCycleController.numberFormatWithComma(saleCycleController.quoteLinedata[index].approvedAmountPerUnit).toString()}",context),
                           bindData( "Sales Credit % : ",saleCycleController.quoteLinedata[index].salesCredit.toString(),context),
                           Obx((){

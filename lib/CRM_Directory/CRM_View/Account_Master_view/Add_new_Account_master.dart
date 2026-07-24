@@ -238,10 +238,10 @@ class AddNewAccountMaster extends StatelessWidget{
                   return  ;
                 }*/
 
-                if(accountMaster_page_controller.account_cat_type_controller.text.isEmpty || accountMaster_page_controller.account_cat_type_controller == null){
+                /*if(accountMaster_page_controller.account_cat_type_controller.text.isEmpty || accountMaster_page_controller.account_cat_type_controller == null){
                   Utils.sanckBarError('Account Category Type!', "Please Enter Account Category Type");
                   return  ;
-                }
+                }*/
 
                 if(accountMaster_page_controller.comp_prof_type_controller.value.text.isEmpty || accountMaster_page_controller.comp_prof_type_controller.value.text == null){
                   Utils.sanckBarError('Company profile Type!', "Please Enter Company profile Type");
@@ -1365,9 +1365,7 @@ class AddNewAccountMaster extends StatelessWidget{
       },
       onSelected: (GetMasterTypeModel selection) {
         print(selection.code);
-        // Update the TextField with the selected
-        accountMaster_page_controller.account_cat_type_controller.text =
-            _displayAccCategoryForOption(selection).toString();
+        accountMaster_page_controller.account_cat_type_controller.text = _displayAccCategoryForOption(selection).toString();
       },
       fieldViewBuilder: (BuildContext context, TextEditingController controller,
           FocusNode focusNode, VoidCallback onFieldSubmitted) {
@@ -1379,10 +1377,8 @@ class AddNewAccountMaster extends StatelessWidget{
           child: TextField(
             cursorColor: AllColors.primaryDark1,
             controller: controller
-              ..text = accountMaster_page_controller.account_cat_type_controller
-                  .text,
+              ..text = accountMaster_page_controller.account_cat_type_controller.text,
             focusNode: focusNode,
-            //onSubmitted: onFieldSubmitted,
             decoration: InputDecoration(
               suffixIcon: IconButton(
                 color: AllColors.primaryDark1,
@@ -1397,8 +1393,8 @@ class AddNewAccountMaster extends StatelessWidget{
               ),
               contentPadding: EdgeInsets.symmetric(
                   vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-              hintText: 'Account Category Type*',
-              labelText: 'Account Category Type*',
+              hintText: 'Account Category Type',
+              labelText: 'Account Category Type',
               border: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(10))
               ),

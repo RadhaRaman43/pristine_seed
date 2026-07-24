@@ -42,9 +42,12 @@ class RollingForceCastDashboardVm extends GetxController{
 
   var CustomerNameApi;
   var ProductCategoryForApi;
+  var ParentProductCategoryForApi;
   var AccountOwnerForApi;
   var ClusterNameForApi;
+  var RequiredClusterNameForApi;
   var RegionNameForApi;
+  var RequiredRegionNameForApi;
   var customerNameCode = '';
   String accountNameCode='';
   var EmployeeEmailIdForApi = '';
@@ -53,13 +56,17 @@ class RollingForceCastDashboardVm extends GetxController{
   var filter_quote_id_cont=TextEditingController().obs;
   var filter_sale_cycle_id_cont=TextEditingController().obs;
   var CustomerName_controller=TextEditingController().obs;
-  var ProductCategory_controller=TextEditingController().obs;
+  var Item_category__code_controller=TextEditingController().obs;
   var filter_created_on_cont=TextEditingController().obs;
   var filter_created_on_star_to_cont=TextEditingController().obs;
   var filterCustomDateController=TextEditingController().obs;
   var clusterName_controller=TextEditingController().obs;
+  var required_clusterName_controller=TextEditingController().obs;
   var RegionName_controller=TextEditingController().obs;
+  var requires_regionName_controller=TextEditingController().obs;
   var AccountOwner_controller=TextEditingController().obs;
+  var item_variant_controller=TextEditingController().obs;
+  var parentCategoryCodeController = TextEditingController().obs;
 
   RxList<EmployeeMemberModel> tempSelected = <EmployeeMemberModel>[].obs;
   RxList<EmployeeMemberModel> filtered = <EmployeeMemberModel>[].obs;
@@ -78,10 +85,15 @@ class RollingForceCastDashboardVm extends GetxController{
   RxList<ItemCategoryMstModel> SelectedProductCategory_list = <ItemCategoryMstModel>[].obs;
   RxList<ClusterModal> clusterGetByEmailList = <ClusterModal>[].obs;
   RxList<ClusterModal> SelectedCluster_list = <ClusterModal>[].obs;
+  RxList<ClusterModal> SelectedRequiredCluster_list = <ClusterModal>[].obs;
   RxList<RegionWithClusterFilterModal> regionwithclusterGetByEmailList = <RegionWithClusterFilterModal>[].obs;
+  RxList<RegionWithClusterFilterModal> requiredRegionwithclusterGetByEmailList = <RegionWithClusterFilterModal>[].obs;
   RxList<RegionWithClusterFilterModal> SelectedRegion_list = <RegionWithClusterFilterModal>[].obs;
+  RxList<RegionWithClusterFilterModal> SelectedRequiredRegion_list = <RegionWithClusterFilterModal>[].obs;
   RxList<AccountMasterModel> Account_Master_list=<AccountMasterModel>[].obs;
   RxList<AccountMasterModel> SelectedAccount_Master_list=<AccountMasterModel>[].obs;
+  RxList<ItemCategoryMstModel> parentProductCategoryList = <ItemCategoryMstModel>[].obs;
+  RxList<ItemCategoryMstModel> parentItemCategorySelectedList = <ItemCategoryMstModel>[].obs;
   @override
   void onInit() async{
     // TODO: implement onInit
@@ -98,6 +110,7 @@ class RollingForceCastDashboardVm extends GetxController{
 
 
     getItemCategoryMstWithoutTaskIdApi();
+    getParentItemCategoryMstGet();
     getClustersGetByEmail();
     isAdminWritePermission == "1"
         ? EmployeeMasterGet("")
@@ -333,7 +346,7 @@ class RollingForceCastDashboardVm extends GetxController{
               SelectedCluster_list.assignAll(clusterGetByEmailList.value);
               clusterName_controller.value.text = clusterGetByEmailList.value.map((e) => e.geoValue).join(', ');
 
-              getRegionsWithClusterFilterGetByEmail();
+              getRegionsWithClusterFilterGetByEmail("");
 
             }
           }else {
@@ -357,14 +370,25 @@ class RollingForceCastDashboardVm extends GetxController{
     }
   }
 
-  void getRegionsWithClusterFilterGetByEmail() {
+  void getRegionsWithClusterFilterGetByEmail(String flag) {
     var selectedCluster="";
-    if(clusterName_controller.value.text.isNotEmpty){
-      selectedCluster = clusterName_controller.value.text
-          .split(',')
-          .map((e) => e.trim())
-          .join('|');
+    if(flag=="cluster"){
+      if(clusterName_controller.value.text.isNotEmpty){
+        selectedCluster = clusterName_controller.value.text
+            .split(',')
+            .map((e) => e.trim())
+            .join('|');
+      }
     }
+    else if(flag=="required cluster"){
+      if(required_clusterName_controller.value.text.isNotEmpty){
+        selectedCluster = required_clusterName_controller.value.text
+            .split(',')
+            .map((e) => e.trim())
+            .join('|');
+      }
+    }
+
     try{
       Map<String, String> data={
         "email_id":email,
@@ -379,10 +403,28 @@ class RollingForceCastDashboardVm extends GetxController{
           List<RegionWithClusterFilterModal> response = jsonResponse.map((e) => RegionWithClusterFilterModal.fromJson(e)).toList();
           if(response.length>0 && response[0].condition=="True"){
             loading.value = false;
-            regionwithclusterGetByEmailList.value=response;
-            RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join(', ');
-            SelectedRegion_list.assignAll(regionwithclusterGetByEmailList);
-            getFilterData();
+            if(flag=="cluster"){
+              regionwithclusterGetByEmailList.value=response;
+              RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join(', ');
+              SelectedRegion_list.assignAll(regionwithclusterGetByEmailList);
+            }
+            else if(flag=="required cluster"){
+              requiredRegionwithclusterGetByEmailList.value = response;
+              print("required cluster ${requiredRegionwithclusterGetByEmailList.length}");
+              requires_regionName_controller.value.text = requiredRegionwithclusterGetByEmailList.map((e) => e.geoValue).join(', ');
+              SelectedRequiredRegion_list.assignAll(requiredRegionwithclusterGetByEmailList);
+            }
+            else{
+              regionwithclusterGetByEmailList.value=response;
+              RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join(', ');
+              SelectedRegion_list.assignAll(regionwithclusterGetByEmailList);
+              requiredRegionwithclusterGetByEmailList.value = response;
+              requires_regionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join(', ');
+              SelectedRequiredRegion_list.assignAll(regionwithclusterGetByEmailList);
+              getFilterData();
+            }
+
+
           }else {
             loading.value = false;
             regionwithclusterGetByEmailList.value=[];
@@ -402,6 +444,9 @@ class RollingForceCastDashboardVm extends GetxController{
       loading.value = false;
     }
   }
+
+
+
   Future<List<AccountMasterModel>> getAccountMaster(String searchText) async {
     try {
       Map<String, String> data = {
@@ -467,19 +512,38 @@ class RollingForceCastDashboardVm extends GetxController{
           .map((e) => e.trim())
           .join('|');
     }
-    RegionNameForApi = '';
-    if(RegionName_controller.value.text.isNotEmpty){
-      RegionNameForApi = RegionName_controller.value.text
+    RequiredClusterNameForApi = '';
+    if(required_clusterName_controller.value.text.isNotEmpty){
+      RequiredClusterNameForApi = required_clusterName_controller.value.text
           .split(',')
           .map((e) => e.trim())
           .join('|');
     }
+    RegionNameForApi = '';
+    if(RegionName_controller.value.text.isNotEmpty){
+      RegionNameForApi = RegionName_controller.value.text
+          .split(',').map((e) => e.trim()).join('|');
+    }
     ProductCategoryForApi = '';
-    if(ProductCategory_controller.value.text.isNotEmpty){
-      ProductCategoryForApi = ProductCategory_controller.value.text
-          .split(',')
-          .map((e) => e.trim())
-          .join('|');
+    if(Item_category__code_controller.value.text.isNotEmpty){
+      ProductCategoryForApi = Item_category__code_controller  .value.text
+          .split(',').map((e) => e.trim()).join('|');
+    }
+    ProductCategoryForApi = '';
+    if(Item_category__code_controller.value.text.isNotEmpty){
+      ProductCategoryForApi = Item_category__code_controller  .value.text
+          .split(',').map((e) => e.trim()).join('|');
+    }
+    ParentProductCategoryForApi = '';
+    if(parentCategoryCodeController.value.text.isNotEmpty){
+      ParentProductCategoryForApi = parentCategoryCodeController.value.text
+          .split(',').map((e) => e.trim()).join('|');
+    }
+
+    RequiredRegionNameForApi = '';
+    if(requires_regionName_controller.value.text.isNotEmpty){
+      RequiredRegionNameForApi = requires_regionName_controller.value.text
+          .split(',').map((e) => e.trim()).join('|');
     }
 
     try {
@@ -494,11 +558,12 @@ class RollingForceCastDashboardVm extends GetxController{
         "filter_created_on": filter_created_on_cont.value.text.isEmpty?"": filter_created_on_cont.value.text,
         "filter_owner_name": AccountOwnerForApi,
         "filter_product_category": ProductCategoryForApi,
+        "filter_parent_product_category":ParentProductCategoryForApi,
         "filter_customer_name": CustomerNameApi,
         "filter_item_code_name": "",
-        "filter_item_varient": "",
-        "filter_req_region": "",
-        "filter_req_cluster": "",
+        "filter_item_varient": item_variant_controller.value.text.isEmpty? "":item_variant_controller.value.text,
+        "filter_req_region": RequiredRegionNameForApi,
+        "filter_req_cluster": RequiredClusterNameForApi,
         "filter_cluster_name": ClusterNameForApi,
         "filter_region_name": RegionNameForApi,
       };
@@ -542,7 +607,6 @@ class RollingForceCastDashboardVm extends GetxController{
         "filter_sales_cycle_id": filter_sale_cycle_id_cont.value.text.isEmpty?"":filter_sale_cycle_id_cont.value.text,
         "filter_quote_id": filter_quote_id_cont.value.text.isEmpty?"":filter_quote_id_cont.value.text,
         "filter_sales_forecast_id":filter_sale_forecast_id_cont.value.text.isEmpty?"":filter_sale_forecast_id_cont.value.text,
-
         "flag": selectedOption.value,
         "email_id": email,
         "emp_email_id": EmployeeEmailIdForApi.isEmpty?"":EmployeeEmailIdForApi,
@@ -595,6 +659,32 @@ class RollingForceCastDashboardVm extends GetxController{
     }
   }
 
+  getParentItemCategoryMstGet() async{
+    Map<String, String> data = {
+      'filter_category': "",
+    };
+    this.loading.value = true;
+    print(data);
+    String value = await _api.ParentItemCategoryMstGet(data, sessionManagement);
+    print(value);
+    try {
+      List<ItemCategoryMstModel> Response = (json.decode(value)
+      as List<dynamic>).map((i) => ItemCategoryMstModel.fromJson(i as Map<String, dynamic>)).toList();
+      if (Response.isNotEmpty && Response[0]?.condition.toString() == "True") {
+        parentProductCategoryList.value = Response!;
+      } else {
+        parentProductCategoryList.value = [];
+      }
+    } catch (e) {
+      parentProductCategoryList.value = [];
+      print('catch....${e.toString()}');
+    }
+    finally{
+      loading.value=false;
+    }
+
+  }
+
 
   clearAllFilterController(){
     character.value = 'Monthly';
@@ -606,14 +696,18 @@ class RollingForceCastDashboardVm extends GetxController{
     RegionNameForApi = '';
     EmployeeEmailIdForApi = '';
 
+
     filter_sale_forecast_id_cont.value.clear();
     filter_sale_cycle_id_cont.value.clear();
+    filter_quote_id_cont.value.clear();
+    item_variant_controller.value.clear();
+    parentCategoryCodeController.value.clear();
 
     filterCustomDateController.value.clear();
     AccountOwner_controller.value.clear();
     accountNameCode='';
 
-    ProductCategory_controller.value.clear();
+    Item_category__code_controller.value.clear();
     CustomerName_controller.value.clear();
     customerNameCode='';
     filter_created_on_cont.value.clear();
@@ -628,14 +722,17 @@ class RollingForceCastDashboardVm extends GetxController{
     SelectedEmployee_Member_list.value = [];
     SelectedProductCategory_list.value = [];
     SelectedCluster_list.value = [];
+    SelectedRequiredCluster_list.value = [];
     SelectedRegion_list.value = [];
+    SelectedRequiredRegion_list.value=[];
     //selectedSalesStageStatusList.value = [];
     //selectedSalesStageStatusList.value = ["All"];
     DateRange("monthly");
     filterCustomDateController.value.text = '${formattedStartDate} - ${formattedEndDate}';
     //RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join(',');
     clusterName_controller.value.text = clusterGetByEmailList.map((e) => e.geoValue).join('|');
-    getRegionsWithClusterFilterGetByEmail();
+    required_clusterName_controller.value.text = clusterGetByEmailList.map((e) => e.geoValue).join('|');
+    getRegionsWithClusterFilterGetByEmail("");
 
 
   }
@@ -643,18 +740,23 @@ class RollingForceCastDashboardVm extends GetxController{
     await sessionManagement.saveRollingForecastDashboardData({
       "filter_sale_forecast_id_cont": filter_sale_forecast_id_cont.value.text,
       "filter_sale_cycle_id_cont": filter_sale_cycle_id_cont.value.text,
+      "filter_quote_id_cont": filter_quote_id_cont.value.text,
       "start_date": formattedStartDate.value,
       "end_date": formattedEndDate.value,
       "filter_custom_date": filterCustomDateController.value.text,
       "filter_customer_name": CustomerName_controller.value.text,
       "customerNameCode": customerNameCode,
-      "filter_product_category": ProductCategory_controller.value.text,
+      "Item_category__code_controller": Item_category__code_controller.value.text,
+      "parentCategoryCodeController": parentCategoryCodeController.value.text,
       "filter_created_on": filter_created_on_cont.value.text,
       "filter_created_on_star_to_cont": filter_created_on_star_to_cont.value.text,
+      "item_variant_controller": item_variant_controller.value.text,
       "filter_owner_name": AccountOwner_controller.value.text,
       "accountNameCode": accountNameCode,
       "filter_region_name":RegionName_controller.value.text,
+      "requires_regionName_controller":requires_regionName_controller.value.text,
       "filter_cluster_name": clusterName_controller.value.text,
+      "required_clusterName_controller": required_clusterName_controller.value.text,
     });
 
     pageNumber = 0;
@@ -669,12 +771,15 @@ class RollingForceCastDashboardVm extends GetxController{
       filterDataChecker.value='1';
       filter_sale_forecast_id_cont.value.text=getFilterData["filter_sale_forecast_id_cont"]??"";
       filter_sale_cycle_id_cont.value.text=getFilterData["filter_sale_cycle_id_cont"]??"";
+      filter_quote_id_cont.value.text=getFilterData["filter_quote_id_cont"]??"";
       filterCustomDateController.value.text=getFilterData["filter_custom_date"]??"";
       CustomerName_controller.value.text=getFilterData["filter_customer_name"]??"";
       customerNameCode=getFilterData["customerNameCode"]??"";
-      ProductCategory_controller.value.text=getFilterData["filter_product_category"]??"";
+      Item_category__code_controller.value.text=getFilterData["Item_category__code_controller"]??"";
+      parentCategoryCodeController.value.text=getFilterData["parentCategoryCodeController"]??"";
       filter_created_on_cont.value.text=getFilterData["filter_created_on"]??"";
       filter_created_on_star_to_cont.value.text=getFilterData["filter_created_on_star_to_cont"]??"";
+      item_variant_controller.value.text=getFilterData["item_variant_controller"]??"";
       AccountOwner_controller.value.text=getFilterData["filter_owner_name"]??"";
       accountNameCode=getFilterData["accountNameCode"]??"";
       pageNumber=0;
@@ -691,29 +796,33 @@ class RollingForceCastDashboardVm extends GetxController{
         RegionName_controller.value.text = "";
         RegionName_controller.value.text = getFilterData["filter_region_name"].toString()??"";
       }
+      if(getFilterData["requires_regionName_controller"].toString().isNotEmpty && getFilterData["requires_regionName_controller"].toString()!=""){
+        requires_regionName_controller.value.text = "";
+        requires_regionName_controller.value.text = getFilterData["requires_regionName_controller"].toString()??"";
+      }
       if(getFilterData["filter_cluster_name"].toString().isNotEmpty && getFilterData["filter_cluster_name"].toString()!=""){
         clusterName_controller.value.text="";
         clusterName_controller.value.text=getFilterData["filter_cluster_name"].toString()??"";
-        print("clusterName_controller.value.text.....${clusterName_controller.value.text}");
+      }
+      if(getFilterData["required_clusterName_controller"].toString().isNotEmpty && getFilterData["required_clusterName_controller"].toString()!=""){
+        required_clusterName_controller.value.text="";
+        required_clusterName_controller.value.text=getFilterData["filter_cluster_name"].toString()??"";
       }
     }
     else{
       print("else condition");
     }
-
     rollingForecastDashboardData();
   }
   void clearFilterData() {
     sessionManagement.clearRollingForecastDashboardData();
   }
-
   Future<void> exportNonStandardExcelWithProgress(BuildContext context, ) async {
     try {
       if(rollingForecastDashboardRecordList.length<=0){
         Utils.sanckBarError("False!", "No Data Found");
         return;
       }
-
       excelLoading.value = true;
       excelProgress.value = 0;
       showExcelProgressDialog(context);

@@ -1365,7 +1365,6 @@ class FunnelDashboardView extends StatelessWidget{
                   borderRadius: BorderRadius.circular(8)),
             ),
           ),
-
           itemBuilder: (context, item, isSelected) {
             return ListTile(
               title: Text("${item.accountName ?? ""}(${item.accountCode ?? ""})",
@@ -1381,6 +1380,9 @@ class FunnelDashboardView extends StatelessWidget{
       );
     });
   }
+
+
+
 
   Widget bindAccountOwnerFilter(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {});
@@ -1534,9 +1536,7 @@ class FunnelDashboardView extends StatelessWidget{
                             },
                           ),
                         ),
-
                         const SizedBox(height: 8),
-
                         // Select All
                         Padding(
                           padding:

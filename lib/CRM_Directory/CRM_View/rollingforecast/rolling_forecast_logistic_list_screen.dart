@@ -189,7 +189,7 @@ class RollingForeCastLogisticListScreen extends StatelessWidget{
           children: [
             _buildLabelWithValue(label: "Quote Id : ", value: sale_fore_cast_vm.rolling_fore_cast_list[position].quoteId??"",),
             _buildLabelWithValue(label: "Sale Cycle Id : ", value: sale_fore_cast_vm.rolling_fore_cast_list[position].salesCycleId??"",),
-            _buildLabelWithValue(label: "Customer Name : ", value: sale_fore_cast_vm.rolling_fore_cast_list[position].accountName??"",),
+            //_buildLabelWithValue(label: "Customer Name : ", value: sale_fore_cast_vm.rolling_fore_cast_list[position].accountName??"",),
             _buildLabelWithValue(label: "Cluster Name : ", value: sale_fore_cast_vm.rolling_fore_cast_list[position].clusterName??"",),
             _buildLabelWithValue(label: "Region Name : ", value: sale_fore_cast_vm.rolling_fore_cast_list[position].regionName??"",),
             _buildLabelWithValue(label: "Created By : ", value: sale_fore_cast_vm.rolling_fore_cast_list[position].createdFullName??"",),
@@ -314,8 +314,8 @@ class RollingForeCastLogisticListScreen extends StatelessWidget{
                               bindFilterData(sale_fore_cast_vm.quoteIdController.value, 'Quote Id'),
                               const SizedBox(height: 10,),
                               bindFilterData(sale_fore_cast_vm.saleCycleController.value, 'Sale Cycle Id'),
-                              const SizedBox(height: 10,),
-                              bindFilterData(sale_fore_cast_vm.customerNameController.value, 'Customer Name'),
+                              /*const SizedBox(height: 10,),
+                              bindFilterData(sale_fore_cast_vm.customerNameController.value, 'Customer Name'),*/
                               const SizedBox(height: 10,),
                               bindClusterNameFilter(context),
                               const SizedBox(height: 10,),

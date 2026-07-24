@@ -1380,8 +1380,13 @@ class Accountmastervm extends GetxController{
       InActive=0;
       //print(accountMaster_page_controller.InActive);
     }
+    String accountCatTypeCode ='';
     String message = account_cat_type_controller.text;
-    String accountCatTypeCode = message.substring(0,1);
+    if(message.isNotEmpty){
+      accountCatTypeCode = message.substring(0,1);
+    }
+
+
     Map<String, dynamic> data = {
       "created_by": email,
       "flag": flag,
