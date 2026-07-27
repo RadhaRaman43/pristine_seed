@@ -9,6 +9,9 @@ class SalesForceCastHeaderModal {
   String? createdOn;
   String? regionName;
   String? clusterName;
+  dynamic? totalQuoteQty;
+  dynamic? totalQuoteApprovedPrice;
+    List<TotalMonthYearQty>? totalMonthYearQty;
   List<Lines>? lines;
 
   SalesForceCastHeaderModal(
@@ -22,6 +25,9 @@ class SalesForceCastHeaderModal {
         this.createdOn,
         this.regionName,
         this.clusterName,
+        this.totalQuoteQty,
+        this.totalQuoteApprovedPrice,
+        this.totalMonthYearQty,
         this.lines});
 
   SalesForceCastHeaderModal.fromJson(Map<String, dynamic> json) {
@@ -35,6 +41,14 @@ class SalesForceCastHeaderModal {
     createdOn = json['created_on'];
     regionName = json['region_name'];
     clusterName = json['cluster_name'];
+    totalQuoteQty = json['total_quote_qty'];
+    totalQuoteApprovedPrice = json['total_quote_approved_price'];
+    if (json['total_month_year_qty'] != null) {
+      totalMonthYearQty = <TotalMonthYearQty>[];
+      json['total_month_year_qty'].forEach((v) {
+        totalMonthYearQty!.add(new TotalMonthYearQty.fromJson(v));
+      });
+    }
     if (json['lines'] != null) {
       lines = <Lines>[];
       json['lines'].forEach((v) {
@@ -55,6 +69,12 @@ class SalesForceCastHeaderModal {
     data['created_on'] = this.createdOn;
     data['region_name'] = this.regionName;
     data['cluster_name'] = this.clusterName;
+    data['total_quote_qty'] = this.totalQuoteQty;
+    data['total_quote_approved_price'] = this.totalQuoteApprovedPrice;
+    if (this.totalMonthYearQty != null) {
+      data['total_month_year_qty'] =
+          this.totalMonthYearQty!.map((v) => v.toJson()).toList();
+    }
     if (this.lines != null) {
       data['lines'] = this.lines!.map((v) => v.toJson()).toList();
     }
@@ -66,7 +86,7 @@ class Lines {
   String? salesForecastId;
   String? salesCycleId;
   String? quoteId;
-  int? quoteLineNo;
+  dynamic? quoteLineNo;
   String? itemCode;
   String? itemName;
   String? itemDescription;
@@ -146,6 +166,39 @@ class Lines {
     for (var month in forecastMonths) {
       data[month.key] = month.value;
     }
+    return data;
+  }
+}
+
+class TotalMonthYearQty {
+  dynamic? srNo;
+  dynamic? contMonthNo;
+  String? closureMonth;
+  String? closureYear;
+  dynamic? totalMonthYearQty;
+
+  TotalMonthYearQty(
+      {this.srNo,
+        this.contMonthNo,
+        this.closureMonth,
+        this.closureYear,
+        this.totalMonthYearQty});
+
+  TotalMonthYearQty.fromJson(Map<String, dynamic> json) {
+    srNo = json['sr_no'];
+    contMonthNo = json['cont_month_no'];
+    closureMonth = json['closure_month'];
+    closureYear = json['closure_year'];
+    totalMonthYearQty = json['total_month_year_qty'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['sr_no'] = this.srNo;
+    data['cont_month_no'] = this.contMonthNo;
+    data['closure_month'] = this.closureMonth;
+    data['closure_year'] = this.closureYear;
+    data['total_month_year_qty'] = this.totalMonthYearQty;
     return data;
   }
 }

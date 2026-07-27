@@ -15,6 +15,7 @@ class RollingForeCastListModal {
   String? createdOn;
   String? itemCode;
   String? itemName;
+  String? itemSpecification;
   String? itemVarient;
   String? itemCategoryCode;
   String? itemParentCategoryCode;
@@ -48,6 +49,7 @@ class RollingForeCastListModal {
         this.createdOn,
         this.itemCode,
         this.itemName,
+        this.itemSpecification,
         this.itemVarient,
         this.itemCategoryCode,
         this.itemParentCategoryCode,
@@ -81,6 +83,7 @@ class RollingForeCastListModal {
     createdOn = json['created_on'];
     itemCode = json['item_code'];
     itemName = json['item_name'];
+    itemSpecification = json['item_specification'];
     itemVarient = json['item_varient'];
     itemCategoryCode = json['item_category_code'];
     itemParentCategoryCode = json['item_parent_category_code'];
@@ -116,6 +119,7 @@ class RollingForeCastListModal {
     data['created_on'] = this.createdOn;
     data['item_code'] = this.itemCode;
     data['item_name'] = this.itemName;
+    data['item_specification'] = this.itemSpecification;
     data['item_varient'] = this.itemVarient;
     data['item_category_code'] = this.itemCategoryCode;
     data['item_parent_category_code'] = this.itemParentCategoryCode;

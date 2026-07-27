@@ -614,6 +614,7 @@ class SalesForeCastVM extends GetxController{
           year_controller.value.text = parts[1];
           forceCastId= salesForceCastHeader_list[0].salesForecastId??"";
           print("cjnge screen .....");
+          debugPrint('Length is.. ${salesForceCastHeader_list[0].totalMonthYearQty}');
           Get.toNamed(RoutesName.SalesForeCastHeaderDetailsScreen);
         }else {
           salesForceCastHeader_list.value=[];

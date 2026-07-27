@@ -569,9 +569,7 @@ class QuoteInformationScreen extends StatelessWidget {
                         color: AllColors.lightgreyColor,
                       ),
                     ),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 10, horizontal: 10),
+                    Container(padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                       child: SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
                         child: Row(
@@ -590,7 +588,7 @@ class QuoteInformationScreen extends StatelessWidget {
                               thickness: 1,
                               color: AllColors.lightgreyColor,
                             ),
-                        Obx(() {
+                       /* Obx(() {
                           final bool showGM = saleCycleController.isAdminWritePermission == "1" ||
                                   saleCycleController.userType.toLowerCase() == "gm"||saleCycleController.GmApproveDetail.value;
                           final bool showbh=saleCycleController.userType?.toLowerCase()=='bh' ||
@@ -634,7 +632,6 @@ class QuoteInformationScreen extends StatelessWidget {
                                     tableHeaderCell("Total Amount"),
                                   ],
                                 ),
-
                                 TableRow(
                                   children: [
                                     tableValueCell(data.quoteTotalQty?.toInt()),
@@ -691,7 +688,7 @@ class QuoteInformationScreen extends StatelessWidget {
                               ],
                             ),
                           );
-                        }),
+                        }),*/
 
                         ],
                         ),

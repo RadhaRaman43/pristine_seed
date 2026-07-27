@@ -68,7 +68,7 @@ class SalesForceHeaderDetails extends StatelessWidget{
                       ),
                     ),
                     Text(
-                      '(${sales_force_cast_vm.salesForceCastHeader_list[0].salesForecastId})',
+                      '(${sales_force_cast_vm.salesForceCastHeader_list[0].salesForecastId ??""})',
                       style: GoogleFonts.poppins(
                         color: AllColors.whiteColor,
                         fontSize: 18.0,
@@ -84,7 +84,8 @@ class SalesForceHeaderDetails extends StatelessWidget{
           ),
           drawer: CustomDrawer(),
           body: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Obx(() {
                 return Visibility(
@@ -211,12 +212,110 @@ class SalesForceHeaderDetails extends StatelessWidget{
                 ),
               ),
               const SizedBox(height: 10,),
+              const SizedBox(height: 10,),
+
+              Obx((){
+                final totalList = sales_force_cast_vm.salesForceCastHeader_list[0].totalMonthYearQty ?? [];
+                if( totalList != null && totalList.isNotEmpty && totalList.length>0){
+                  return  Container(
+                    padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: [
+                          Center(
+                            child: Divider(
+                              height: 1,
+                              color: AllColors.lightgreyColor,
+                            ),
+                          ),
+                          Text(
+                            "Total",
+                            textAlign: TextAlign.center,
+                            style: GoogleFonts.poppins(
+                              color: AllColors.primaryDark1,
+                              fontSize: AllFontSize.sisxteen,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                          VerticalDivider(
+                            width: 20, // total space taken
+                            thickness: 1,
+                            color: AllColors.lightgreyColor,
+                          ),
+                           Table(
+                                defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+                                defaultColumnWidth: const FixedColumnWidth(130),
+                                border: TableBorder.symmetric(
+                                  inside: BorderSide(
+                                    width: 1,
+                                    color: AllColors.lightgreyColor,
+                                  ),
+                                ),
+                                children: [
+                                  TableRow(
+                                    children: totalList.map((item) {
+                                      return tableHeaderCell(
+                                        "${item.closureMonth}-${item.closureYear}",
+                                      );
+                                    }).toList(),
+                                  ),
+                                  TableRow(
+                                    children: totalList.map((item) {
+                                      return tableValueCell(
+                                        item.totalMonthYearQty?.toString() ?? "0",
+                                      );
+                                    }).toList(),
+                                  ),
+                                ],
+                              )
+
+
+                        ],
+                      ),
+                    ),
+                  );
+                }
+                else{
+                  return SizedBox();
+                }
+              }),
+              const SizedBox(height: 10,),
               Divider(height: 1, color: AllColors.bluegrayColor,),
               const SizedBox(height: 10,),
               bindForeCastLinesData(context),
 
             ],
           )),
+    );
+  }
+
+  Widget tableHeaderCell(String title) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Text(
+        title,
+        textAlign: TextAlign.center,
+        style: GoogleFonts.poppins(
+          color: AllColors.textColor,
+          fontSize: AllFontSize.sisxteen,
+          fontWeight: FontWeight.w700,
+        ),
+      ),
+    );
+  }
+  Widget tableValueCell(dynamic value) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Text(
+        value?.toString() ?? "0",
+        textAlign: TextAlign.center,
+        style: GoogleFonts.poppins(
+          color: AllColors.primaryDark1,
+          fontSize: AllFontSize.sisxteen,
+          fontWeight: FontWeight.w700,
+        ),
+      ),
     );
   }
   Color getStatusColor(String status) {

@@ -68,6 +68,7 @@ class RollingForeCastLogisticVM extends GetxController{
   var AccountOwner_controller=TextEditingController().obs;
   var itemCodeController=TextEditingController().obs;
   var itemNameController=TextEditingController().obs;
+  var itemSpecificationController=TextEditingController().obs;
   var qtyController=TextEditingController().obs;
   var itemVarient_Ctrl = TextEditingController().obs;
   var itemCategoryCodeController = TextEditingController().obs;
@@ -377,6 +378,7 @@ class RollingForeCastLogisticVM extends GetxController{
         "filter_created_on": createdOnStartToEnd.value,
         "filter_item_code": itemCodeController.value.text.isEmpty?"":itemCodeController.value.text,
         "filter_item_name":itemNameController.value.text.isEmpty?"":itemNameController.value.text,
+        "filter_item_specification":itemSpecificationController.value.text.isEmpty?"":itemSpecificationController.value.text,
         "filter_item_varient": itemVarient_Ctrl.value.text.isEmpty?"":itemVarient_Ctrl.value.text,
         "filter_item_category_type": item_category_type_controller.value.text.isEmpty?"":item_category_type_controller.value.text,
         "filter_item_category_code": itemCategoryCodeForApi,
@@ -431,6 +433,7 @@ class RollingForeCastLogisticVM extends GetxController{
     searchController.value.clear();
     itemCodeController.value.clear();
     itemNameController.value.clear();
+    itemSpecificationController.value.clear();
     qtyController.value.clear();
     itemVarient_Ctrl.value.clear();
     itemCategoryCodeController.value.clear();
@@ -469,6 +472,7 @@ class RollingForeCastLogisticVM extends GetxController{
       'accountNameCode': accountNameCode,
       'itemCodeController': itemCodeController.value.text,
       'itemNameController': itemNameController.value.text,
+      'itemSpecificationController': itemNameController.value.text,
       'qtyController': qtyController.value.text,
       'itemVarient_Ctrl': itemVarient_Ctrl.value.text,
       'itemCategoryCodeController': itemCategoryCodeController.value.text,
@@ -502,6 +506,7 @@ class RollingForeCastLogisticVM extends GetxController{
       accountNameCode=getFilterData["accountNameCode"]??"";
       itemCodeController.value.text=getFilterData["itemCodeController"]??"";
       itemNameController.value.text=getFilterData["itemNameController"]??"";
+      itemSpecificationController.value.text=getFilterData["itemSpecificationController"]??"";
       qtyController.value.text=getFilterData["qtyController"]??"";
       itemVarient_Ctrl.value.text=getFilterData["itemVarient_Ctrl"]??"";
       itemCategoryCodeController.value.text=getFilterData["itemCategoryCodeController"]??"";
