@@ -1693,7 +1693,7 @@ class PreventiveViewDetailScreen extends StatelessWidget {
             height: 200,
             child: Column(
               children: [
-                bindReasonDropDown(context),
+                bindReasonDropDown(context, 'Reassignment'),
                 TextFormField(
                   controller: preventive_deatils_page_controller
                       .reason_description_controller,
@@ -1778,7 +1778,7 @@ class PreventiveViewDetailScreen extends StatelessWidget {
     );
   }
 
-  Widget bindReasonDropDown(context) {
+  Widget bindReasonDropDown(context, String flagApiType) {
     preventive_deatils_page_controller.reason_master_list.value=[];
     return Autocomplete<ReasonModel>(
       displayStringForOption: _displayReasonCodeForOption,
@@ -1787,7 +1787,7 @@ class PreventiveViewDetailScreen extends StatelessWidget {
           return preventive_deatils_page_controller.reason_master_list.value;
           // return const Iterable<VehicleTypeResponse>.empty();
         }
-        return await preventive_deatils_page_controller.getSearchReasonMaster(textEditingValue.text);
+        return await preventive_deatils_page_controller.getSearchReasonMaster(textEditingValue.text, flagApiType);
       },
       onSelected: (ReasonModel selection) {
         print(selection.reasonCode);
@@ -1815,8 +1815,8 @@ class PreventiveViewDetailScreen extends StatelessWidget {
           decoration: InputDecoration(
             contentPadding: EdgeInsets.symmetric(
                 vertical: AllFontSize.two, horizontal: AllFontSize.one),
-            hintText: 'Enter Reason Code.',
-            labelText: 'Enter Reason Code',
+            hintText: 'Search Reason Code.',
+            labelText: 'Search Reason Code',
             hintStyle: GoogleFonts.poppins(
               color: AllColors.primaryDark1,
               // fontWeight: FontWeight.w300,
@@ -1897,7 +1897,7 @@ class PreventiveViewDetailScreen extends StatelessWidget {
             height: 230,
             child: Column(
               children: [
-                bindReasonDropDown(context),
+                bindReasonDropDown(context, 'Reschedule'),
                 TextFormField(
                   controller: preventive_deatils_page_controller
                       .reschdule_remark_controller,

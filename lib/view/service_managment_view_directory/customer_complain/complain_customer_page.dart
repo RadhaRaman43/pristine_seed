@@ -384,11 +384,11 @@ class ComplainCustomerPage extends StatelessWidget{
         .complain_list[position].serviceTatDatetime ?? "");
     return InkWell(
       child: ListTile(
-          onTap: () {
+          /*onTap: () {
 
-            //customer_complain_vm.id = customer_complain_vm.complain_list[position].id!;
-            //customer_complain_vm.getServiceCorrectiveDetailsGet(customer_complain_vm.complain_list[position].id!,"");
-          },
+            customer_complain_vm.id = customer_complain_vm.complain_list[position].id!;
+            customer_complain_vm.getServiceCorrectiveDetailsGet(customer_complain_vm.complain_list[position].id!,"");
+          },*/
           subtitle: Column(
             children: [
               Row(

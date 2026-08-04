@@ -1687,7 +1687,7 @@ class CorrectiveViewDetailsScreen extends StatelessWidget {
             height: 230,
             child: Column(
               children: [
-                bindReasonDropDown(context),
+                bindReasonDropDown(context, 'Reschedule'),
                 TextFormField(
                   controller: corrective_deatils_page_controller
                       .reschdule_remark_controller,
@@ -1893,7 +1893,7 @@ class CorrectiveViewDetailsScreen extends StatelessWidget {
     );
   }*/
 
-  Widget bindReasonDropDown(context) {
+  Widget bindReasonDropDown(context, String subReasonType) {
     corrective_deatils_page_controller.reason_master_list.value=[];
     return Autocomplete<ReasonModel>(
       displayStringForOption: _displayReasonCodeForOption,
@@ -1902,7 +1902,7 @@ class CorrectiveViewDetailsScreen extends StatelessWidget {
           return corrective_deatils_page_controller.reason_master_list.value;
           // return const Iterable<VehicleTypeResponse>.empty();
         }
-        return  await corrective_deatils_page_controller.getSearchReasonMaster(textEditingValue.text);
+        return  await corrective_deatils_page_controller.getSearchReasonMaster(textEditingValue.text, subReasonType);
       },
       onSelected: (ReasonModel selection) {
         print(selection.reasonCode);
@@ -1931,8 +1931,8 @@ class CorrectiveViewDetailsScreen extends StatelessWidget {
           decoration: InputDecoration(
             contentPadding: EdgeInsets.symmetric(
                 vertical: AllFontSize.two, horizontal: AllFontSize.one),
-            hintText: 'Enter Reason Code.',
-            labelText: 'Enter Reason Code',
+            hintText: 'Search Reason Code.',
+            labelText: 'Search Reason Code',
             hintStyle: GoogleFonts.poppins(
               color: AllColors.primaryDark1,
               // fontWeight: FontWeight.w300,
@@ -2013,7 +2013,7 @@ class CorrectiveViewDetailsScreen extends StatelessWidget {
             height: 200,
             child: Column(
               children: [
-                bindReasonDropDown(context),
+                bindReasonDropDown(context,'Reassignment'),
                 TextFormField(
                   controller: corrective_deatils_page_controller
                       .reason_description_controller,

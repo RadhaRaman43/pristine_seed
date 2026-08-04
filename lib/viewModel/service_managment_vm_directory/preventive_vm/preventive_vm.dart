@@ -644,15 +644,16 @@ class PreventiveViewModel extends GetxController {
     }
   }*/
 
-  Future<Iterable<ReasonModel>> getSearchReasonMaster(String text) async {
+  Future<Iterable<ReasonModel>> getSearchReasonMaster(String text, String flagApiType) async {
     if (text == '') {
       return const Iterable<ReasonModel>.empty();
     }
     Map data = {
       "flag": "select",
       "reason_code": text,
-      "reason_type": "Installation",
+      "reason_type": "Preventive",
       "reason_description": "",
+      "sub_reason_type":flagApiType,
       "created_by": email,
       "id": "",
     };

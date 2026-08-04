@@ -43,6 +43,8 @@ class CorrectiveViewModel extends GetxController{
   int total_rows = 0;
   String email="";
   String reason_code = "";
+  RxString problem_Identified_des="".obs;
+  RxString action_taken_des="".obs;
   RxString image_description_flag = "".obs;
   RxString upLoadLocalImagesList = ''.obs;
   int is_warrenty= 0;
@@ -76,9 +78,10 @@ class CorrectiveViewModel extends GetxController{
   var indent_type_controller=TextEditingController();
   var indent_date_controller=TextEditingController();
   var paybal_amount_controller=TextEditingController();
-
   var item_price_controller=TextEditingController();
   var serialNoController=TextEditingController();
+  var problem_identified_controller=TextEditingController();
+  var action_taken_controller=TextEditingController();
 
   RxDouble currentLat = 0.0.obs;
   RxDouble currentLng = 0.0.obs;
@@ -524,12 +527,26 @@ getServiceCorrectiveList(int is_done, int page_no,String date_filter,{String glo
 
 
   CorrectiveMarkComplete(String service_id) {
+    if(problem_identified_controller.text.isEmpty){
+      Utils.sanckBarError('Error', 'Action Taken can not be blank');
+      return;
+    }
+
+    if(action_taken_controller.text.isEmpty){
+      Utils.sanckBarError('Error', 'Action Taken can not be blank');
+      return;
+    }
+
     Map data = {
       "service_id": service_id,
       "user_remark":indent_remark_controller.text,
       "visit_charges": indent_visit_charge_controller.text,
       "from_latitude": currentLat.value,
       "from_longitude": currentLng.value,
+      "problem_reason_code": problem_identified_controller.text,
+      "problem_reason_desc": problem_Identified_des.value,
+      "action_taken_reason_code": action_taken_controller.text,
+      "action_taken_reason_desc": action_taken_des.value,
       "email_id": email
     };
     print(data);
@@ -1054,15 +1071,16 @@ getServiceCorrectiveList(int is_done, int page_no,String date_filter,{String glo
 
 
 
-  Future<Iterable<ReasonModel>> getSearchReasonMaster(String text) async {
+  Future<Iterable<ReasonModel>> getSearchReasonMaster(String text, String subReasonType) async {
     if (text == '') {
       return const Iterable<ReasonModel>.empty();
     }
     Map data = {
       "flag": "select",
       "reason_code": text,
-      "reason_type": "Installation",
+      "reason_type": "Corrective",
       "reason_description": "",
+      "sub_reason_type":subReasonType,
       "created_by": email,
       "id": "",
     };

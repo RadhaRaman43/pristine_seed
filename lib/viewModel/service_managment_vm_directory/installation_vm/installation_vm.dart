@@ -349,7 +349,7 @@ class InstallationViewModel extends GetxController {
   }
 */
 
-  Future<Iterable<ReasonModel>> getSearchReasonMaster(String text) async {
+  Future<Iterable<ReasonModel>> getSearchReasonMaster(String text, String sub_reason_type) async {
     if (text == '') {
       return const Iterable<ReasonModel>.empty();
     }
@@ -358,6 +358,7 @@ class InstallationViewModel extends GetxController {
       "reason_code": text,
       "reason_type": "Installation",
       "reason_description": "",
+      "sub_reason_type":sub_reason_type,
       "created_by": email,
       "id": "",
     };

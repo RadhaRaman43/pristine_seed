@@ -27,7 +27,7 @@ class InstallationViewDetailsScreen extends StatelessWidget {
   Size size = Get.size;
 
   static String _displayReasonCodeForOption(ReasonModel option) =>
-      option.reasonCode!;
+      option.reasonCode??"";
 
   List<String> ExerciseFilter = ["walking", "running", "cycling", "hiking"];
 
@@ -1774,7 +1774,7 @@ class InstallationViewDetailsScreen extends StatelessWidget {
             height: 200,
             child: Column(
               children: [
-                bindReasonDropDown(context),
+                bindReasonDropDown(context,'Reassignment'),
                 TextFormField(
                   controller: installation_deatils_page_controller
                       .reason_description_controller,
@@ -1859,7 +1859,7 @@ class InstallationViewDetailsScreen extends StatelessWidget {
     );
   }
 
-  Widget bindReasonDropDown(context) {
+  Widget bindReasonDropDown(context, String sub_reason_type) {
     installation_deatils_page_controller.reason_master_list.value = [];
     return Autocomplete<ReasonModel>(
       displayStringForOption: _displayReasonCodeForOption,
@@ -1869,7 +1869,7 @@ class InstallationViewDetailsScreen extends StatelessWidget {
           // return const Iterable<VehicleTypeResponse>.empty();
         }
         return await installation_deatils_page_controller
-            .getSearchReasonMaster(textEditingValue.text);
+            .getSearchReasonMaster(textEditingValue.text,sub_reason_type);
       },
       onSelected: (ReasonModel selection) {
         print(selection.reasonCode);
@@ -1980,7 +1980,7 @@ class InstallationViewDetailsScreen extends StatelessWidget {
             height: 220,
             child: Column(
               children: [
-                bindReasonDropDown(context),
+                bindReasonDropDown(context, 'Reschedule'),
                 TextFormField(
                   controller: installation_deatils_page_controller
                       .reschdule_remark_controller,

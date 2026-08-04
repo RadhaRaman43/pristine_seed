@@ -6,9 +6,9 @@ var myRootNode = Root.fromJson(map);
 class ShowAllComplainModal {
   String? condition;
   String? message;
-  int? id;
+  dynamic? id;
   String? serviceno;
-  int? lineno;
+  dynamic? lineno;
   String? servicetype;
   String? invoiceno;
   String? invoicedate;
@@ -34,18 +34,18 @@ class ShowAllComplainModal {
   String? servicestatus;
   String? parentserviceno;
   String? parentserviceid;
-  int? isassignment;
+  dynamic? isassignment;
   String? assignedpersonemail;
   String? updatedby;
   String? updatedon;
   String? complainreasoncode;
   String? complainreasondesc;
   String? complainremark;
-  int? iswarrantyreceive;
-  int? frequencyofpm;
+  dynamic? iswarrantyreceive;
+  dynamic? frequencyofpm;
   String? servicetatdatetime;
-  double? visitcharges;
-  int? isunderapproval;
+  dynamic? visitcharges;
+  dynamic? isunderapproval;
 
   ShowAllComplainModal({this.condition, this.message, this.id, this.serviceno, this.lineno, this.servicetype, this.invoiceno, this.invoicedate, this.customerno, this.customername, this.customeraddress, this.customerpincode, this.customerstate, this.customerstatecode, this.contactperson, this.customerphoneno, this.customerifsccode, this.customeremailid, this.customerarea, this.itemno, this.itemname, this.serialno, this.salesdate, this.deliverydatetime, this.serviceitemcardno, this.createdby, this.createdon, this.servicestatus, this.parentserviceno, this.parentserviceid, this.isassignment, this.assignedpersonemail, this.updatedby, this.updatedon, this.complainreasoncode, this.complainreasondesc, this.complainremark, this.iswarrantyreceive, this.frequencyofpm, this.servicetatdatetime, this.visitcharges, this.isunderapproval});
 
