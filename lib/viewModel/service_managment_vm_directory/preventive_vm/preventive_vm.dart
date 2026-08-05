@@ -84,6 +84,7 @@ class PreventiveViewModel extends GetxController {
       <CreatePreventiveCalender>[].obs;
 
   RxList<ReasonModel> reason_master_list = <ReasonModel>[].obs;
+  RxList<ReasonModel> action_taken_list = <ReasonModel>[].obs;
 
   RxList<PreventiveItemDetailsResponse> item_details_list =
       <PreventiveItemDetailsResponse>[].obs;
@@ -132,6 +133,9 @@ class PreventiveViewModel extends GetxController {
 
   var item_price_controller = TextEditingController();
   var serialNoController = TextEditingController();
+  var actionTakenController= TextEditingController();
+  var problemIdentifiedController= TextEditingController();
+
 
   //todo add new preventive calender controller
 
@@ -145,6 +149,8 @@ class PreventiveViewModel extends GetxController {
   RxBool isShowItemNo=true.obs;
   RxInt invoiceKey = 0.obs;
   RxInt itemKey = 0.obs;
+  RxString problem_Identified_des="".obs;
+  RxString action_taken_des="".obs;
 
   RxString serviceNo="".obs;
   RxString selectedItemNo="".obs;
@@ -682,6 +688,44 @@ class PreventiveViewModel extends GetxController {
       reason_master_list.value = [];
     }
     return reason_master_list.value;
+  }
+
+  Future<Iterable<ReasonModel>> getActionTaken(String text, String flagApiType) async {
+    if (text == '') {
+      return const Iterable<ReasonModel>.empty();
+    }
+    Map data = {
+      "flag": "select",
+      "reason_code": text,
+      "reason_type": "Preventive",
+      "reason_description": "",
+      "sub_reason_type":flagApiType,
+      "created_by": email,
+      "id": "",
+    };
+
+    String reasondropdownresp = await _api.preventiveReasonMasterApiHit(data, sessionManagement);
+    try {
+      final jsonResponse = json.decode(reasondropdownresp);
+      if (jsonResponse is List) {
+        print(jsonResponse);
+        List<ReasonModel> response =
+        jsonResponse.map((data) => ReasonModel.fromJson(data)).toList();
+        if (response[0].condition == 'True') {
+          print(jsonResponse);
+          action_taken_list.value = response;
+        } else {
+          action_taken_list.value = [];
+        }
+      } else {
+        Utils.sanckBarException('False!', jsonResponse.message);
+        action_taken_list.value = [];
+      }
+    } catch (e) {
+      Utils.sanckBarException('Exception!', e.toString());
+      action_taken_list.value = [];
+    }
+    return action_taken_list.value;
   }
 
   IndentLineCreate(String indent_no, BuildContext context) {
@@ -1237,12 +1281,25 @@ class PreventiveViewModel extends GetxController {
       Utils.showErrorToastification("Message!", "Please Enter remark");
       return;
     }
+    if(problemIdentifiedController.text.isEmpty){
+      Utils.sanckBarError('Error', 'Action Taken can not be blank');
+      return;
+    }
+
+    if(actionTakenController.text.isEmpty){
+      Utils.sanckBarError('Error', 'Action Taken can not be blank');
+      return;
+    }
     Map data = {
       "service_id": service_id,
       "user_remark": indent_remark_controller.text,
       "visit_charges": indent_visit_charge_controller.text,
       "from_latitude": currentLat.value,
       "from_longitude": currentLng.value,
+      "problem_reason_code": problemIdentifiedController.text,
+      "problem_reason_desc": problem_Identified_des.value,
+      "action_taken_reason_code": actionTakenController.text,
+      "action_taken_reason_desc": action_taken_des.value,
       "email_id": email
     };
     print(data);

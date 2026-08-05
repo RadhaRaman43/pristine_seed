@@ -11,6 +11,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../../constants/app_colors.dart';
 import '../../../constants/app_font_size.dart';
 import '../../../constants/static_methods.dart';
+import '../../../models/service_managment_model_directory/reasonModel/reason_master_response.dart';
 import '../../../utils/app_utils.dart';
 import '../../../viewModel/service_managment_vm_directory/preventive_vm/preventive_vm.dart';
 import '../../custom_drawer.dart';
@@ -21,6 +22,9 @@ class PreventiveMarkVisitScreen extends StatelessWidget {
 
   final preventive_indent_page_controller = Get.put(PreventiveViewModel());
   Size size = Get.size;
+
+  static String _displayReasonCodeForOption(ReasonModel option) =>
+      option.reasonCode!;
 
   @override
   Widget build(BuildContext context) {
@@ -1155,6 +1159,8 @@ class PreventiveMarkVisitScreen extends StatelessWidget {
                                                     .clear();
                                                 preventive_indent_page_controller.indent_visit_charge_controller.clear();
                                                 remarkDialog(context);
+                                                preventive_indent_page_controller.actionTakenController.clear();
+                                                preventive_indent_page_controller.problemIdentifiedController.clear();
 
                                                 // Your onPressed logic here
                                               },
@@ -1595,76 +1601,274 @@ class PreventiveMarkVisitScreen extends StatelessWidget {
             ],
           ),
 
-          content: Container(
-            height: size.height * .24,
-            child: Column(
-              children: [
-                TextFormField(
-                  controller: preventive_indent_page_controller
-                      .indent_remark_controller,
-                  decoration: InputDecoration(
-                    labelText: "Enter Remark ",
-                    labelStyle: TextStyle(color: AllColors.primaryDark1),
-                    enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: AllColors.primaryDark1),
-                    ),
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: AllColors.primaryDark1),
-                    ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+
+              bindProblemIdentified(context),
+              bindTakenAction(context),
+              TextFormField(
+                controller: preventive_indent_page_controller
+                    .indent_remark_controller,
+                decoration: InputDecoration(
+                  labelText: "Enter Remark ",
+                  labelStyle: TextStyle(color: AllColors.primaryDark1),
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: AllColors.primaryDark1),
+                  ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: AllColors.primaryDark1),
                   ),
                 ),
-                TextFormField(
-                  keyboardType: TextInputType.number,
-                  readOnly: preventive_indent_page_controller
-                      .service_preventive_details_list[0].isWarranty==0?false:true,
-                  controller: preventive_indent_page_controller
-                      .indent_visit_charge_controller,
-                  decoration: InputDecoration(
-                    labelText: "Visit Charge ",
-                    labelStyle: TextStyle(color: AllColors.primaryDark1),
-                    enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: AllColors.primaryDark1),
-                    ),
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: AllColors.primaryDark1),
-                    ),
+              ),
+
+
+              TextFormField(
+                keyboardType: TextInputType.number,
+                readOnly: preventive_indent_page_controller
+                    .service_preventive_details_list[0].isWarranty==0?false:true,
+                controller: preventive_indent_page_controller
+                    .indent_visit_charge_controller,
+                decoration: InputDecoration(
+                  labelText: "Visit Charge ",
+                  labelStyle: TextStyle(color: AllColors.primaryDark1),
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: AllColors.primaryDark1),
+                  ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: AllColors.primaryDark1),
                   ),
                 ),
-                SizedBox(
-                  height: 13,
-                ),
-                ElevatedButton(
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all<Color>(
-                      AllColors.primaryDark1,
-                    ),
+              ),
+              SizedBox(
+                height: 13,
+              ),
+              ElevatedButton(
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all<Color>(
+                    AllColors.primaryDark1,
                   ),
-                  onPressed: () {
-                    Navigator.pop(context);
-                    GeoTaggingMarkDialog(context);
-                    /*
-                    preventive_indent_page_controller.PreventiveMarkComplete(
-                        preventive_indent_page_controller
-                            .service_preventive_details_list[0].id
-                            .toString());*/
+                ),
+                onPressed: () {
+                  Navigator.pop(context);
+                  GeoTaggingMarkDialog(context);
+                  /*
+                  preventive_indent_page_controller.PreventiveMarkComplete(
+                      preventive_indent_page_controller
+                          .service_preventive_details_list[0].id
+                          .toString());*/
 
 
 
-                  },
-                  child: Container(
-                    width: 80,
-                    alignment: Alignment.center,
-                    child: Text(
-                      'Ok',
-                      style: GoogleFonts.poppins(
-                        color: AllColors.customDarkerWhite,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w700,
+                },
+                child: Container(
+                  width: 80,
+                  alignment: Alignment.center,
+                  child: Text(
+                    'Ok',
+                    style: GoogleFonts.poppins(
+                      color: AllColors.customDarkerWhite,
+                      fontSize: AllFontSize.fourtine,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ),
+              )
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  bindProblemIdentified(BuildContext context) {
+    preventive_indent_page_controller.reason_master_list.value=[];
+    return Autocomplete<ReasonModel>(
+      displayStringForOption: _displayReasonCodeForOption,
+      optionsBuilder: (TextEditingValue textEditingValue) async {
+        if (textEditingValue.text.isEmpty) {
+          return preventive_indent_page_controller.reason_master_list.value;
+        }
+        return await preventive_indent_page_controller
+            .getSearchReasonMaster(textEditingValue.text,'Problem Identified');
+      },
+      onSelected: (ReasonModel selection) {
+        print(selection.reasonCode);
+        preventive_indent_page_controller.problemIdentifiedController.text =
+            _displayReasonCodeForOption(selection).toString();
+        preventive_indent_page_controller.problem_Identified_des.value =
+            selection.reasonDescription??"";
+        FocusScope.of(context).unfocus();
+      },
+      fieldViewBuilder: (BuildContext context, TextEditingController controller,
+          FocusNode focusNode, VoidCallback onFieldSubmitted) {
+        return TextField(
+          onChanged: (value) {
+            if (value.isEmpty) {
+              FocusScope.of(context).unfocus();
+            }
+            preventive_indent_page_controller.problemIdentifiedController.text =
+                value;
+          },
+          cursorColor: AllColors.primaryDark1,
+          controller: controller
+            ..text = preventive_indent_page_controller.problemIdentifiedController.text,
+          focusNode: focusNode,
+          decoration: InputDecoration(
+            contentPadding: EdgeInsets.symmetric(
+                vertical: AllFontSize.two, horizontal: AllFontSize.one),
+            hintText: 'Search Problem Identified',
+            labelText: 'Search Problem Identified',
+            suffixIcon: Icon(Icons.arrow_drop_down),
+            hintStyle: GoogleFonts.poppins(
+                color: AllColors.primaryDark1,
+                fontWeight: FontWeight.w300,
+                fontSize: AllFontSize.ten),
+            labelStyle: GoogleFonts.poppins(
+                color: AllColors.primaryDark1,
+                // fontWeight: FontWeight.w700,
+                fontSize: AllFontSize.sisxteen),
+            focusedBorder: UnderlineInputBorder(
+              borderSide: BorderSide(
+                  color: AllColors.primaryDark1),
+            ),
+          ),
+        );
+      },
+      optionsViewBuilder: (BuildContext context,
+          AutocompleteOnSelected<ReasonModel> onSelected,
+          Iterable<ReasonModel> suggestions) {
+        return Align(
+          alignment: Alignment.topLeft,
+          child: Material(
+            elevation: 4.0,
+            child: Container(
+              color: AllColors.grayColor1,
+              width: size.width * .61,
+              height: size.height * .15,
+              constraints: BoxConstraints(maxHeight: 200),
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: suggestions.length,
+                itemBuilder: (context, index) {
+                  final ReasonModel option = suggestions.elementAt(index);
+                  return GestureDetector(
+                    onTap: () {
+                      onSelected(option);
+                    },
+                    child: Container(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text(
+                        option.reasonCode.toString(),
+                        style: GoogleFonts.poppins(
+                            color: AllColors.blackColor,
+                            fontWeight: FontWeight.w300,
+                            fontSize: AllFontSize
+                                .sisxteen // Change the text color here
+                        ),
                       ),
                     ),
-                  ),
-                )
-              ],
+                  );
+                },
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  bindTakenAction(BuildContext context) {
+    preventive_indent_page_controller.action_taken_list.value=[];
+    return Autocomplete<ReasonModel>(
+      displayStringForOption: _displayReasonCodeForOption,
+      optionsBuilder: (TextEditingValue textEditingValue) async {
+        if (textEditingValue.text.isEmpty) {
+          return preventive_indent_page_controller.action_taken_list.value;
+        }
+        return await preventive_indent_page_controller
+            .getActionTaken(textEditingValue.text,'Action Taken');
+      },
+      onSelected: (ReasonModel selection) {
+        print(selection.reasonCode);
+        preventive_indent_page_controller.actionTakenController.text =
+            _displayReasonCodeForOption(selection).toString();
+        preventive_indent_page_controller.action_taken_des.value =
+            selection.reasonDescription??"";
+        FocusScope.of(context).unfocus();
+      },
+      fieldViewBuilder: (BuildContext context, TextEditingController controller,
+          FocusNode focusNode, VoidCallback onFieldSubmitted) {
+        return TextField(
+          onChanged: (value) {
+            if (value.isEmpty) {
+              FocusScope.of(context).unfocus();
+            }
+            preventive_indent_page_controller.actionTakenController.text =
+                value;
+          },
+          cursorColor: AllColors.primaryDark1,
+          controller: controller
+            ..text = preventive_indent_page_controller.actionTakenController.text,
+          focusNode: focusNode,
+          //onSubmitted: onFieldSubmitted,
+          decoration: InputDecoration(
+            contentPadding: EdgeInsets.symmetric(
+                vertical: AllFontSize.two, horizontal: AllFontSize.one),
+            hintText: 'Search Action Taken',
+            labelText: 'Search Action Taken',
+            suffixIcon: Icon(Icons.arrow_drop_down),
+            hintStyle: GoogleFonts.poppins(
+                color: AllColors.primaryDark1,
+                fontWeight: FontWeight.w300,
+                fontSize: AllFontSize.ten),
+            labelStyle: GoogleFonts.poppins(
+                color: AllColors.primaryDark1,
+                // fontWeight: FontWeight.w700,
+                fontSize: AllFontSize.sisxteen),
+            focusedBorder: UnderlineInputBorder(
+              borderSide: BorderSide(
+                  color: AllColors.primaryDark1), // Change the color to green
+            ),
+          ),
+        );
+      },
+      optionsViewBuilder: (BuildContext context,
+          AutocompleteOnSelected<ReasonModel> onSelected,
+          Iterable<ReasonModel> suggestions) {
+        return Align(
+          alignment: Alignment.topLeft,
+          child: Material(
+            elevation: 4.0,
+            child: Container(
+              color: AllColors.grayColor1,
+              width: size.width * .61,
+              height: size.height * .15,
+              constraints: BoxConstraints(maxHeight: 200),
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: suggestions.length,
+                itemBuilder: (context, index) {
+                  final ReasonModel option = suggestions.elementAt(index);
+                  return GestureDetector(
+                    onTap: () {
+                      onSelected(option);
+                    },
+                    child: Container(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text(
+                        option.reasonCode.toString(),
+                        style: GoogleFonts.poppins(
+                            color: AllColors.blackColor,
+                            fontWeight: FontWeight.w300,
+                            fontSize: AllFontSize
+                                .sisxteen // Change the text color here
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
             ),
           ),
         );

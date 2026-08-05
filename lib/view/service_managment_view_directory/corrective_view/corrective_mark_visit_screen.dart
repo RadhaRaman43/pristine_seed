@@ -1062,6 +1062,8 @@ class CorrectiveMarkVisitScreen extends StatelessWidget{
                                                    .clear();
                                               corrective_indent_page_controller.indent_visit_charge_controller.clear();
                                                remarkDialog(context);
+                                               corrective_indent_page_controller.action_taken_controller.clear();
+                                               corrective_indent_page_controller.problem_identified_controller.clear();
 
                                                // Your onPressed logic here
                                              },
@@ -1498,6 +1500,12 @@ class CorrectiveMarkVisitScreen extends StatelessWidget{
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
+
+              bindProblemIdentified(context,
+                  corrective_indent_page_controller.problem_identified_controller ,'Problem Identified'),
+
+              bindTakenAction(context,
+                  corrective_indent_page_controller.action_taken_controller ,'Action Taken'),
               TextFormField(
                 controller: corrective_indent_page_controller
                     .indent_remark_controller,
@@ -1512,11 +1520,7 @@ class CorrectiveMarkVisitScreen extends StatelessWidget{
                   ),
                 ),
               ),
-              bindProblemIdentified(context,
-                  corrective_indent_page_controller.problem_identified_controller ,'Problem Identified'),
 
-              bindTakenAction(context,
-                  corrective_indent_page_controller.action_taken_controller ,'Action Taken'),
 
               TextFormField(
                 keyboardType: TextInputType.number,
@@ -1611,6 +1615,7 @@ class CorrectiveMarkVisitScreen extends StatelessWidget{
                 vertical: AllFontSize.two, horizontal: AllFontSize.one),
             hintText: 'Search ${title}',
             labelText: 'Search ${title}',
+            suffixIcon: Icon(Icons.arrow_drop_down),
             hintStyle: GoogleFonts.poppins(
                 color: AllColors.primaryDark1,
                 fontWeight: FontWeight.w300,
@@ -1670,16 +1675,16 @@ class CorrectiveMarkVisitScreen extends StatelessWidget{
   }
 
   bindTakenAction(BuildContext context, TextEditingController controller, String title) {
-    corrective_indent_page_controller.reason_master_list.value=[];
+    corrective_indent_page_controller.action_taken_list.value=[];
     return Autocomplete<ReasonModel>(
       displayStringForOption: _displayReasonCodeForOption,
       optionsBuilder: (TextEditingValue textEditingValue) async {
         if (textEditingValue.text.isEmpty) {
-          return corrective_indent_page_controller.reason_master_list.value;
+          return corrective_indent_page_controller.action_taken_list.value;
           // return const Iterable<VehicleTypeResponse>.empty();
         }
         return await corrective_indent_page_controller
-            .getSearchReasonMaster(textEditingValue.text,title);
+            .getActionTaken(textEditingValue.text,title);
       },
       onSelected: (ReasonModel selection) {
         print(selection.reasonCode);
@@ -1709,6 +1714,7 @@ class CorrectiveMarkVisitScreen extends StatelessWidget{
                 vertical: AllFontSize.two, horizontal: AllFontSize.one),
             hintText: 'Search ${title}',
             labelText: 'Search ${title}',
+            suffixIcon: Icon(Icons.arrow_drop_down),
             hintStyle: GoogleFonts.poppins(
                 color: AllColors.primaryDark1,
                 fontWeight: FontWeight.w300,

@@ -106,6 +106,7 @@ class CorrectiveViewModel extends GetxController{
   RxList<ServiceCorrectiveIndentHeaderResponse> service_indent_header_list =
       <ServiceCorrectiveIndentHeaderResponse>[].obs;
   RxList<ReasonModel> reason_master_list = <ReasonModel>[].obs;
+  RxList<ReasonModel> action_taken_list = <ReasonModel>[].obs;
   RxList<CorrectiveItemDetailsResponse> item_details_list = <CorrectiveItemDetailsResponse>[].obs;
 
   RxList<CorrectiveIndentHeaderCreateResponse> service_indent_header_create_list =
@@ -355,7 +356,6 @@ getServiceCorrectiveList(int is_done, int page_no,String date_filter,{String glo
               if (flag != "Refresh") {
                 Get.toNamed(RoutesName.corrective_details_screen);
               } else {
-
 
               }
             } else {
@@ -1113,7 +1113,44 @@ getServiceCorrectiveList(int is_done, int page_no,String date_filter,{String glo
   }
 
 
+  Future<Iterable<ReasonModel>> getActionTaken(String text, String subReasonType) async {
+    if (text == '') {
+      return const Iterable<ReasonModel>.empty();
+    }
+    Map data = {
+      "flag": "select",
+      "reason_code": text,
+      "reason_type": "Corrective",
+      "reason_description": "",
+      "sub_reason_type":subReasonType,
+      "created_by": email,
+      "id": "",
+    };
 
+    String reasondropdownresp = await _api.reasonMasterApiHit(data, sessionManagement);
+    try {
+      final jsonResponse = json.decode(reasondropdownresp);
+      if (jsonResponse is List) {
+        print(jsonResponse);
+        List<ReasonModel> response = jsonResponse
+            .map((data) => ReasonModel.fromJson(data))
+            .toList();
+        if (response[0].condition == 'True') {
+          print(jsonResponse);
+          action_taken_list.value = response;
+        } else {
+          action_taken_list.value = [];
+        }
+      } else {
+        Utils.sanckBarException('False!', jsonResponse.message);
+        action_taken_list.value = [];
+      }
+    } catch (e) {
+      Utils.sanckBarException('Exception!', e.toString());
+      action_taken_list.value= [];
+    }
+    return   action_taken_list.value;
+  }
 
 
   reAssignRequestApi(BuildContext context) {

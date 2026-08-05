@@ -2354,8 +2354,7 @@ class CorrectiveViewDetailsScreen extends StatelessWidget {
   return  corrective_deatils_page_controller
         .service_corrective_details_list[0]
         .serviceHistory!
-        .length >
-        0 &&
+        .length > 0 &&
         corrective_deatils_page_controller
             .service_corrective_details_list[0]
             .serviceHistory!

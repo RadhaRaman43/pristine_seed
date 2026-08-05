@@ -157,6 +157,7 @@ class CustomerComplainVm extends GetxController {
    "reason_code": reason_code,
    "reason_type": "Installation",
    "reason_description": "",
+   "sub_reason_type":'Customer Complaint',
    "created_by": email,
    "id": "",
   };

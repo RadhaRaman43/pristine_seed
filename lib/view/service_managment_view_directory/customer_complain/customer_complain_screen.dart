@@ -1393,59 +1393,57 @@ class CustomerComplainScreen extends StatelessWidget{
             ],
           ),
 
-          content: Container(
-            height: size.height * .24,
-            child: Column(
-              children: [
-                bindReasonDropDown(context),
-                SizedBox(
-                  height: 13,
-                ),
-                TextFormField(
-                  controller: customer_complain_vm
-                      .user_remark_controller,
-                  decoration: InputDecoration(
-                    labelText: "User Remark ",
-                    labelStyle: TextStyle(color: AllColors.primaryDark1),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: AllColors.primaryDark1), // Border color when focused
-                      borderRadius: BorderRadius.circular(8.0), // Adjust the border radius as needed
-                    ),
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide(color: AllColors.primaryDark1), // Default border color
-                      borderRadius: BorderRadius.circular(8.0), // Adjust the border radius as needed
-                    ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              bindReasonDropDown(context),
+              SizedBox(
+                height: 13,
+              ),
+              TextFormField(
+                controller: customer_complain_vm
+                    .user_remark_controller,
+                decoration: InputDecoration(
+                  labelText: "User Remark ",
+                  labelStyle: TextStyle(color: AllColors.primaryDark1),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: AllColors.primaryDark1), // Border color when focused
+                    borderRadius: BorderRadius.circular(8.0), // Adjust the border radius as needed
+                  ),
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide(color: AllColors.primaryDark1), // Default border color
+                    borderRadius: BorderRadius.circular(8.0), // Adjust the border radius as needed
                   ),
                 ),
+              ),
 
-                SizedBox(
-                  height: 13,
+              SizedBox(
+                height: 13,
+              ),
+              ElevatedButton(
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all<Color>(
+                    AllColors.primaryDark1,
+                  ),
                 ),
-                ElevatedButton(
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all<Color>(
-                      AllColors.primaryDark1,
+                onPressed: () {
+                  customer_complain_vm.raiseComplainApi(id);
+                  Navigator.pop(context);
+                },
+                child: Container(
+                  width: 80,
+                  alignment: Alignment.center,
+                  child: Text(
+                    'Save',
+                    style: GoogleFonts.poppins(
+                      color: AllColors.customDarkerWhite,
+                      fontSize: AllFontSize.fourtine,
+                      fontWeight: FontWeight.w700,
                     ),
                   ),
-                  onPressed: () {
-                    customer_complain_vm.raiseComplainApi(id);
-                    Navigator.pop(context);
-                  },
-                  child: Container(
-                    width: 80,
-                    alignment: Alignment.center,
-                    child: Text(
-                      'Save',
-                      style: GoogleFonts.poppins(
-                        color: AllColors.customDarkerWhite,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  ),
-                )
-              ],
-            ),
+                ),
+              )
+            ],
           ),
         );
       },
@@ -1497,8 +1495,6 @@ class CustomerComplainScreen extends StatelessWidget{
             labelText: 'Reason Code',
             hintStyle: GoogleFonts.poppins(
               color: AllColors.primaryDark1,
-              // fontWeight: FontWeight.w300,
-              //  fontSize: AllFontSize.ten
             ),
             suffixIcon: Icon(Icons.arrow_drop_down),
             labelStyle: GoogleFonts.poppins(
