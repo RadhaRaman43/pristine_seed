@@ -432,7 +432,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                 ),
                                 Visibility(
                                   visible: (saleCycleController.saleCycleList[0].quoteAccepted?.toUpperCase() == "OPEN" &&
-                                              saleCycleController.saleCycleList[0].salesCycleStatus!.toUpperCase() == "SUSPECT") &&
+                                              saleCycleController.saleCycleList[0].salesCycleStatus?.toUpperCase() == "SUSPECT") &&
                                           !(saleCycleController.FromPage.value == "FromDashboard") &&
                                           (saleCycleController.email.toLowerCase() == saleCycleController.saleCycleList[0].salesCycleOwner?.toLowerCase() ||
                                               saleCycleController.userType?.toLowerCase()=='bh' || saleCycleController.isAdminWritePermission=='1'
@@ -1300,6 +1300,51 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                         ],
                       ));
                 }),
+
+                Obx(() {
+                  return Visibility(
+                      visible: (saleCycleController.saleCycleList[0].salesCycleOwner
+                          ?.toLowerCase() ==
+                          saleCycleController.email.toLowerCase() ||
+                          saleCycleController.isAdminWritePermission ==
+                              "1") &&
+                          (saleCycleController
+                              .saleCycleList[0].salesCycleStatus!.toLowerCase() ==
+                              "suspect") &&
+                          saleCycleController.saleCycleList[0].salesCycleApprovalStatus
+                              ?.toLowerCase() ==
+                              "approved",
+                      child:  Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: ElevatedButton(
+                            style: ButtonStyle(
+                              backgroundColor:
+                              MaterialStateProperty.all<Color>(
+                                AllColors.primaryDark1,
+                              ),
+                            ),
+                            onPressed: () {
+                              saleCycleController.SalesCycleStatusChangeSuspectToProspect(saleCycleController
+                                  .saleCycleList[0].salesCycleId??"");
+                            },
+                            child: Container(
+                              width: size.width,
+                              child: Center(
+                                child: Text(
+                                  'Next',
+                                  style: GoogleFonts.poppins(
+                                    color: AllColors.whiteColor,
+                                    fontSize: AllFontSize.fourtine,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ));
+
+                }),
+
                 Wrap(
                   children: [
                     Obx(() {

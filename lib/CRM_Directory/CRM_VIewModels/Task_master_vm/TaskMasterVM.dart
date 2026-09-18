@@ -102,6 +102,7 @@ class Taskmastervm extends GetxController{
     var filterTaskDuedateController=TextEditingController().obs;
     var filterTaskCreationOnController=TextEditingController().obs;
     var filterTaskCreationOn_from_to_date_Controller=TextEditingController().obs;
+    var filterAlongWithPersonNameController=TextEditingController().obs;
     var DataOFVisitController=TextEditingController().obs;
     var VisitTime_controller=TextEditingController().obs;
 
@@ -523,6 +524,7 @@ class Taskmastervm extends GetxController{
                 "filter_frontliner_value": "",
                 "filter_branch_head_value": RegionName_controller.value.text.isEmpty?"":RegionName_controller.value.text,
                 "filter_zone_head_value": "",
+              "filter_parent_product_category":"",
                 "filter_clusture_head_value": clusterName_controller.value.text.isEmpty?"":clusterName_controller.value.text,
                 "row_per_page": rowsPerPage.toString(),
                 "page_number": page_no.toString()
@@ -1666,8 +1668,11 @@ class Taskmastervm extends GetxController{
 
       SelectedCluster_list.value=[];
       SelectedRegion_list.value=[];
+     filterAlongWithPersonNameController.value.clear();
+      SelectedAlongPersonWith_list.value=[];
       //RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join('|');
       clusterName_controller.value.text = clusterGetByEmailList.map((e) => e.geoValue).join('|');
+
     getRegionsWithClusterFilterGetByEmail();
 
   }

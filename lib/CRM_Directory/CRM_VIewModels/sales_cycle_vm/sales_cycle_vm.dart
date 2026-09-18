@@ -15,6 +15,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:navigation_drawer_flutter/CRM_Directory/CRM_Models/sales_advise_modal/sales_advise_header_line_modal.dart';
 import 'package:navigation_drawer_flutter/component/default_button.dart';
+import 'package:navigation_drawer_flutter/models/common_response/common_response.dart';
 import 'package:navigation_drawer_flutter/utils/app_utils.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -882,6 +883,7 @@ class SalesCycleVm extends GetxController {
         "filter_postal_code": postalCodeController.value.text.isEmpty ? "" : postalCodeController.value.text,
         "filter_district": district_controller.value.text.isEmpty ? "" : district_controller.value.text,
         "filter_frontliner_value": "",
+        "filter_parent_product_category": "",
         "filter_branch_head_value": RegionName_controller.value.text.isEmpty ? "" : RegionName_controller.value.text,
         "filter_zone_head_value": "",
         "filter_clusture_head_value": clusterName_controller.value.text.isEmpty ? "" : clusterName_controller.value.text,
@@ -900,12 +902,10 @@ class SalesCycleVm extends GetxController {
             if (response != null &&
                 response.length > 0 &&
                 response[0].condition == "True") {
-              print('listSize.....${saleCycleList.length}');
               if (page_no == 0) {
                 saleCycleList.clear();
               }
               saleCycleList.addAll(response);
-              print('listSize.....${saleCycleList.length}');
               total_rows_sales = int.parse(saleCycleList[0].totalRows!);
               if (flag == "ViewHeader") {
                 Get.toNamed(RoutesName.viewSalesCycleHeaderScreen);
@@ -967,7 +967,8 @@ class SalesCycleVm extends GetxController {
                 ProductCategoryWiseAmtGet(0, saleCycleList[0].salesCycleId??"");
               }
               if (flag!='salesPage' && saleCycleList[0].salesCycleStatus == "Propose") {
-                print("Sales cycle status..${saleCycleList[0].salesCycleId}");
+                print("Sales cycle ID..${saleCycleList[0].salesCycleId}");
+                print("Sales cycle status..${saleCycleList[0].salesCycleStatus}");
                 pageNumberForQuote = 0;
                  getQuoteHeaderData(pageNumberForQuote, saleCycleList[0].salesCycleId??"", '');
                 getQuoteWonData(saleCycleList[0].salesCycleId??"");
@@ -981,7 +982,6 @@ class SalesCycleVm extends GetxController {
           }
 
     } catch (e) {
-
       print('Exception..$e');
     }
     finally{
@@ -1313,8 +1313,8 @@ class SalesCycleVm extends GetxController {
                 filterQuoteAcceptedFlag.value = "";
                 pageNumber = 0;
                 clearAllFieldOfFilter();
-                getsalesCycleData(pageNumber, saleCycleList.salesCycleId!, "ViewHeader", FromPage.value);
-                Get.toNamed(RoutesName.viewSalesCycleHeaderScreen);
+                getsalesCycleData(pageNumber, saleCycleList.salesCycleId??"", "ViewHeader", FromPage.value);
+              //  Get.toNamed(RoutesName.viewSalesCycleHeaderScreen);
               }
 
             } else {
@@ -5156,12 +5156,11 @@ class SalesCycleVm extends GetxController {
       EmployeeMasterGet("");
     }
     SelectedEmployee_Member_list.value = [];
-
     SelectedCluster_list.value=[];
     SelectedRegion_list.value=[];
     //RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join('|');
     clusterName_controller.value.text = clusterGetByEmailList.map((e) => e.geoValue).join('|');
-    getRegionsWithClusterFilterGetByEmail();
+    //getRegionsWithClusterFilterGetByEmail();
   }
   void clearAllFieldOfFunnelDashboardFilter() {
     print("Clear Filed");
@@ -6831,6 +6830,34 @@ class SalesCycleVm extends GetxController {
 
 
 
+  SalesCycleStatusChangeSuspectToProspect(String saleCycleId,) async {
+    try {
+      Map data ={
+        "sales_cycle_id": saleCycleId,
+        "created_by": email
+      };
+      this.loading.value = true;
+      String onValue = await  _api.salesCycleMstStatusChangeSuspectToProspectApiHit(data, sessionManagement);
+      final jsonResponse = json.decode(onValue);
+      if (jsonResponse is List) {
+        List<CommonResponse> response = jsonResponse.map((e) => CommonResponse.fromJson(e)).toList();
+        if (response[0].condition?.toLowerCase() == "true") {
+          Utils.sanckBarSuccess("Message !", response[0].message.toString());
+          getsalesCycleData(pageNumber, saleCycleId, "ViewHeader", 'Sales');
+          clearInfraUpdateController();
+        } else {
+          Utils.sanckBarError("False Message !", response[0].message.toString());
+        }
+      }
+    } catch (e) {
+      Utils.sanckBarException("Message !", e.toString());
+      print(e);
+      loading.value = false;
+    }
+    finally{
+      loading.value = false;
+    }
+  }
 }
 
 

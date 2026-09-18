@@ -314,6 +314,11 @@ class SalesCycleRepository{
   Future<String> AccountMasterGetApiHit(var data,SessionManagement sessionManagement) async{
     return _apiService.postApi(data, AppUrl.AccountMstGet,sessionManagement);
   }
+  Future<String> salesCycleMstStatusChangeSuspectToProspectApiHit(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.SalesCycleMstStatusChangeSuspectToProspect,sessionManagement);
+  }
+
+
 
 
 }
