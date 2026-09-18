@@ -530,6 +530,80 @@ class SessionManagement {
     prefs.remove("sale_cycle_Competitor_data");
   }
 
+  //todo sale cycle Competitor
+  Future<void> saveSaleForeCastData(Map<String, dynamic> data) async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString("sale_fore_cast_data", jsonEncode(data));
+  }
+  Future<Map<String, dynamic>> getSaleForeCastData() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? data = prefs.getString("sale_fore_cast_data");
+    return data != null ? jsonDecode(data) : {};
+  }
+  Future<void> clearSaleForeCastData() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.remove("sale_fore_cast_data");
+  }
+
+  //todo saleforecast Competitor
+  Future<void> saveSaleForeCastGMData(Map<String, dynamic> data) async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString("sale_fore_cast_gm_data", jsonEncode(data));
+  }
+  Future<Map<String, dynamic>> getSaleForeCastGmData() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? data = prefs.getString("sale_fore_cast_gm_data");
+    return data != null ? jsonDecode(data) : {};
+  }
+  Future<void> clearSaleForeCastGmData() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.remove("sale_fore_cast_gm_data");
+  }
+
+  Future<void> saveSaleForeCastRhData(Map<String, dynamic> data) async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString("sale_fore_cast_rh_data", jsonEncode(data));
+  }
+  Future<Map<String, dynamic>> getSaleForeCastRhData() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? data = prefs.getString("sale_fore_cast_rh_data");
+    return data != null ? jsonDecode(data) : {};
+  }
+  Future<void> clearSaleForeCastRhData() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.remove("sale_fore_cast_rh_data");
+  }
+
+  Future<void> saveSaleForeCastCbhData(Map<String, dynamic> data) async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString("sale_fore_cast_cbh_data", jsonEncode(data));
+  }
+  Future<Map<String, dynamic>> getSaleForeCastCbhData() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? data = prefs.getString("sale_fore_cast_cbh_data");
+    return data != null ? jsonDecode(data) : {};
+  }
+  Future<void> clearSaleForeCastCbhData() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.remove("sale_fore_cast_cbh_data");
+  }
+
+  Future<void> saveSaleForeCastLogisticData(Map<String, dynamic> data) async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString("sale_fore_cast_Logistic_data", jsonEncode(data));
+  }
+  Future<Map<String, dynamic>> getSaleForeCastLogisticData() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? data = prefs.getString("sale_fore_cast_Logistic_data");
+    return data != null ? jsonDecode(data) : {};
+  }
+  Future<void> clearSaleForeCastLogisticData() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.remove("sale_fore_cast_Logistic_data");
+  }
+
+
+
   //todo sale advise list
   Future<void> saveSaleAdviseListData(Map<String, dynamic> data) async {
     final prefs = await SharedPreferences.getInstance();
@@ -579,13 +653,13 @@ class SessionManagement {
   }
 
   //todo Quote approver
-  Future<void> saveQuoteApproverData(Map<String, dynamic> data) async {
+  Future<void> saveQuoteApproverData(String saveTag,Map<String, dynamic> data) async {
     final prefs = await SharedPreferences.getInstance();
-    prefs.setString("Quote_approver_data", jsonEncode(data));
+    prefs.setString(saveTag, jsonEncode(data));
   }
-  Future<Map<String, dynamic>> getQuoteApproverData() async {
+  Future<Map<String, dynamic>> getQuoteApproverData(String getTag) async {
     final prefs = await SharedPreferences.getInstance();
-    String? data = prefs.getString("Quote_approver_data");
+    String? data = prefs.getString(getTag);
     return data != null ? jsonDecode(data) : {};
   }
   Future<void> clearQuoteApproverData() async {
@@ -619,6 +693,36 @@ class SessionManagement {
     return data != null ? jsonDecode(data) : {};
   }
   Future<void> clearPendingDraftQuoteData() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.remove("PendingDraftQuote_data");
+  }
+
+  //todo create Sales Force Cast Quote
+  Future<void> saveSalesForceCastQuoteData(Map<String, dynamic> data) async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString("SalesForceCastQuote_data", jsonEncode(data));
+  }
+  Future<Map<String, dynamic>> getSalesForceCastQuoteData() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? data = prefs.getString("SalesForceCastQuote_data");
+    return data != null ? jsonDecode(data) : {};
+  }
+  Future<void> clearSalesForceCastQuoteData() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.remove("PendingDraftQuote_data");
+  }
+
+  //todo Force Cast Item Screen
+  Future<void> saveForceCastItemData(Map<String, dynamic> data) async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString("ForceCastItem_data", jsonEncode(data));
+  }
+  Future<Map<String, dynamic>> getForceCastItemData() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? data = prefs.getString("ForceCastItem_data");
+    return data != null ? jsonDecode(data) : {};
+  }
+  Future<void> clearForceCastItemData() async {
     final prefs = await SharedPreferences.getInstance();
     prefs.remove("PendingDraftQuote_data");
   }
@@ -804,6 +908,20 @@ class SessionManagement {
   Future<void> clearCommitDashboardData() async {
     final prefs = await SharedPreferences.getInstance();
     prefs.remove("commit_dashboard_data");
+  }
+
+  Future<void> saveRollingForecastDashboardData(Map<String, dynamic> data) async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString("rolling_forecast_dashboard_data", jsonEncode(data));
+  }
+  Future<Map<String, dynamic>> getRollingForecastDashboardData() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? data = prefs.getString("rolling_forecast_dashboard_data");
+    return data != null ? jsonDecode(data) : {};
+  }
+  Future<void> clearRollingForecastDashboardData() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.remove("rolling_forecast_dashboard_data");
   }
 
   Future<void> saveCallDashboardData(Map<String, dynamic> data) async {

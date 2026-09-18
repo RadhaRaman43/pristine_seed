@@ -127,6 +127,11 @@ class RoutesName{
   static const UpdateBussinessTermPage="/update_bussiness_term_page.dart";
   static const updateTaskMstInfraScreen="/update_task_mst_infra_screen";
   static const quoteApprovalListScreen="/quote_approval_list_screen";
+
+  static const quoteRHApprovalListScreen="/quote_rh_approval_list_screen";
+  static const quoteCBHApprovalListScreen="/quote_cbh_approval_list_screen";
+  static const quoteGMApprovalListScreen="/quote_gm_approval_list_screen";
+
   static const approvedQuotationListScreen="/approved_quotation_list.dart";
   static const ItemListBySalesCycle_Screen="/ItemListBySalesCycle_Screen.dart";
   static const salesCyclePendingForApprovalListScreen="/sale_cycle_pending_for_approval_list";
@@ -171,6 +176,18 @@ class RoutesName{
   //todo item master screen
   static const nonStandardItemList="/non_standard_item_list.dart";
   static const updateNonStandardItemList="/update_non_standard_item.dart";
+
+  //todo sales forecast screen
+  static const SalesForeCastScreen="/SalesForeCastScreen.dart";
+  static const createSalesForeCastScreen="/create_sales_force_cast_screen.dart";
+  static const SalesForeCastHeaderDetailsScreen="/sales_force_cast_header_details.dart";
+  static const ForeCastItemScreen="/fore_cast_item_list_screen.dart";
+  static const rollingForeCastRhListScreen="/rolling_forecast_rh_list_screen.dart";
+  static const rollingForeCastGmListScreen="/rolling_forecast_gm_list_screen.dart";
+  static const rollingForeCastCBHListScreen="/rolling_forecast_cbh_list_screen.dart";
+  static const rollingForeCastLogisticListScreen="/rolling_forecast_logistic_list_screen.dart";
+  static const rollingforceCastDashBoardScreen="/rollingforceCastDashBoardScreen.dart";
+
 
 
   //todo image not found...

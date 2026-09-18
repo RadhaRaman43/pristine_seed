@@ -73,7 +73,6 @@ class EmpMarkLeaveRequestScreen extends StatelessWidget{
             ),
           );
         }),
-
         body: RefreshIndicator(
           onRefresh:employeeMarkLeaveController.refreshList,
           child: Container(
@@ -235,25 +234,20 @@ class EmpMarkLeaveRequestScreen extends StatelessWidget{
         ),
       ), );
   }
-
-
   bindListView(BuildContext context) {
     print("length${employeeMarkLeaveController.employee_leave_data_list.value.length}");
     if(employeeMarkLeaveController.employee_leave_data_list.value.isNotEmpty &&
         employeeMarkLeaveController.employee_leave_data_list.value != null) {
       ScrollController scrollController = ScrollController();
       scrollController.addListener(() {
-        if (scrollController.position.pixels ==
-            scrollController.position.maxScrollExtent) {
+        if (scrollController.position.pixels == scrollController.position.maxScrollExtent) {
           // You have reached the end of the list
           int total_page = (employeeMarkLeaveController.total_rows /
               employeeMarkLeaveController.rowsPerPage).toInt();
           if ((employeeMarkLeaveController.total_rows % employeeMarkLeaveController.rowsPerPage) > 0) total_page += 1;
-          print("radha");
-          print("last index ${employeeMarkLeaveController.pageNumber} ${employeeMarkLeaveController.total_rows} ${employeeMarkLeaveController.rowsPerPage} ${total_page}");
           if (employeeMarkLeaveController.pageNumber + 1 < total_page) {
-            print("radha1");
-            employeeMarkLeaveController.getEmployeeLeaveData(employeeMarkLeaveController.filterStatus.value, employeeMarkLeaveController.pageNumber+1);
+            employeeMarkLeaveController.getEmployeeLeaveData(employeeMarkLeaveController.filterStatus.value,
+                employeeMarkLeaveController.pageNumber+1);
             employeeMarkLeaveController.pageNumber += 1;
           }
         }
@@ -274,12 +268,11 @@ class EmpMarkLeaveRequestScreen extends StatelessWidget{
             },
             itemCount: employeeMarkLeaveController.employee_leave_data_list.length),
       );
-    } else {
+    }
+    else {
       return Center(child: Image.asset("assests/images/no_data_remove.png"));
     }
   }
-
-
   BindEmployeeList(BuildContext context, int index) {
     var createdOn=StaticMethod.convertDateFormat1(employeeMarkLeaveController
         .employee_leave_data_list[index].createdOn??"");
@@ -307,32 +300,51 @@ class EmpMarkLeaveRequestScreen extends StatelessWidget{
     return Container(
       child: Card(
         child: ListTile(
-          title: Row(
-            children: [
-              Text(
-                'Leave Id :',
-                style: GoogleFonts.poppins(
-                  color: AllColors.primaryDark1,
-                  fontSize: AllFontSize.fourtine,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-              Tooltip(
-                message: employeeMarkLeaveController
-                    .employee_leave_data_list[index].leaveId.toString()??"",
-                child: Text(
-                  employeeMarkLeaveController
-                      .employee_leave_data_list[index].leaveId.toString()??"",
-                  style: GoogleFonts.poppins(
-                    color: AllColors.textColor,
-                    fontSize: AllFontSize.fourtine,
-                    fontWeight: FontWeight.w700,
-                  ),
-                  overflow: TextOverflow.ellipsis,
-                  textAlign: TextAlign.end,
-                ),
-              ),
 
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(child: Row(
+                children: [
+                  Text(
+                    'Leave Id :',
+                    style: GoogleFonts.poppins(
+                      color: AllColors.primaryDark1,
+                      fontSize: AllFontSize.fourtine,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  Flexible(
+                    child: Tooltip(
+                      message: employeeMarkLeaveController
+                          .employee_leave_data_list[index].leaveId.toString()??"",
+                      child: Text(
+                        employeeMarkLeaveController
+                            .employee_leave_data_list[index].leaveId.toString()??"",
+                        style: GoogleFonts.poppins(
+                          color: AllColors.textColor,
+                          fontSize: AllFontSize.fourtine,
+                          fontWeight: FontWeight.w700,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.end,
+                      ),
+                    ),
+                  ),
+
+                ],
+              ),),
+              /*Obx(() {
+                return Visibility(
+                  visible: employeeMarkLeaveController.isAdminWritePermission.value == "1",
+                  child:  GestureDetector(
+                      onTap: (){
+                        showConfirmCompleteDialog(context,index);
+
+                      },
+                      child: Icon(Icons.delete, color: Colors.red)),
+                );
+              }),*/
 
             ],
           ),
@@ -443,6 +455,71 @@ class EmpMarkLeaveRequestScreen extends StatelessWidget{
       ),
     );
   }
+  showConfirmCompleteDialog(BuildContext context, int index){
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: Colors.red.shade100, // light red background
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(
+                  Icons.delete,
+                  color: Colors.red,
+                  size: 28,
+                ),
+              ),
+              SizedBox(width: 20,),
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("Delete",
+                      style: GoogleFonts.poppins(
+                          color: AllColors.primaryDark1,
+                          fontSize: AllFontSize.sisxteen,
+                          fontWeight: FontWeight.w700),
+                    ),
+                    Text("Do You Want to Delete Leave Id(${ employeeMarkLeaveController.employee_leave_data_list[index].leaveId??""})?",
+                      style: GoogleFonts.poppins(
+                          color: AllColors.primaryDark1,
+                          fontSize: AllFontSize.fourtine,
+                          fontWeight: FontWeight.w500),
+                      softWrap: true,
+                    ),
+                  ],
+                ),
+              ),
+
+            ],
+          ),
+
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text("Cancel",style: TextStyle(color: AllColors.redColor),),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+                employeeMarkLeaveController.EmployeeLeaveRequestDelete(
+                    employeeMarkLeaveController.employee_leave_data_list[index].leaveId??"");
+              },
+              child: Text("Delete",style: TextStyle(color: AllColors.greenblue),),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   Widget _buildLabelWithValue({
     required String label,
@@ -479,7 +556,6 @@ class EmpMarkLeaveRequestScreen extends StatelessWidget{
       ],
     );
   }
-
 
   bindFilterStartDate(BuildContext context) {
     return  TextFormField(
@@ -686,7 +762,6 @@ class EmpMarkLeaveRequestScreen extends StatelessWidget{
       },
     );
   }
-
   bindfilterText(BuildContext context, String hintData, TextEditingController controller) {
     return   TextField(
       controller: controller,
@@ -713,8 +788,6 @@ class EmpMarkLeaveRequestScreen extends StatelessWidget{
       cursorColor: AllColors.primaryDark1,
     );
   }
-
-
   void showFilterBottomSheet(BuildContext context) {
     showModalBottomSheet(
       context: context,
@@ -770,7 +843,7 @@ class EmpMarkLeaveRequestScreen extends StatelessWidget{
                     child: Column(
                       children: [
                         SizedBox(height: 10,),
-                        bindfilterText(context,'Leave Id',employeeMarkLeaveController.leaveId_filter_controller),
+                        bindfilterText(context,'Leave Id', employeeMarkLeaveController.leaveId_filter_controller),
                         SizedBox(height: 10,),
                         bindClusterNameFilter(context),
                         SizedBox(height: 10,),
@@ -778,7 +851,7 @@ class EmpMarkLeaveRequestScreen extends StatelessWidget{
                         SizedBox(height: 10,),
                         bindLeaveCode(context),
                         SizedBox(height: 10,),
-                        bindfilterText(context,'Leave Reason',employeeMarkLeaveController.leave_reason_filter_controller),
+                        bindfilterText(context,'Leave Reason', employeeMarkLeaveController.leave_reason_filter_controller),
                         SizedBox(height: 10,),
                         bindFilterStartDate(context),
                         SizedBox(height: 10,),
@@ -786,7 +859,7 @@ class EmpMarkLeaveRequestScreen extends StatelessWidget{
                         SizedBox(height: 10,),
                         bindCrteatedOn(context),
                         SizedBox(height: 10,),
-                        bindfilterText(context,'Created By',employeeMarkLeaveController.CreatedBy_filter_controller),
+                        bindfilterText(context,'Created By', employeeMarkLeaveController.CreatedBy_filter_controller),
                         SizedBox(height: 10,),
                       ],
                     ),
@@ -928,9 +1001,6 @@ class EmpMarkLeaveRequestScreen extends StatelessWidget{
       ),
     );
   }
-  
-
-
   Widget bindClusterNameFilter(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final availableItems = employeeMarkLeaveController.clusterGetByEmailList;
@@ -1178,7 +1248,6 @@ class EmpMarkLeaveRequestScreen extends StatelessWidget{
       );
     });
   }
-
   Widget bindRegionNameFilter(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final availableItems = employeeMarkLeaveController.regionwithclusterGetByEmailList;
@@ -1415,5 +1484,6 @@ class EmpMarkLeaveRequestScreen extends StatelessWidget{
       );
     });
   }
+
 }
 

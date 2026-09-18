@@ -22,36 +22,39 @@ class QuoteApprovalListVm extends GetxController{
   int pageNumberForQuote = 0;
   int rowsPerPage = 10;
   int total_rows = 0;
+  String filterRouting = "";
+  String apiQuoteStatusField = "";
+
+
 
   RxString createdOnStartToEnd = "".obs;
   RxString extClosureStartToEnd = "".obs;
   RxString quoteValidityStartToEnd = "".obs;
-
-
   var filterQuoteIdController=TextEditingController().obs;
   var filterQuoteVersionController=TextEditingController().obs;
-  var filterQuoteAccountNameController=TextEditingController().obs;
-  var filterQuoteContactNameController=TextEditingController().obs;
-  var filterQuoteValidityController=TextEditingController().obs;
-  var filterExpectedClosuredateController=TextEditingController().obs;
   var filterQuoteSaleCycleController=TextEditingController().obs;
-
-  var createdOnCnontroller=TextEditingController().obs;
-  var RegionName_controller=TextEditingController().obs;
-  var zone_head_value_controller=TextEditingController().obs;
-  var clusterName_controller=TextEditingController().obs;
-  var frontliner_controller=TextEditingController().obs;
-  var createdByController=TextEditingController().obs;
-  var companyProfileTypeController=TextEditingController().obs;
   var accountCodeController=TextEditingController().obs;
   var accountNameController=TextEditingController().obs;
+  var filterQuoteValidityController=TextEditingController().obs;
+  var filterExpectedClosuredateController=TextEditingController().obs;
   var rh_Approval_controller=TextEditingController().obs;
   var cbh_Approval_controller=TextEditingController().obs;
   var category_Approval_controller=TextEditingController().obs;
   var gm_Approval_controller=TextEditingController().obs;
-  var filterQuoteStatusController=TextEditingController().obs;
+  var clusterName_controller=TextEditingController().obs;
+  var RegionName_controller=TextEditingController().obs;
+  var createdOnCnontroller=TextEditingController().obs;
   var productCategoryController=TextEditingController().obs;
   var product_category_type_Controller = TextEditingController().obs;
+  var filterQuoteAccountNameController=TextEditingController().obs;
+  var filterQuoteContactNameController=TextEditingController().obs;
+  var zone_head_value_controller=TextEditingController().obs;
+  var frontliner_controller=TextEditingController().obs;
+  var createdByController=TextEditingController().obs;
+  var companyProfileTypeController=TextEditingController().obs;
+  var filterQuoteStatusController=TextEditingController().obs;
+  var filterQuoteAcceptedController = TextEditingController().obs;
+  RxList<String> qouteAcceptedList = ["All", "Open", "Loss", "Won"].obs;
 
   RxString isAdminWritePermission = "".obs;
   RxString isHeadofficePermission = "".obs;
@@ -73,6 +76,19 @@ class QuoteApprovalListVm extends GetxController{
     email=await sessionManagement.getEmail() ?? '';
     isAdminWritePermission.value = await sessionManagement.getIsAdminPermission() ?? '';
     isHeadofficePermission.value = await sessionManagement.getisHeadofficePermission() ?? '';
+    filterRouting = await sessionManagement.getfilterRouting() ?? '';
+    if(filterRouting=="Quote Approval List"){
+      apiQuoteStatusField = "Under Approval";
+    }
+    if(filterRouting=="Quote RH Approval List"){
+      apiQuoteStatusField = "UNDER APPROVAL RH";
+    }
+    if(filterRouting=="Quote CBH Approval List"){
+      apiQuoteStatusField = "UNDER APPROVAL CBH";
+    }
+    if(filterRouting=="Quote GM Approval List"){
+      apiQuoteStatusField = "UNDER APPROVAL GM";
+    }
     //getQuoteHeaderData(pageNumberForQuote);
     product_category_type_Controller.value.text="Contains";
     getItemCategoryMstWithoutTaskIdApi();
@@ -85,13 +101,14 @@ class QuoteApprovalListVm extends GetxController{
     getQuoteHeaderData(pageNumberForQuote);
   }
 
-  getItemCategoryMstWithoutTaskIdApi() {
-    this.loading.value = true;
+  getItemCategoryMstWithoutTaskIdApi() async{
+    try {
     Map<String, String> data = {
 
     };
-    _api.getItemCategoryMstWithoutTaskIdApiHit(data, sessionManagement).then((value) {
-      try {
+    this.loading.value = true;
+    String value = await _api.getItemCategoryMstWithoutTaskIdApiHit(data, sessionManagement);
+
         List<ItemCategoryMstModel> Response =
         (json.decode(value) as List<dynamic>)
             .map((i) => ItemCategoryMstModel.fromJson(i as Map<String, dynamic>))
@@ -109,23 +126,20 @@ class QuoteApprovalListVm extends GetxController{
         Item_Category_master_list_without_task.value = [];
         print('catch....${e.toString()}');
       }
-    }).onError((error, stackTrace) {
-      Item_Category_master_list_without_task.value = [];
-      Utils.sanckBarError('Api Exception onError', error.toString());
-      print('catchEx....${error.toString()}');
-    }).whenComplete(() {
-      this.loading.value = false;
-    });
+      finally{
+        loading.value=false;
+      }
+
   }
 
-  void getClustersGetByEmail() {
+  void getClustersGetByEmail() async{
     try{
       Map<String, String> data={
         "email_id":email
       };
       loading.value=true;
       print("data is ${data}");
-      _api.clustersGetByEmailApiHit(data, sessionManagement).then((onValue){
+      String onValue = await _api.clustersGetByEmailApiHit(data, sessionManagement);
         print(onValue);
         final jsonResponse = json.decode(onValue);
         if(jsonResponse is List){
@@ -145,12 +159,6 @@ class QuoteApprovalListVm extends GetxController{
         } else {
           loading.value = false;
         }
-      },
-      ).onError(
-            (error, stackTrace) {
-          print(error);
-        },
-      );
     }catch(e){
       loading.value = false;
       print(e);
@@ -158,7 +166,7 @@ class QuoteApprovalListVm extends GetxController{
       loading.value = false;
     }
   }
-  void getRegionsWithClusterFilterGetByEmail() {
+  void getRegionsWithClusterFilterGetByEmail() async{
     var selectedCluster="";
     if(clusterName_controller.value.text.isNotEmpty){
       selectedCluster = clusterName_controller.value.text
@@ -173,7 +181,7 @@ class QuoteApprovalListVm extends GetxController{
       };
       loading.value=true;
       print("data is ${data}");
-      _api.RegionsWithClusterFilterGetByEmailApiHit(data, sessionManagement).then((onValue){
+      String onValue = await _api.RegionsWithClusterFilterGetByEmailApiHit(data, sessionManagement);
         print(onValue);
         final jsonResponse = json.decode(onValue);
         if(jsonResponse is List){
@@ -184,7 +192,7 @@ class QuoteApprovalListVm extends GetxController{
             RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join('|');
             SelectedRegion_list.assignAll(regionwithclusterGetByEmailList);
             // print('region....${RegionName_controller.value.text}');
-            getFilterData();
+            getFilterData(apiQuoteStatusField);
             //getQuoteHeaderData(pageNumberForQuote);
 
           }else {
@@ -194,12 +202,6 @@ class QuoteApprovalListVm extends GetxController{
         } else {
           loading.value = false;
         }
-      },
-      ).onError(
-            (error, stackTrace) {
-          print(error);
-        },
-      );
     }catch(e){
       loading.value = false;
       print(e);
@@ -207,7 +209,7 @@ class QuoteApprovalListVm extends GetxController{
       loading.value = false;
     }
   }
-  getQuoteHeaderData(int pageNumberForQuote){
+  getQuoteHeaderData(int pageNumberForQuote) async{
     try{
       Map data={
         "filter_quote_id": filterQuoteIdController.value.text.isNotEmpty? filterQuoteIdController.value.text:"",
@@ -221,7 +223,7 @@ class QuoteApprovalListVm extends GetxController{
         "filter_quote_version": -1,
         "filter_quote_validity": quoteValidityStartToEnd.value.isNotEmpty?quoteValidityStartToEnd.value:"",
         "filter_exp_closure_date": extClosureStartToEnd.value.isNotEmpty?extClosureStartToEnd.value:"",
-        "filter_quote_status":"Under Approval",
+        "filter_quote_status": apiQuoteStatusField,
         "filter_product_category": productCategoryController.value.text.isEmpty?"":productCategoryController.value.text,
         "filter_product_category_type": product_category_type_Controller.value.text.isEmpty?"":product_category_type_Controller.value.text,
         "filter_created_by": isAdminWritePermission.value=="1" || isHeadofficePermission.value=="1"?"":email,
@@ -230,11 +232,18 @@ class QuoteApprovalListVm extends GetxController{
         "filter_branch_head_value": RegionName_controller.value.text.isEmpty?"":RegionName_controller.value.text,
         "filter_zone_head_value": zone_head_value_controller.value.text.isEmpty?"":zone_head_value_controller.value.text,
         "filter_clusture_head_value": clusterName_controller.value.text.isEmpty?"":clusterName_controller.value.text,
+        "filter_quote_accepted":  filterQuoteAcceptedController.value.text,
         "row_per_page": rowsPerPage,
         "page_number": pageNumberForQuote
       };
       loading.value=true;
-      _api.quoteHeaderGetApiHit(data, sessionManagement).then((onValue){
+      String onValue="";
+      if(filterRouting=="Quote Approval List") {
+        onValue = await _api.quoteHeaderGetApiHit(data, sessionManagement);
+      }
+      else{
+        onValue = await _api.QuoteHeaderGetApprovalPendency(data, sessionManagement);
+      }
         final jsonResponse = json.decode(onValue);
         print(onValue);
         if(jsonResponse is List){
@@ -254,12 +263,6 @@ class QuoteApprovalListVm extends GetxController{
         } else {
           loading.value = false;
         }
-      },
-      ).onError(
-            (error, stackTrace) {
-          print(error);
-        },
-      );
     }catch(e){
       loading.value = false;
       print(e);
@@ -291,6 +294,7 @@ class QuoteApprovalListVm extends GetxController{
     createdOnStartToEnd.value = "";
     extClosureStartToEnd.value = "";
     quoteValidityStartToEnd.value = "";
+    filterQuoteAcceptedController.value.clear();
 
     SelectedCluster_list.value = [];
     SelectedRegion_list.value = [];
@@ -301,8 +305,8 @@ class QuoteApprovalListVm extends GetxController{
   }
 
   RxString filterDataChecker = ''.obs;
-  void SaveFilterData() async{
-    await sessionManagement.saveQuoteApproverData({
+  void SaveFilterData(String saveTag) async{
+    await sessionManagement.saveQuoteApproverData(saveTag,{
       'filterQuoteIdController': filterQuoteIdController.value.text,
       'filterQuoteVersionController': filterQuoteVersionController.value.text,
       'filterQuoteSaleCycleController': filterQuoteSaleCycleController.value.text,
@@ -322,6 +326,7 @@ class QuoteApprovalListVm extends GetxController{
       'createdOnStartToEnd': createdOnStartToEnd.value,
       'product_category': productCategoryController.value.text,
       'product_category_type': product_category_type_Controller.value.text,
+      'filterQuoteAcceptedController': filterQuoteAcceptedController.value.text,
 
     });
     filterDataChecker.value='';
@@ -329,8 +334,8 @@ class QuoteApprovalListVm extends GetxController{
 
   }
 
-  void getFilterData() async{
-    Map getFilterData=await sessionManagement.getQuoteApproverData();
+  void getFilterData(String getTag) async{
+    Map getFilterData=await sessionManagement.getQuoteApproverData(getTag);
 
 
     if(getFilterData.isNotEmpty){
@@ -352,6 +357,7 @@ class QuoteApprovalListVm extends GetxController{
       createdOnStartToEnd.value=getFilterData["createdOnStartToEnd"];
       productCategoryController.value.text=getFilterData["product_category"];
       product_category_type_Controller.value.text=getFilterData["product_category_type"];
+      filterQuoteAcceptedController.value.text=getFilterData["filterQuoteAcceptedController"]??"";
 
       if(getFilterData["region_name"].toString().isNotEmpty && getFilterData["region_name"].toString()!=""){
         RegionName_controller.value.text = "";

@@ -153,7 +153,7 @@ class AddNewTaskScreen extends StatelessWidget{
                   ),
                 );
               }),
-              SizedBox(height: 25,),
+              const SizedBox(height: 25,),
               Container(
                 padding: EdgeInsets.only(left: 15.0, right: 15.0),
                 height: 50,
@@ -228,6 +228,7 @@ class AddNewTaskScreen extends StatelessWidget{
                             //contact_vm_controller.IsHeDecisionMakerController.value.text = "No";
                             contact_vm_controller.getAccountMaster("");
                             contact_vm_controller.getDecisionRoleMaster();
+                            contact_vm_controller.createAccount.value=true;
                             Get.toNamed(RoutesName.addNewContactMaster_screen);
                           }, icon: Icon(Icons.add)),
                     )

@@ -7,6 +7,7 @@ import '../../../viewModel/SessionManagment/session_managment.dart';
 import '../../CRM_Models/AccountMaster_model/cluster_modal.dart';
 import '../../CRM_Models/AccountMaster_model/region_with_cluster_filter_modal.dart';
 import '../../CRM_Models/Bussiness_Tour_Plan_Model/BusinessTourApprovalModel.dart';
+import '../../CRM_Models/Bussiness_Tour_Plan_Model/reporting_manager_modal.dart';
 import '../../CRM_Repository/BusinessTourPlan_Repository/business_tour_plan_repo.dart';
 
 class BusinessTourApprovalVm extends GetxController{
@@ -23,6 +24,8 @@ class BusinessTourApprovalVm extends GetxController{
 
   RxList<BusinessTourApprovalModel> BusinessTourApprovalList = <BusinessTourApprovalModel>[].obs;
   RxList<BusinessTourApprovalModel> BusinessTourApproveRejectList = <BusinessTourApprovalModel>[].obs;
+  RxList<ReportingManagerModal> reportingMangerList = <ReportingManagerModal>[].obs;
+  RxList<ReportingManagerModal> selectedReportingMangerList = <ReportingManagerModal>[].obs;
 
   var filterTourIdController = TextEditingController().obs;
   var RegionName_controller = TextEditingController().obs;
@@ -31,11 +34,15 @@ class BusinessTourApprovalVm extends GetxController{
   final EndDate_filter_controller=TextEditingController().obs;
   final createdOn_filter_controller=TextEditingController().obs;
   var filterCreatedByController = TextEditingController().obs;
+  var reporting_manager_Controller = TextEditingController().obs;
+  var ApprovalStatusController = TextEditingController().obs;
 
   RxList<ClusterModal> clusterGetByEmailList = <ClusterModal>[].obs;
   RxList<ClusterModal> SelectedCluster_list = <ClusterModal>[].obs;
   RxList<RegionWithClusterFilterModal> regionwithclusterGetByEmailList = <RegionWithClusterFilterModal>[].obs;
   RxList<RegionWithClusterFilterModal> SelectedRegion_list = <RegionWithClusterFilterModal>[].obs;
+  RxList<String> ApprovalStatusList = ["All", "PENDING", "PENDING FOR APPROVAL", "APPROVED", "REJECTED"].obs;
+
 
   @override
   Future<void> onInit() async {
@@ -64,6 +71,9 @@ class BusinessTourApprovalVm extends GetxController{
     EndDate_filter_controller.value.clear();
     filterCreatedByController.value.clear();
     createdOn_filter_controller.value.clear();
+    reporting_manager_Controller.value.clear();
+    ApprovalStatusController.value.clear();
+    selectedReportingMangerList.value=[];
 
     SelectedCluster_list.value=[];
     SelectedRegion_list.value=[];
@@ -176,6 +186,7 @@ class BusinessTourApprovalVm extends GetxController{
         "start_date": StartDate_filter_controller.value.text.isEmpty?"":StartDate_filter_controller.value.text,
         "end_date": EndDate_filter_controller.value.text.isEmpty?"":EndDate_filter_controller.value.text,
         "filter_created_on": createdOn_filter_controller.value.text.isEmpty?"":createdOn_filter_controller.value.text,
+        "reporting_manager": reporting_manager_Controller.value.text.isEmpty?"":reporting_manager_Controller.value.text,
         "rowsPerPage": rowsPerPage,
         "pageNumber": page_no,
 
@@ -216,6 +227,34 @@ class BusinessTourApprovalVm extends GetxController{
       print(e);
     }
   }
+  Future<List<ReportingManagerModal>> getReportingManager(String searchText) async {
+    try {
+      Map<String, dynamic> data = {
+        "email_id": "rajesh.kumar1@methodexsystems.com",
+        "filter_value": searchText,
+        "rowsPerPage": 50,
+        "pageNumber": 0
+      };
+      print("data is master....${data}");
+      final response =
+      await _api.BusinessTourplanReportingManagerGet(data, sessionManagement);
+
+      final jsonResponse = json.decode(response);
+
+      if (jsonResponse is List) {
+        List<ReportingManagerModal> list =
+        jsonResponse.map((e) => ReportingManagerModal.fromJson(e)).toList();
+        if (list.isNotEmpty && list[0].condition?.toLowerCase() == "true") {
+          reportingMangerList.value = list;
+          return list;
+        }
+      }
+      return [];
+    } catch (e) {
+      print(e);
+      return [];
+    }
+  }
 
 
   RxString filterDataChecker = ''.obs;
@@ -232,6 +271,8 @@ class BusinessTourApprovalVm extends GetxController{
       'EndDate_filter_controller': EndDate_filter_controller.value.text,
       'filterCreatedByController': filterCreatedByController.value.text,
       'createdOn_filter_controller': createdOn_filter_controller.value.text,
+      'reporting_manager_Controller': reporting_manager_Controller.value.text,
+      'ApprovalStatusController': ApprovalStatusController.value.text,
 
     });
     filterDataChecker.value='';
@@ -248,6 +289,8 @@ class BusinessTourApprovalVm extends GetxController{
       EndDate_filter_controller.value.text=getFilterData["EndDate_filter_controller"]??"";
       filterCreatedByController.value.text=getFilterData["filterCreatedByController"]??"";
       createdOn_filter_controller.value.text=getFilterData["createdOn_filter_controller"]??"";
+      reporting_manager_Controller.value.text=getFilterData["reporting_manager_Controller"]??"";
+      ApprovalStatusController.value.text=getFilterData["ApprovalStatusController"]??"";
       filterDataChecker.value='1';
 
 

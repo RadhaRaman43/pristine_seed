@@ -56,33 +56,30 @@ class TaskMasterDetails extends StatelessWidget{
             Get.toNamed(RoutesName.viewSalesCycleHeaderScreen);
             //account_vm_controller.view='';
            // Get.back();
-          }else if (account_vm_controller.view=="TaskDashboard") {
+          }
+          else if (account_vm_controller.view=="TaskDashboard") {
             account_vm_controller.view = '';
             Get.toNamed(RoutesName.AccountDashboardData_Screen);
-          }else if (TaskMaster_page_controller.FromPage=="from_pendingDSARDashboard"){
+          }
+          else if (TaskMaster_page_controller.FromPage=="from_pendingDSARDashboard"){
             TaskMaster_page_controller.FromPage.value='';
             Get.toNamed(RoutesName.pendingDSARDashboardViewScreen);
-         }
-          else if (TaskMaster_page_controller.FromPage=="from_CallDashboard"){
+          }
+          else if (TaskMaster_page_controller.FromPage == "from_CallDashboard"){
           TaskMaster_page_controller.FromPage.value='';
           Get.toNamed(RoutesName.callDashboardViewScreen);
-         }
+          }
           else {
             TaskMaster_page_controller.resetAllFieldOfFilter();
             TaskMaster_page_controller.pageNumber = 0;
-            TaskMaster_page_controller
-                .date_filter.value = "Today";
-            TaskMaster_page_controller
-                .is_done.value = 0;
-            TaskMaster_page_controller
-                .filter.value = "Running";
-            TaskMaster_page_controller.is_Active=-1;
-            TaskMaster_page_controller
-                .getTaskMaster(
+            TaskMaster_page_controller.date_filter.value = "Today";
+            TaskMaster_page_controller.is_done.value = 0;
+            TaskMaster_page_controller.filter.value = "Running";
+            TaskMaster_page_controller.is_Active = -1;
+            TaskMaster_page_controller.getTaskMaster(
                 TaskMaster_page_controller.pageNumber,
                 TaskMaster_page_controller.is_Active.toString(),
-                '',
-                '',
+                '', '',
                 TaskMaster_page_controller.Task_status_controller.value.text,
                 TaskMaster_page_controller.date_filter,
                 TaskMaster_page_controller.is_done.value);
@@ -1204,7 +1201,6 @@ class TaskMasterDetails extends StatelessWidget{
           margin: EdgeInsets.only(left: 10.0, right: 10.0),
           child: Column(
             children: [
-              _buildLabelWithValue(label: "Infra Lead: ", value: TaskMaster_page_controller.Task_Master_list[0].clustureHeadValue ?? "",),
               Row(
                 children: [
                   Text(
@@ -1250,35 +1246,41 @@ class TaskMasterDetails extends StatelessWidget{
                   ),
                 ],
               ),
-              const SizedBox(height: 3,),
+             // const SizedBox(height: 3,),
               _buildLabelWithValue(label: "Infra Lead No.: ", value: TaskMaster_page_controller.Task_Master_list[0].infraLeadNo??"",),
-              const SizedBox(height: 3,),
+              //const SizedBox(height: 3,),
               _buildLabelWithValue(label: "User Region: ", value: TaskMaster_page_controller.Task_Master_list[0].userRegion??"",),
-              const SizedBox(height: 3,),
+              // const SizedBox(height: 3,),
               _buildLabelWithValue(label: "User Cluster: ", value: TaskMaster_page_controller.Task_Master_list[0].userClusture??"",),
-              const SizedBox(height: 3,),
+              //const SizedBox(height: 3,),
               _buildLabelWithValue(label: "Project Value: ", value: TaskMaster_page_controller.Task_Master_list[0].projectValue.toString(),),
-              const SizedBox(height: 3,),
+              //const SizedBox(height: 3,),
               _buildLabelWithValue(label: "Exp Date of Order: ", value: expOrderDate??"",),
-              const SizedBox(height: 3,),
+              //const SizedBox(height: 3,),
               _buildLabelWithValue(label: "Drawing Collected: ", value: TaskMaster_page_controller.Task_Master_list[0].drawingCollected==1?"Yes":"No",),
-              const SizedBox(height: 3,),
+              //const SizedBox(height: 3,),
               _buildLabelWithValue(label: "Proposal Submitted: ", value: TaskMaster_page_controller.Task_Master_list[0].proposalSubmitted==1?"Yes":"No",),
-              const SizedBox(height: 3,),
+              //const SizedBox(height: 3,),
               _buildLabelWithValue(label: "Inauguration Date of Project: ", value: inaugurationDate??"",),
-              const SizedBox(height: 3,),
-              _buildLabelWithValue(label: "Architect: ", value: TaskMaster_page_controller.Task_Master_list[0].architect??"",),
-              const SizedBox(height: 3,),
-              _buildLabelWithValue(label: "Executive Engineer: ", value: TaskMaster_page_controller.Task_Master_list[0].executiveEngineer??"",),
-              const SizedBox(height: 3,),
-              _buildLabelWithValue(label: "Name of Infra Department: ", value: TaskMaster_page_controller.Task_Master_list[0].nameOfInfraDepartment??"",),
-              const SizedBox(height: 3,),
-              _buildLabelWithValue(label: "Name of Agency Contactor: ", value: TaskMaster_page_controller.Task_Master_list[0].nameOfAgencyContrator??"",),
-              const SizedBox(height: 3,),
+              // const SizedBox(height: 3,),
+              _buildLabelWithValue(label: "Architect: ", value: TaskMaster_page_controller.Task_Master_list[0].actualArchitect??"",),
+              // const SizedBox(height: 3,),
+              _buildLabelWithValue(label: "Executive Engineer: ", value: TaskMaster_page_controller.Task_Master_list[0].actualExecutiveEngineer??"",),
+              _buildLabelWithValue(label: "Assistant Engineer: ", value: TaskMaster_page_controller.Task_Master_list[0].actualAssistantEngineer??"",),
+              _buildLabelWithValue(label: "Customer Name: ", value: TaskMaster_page_controller.Task_Master_list[0].actualCustomerName??"",),
+              _buildLabelWithValue(label: "Contact Person/Decision Maker: ", value: TaskMaster_page_controller.Task_Master_list[0].actualContactPersonDecisionMaker??"",),
+              _buildLabelWithValue(label: "Name of Architect Firm: ", value: TaskMaster_page_controller.Task_Master_list[0].actualNameOfArchitectFirm??"",),
+              //const SizedBox(height: 3,),
+              _buildLabelWithValue(label: "Name of Infra Department: ", value: TaskMaster_page_controller.Task_Master_list[0].actualNameOfInfraDepartment??"",),
+              //const SizedBox(height: 3,),
+              _buildLabelWithValue(label: "Owner Of Contractor: ", value: TaskMaster_page_controller.Task_Master_list[0].actualOwnerOfContractor??"",),
+              _buildLabelWithValue(label: "Project Site Manager: ", value: TaskMaster_page_controller.Task_Master_list[0].actualProjectSiteManager??"",),
+              _buildLabelWithValue(label: "Name of Agency Contactor: ", value: TaskMaster_page_controller.Task_Master_list[0].actualNameOfAgencyContrator??"",),
+              //const SizedBox(height: 3,),
               _buildLabelWithValue(label: "Expected Revenue: ", value: TaskMaster_page_controller.Task_Master_list[0].expectedRevenue.toString()??"",),
-              const SizedBox(height: 3,),
+              //const SizedBox(height: 3,),
               _buildLabelWithValue(label: "Value Of Quote: ", value: TaskMaster_page_controller.Task_Master_list[0].valueOfQuote.toString()??"",),
-              const SizedBox(height: 3,),
+              // const SizedBox(height: 3,),
               _buildLabelWithValue(label: "Expected Date Of Completion: ", value: expDateOfCompletion??"",),
               const SizedBox(height: 3,),
             ],

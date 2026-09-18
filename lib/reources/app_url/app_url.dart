@@ -1,9 +1,9 @@
 class AppUrl {
 
    //todo testing url...
-     static const String BASE_URL = "https://devlogin.pristinefulfil.com";
+    //static const String BASE_URL = "https://devlogin.pristinefulfil.com";
     //todo live url....
-       //static const String BASE_URL = "https://care.pristinefulfil.com";
+       static const String BASE_URL = "https://care.pristinefulfil.com";
 
   static const String login_url = "$BASE_URL/api/UserLogin/Login";
   static const String logout_url = "$BASE_URL/api/UserLogin/Logout";
@@ -50,6 +50,8 @@ class AppUrl {
   static const String checkOutComplete="$BASE_URL/api/Travel/CheckOutComplete";
   static const String userLocationInsert="$BASE_URL/api/Travel/UserLocationInsert";
   static const String expanseLineSaveSaveData="$BASE_URL/api/Travel/CheckOutLineExpenseSubmit";
+  static const String RegionMasterGet="$BASE_URL/api/CRM/Master/RegionMasterGet";
+  static const String BusinessTourplanReportingManagerGet="$BASE_URL/api/CRM/BusinessTourPlan/BusinessTourplanReportingManagerGet";
    //todo for checkInApproval.........
   static const String employeeTeamMemberGet="$BASE_URL/api/Employee/EmployeeTeamMemberGet";
   static const String check_in_approverData="$BASE_URL/api/Travel/CheckInApproverGet";
@@ -206,6 +208,7 @@ class AppUrl {
      static const String AccountCategoryTypeMstGet = "$BASE_URL/api/CRM/Master/AccountCategoryTypeMstGet";
      //todo radha raman
      static const String AccountMstDelete = "$BASE_URL/api/CRM/Account/AccountMstDelete";
+     static const String DraftAccountMstDelete = "$BASE_URL/api/CRM/Account/DraftAccountMstDelete";
      static const String ContactMstDelete = "$BASE_URL/api/CRM/Contact/ContactMstDelete";
 
      //todo contact master repo.....
@@ -256,6 +259,7 @@ class AppUrl {
      static const String salesCycleMstApproveReject = "$BASE_URL/api/CRM/SalesCycle/SalesCycleMstApproveReject";
      static const String SalesCycleMstGetByAccountCode = "$BASE_URL/api/CRM/SalesCycle/SalesCycleMstGetByAccountCode";
      static const String quoteHeaderGet = "$BASE_URL/api/CRM/Quote/QuoteHeaderGet";
+     static const String QuoteHeaderGetApprovalPendency = "$BASE_URL/api/CRM/Quote/QuoteHeaderGetApprovalPendency";
      static const String QuoteWonDataGet = "$BASE_URL/api/CRM/Quote/QuoteWonDataGet";
      static const String quoteHeaderCreate = "$BASE_URL/api/CRM/Quote/QuoteHeaderCreate";
      static const String quoteHeaderDuplicateCreate = "$BASE_URL/api/CRM/Quote/QuoteHeaderDuplicate";
@@ -329,6 +333,7 @@ class AppUrl {
      static const String employeeLeaveRequestMark="$BASE_URL/api/CRM/EmployeeAttendance/EmployeeLeaveRequestMark";
      static const String employeeLeaveRequestRejectApproveDataGet="$BASE_URL/api/CRM/EmployeeAttendance/EmployeeLeaveRequestRejectApproveDataGet";
      static const String employeeLeaveRequestApproveReject="$BASE_URL/api/CRM/EmployeeAttendance/EmployeeLeaveRequestApproveReject";
+     static const String EmployeeLeaveRequestDelete="$BASE_URL/api/CRM/EmployeeAttendance/EmployeeLeaveRequestDelete";
 
      //todo business tour plan
      static const String businessPlanListGet="$BASE_URL/api/CRM/BusinessTourPlan/BusinessTourPlanListGet";
@@ -369,4 +374,20 @@ class AppUrl {
 
 
      static const String QuoteHeaderParentCategoryUpdate="$BASE_URL/api/CRM/Quote/QuoteHeaderParentCategoryUpdate";
+
+     //todo SalesForeCast
+     static const String SalesForecastHeaderGet="$BASE_URL/api/CRM/SalesForecast/SalesForecastHeaderGet";
+     static const String QuoteHeaderGetForSalesForecast="$BASE_URL/api/CRM/SalesForecast/QuoteHeaderGetForSalesForecast";
+     static const String SalesForecastHeaderGetBySalesForecastId="$BASE_URL/api/CRM/SalesForecast/SalesForecastHeaderGetBySalesForecastId";
+     static const String SalesForecastHeaderCreate="$BASE_URL/api/CRM/SalesForecast/SalesForecastHeaderCreate";
+     static const String SalesForecastHeaderCompleted="$BASE_URL/api/CRM/SalesForecast/SalesForecastHeaderCompleted";
+     static const String SalesForecastAddQuoteItems="$BASE_URL/api/CRM/SalesForecast/SalesForecastAddQuoteItems";
+     static const String SalesForecastLinesGetForUpload="$BASE_URL/api/CRM/SalesForecast/SalesForecastLinesGetForUpload";
+     static const String SalesForecastUploadItem="$BASE_URL/api/CRM/SalesForecast/SalesForecastUploadItem";
+     static const String SalesForecastLinesGetNew="$BASE_URL/api/CRM/SalesForecast/SalesForecastLinesGetNew";
+     static const String SalesForecastDeleteItems="$BASE_URL/api/CRM/SalesForecast/SalesForecastDeleteItems";
+     static const String SalesForecastdashboardDataGetByUser="$BASE_URL/api/CRM/Dashboard/SalesForecastdashboardDataGetByUser";
+     static const String SalesForecastdashboardDataGet="$BASE_URL/api/CRM/Dashboard/SalesForecastdashboardDataGet";
+     static const String SalesDashboardPdfReport="$BASE_URL/api/CRM/Dashboard/SalesDashboardPdfReport";
+
 }

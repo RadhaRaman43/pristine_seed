@@ -7,10 +7,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:navigation_drawer_flutter/CRM_Directory/CRM_Repository/item_master_repo/item_master_repo.dart';
+import 'package:navigation_drawer_flutter/constants/static_methods.dart';
 import 'package:navigation_drawer_flutter/utils/app_utils.dart';
 import 'package:open_filex/open_filex.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:share_plus/share_plus.dart';
 
 import '../../../reources/routes/routes_name.dart';
 import '../../../viewModel/SessionManagment/session_managment.dart';
@@ -71,6 +73,10 @@ class ItemMasterVm extends GetxController{
   RxList<ItemCategoryMstModel> productCategoryList = <ItemCategoryMstModel>[].obs;
   RxList<String> productTypeList = <String>["Non Standard", "Rate Contractor"].obs;
   RxList<String> IsActiveTypeList = <String>["Yes","No"].obs;
+
+  RxList<ItemCategoryMstModel> Item_Category_master_list_without_task = <ItemCategoryMstModel>[].obs;
+  RxList<ItemCategoryMstModel> Selected_Item_Category_master_list_without_task = <ItemCategoryMstModel>[].obs;
+
   NonStandardItemDataModal item= NonStandardItemDataModal();
   String checkForExcel = "";
   @override
@@ -79,6 +85,7 @@ class ItemMasterVm extends GetxController{
     userType = await sessionManagement.getUserType() ?? '';
     isAdminWritePermission.value = await sessionManagement.getIsAdminPermission() ?? '';
     isHeadofficePermission.value = await sessionManagement.getisHeadofficePermission() ?? '';
+    getItemCategoryMstApi();
 
     itemMstSalesCycleGet(page_no:0,row_Per_Page: rowsPerPage);
 
@@ -94,7 +101,7 @@ class ItemMasterVm extends GetxController{
         "item_code": item_code_Controller.value.text.isNotEmpty? item_code_Controller.value.text:"",
         "name": name_Controller.value.text.isNotEmpty? name_Controller.value.text:"",
         "description": "",
-        "category_code": "",
+        "category_code": category_Controller.value.text.isEmpty?"":category_Controller.value.text,
         "gst_group_code": GST_group_code_Controller.value.text.isNotEmpty? GST_group_code_Controller.value.text:"",
         "hsn_code": HSN_code_Controller.value.text.isNotEmpty? HSN_code_Controller.value.text:"",
         "location_code": "",
@@ -176,6 +183,8 @@ class ItemMasterVm extends GetxController{
   }
 
 
+
+
   getItemCategoryMstApi() async{
     try {
     Map<String, String> data = {};
@@ -186,9 +195,14 @@ class ItemMasterVm extends GetxController{
         as List<dynamic>).map((i) => ItemCategoryMstModel.fromJson(i as Map<String, dynamic>)).toList();
         if (Response.isNotEmpty &&
             Response[0]?.condition.toString() == "True") {
+          Item_Category_master_list_without_task.value=Response;
           productCategoryList.value = Response!;
         }
+        else{
+          Item_Category_master_list_without_task.value=[];
+        }
       } catch (e) {
+      Item_Category_master_list_without_task.value=[];
        Utils.sanckBarError("Error!", e.toString());
       }
       finally{
@@ -227,58 +241,72 @@ class ItemMasterVm extends GetxController{
   updateItemMasterCreateFromCRM(NonStandardItemDataModal nonStandardItem,String updateExcel, List<NonStandardItemDataModal> itemList ) async{
     try {
     List<Map<String,dynamic>> items = [];
+    //print("excel file upload ${itemList[0].accountCode??""} and active ${itemList[0].active??""}");
     if(updateExcel!= null && updateExcel=="uploadExcel"){
+      if(itemList.length<=0){
+        Utils.sanckBarError("Input error!", "Please enter valid values");
+      }
+      else if(itemList[0].itemCode==null && itemList[0].itemCode!.isEmpty){
+        Utils.sanckBarError("Item Code!", "Please enter valid item code");
+      }
+      else if(itemList[0].categoryName==null && itemList[0].categoryName!.isEmpty){
+        Utils.sanckBarError("Item Code!", "Please enter valid item code");
+      }
       for(int i=0;i<itemList.length;i++){
         final item = itemList[i];
+        debugPrint("Debug print1 ${item.hsnCode}");
+        String hsn_code = double.parse(item.hsnCode?? "0").toInt().toString();
+        String? expired_on = StaticMethod.convertDateFormat(item.expiredOn??"");
+        String? rate_contract = StaticMethod.convertDateFormat(item.rateContractValidDate??"");
         items.add({
           "account_code": item.accountCode??"",
           "active": item.active=="0"?0:1,
+          "branch_transfer_price":item.branchTransferPrice??"0",
           "brand_name": "",
           "brand_code": "",
-          "base_uom": "",
-          "branch_transfer_price":item.branchTransferPrice??"0",
-          "category_code":  item.categoryName??"",
-          "category_name": item.categoryName??"",
+          "base_uom": "PCS",
           "color_code": "",
           "cubic_capacity": "",
           "cost_per_unit": 0,
           "color_name": "",
-          "component_type":item.componentType??"",
+          "category_code":  item.categoryName??"",
+          "category_name": item.categoryName??"",
+          "component_type":"SIMPLE",
           "description":item.name??"",
-          "ean_code": "",
-          "expired_on": item.expiredOn??"",
+          "expired_on": expired_on??"" /*item.expiredOn??""*/,
           "expiry_range": 0,
+          "ean_code": "",
           "gst_group_code": item.gstGroupCode??"",
-          "hsn_code": item.hsnCode??"",
-          "is_bulky": 0,
-          "is_expiry_mandatory": 0,
+          "hsn_code": /*item.hsnCode*/ hsn_code ??"",
+          "height": 0,
           "item_code":item.itemCode??"",
-          "list_selling_price": item.listSellingPrice??"0",
+          "is_expiry_mandatory": 0,
+          "is_bulky": 0,
           "length": 0,
           "label": "",
-          "height": 0,
-          "name": item.name??"",
+          "list_selling_price": item.listSellingPrice??"0",
+          "minimal_acceptable_price":item.minimalAcceptablePrice??"0",
           "manufacturer_code": "",
           "manufacturer_name": "",
           "mrp": 0,
           "moq": 0,
-          "minimal_acceptable_price":item.minimalAcceptablePrice??"0",
+          "name": item.name??"",
           "product_type":item.productType??"",
           "product_group_code": "",
           "product_group_name": "",
-          "purchase_uom": "",
-          "rate_contract_valid_date": item.rateContractValidDate??"",
+          "purchase_uom": "PCS",
+          "rate_contract_valid_date": rate_contract??"",
           "rsp": 0,
           "specification": item.specification??"",
           "sales_cycle_id": item.salesCycleId??"",
+          "standard_cost":item.standardCost??"0",
           "sub_product_group_code": "",
           "sub_sub_product_group_code": "",
           "size_code": "",
           "style_code": "",
           "size_name": "",
           "style_name": "",
-          "sale_uom": "",
-          "standard_cost":item.standardCost??"0",
+          "sale_uom": "PCS",
           "sub_product_group_name": "",
           "sub_sub_product_group_name": "",
           "thikness_gsm": 0,
@@ -287,9 +315,9 @@ class ItemMasterVm extends GetxController{
           "tolerance_mrp": 0,
           "weight_in_kg": 0,
           "width": 0,
-
         });
       }
+      debugPrint("Debug print ${item}");
     }
     else{
       items.add({
@@ -352,8 +380,6 @@ class ItemMasterVm extends GetxController{
 
       });
     }
-
-
       Map data = {
         "items":items,
       };
@@ -381,7 +407,7 @@ class ItemMasterVm extends GetxController{
       }
     } catch (e) {
       Utils.sanckBarError("Exception error!", e.toString());
-      print('Exception..$e');
+      print('Exception..${e.toString()}');
     }
     finally{
       loading.value = false;
@@ -409,6 +435,7 @@ class ItemMasterVm extends GetxController{
   }
 
   clearFilterData(){
+    Selected_Item_Category_master_list_without_task.value=[];
     item_code_Controller.value.clear();
     customer_code_Controller.value.clear();
     sale_cycle_id_Controller.value.clear();
@@ -499,10 +526,10 @@ class ItemMasterVm extends GetxController{
 
   Future<void> exportNonStandardExcelWithProgress(BuildContext context, String sheetName, String saveFileName) async {
     try {
-
       excelLoading.value = true;
       excelProgress.value = 0;
       showExcelProgressDialog(context);
+
       final excel = Excel.createExcel();
       excel.rename('Sheet1', sheetName);
       final sheet = excel[sheetName];
@@ -558,32 +585,247 @@ class ItemMasterVm extends GetxController{
         }
       }
 
-      late Directory dir;
+      late Directory? dir;
       if (Platform.isAndroid) {
         dir = Directory('/storage/emulated/0/Download');
+        //dir = await getExternalStorageDirectory();
+        //dir = await getTemporaryDirectory();
+
       } else {
         dir = await getApplicationDocumentsDirectory();
+        //dir = await getExternalStorageDirectory();
+      }
+
+
+
+      // Ensure the directory exists
+      if (!await dir.exists()) {
+        await dir.create(recursive: true);
       }
 
       //final fileName = "non_standard_items_${DateTime.now().millisecondsSinceEpoch}.xlsx";
       final fileName = "${saveFileName}.xlsx";
-      final filePath = "${dir.path}/$fileName";
+      String filePath = "${dir?.path}/$fileName";
+      int counter = 1;
+
+      while (await File(filePath).exists()) {
+        filePath = '${dir.path}/($counter)$fileName';
+        counter++;
+      }
       final file = File(filePath);
+      debugPrint("Excel saved at1: $filePath");
       // Delete old file if exists
-      if (await file.exists()) {
-        await file.delete();
+      try {
+        debugPrint("Excel saved at2: $filePath");
+        if (await file.exists()) {
+          await file.delete();
+          debugPrint("Excel saved at3: $filePath");
+        }
+      } catch (e) {
+        debugPrint("Delete skipped: $e");
       }
       await file.writeAsBytes(excel.encode()!);
       excelProgress.value = 100;
       excelLoading.value = false;
       Get.back();
       // Open File
-      await OpenFilex.open(filePath);
-      debugPrint("Excel saved at: $filePath");
+      //await OpenFilex.open(filePath);
+      if(Platform.isIOS){
+        await Share.shareXFiles([XFile(filePath)],
+        text: fileName);
+      }
+      else{
+        await OpenFilex.open(filePath);
+      }
+
+      debugPrint("Excel saved at4: $filePath");
     }catch(e){
+      excelProgress.value = 100;
+      excelLoading.value = false;
+      print("Failed to download file! ${e.toString()}");
       Utils.sanckBarError("Failed to download file!", e.toString());
     }
   }
+
+ /* Future<void> exportNonStandardExcelWithProgress(BuildContext context, String sheetName, String saveFileName,) async {
+    try {
+      excelLoading.value = true;
+      excelProgress.value = 0;
+      showExcelProgressDialog(context);
+      /// STORAGE PERMISSION
+      if (Platform.isAndroid) {
+        directory = Directory('/storage/emulated/0/Download');
+        var status = await Permission.manageExternalStorage.request();
+        if (!status.isGranted) {
+          Get.back();
+          Utils.sanckBarError(
+            "Permission",
+            "Storage permission denied",
+          );
+          return;
+        }
+      }
+      /// CREATE EXCEL
+      final excel = Excel.createExcel();
+      excel.rename('Sheet1', sheetName);
+      final sheet = excel[sheetName];
+      List<String> headers = [];
+
+      if (sheetName=='Non Standard Items') {
+        final firstRowMap = removeExcelKeys(nonStandardListForExcel.first, sheetName);
+        headers = firstRowMap.keys.toList();
+      }
+      else {
+        headers = [
+          "category_name",
+          "item_code",
+          "name",
+          "hsn_code",
+          "account_code",
+          "product_type",
+          "list_selling_price",
+          "minimal_acceptable_price",
+          "branch_transfer_price",
+          "standard_cost",
+          "active",
+          "gst_group_code",
+          "specification",
+          "sales_cycle_id",
+          "rate_contract_valid_date",
+          "expired_on",
+        ];
+      }
+
+      // Write Headers
+      for (int col = 0; col < headers.length; col++) {
+        sheet.cell(CellIndex.indexByColumnRow(columnIndex: col, rowIndex: 0))
+            .value = TextCellValue(headers[col]);
+      }
+
+      final totalRows = nonStandardListForExcel.length;
+
+      if(sheetName=='Non Standard Items'){
+        for (int row = 0; row < totalRows; row++) {
+          final rowMap = removeExcelKeys(nonStandardListForExcel[row],sheetName);
+          for (int col = 0; col < headers.length; col++) {
+            final value = rowMap[headers[col]];
+            sheet.cell(CellIndex.indexByColumnRow(
+                columnIndex: col, rowIndex: row + 1)).value = value == null
+                ? TextCellValue('') : TextCellValue(value.toString());
+          }
+          excelProgress.value = ((row + 1) / totalRows) * 100;
+          await Future.delayed(const Duration(milliseconds: 5));
+        }
+      }
+    *//*  /// WRITE HEADERS
+      for (int col = 0; col < headers.length; col++) {
+
+        sheet
+            .cell(
+          CellIndex.indexByColumnRow(
+            columnIndex: col,
+            rowIndex: 0,
+          ),
+        )
+            .value = TextCellValue(headers[col]);
+      }
+
+      final totalRows = nonStandardListForExcel.length;
+
+      /// WRITE DATA
+      for (int row = 0; row < totalRows; row++) {
+        final rowMap = removeExcelKeys(nonStandardListForExcel[row], sheetName);
+        for (int col = 0; col < headers.length; col++) {
+          final value = rowMap[headers[col]];
+
+          sheet.cell(
+            CellIndex.indexByColumnRow(
+              columnIndex: col,
+              rowIndex: row + 1,
+            ),
+          )
+              .value = value == null
+              ? TextCellValue('')
+              : TextCellValue(value.toString());
+        }
+
+        excelProgress.value = ((row + 1) / totalRows) * 100;
+
+        await Future.delayed(
+          const Duration(milliseconds: 5),
+        );
+      }*//*
+
+      /// DOWNLOAD DIRECTORY
+      Directory dir = Directory(
+        '/storage/emulated/0/Download',
+      );
+
+      /// CREATE DIRECTORY IF NOT EXISTS
+      if (!await dir.exists()) {
+        await dir.create(
+          recursive: true,
+        );
+      }
+
+      final fileName = "$saveFileName.xlsx";
+
+      final filePath = "${dir.path}/$fileName";
+
+      final file = File(filePath);
+
+      /// DELETE OLD FILE
+      if (await file.exists()) {
+
+        await file.delete();
+      }
+
+      final bytes = excel.encode();
+
+      if (bytes == null) {
+
+        throw Exception("Excel encode failed");
+      }
+
+      /// SAVE FILE
+      await file.writeAsBytes(
+        bytes,
+        flush: true,
+      );
+
+      excelProgress.value = 100;
+
+      excelLoading.value = false;
+
+      Get.back();
+
+      debugPrint("Excel saved at: $filePath");
+
+      /// OPEN FILE
+      await OpenFilex.open(filePath);
+
+      Utils.sanckBarSuccess(
+        "Success",
+        "File saved in Downloads",
+      );
+
+    } catch (e) {
+
+      excelProgress.value = 100;
+
+      excelLoading.value = false;
+
+      Get.back();
+
+      debugPrint("Export Error: $e");
+
+      Utils.sanckBarError(
+        "Failed",
+        e.toString(),
+      );
+    }
+  }
+*/
   Map<String, dynamic> removeExcelKeys(NonStandardItemDataModal item, String sheetName) {
     final map = Map<String, dynamic>.from(item.toJson());
 
@@ -596,12 +838,13 @@ class ItemMasterVm extends GetxController{
       map.remove('message');
       map.remove('total_rows');
       map.remove('updated_on');
-      map.remove('component_type');
+      //map.remove('component_type');
       map.remove('category_code');
     }
 
     return map;
   }
+
   void showExcelProgressDialog(BuildContext context) {
     Get.dialog(
       Obx(() => AlertDialog(
@@ -629,22 +872,30 @@ class ItemMasterVm extends GetxController{
       if (file == null){
         return;
       }
-      print("File name ${file}");
       List<Map<String, dynamic>> excelData = await readExcelFile(file);
-      List<NonStandardItemDataModal> modelList = convertToModel(excelData);
-      if(modelList[0].accountCode!.isNotEmpty)
-      updateItemMasterCreateFromCRM(item, "uploadExcel",modelList);
+      if(excelData.length>=1 && excelData!=null) {
+        List<NonStandardItemDataModal> modelList = convertToModel(excelData);
+        if (modelList[0].accountCode!.isNotEmpty) {
+          updateItemMasterCreateFromCRM(item, "uploadExcel", modelList);
+        }
+        else{
+          Utils.sanckBarError("Data Input Error!", "Can't insert null value into column 'account code'");
+        }
+      }
+      else{
+        Utils.sanckBarError("Data Input Error!", "Can't insert null value into column");
+      }
 
     }catch(e){
       Utils.sanckBarError("failed to upload file!", e.toString());
-      print(e.toString());
+      print("fa........${e.toString() }");
     }
   }
 
   Future<File?> pickExcelFile() async {
     final result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
-      allowedExtensions: ['xlsx'],
+      allowedExtensions: ['xlsx', 'xls'],
     );
 
     if (result != null && result.files.single.path != null) {
@@ -674,23 +925,42 @@ class ItemMasterVm extends GetxController{
 
     List<Map<String, dynamic>> excelData = [];
 
-    for (var table in excel.tables.keys) {
+    if (excel.tables.isEmpty) {
+      debugPrint("No sheets found in excel");
+      return excelData;
+    }
 
+    String tableName = excel.tables.keys.first;
+
+    debugPrint("Sheet Name: $tableName");
+
+    var sheet = excel.tables[tableName];
+
+    if (sheet == null || sheet.rows.isEmpty) {
+      debugPrint("Sheet is empty");
+      return excelData;
+    }
+
+    var rows = sheet.rows;
+
+    List headers = rows.first;
+
+   /* //for (var table in excel.tables.keys) {
+      var table =  excel.tables.keys;
       var rows = excel.tables[table]!.rows;
-
-      List headers = rows.first;
-
+      List headers = rows.first;*/
       for (int i = 1; i < rows.length; i++) {
         Map<String, dynamic> rowMap = {};
-
         for (int j = 0; j < headers.length; j++) {
-          rowMap[headers[j]!.value.toString()] =
-              rows[i][j]?.value.toString();
+            String header = headers[j]?.value?.toString() ?? "";
+            String value = rows[i].length > j ? rows[i][j]?.value?.toString() ?? "" : "";
+            rowMap[header] = value;
+            //rowMap[headers[j]!.value.toString()] = rows[i][j]?.value.toString();
+          debugPrint("value...... ${rows[i][j]?.value.toString()} and ${headers[j]!.value.toString()}");
         }
-
         excelData.add(rowMap);
       }
-    }
+   // }
 
     return excelData;
   }

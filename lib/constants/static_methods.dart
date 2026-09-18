@@ -24,6 +24,7 @@ class StaticMethod{
       return inputDate; // Handle the error as needed
     }
   }
+
   static String? convertDateFormat1(String inputDate) {
     final inputFormat = DateFormat('yyyy-MM-dd');
     final outputFormat = DateFormat('dd-MM-yyyy');

@@ -97,15 +97,10 @@ class Itemlist_by_sales_cycle_Screen extends StatelessWidget{
 
     if (saleCycleController.itemMstGetBySalesIdList.value.isNotEmpty) {
       ScrollController scrollController = ScrollController();
-
       scrollController.addListener(() {
-        print("ghdjhgf");
-        if (scrollController.position.pixels ==
-            scrollController.position.maxScrollExtent) {
-
+        if (scrollController.position.pixels == scrollController.position.maxScrollExtent) {
           int total_page = (saleCycleController.total_rows_items /
-              saleCycleController.rowsPerPage)
-              .toInt();
+              saleCycleController.rowsPerPage).toInt();
           if ((saleCycleController.total_rows_items %
               saleCycleController.rowsPerPage) >
               0) total_page += 1;
@@ -175,7 +170,7 @@ class Itemlist_by_sales_cycle_Screen extends StatelessWidget{
                 return Checkbox(
                   value: saleCycleController.itemMstGetBySalesIdList[index].isSelected==1?true:false,
                   onChanged: (bool? value) {
-                    saleCycleController.toggleSalesCheckbox(index);
+                    saleCycleController.toggleSalesCheckbox(index,context);
                   },
                 );
               }),
@@ -813,8 +808,8 @@ class Itemlist_by_sales_cycle_Screen extends StatelessWidget{
                                       ),
                                     ),
                                     onPressed: ()  {
-                                      String ProductCategory = saleCycleController.saleCycleList[0].productCategoryCode??"";
-                                      String PipeProdCate = ProductCategory.replaceAll(', ', '|');
+                                     /* String ProductCategory = saleCycleController.itemMstGetBySalesIdList[0].categoryCode??"";
+                                      String PipeProdCate = ProductCategory.replaceAll(', ', '|');*/
                                       try{
                                         saleCycleController.itemSalesCodeController.value.clear();
                                         saleCycleController.nameSalesController.value.clear();
@@ -822,7 +817,7 @@ class Itemlist_by_sales_cycle_Screen extends StatelessWidget{
                                         saleCycleController.categoryCodeSalesController.value.clear();
                                         saleCycleController.gstGrpCodeSalesController.value.clear();
                                         saleCycleController.hsnCodeSalesController.value.clear();
-                                        saleCycleController.itemMstGetBySalesIdApiHit(0,saleCycleController.saleCycleList[0].salesCycleId, PipeProdCate);
+                                        saleCycleController.itemMstGetBySalesIdApiHit(0,saleCycleController.salesCycleId.value, saleCycleController.productCategory);
                                         Navigator.pop(context);
                                       }catch(e){
                                         print("Exception..${e.toString()}");
@@ -849,9 +844,9 @@ class Itemlist_by_sales_cycle_Screen extends StatelessWidget{
                                       ),
                                     ),
                                     onPressed: ()  {
-                                      String ProductCategory = saleCycleController.saleCycleList[0].productCategoryCode??"";
-                                      String PipeProdCate = ProductCategory.replaceAll(', ', '|');
-                                      saleCycleController.itemMstGetBySalesIdApiHit(0,saleCycleController.saleCycleList[0].salesCycleId, PipeProdCate);
+                                      /*String ProductCategory = saleCycleController.itemMstGetBySalesIdList[0].categoryCode??"";
+                                      String PipeProdCate = ProductCategory.replaceAll(', ', '|');*/
+                                      saleCycleController.itemMstGetBySalesIdApiHit(0,saleCycleController.salesCycleId.value, saleCycleController.productCategory);
                                       Navigator.pop(context);
                                       saleCycleController.itemSalesCodeController.value.clear();
                                       saleCycleController.nameSalesController.value.clear();

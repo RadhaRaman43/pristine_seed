@@ -243,26 +243,26 @@ class AllQuoteLineItemScreen extends StatelessWidget{
               _buildLabelWithValue(label: "Qty: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].qty.toString() ?? "",color:AllColors.textColor),
               _buildLabelWithValue(label: "LSP: ", value:  "₹ ${pendingDraftQuoteController.PendingDraftQuoteList[position].listSellingPrice.toString() ?? ""}",color:AllColors.textColor),
               
-              Visibility(visible: /*pendingDraftQuoteController.userType=="bh" ||*/ pendingDraftQuoteController.userType=="cl"
+              Visibility(visible: /*pendingDraftQuoteController.userType=="bh" ||*/ pendingDraftQuoteController.userType.toLowerCase()=="ch"
                   ||pendingDraftQuoteController.userType=="gm" || pendingDraftQuoteController.isAdminWritePermission=="1",
                   child: _buildLabelWithValue(label: "MAP: ", value:  "₹ ${pendingDraftQuoteController.PendingDraftQuoteList[position].minimalAcceptablePrice.toString() ?? ""}",color:AllColors.textColor)),
               
-              Visibility(visible: pendingDraftQuoteController.userType=="bh" || pendingDraftQuoteController.userType=="cl"
+              Visibility(visible: pendingDraftQuoteController.userType=="bh" || pendingDraftQuoteController.userType.toLowerCase()=="ch"
                   ||pendingDraftQuoteController.userType=="gm" || pendingDraftQuoteController.isAdminWritePermission=="1",
                   child: _buildLabelWithValue(label: "BTP: ", value:  "₹ ${pendingDraftQuoteController.PendingDraftQuoteList[position].branchTransferPrice.toString() ?? ""}",color:AllColors.textColor)),
-              Visibility(visible: pendingDraftQuoteController.userType=="bh" || pendingDraftQuoteController.userType=="cl"
+              Visibility(visible: pendingDraftQuoteController.userType=="bh" || pendingDraftQuoteController.userType.toLowerCase()=="ch"
                   ||pendingDraftQuoteController.userType=="gm" || pendingDraftQuoteController.isAdminWritePermission=="1",
                   child: _buildLabelWithValue(label: "BM %: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].bmDiscountPer.toString(),color:AllColors.textColor)),
               
-              Visibility(visible: /*pendingDraftQuoteController.userType=="bh" ||*/ pendingDraftQuoteController.userType=="cl"
+              Visibility(visible: /*pendingDraftQuoteController.userType=="bh" ||*/ pendingDraftQuoteController.userType.toLowerCase()=="ch"
                   ||pendingDraftQuoteController.userType=="gm" || pendingDraftQuoteController.isAdminWritePermission=="1",
                   child: _buildLabelWithValue(label: "GM %: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].gmDiscountPer.toString(),color:AllColors.textColor)),
               Visibility(
-                  visible: /*pendingDraftQuoteController.userType=="bh" ||*/ pendingDraftQuoteController.userType=="cl"
+                  visible: /*pendingDraftQuoteController.userType=="bh" ||*/ pendingDraftQuoteController.userType.toLowerCase()=="ch"
                       ||pendingDraftQuoteController.userType=="gm" || pendingDraftQuoteController.isAdminWritePermission=="1",
                   child: _buildLabelWithValue(label: "GM Absolute: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].gmTotalDiscountAmount.toString(),color:AllColors.textColor)),
               
-              Visibility(visible: /*pendingDraftQuoteController.userType=="bh" ||*/ pendingDraftQuoteController.userType=="cl"
+              Visibility(visible: /*pendingDraftQuoteController.userType=="bh" ||*/ pendingDraftQuoteController.userType.toLowerCase()=="ch"
                   ||pendingDraftQuoteController.userType=="gm" || pendingDraftQuoteController.isAdminWritePermission=="1",
                   child: _buildLabelWithValue(label: "Standard Cost: ", value:  "₹ ${pendingDraftQuoteController.PendingDraftQuoteList[position].standardCost.toString() ?? ""}",color:AllColors.textColor)),
               _buildLabelWithValue(label: "Sales Credit: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].salesCredit.toString()??"",color:AllColors.textColor),
@@ -436,6 +436,8 @@ class AllQuoteLineItemScreen extends StatelessWidget{
                               bindData(context,'Quote Id', pendingDraftQuoteController.filterQuoteIdController.value),
                               const SizedBox(height: 10),
                               bindData(context,'Quote Version', pendingDraftQuoteController.filterQuoteVersionController.value),
+                              const SizedBox(height: 10),
+                              bindQuoteAccepted(context),
                               const SizedBox(height: 10),
                               bindData(context,'Sale Cycle Id', pendingDraftQuoteController.filterQuoteSaleCycleController.value),
                               const SizedBox(height: 10),
@@ -670,6 +672,64 @@ class AllQuoteLineItemScreen extends StatelessWidget{
       onChanged: (value) {
         // Handle the text field value changes if needed
       },
+    );
+  }
+  bindQuoteAccepted(BuildContext context) {
+    return Container(
+
+      child: DropdownMenu<String>(
+        width: MediaQuery.of(context).size.width-15,
+        controller: pendingDraftQuoteController.filterQuoteAcceptedController.value,
+        label: Text(
+          "Select Quote Accepted",
+          style: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontSize: AllFontSize.sisxteen,
+              fontWeight: FontWeight.w500),
+        ),
+
+        inputDecorationTheme: const InputDecorationTheme(
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+              color: AllColors.primaryDark1,),
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+                color: AllColors.primaryDark1), // Change the color to green
+          ),
+          border: OutlineInputBorder(
+            borderSide: BorderSide(
+                color: AllColors.primaryDark1), // Change the color to green
+          ),
+          filled: false,
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.two, horizontal: AllFontSize.ten),
+        ),
+
+
+        onSelected: (String? selection) {
+          if(selection=="Open"){
+            pendingDraftQuoteController.filterQuoteAcceptedController.value.text = '';
+          }
+          else{
+
+            pendingDraftQuoteController.filterQuoteAcceptedController.value.text =selection.toString();
+
+            debugPrint("Quote accepted.... ${pendingDraftQuoteController.filterQuoteAcceptedController.value.text}");
+          }
+
+
+        },
+        dropdownMenuEntries:
+        pendingDraftQuoteController.qouteAcceptedList.map<
+            DropdownMenuEntry<String>>((String e) {
+          return DropdownMenuEntry<String>(
+              value: e, label: e!, style: ButtonStyle(
+            foregroundColor: MaterialStateProperty.all<Color>(
+                AllColors.primaryDark1),));
+        }).toList(),
+      ),
     );
   }
 

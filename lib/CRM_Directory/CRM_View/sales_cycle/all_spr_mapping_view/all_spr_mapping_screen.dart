@@ -221,32 +221,32 @@ class AllSprMappingScreen extends StatelessWidget{
               _buildLabelWithValue(label: "Quantity: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].qty.toString(),color:AllColors.textColor),
               _buildLabelWithValue(label: "LSP: ", value:  "₹ ${pendingDraftQuoteController.PendingDraftQuoteList[position].listSellingPrice.toString() ?? ""}",color:AllColors.textColor),
 
-              Visibility(visible:  /*pendingDraftQuoteController.userType=="bh" ||*/ pendingDraftQuoteController.userType=="cl"
+              Visibility(visible:  /*pendingDraftQuoteController.userType=="bh" ||*/ pendingDraftQuoteController.userType.toLowerCase()=="ch"
                   ||pendingDraftQuoteController.userType=="gm" || pendingDraftQuoteController.isAdminWritePermission=="1" ,
                   child: _buildLabelWithValue(label: "MAP: ", value:  "₹ ${pendingDraftQuoteController.PendingDraftQuoteList[position].minimalAcceptablePrice.toString() ?? ""}",color:AllColors.textColor)),
 
               _buildLabelWithValue(label: "Seeking Price Per Unit: ", value:  "₹ ${pendingDraftQuoteController.PendingDraftQuoteList[position].discountAmtPerUnit.toString() ?? ""}",color:AllColors.textColor),
               _buildLabelWithValue(label: "Seeking Discount Per: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].discountPer.toString() ?? "",color:AllColors.textColor),
               _buildLabelWithValue(label: "Total Seeking Price: ", value:  "₹ ${pendingDraftQuoteController.PendingDraftQuoteList[position].discountAmt.toString() ?? ""}",color:AllColors.textColor),
-              Visibility(visible:  /*pendingDraftQuoteController.userType=="bh" ||*/ pendingDraftQuoteController.userType=="cl"
+              Visibility(visible:  /*pendingDraftQuoteController.userType=="bh" ||*/ pendingDraftQuoteController.userType.toLowerCase()=="ch"
                   ||pendingDraftQuoteController.userType=="gm" || pendingDraftQuoteController.isAdminWritePermission=="1" ,
                   child: _buildLabelWithValue(label: "Standard Cost: ", value:  "₹ ${pendingDraftQuoteController.PendingDraftQuoteList[position].standardCost.toString() ?? ""}",color:AllColors.textColor)),
               _buildLabelWithValue(label: "Discount Per: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].approvedDiscountPer.toString(),color:AllColors.textColor),
-              Visibility(visible:  pendingDraftQuoteController.userType=="bh" || pendingDraftQuoteController.userType=="cl"
+              Visibility(visible:  pendingDraftQuoteController.userType=="bh" || pendingDraftQuoteController.userType.toLowerCase()=="ch"
                   ||pendingDraftQuoteController.userType=="gm" || pendingDraftQuoteController.isAdminWritePermission=="1" ,
                   child: _buildLabelWithValue(label: "BTP: ", value:  "₹ ${pendingDraftQuoteController.PendingDraftQuoteList[position].branchTransferPrice.toString() ?? ""}",color:AllColors.textColor)),
 
               _buildLabelWithValue(label: "Approved Price Per Unit: ", value:  "₹ ${pendingDraftQuoteController.PendingDraftQuoteList[position].approvedAmountPerUnit.toString() ?? ""}",color:AllColors.textColor),
               _buildLabelWithValue(label: "Sales Credit"
                   " Per: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].salesCredit.toString() ?? "",color:AllColors.textColor),
-              Visibility(visible:  pendingDraftQuoteController.userType=="bh" || pendingDraftQuoteController.userType=="cl"
+              Visibility(visible:  pendingDraftQuoteController.userType=="bh" || pendingDraftQuoteController.userType.toLowerCase()=="ch"
                   ||pendingDraftQuoteController.userType=="gm" || pendingDraftQuoteController.isAdminWritePermission=="1" ,
                   child: _buildLabelWithValue(label: "BM Per: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].bmDiscountPer.toString() ?? "",color:AllColors.textColor)),
 
-              Visibility(visible:  /*pendingDraftQuoteController.userType=="bh" ||*/ pendingDraftQuoteController.userType=="cl"
+              Visibility(visible:  /*pendingDraftQuoteController.userType=="bh" ||*/ pendingDraftQuoteController.userType.toLowerCase()=="ch"
                   ||pendingDraftQuoteController.userType=="gm" || pendingDraftQuoteController.isAdminWritePermission=="1",
                   child: _buildLabelWithValue(label: "GM Per: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].gmDiscountPer.toString() ?? "",color:AllColors.textColor)),
-              Visibility(visible:  /*pendingDraftQuoteController.userType=="bh" ||*/ pendingDraftQuoteController.userType=="cl"
+              Visibility(visible:  /*pendingDraftQuoteController.userType=="bh" ||*/ pendingDraftQuoteController.userType.toLowerCase()=="ch"
                   ||pendingDraftQuoteController.userType=="gm" || pendingDraftQuoteController.isAdminWritePermission=="1",
                   child: _buildLabelWithValue(label: "GM Absolute: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].gmTotalDiscountAmount.toString() ?? "",color:AllColors.textColor)),
 

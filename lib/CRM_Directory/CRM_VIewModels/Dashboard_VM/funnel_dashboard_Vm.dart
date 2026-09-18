@@ -26,6 +26,7 @@ class FunnelDashboardVm extends GetxController{
   RxBool loading = false.obs;
   RxBool isShimmerLoading = false.obs;
   RxBool isSelectAllClusterValue = true.obs;
+
   String email = "";
   String isAdminWritePermission = "";
 
@@ -49,8 +50,7 @@ class FunnelDashboardVm extends GetxController{
   RxList<String> SalesCycleStageStatusList = <String>[].obs;
   //RxList<String> selectedSalesStageStatusList = <String>[].obs;
   RxList<String> selectedSalesStageStatusList = ['ALL','Suspect', 'Prospect', 'Propose'].obs;
-  RxList<EmployeeMemberModel> employee_Member_list = <EmployeeMemberModel>[].obs;
-  RxList<EmployeeMemberModel> SelectedEmployee_Member_list = <EmployeeMemberModel>[].obs;
+
   RxList<ItemCategoryMstModel> Item_Category_master_list_without_task = <ItemCategoryMstModel>[].obs;
   RxList<ItemCategoryMstModel> SelectedProductCategory_list = <ItemCategoryMstModel>[].obs;
   RxList<ClusterModal> clusterGetByEmailList = <ClusterModal>[].obs;
@@ -61,6 +61,17 @@ class FunnelDashboardVm extends GetxController{
   RxList<AccountMasterModel> SelectedAccount_Master_list=<AccountMasterModel>[].obs;
   RxList<String> quoteAcceptedList = ["ALL","OPEN","WON", "LOSS"].obs;
   RxList<String> isCommitList = ["ALL","YES", "NO"].obs;
+
+  RxList<EmployeeMemberModel> employee_Member_list = <EmployeeMemberModel>[].obs;
+  RxList<EmployeeMemberModel> SelectedEmployee_Member_list = <EmployeeMemberModel>[].obs;
+  RxList<EmployeeMemberModel> tempSelected = <EmployeeMemberModel>[].obs;
+  RxList<EmployeeMemberModel> filtered = <EmployeeMemberModel>[].obs;
+  var searchController=TextEditingController().obs;
+  RxBool selectOwner = true.obs;
+  RxBool allSelected = false.obs;
+  RxBool isSel = false.obs;
+  String accountNameCode='';
+
 
   var filterCustomDateController=TextEditingController().obs;
   var AccountOwner_controller=TextEditingController().obs;
@@ -86,6 +97,7 @@ class FunnelDashboardVm extends GetxController{
   var StageNameForApi = '';
   var SelectedTabForApi = '';
   var EmployeeEmailIdForApi = '';
+  var customerNameCode = '';
 
 
   @override
@@ -109,7 +121,7 @@ class FunnelDashboardVm extends GetxController{
       getClustersGetByEmail();
       //funnelDashboardData();
 
-      if (this.isAdminWritePermission == 1) {
+      if (this.isAdminWritePermission == '1') {
         EmployeeMasterGet('');
       }
       else {
@@ -437,19 +449,35 @@ class FunnelDashboardVm extends GetxController{
   }
 
   Future<Iterable<EmployeeMemberModel>> EmployeeMasterGet(String query) async {
-    if (query == '') {
+    /*if (query == '') {
       return const Iterable<EmployeeMemberModel>.empty();
+    }*/
+
+    ClusterNameForApi = '';
+    if(clusterName_controller.value.text.isNotEmpty){
+      ClusterNameForApi = clusterName_controller.value.text
+          .split(',')
+          .map((e) => e.trim())
+          .join('|');
+    }
+    RegionNameForApi = '';
+    if(RegionName_controller.value.text.isNotEmpty){
+      RegionNameForApi = RegionName_controller.value.text
+          .split(',')
+          .map((e) => e.trim())
+          .join('|');
     }
     Map data = {
       'filter_name': query,
       'filter_email': "",
       'filter_location_id': '',
       'email_id': email,
-      "filter_cluster_name": "",
-      "filter_region_name": "",
-      'rowsPerPage': 50,
+      "filter_cluster_name": ClusterNameForApi,
+      "filter_region_name": RegionNameForApi,
+      'rowsPerPage': 10,
       'pageNumber': 0,
     };
+    loading.value = true;
     String employee_response =await _api.EmployeeMatserGetApiHit(data, sessionManagement);
     try {
       final jsonResponse = json.decode(employee_response);
@@ -463,6 +491,7 @@ class FunnelDashboardVm extends GetxController{
           print(jsonResponse);
           employee_Member_list.value = response;
 
+
         } else {
           // Utils.sanckBarException('False!', response[0].message!);
           employee_Member_list.value = [];
@@ -474,6 +503,9 @@ class FunnelDashboardVm extends GetxController{
     } catch (e) {
       Utils.sanckBarException('Exception!', e.toString());
       employee_Member_list.value = [];
+    }
+    finally{
+      loading.value = false;
     }
     return employee_Member_list.value;
   }
@@ -661,12 +693,12 @@ class FunnelDashboardVm extends GetxController{
     }
   }*/
 
-  Future<List<AccountMasterModel>> getAccountMaster(
-      String searchText) async {
+  Future<List<AccountMasterModel>> getAccountMaster(String searchText) async {
     try {
       Map<String, String> data = {
         "filter_account_code": '',
         "filter_account_name": searchText,
+        "filter_account_owner":isAdminWritePermission=="1"?"": email,
         "filter_account_type": '',
         "filter_email_id": '',
         "filter_phone_no": '',
@@ -675,7 +707,6 @@ class FunnelDashboardVm extends GetxController{
         "filter_postal_code": '',
         "filter_district": '',
         "filter_created_by": '',
-        "filter_account_owner": email,
         "filter_frontliner_value": "",
         "filter_branch_head_value": '',
         "filter_zone_head_value": "",
@@ -730,6 +761,12 @@ class FunnelDashboardVm extends GetxController{
     filter_created_on_star_to_cont.value.clear();
     //clusterName_controller.value.clear();
     CustomerName_controller.value.clear();
+    customerNameCode = '';
+    searchController.value.clear();
+    accountNameCode='';
+    if(isAdminWritePermission=="1") {
+      EmployeeMasterGet("");
+    }
     //RegionName_controller.value.clear();
     SelectedAccount_Master_list.value = [];
     SelectedEmployee_Member_list.value = [];
@@ -755,11 +792,13 @@ class FunnelDashboardVm extends GetxController{
       "filter_stage_name": StageName_controller.value.text,
       "filter_quote_accepted": QuoteAccepted_controller.value.text,
       "filter_customer_name": CustomerName_controller.value.text,
+      "customerNameCode": customerNameCode,
       "filter_product_category": ProductCategory_controller.value.text,
       "filter_commit": IsCommit_controller.value.text,
       "filter_created_on": filter_created_on_cont.value.text,
       "filter_created_on_star_to_cont": filter_created_on_star_to_cont.value.text,
       "filter_owner_name": AccountOwner_controller.value.text,
+      "accountNameCode": accountNameCode,
       "filter_region_name":RegionName_controller.value.text,
       "filter_cluster_name": clusterName_controller.value.text,
     });
@@ -777,11 +816,13 @@ class FunnelDashboardVm extends GetxController{
         StageName_controller.value.text=getFilterData["filter_stage_name"]??"";
         QuoteAccepted_controller.value.text=getFilterData["filter_quote_accepted"]??"";
         CustomerName_controller.value.text=getFilterData["filter_customer_name"]??"";
+        customerNameCode=getFilterData["customerNameCode"]??"";
         ProductCategory_controller.value.text=getFilterData["filter_product_category"]??"";
         IsCommit_controller.value.text=getFilterData["filter_commit"]??"";
         filter_created_on_cont.value.text=getFilterData["filter_created_on"]??"";
         filter_created_on_star_to_cont.value.text=getFilterData["filter_created_on_star_to_cont"]??"";
         AccountOwner_controller.value.text=getFilterData["filter_owner_name"]??"";
+        accountNameCode=getFilterData["accountNameCode"]??"";
         pageNumber=0;
 
         if(getFilterData["start_date"].toString().isNotEmpty && getFilterData["start_date"].toString()!="" ){

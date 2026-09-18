@@ -126,6 +126,8 @@ class BussinessTourPlanModel {
   dynamic? approvedBy;
   dynamic? approvedOn;
   String? reportingManager;
+  String? remarks;
+  dynamic? managerRemarks;
   String? createdFullName;
   String? approvedFullName;
   String? reportingFullName;
@@ -152,6 +154,8 @@ class BussinessTourPlanModel {
         this.approvedBy,
         this.approvedOn,
         this.reportingManager,
+        this.remarks,
+        this.managerRemarks,
         this.createdFullName,
         this.approvedFullName,
         this.reportingFullName});
@@ -178,6 +182,8 @@ class BussinessTourPlanModel {
     approvedBy = json['approved_by'];
     approvedOn = json['approved_on'];
     reportingManager = json['reporting_manager'];
+    remarks = json['remarks'];
+    managerRemarks = json['manager_remarks'];
     createdFullName = json['created_full_name'];
     approvedFullName = json['approved_full_name'];
     reportingFullName = json['reporting_full_name'];
@@ -206,6 +212,8 @@ class BussinessTourPlanModel {
     data['approved_by'] = this.approvedBy;
     data['approved_on'] = this.approvedOn;
     data['reporting_manager'] = this.reportingManager;
+    data['remarks'] = this.remarks;
+    data['manager_remarks'] = this.managerRemarks;
     data['created_full_name'] = this.createdFullName;
     data['approved_full_name'] = this.approvedFullName;
     data['reporting_full_name'] = this.reportingFullName;

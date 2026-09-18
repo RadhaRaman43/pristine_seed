@@ -55,7 +55,25 @@ class DraftItemList extends StatelessWidget{
                 ),
               ),
               Spacer(),
-
+              /*Obx((){
+                return Visibility(
+                  //visible:accountMaster_page_controller.isAdminWritePermission=="0"  ? true:false ,
+                  visible:accountMaster_page_controller.isHeadofficePermission!="1"|| accountMaster_page_controller.UserCode?.toLowerCase() == 'cce'  ?true:false ,
+                  child: IconButton(onPressed: () {
+                    accountMaster_page_controller.yesNoValue.value="No";
+                    accountMaster_page_controller.DraftId = '';
+                    accountMaster_page_controller.account_type_controller.text='New Account';
+                    accountMaster_page_controller.clearController();
+                    accountMaster_page_controller.getCompanyProfileSubTypeApi();
+                    accountMaster_page_controller.getCompanyProfileTypeApi("");
+                    accountMaster_page_controller.getGeoPostalCodeApi(50,'',accountMaster_page_controller.email);
+                    accountMaster_page_controller.ReferralBy_Controller.text= "";
+                    accountMaster_page_controller.view= "FromDraft";
+                    accountMaster_page_controller.addDraftAccount.value="FromDraft";
+                    Get.toNamed(RoutesName.add_New_AccountMaster_screen,arguments: 'Create');
+                  }, icon: Icon(Icons.add)),
+                );
+              }),*/
               IconButton(onPressed: () {
                 showFilterBottomSheet(context);
               }, icon: Icon(Icons.filter_alt_sharp))
@@ -191,7 +209,7 @@ class DraftItemList extends StatelessWidget{
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Expanded(
+            Flexible(
               child: Row(
               children: [
                 Text(
@@ -201,23 +219,40 @@ class DraftItemList extends StatelessWidget{
                       fontSize: AllFontSize.fourtine,
                       fontWeight: FontWeight.w500),
                 ),
-                Tooltip(
-                  message: controller.accountCode ?? "",
-                  child: Text(
-                    controller.accountCode ?? "",
-                    overflow: TextOverflow.ellipsis,
-                    style: GoogleFonts.poppins(
-                        color: AllColors.textColor,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
+                Flexible(
+                  child: Tooltip(
+                    message: controller.accountCode ?? "",
+                    child: Text(
+                      controller.accountCode ?? "",
+                      overflow: TextOverflow.ellipsis,
+                      style: GoogleFonts.poppins(
+                          color: AllColors.textColor,
+                          fontSize: AllFontSize.fourtine,
+                          fontWeight: FontWeight.w500),
+                    ),
                   ),
                 ),
               ],),
             ),
+            Row(
+              children: [
+                InkWell(
+                  child: /*accountMaster_page_controller.isAdminWritePermission == "0" ?*/Icon(Icons.update) /*: Icon(Icons.remove_red_eye)*/,
+                ),
+                Visibility(
+                  visible: accountMaster_page_controller.isAdminWritePermission.value=='1',
+                  child:  GestureDetector(
+                    onTap: (){
+                      showConfirmCompleteDialog(context, position);
 
-            InkWell(
-              child: accountMaster_page_controller.isAdminWritePermission == "0" ?Icon(Icons.update) : Icon(Icons.remove_red_eye),
-            ),
+                    },
+                    child: Icon(Icons.delete,  color: Colors.red,),
+                  ),
+                ),
+              ],
+            )
+
+
           ],
         ),
         subtitle: Column(
@@ -242,6 +277,71 @@ class DraftItemList extends StatelessWidget{
           ],
         ),
       ),
+    );
+  }
+
+  showConfirmCompleteDialog(BuildContext context, int index){
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: Colors.red.shade100, // light red background
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(
+                  Icons.delete,
+                  color: Colors.red,
+                  size: 28,
+                ),
+              ),
+              SizedBox(width: 20,),
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("Delete",
+                      style: GoogleFonts.poppins(
+                          color: AllColors.primaryDark1,
+                          fontSize: AllFontSize.sisxteen,
+                          fontWeight: FontWeight.w700),
+                    ),
+                    Text("Do You Want to Delete This Account?",
+                      style: GoogleFonts.poppins(
+                          color: AllColors.primaryDark1,
+                          fontSize: AllFontSize.fourtine,
+                          fontWeight: FontWeight.w500),
+                      softWrap: true,
+                    ),
+                  ],
+                ),
+              ),
+
+            ],
+          ),
+
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text("Cancel",style: TextStyle(color: AllColors.redColor),),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+                accountMaster_page_controller.DraftAccountMstDelete(accountMaster_page_controller.Account_Master_Draft_list1[index].accountCode??"",index,);
+              },
+              child: Text("Delete",style: TextStyle(color: AllColors.greenblue),),
+            ),
+          ],
+        );
+      },
     );
   }
 

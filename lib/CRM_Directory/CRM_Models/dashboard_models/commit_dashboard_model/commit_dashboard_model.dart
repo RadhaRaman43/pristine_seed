@@ -36,8 +36,9 @@ class Records {
   String? geoName;
   String? geoValue;
   dynamic estimatedAmount;
+  dynamic? totalEstimatedAmount;
 
-  Records({this.emailId, this.employee, this.geoName, this.geoValue,this.estimatedAmount});
+  Records({this.emailId, this.employee, this.geoName, this.geoValue,this.estimatedAmount, this.totalEstimatedAmount});
 
   Records.fromJson(Map<String, dynamic> json) {
     emailId = json['email_id'];
@@ -45,7 +46,7 @@ class Records {
     geoName = json['geo_name'];
     geoValue = json['geo_value'];
     estimatedAmount = json['estimated_amount'];
-  }
+    totalEstimatedAmount = json['total_estimated_amount'];  }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
@@ -54,6 +55,7 @@ class Records {
     data['geo_name'] = this.geoName;
     data['geo_value'] = this.geoValue;
     data['estimated_amount'] = this.estimatedAmount;
+    data['total_estimated_amount'] = this.totalEstimatedAmount;
     return data;
   }
 }

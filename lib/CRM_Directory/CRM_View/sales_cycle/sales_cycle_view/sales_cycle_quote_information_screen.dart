@@ -42,10 +42,21 @@ class QuoteInformationScreen extends StatelessWidget {
     return WillPopScope(
       onWillPop: () async {
         print("Satus ${saleCycleController.quoteApprovalPage.value}");
-        if (saleCycleController.quoteApprovalPage.value ==
-            "quoteApprovalScreen") {
+        if (saleCycleController.quoteApprovalPage.value == "Quote Approval List") {
           quoteApprovalController.getQuoteHeaderData(0);
           Get.toNamed(RoutesName.quoteApprovalListScreen);
+        }
+        else if (saleCycleController.quoteApprovalPage.value == "Quote RH Approval List") {
+          quoteApprovalController.getQuoteHeaderData(0);
+          Get.toNamed(RoutesName.quoteRHApprovalListScreen);
+        }
+        else if (saleCycleController.quoteApprovalPage.value == "Quote CBH Approval List") {
+          quoteApprovalController.getQuoteHeaderData(0);
+          Get.toNamed(RoutesName.quoteCBHApprovalListScreen);
+        }
+        else if (saleCycleController.quoteApprovalPage.value == "Quote GM Approval List") {
+          quoteApprovalController.getQuoteHeaderData(0);
+          Get.toNamed(RoutesName.quoteGMApprovalListScreen);
         }else if (saleCycleController.quoteApprovalPage.value == "pendingDraftQuote") {
           pendingDraftQuoteController.clearAllFieldOfQuoteFilter();
           pendingDraftQuoteController.pageNumberForQuote =0;
@@ -199,249 +210,259 @@ class QuoteInformationScreen extends StatelessWidget {
                   child: ListView(children: [
                     /*visible: saleCycleController.FromPage=="QuoteApprovalPage" ||
                           saleCycleController.quoteApprovalPage.value=="quoteApprovalScreen"?true:false,*/
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Obx((){
-                          return Visibility(
-                            visible:  ((saleCycleController.quoteHeaderdata[0].createdBy?.toLowerCase()==saleCycleController.email.toLowerCase() ||
-                                saleCycleController.isAdminWritePermission=="1")&&
-                            saleCycleController
-                                .quoteHeaderdata[0].quoteStatus?.toLowerCase()=="rejected") || (saleCycleController
-                                .quoteHeaderdata[0].quoteStatus?.toLowerCase()=="approved"   && saleCycleController.isAdminWritePermission=="1")&&
-                                saleCycleController.quoteHeaderdata[0].quoteAccepted?.toLowerCase()=="open" ,
-                            child: Tooltip(
-                              message: "Reopen",
-                              child: Container(
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(30),
-                                    border: Border.all(color: AllColors.primaryDark1)
-                                ),
-                                child:  GestureDetector(
-                                  onTap: () {
-                                    saleCycleController.reOpenRemarksController.value.text = "";
-                                    reOpenSalesCycle(context);
-                                    //showDialogForHeaderUpdate(context);
-                                  },
-                                  child: Container(
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(7.0),
-                                      child: Icon(Icons.lock_open, size: 20,),
-                                    ),
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(30),
-                                        border: Border.all(
-                                            color: AllColors.primaryDark1)),
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      reverse: true,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Obx((){
+                            return Visibility(
+                              visible:  /*((saleCycleController.quoteHeaderdata[0].createdBy?.toLowerCase()==saleCycleController.email.toLowerCase() ||
+                                  saleCycleController.isAdminWritePermission=="1")&&
+                                  saleCycleController.quoteHeaderdata[0].quoteStatus?.toLowerCase()=="rejected") || (saleCycleController
+                                  .quoteHeaderdata[0].quoteStatus?.toLowerCase()=="approved"   && saleCycleController.isAdminWritePermission=="1")&&
+                                  saleCycleController.quoteHeaderdata[0].quoteAccepted?.toLowerCase()=="open" */
+                              //todo by radha raman
+                              saleCycleController.isAdminWritePermission=="1" &&
+                            (saleCycleController.quoteHeaderdata[0].quoteStatus?.toLowerCase()=="rejected" ||
+                                saleCycleController.quoteHeaderdata[0].quoteStatus?.toLowerCase()=="approved") &&
+                                  saleCycleController.quoteHeaderdata[0].quoteAccepted?.toLowerCase()=="open"
+                              ,
+                              child: Tooltip(
+                                message: "Reopen",
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(30),
+                                      border: Border.all(color: AllColors.primaryDark1)
                                   ),
+                                  child:  GestureDetector(
+                                    onTap: () {
+                                      saleCycleController.reOpenRemarksController.value.text = "";
+                                      reOpenSalesCycle(context);
+                                      //showDialogForHeaderUpdate(context);
+                                    },
+                                    child: Container(
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(7.0),
+                                        child: Icon(Icons.lock_open, size: 20,),
+                                      ),
+                                      decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(30),
+                                          border: Border.all(
+                                              color: AllColors.primaryDark1)),
+                                    ),
+                                  ),
+
                                 ),
+                              ),);
+                          }),
+                          Obx(()
+                          {
+                            return Padding(
+                              padding: const EdgeInsets.only(right: 0.0),
+                              child: Visibility(
+                                visible:saleCycleController
+                                    .quoteHeaderdata[0].quoteAccepted?.toLowerCase()=="open" && saleCycleController
+                                    .quoteHeaderdata[0].quoteStatus?.toLowerCase()!="rejected" && ((saleCycleController.showApprovalBtn.value )||
+                                    (saleCycleController.isAdminWritePermission=="0"&&
+                                        saleCycleController.showApprovalBtn.value && saleCycleController
+                                        .quoteHeaderdata[0].isReadyForApprove==1) ||
+                                    (saleCycleController.isAdminWritePermission=="1" && saleCycleController
+                                        .quoteHeaderdata[0].quoteStatus?.toLowerCase()=="pending for approval" && saleCycleController
+                                        .quoteHeaderdata[0].isReadyForApprove==1)),
 
-                              ),
-                            ),);
-                        }),
-                        Obx(()
-                        {
-                          return Padding(
-                            padding: const EdgeInsets.only(right: 0.0),
-                            child: Visibility(
-                              visible:saleCycleController
-                                  .quoteHeaderdata[0].quoteAccepted?.toLowerCase()=="open" && saleCycleController
-                                  .quoteHeaderdata[0].quoteStatus?.toLowerCase()!="rejected" && ((saleCycleController.showApprovalBtn.value )||
-                                  (saleCycleController.isAdminWritePermission=="0"&&
-                                      saleCycleController.showApprovalBtn.value && saleCycleController
-                                      .quoteHeaderdata[0].isReadyForApprove==1) ||
-                                  (saleCycleController.isAdminWritePermission=="1" && saleCycleController
-                                      .quoteHeaderdata[0].quoteStatus?.toLowerCase()=="pending for approval" && saleCycleController
-                                      .quoteHeaderdata[0].isReadyForApprove==1)),
-
-                             /* visible:saleCycleController
-                                  .quoteHeaderdata[0].quoteStatus?.toLowerCase()=="pending for approval"
-                              && saleCycleController
-                                      .quoteHeaderdata[0].isReadyForApprove==1 && saleCycleController
-                                  .quoteHeaderdata[0].quoteAccepted?.toLowerCase()=="open" && (saleCycleController.showApprovalBtn.value|| saleCycleController.isAdminWritePermission=="1")
-                                  ? true
-                                  : false,*/
-                              child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    ActionChip(
-                                      label: Text(
-                                        "Approve",
-                                        style: GoogleFonts.poppins(
-                                           color: AllColors.whiteColor,
-                                          fontWeight: FontWeight.w500,
+                               /* visible:saleCycleController
+                                    .quoteHeaderdata[0].quoteStatus?.toLowerCase()=="pending for approval"
+                                && saleCycleController
+                                        .quoteHeaderdata[0].isReadyForApprove==1 && saleCycleController
+                                    .quoteHeaderdata[0].quoteAccepted?.toLowerCase()=="open" && (saleCycleController.showApprovalBtn.value|| saleCycleController.isAdminWritePermission=="1")
+                                    ? true
+                                    : false,*/
+                                child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      ActionChip(
+                                        label: Text(
+                                          "Approve/Reject",
+                                          style: GoogleFonts.poppins(
+                                             color: AllColors.whiteColor,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                        onPressed: () {
+                                          saleCycleController.quoteStatusController.value.clear();
+                                          saleCycleController.rejectreasonQuoteController.value.clear();
+                                          saleCycleController
+                                              .managerRemarksController.value
+                                              .clear();
+                                          saleCycleController.isReject.value =
+                                              false;
+                                          saleCycleController.isApprove.value =
+                                              false;
+                                          showdialogForApproval(context);
+                                        },
+                                        backgroundColor: AllColors.primaryDark1,
+                                        shape: StadiumBorder(
+                                          side: BorderSide.none,
                                         ),
                                       ),
-                                      onPressed: () {
-                                        saleCycleController.quoteStatusController.value.clear();
-                                        saleCycleController.rejectreasonQuoteController.value.clear();
-                                        saleCycleController
-                                            .managerRemarksController.value
-                                            .clear();
-                                        saleCycleController.isReject.value =
-                                            false;
-                                        saleCycleController.isApprove.value =
-                                            false;
-                                        showdialogForApproval(context);
-                                      },
-                                      backgroundColor: AllColors.primaryDark1,
-                                      shape: StadiumBorder(
-                                        side: BorderSide.none,
+                                    ]),
+                              ),
+                            );
+                          }),
+                          Obx(() {
+                            return Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Visibility(
+                                visible: saleCycleController.quoteHeaderdata[0].quoteAccepted?.toLowerCase() == "open" &&
+                                        saleCycleController.quoteHeaderdata[0].isReadySendForApproval == 1 ? true : false,
+                                child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Container(
+                                        child: DefaultButton(
+                                          press: () {
+                                            saleCycleController.BusinessTerm.value = false;
+                                            saleCycleController.clearBusinessTerm();
+                                            Get.toNamed(RoutesName.UpdateBussinessTermPage);
+                                            //openConfirmationDialog(context,   'Do you want to send this Quote for Approval?', "");
+                                          },
+                                          text: "Send For Approval",
+                                        ),
+                                        width: size.width * .5,
+                                        //margin: EdgeInsets.only(right: 10),
                                       ),
-                                    ),
-                                  ]),
-                            ),
-                          );
-                        }),
-                        Obx(() {
-                          return Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Visibility(
-                              visible: saleCycleController.quoteHeaderdata[0].quoteAccepted?.toLowerCase() == "open" &&
-                                      saleCycleController.quoteHeaderdata[0].isReadySendForApproval == 1 ? true : false,
-                              child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    Container(
-                                      child: DefaultButton(
-                                        press: () {
-                                          saleCycleController.BusinessTerm.value = false;
-                                          saleCycleController.clearBusinessTerm();
-                                          Get.toNamed(RoutesName.UpdateBussinessTermPage);
-                                          //openConfirmationDialog(context,   'Do you want to send this Quote for Approval?', "");
-                                        },
-                                        text: "Send For Approval",
-                                      ),
-                                      width: size.width * .5,
-                                      //margin: EdgeInsets.only(right: 10),
-                                    ),
-                                  ]),
-                            ),
-                          );
-                        }),
-                         //todo mark quotation work is done by nirupma
-                        Obx(() {
-                          return Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Visibility(
-                              visible:(saleCycleController.userType?.toLowerCase()=='bh' ||
-                                  saleCycleController.email.toLowerCase()==saleCycleController.quoteHeaderdata[0].createdBy?.toLowerCase())
-                                  && saleCycleController.quoteHeaderdata[0].quoteStatus?.toLowerCase() == 'approved' &&
-                                  saleCycleController.quoteHeaderdata[0].quoteStatusWon?.toLowerCase() == 'open',
-                              child: GestureDetector(
-                                onTap: () {
+                                    ]),
+                              ),
+                            );
+                          }),
 
-                                },
-                                child:  ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                      backgroundColor: AllColors.primaryDark1
-                                  ),
-                                  onPressed: () {
-                                    saleCycleController.quotationWonLossController.value.text='WON';
-                                    saleCycleController.reasonQuotationVisibilty.value=false;
-                                    saleCycleController
-                                        .quotationReasonController.value.text="";
-                                    showDialogquotationWonLoss(context);
+                          //todo mark quotation work is done by nirupma
+
+                          Obx(() {
+                            return Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Visibility(
+                                visible:(saleCycleController.userType?.toLowerCase()=='bh' ||
+                                    saleCycleController.email.toLowerCase()==saleCycleController.quoteHeaderdata[0].createdBy?.toLowerCase())
+                                    && saleCycleController.quoteHeaderdata[0].quoteStatus?.toLowerCase() == 'approved' &&
+                                    saleCycleController.quoteHeaderdata[0].quoteStatusWon?.toLowerCase() == 'open',
+                                child: GestureDetector(
+                                  onTap: () {
+
                                   },
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(6.0),
-                                    child: Text('Mark Quotation Won',
-                                      style: GoogleFonts.poppins(
-                                        color: AllColors.whiteColor,
-                                        fontSize: AllFontSize.fourtine,
-                                        fontWeight: FontWeight.w500,
-                                      ),),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          );
-                        }),
-
-                        Obx(() {
-                          print("quote accepted ${saleCycleController.quoteHeaderdata[0].quoteAccepted?.toLowerCase() != "loss"}");
-                         return Visibility(
-                            visible: saleCycleController.quoteHeaderdata[0].quoteAccepted?.toLowerCase() != "loss"&&
-                                saleCycleController.quoteHeaderdata[0].quoteAccepted?.toLowerCase() != "won"&&(
-                                (saleCycleController.quoteHeaderdata[0].quoteStatus?.toLowerCase() == "draft" &&
-                                    saleCycleController.quoteHeaderdata[0].quoteAccepted?.toLowerCase() == "open"&&
-                                    saleCycleController.quoteHeaderdata[0].isReadySendForApproval == 1)
-                                    || saleCycleController.isAdminWritePermission=="1"
-                                    || ((saleCycleController.userType.toLowerCase()=="ch"||saleCycleController.userType.toLowerCase()=="bh"||
-                                        saleCycleController.userType.toLowerCase()=="gm") &&
-                                    saleCycleController.quoteHeaderdata[0].quoteStatus?.toLowerCase() == "pending for approval")) ? true : false,
-                            child: GestureDetector(
-                              onTap: () {
-                                saleCycleController.updateQuoteShippingAddressConfirmation.value.text='No';
-                                saleCycleController.bindAddress();
-                                Get.toNamed(RoutesName.updateQuoteHeaderScreen);
-                                //showDialogForHeaderUpdate(context);
-                              },
-                              child: Container(
-                                child: Tooltip(
-                                  message: 'Update Quote Header',
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(7.0),
-                                    child: Icon(
-                                      Icons.update,
-                                      color: AllColors.primaryDark1,
-                                      size: 20,
+                                  child:  ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                        backgroundColor: AllColors.primaryDark1
+                                    ),
+                                    onPressed: () {
+                                      saleCycleController.quotationWonLossController.value.text='WON';
+                                      saleCycleController.reasonQuotationVisibilty.value=false;
+                                      saleCycleController
+                                          .quotationReasonController.value.text="";
+                                      showDialogquotationWonLoss(context);
+                                    },
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(6.0),
+                                      child: Text('Mark Quotation Won',
+                                        style: GoogleFonts.poppins(
+                                          color: AllColors.whiteColor,
+                                          fontSize: AllFontSize.fourtine,
+                                          fontWeight: FontWeight.w500,
+                                        ),),
                                     ),
                                   ),
                                 ),
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(30),
-                                    border: Border.all(
-                                        color: AllColors.primaryDark1)),
                               ),
-                            ),
-                          );
-                        }),
-                        Obx(() {
-                          return Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Visibility(
-                              visible: saleCycleController.quoteHeaderdata[0].quoteStatus!.toLowerCase() == 'draft' ? false : true,
+                            );
+                          }),
+                          Obx(() {
+                            print("quote accepted ${saleCycleController.quoteHeaderdata[0].quoteAccepted?.toLowerCase() != "loss"}");
+                           return Visibility(
+                              visible: saleCycleController.quoteHeaderdata[0].quoteAccepted?.toLowerCase() != "loss"&&
+                                  saleCycleController.quoteHeaderdata[0].quoteAccepted?.toLowerCase() != "won"&&(
+                                  (saleCycleController.quoteHeaderdata[0].quoteStatus?.toLowerCase() == "draft" &&
+                                      saleCycleController.quoteHeaderdata[0].quoteAccepted?.toLowerCase() == "open"&&
+                                      saleCycleController.quoteHeaderdata[0].isReadySendForApproval == 1)
+                                      || saleCycleController.isAdminWritePermission=="1"
+                                      || ((saleCycleController.userType.toLowerCase()=="ch"||saleCycleController.userType.toLowerCase()=="bh"||
+                                          saleCycleController.userType.toLowerCase()=="gm") &&
+                                      saleCycleController.quoteHeaderdata[0].quoteStatus?.toLowerCase() == "pending for approval")) ? true : false,
                               child: GestureDetector(
                                 onTap: () {
-                                  Get.toNamed(RoutesName.approvalPersonList);
-                                  saleCycleController.getApprovalPersonList(saleCycleController.quoteHeaderdata[0].quoteId ?? "");
-                                  // Get.offAllNamed(RoutesName.approvalPersonList);
+                                  saleCycleController.updateQuoteShippingAddressConfirmation.value.text='No';
+                                  saleCycleController.bindAddress();
+                                  Get.toNamed(RoutesName.updateQuoteHeaderScreen);
+                                  //showDialogForHeaderUpdate(context);
                                 },
-                                child: Tooltip(
-                                  message: 'View Approver Persons',
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(30),
-                                        border: Border.all(color: AllColors.primaryDark1)),
+                                child: Container(
+                                  child: Tooltip(
+                                    message: 'Update Quote Header',
                                     child: Padding(
                                       padding: const EdgeInsets.all(7.0),
-                                      child: Icon(Icons.groups,size: 20,),
+                                      child: Icon(
+                                        Icons.update,
+                                        color: AllColors.primaryDark1,
+                                        size: 20,
+                                      ),
+                                    ),
+                                  ),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(30),
+                                      border: Border.all(
+                                          color: AllColors.primaryDark1)),
+                                ),
+                              ),
+                            );
+                          }),
+                          Obx(() {
+                            return Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Visibility(
+                                visible: saleCycleController.quoteHeaderdata[0].quoteStatus!.toLowerCase() == 'draft' ? false : true,
+                                child: GestureDetector(
+                                  onTap: () {
+                                    Get.toNamed(RoutesName.approvalPersonList);
+                                    saleCycleController.getApprovalPersonList(saleCycleController.quoteHeaderdata[0].quoteId ?? "");
+                                    // Get.offAllNamed(RoutesName.approvalPersonList);
+                                  },
+                                  child: Tooltip(
+                                    message: 'View Approver Persons',
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(30),
+                                          border: Border.all(color: AllColors.primaryDark1)),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(7.0),
+                                        child: Icon(Icons.groups,size: 20,),
+                                      ),
                                     ),
                                   ),
                                 ),
                               ),
+                            );
+                          }),
+                          Visibility(
+                            visible: saleCycleController.isAdminWritePermission=="1",
+                            child: ActionChip(
+                            label: Text(
+                              "Move To Draft",
+                              style: GoogleFonts.poppins(
+                                color: AllColors.whiteColor,
+                                fontWeight: FontWeight.w500,
+                              ),
                             ),
-                          );
-                        }),
-                        Visibility(
-                          visible: saleCycleController.isAdminWritePermission=="1",
-                          child: ActionChip(
-                          label: Text(
-                            "Move To Draft",
-                            style: GoogleFonts.poppins(
-                              color: AllColors.whiteColor,
-                              fontWeight: FontWeight.w500,
+                            onPressed: () {
+                              moveToDraftDialog(context);
+                            },
+                            backgroundColor: AllColors.primaryDark1,
+                            shape: StadiumBorder(
+                              side: BorderSide.none,
                             ),
-                          ),
-                          onPressed: () {
-                            moveToDraftDialog(context);
-                          },
-                          backgroundColor: AllColors.primaryDark1,
-                          shape: StadiumBorder(
-                            side: BorderSide.none,
-                          ),
-                        ),)
-                      ],
+                          ),)
+                        ],
+                      ),
                     ),
                     Obx(() {
                       return BindSalesData(context);
@@ -530,6 +551,12 @@ class QuoteInformationScreen extends StatelessWidget {
                                 ),
                               );
                             }),
+
+                            IconButton(onPressed: () {
+                                  showDialogForFilter(context);
+                                  }, icon: Icon(Icons.filter_alt_sharp)
+                            ),
+
                           ],
                         ),
                       ),
@@ -542,9 +569,7 @@ class QuoteInformationScreen extends StatelessWidget {
                         color: AllColors.lightgreyColor,
                       ),
                     ),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 10, horizontal: 10),
+                    Container(padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                       child: SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
                         child: Row(
@@ -563,73 +588,16 @@ class QuoteInformationScreen extends StatelessWidget {
                               thickness: 1,
                               color: AllColors.lightgreyColor,
                             ),
-                            /*Obx(() {
-                              return Table(
-                                defaultVerticalAlignment:
-                                    TableCellVerticalAlignment.middle,
-                                columnWidths: const {
-                                  0: FixedColumnWidth(120),
-                                  1: FixedColumnWidth(150),
-                                  2: FixedColumnWidth(120),
-                                  3: FixedColumnWidth(130),
-                                  4: FixedColumnWidth(130),
-                                  5: FixedColumnWidth(120),
-                                  6: FixedColumnWidth(130),
-                                  7: FixedColumnWidth(120),
-                                  8: FixedColumnWidth(130),
-                                  9: FixedColumnWidth(130),
-                                },
-                                border: TableBorder.symmetric(
-                                  inside: BorderSide(
-                                      width: 1,
-                                      color: AllColors.lightgreyColor),
-                                ),
-                                children: [
-                                  // Header Row
-                                  TableRow(
-                                    children: [
-                                      tableHeaderCell("Qty"),
-                                      tableHeaderCell("BM %"),
-                                      tableHeaderCell("Appr Amt Per Unit"),
-                                      tableHeaderCell("Sales Credit"),
-                                      tableHeaderCell("Total Approved Price"),
-                                      Visibility(visible:saleCycleController.isAdminWritePermission=="1"|| saleCycleController.userType.toLowerCase()=="GM",child: tableHeaderCell("GM %")),
-                                      Visibility(visible:saleCycleController.isAdminWritePermission=="1"|| saleCycleController.userType.toLowerCase()=="GM",child:  tableHeaderCell("GM Amt"),),
-                                      Visibility(visible:saleCycleController.isAdminWritePermission=="1"|| saleCycleController.userType.toLowerCase()=="GM",child: tableHeaderCell("GM Total Amt"),),
-
-                                      tableHeaderCell("Gst Amount"),
-                                      tableHeaderCell("Total Amount"),
-                                    ],
-                                  ),
-                                  // Value Row
-                                  TableRow(
-                                    children: [
-                                      tableValueCell(saleCycleController.quoteHeaderdata[0].quoteTotalQty?.toInt()),
-                                      tableValueCell(saleCycleController.quoteHeaderdata[0].quoteTotalBmPerAverage),
-                                      tableValueCell("₹ ${saleCycleController.numberFormatWithComma(saleCycleController.quoteHeaderdata[0].quoteApprovedAmtPerUnit)}"),
-                                      tableValueCell(saleCycleController.quoteHeaderdata[0].quoteSalesCreditAverage),
-                                      tableValueCell("₹ ${saleCycleController.numberFormatWithComma(saleCycleController.quoteHeaderdata[0].quoteTotalApprovedDiscountAmount)}"),
-
-                                      Visibility(visible:saleCycleController.isAdminWritePermission=="1"|| saleCycleController.userType.toLowerCase()=="GM",child:tableValueCell(saleCycleController.quoteHeaderdata[0].quoteTotalGmPerAverage),),
-                                      Visibility(visible:saleCycleController.isAdminWritePermission=="1"|| saleCycleController.userType.toLowerCase()=="GM",child:  tableValueCell("₹ ${saleCycleController.numberFormatWithComma(saleCycleController.quoteHeaderdata[0].quoteTotalGmDiscountAmount)}"),),
-                                      Visibility(visible:saleCycleController.isAdminWritePermission=="1"|| saleCycleController.userType.toLowerCase()=="GM",child: tableValueCell("₹ ${saleCycleController.numberFormatWithComma(saleCycleController.quoteHeaderdata[0].quoteNewTotalGmDiscountAmount)}"),),
-
-
-                                      tableValueCell("₹ ${saleCycleController.numberFormatWithComma(saleCycleController.quoteHeaderdata[0].quoteGstAmount)}"),
-                                      tableValueCell("₹ ${saleCycleController.numberFormatWithComma(saleCycleController.quoteHeaderdata[0].quoteGrossAmount)}"),
-                                    ],
-                                  ),
-                                ],
-                              );
-                            })*/
-                        Obx(() {
-                          final bool showGM =
-                              saleCycleController.isAdminWritePermission == "1" ||
+                       /* Obx(() {
+                          final bool showGM = saleCycleController.isAdminWritePermission == "1" ||
                                   saleCycleController.userType.toLowerCase() == "gm"||saleCycleController.GmApproveDetail.value;
                           final bool showbh=saleCycleController.userType?.toLowerCase()=='bh' ||
                               saleCycleController.userType?.toLowerCase()=='ch'||
                               saleCycleController.userType?.toLowerCase()=='gm'||
                               saleCycleController.isAdminWritePermission.value=="1";
+
+                          final bool showStandardCost = saleCycleController.userType?.toLowerCase()=='gm' || saleCycleController.isAdminWritePermission=="1" ||
+                              saleCycleController.GmApproveDetail.value;
 
                           final data = saleCycleController.quoteHeaderdata[0];
 
@@ -648,9 +616,10 @@ class QuoteInformationScreen extends StatelessWidget {
                                 TableRow(
                                   children: [
                                     tableHeaderCell("Qty"),
+                                    if(showStandardCost)tableHeaderCell('Std Cost'),
 
                                     if(showbh)tableHeaderCell("BM %"),
-
+                                    if(showStandardCost)tableHeaderCell('Total Std Cost'),
                                     tableHeaderCell("Appr Amt Per Unit"),
                                     tableHeaderCell("Sales Credit"),
                                     tableHeaderCell("Total Approved Price"),
@@ -663,11 +632,20 @@ class QuoteInformationScreen extends StatelessWidget {
                                     tableHeaderCell("Total Amount"),
                                   ],
                                 ),
-
                                 TableRow(
                                   children: [
                                     tableValueCell(data.quoteTotalQty?.toInt()),
+                                    if(showStandardCost) tableValueCell(
+                                      "₹ ${saleCycleController.numberFormatWithComma(
+                                        data.quoteStandardCostTotal,
+                                      )}",
+                                    ),
                                     if(showbh)tableValueCell(data.quoteTotalBmPerAverage),
+                                    if(showStandardCost) tableValueCell(
+                                      "₹ ${saleCycleController.numberFormatWithComma(
+                                        data.quoteStandardCostWithQtyTotal,
+                                      )}",
+                                    ),
                                     tableValueCell(
                                       "₹ ${saleCycleController.numberFormatWithComma(
                                         data.quoteApprovedAmtPerUnit,
@@ -710,7 +688,7 @@ class QuoteInformationScreen extends StatelessWidget {
                               ],
                             ),
                           );
-                        }),
+                        }),*/
 
                         ],
                         ),
@@ -971,13 +949,25 @@ class QuoteInformationScreen extends StatelessWidget {
                           }),
                           Obx(() {
                             return Visibility(
-                              visible:
-                              saleCycleController.userType?.toLowerCase()=='gm' || saleCycleController.isAdminWritePermission=="1",
+                              visible: saleCycleController.userType?.toLowerCase()=='gm' || saleCycleController.isAdminWritePermission=="1" ||
+                                  saleCycleController.GmApproveDetail.value,
                               child:  bindData( "Std Cost : ","₹ ${
                                   saleCycleController.numberFormatWithComma(saleCycleController.quoteLinedata[index].standardCost).toString()}",context),
                             );
                           }),
                           bindData( "Approved Dis. % :",saleCycleController.quoteLinedata[index].approvedDiscountPer.toString(),context),
+
+
+                          Obx(() {
+                            return Visibility(
+                              visible: saleCycleController.userType?.toLowerCase()=='gm' || saleCycleController.isAdminWritePermission=="1" ||
+                                  saleCycleController.GmApproveDetail.value,
+                              child:  bindData( "Total Std Cost : ","₹ ${
+                                  saleCycleController.numberFormatWithComma(saleCycleController.quoteLinedata[index].standardCostWithQty).toString()}",context),
+                            );
+                          }),
+
+
                           bindData( "Appr. Amt P/U : ","₹ ${saleCycleController.numberFormatWithComma(saleCycleController.quoteLinedata[index].approvedAmountPerUnit).toString()}",context),
                           bindData( "Sales Credit % : ",saleCycleController.quoteLinedata[index].salesCredit.toString(),context),
                           Obx((){
@@ -1105,8 +1095,6 @@ class QuoteInformationScreen extends StatelessWidget {
                                 saleCycleController.quoteLinedata[index].discountPer ==0?"":
                                 saleCycleController.quoteLinedata[index].discountPer.toString();
 
-
-
                             saleCycleController.updateDiscountAmountController.value.text =
                                 saleCycleController.quoteLinedata[index].approvedDiscountPer.toString();
                             saleCycleController.gmDiscountPerContoller.value.text =
@@ -1181,15 +1169,17 @@ class QuoteInformationScreen extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(left: 8.0, right: 8.0),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Text(fixData,
             style: GoogleFonts.poppins(
               color: AllColors.primaryDark1,
               fontSize: AllFontSize.twelve,
               fontWeight: FontWeight.w500,
+
             ),
           ),
+          SizedBox(width: 10,),
           Flexible(
             child: Tooltip(
               message: value,
@@ -1308,13 +1298,9 @@ class QuoteInformationScreen extends StatelessWidget {
                           ),
                         ),
                         onTap: () {
-                          accountMaster_page_controller.view =
-                              'FromquoteInformationScreen';
-                          contact_vm_controller.view =
-                              'FromquoteInformationScreen';
-                          accountMaster_page_controller.getAccMasterBuyCodeApi(
-                              saleCycleController
-                                  .quoteHeaderdata[0].accountCode!);
+                          accountMaster_page_controller.view = 'FromquoteInformationScreen';
+                          contact_vm_controller.view = 'FromquoteInformationScreen';
+                          accountMaster_page_controller.getAccMasterBuyCodeApi(saleCycleController.quoteHeaderdata[0].accountCode!);
                         },
                       ),
                     ],
@@ -1332,7 +1318,8 @@ class QuoteInformationScreen extends StatelessWidget {
                     color: AllColors.textColor,
                   ),
                   Visibility(
-                    visible: saleCycleController.quoteHeaderdata[0].parentProductCategoryCode==null,
+                    visible:true  /*saleCycleController.quoteHeaderdata[0].parentProductCategoryCode==null ||
+                        saleCycleController.quoteHeaderdata[0].parentProductCategoryCode==""*/,
                     child:
                   _buildLabelWithValue(
                       label: "Product Category",
@@ -1619,9 +1606,8 @@ class QuoteInformationScreen extends StatelessWidget {
         ),
 
         if (label == "P. Product Category" &&
-            saleCycleController.quoteHeaderdata[0].quoteStatus?.toLowerCase() ==
-                "draft" && saleCycleController.isHeadofficePermission !=
-            "1")
+            saleCycleController.quoteHeaderdata[0].quoteStatus?.toLowerCase() == "draft" &&
+            saleCycleController.isHeadofficePermission != "1")
           InkWell(
             onTap: () {
               saleCycleController.itemCategorySelectedlist.clear();
@@ -1654,6 +1640,30 @@ class QuoteInformationScreen extends StatelessWidget {
               child: Icon(Icons.add),
             ),
           ),
+        if(label == "Product Category" &&
+            saleCycleController.quoteHeaderdata[0].quoteStatus?.toLowerCase() ==
+                "draft" &&
+            saleCycleController.isHeadofficePermission != "1")
+          InkWell(
+              onTap: () {
+                saleCycleController.itemCategorySelectedlist.value = [];
+                for (int i = 0; i < saleCycleController.productCategoryList.length; i++) {
+                  if (saleCycleController.productCategoryList[i].isSelected == 1) {
+                    saleCycleController.itemCategorySelectedlist.add(saleCycleController.productCategoryList[i]);
+                    //TaskMaster_page_controller.Item_Category_code_list.add(TaskMaster_page_controller.Item_Category_master_list[i].categoryCode!);
+
+                    print(
+                        'LIstSIze.....${saleCycleController.itemCategorySelectedlist.length}');
+                  } else {
+                    print('NoLIstSIze.....');
+                  }
+                }
+                saleCycleController.productCategoryController.value.clear();
+                showProductCategoryDialog(context);
+              },
+              child: Icon(Icons.add)),
+
+
       ],
     );
   }
@@ -1744,6 +1754,89 @@ class QuoteInformationScreen extends StatelessWidget {
           );
         });
   }
+  showProductCategoryDialog(context) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            title: Text(
+              'Product Category',
+              style: GoogleFonts.poppins(
+                fontSize: AllFontSize.sisxteen,
+                fontWeight: FontWeight.w700,
+                color: AllColors.primaryDark1,
+              ),
+            ),
+            content: Container(
+              //height: size.height*.3,
+              width: size.width * 4,
+              padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
+              child: Wrap(
+                children: [
+                  //bindItemCategoryDropDown(context),
+                  bindItemProducrtCategoryDropDown(context),
+                  const SizedBox(
+                    height: 65,
+                  ),
+                  Obx(() {
+                    return Visibility(
+                      visible:
+                      saleCycleController.itemCategorySelectedlist.length > 0 ? true : false,
+                      child: Wrap(
+                        spacing: 8.0,
+                        children: saleCycleController.itemCategorySelectedlist
+                            .map((category) {
+                          return Chip(
+                            label: Text(category.categoryName ?? ""),
+                            onDeleted: () {
+                              saleCycleController.itemCategorySelectedlist.remove(category);
+                            },
+                          );
+                        }).toList(),
+                      ),
+                    );
+                  }),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      ElevatedButton(
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all<Color>(
+                            AllColors.primaryDark1,
+                          ),
+                        ),
+                        onPressed: () {
+                          saleCycleController.ProductCatCreateSaleCycleInfApiHit(saleCycleController.quoteHeaderdata[0].quoteId.toString());
+                          Navigator.pop(context);
+                        },
+                        child: Container(
+                          width: 100,
+                          alignment: Alignment.center,
+                          child: Text(
+                            'Save' /*accountMaster_page_controller.UploadImageType_controller.value =="Url"? 'Upload Url':'Choose files'*/,
+                            style: GoogleFonts.poppins(
+                              color: AllColors.customDarkerWhite,
+                              fontSize: AllFontSize.fourtine,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            ),
+          );
+        });
+  }
+
   bindIsMultiParentCategoryDropDown(BuildContext context) {
     return DropdownMenu<String>(
       width: MediaQuery.of(context).size.width,
@@ -1813,6 +1906,113 @@ class QuoteInformationScreen extends StatelessWidget {
   }
   static String _displayItemCatMasterForOption(ItemCategoryMstModel option) =>
       option.parentCategoryCode!;
+
+  static String _displayItemProductCatMasterForOption(ItemCategoryMstModel option) =>
+      option.categoryName!;
+
+  Widget bindItemProducrtCategoryDropDown(context) {
+    return Autocomplete<ItemCategoryMstModel>(
+      displayStringForOption: _displayItemProductCatMasterForOption,
+      optionsBuilder: (TextEditingValue textEditingValue) {
+        if (textEditingValue.text.isEmpty) {
+          return saleCycleController.productCategoryList;
+          // return const Iterable<VehicleTypeResponse>.empty();
+        }
+        return saleCycleController.productCategoryList
+            .where((ItemCategoryMstModel option) {
+          return option.categoryName
+              .toString()
+              .toLowerCase()
+              .contains(textEditingValue.text.toLowerCase());
+        }).toList();
+      },
+      onSelected: (ItemCategoryMstModel selection) {
+        // Update the TextField with the selected
+        saleCycleController.productCategoryController.value.text =
+            _displayItemProductCatMasterForOption(selection).toString();
+        print('Controller.....${saleCycleController.productCategoryController.value.text}');
+        if (!saleCycleController.itemCategorySelectedlist.contains(selection)) {
+          //TaskMaster_page_controller.Item_Category_code_list.add(selection.categoryCode!);
+          saleCycleController.itemCategorySelectedlist.add(selection);
+          //Utils.showToastification('Success', 'Add Successfully');
+        } else {
+          Utils.showErrorToastification('Error', 'Already Selected');
+        }
+        saleCycleController.productCategoryController.value.clear();
+        // TaskMaster_page_controller.AccountOwner = selection.loginEmailId!;
+      },
+      fieldViewBuilder: (BuildContext context, TextEditingController controller,
+          FocusNode focusNode, VoidCallback onFieldSubmitted) {
+        return Container(
+          decoration: BoxDecoration(
+              color: Colors.white, borderRadius: BorderRadius.circular(10)),
+          child: TextField(
+            onTap: () {
+              controller.clear();
+            },
+            cursorColor: AllColors.primaryDark1,
+            controller: controller
+              ..text = saleCycleController.productCategoryController.value.text,
+            focusNode: focusNode,
+            //onSubmitted: onFieldSubmitted,
+            decoration: InputDecoration(
+              suffixIcon: InkWell(
+                  onTap: () {
+                    focusNode.requestFocus();
+                    controller.clear();
+                  },
+                  child: Icon(Icons.arrow_drop_down)),
+              contentPadding: EdgeInsets.symmetric(
+                  vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+              hintText: 'Product Category',
+              labelText: 'Product Category',
+              border: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(10))),
+            ),
+          ),
+        );
+      },
+      optionsViewBuilder: (BuildContext context,
+          AutocompleteOnSelected<ItemCategoryMstModel> onSelected,
+          Iterable<ItemCategoryMstModel> suggestions) {
+        return Align(
+          alignment: Alignment.topLeft,
+          child: Material(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+            elevation: 4.0,
+            child: Container(
+              width: size.width * .7,
+              constraints: BoxConstraints(maxHeight: 200),
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: suggestions.length,
+                itemBuilder: (context, index) {
+                  final ItemCategoryMstModel option =
+                  suggestions.elementAt(index);
+                  return GestureDetector(
+                    onTap: () {
+                      onSelected(option);
+                    },
+                    child: Container(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text(
+                        option.categoryName.toString(),
+                        style: GoogleFonts.poppins(
+                            color: AllColors.blackColor,
+                            fontWeight: FontWeight.w300,
+                            fontSize: AllFontSize.sisxteen // Change the text color here
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
 
   Widget bindItemCategoryDropDown(context) {
     return Autocomplete<ItemCategoryMstModel>(
@@ -3789,6 +3989,31 @@ class QuoteInformationScreen extends StatelessWidget {
                     ),
                   ),
                   Spacer(),
+                 /* Visibility(
+                    visible: ((saleCycleController.isAdminWritePermission == "1" ||
+                        saleCycleController.userType.toLowerCase() == "bh" ||
+                        saleCycleController.saleCycleList[0].createdBy?.toLowerCase() == saleCycleController.email.toLowerCase()) &&
+                        *//* saleCycleController.filter.value == 'Sales cycle' &&*//*
+                        saleCycleController.saleCycleList[0].quoteAccepted?.toLowerCase() == 'open') &&
+                        !(saleCycleController.saleCycleList[0].actualSalesCycleApprovalStatus?.toLowerCase() == 'rejected') &&
+                        !(saleCycleController.FromPage.value == "FromDashboard"),
+                    child:*/ CircleAvatar(
+                      child: InkWell(
+                        onTap: () {
+                          String ProductCategory = saleCycleController.quoteHeaderdata[0].productCategoryCode ?? "";
+                          String PipeProdCate = ProductCategory.replaceAll(', ', '|');
+                          saleCycleController.pageNumberForItem = 0;
+                          saleCycleController.productCategory = PipeProdCate;
+                          saleCycleController.salesCycleId.value=saleCycleController.quoteHeaderdata[0].salesCycleId?? "";
+                          saleCycleController.itemMstGetBySalesIdApiHit(saleCycleController.pageNumberForItem,
+                              saleCycleController.quoteHeaderdata[0].salesCycleId, PipeProdCate);
+                        },
+                        child: Icon(Icons.add),
+                      ),
+                    ),
+                 // ),
+
+                  const SizedBox(width: 5,),
                   CircleAvatar(
                     child: InkWell(
                       onTap: () {
@@ -3910,6 +4135,98 @@ class QuoteInformationScreen extends StatelessWidget {
         ));
       },
     );
+  }
+  showSalesProductConfirmationDialog(context, String SalesId, int LineNo) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Icon(
+                  Icons.check_circle,
+                  color: AllColors.lightredColor,
+                ),
+                const SizedBox(
+                  width: 5,
+                ),
+                Text('Delete!',
+                    style: GoogleFonts.poppins(
+                      fontSize: AllFontSize.sisxteen,
+                      fontWeight: FontWeight.w700,
+                      color: AllColors.primaryDark1,
+                    ))
+              ],
+            ),
+            content: Wrap(children: [
+              Column(
+                children: [
+                  Text('Do you want to delete this sales line ?',
+                      style: GoogleFonts.poppins(
+                        fontSize: AllFontSize.fourtine,
+                        fontWeight: FontWeight.w500,
+                        color: AllColors.primaryDark1,
+                      )),
+                  const SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      ElevatedButton(
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all<Color>(
+                            AllColors.lightredColor,
+                          ),
+                        ),
+                        onPressed: () {
+                          Navigator.pop(context);
+                          //Get.back();
+                        },
+                        child: Container(
+                          width: 60,
+                          alignment: Alignment.center,
+                          child: Text(
+                            'Cancel',
+                            style: GoogleFonts.poppins(
+                              color: AllColors.blackColor,
+                              fontSize: AllFontSize.twelve,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                      ),
+                      ElevatedButton(
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all<Color>(
+                            AllColors.greenblue,
+                          ),
+                        ),
+                        onPressed: () {
+                          saleCycleController.SalesCycleLineDeleteApiHit(
+                              LineNo, SalesId);
+                          Navigator.pop(context);
+                          // Get.back();
+                        },
+                        child: Container(
+                          width: 60,
+                          alignment: Alignment.center,
+                          child: Text(
+                            'Confirm',
+                            style: GoogleFonts.poppins(
+                              color: AllColors.blackColor,
+                              fontSize: AllFontSize.twelve,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
+                  )
+                ],
+              ),
+            ]),
+          );
+        });
   }
 
   void showDialogSalesCycleProductFilter(BuildContext context) {
@@ -4253,25 +4570,40 @@ class QuoteInformationScreen extends StatelessWidget {
       child: ListTile(
         contentPadding: EdgeInsets.only(left: 5, right: 10),
         title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              "Item Code : ",
+              "Item Code : ${saleCycleController.get_SalesCycleProductById_List[index].itemCode ?? ""} ",
               style: GoogleFonts.poppins(
                 color: AllColors.primaryDark1,
                 fontSize: AllFontSize.fourtine,
                 fontWeight: FontWeight.w800,
               ),
             ),
-            Text(
-              saleCycleController
-                      .get_SalesCycleProductById_List[index].itemCode ??
-                  "",
+            /*Text(
+              saleCycleController.get_SalesCycleProductById_List[index].itemCode ?? "",
               style: GoogleFonts.poppins(
                 color: AllColors.textColor,
                 fontSize: AllFontSize.fourtine,
                 fontWeight: FontWeight.w800,
               ),
-            ),
+            ),*/
+             GestureDetector(
+                  onTap: () {
+                    showSalesProductConfirmationDialog(
+                      context,
+                      saleCycleController
+                          .get_SalesCycleProductById_List[index].salesCycleId
+                          .toString(),
+                      saleCycleController
+                          .get_SalesCycleProductById_List[index].lineNo!,
+                    );
+                  },
+                  child: Icon(
+                    Icons.delete_forever,
+                    color: AllColors.redColor,
+                  ),
+                )
           ],
         ),
         subtitle: Column(
@@ -4799,32 +5131,6 @@ class QuoteInformationScreen extends StatelessWidget {
     );
   }
 
-  bindGmDiscountPer(BuildContext context) {
-    return TextField(
-      keyboardType: TextInputType.number,
-      cursorColor: AllColors.primaryDark1,
-      controller: saleCycleController.gmDiscountPerContoller.value,
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(
-              vertical: AllFontSize.two, horizontal: AllFontSize.ten),
-          hintText: 'Gm %',
-          labelText: 'Gm %',
-          hintStyle: GoogleFonts.poppins(
-              color: AllColors.lightblackColor,
-              fontWeight: FontWeight.w300,
-              fontSize: AllFontSize.ten),
-          labelStyle: GoogleFonts.poppins(
-              color: AllColors.primaryDark1,
-              fontWeight: FontWeight.w500,
-              fontSize: AllFontSize.sisxteen),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          )),
-    );
-  }
 
   bindSalesCreditPer(BuildContext context) {
     return TextField(
@@ -5470,6 +5776,288 @@ class QuoteInformationScreen extends StatelessWidget {
             ),
           );
         });
+  }
+
+  void showDialogForFilter(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        return DraggableScrollableSheet(
+          expand: false,
+          initialChildSize: 0.85,
+          minChildSize: 0.5,
+          maxChildSize: 0.95,
+          builder: (_, scrollController) {
+            return Padding(
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom,
+              ),
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Icon(Icons.shield_moon_rounded, color: AllColors.primaryDark1,),
+                        SizedBox(width: 5,),
+                        Text(
+                          "Quote Filter ",
+                          style: GoogleFonts.poppins(
+                            color: AllColors.primaryDark1,
+                            fontSize: AllFontSize.twentee,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        Spacer(),
+                        InkWell(
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.only(right: 18.0),
+                            child: Icon(
+                              Icons.cancel,
+                              color: AllColors.primaryDark1,
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                  Center(
+                      child: Divider(
+                        height: 1,
+                        color: AllColors.primaryDark1,
+                      )),
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: Container(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const SizedBox(height: 5,),
+                              bindFilterData(context,'Item Name', saleCycleController.quote_item_name_flt.value),
+                              const SizedBox(height: 10),
+                              bindFilterData(context,'Quantity', saleCycleController.quote_qty_flt.value),
+                              const SizedBox(height: 10),
+                              bindFilterData(context,'LSP', saleCycleController.quote_lsp_flt.value),
+                              const SizedBox(height: 10),
+                              Obx(() {
+                                return Visibility(
+                                  visible: saleCycleController.userType?.toLowerCase()=='bh' ||
+                                      saleCycleController.userType?.toLowerCase()=='ch'||
+                                      saleCycleController.isAdminWritePermission=="1" ||
+                                      saleCycleController.userType?.toLowerCase()=='gm',
+                                  child: bindFilterData(context,'MAP', saleCycleController.quote_map_flt.value),
+                                );
+                              }),
+                              const SizedBox(height: 10),
+                              bindFilterData(context,'Seeking%', saleCycleController.quote_seeking_per_flt.value),
+                              const SizedBox(height: 10),
+                              bindFilterData(context,'Seeking Amt P/U', saleCycleController.quote_seeking_amt_flt.value),
+                              Obx(() {
+                                return Visibility(
+                                  visible: saleCycleController.userType?.toLowerCase()=='bh' ||
+                                      saleCycleController.userType?.toLowerCase()=='ch'||
+                                      saleCycleController.isAdminWritePermission=="1" ||
+                                      saleCycleController.userType?.toLowerCase()=='gm',
+                                  child: Column(
+                                    children: [
+                                      const SizedBox(height: 10),
+                                      bindFilterData(context,'BTP', saleCycleController.quote_btp_flt.value),
+
+                                    ],
+                                  )
+
+                                );
+                              }),
+                              Obx(() {
+                                return Visibility(
+                                  visible: saleCycleController.userType?.toLowerCase()=='bh' ||
+                                      saleCycleController.userType?.toLowerCase()=='ch'||
+                                      saleCycleController.isAdminWritePermission=="1" ||
+                                      saleCycleController.userType?.toLowerCase()=='gm',
+                                  child: Column(
+                                    children: [
+                                      const SizedBox(height: 10),
+                                      bindFilterData(context,'Std. Cost', saleCycleController.quote_st_cost_flt.value),
+                                      const SizedBox(height: 10),
+                                    ],
+                                  )
+
+                                );
+                              }),
+                              const SizedBox(height: 10),
+                              bindFilterData(context,'Approved Dis. %', saleCycleController.quote_app_dis_per_flt.value),
+                              const SizedBox(height: 10),
+                              bindFilterData(context,'Approved Amt P/U', saleCycleController.quote_app_amt_flt.value),
+                              const SizedBox(height: 10),
+                              bindFilterData(context,'Sales Credit', saleCycleController.quote_sales_credit_flt.value),
+                              Obx(() {
+                                return Visibility(
+                                  visible: saleCycleController.userType?.toLowerCase()=='bh' ||
+                                      saleCycleController.userType?.toLowerCase()=='ch'||
+                                      saleCycleController.isAdminWritePermission=="1" ||
+                                      saleCycleController.userType?.toLowerCase()=='gm',
+                                  child:Column(
+                                    children: [
+                                      const SizedBox(height: 10),
+                                      bindFilterData(context,'GM %', saleCycleController.quote_gm_per_flt.value),
+                                      const SizedBox(height: 10),
+
+                                    ],
+                                  )
+
+                                );
+                              }),
+                              Obx(() {
+                                return Visibility(
+                                  visible: saleCycleController.userType?.toLowerCase()=='bh' ||
+                                      saleCycleController.userType?.toLowerCase()=='ch'||
+                                      saleCycleController.isAdminWritePermission=="1" ||
+                                      saleCycleController.userType?.toLowerCase()=='gm',
+                                  child:bindFilterData(context,'GM Total Amt.', saleCycleController.quote_gm_total_amt_flt.value),
+                                );
+                              }),
+                              const SizedBox(height: 10),
+                              bindFilterData(context,'Total Approved Price', saleCycleController.quote_total_app_price_flt.value),
+                              Obx(() {
+                                return Visibility(
+                                  visible: saleCycleController.userType?.toLowerCase()=='bh' ||
+                                      saleCycleController.userType?.toLowerCase()=='ch'||
+                                      saleCycleController.isAdminWritePermission=="1" ||
+                                      saleCycleController.userType?.toLowerCase()=='gm',
+                                  child:Column(
+                                    children: [
+                                      const SizedBox(height: 10),
+                                      bindFilterData(context,'BM %', saleCycleController.quote_bm_per_flt.value),
+                                    ],
+                                  )
+
+                                );
+                              }),
+                              const SizedBox(height: 10),
+                              bindFilterData(context,'Total Seeking Price', saleCycleController.quote_total_seeking_price_flt.value),
+                              const SizedBox(height: 10),
+                              bindFilterData(context,'Category Name', saleCycleController.quote_category_name_flt.value),
+                              const SizedBox(height: 10),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                    child: Row(
+                      children: [
+                        Expanded(child: _buildButton(
+                          text: 'Clear',
+                          borderColor: AllColors.redColor,
+                          textColor: AllColors.redColor,
+                          onTap: () {
+                            saleCycleController.clearQuoteLineFil();
+                            saleCycleController.getQuoteHeaderInformation(saleCycleController.quoteHeaderdata[0].quoteId, "ALLSPRMAPPING");
+                            Get.back();
+                          },
+                        )),
+                        const SizedBox(width: 6),
+                        Expanded(child: _buildButton(
+                          text: 'Apply',
+                          borderColor: AllColors.primaryDark,
+                          textColor: AllColors.primaryDark1,
+                          onTap: () {
+                            saleCycleController.getQuoteHeaderInformation(saleCycleController.quoteHeaderdata[0].quoteId, "ALLSPRMAPPING");
+                            Get.back();
+                          },
+                        )),
+                        const SizedBox(width: 6),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+
+        );
+      },
+    );
+  }
+  bindFilterData(BuildContext context, String labelText, TextEditingController controller,) {
+    String keybordType = "no";
+    print("label text  $labelText");
+    if(labelText.toLowerCase()== "item name" || labelText=="Category Name"){
+      keybordType="text";
+      print("label text else $labelText");
+    }
+    print("keyboard type $keybordType");
+    return TextField(
+      controller: controller,
+      keyboardType:keybordType=="no"? TextInputType.number:TextInputType.text,
+      decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+          labelText: labelText,
+          hintText: labelText,
+          hintStyle: GoogleFonts.poppins(
+              color: AllColors.lightblackColor,
+              fontWeight: FontWeight.w300,
+              fontSize: AllFontSize.ten),
+          labelStyle: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontWeight: FontWeight.w500,
+              fontSize: AllFontSize.sisxteen),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          )
+      ),
+      cursorColor: AllColors.primaryDark1,
+      onChanged: (value) {
+        // Handle the text field value changes if needed
+      },
+    );
+  }
+  Widget _buildButton({
+    required String text,
+    required Color borderColor,
+    required Color textColor,
+    required VoidCallback onTap,
+  }) {
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: AllColors.whiteColor,
+        foregroundColor: AllColors.lightgreyColor,
+        padding: const EdgeInsets.symmetric(vertical: 12),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15),
+          side: BorderSide(color: borderColor, width: 1),
+        ),
+      ),
+      onPressed: onTap,
+      child: Center(
+        child: FittedBox( // 🔥 PREVENTS OVERFLOW
+          fit: BoxFit.scaleDown,
+          child: Text(
+            text,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: GoogleFonts.poppins(
+              color: textColor,
+              fontSize: AllFontSize.sisxteen,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ),
+      ),
+    );
   }
 
 }

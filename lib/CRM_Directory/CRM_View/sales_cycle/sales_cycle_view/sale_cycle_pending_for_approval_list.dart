@@ -1310,109 +1310,334 @@ class SaleCyclePendingForApprovalList extends StatelessWidget{
     });
   }
 
-  bindAccountOwnerFilter(BuildContext context) {
-    return Obx((){
+  Widget bindAccountOwnerFilter(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {});
+    return Obx(() {
       if (salesCyclePendingForApprovalController.AccountOwner_controller.value.text.isNotEmpty && salesCyclePendingForApprovalController.filterDataChecker.value=='1') {
         List<String> nameList = salesCyclePendingForApprovalController.AccountOwner_controller.value.text.split(',');
-        salesCyclePendingForApprovalController.SelectedEmployee_Member_list.value =
-            List.generate(nameList.length, (index) {
-              return EmployeeMemberModel(
-                fullName: nameList[index].trim(),
-              );
-            });
-      }
-      return  DropdownSearch<EmployeeMemberModel>.multiSelection(
-        items: salesCyclePendingForApprovalController.employee_Member_list,
-        itemAsString: (EmployeeMemberModel u) => u.fullName??"",
-        selectedItems: salesCyclePendingForApprovalController.SelectedEmployee_Member_list,
-        dropdownDecoratorProps: DropDownDecoratorProps(
-          baseStyle: TextStyle(color: Colors.black),
-          dropdownSearchDecoration: InputDecoration(
-            filled: false,
-            labelText: salesCyclePendingForApprovalController.SelectedEmployee_Member_list.isNotEmpty?"Account Owner":null,
-            hintText: "Sales Cycle Owner",
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-          ),
-        ),
-        dropdownBuilder: (context, selectedItems) {
-          // Custom builder to just show comma-separated names
-          if (selectedItems.isEmpty) {
-            return Text(
-              " Sales Cycle Owner",
-              style: GoogleFonts.poppins(
-                color: AllColors.primaryDark1, // Match your hint color
-                fontSize: AllFontSize.sisxteen,
-                fontWeight: FontWeight.w500,
-              ),
-            );
-          }
-          return SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Text(
-              selectedItems.map((e) => e.fullName).join(', '),
-              style: TextStyle(color: Colors.black), // Only black text
-            ),
+        salesCyclePendingForApprovalController.SelectedEmployee_Member_list.value = List.generate(nameList.length, (index) {
+          return EmployeeMemberModel(
+            userFullName: nameList[index].trim(),
           );
+        });
+      }
+      final selected = salesCyclePendingForApprovalController.SelectedEmployee_Member_list;
+      final selectedText = selected.isEmpty ? null : selected.map((e) =>
+      "${salesCyclePendingForApprovalController.isAdminWritePermission=="1"?e.userFullName ?? "":e.fullName ?? ""}(${e.salesPersonEmpCode ?? ""})").join(', ');
+      return GestureDetector(
+        onTap: ()  {
+          openBottomSheet(context);
         },
-        onChanged: (List<EmployeeMemberModel> selectedList) {
-          salesCyclePendingForApprovalController.SelectedEmployee_Member_list.value =
-              selectedList;
-          salesCyclePendingForApprovalController.AccountOwner_controller.value.text =
-              selectedList.map((e) => e.fullName).join(', ');
-        },
-
-        popupProps: PopupPropsMultiSelection.dialog(
-          showSearchBox: true,
-          searchFieldProps: TextFieldProps(
-            padding: EdgeInsets.only(top: 20, left: 10, right: 10),
-            decoration: InputDecoration(
-              contentPadding: EdgeInsets.only(top: 20, left: 12, right: 12),
-              // Top margin here
-              hintText: "Search...",
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
+        child: InputDecorator(
+          decoration: InputDecoration(
+            labelText: selectedText != null ?  "Sales Cycle Owner": "", // 👈 Label restored here
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
             ),
+            contentPadding:
+            const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
           ),
-
-          itemBuilder: (context, item, isSelected) =>
-              ListTile(
-                title: Text(item.fullName??""),
+          child: Row(
+            children: [
+              Expanded(
+                child: selectedText == null
+                    ? Text(
+                  "Sales Cycle Owner",
+                  style: GoogleFonts.poppins(
+                    color: Colors.black,
+                    fontSize: AllFontSize.sisxteen,
+                  ),
+                )
+                    : SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Text(
+                    selectedText,
+                    style: const TextStyle(color: Colors.black),
+                  ),
+                ),
               ),
+              const Icon(Icons.arrow_drop_down),
+            ],
+          ),
         ),
       );
     });
-
   }
-  bindSaleCycleOwner() {
-    return TextField(
-      controller: salesCyclePendingForApprovalController.salesCycleOwnerController.value,
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(
-              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-          labelText: 'Sales Cycle Owner',
-          hintText: 'Sales Cycle Owner',
-          hintStyle: GoogleFonts.poppins(
-              color: AllColors.lightblackColor,
-              fontWeight: FontWeight.w300,
-              fontSize: AllFontSize.ten),
-          labelStyle: GoogleFonts.poppins(
-              color: AllColors.primaryDark1,
-              fontWeight: FontWeight.w500,
-              fontSize: AllFontSize.sisxteen),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          )
-      ),
-      cursorColor: AllColors.primaryDark1,
-      onChanged: (value) {
-        // Handle the text field value changes if needed
-      },
+
+  openBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(16)),),
+        builder: (context){
+          salesCyclePendingForApprovalController.tempSelected.value = [];
+          salesCyclePendingForApprovalController.tempSelected.addAll(salesCyclePendingForApprovalController.SelectedEmployee_Member_list);
+          salesCyclePendingForApprovalController.filtered.value = salesCyclePendingForApprovalController.employee_Member_list;
+          return Obx((){
+            salesCyclePendingForApprovalController.allSelected.value = salesCyclePendingForApprovalController.filtered.isNotEmpty
+                && salesCyclePendingForApprovalController.tempSelected.length == salesCyclePendingForApprovalController.filtered.length;
+            return Visibility(
+                visible: salesCyclePendingForApprovalController.selectOwner.value,
+                child: Padding(
+                  padding: EdgeInsets.only(
+                      bottom: MediaQuery.of(context).viewInsets.bottom),
+                  child: SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.75,
+                    child: Column(
+                      children: [
+                        const SizedBox(height: 8),
+                        Container(
+                          width: 50,
+                          height: 4,
+                          decoration: BoxDecoration(
+                              color: Colors.grey[400],
+                              borderRadius: BorderRadius.circular(2)),
+                        ),
+                        const SizedBox(height: 12),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  'Sales Cycle Owner',
+                                  style: GoogleFonts.poppins(
+                                      fontSize: 16, fontWeight: FontWeight.w600,color: Colors.black),
+                                ),
+                              ),
+                              IconButton(onPressed: () {
+                                Navigator.of(context).pop();
+                              }, icon: const Icon(Icons.close,color: AllColors.primaryDark1,weight: 700,))
+
+                            ],
+                          ),
+                        ),
+                        // Search Field
+                        Padding(
+                          padding:
+                          const EdgeInsets.symmetric(horizontal: 16.0),
+                          child: TextField(
+                            controller: salesCyclePendingForApprovalController.searchController.value,
+                            decoration: InputDecoration(
+                              hintText: 'Search...',
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8)),
+                              isDense: true,
+                              suffixIcon: salesCyclePendingForApprovalController.searchController.value.text.isNotEmpty ? IconButton(
+                                icon: const Icon(Icons.clear),
+                                onPressed: () {
+                                  salesCyclePendingForApprovalController.searchController.value.clear();
+                                  if(salesCyclePendingForApprovalController.isAdminWritePermission=="1") {
+                                    salesCyclePendingForApprovalController.EmployeeMasterGet(salesCyclePendingForApprovalController.searchController.value.text);
+                                  }
+                                  else{
+                                    salesCyclePendingForApprovalController.filtered.value =salesCyclePendingForApprovalController.searchController.value.text.isEmpty ?
+                                    salesCyclePendingForApprovalController.employee_Member_list:salesCyclePendingForApprovalController.employee_Member_list.where((c) =>
+                                        (c.fullName ?? "").toLowerCase().contains(salesCyclePendingForApprovalController.searchController.value.text)).toList();
+                                  }
+
+
+                                },
+                              ) : null,
+                            ),
+                            onChanged: (v)
+                            {
+                              if(salesCyclePendingForApprovalController.isAdminWritePermission=="1") {
+                                salesCyclePendingForApprovalController.EmployeeMasterGet(salesCyclePendingForApprovalController.searchController.value.text);
+                              }
+                              else{
+                                salesCyclePendingForApprovalController.filtered.value =salesCyclePendingForApprovalController.searchController.value.text.isEmpty ?
+                                salesCyclePendingForApprovalController.employee_Member_list:salesCyclePendingForApprovalController.employee_Member_list.where((c) =>
+                                    ("${c.fullName ?? ""} ${c.salesPersonEmpCode ?? ""}").toLowerCase().contains(salesCyclePendingForApprovalController.searchController.value.text)).toList();
+                              }
+
+                            },
+                          ),
+                        ),
+
+                        const SizedBox(height: 8),
+
+                        // Select All
+                        /* Padding(
+                          padding:
+                          const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: CheckboxListTile(
+                            title:salesCyclePendingForApprovalController.allSelected.value?const Text('UnSelect All'): const Text('Select All'),
+                            value: salesCyclePendingForApprovalController.allSelected.value,
+                            onChanged: (val) {
+                              if (val == true) {
+                                salesCyclePendingForApprovalController.tempSelected.clear();
+                                salesCyclePendingForApprovalController.allSelected.value=true;
+                                salesCyclePendingForApprovalController.tempSelected.addAll(salesCyclePendingForApprovalController.filtered);
+                              } else {
+                                salesCyclePendingForApprovalController.allSelected.value=false;
+                                salesCyclePendingForApprovalController.tempSelected.clear();
+                              }
+                              salesCyclePendingForApprovalController.selectOwner.value=false;
+                              salesCyclePendingForApprovalController.selectOwner.value=true;
+                            },
+                          ),
+                        ),*/
+
+                        const Divider(height: 1),
+                        Obx((){
+                          return Visibility(visible:salesCyclePendingForApprovalController.loading.value,
+                            child:LinearProgressIndicator(
+                              backgroundColor: AllColors.primaryDark1,
+                              color: AllColors.textColor,
+                            ), );
+                        }),
+
+
+                        // List
+                        Expanded(
+                          child: salesCyclePendingForApprovalController.filtered.isEmpty ? const Center(child: Text('No Record Found!')) : ListView.builder(
+                            padding: const EdgeInsets.symmetric(vertical: 8),
+                            itemCount: salesCyclePendingForApprovalController.filtered.length,
+                            itemBuilder: (context, idx) {
+                              final item = salesCyclePendingForApprovalController.filtered[idx];
+                              salesCyclePendingForApprovalController.isSel.value = salesCyclePendingForApprovalController.tempSelected.any((s) =>
+                              (salesCyclePendingForApprovalController.isAdminWritePermission=="1"?s.userFullName ?? "":s.fullName ?? "") ==
+                                  (salesCyclePendingForApprovalController.isAdminWritePermission=="1"?item.userFullName ?? "":item.fullName ?? ""));
+                              return CheckboxListTile(
+                                title: Text("${salesCyclePendingForApprovalController.isAdminWritePermission=="1"?
+                                item.userFullName ?? "":item.fullName ?? ""}(${item.salesPersonEmpCode ?? ""})"),
+                                value: salesCyclePendingForApprovalController.isSel.value,
+                                onChanged: (v) {
+                                  if (v == true) {
+                                    salesCyclePendingForApprovalController.isSel.value=true;
+                                    salesCyclePendingForApprovalController.tempSelected.add(item);
+                                  } else {
+                                    salesCyclePendingForApprovalController.isSel.value=false;
+                                    salesCyclePendingForApprovalController.tempSelected.removeWhere((s) =>
+                                    (salesCyclePendingForApprovalController.isAdminWritePermission=="1"?s.userFullName ?? "":s.fullName ?? "") ==
+                                        (salesCyclePendingForApprovalController.isAdminWritePermission=="1"?item.userFullName ?? "":item.fullName ?? ""));
+                                    //(s.userFullName ?? "") == (item.userFullName ?? ""));
+                                  }
+                                  salesCyclePendingForApprovalController.selectOwner.value=false;
+                                  salesCyclePendingForApprovalController.selectOwner.value=true;
+                                },
+                              );
+                            },
+                          ),
+                        ),
+
+                        // Done button
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16.0, vertical: 12),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: ElevatedButton(
+                                  onPressed: () {
+                                    salesCyclePendingForApprovalController.SelectedEmployee_Member_list
+                                        .assignAll(salesCyclePendingForApprovalController.tempSelected);
+                                    salesCyclePendingForApprovalController.AccountOwner_controller.value.text =
+                                        salesCyclePendingForApprovalController.tempSelected.map((e) => e.empId).join(', ');
+
+                                    Navigator.of(context).pop();
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: AllColors.primaryDark1,
+                                    shadowColor: AllColors.primaryDark1,
+                                    foregroundColor: AllColors.primaryDark1,
+                                    side: BorderSide(color: AllColors.primaryDark1, width: 1),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                  ),
+                                  child: Text('Done',style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w600,color: Colors.white),),
+
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ));
+          });
+        }
     );
   }
+
+  // bindAccountOwnerFilter(BuildContext context) {
+  //   return Obx((){
+  //     if (salesCyclePendingForApprovalController.AccountOwner_controller.value.text.isNotEmpty && salesCyclePendingForApprovalController.filterDataChecker.value=='1') {
+  //       List<String> nameList = salesCyclePendingForApprovalController.AccountOwner_controller.value.text.split(',');
+  //       salesCyclePendingForApprovalController.SelectedEmployee_Member_list.value =
+  //           List.generate(nameList.length, (index) {
+  //             return EmployeeMemberModel(
+  //               fullName: nameList[index].trim(),
+  //             );
+  //           });
+  //     }
+  //     return  DropdownSearch<EmployeeMemberModel>.multiSelection(
+  //       items: salesCyclePendingForApprovalController.employee_Member_list,
+  //       itemAsString: (EmployeeMemberModel u) => u.fullName??"",
+  //       selectedItems: salesCyclePendingForApprovalController.SelectedEmployee_Member_list,
+  //       dropdownDecoratorProps: DropDownDecoratorProps(
+  //         baseStyle: TextStyle(color: Colors.black),
+  //         dropdownSearchDecoration: InputDecoration(
+  //           filled: false,
+  //           labelText: salesCyclePendingForApprovalController.SelectedEmployee_Member_list.isNotEmpty?"Account Owner":null,
+  //           hintText: "Sales Cycle Owner",
+  //           border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+  //         ),
+  //       ),
+  //       dropdownBuilder: (context, selectedItems) {
+  //         // Custom builder to just show comma-separated names
+  //         if (selectedItems.isEmpty) {
+  //           return Text(
+  //             " Sales Cycle Owner",
+  //             style: GoogleFonts.poppins(
+  //               color: AllColors.primaryDark1, // Match your hint color
+  //               fontSize: AllFontSize.sisxteen,
+  //               fontWeight: FontWeight.w500,
+  //             ),
+  //           );
+  //         }
+  //         return SingleChildScrollView(
+  //           scrollDirection: Axis.horizontal,
+  //           child: Text(
+  //             selectedItems.map((e) => "${e.fullName ?? ""}(${e.salesPersonEmpCode ?? ""})").join(', '),
+  //             style: TextStyle(color: Colors.black), // Only black text
+  //           ),
+  //         );
+  //       },
+  //       onChanged: (List<EmployeeMemberModel> selectedList) {
+  //         salesCyclePendingForApprovalController.SelectedEmployee_Member_list.value =
+  //             selectedList;
+  //         salesCyclePendingForApprovalController.AccountOwner_controller.value.text =
+  //             selectedList.map((e) => e.empId).join(', ');
+  //       },
+  //
+  //       popupProps: PopupPropsMultiSelection.dialog(
+  //         showSearchBox: true,
+  //         searchFieldProps: TextFieldProps(
+  //           padding: EdgeInsets.only(top: 20, left: 10, right: 10),
+  //           decoration: InputDecoration(
+  //             contentPadding: EdgeInsets.only(top: 20, left: 12, right: 12),
+  //             // Top margin here
+  //             hintText: "Search...",
+  //             border: OutlineInputBorder(
+  //               borderRadius: BorderRadius.circular(8),
+  //             ),
+  //           ),
+  //         ),
+  //
+  //         itemBuilder: (context, item, isSelected) =>
+  //             ListTile(
+  //               title: Text("${item.fullName ?? ""}(${item.salesPersonEmpCode ?? ""})"),
+  //             ),
+  //       ),
+  //     );
+  //   });
+  //
+  // }
+
 
   Widget bindSolutionAccepted(BuildContext context) {
     return Container(

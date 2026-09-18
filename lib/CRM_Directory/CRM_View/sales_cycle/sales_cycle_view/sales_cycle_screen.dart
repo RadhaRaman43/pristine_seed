@@ -29,14 +29,9 @@ class SalesCycleScreen extends StatelessWidget{
   ScrollController scrollController = ScrollController();
   SalesCycleVm salesCycleController=Get.put(SalesCycleVm());
 
-  static String _displaySaleCycleStatusForOption(String option) =>
+  static String _displayStringTypeDropDownForOption(String option) =>
       option;
 
-  static String _displayApprovalStatusForOption(String option) =>
-      option;
-
-  static String _displayCustomerNeedIdentityStatusForOption(String option) =>
-      option;
 
  /* static String _displayItemCatMasterForOption(ItemCategoryMstModel option) =>
       option.categoryName!;*/
@@ -132,6 +127,8 @@ class SalesCycleScreen extends StatelessWidget{
                               ),*/
                             ),
                             onPressed: () {
+                              salesCycleController.extClosureStartToEnd.value="";
+                              salesCycleController.filterExpectedClosuredateController.value.text = '';
                               salesCycleController.filterQuoteAcceptedFlag.value = 'Open';
                               salesCycleController.quoteAcceptedForFilterOnSaleCycle.value="Open";
                               salesCycleController.pageNumber=0;
@@ -170,6 +167,8 @@ class SalesCycleScreen extends StatelessWidget{
                               ),*/
                             ),
                             onPressed: () {
+                              salesCycleController.extClosureStartToEnd.value="";
+                              salesCycleController.filterExpectedClosuredateController.value.text = '';
                               salesCycleController.filterQuoteAcceptedFlag.value = 'Won';
                               salesCycleController.quoteAcceptedForFilterOnSaleCycle.value = "Won";
                               salesCycleController.pageNumber=0;
@@ -207,6 +206,8 @@ class SalesCycleScreen extends StatelessWidget{
                               ),*/
                             ),
                             onPressed: () {
+                              salesCycleController.extClosureStartToEnd.value="";
+                              salesCycleController.filterExpectedClosuredateController.value.text = '';
                               salesCycleController.filterQuoteAcceptedFlag.value = 'Loss';
                               salesCycleController.quoteAcceptedForFilterOnSaleCycle.value="Loss";
                               salesCycleController.pageNumber=0;
@@ -244,6 +245,8 @@ class SalesCycleScreen extends StatelessWidget{
                               ),*/
                             ),
                             onPressed: () {
+                              salesCycleController.extClosureStartToEnd.value="";
+                              salesCycleController.filterExpectedClosuredateController.value.text = '';
                               salesCycleController.quoteAcceptedForFilterOnSaleCycle.value="";
                               salesCycleController.filterQuoteAcceptedFlag.value = '';
                               salesCycleController.pageNumber=0;
@@ -726,59 +729,57 @@ class SalesCycleScreen extends StatelessWidget{
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
                               bindSaleCycleStagesDropDown(context),
-                              SizedBox(height: 5,),
+                              const SizedBox(height: 5,),
                               bindFilterData(salesCycleController.saleCycleController.value, 'Sale Cycle Id'),
-                              SizedBox(height: 5,),
+                              const SizedBox(height: 5,),
                               Obx((){
                                 return Visibility(
                                   visible: salesCycleController.filterQuoteAcceptedFlag.value=='',
                                     child:Column(
                                   children: [
                                     bindQuoteAccepted(context),
-                                    SizedBox(
-                                      height: 5,
-                                    ),
+                                    const SizedBox(height: 5,),
                                   ],
                                 ) );
                               }),
                               bindFilterData(salesCycleController.filterTask_Id_controller.value, 'Task Id'),
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
                               bindApprovalStatusDropDown(context),
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
                               bindFilterData(salesCycleController.accountNameController.value, 'Customer Name'),
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
                               bindFilterData(salesCycleController.accountCodeController.value, 'Customer Code'),
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
                               bindProductCategoryDropDown(context),
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
                               bindProductCategoryTypeDropDown(context),
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
                               bindFilterData(salesCycleController.purchaseProcessController.value, 'Purchase Process'),
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
                               bindCompProfileTypeDropDown(context),
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
                               bindIsCommintdrpdown(context),
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
                               bindSolutionAccepted(context),
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
                               bindFilterData(salesCycleController.postalCodeController.value, 'Pin Code'),
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
                               bindFilterData(salesCycleController.district_controller.value, 'District'),
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
                               bindExpectedClosureDate(context),
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
                               bindFilterData(salesCycleController.createdByController.value, 'Created By'),
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
                               bindCreatedOn(context),
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
                               bindClusterNameFilter(context),
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
                               bindRegionNameFilter(context),
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
                               bindSaleCycleOwnerFilter(context),
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
 
                             ],
                           ),
@@ -911,7 +912,7 @@ class SalesCycleScreen extends StatelessWidget{
         onSelected: (String? selection) {
           print(selection);
           salesCycleController.SaleCycleStatusController.value.text =
-              _displaySaleCycleStatusForOption(selection!)
+              _displayStringTypeDropDownForOption(selection!)
                   .toString();
           /*print('IsActive.....${salesCycleController.solutionAcceptedController
               .value.text}');*/
@@ -969,7 +970,7 @@ class SalesCycleScreen extends StatelessWidget{
         onSelected: (String? selection) {
           print(selection);
           salesCycleController.ApprovalStatusController.value.text =
-              _displayApprovalStatusForOption(selection!)
+              _displayStringTypeDropDownForOption(selection!)
                   .toString();
           /*print('IsActive.....${salesCycleController.solutionAcceptedController
               .value.text}');*/
@@ -1091,7 +1092,7 @@ class SalesCycleScreen extends StatelessWidget{
     );*/
   }
 
-  bindSaleCycleOwnerFilter(BuildContext context) {
+ /* bindSaleCycleOwnerFilter(BuildContext context) {
     return Obx((){
       if (salesCycleController.AccountOwner_controller.value.text.isNotEmpty && salesCycleController.filterDataChecker.value=='1') {
         List<String> nameList = salesCycleController.AccountOwner_controller.value.text.split(',');
@@ -1130,7 +1131,7 @@ class SalesCycleScreen extends StatelessWidget{
           return SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Text(
-              selectedItems.map((e) => e.fullName).join(', '),
+              selectedItems.map((e) => "${e.fullName ?? ""}(${e.salesPersonEmpCode ?? ""})").join(', '),
               style: TextStyle(color: Colors.black), // Only black text
             ),
           );
@@ -1139,7 +1140,7 @@ class SalesCycleScreen extends StatelessWidget{
           salesCycleController.SelectedEmployee_Member_list.value =
               selectedList;
           salesCycleController.AccountOwner_controller.value.text =
-              selectedList.map((e) => e.fullName).join(', ');
+              selectedList.map((e) => e.empId).join(', ');
         },
 
         popupProps: PopupPropsMultiSelection.dialog(
@@ -1159,13 +1160,489 @@ class SalesCycleScreen extends StatelessWidget{
           itemBuilder: (context, item, isSelected) =>
               ListTile(
 
-                title: Text(item.fullName??""),
+                title: Text("${item.fullName ?? ""}(${item.salesPersonEmpCode ?? ""})"),
               ),
         ),
       );
     });
 
+  }*/
+
+  Widget bindSaleCycleOwnerFilter(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {});
+    return Obx(() {
+      if (salesCycleController.AccountOwner_controller.value.text.isNotEmpty && salesCycleController.filterDataChecker.value=='1') {
+        List<String> nameList = salesCycleController.AccountOwner_controller.value.text.split(',');
+        salesCycleController.SelectedEmployee_Member_list.value = List.generate(nameList.length, (index) {
+          return EmployeeMemberModel(
+            userFullName: nameList[index].trim(),
+          );
+        });
+      }
+      print("list length ${salesCycleController.employee_Member_list.length}");
+      final selected = salesCycleController.SelectedEmployee_Member_list;
+      final selectedText = selected.isEmpty ? null : selected.map((e) =>
+      "${salesCycleController.isAdminWritePermission=="1"?e.userFullName ?? "":e.fullName ?? ""}(${e.salesPersonEmpCode ?? ""})").join(', ');
+      return GestureDetector(
+        onTap: ()  {
+          openBottomSheet(context);
+        },
+        child: InputDecorator(
+          decoration: InputDecoration(
+            labelText: selectedText != null ?  "Sales Cycle Owner": "", // 👈 Label restored here
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            contentPadding:
+            const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+          ),
+          child: Row(
+            children: [
+              Expanded(
+                child: selectedText == null
+                    ? Text(
+                  "Sales Cycle Owner",
+                  style: GoogleFonts.poppins(
+                    color: Colors.black,
+                    fontSize: AllFontSize.sisxteen,
+                  ),
+                )
+                    : SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Text(
+                    selectedText,
+                    style: const TextStyle(color: Colors.black),
+                  ),
+                ),
+              ),
+              const Icon(Icons.arrow_drop_down),
+            ],
+          ),
+        ),
+      );
+    });
   }
+
+  openBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(16)),),
+        builder: (context){
+          salesCycleController.tempSelected.value = [];
+          salesCycleController.tempSelected.addAll(salesCycleController.SelectedEmployee_Member_list);
+          salesCycleController.filtered.value = salesCycleController.employee_Member_list;
+          return Obx((){
+            salesCycleController.allSelected.value = salesCycleController.filtered.isNotEmpty
+                && salesCycleController.tempSelected.length == salesCycleController.filtered.length;
+            return Visibility(
+                visible: salesCycleController.selectOwner.value,
+                child: Padding(
+                  padding: EdgeInsets.only(
+                      bottom: MediaQuery.of(context).viewInsets.bottom),
+                  child: SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.75,
+                    child: Column(
+                      children: [
+                        const SizedBox(height: 8),
+                        Container(
+                          width: 50,
+                          height: 4,
+                          decoration: BoxDecoration(
+                              color: Colors.grey[400],
+                              borderRadius: BorderRadius.circular(2)),
+                        ),
+                        const SizedBox(height: 12),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  'Sales Cycle Owner',
+                                  style: GoogleFonts.poppins(
+                                      fontSize: 16, fontWeight: FontWeight.w600,color: Colors.black),
+                                ),
+                              ),
+                              IconButton(onPressed: () {
+                                Navigator.of(context).pop();
+                              }, icon: const Icon(Icons.close,color: AllColors.primaryDark1,weight: 700,))
+
+                            ],
+                          ),
+                        ),
+                        // Search Field
+                        Padding(
+                          padding:
+                          const EdgeInsets.symmetric(horizontal: 16.0),
+                          child: TextField(
+                            controller: salesCycleController.searchController.value,
+                            decoration: InputDecoration(
+                              hintText: 'Search...',
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8)),
+                              isDense: true,
+                              suffixIcon: salesCycleController.searchController.value.text.isNotEmpty ? IconButton(
+                                icon: const Icon(Icons.clear),
+                                onPressed: () {
+                                  salesCycleController.searchController.value.clear();
+                                  if(salesCycleController.isAdminWritePermission=="1") {
+                                    salesCycleController.EmployeeMasterGet(salesCycleController.searchController.value.text);
+                                  }
+                                  else{
+                                    salesCycleController.filtered.value =salesCycleController.searchController.value.text.isEmpty ?
+                                    salesCycleController.employee_Member_list:salesCycleController.employee_Member_list.where((c) =>
+                                        (c.fullName ?? "").toLowerCase().contains(salesCycleController.searchController.value.text)).toList();
+                                  }
+
+
+                                },
+                              ) : null,
+                            ),
+                            onChanged: (v)
+                            {
+                              if(salesCycleController.isAdminWritePermission=="1") {
+                                salesCycleController.EmployeeMasterGet(salesCycleController.searchController.value.text);
+                              }
+                              else{
+                                salesCycleController.filtered.value =salesCycleController.searchController.value.text.isEmpty ?
+                                salesCycleController.employee_Member_list:salesCycleController.employee_Member_list.where((c) =>
+                                    ("${c.fullName ?? ""} ${c.salesPersonEmpCode ?? ""}").toLowerCase().contains(salesCycleController.searchController.value.text)).toList();
+                              }
+
+                            },
+                          ),
+                        ),
+
+                        const SizedBox(height: 8),
+
+                        // Select All
+                        /* Padding(
+                          padding:
+                          const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: CheckboxListTile(
+                            title:salesCycleController.allSelected.value?const Text('UnSelect All'): const Text('Select All'),
+                            value: salesCycleController.allSelected.value,
+                            onChanged: (val) {
+                              if (val == true) {
+                                salesCycleController.tempSelected.clear();
+                                salesCycleController.allSelected.value=true;
+                                salesCycleController.tempSelected.addAll(salesCycleController.filtered);
+                              } else {
+                                salesCycleController.allSelected.value=false;
+                                salesCycleController.tempSelected.clear();
+                              }
+                              salesCycleController.selectOwner.value=false;
+                              salesCycleController.selectOwner.value=true;
+                            },
+                          ),
+                        ),*/
+
+                        const Divider(height: 1),
+                        Obx((){
+                          return Visibility(visible:salesCycleController.loading.value,
+                            child:LinearProgressIndicator(
+                              backgroundColor: AllColors.primaryDark1,
+                              color: AllColors.textColor,
+                            ), );
+                        }),
+
+                        // List
+                        Expanded(
+                          child: salesCycleController.filtered.isEmpty ? const Center(child: Text('No Record Found!')) : ListView.builder(
+                            padding: const EdgeInsets.symmetric(vertical: 8),
+                            itemCount: salesCycleController.filtered.length,
+                            itemBuilder: (context, idx) {
+                              final item = salesCycleController.filtered[idx];
+                              salesCycleController.isSel.value = salesCycleController.tempSelected.any((s) =>
+                              (salesCycleController.isAdminWritePermission=="1"?s.userFullName ?? "":s.fullName ?? "") ==
+                                  (salesCycleController.isAdminWritePermission=="1"?item.userFullName ?? "":item.fullName ?? ""));
+                              return CheckboxListTile(
+                                title: Text("${salesCycleController.isAdminWritePermission=="1"?
+                                item.userFullName ?? "":item.fullName ?? ""}(${item.salesPersonEmpCode ?? ""})"),
+                                value: salesCycleController.isSel.value,
+                                onChanged: (v) {
+                                  if (v == true) {
+                                    salesCycleController.isSel.value=true;
+                                    salesCycleController.tempSelected.add(item);
+                                  } else {
+                                    salesCycleController.isSel.value=false;
+                                    salesCycleController.tempSelected.removeWhere((s) =>
+                                    (salesCycleController.isAdminWritePermission=="1"?s.userFullName ?? "":s.fullName ?? "") ==
+                                        (salesCycleController.isAdminWritePermission=="1"?item.userFullName ?? "":item.fullName ?? ""));
+                                    //(s.userFullName ?? "") == (item.userFullName ?? ""));
+                                  }
+                                  salesCycleController.selectOwner.value=false;
+                                  salesCycleController.selectOwner.value=true;
+                                },
+                              );
+                            },
+                          ),
+                        ),
+
+                        // Done button
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16.0, vertical: 12),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: ElevatedButton(
+                                  onPressed: () {
+                                    salesCycleController.SelectedEmployee_Member_list
+                                        .assignAll(salesCycleController.tempSelected);
+                                    salesCycleController.AccountOwner_controller.value.text =
+                                        salesCycleController.tempSelected.map((e) => e.empId).join(', ');
+
+                                    Navigator.of(context).pop();
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: AllColors.primaryDark1,
+                                    shadowColor: AllColors.primaryDark1,
+                                    foregroundColor: AllColors.primaryDark1,
+                                    side: BorderSide(color: AllColors.primaryDark1, width: 1),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                  ),
+                                  child: Text('Done',style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w600,color: Colors.white),),
+
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ));
+          });
+        }
+    );
+  }
+
+  /*Widget bindSaleCycleOwnerFilter(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+    });
+    return Obx(() {
+      if (salesCycleController.AccountOwner_controller.value.text.isNotEmpty && salesCycleController.filterDataChecker.value=='1') {
+        List<String> nameList = salesCycleController.AccountOwner_controller.value.text.split(',');
+        salesCycleController.SelectedEmployee_Member_list.value =
+            List.generate(nameList.length, (index) {
+              return EmployeeMemberModel(
+                fullName: nameList[index].trim(),
+              );
+            });
+      }
+      final selected = salesCycleController.SelectedEmployee_Member_list;
+      final selectedText = selected.isEmpty ? null : selected.map((e) => "${e.fullName ?? ""}(${e.salesPersonEmpCode ?? ""})").join(', ');
+      return GestureDetector(
+        onTap: () async {
+          await showModalBottomSheet(
+            context: context,
+            isScrollControlled: true,
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+            ),
+            builder: (context) {
+              final searchController = TextEditingController();
+              final tempSelected = <EmployeeMemberModel>[];
+              tempSelected.addAll(salesCycleController.SelectedEmployee_Member_list);
+              List<EmployeeMemberModel> allItems =
+                  salesCycleController.employee_Member_list;
+
+              return StatefulBuilder(builder: (context, setState) {
+                final query = searchController.text.toLowerCase();
+                final filtered = query.isEmpty ? allItems : allItems.where((c) =>
+                    (c.fullName ?? "").toLowerCase().contains(query)).toList();
+
+                final allSelected = allItems.isNotEmpty && tempSelected.length == allItems.length;
+
+                return Padding(
+                  padding: EdgeInsets.only(
+                      bottom: MediaQuery.of(context).viewInsets.bottom),
+                  child: SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.75,
+                    child: Column(
+                      children: [
+                        const SizedBox(height: 8),
+                        Container(
+                          width: 50,
+                          height: 4,
+                          decoration: BoxDecoration(
+                              color: Colors.grey[400],
+                              borderRadius: BorderRadius.circular(2)),
+                        ),
+                        const SizedBox(height: 12),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  'Select Sale Cycle Owner',
+                                  style: GoogleFonts.poppins(
+                                      fontSize: 16, fontWeight: FontWeight.w600,color: Colors.black),
+                                ),
+                              ),
+                              IconButton(onPressed: () {
+                                Navigator.of(context).pop();
+                              }, icon: const Icon(Icons.close,color: AllColors.primaryDark1,weight: 700,))
+
+                            ],
+                          ),
+                        ),
+                        // Search Field
+                        Padding(
+                          padding:
+                          const EdgeInsets.symmetric(horizontal: 16.0),
+                          child: TextField(
+                            controller: searchController,
+                            decoration: InputDecoration(
+                              hintText: 'Search...',
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8)),
+                              isDense: true,
+                              suffixIcon: searchController.text.isNotEmpty ? IconButton(
+                                icon: const Icon(Icons.clear),
+                                onPressed: () {
+                                  searchController.clear();
+                                  setState(() {});
+                                },
+                              ) : null,
+                            ),
+                            onChanged: (v) => setState(() {}),
+                          ),
+                        ),
+
+                        const SizedBox(height: 8),
+
+                        // Select All
+                        Padding(
+                          padding:
+                          const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: CheckboxListTile(
+                            title: const Text('Select All'),
+                            value: allSelected,
+                            onChanged: (val) {
+                              setState(() {
+                                if (val == true) {
+                                  tempSelected.clear();
+                                  tempSelected.addAll(allItems);
+                                } else {
+                                  tempSelected.clear();
+                                }
+                              });
+                            },
+                          ),
+                        ),
+
+                        const Divider(height: 1),
+
+                        // List
+                        Expanded(
+                          child: filtered.isEmpty ? const Center(child: Text('No Record Found!')) : ListView.builder(
+                            padding:
+                            const EdgeInsets.symmetric(vertical: 8),
+                            itemCount: filtered.length,
+                            itemBuilder: (context, idx) {
+                              final item = filtered[idx];
+                              final isSel = tempSelected.any((s) =>
+                              (s.fullName ?? "") ==
+                                  (item.fullName ?? ""));
+                              return CheckboxListTile(
+                                title: Text("${item.fullName ?? ""}(${item.salesPersonEmpCode ?? ""})"),
+                                value: isSel,
+                                onChanged: (v) {
+                                  setState(() {
+                                    if (v == true) {
+                                      if (!isSel) tempSelected.add(item);
+                                    } else {
+                                      tempSelected.removeWhere((s) =>
+                                      (s.fullName ?? "") == (item.fullName ?? ""));
+                                    }
+                                  });
+                                },
+                              );
+                            },
+                          ),
+                        ),
+
+                        // Done button
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16.0, vertical: 12),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: ElevatedButton(
+                                  onPressed: () {
+                                    salesCycleController.SelectedEmployee_Member_list
+                                        .assignAll(tempSelected);
+                                    salesCycleController.AccountOwner_controller.value.text =
+                                        tempSelected.map((e) => e.empId).join(', ');
+
+                                    Navigator.of(context).pop();
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: AllColors.primaryDark1,
+                                    shadowColor: AllColors.primaryDark1,
+                                    foregroundColor: AllColors.primaryDark1,
+                                    side: BorderSide(color: AllColors.primaryDark1, width: 1),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                  ),
+                                  child: Text('Done',style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w600,color: Colors.white),),
+
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              });
+            },
+          );
+        },
+        child: InputDecorator(
+          decoration: InputDecoration(
+            labelText: selectedText != null ?  "Sales Cycle Owner": "", // 👈 Label restored here
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            contentPadding:
+            const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+          ),
+          child: Row(
+            children: [
+              Expanded(
+                child: selectedText == null
+                    ? Text(
+                  "Sale Cycle Owner",
+                  style: GoogleFonts.poppins(
+                    color: Colors.black,
+                    fontSize: AllFontSize.sisxteen,
+                  ),
+                )
+                    : SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Text(
+                    selectedText,
+                    style: const TextStyle(color: Colors.black),
+                  ),
+                ),
+              ),
+              const Icon(Icons.arrow_drop_down),
+            ],
+          ),
+        ),
+      );
+    });
+  }*/
 
   bindProductCategoryDropDown(BuildContext context) {
     return Obx(() {
@@ -1351,7 +1828,7 @@ class SalesCycleScreen extends StatelessWidget{
         onSelected: (String? selection) {
           print(selection);
           salesCycleController.solutionAcceptedController.value.text =
-              _displayCustomerNeedIdentityStatusForOption(selection!)
+              _displayStringTypeDropDownForOption(selection!)
                   .toString();
           print('IsActive.....${salesCycleController.solutionAcceptedController
               .value.text}');
@@ -1474,7 +1951,7 @@ class SalesCycleScreen extends StatelessWidget{
       onSelected: (String? selection) {
         print(selection);
         salesCycleController.isCommitController.value.text =
-            _displayCustomerNeedIdentityStatusForOption(selection!)
+            _displayStringTypeDropDownForOption(selection!)
                 .toString();
       },
       dropdownMenuEntries:
@@ -1660,8 +2137,7 @@ class SalesCycleScreen extends StatelessWidget{
             salesCycleController.filterQuoteAcceptedFlag.value = '';
           }
           salesCycleController.filterQuoteAcceptedController.value.text =
-              _displaySaleCycleStatusForOption(selection!)
-                  .toString();
+              _displayStringTypeDropDownForOption(selection!).toString();
         },
         dropdownMenuEntries:
         salesCycleController.qouteAcceptedList.map<

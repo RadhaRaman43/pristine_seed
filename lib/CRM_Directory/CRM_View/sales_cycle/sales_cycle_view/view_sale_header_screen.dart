@@ -79,14 +79,26 @@ class ViewSaleHeaderScreen extends StatelessWidget {
               0,
               TaskMaster_page_controller.is_Active.toString(),
               TaskMaster_page_controller.Task_Master_list[0].taskId,
-              '',
-              'GET FROM TASK ID',
+              '', 'GET FROM TASK ID',
               TaskMaster_page_controller.date_filter,
               TaskMaster_page_controller.is_done.value);
           Get.toNamed(RoutesName.taskMasterDetails_screen);
-        } else if (saleCycleController.FromPage.value == "QuoteApprovalPage") {
+        }
+        else if (saleCycleController.FromPage.value == "Quote Approval List") {
           quoteApprovalController.getQuoteHeaderData(0);
           Get.toNamed(RoutesName.quoteApprovalListScreen);
+        }
+        else if (saleCycleController.FromPage.value == "Quote RH Approval List") {
+          quoteApprovalController.getQuoteHeaderData(0);
+          Get.toNamed(RoutesName.quoteRHApprovalListScreen);
+        }
+        else if (saleCycleController.FromPage.value == "Quote CBH Approval List") {
+          quoteApprovalController.getQuoteHeaderData(0);
+          Get.toNamed(RoutesName.quoteCBHApprovalListScreen);
+        }
+        else if (saleCycleController.FromPage.value == "Quote GM Approval List") {
+          quoteApprovalController.getQuoteHeaderData(0);
+          Get.toNamed(RoutesName.quoteGMApprovalListScreen);
         } else if (saleCycleController.FromPage.value == "FromTaskScreen") {
           Get.offAllNamed(RoutesName.taskMaster_screen);
         } else if (saleCycleController.FromPage.value == "FromDashboard") {
@@ -1297,15 +1309,11 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                         ?.toUpperCase() !=
                                     "rejected" &&
                                 saleCycleController.saleCycleList[0].quoteAccepted
-                                        ?.toUpperCase() !=
-                                    "LOSS" &&
+                                        ?.toUpperCase() != "LOSS" &&
                                 saleCycleController
-                                        .saleCycleList[0].salesCycleStatus!
-                                        .toUpperCase() ==
+                                        .saleCycleList[0].salesCycleStatus!.toUpperCase() ==
                                     "SUSPECT" &&
-                                saleCycleController
-                                        .saleCycleList[0].salesCycleApprovalStatus
-                                        ?.toLowerCase() ==
+                                saleCycleController.saleCycleList[0].salesCycleApprovalStatus?.toLowerCase() ==
                                     "pending" &&
                                 (saleCycleController
                                         .saleCycleList[0].salesCycleOwner
@@ -6608,6 +6616,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
 
                               saleCycleController.viewAllDetailsOfSaleCycleInfra(saleCycleList[0]);
                               //TaskMaster_page_controller.isInfraLeadUpdateController.value.text=TaskMaster_page_controller.isInfraLead.value.text;
+                              saleCycleController.getAccountMaster(saleCycleController.rowsPerPage,"");
                               saleCycleController.getItemCategoryMstApiHit(saleCycleList[0].taskId, saleCycleList[0].infraLeadNo,"");
                               Get.toNamed(RoutesName.update_sale_infra_detail_screen);
                             },decoration: TextDecoration.underline,decorationStyle:TextDecorationStyle.wavy ),
@@ -6626,13 +6635,13 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                         const SizedBox(height: 3,),
                         bindData(fixText: "Inaugration Date of Project : ",data:  saleCycleList[0].inaugrationDateOfProject ?? ""),
                         const  SizedBox(height: 3,),
-                        bindData(fixText: "Architect : ",data:  saleCycleList[0].architect ?? ""),
+                        bindData(fixText: "Architect : ",data:  saleCycleList[0].actualArchitect ?? ""),
                         const SizedBox(height: 3,),
-                        bindData(fixText: "Executive Engineer : ",data:  saleCycleList[0].executiveEngineer ?? ""),
+                        bindData(fixText: "Executive Engineer : ",data:  saleCycleList[0].actualExecutiveEngineer ?? ""),
                         const SizedBox(height: 3,),
-                        bindData(fixText: "Name of Infra Department : ",data:  saleCycleList[0].nameOfInfraDepartment ?? ""),
+                        bindData(fixText: "Name of Infra Department : ",data:  saleCycleList[0].actualNameOfInfraDepartment ?? ""),
                         const SizedBox(height: 3,),
-                        bindData(fixText: "Name of Agency Contactor : ",data:  saleCycleList[0].nameOfAgencyContrator ?? ""),
+                        bindData(fixText: "Name of Agency Contactor : ",data:  saleCycleList[0].actualNameOfAgencyContrator ?? ""),
                         const SizedBox(height: 3,),
                         bindData(fixText: "Expected Revenue : ",data:  saleCycleList[0].expectedRevenue.toString()),
                         const SizedBox(height: 3,),
@@ -8149,7 +8158,9 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                               onTap: () {
                                 String ProductCategory = saleCycleController.saleCycleList[0].productCategoryCode ?? "";
                                 String PipeProdCate = ProductCategory.replaceAll(', ', '|');
+                                saleCycleController.productCategory = PipeProdCate;
                                 saleCycleController.pageNumberForItem = 0;
+                                saleCycleController.salesCycleId.value = saleCycleController.saleCycleList[0].salesCycleId ??"";
                                 saleCycleController.itemMstGetBySalesIdApiHit(saleCycleController.pageNumberForItem,
                                     saleCycleController.saleCycleList[0].salesCycleId, PipeProdCate);
                               },

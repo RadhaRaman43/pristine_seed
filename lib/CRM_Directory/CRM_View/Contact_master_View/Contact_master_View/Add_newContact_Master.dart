@@ -61,6 +61,11 @@ class AddNewcontactMasterContact extends StatelessWidget{
         else if(contact_vm_controller.FromPage.value== "AccountUpdate"){
           Get.toNamed(RoutesName.viewContacts_screen);
         }
+        else if(contact_vm_controller.FromPage.value== "AddTourLine"){
+          contact_vm_controller.FromPage.value ="";
+          Get.toNamed(RoutesName.BusinessTourPlanDetails);
+        }
+
         else{
           contact_vm_controller.filterIconColor.value=false;
           contact_vm_controller.account_name_controller.clear();
@@ -84,7 +89,7 @@ class AddNewcontactMasterContact extends StatelessWidget{
             title:Row(
               children: [
                 Text(
-                  contact_vm_controller.updateContact?'Update Contact':"Create Contact",
+                  contact_vm_controller.updateContact.value?'Update Contact':"Create Contact",
                   style: GoogleFonts.poppins(
                     color: AllColors.whiteColor,
                     fontSize: 20.0,
@@ -133,16 +138,17 @@ class AddNewcontactMasterContact extends StatelessWidget{
           margin: EdgeInsets.only(left: 30),
           child: DefaultButton(
             press: (){
-              if(contact_vm_controller.updateContact){
+              if(contact_vm_controller.updateContact.value){
                 contact_vm_controller.createNewContactMstApi("Update");
               }
               else{
+                debugPrint("radha debug");
                 contact_vm_controller.contact_code="";
                 contact_vm_controller.createNewContactMstApi("Create");
               }
 
             },
-            text: contact_vm_controller.updateContact?'Update Contact':'Create Contact',
+            text: contact_vm_controller.updateContact.value?'Update Contact':'Create Contact',
           ),
         ),
         body: Container(
@@ -163,11 +169,11 @@ class AddNewcontactMasterContact extends StatelessWidget{
                 }),
                 SizedBox(height: 20,),
                 Visibility(
-                  visible: contact_vm_controller.updateContact,
+                  visible: contact_vm_controller.updateContact.value,
                   child: Container(
                     padding: EdgeInsets.only(left: 15.0, right: 15.0),
                     child: TextFormField(
-                      readOnly: contact_vm_controller.updateContact,
+                      readOnly: contact_vm_controller.updateContact.value ,
                       controller: contact_vm_controller.contact_code_controller,
                       decoration: InputDecoration(
                         //hintText: "Alternate No",
@@ -207,7 +213,7 @@ class AddNewcontactMasterContact extends StatelessWidget{
                         ),
                       ),
                       Visibility(
-                        visible: contact_vm_controller.updateContact==true?false:true,
+                        visible: contact_vm_controller.createAccount.value/*!contact_vm_controller.updateContact.value*/,
                         child: Container(
                           margin: EdgeInsets.only(left: 10),
                           decoration: BoxDecoration(
@@ -505,11 +511,11 @@ class AddNewcontactMasterContact extends StatelessWidget{
 
   Widget bindAccountOwnerDropDown(context){
     return IgnorePointer(
-      ignoring: contact_vm_controller.updateContact || contact_vm_controller.insideOut == false,
+      ignoring: contact_vm_controller.updateContact.value || contact_vm_controller.insideOut==false,
       child: Autocomplete<AccountMasterModel>(
         displayStringForOption: _displayAccNameForOption,
         optionsBuilder: (TextEditingValue textEditingValue) async {
-          if(contact_vm_controller.updateContact){
+          if(contact_vm_controller.updateContact.value){
             contact_vm_controller.Account_Master_list.value=[];
           }
           return await contact_vm_controller.getAccountMaster(textEditingValue.text);
@@ -520,6 +526,11 @@ class AddNewcontactMasterContact extends StatelessWidget{
               _displayAccNameForOption(selection).toString();
           contact_vm_controller.accountName.value=selection.accountName??"";
           contact_vm_controller.accountCode.value=selection.accountCode??"";
+          /*contact_vm_controller.FullAddress_Controller.value.text= "${selection.permanentAddress?.address??""},"
+              "${selection.permanentAddress?.address??""},"
+              "${selection.permanentAddress?.stateName??""},"
+              "${selection.permanentAddress?.district??""},"
+              "(${selection.permanentAddress?.postCode??""})";*/
           contact_vm_controller.getAccMasterBuyCodeApi(selection.accountCode??"");
 
         },
@@ -530,7 +541,7 @@ class AddNewcontactMasterContact extends StatelessWidget{
               controller.clear();
               contact_vm_controller.account_name_controller.clear();
             },
-            readOnly: contact_vm_controller.updateContact || contact_vm_controller.insideOut == false,
+            readOnly:contact_vm_controller.updateContact.value,
             cursorColor: AllColors.primaryDark1,
             controller: controller
               ..text = contact_vm_controller.account_name_controller.text,

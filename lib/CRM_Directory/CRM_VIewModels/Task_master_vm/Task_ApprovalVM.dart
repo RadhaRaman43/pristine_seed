@@ -67,6 +67,7 @@ class TaskApprovalvm extends GetxController{
   var RejectReason_Controller = TextEditingController();
   var managerRemarksController=TextEditingController().obs;
   var AccountOwner_controller=TextEditingController().obs;
+  String accountNameCode='';
 
   RxBool RejectBool=false.obs;
   RxBool ApproveBool=false.obs;
@@ -80,6 +81,13 @@ class TaskApprovalvm extends GetxController{
 
   RxList<EmployeeMemberModel> employee_Member_list = <EmployeeMemberModel>[].obs;
   RxList<EmployeeMemberModel> SelectedEmployee_Member_list = <EmployeeMemberModel>[].obs;
+
+  RxList<EmployeeMemberModel> tempSelected = <EmployeeMemberModel>[].obs;
+  RxList<EmployeeMemberModel> filtered = <EmployeeMemberModel>[].obs;
+  RxBool selectOwner = true.obs;
+  RxBool allSelected = false.obs;
+  RxBool isSel = false.obs;
+  var searchController=TextEditingController().obs;
 
   void toggle() {
     isExpandDetails.value = !isExpandDetails.value;
@@ -145,7 +153,7 @@ class TaskApprovalvm extends GetxController{
       CallStatusMasterApiHit('Call');
       MethodOfCallMasterApiHit();
       CallDSARsMasterApiHit();
-      if (isAdminWritePermission == 1) {
+      if (isAdminWritePermission == "1") {
         EmployeeMasterGet('');
       }
       else {
@@ -262,18 +270,20 @@ class TaskApprovalvm extends GetxController{
   }
 
   Future<Iterable<EmployeeMemberModel>> EmployeeMasterGet(String query) async {
-    if (query == '') {
+    /*if (query == '') {
       return const Iterable<EmployeeMemberModel>.empty();
-    }
+    }*/
     Map data = {
-      'filter_name': '',
-      'filter_email': query,
+      'filter_name': query,
+      'filter_email': "",
       'filter_location_id': '',
       'email_id': email,
-      'rowsPerPage': 50,
+      "filter_cluster_name": clusterName_controller.value.text.isEmpty?"":clusterName_controller.value.text,
+      "filter_region_name": RegionName_controller.value.text.isEmpty?"":RegionName_controller.value.text,
+      'rowsPerPage': 10,
       'pageNumber': 0,
     };
-   // loading.value = true;
+    loading.value = true;
     String employee_response =await _api.EmployeeMatserGetApiHit(data, sessionManagement);
     try {
       final jsonResponse = json.decode(employee_response);
@@ -299,9 +309,9 @@ class TaskApprovalvm extends GetxController{
       Utils.sanckBarException('Exception!', e.toString());
       employee_Member_list.value = [];
     }
-   /* finally{
+    finally{
       loading.value = false;
-    }*/
+    }
     return employee_Member_list.value;
   }
   getEmployeeMemberApi() {
@@ -544,6 +554,11 @@ class TaskApprovalvm extends GetxController{
 
     AccountOwnerForApi = '';
     AccountOwner_controller.value.clear();
+    accountNameCode='';
+    searchController.value.clear();
+    if(isAdminWritePermission=="1") {
+      EmployeeMasterGet("");
+    }
     SelectedEmployee_Member_list.value = [];
 
     SelectedCluster_list.value=[];
@@ -659,6 +674,7 @@ class TaskApprovalvm extends GetxController{
     }
     try{
       Map data={
+        "filter_task_owner_new":  AccountOwnerForApi.isEmpty?"":AccountOwnerForApi,
         "filter_task_id":filterTask_Id_controller.value.text.isEmpty?"":filterTask_Id_controller.value.text,
         "filter_account_code": account_code_controller.value.text.isEmpty?"":account_code_controller.value.text,
         "filter_account_name": account_Name_controller.value.text.isEmpty?"":account_Name_controller.value.text,
@@ -685,7 +701,7 @@ class TaskApprovalvm extends GetxController{
         "filter_branch_head_value": RegionName_controller.value.text.isEmpty?"":RegionName_controller.value.text,
         "filter_zone_head_value": "",
         "filter_clusture_head_value": clusterName_controller.value.text.isEmpty?"":clusterName_controller.value.text,
-        "filter_task_owner_new":  AccountOwnerForApi.isEmpty?"":AccountOwnerForApi,
+
         "row_per_page": rowsPerPage.toString(),
         "page_number": page_no.toString()
       };
@@ -1210,6 +1226,7 @@ class TaskApprovalvm extends GetxController{
       'region_name': RegionName_controller.value.text,
       'cluster_name': clusterName_controller.value.text,
       'account_owner': AccountOwner_controller.value.text,
+      'accountNameCode':accountNameCode,
       'filterTaskCreationOnController': filterTaskCreationOnController.value.text,
       'product_category': product_category_controller.value.text,
       'product_category_type': product_category_type_Controller.value.text,
@@ -1235,6 +1252,7 @@ class TaskApprovalvm extends GetxController{
       postalCodeController.value.text=getFilterData["pin_code"];
       district_controller.value.text=getFilterData["district"];
       AccountOwner_controller.value.text=getFilterData["account_owner"];
+      accountNameCode=getFilterData["accountNameCode"];
       filterTaskCreationOnController.value.text=getFilterData["filterTaskCreationOnController"];
       product_category_controller.value.text=getFilterData["product_category"];
       product_category_type_Controller.value.text=getFilterData["product_category_type"];

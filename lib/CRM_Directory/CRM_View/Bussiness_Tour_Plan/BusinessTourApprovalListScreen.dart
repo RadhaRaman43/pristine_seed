@@ -1,3 +1,4 @@
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -12,6 +13,7 @@ import '../../../reources/routes/routes_name.dart';
 import '../../../view/custom_drawer.dart';
 import '../../CRM_Models/AccountMaster_model/cluster_modal.dart';
 import '../../CRM_Models/AccountMaster_model/region_with_cluster_filter_modal.dart';
+import '../../CRM_Models/Bussiness_Tour_Plan_Model/reporting_manager_modal.dart';
 import '../../CRM_VIewModels/Bussiness_Tour_Plan_Vm/BusinessPlanTour_Vm.dart';
 import '../../CRM_VIewModels/Bussiness_Tour_Plan_Vm/Business_Tour_Approval_Vm.dart';
 
@@ -22,6 +24,9 @@ class BusinessTourApprovalListScreen extends StatelessWidget{
   BusinessTourApprovalVm businessTourPlanController=Get.put(BusinessTourApprovalVm());
   BusinessPlanTourViewModel businessTourPlanViewController=Get.put(BusinessPlanTourViewModel());
   Size size=Get.size;
+  static String _displayApprovalStatusForOption(String option) =>
+      option;
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(onWillPop: () async {
@@ -289,7 +294,7 @@ class BusinessTourApprovalListScreen extends StatelessWidget{
       builder: (BuildContext context) {
         return DraggableScrollableSheet(
           expand: false,
-          // initialChildSize: 0.85,
+           initialChildSize: 0.85,
           minChildSize: 0.5,
           maxChildSize: 0.95,
           builder: (_, scrollController) {
@@ -344,20 +349,25 @@ class BusinessTourApprovalListScreen extends StatelessWidget{
                           child: Column(
                             mainAxisSize: MainAxisSize.max,
                             children: [
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
                               bindfilterText(context,'Tour ID',businessTourPlanController.filterTourIdController.value),
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
                               bindClusterNameFilter(context),
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
                               bindRegionNameFilter(context),
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
                               bindFilterStartDate(context),
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
                               bindFilterEndDate(context),
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
                               bindfilterText(context,'Created By',businessTourPlanController.filterCreatedByController.value),
-                              SizedBox(height: 10,),
+                              const SizedBox(height: 10,),
                               bindCrteatedOn(context),
+                              const SizedBox(height: 10,),
+                              bindReportingManager(context),
+                              const SizedBox(height: 10,),
+                             /* bindApprovalStatusDropDown(context),
+                              const SizedBox(height: 10,),*/
 
                             ],
                           ),
@@ -713,6 +723,96 @@ class BusinessTourApprovalListScreen extends StatelessWidget{
         }
       },
     );
+  }
+  bindReportingManager(BuildContext context) {
+    return Obx(() {
+      if (businessTourPlanController.reporting_manager_Controller.value.text
+          .isNotEmpty &&
+          businessTourPlanController.filterDataChecker.value == '1') {
+        List<String> nameList = businessTourPlanController
+            .reporting_manager_Controller.value.text.split('|');
+
+        businessTourPlanController.selectedReportingMangerList.assignAll(
+          List.generate(nameList.length, (index) {
+            return ReportingManagerModal(
+              userFullName: nameList[index].trim(),
+            );
+          }),
+        );
+      }
+
+      return DropdownSearch<ReportingManagerModal>.multiSelection(
+        compareFn: (item, selectedItem) =>
+        item.emailId == selectedItem.emailId,
+        asyncItems: (String filter) async {
+          return await businessTourPlanController.getReportingManager(filter);
+        },
+        itemAsString: (ReportingManagerModal u) => u.emailId ?? "",
+        selectedItems: businessTourPlanController.selectedReportingMangerList,
+        dropdownBuilder: (context, selectedItems) {
+          if (selectedItems.isEmpty) {
+            return Text(
+              "Select Reporting Manager",
+              style: GoogleFonts.poppins(
+                color: AllColors.primaryDark1, // Match your hint color
+                fontSize: AllFontSize.sisxteen,
+                fontWeight: FontWeight.w500,
+              ),
+            );
+          }return SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Text(
+              selectedItems.map((e) => e.userFullName).join(', '),
+              style: TextStyle(color: Colors.black),
+            ),
+          );
+        },
+
+        dropdownDecoratorProps: DropDownDecoratorProps(
+          dropdownSearchDecoration: InputDecoration(
+            labelText: businessTourPlanController.selectedReportingMangerList
+                .isNotEmpty ? "Reporting Manager" : null,
+            hintText: "Search Reporting Manager",
+            contentPadding: const EdgeInsets.symmetric(
+                horizontal: 12, vertical: 8),
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+          ),
+        ),
+
+        onChanged: (List<ReportingManagerModal> selectedList) {
+          businessTourPlanController.selectedReportingMangerList.assignAll(
+              selectedList);
+          businessTourPlanController.reporting_manager_Controller.value.text =
+              selectedList.map((e) => e.emailId).join('|');
+        },
+
+        popupProps: PopupPropsMultiSelection.dialog(
+          showSearchBox: true,
+          isFilterOnline: true,
+          searchDelay: const Duration(milliseconds: 300),
+          searchFieldProps: TextFieldProps(
+            decoration: InputDecoration(
+              hintText: "Search...",
+              prefixIcon: const Icon(Icons.search),
+              border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8)),
+            ),
+          ),
+
+          itemBuilder: (context, item, isSelected) {
+            return ListTile(
+              title: Text("${item.userFullName ?? ""}",
+                style: TextStyle(
+                  color: isSelected ? Colors.blue : Colors.black,
+                  fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                ),
+              ),
+              selected: isSelected,
+            );
+          },
+        ),
+      );
+    });
   }
 
   bindfilterText(BuildContext context, String hintData, TextEditingController controller) {
@@ -1227,7 +1327,173 @@ class BusinessTourApprovalListScreen extends StatelessWidget{
     });
   }
 
+  Widget bindApprovalStatusDropDown(BuildContext context){
+    return Container(
+      child: DropdownMenu<String>(
+        width: MediaQuery
+            .of(context)
+            .size
+            .width-15,
+        controller: businessTourPlanController.ApprovalStatusController.value,
+        label: Text(
+          "Approval Status",
+          style: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontSize: AllFontSize.fourtine,
+              fontWeight: FontWeight.w700),
+        ),
 
+        inputDecorationTheme: const InputDecorationTheme(
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+              color: AllColors.primaryDark1,),
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+                color: AllColors.primaryDark1), // Change the color to green
+          ),
+          border: OutlineInputBorder(
+            borderSide: BorderSide(
+                color: AllColors.primaryDark1), // Change the color to green
+          ),
+          filled: false,
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.two, horizontal: AllFontSize.ten),
+        ),
+
+
+        onSelected: (String? selection) {
+          print(selection);
+          businessTourPlanController.ApprovalStatusController.value.text =
+              _displayApprovalStatusForOption(selection!).toString();
+
+          if(businessTourPlanController.ApprovalStatusController.value.text=="ALL"){
+            businessTourPlanController.filterStatusFlag.value="";
+          }
+          else{
+            businessTourPlanController.filterStatusFlag.value= businessTourPlanController.ApprovalStatusController.value.text;
+          }
+          /*print('IsActive.....${salesCycleController.solutionAcceptedController
+              .value.text}');*/
+
+        },
+        dropdownMenuEntries:
+        businessTourPlanController.ApprovalStatusList.map<
+            DropdownMenuEntry<String>>((String e) {
+          return DropdownMenuEntry<String>(
+              value: e, label: e!, style: ButtonStyle(
+            foregroundColor: MaterialStateProperty.all<Color>(
+                AllColors.primaryDark1),));
+        }).toList(),
+      ),
+    );
+
+    //todo commented by nirupma because dropdown is not working properly
+    /* return Autocomplete<String>(
+      displayStringForOption: _displayApprovalStatusForOption,
+      optionsBuilder: (TextEditingValue textEditingValue) {
+        if (textEditingValue.text.isEmpty) {
+          return salesCycleController.ApprovalStatusList;
+        }
+        return salesCycleController.ApprovalStatusList
+            .where((String option) {
+          return option
+              .toString()
+              .toLowerCase()
+              .contains(textEditingValue.text.toLowerCase());
+        }).toList();
+      },
+      onSelected: (String selection) {
+        print(selection);
+        // Update the TextField with the selected
+        salesCycleController.ApprovalStatusController.value.text =
+            _displayApprovalStatusForOption(selection).toString();
+        //print('IsActive.....${salesCycleController.Task_status_controller.text}');
+      },
+      fieldViewBuilder: (BuildContext context, TextEditingController controller,
+          FocusNode focusNode, VoidCallback onFieldSubmitted) {
+        return TextField(
+          cursorColor: AllColors.primaryDark1,
+          controller: controller
+            ..text = salesCycleController.ApprovalStatusController.value
+                .text,
+          focusNode: focusNode,
+          //onSubmitted: onFieldSubmitted,
+          decoration: InputDecoration(
+              suffixIcon: IconButton(
+                color: AllColors.primaryDark1,
+                onPressed: (){
+                  if(focusNode.hasFocus){
+                    focusNode.unfocus();
+                  }else{
+                    focusNode.requestFocus();
+                  }
+                },
+                icon: Icon(Icons.arrow_drop_down),
+              ),
+              contentPadding: EdgeInsets.symmetric(
+                  vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+              hintText: 'Approval Status',
+              labelText: 'Approval Status',
+              hintStyle: GoogleFonts.poppins(
+                  color: AllColors.lightblackColor,
+                  fontWeight: FontWeight.w300,
+                  fontSize: AllFontSize.ten),
+              labelStyle: GoogleFonts.poppins(
+                  color: AllColors.primaryDark1,
+                  fontWeight: FontWeight.w500,
+                  fontSize: AllFontSize.sisxteen),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+              ),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+              )
+          ),
+        );
+      },
+      optionsViewBuilder: (BuildContext context,
+          AutocompleteOnSelected<String> onSelected,
+          Iterable<String> suggestions) {
+        return Align(
+          alignment: Alignment.topLeft,
+          child: Material(
+            elevation: 4.0,
+            child: Container(
+              width: size.width*.9,
+              constraints: BoxConstraints(maxHeight: 200),
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: suggestions.length,
+                itemBuilder: (context, index) {
+                  final String option =
+                  suggestions.elementAt(index);
+                  return GestureDetector(
+                    onTap: () {
+                      onSelected(option);
+                    },
+                    child: Container(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text(
+                        option,
+                        style: GoogleFonts.poppins(
+                            color: AllColors.blackColor,
+                            fontWeight: FontWeight.w300,
+                            fontSize: AllFontSize
+                                .sisxteen // Change the text color here
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+        );
+      },
+    );*/
+  }
 
 
 }

@@ -30,6 +30,10 @@ class SalesCycleRepository{
     return _apiService.postApi(data, AppUrl.quoteHeaderGet,sessionManagement);
   }
 
+  Future<String> QuoteHeaderGetApprovalPendency(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.QuoteHeaderGetApprovalPendency,sessionManagement);
+  }
+
   Future<String> quoteWonDataGetApiHit(var data,SessionManagement sessionManagement) async{
     return _apiService.postApi(data, AppUrl.QuoteWonDataGet,sessionManagement);
   }
@@ -306,5 +310,10 @@ class SalesCycleRepository{
   Future<String> QuoteMstStatusChangeToDraft(var data,SessionManagement sessionManagement) async{
     return _apiService.postApi(data,AppUrl.QuoteMstStatusChangeToDraft, sessionManagement);
   }
+
+  Future<String> AccountMasterGetApiHit(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.AccountMstGet,sessionManagement);
+  }
+
 
 }

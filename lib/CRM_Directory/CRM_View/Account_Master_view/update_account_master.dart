@@ -111,9 +111,17 @@ class UpdateAccountMaster extends StatelessWidget{
           saleCycleController.getsalesCycleData(saleCycleController.pageNumber, "", "",'');
           Get.toNamed(RoutesName.salesCycleScreen);
         }
-        else if(accountMaster_page_controller.view=="FromQuoteApproval"){
-          print("view..");
+        else if(accountMaster_page_controller.view=="Quote Approval List"){
           Get.offAllNamed(RoutesName.quoteApprovalListScreen);
+        }
+        else if(accountMaster_page_controller.view=="Quote RH Approval List"){
+          Get.offAllNamed(RoutesName.quoteRHApprovalListScreen);
+        }
+        else if(accountMaster_page_controller.view=="Quote CBH Approval List"){
+          Get.offAllNamed(RoutesName.quoteCBHApprovalListScreen);
+        }
+        else if(accountMaster_page_controller.view=="Quote GM Approval List"){
+          Get.offAllNamed(RoutesName.quoteGMApprovalListScreen);
         }
         else if(accountMaster_page_controller.view=='FromSaleDetailsScreen'){
           Get.toNamed(RoutesName.viewSalesCycleHeaderScreen);

@@ -15,12 +15,14 @@ import '../../CRM_Models/Bussiness_Tour_Plan_Model/TouringDistrictModel.dart';
 import '../../CRM_Models/sale_cycle_modal/alongWithPersonModel.dart';
 import '../../CRM_VIewModels/Bussiness_Tour_Plan_Vm/BusinessPlanTour_Vm.dart';
 import '../../CRM_VIewModels/account_master_vm/accountMasterVM.dart';
+import '../../CRM_VIewModels/contact_master_vm/contact_master_vm/ContactMasterVM.dart';
 
 class AddTourLinesPage extends StatelessWidget{
   AddTourLinesPage({super.key});
 
   BusinessPlanTourViewModel businessTourPlanController = Get.put(BusinessPlanTourViewModel());
   final accountMaster_page_controller=Get.put(Accountmastervm());
+  final contact_vm_page_controller=Get.put(ContactMasterVM());
   Size size = Get.size;
 
   static String _displayAlongPersonForOption(AlongWithPersonModel option) =>
@@ -46,6 +48,9 @@ class AddTourLinesPage extends StatelessWidget{
   Widget build(BuildContext context) {
    return WillPopScope(
      onWillPop: () async {
+       businessTourPlanController.customerVisible.value =true;
+       businessTourPlanController.addCustomer.value =false;
+
        Get.toNamed(RoutesName.BusinessTourPlanDetails);
        return false;
      },
@@ -81,10 +86,16 @@ class AddTourLinesPage extends StatelessWidget{
                  Utils.sanckBarError('Tour Type!', "Please Select tour Type");
                  return  ;
                }
-               if(businessTourPlanController.TourPlanAccount_Controller.value.text.isEmpty){
-                 Utils.sanckBarError('Customer!', "Please Select Customer");
-                 return  ;
+               if(businessTourPlanController.TourType_Controller.value.text.toLowerCase()=="administrative"){
+
                }
+               else{
+                 if(businessTourPlanController.TourPlanAccount_Controller.value.text.isEmpty){
+                   Utils.sanckBarError('Customer!', "Please Select Customer");
+                   return  ;
+                 }
+               }
+
                if(businessTourPlanController.MeetingWith_controller.value.text.isEmpty){
                  Utils.sanckBarError('Meeting With!', "Please Select Meeting With");
                  return  ;
@@ -99,6 +110,7 @@ class AddTourLinesPage extends StatelessWidget{
                  Utils.sanckBarError('Remarks!', "Please Enter Remarks");
                  return  ;
                }
+
 
                ConfirmationDialog(context, businessTourPlanController.Tour_Id);
 
@@ -141,10 +153,15 @@ class AddTourLinesPage extends StatelessWidget{
                                    " " +
                                    (category.middleName?.toString() ?? "") +
                                    " " +
-                                   (category.lastName?.toString() ?? "")
-                               ),
+                                   (category.lastName?.toString() ?? "")),
                                onDeleted: () {
-                                 businessTourPlanController.SelectedAlongPersonWith_list.remove(category);
+                                   businessTourPlanController.SelectedAlongPersonWith_list.remove(category);
+                                   String name = (category.firstName?.toString() ?? "") +
+                                       " " +
+                                       (category.middleName?.toString() ?? "") +
+                                       " " +
+                                       (category.lastName?.toString() ?? "");
+                                   businessTourPlanController.SelectedAlongPersonWith_list1.remove(name);
                                },
                              );
                            }).toList(),
@@ -152,52 +169,59 @@ class AddTourLinesPage extends StatelessWidget{
 
                      }),
                      const SizedBox(height: 10,),
-                     Container(
-                       padding: EdgeInsets.only( right: 15.0),
-                       height: 50,
-                       child: Row(
-                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                         children: [
-                           Expanded(
-                             child: Container(
-                               decoration: BoxDecoration(
-                                   borderRadius: BorderRadius.circular(10)
-                               ),
-                               child: bindTourPlanAccountDropDown(context),
-                             ),
-                           ),
-                            Container(
-                               margin: EdgeInsets.only(left: 10),
-                               decoration: BoxDecoration(
-                                 color: AllColors.whiteColor,
-                                 borderRadius: BorderRadius.circular(10),
-                                 border: Border.all(
-                                   color: AllColors.lightblackColor, // Set the border color to black
-                                   width: 1.0, // You can adjust the width of the border as needed
+                     Obx((){
+                       return Visibility(
+                         visible: businessTourPlanController.customerVisible.value ,
+                         child: Container(
+                           padding: EdgeInsets.only( right: 15.0),
+                           height: 50,
+                           child: Row(
+                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                             children: [
+                               Expanded(
+                                 child: Container(
+                                   decoration: BoxDecoration(
+                                       borderRadius: BorderRadius.circular(10)
+                                   ),
+                                   child: bindTourPlanAccountDropDown(context),
                                  ),
                                ),
-                               child: IconButton(
-                                   onPressed: (){
-                                     accountMaster_page_controller.FromPage.value = 'AddTourLine';
-                                     accountMaster_page_controller.DraftId = '';
-                                     accountMaster_page_controller.clearController();
-                                     accountMaster_page_controller.getEmployeeMemberApi();
-                                     accountMaster_page_controller.getCompanyProfileTypeApi("");
-                                     accountMaster_page_controller.getCompanyProfileSubTypeApi();
-                                     accountMaster_page_controller.getGeoPostalCodeApi(50,'',accountMaster_page_controller.email);
-                                     Get.toNamed(RoutesName.add_New_AccountMaster_screen);
-                                   }, icon: Icon(Icons.add)),
-                             ),
+                               Container(
+                                 margin: EdgeInsets.only(left: 10),
+                                 decoration: BoxDecoration(
+                                   color: AllColors.whiteColor,
+                                   borderRadius: BorderRadius.circular(10),
+                                   border: Border.all(
+                                     color: AllColors.lightblackColor, // Set the border color to black
+                                     width: 1.0, // You can adjust the width of the border as needed
+                                   ),
+                                 ),
+                                 child: IconButton(
+                                     onPressed: (){
+                                       accountMaster_page_controller.FromPage.value = 'AddTourLine';
+                                       accountMaster_page_controller.DraftId = '';
+                                       accountMaster_page_controller.clearController();
+                                       accountMaster_page_controller.getEmployeeMemberApi();
+                                       accountMaster_page_controller.getCompanyProfileTypeApi("");
+                                       accountMaster_page_controller.getCompanyProfileSubTypeApi();
+                                       accountMaster_page_controller.getGeoPostalCodeApi(50,'',accountMaster_page_controller.email);
+                                       Get.toNamed(RoutesName.add_New_AccountMaster_screen);
+                                     }, icon: Icon(Icons.add)),
+                               ),
 
-                         ],
-                       ),
-                     ),
+                             ],
+                           ),
+                         ),
+                       );
+                     }),
+
                      const SizedBox(height: 10,),
                      Obx((){
-                       print("client meeting with ${businessTourPlanController.TourType_Controller.value.text.toString().trim().toLowerCase()}");
+                       //print("client meeting with ${businessTourPlanController.TourType_Controller.value.text.toString().trim().toLowerCase()}");
                        return Visibility(
                            visible: businessTourPlanController.meetingWith.value && businessTourPlanController.tourType.value?true:false ,
-                           child:businessTourPlanController.TourType_Controller.value.text.toString().trim().toLowerCase()=="client meeting"? bindMeetingWithDropDown(context):MeetingWithTextField(context));
+                           child:businessTourPlanController.TourType_Controller.value.text.toString().trim().toLowerCase()=="client meeting"? creatEAccountAndMeetingWithDropDown(context)
+                           /*bindMeetingWithDropDown(context)*/:MeetingWithTextField(context));
                      }),
                      const SizedBox(height: 10,),
                      Obx(() {
@@ -359,8 +383,18 @@ class AddTourLinesPage extends StatelessWidget{
             businessTourPlanController.MeetingWith_controller.value.clear();
             businessTourPlanController.SelectedMeetingWith_List.value=[];
             businessTourPlanController.TourType_Controller.value.text = _displayTourTypeForOption(selection!).toString();
+            if(businessTourPlanController.TourType_Controller.value.text.toLowerCase() !="administrative"){
+              businessTourPlanController.customerVisible.value =true;
+            }
+            else{
+              businessTourPlanController.customerVisible.value =false;
+            }
             businessTourPlanController.selectMeetingWith.value=true;
-
+            businessTourPlanController.addCustomer.value= false;
+            businessTourPlanController.TourPlanAccount_Controller.value.text="";
+            businessTourPlanController.MeetingWith_controller.value.text = "";
+            businessTourPlanController.SelectedMeetingWith_List.value=[];
+            businessTourPlanController.SelectedMeetingWith_List1.value=[];
           },
 
           dropdownMenuEntries: businessTourPlanController.TourType_List.map<DropdownMenuEntry<TouringDistrictModel>>((TouringDistrictModel e) {
@@ -408,31 +442,35 @@ class AddTourLinesPage extends StatelessWidget{
   Widget MeetingWithTextField(context){
     return Padding(
       padding: const EdgeInsets.only(left: 15, right: 15),
-      child: Container(
-        decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(10)
-        ),
-        //padding: EdgeInsets.only(left: 10.0, right: 10.0),
-        child: TextFormField(
-          controller: businessTourPlanController
-              .MeetingWith_controller.value,
-          decoration: InputDecoration(
-              hintText: "Meeting With*",
-              labelText: "Meeting With*",
-              //suffixIcon: Icon(Icons.email),
-              contentPadding: EdgeInsets.symmetric(
-                  vertical: AllFontSize.ten,
-                  horizontal: AllFontSize.ten),
-
-              /* focusedBorder: OutlineInputBorder(
-                                   borderSide: BorderSide(color: Colors.blue)
-                               ),*/
-              border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10)
-              )
+      child: IgnorePointer(
+        ignoring: !businessTourPlanController.TourType_Controller.value.text.isEmpty
+            || !businessTourPlanController.TourPlanAccount_Controller.value.text.isEmpty?false:true ,
+        child: Container(
+          decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(10)
           ),
+          //padding: EdgeInsets.only(left: 10.0, right: 10.0),
+          child: TextFormField(
+            controller: businessTourPlanController
+                .MeetingWith_controller.value,
+            decoration: InputDecoration(
+                hintText: "Meeting With*",
+                labelText: "Meeting With*",
+                //suffixIcon: Icon(Icons.email),
+                contentPadding: EdgeInsets.symmetric(
+                    vertical: AllFontSize.ten,
+                    horizontal: AllFontSize.ten),
 
+                /* focusedBorder: OutlineInputBorder(
+                                     borderSide: BorderSide(color: Colors.blue)
+                                 ),*/
+                border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10)
+                )
+            ),
+
+          ),
         ),
       ),
     );
@@ -582,6 +620,7 @@ class AddTourLinesPage extends StatelessWidget{
         optionsBuilder: (TextEditingValue textEditingValue) async {
           if (textEditingValue.text.isEmpty) {
             businessTourPlanController.TourPlanContact_List.value= [];
+            businessTourPlanController.TourPlanAccount_Controller.value.text="";
             return businessTourPlanController.TourPlanAccount_List;
             // return const Iterable<VehicleTypeResponse>.empty();
           }
@@ -593,12 +632,22 @@ class AddTourLinesPage extends StatelessWidget{
           businessTourPlanController.meetingWith.value = false;
           businessTourPlanController.meetingWith.value = true;
           businessTourPlanController.CustomerId  = selection.accountCode??"";
+          businessTourPlanController.addCustomer.value= true;
           businessTourPlanController.BusinessTourPlanContactGet(selection.accountCode??"");
-
         },
         fieldViewBuilder: (BuildContext context, TextEditingController controller,
             FocusNode focusNode, VoidCallback onFieldSubmitted) {
           return TextField(
+            onChanged: (value){
+              if(value.isEmpty){
+                businessTourPlanController.TourPlanAccount_Controller.value.text="";
+                businessTourPlanController.MeetingWith_controller.value.text = "";
+                businessTourPlanController.SelectedMeetingWith_List.value=[];
+                businessTourPlanController.SelectedMeetingWith_List1.value=[];
+                businessTourPlanController.meetingWith.value = false;
+                businessTourPlanController.meetingWith.value = true;
+              }
+            },
             onTap: (){
               if(focusNode.hasFocus){
                 focusNode.unfocus();
@@ -675,6 +724,55 @@ class AddTourLinesPage extends StatelessWidget{
     );
   }
 
+  Widget creatEAccountAndMeetingWithDropDown(context){
+    return Container(
+      padding: businessTourPlanController.addCustomer.value?EdgeInsets.only( right: 15.0):EdgeInsets.only( right: 0.0),
+      height: 50,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Expanded(
+            child: Container(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10)
+              ),
+              child: bindMeetingWithDropDown(context),
+            ),
+          ),
+          Obx((){
+            return Visibility(
+              visible: businessTourPlanController.addCustomer.value,
+              child: Container(
+                margin: EdgeInsets.only(left: 10),
+                decoration: BoxDecoration(
+                  color: AllColors.whiteColor,
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(
+                    color: AllColors.lightblackColor, // Set the border color to black
+                    width: 1.0, // You can adjust the width of the border as needed
+                  ),
+                ),
+                child: IgnorePointer(
+                  ignoring: businessTourPlanController.TourPlanAccount_Controller.value.text == ""? true:false,
+                  child: IconButton(
+                      onPressed: (){
+                        contact_vm_page_controller.insideOut=true;
+                        contact_vm_page_controller.FromPage.value="AddTourLine";
+                        contact_vm_page_controller.resetAllContactCreativeField("Icon");
+                        contact_vm_page_controller.createAccount.value=true;
+                        Get.toNamed(RoutesName.addNewContactMaster_screen);
+                      }, icon: Icon(Icons.add)),
+                ),
+              ),
+            );
+          })
+
+
+        ],
+      ),
+    );
+  }
+
   Widget bindMeetingWithDropDown(context){
       return IgnorePointer(
         ignoring: businessTourPlanController.TourPlanAccount_Controller.value.text == ""? true:false,
@@ -747,6 +845,7 @@ class AddTourLinesPage extends StatelessWidget{
                 ),
               );
             },
+
             optionsViewBuilder: (BuildContext context,
                 AutocompleteOnSelected<TourPlanAccountModel> onSelected,
                 Iterable<TourPlanAccountModel> suggestions) {
@@ -830,7 +929,7 @@ class AddTourLinesPage extends StatelessWidget{
         },
         onSelected: (AlongWithPersonModel selection) {
           // Update the TextField with the selected
-          businessTourPlanController.AlongPersonWith_controller.text =
+          businessTourPlanController.AlongPersonWith_controller.value.text =
               _displayAlongPersonForOption(selection).toString();
 
           if (!businessTourPlanController.SelectedAlongPersonWith_list.contains(selection)) {
@@ -851,24 +950,28 @@ class AddTourLinesPage extends StatelessWidget{
             FocusNode focusNode, VoidCallback onFieldSubmitted) {
           return TextField(
             onTap: (){
-              businessTourPlanController.AlongPersonWith_controller.clear();
+              businessTourPlanController.AlongPersonWith_controller.value.clear();
               if(focusNode.hasFocus){
                 focusNode.unfocus();
               }else{
                 focusNode.requestFocus();
               }
             },
+            onChanged:(value){
+              if(value.isEmpty){
+                businessTourPlanController.AlongPersonWith_controller.value.text="";
+              }
+            } ,
             cursorColor: AllColors.primaryDark1,
             controller: controller
-              ..text = businessTourPlanController.AlongPersonWith_controller
-                  .text,
+              ..text = businessTourPlanController.AlongPersonWith_controller.value.text,
             focusNode: focusNode,
             //onSubmitted: onFieldSubmitted,
             decoration: InputDecoration(
               suffixIcon: IconButton(
                 color: AllColors.primaryDark1,
                 onPressed: (){
-                  businessTourPlanController.AlongPersonWith_controller.clear();
+                  businessTourPlanController.AlongPersonWith_controller.value.clear();
                   if(focusNode.hasFocus){
                     focusNode.unfocus();
                   }else{

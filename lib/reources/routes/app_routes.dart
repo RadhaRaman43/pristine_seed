@@ -5,6 +5,9 @@ import 'package:navigation_drawer_flutter/CRM_Directory/CRM_View/Task_Master_vie
 import 'package:navigation_drawer_flutter/CRM_Directory/CRM_View/Task_Master_view/task_master_approval_details.dart';
 import 'package:navigation_drawer_flutter/CRM_Directory/CRM_View/item_master/non_standard_item_list.dart';
 import 'package:navigation_drawer_flutter/CRM_Directory/CRM_View/pageNotFound.dart';
+import 'package:navigation_drawer_flutter/CRM_Directory/CRM_View/sales_cycle/quote_approval_list/quote_cbh_approval_list.dart';
+import 'package:navigation_drawer_flutter/CRM_Directory/CRM_View/sales_cycle/quote_approval_list/quote_gm_approval_list.dart';
+import 'package:navigation_drawer_flutter/CRM_Directory/CRM_View/sales_cycle/quote_approval_list/quote_rh_approval_list.dart';
 import 'package:navigation_drawer_flutter/component/default_button.dart';
 import 'package:navigation_drawer_flutter/component/error_404.dart';
 import 'package:navigation_drawer_flutter/reources/routes/routes_name.dart';
@@ -39,6 +42,7 @@ import '../../CRM_Directory/CRM_View/Call_Dashboard_view/call_Dashboard_View_Scr
 import '../../CRM_Directory/CRM_View/Call_Dashboard_view/commit_dashboard_viewScreen.dart';
 import '../../CRM_Directory/CRM_View/Call_Dashboard_view/funnel_Dashboard_view.dart';
 import '../../CRM_Directory/CRM_View/Call_Dashboard_view/pending_DSAR_Dashboard_ViewScreen.dart';
+import '../../CRM_Directory/CRM_View/Call_Dashboard_view/rollingforceCastDashBoardScreen.dart';
 import '../../CRM_Directory/CRM_View/Call_Dashboard_view/sales_Dashboard_ViewScreen.dart';
 import '../../CRM_Directory/CRM_View/Contact_master_View/Contact_master_View/Add_newContact_Master.dart';
 import '../../CRM_Directory/CRM_View/Contact_master_View/Contact_master_View/Contact_Master_Screen.dart';
@@ -54,6 +58,14 @@ import '../../CRM_Directory/CRM_View/employee_information_system_view/emp_mark_l
 import '../../CRM_Directory/CRM_View/employee_information_system_view/emp_mark_leave_screen.dart';
 import '../../CRM_Directory/CRM_View/employee_information_system_view/leave_request_approval_screen.dart';
 import '../../CRM_Directory/CRM_View/item_master/update_non_standard_item.dart';
+import '../../CRM_Directory/CRM_View/rollingforecast/SalesForeCastScreen.dart';
+import '../../CRM_Directory/CRM_View/rollingforecast/create_rolling_force_cast_screen.dart';
+import '../../CRM_Directory/CRM_View/rollingforecast/fore_cast_item_list_screen.dart';
+import '../../CRM_Directory/CRM_View/rollingforecast/rolling_forecast_cbh_list_screen.dart';
+import '../../CRM_Directory/CRM_View/rollingforecast/rolling_forecast_gm_list_screen.dart';
+import '../../CRM_Directory/CRM_View/rollingforecast/rolling_forecast_logistic_list_screen.dart';
+import '../../CRM_Directory/CRM_View/rollingforecast/rolling_forecast_rh_list_screen.dart';
+import '../../CRM_Directory/CRM_View/rollingforecast/sales_force_cast_header_details.dart';
 import '../../CRM_Directory/CRM_View/sales_cycle/All_Quote_Line_Item_View/All_Quote_Line_Item_Screen.dart';
 import '../../CRM_Directory/CRM_View/sales_cycle/All_Quote_view/All_Quote_Screen.dart';
 import '../../CRM_Directory/CRM_View/sales_cycle/Pending_Draft_Quote_view/pending_Draft_Quote.dart';
@@ -663,6 +675,25 @@ class AppRoutes{
         transition: Transition.rightToLeftWithFade
     ),
 
+
+    GetPage(name: RoutesName.quoteRHApprovalListScreen,
+        page: ()=>QuoteRHApprovalList(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
+    GetPage(name: RoutesName.quoteCBHApprovalListScreen,
+        page: ()=>QuoteCBHApprovalList(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
+    GetPage(name: RoutesName.quoteGMApprovalListScreen,
+        page: ()=>QuoteGMApprovalList(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
+
+
+
     GetPage(name: RoutesName.approvedQuotationListScreen,
         page: ()=>ApprovedQuotationList(),
         transitionDuration: Duration(microseconds: 180),
@@ -874,6 +905,60 @@ class AppRoutes{
         transitionDuration: Duration(microseconds: 180),
         transition: Transition.rightToLeftWithFade
     ),
+
+    GetPage(name: RoutesName.SalesForeCastScreen,
+        page: ()=>SalesForceCastScreen(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
+    GetPage(name: RoutesName.createSalesForeCastScreen,
+        page: ()=>CreateSalesForceCastScreen(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
+    GetPage(name: RoutesName.SalesForeCastHeaderDetailsScreen,
+        page: ()=>SalesForceHeaderDetails(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
+
+    GetPage(name: RoutesName.ForeCastItemScreen,
+        page: ()=>CreateForeCastIyemScreen(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
+
+    GetPage(name: RoutesName.rollingForeCastRhListScreen,
+        page: ()=>RollingForeCastRHListScreen(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
+
+
+    GetPage(name: RoutesName.rollingForeCastGmListScreen,
+        page: ()=>RollingForeCastGMListScreen(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
+    GetPage(name: RoutesName.rollingForeCastCBHListScreen,
+        page: ()=>RollingForeCastCBHListScreen(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
+    GetPage(name: RoutesName.rollingForeCastLogisticListScreen,
+        page: ()=>RollingForeCastLogisticListScreen(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
+
+
+    GetPage(name: RoutesName.rollingforceCastDashBoardScreen,
+        page: ()=>RollingForceCastDashBoardScreen(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
+
+
 
 
 

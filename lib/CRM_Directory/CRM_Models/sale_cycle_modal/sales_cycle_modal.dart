@@ -98,6 +98,16 @@ class SalesCycleModal {
   String? companyProfileType;
   String? postCode;
   String? district;
+  String? actualNameOfInfraDepartment;
+  String? actualCustomerName;
+  String? actualNameOfAgencyContrator;
+  String? actualNameOfArchitectFirm;
+  String? actualExecutiveEngineer;
+  String? actualAssistantEngineer;
+  String? actualContactPersonDecisionMaker;
+  String? actualOwnerOfContractor;
+  String? actualProjectSiteManager;
+  String? actualArchitect;
 
   SalesCycleModal(
       {this.condition,
@@ -198,7 +208,17 @@ class SalesCycleModal {
         this.clustureHeadValue,
         this.companyProfileType,
         this.postCode,
-        this.district});
+        this.district,
+        this.actualNameOfInfraDepartment,
+        this.actualCustomerName,
+        this.actualNameOfAgencyContrator,
+        this.actualNameOfArchitectFirm,
+        this.actualExecutiveEngineer,
+        this.actualAssistantEngineer,
+        this.actualContactPersonDecisionMaker,
+        this.actualOwnerOfContractor,
+        this.actualProjectSiteManager,
+        this.actualArchitect});
 
   SalesCycleModal.fromJson(Map<String, dynamic> json) {
     condition = json['condition'];
@@ -301,6 +321,16 @@ class SalesCycleModal {
     companyProfileType = json['company_profile_type'];
     postCode = json['post_code'];
     district = json['district'];
+    actualNameOfInfraDepartment = json['actual_name_of_infra_department'];
+    actualCustomerName = json['actual_customer_name'];
+    actualNameOfAgencyContrator = json['actual_name_of_agency_contrator'];
+    actualNameOfArchitectFirm = json['actual_name_of_architect_firm'];
+    actualExecutiveEngineer = json['actual_executive_engineer'];
+    actualAssistantEngineer = json['actual_assistant_engineer'];
+    actualContactPersonDecisionMaker = json['actual_contact_person_decision_maker'];
+    actualOwnerOfContractor = json['actual_owner_of_contractor'];
+    actualProjectSiteManager = json['actual_project_site_manager'];
+    actualArchitect = json['actual_architect'];
   }
 
   Map<String, dynamic> toJson() {
@@ -353,13 +383,11 @@ class SalesCycleModal {
     data['assistant_engineer'] = this.assistantEngineer;
     data['project_name'] = this.projectName;
     data['location'] = this.location;
-    data['time_period_to_complete_civil_work_in_months'] =
-        this.timePeriodToCompleteCivilWorkInMonths;
+    data['time_period_to_complete_civil_work_in_months'] = this.timePeriodToCompleteCivilWorkInMonths;
     data['expected_date_of_completion'] = this.expectedDateOfCompletion;
     data['project_value'] = this.projectValue;
     data['expected_revenue'] = this.expectedRevenue;
-    data['furniture_included_in_civil_scope'] =
-        this.furnitureIncludedInCivilScope;
+    data['furniture_included_in_civil_scope'] = this.furnitureIncludedInCivilScope;
     data['customer_name'] = this.customerName;
     data['contact_person_decision_maker'] = this.contactPersonDecisionMaker;
     data['name_of_agency_contrator'] = this.nameOfAgencyContrator;
@@ -378,8 +406,7 @@ class SalesCycleModal {
     data['updated_on'] = this.updatedOn;
     data['is_ready_for_approve'] = this.isReadyForApprove;
     data['is_ready_send_for_approval'] = this.isReadySendForApproval;
-    data['actual_sales_cycle_approval_status'] =
-        this.actualSalesCycleApprovalStatus;
+    data['actual_sales_cycle_approval_status'] = this.actualSalesCycleApprovalStatus;
     data['shipping_address'] = this.shippingAddress;
     data['shipping_address2'] = this.shippingAddress2;
     data['shipping_city'] = this.shippingCity;
@@ -407,6 +434,16 @@ class SalesCycleModal {
     data['company_profile_type'] = this.companyProfileType;
     data['post_code'] = this.postCode;
     data['district'] = this.district;
+    data['actual_name_of_infra_department'] = this.actualNameOfInfraDepartment;
+    data['actual_customer_name'] = this.actualCustomerName;
+    data['actual_name_of_agency_contrator'] = this.actualNameOfAgencyContrator;
+    data['actual_name_of_architect_firm'] = this.actualNameOfArchitectFirm;
+    data['actual_executive_engineer'] = this.actualExecutiveEngineer;
+    data['actual_assistant_engineer'] = this.actualAssistantEngineer;
+    data['actual_contact_person_decision_maker'] = this.actualContactPersonDecisionMaker;
+    data['actual_owner_of_contractor'] = this.actualOwnerOfContractor;
+    data['actual_project_site_manager'] = this.actualProjectSiteManager;
+    data['actual_architect'] = this.actualArchitect;
     return data;
   }
 }

@@ -123,6 +123,7 @@ class Taskmastervm extends GetxController{
     var method_of_call_controller=TextEditingController().obs;
     //var account_owner_controller=TextEditingController().obs;
     var AccountOwner_controller=TextEditingController().obs;
+    String accountNameCode='';
 
     //todo update task controllers
     var userRegionUpdateController = TextEditingController();
@@ -153,6 +154,17 @@ class Taskmastervm extends GetxController{
     var dateOfProposalSubmissionController = TextEditingController();
     var dateOfDrawingReceivedController = TextEditingController();
     //var Sale_cycle_Id_controller = TextEditingController();
+
+    String executiveEn ="";
+    String assistantEn ="";
+    String contactPersonHOD ="";
+    String ownerOfContractor ="";
+    String siteManager ="";
+    String architectUpdate ="";
+    String nameofInfradepUpdate ="";
+    String customerName ="";
+    String agencyContractorUpdate ="";
+    String nameOfArchitecfirmUpdate ="";
 
     RxList<TaskMasterGetModel> Task_Master_list=<TaskMasterGetModel>[].obs;
     RxList<String> TaskStatusListTypeList = <String>[].obs;
@@ -193,6 +205,12 @@ class Taskmastervm extends GetxController{
     RxList<RegionWithClusterFilterModal> SelectedRegion_list = <RegionWithClusterFilterModal>[].obs;
     RxList<CallStatusMasterModel> selectedDSARStatusList = <CallStatusMasterModel>[].obs;
 
+    RxList<EmployeeMemberModel> tempSelected = <EmployeeMemberModel>[].obs;
+    RxList<EmployeeMemberModel> filtered = <EmployeeMemberModel>[].obs;
+    RxBool selectOwner = true.obs;
+    RxBool allSelected = false.obs;
+    RxBool isSel = false.obs;
+    var searchController=TextEditingController().obs;
 
     @override
     void onInit() async {
@@ -228,7 +246,7 @@ class Taskmastervm extends GetxController{
         MethodOfCallMasterApiHit();
         CallDSARsMasterApiHit();
 
-        if (this.isAdminWritePermission.value == 1) {
+        if (this.isAdminWritePermission.value == "1") {
           EmployeeMasterGet('');
         }
         else {
@@ -261,16 +279,18 @@ class Taskmastervm extends GetxController{
     }
 
     Future<Iterable<EmployeeMemberModel>> EmployeeMasterGet(String query) async {
-        if (query == '') {
-            return const Iterable<EmployeeMemberModel>.empty();
-        }
+        // if (query == '') {
+        //     return const Iterable<EmployeeMemberModel>.empty();
+        // }
         Map data = {
-            'filter_name': '',
-            'filter_email': query,
-            'filter_location_id': '',
-            'email_id': email,
-            'rowsPerPage': 50,
-            'pageNumber': 0,
+          'filter_name': query,
+          'filter_email': "",
+          'filter_location_id': '',
+          'email_id': email,
+          "filter_cluster_name": clusterName_controller.value.text.isEmpty?"":clusterName_controller.value.text,
+          "filter_region_name": RegionName_controller.value.text.isEmpty?"":RegionName_controller.value.text,
+          'rowsPerPage': 10,
+          'pageNumber': 0,
         };
         loading.value = true;
         String employee_response =await _api.EmployeeMatserGetApiHit(data, sessionManagement);
@@ -479,6 +499,7 @@ class Taskmastervm extends GetxController{
                 "filter_task_id": taskId!.isNotEmpty?taskId:filterTask_Id_controller.text,
                 "filter_account_code": account_code_controller.text.isEmpty?"":account_code_controller.text,
                 "filter_account_name": account_Name_controller.text.isEmpty?"":account_Name_controller.text,
+                "filter_task_owner_new": AccountOwnerForApi.isEmpty?"":AccountOwnerForApi,
                 "filter_task_status": status == 'All'?"":status,
                 "filter_product_category": product_category_controller.value.text.isEmpty?"":product_category_controller.value.text,
                 "filter_product_category_type": product_category_type_Controller.value.text.isEmpty?"":product_category_type_Controller.value.text,
@@ -503,7 +524,6 @@ class Taskmastervm extends GetxController{
                 "filter_branch_head_value": RegionName_controller.value.text.isEmpty?"":RegionName_controller.value.text,
                 "filter_zone_head_value": "",
                 "filter_clusture_head_value": clusterName_controller.value.text.isEmpty?"":clusterName_controller.value.text,
-                "filter_task_owner_new": AccountOwnerForApi.isEmpty?"":AccountOwnerForApi,
                 "row_per_page": rowsPerPage.toString(),
                 "page_number": page_no.toString()
                 //"filter_account_owner": account_owner_controller.value.text.isEmpty?"":account_owner_controller.value.text,
@@ -793,7 +813,7 @@ class Taskmastervm extends GetxController{
     }
 
 
-    getContactMasterList(String accountCode, String accountName) async {
+    Future<Iterable<ContactMstGetListModal>> getContactMasterList(String accountCode, String accountName) async {
         try{
             Map<String, String> data={
                 "filter_contact_name": '',
@@ -803,7 +823,7 @@ class Taskmastervm extends GetxController{
                 "row_per_page": rowsPerPage.toString(),
                 "page_number": '0'
             };
-
+            loading.value=true;
             print("data is ${data}");
             String onValue = await _api.contactMstGetList(data, sessionManagement);
                 final jsonResponse = json.decode(onValue);
@@ -827,6 +847,10 @@ class Taskmastervm extends GetxController{
         }catch(e){
             print(e);
         }
+        finally{
+          loading.value=false;
+        }
+        return contact_master_list;
 
     }
 
@@ -889,7 +913,6 @@ class Taskmastervm extends GetxController{
             String onValue = await _api.AccountMasterGetApiHit(data, sessionManagement);
                 final jsonResponse = json.decode(onValue);
                 if(jsonResponse is List){
-                  loading.value = false;
                     List<AccountMasterModel> response = jsonResponse.map((e) => AccountMasterModel.fromJson(e)).toList();
                     if(response!= null && response.length>0 && response[0].condition=="True"){
                         Account_Master_list.value=response;
@@ -900,11 +923,16 @@ class Taskmastervm extends GetxController{
                 }
 
         }catch(e){
-          loading.value = false;
+
             print(e);
+        }
+        finally{
+          loading.value = false;
         }
         return Account_Master_list;
     }
+
+
 
     CallStatusMasterApiHit(String flag,{String? filter}) async {
         try{
@@ -1351,9 +1379,9 @@ class Taskmastervm extends GetxController{
             "infra_lead_no": InfraNo,
             "user_region": userRegionUpdateController.text.isEmpty?"":userRegionUpdateController.text,
             "user_clusture": userClusterUpdateController.text.isEmpty?"":userClusterUpdateController.text,
-            "name_of_infra_department": nameofInfradepUpdateController.text.isEmpty?"":nameofInfradepUpdateController.text,
-            "executive_engineer": executiveEngineerUpdateController.text.isEmpty?"":executiveEngineerUpdateController.text,
-            "assistant_engineer": assistantEngineerController.text.isEmpty?"":assistantEngineerController.text,
+            "name_of_infra_department": nameofInfradepUpdateController.text.isEmpty?"":nameofInfradepUpdate,
+            "executive_engineer": executiveEngineerUpdateController.text.isEmpty?"":executiveEn,
+            "assistant_engineer": assistantEngineerController.text.isEmpty?"":assistantEn,
             "project_name": nameOfProjectController.text.isEmpty?"":nameOfProjectController.text,
             "location": locationController.text.isEmpty?"":locationController.text,
             "time_period_to_complete_civil_work_in_months": timePeriodToCompleteWorkController.text.isEmpty?"0":timePeriodToCompleteWorkController.text,
@@ -1361,13 +1389,13 @@ class Taskmastervm extends GetxController{
             "project_value": projectValueUpdateController.text.isEmpty?"":projectValueUpdateController.text,
             "expected_revenue": expectedRevenueUpdateController.text.isEmpty?"":expectedRevenueUpdateController.text,
             "furniture_included_in_civil_scope": furnitureIncludedInCivilController.text=="Yes"?1:0,
-            "customer_name": customerNameController.text.isEmpty?"":customerNameController.text,
-            "contact_person_decision_maker": contactPersonHODController.text.isEmpty?"":contactPersonHODController.text,
-            "name_of_agency_contrator": agencyContractorUpdateController.text.isEmpty?"":agencyContractorUpdateController.text,
-            "owner_of_contrator": ownerOfContractorController.text.isEmpty?"":ownerOfContractorController.text,
-            "project_site_manager": siteManagerController.text.isEmpty?"":siteManagerController.text,
-            "name_of_architect_firm": nameOfArchitecfirmUpdateController.text.isEmpty?"":nameOfArchitecfirmUpdateController.text,
-            "architect": architectUpdateController.text.isEmpty?"":architectUpdateController.text,
+            "customer_name": customerNameController.text.isEmpty?"":customerName,
+            "contact_person_decision_maker": contactPersonHODController.text.isEmpty?"":contactPersonHOD,
+            "name_of_agency_contrator": agencyContractorUpdateController.text.isEmpty?"":agencyContractorUpdate,
+            "owner_of_contrator": ownerOfContractorController.text.isEmpty?"":ownerOfContractor,
+            "project_site_manager": siteManagerController.text.isEmpty?"":siteManager,
+            "name_of_architect_firm": nameOfArchitecfirmUpdateController.text.isEmpty?"":nameOfArchitecfirmUpdate,
+            "architect": architectUpdateController.text.isEmpty?"":architectUpdate,
             "lines": lines.map((line) => line.toJson()).toList(),
             "drawing_collected": drawingcollectedUpdateController.text=="Yes"?1:0,
             "date_drawing_received": dateDrawingReceived??"",
@@ -1457,7 +1485,6 @@ class Taskmastervm extends GetxController{
                 "task_id": TaskID,
                 "along_with_person_name": "",
                 "email_id": email,
-
             };
             loading.value=true;
             String onValue = await _api.TaskPersonMstGetByTaskId(data, sessionManagement);
@@ -1510,6 +1537,17 @@ class Taskmastervm extends GetxController{
          dateOfProposalSubmissionController.clear();
          projectValueUpdateController.clear();
 
+         executiveEn = "";
+         assistantEn = "";
+         contactPersonHOD = "";
+         ownerOfContractor = "";
+         siteManager = "";
+         architectUpdate = "";
+         nameofInfradepUpdate = "";
+         customerName = "";
+         agencyContractorUpdate = "";
+         nameOfArchitecfirmUpdate = "";
+
     }
 
     void viewAllDetailsOfTaskUpdateInfra(){
@@ -1524,23 +1562,29 @@ class Taskmastervm extends GetxController{
         drawingcollectedUpdateController.text=Task_Master_list[0].drawingCollected ==1 ? "Yes":"No";
         proposalSubmittedUpdateController.text=Task_Master_list[0].drawingCollected==1 ? "Yes":"No";
         inaugrationDateUpdateController.text= inaugurationDate??"";
-        architectUpdateController.text=Task_Master_list[0].architect ?? "";
-        executiveEngineerUpdateController.text=Task_Master_list[0].executiveEngineer ?? "";
-        nameOfArchitecfirmUpdateController.text=Task_Master_list[0].nameOfArchitectFirm ?? "";
-        nameofInfradepUpdateController.text=Task_Master_list[0].nameOfInfraDepartment ?? "";
-        agencyContractorUpdateController.text=Task_Master_list[0].nameOfAgencyContrator ?? "";
+
+        nameofInfradepUpdateController.text=Task_Master_list[0].actualNameOfInfraDepartment ?? "";
+        executiveEngineerUpdateController.text=Task_Master_list[0].actualExecutiveEngineer ?? "";
+        assistantEngineerController.text=Task_Master_list[0].actualAssistantEngineer??"";
+
+        customerNameController.text=Task_Master_list[0].actualCustomerName??"";
+        contactPersonHODController.text=Task_Master_list[0].actualContactPersonDecisionMaker??"";
+
+        agencyContractorUpdateController.text=Task_Master_list[0].actualNameOfAgencyContrator ?? "";
+        ownerOfContractorController.text=Task_Master_list[0].actualOwnerOfContractor??"";
+        siteManagerController.text=Task_Master_list[0].actualProjectSiteManager??"";
+
+        architectUpdateController.text=Task_Master_list[0].actualArchitect ?? "";
+        nameOfArchitecfirmUpdateController.text=Task_Master_list[0].actualNameOfArchitectFirm ?? "";
+
         expectedRevenueUpdateController.text=Task_Master_list[0].expectedRevenue.toString();
         valueOfQuoteUpdateController.text=Task_Master_list[0].valueOfQuote.toString();
         dateofcompletioneUpdateController.text=expDateOfCompletion??"";
-        assistantEngineerController.text=Task_Master_list[0].assistantEngineer??"";
+
         nameOfProjectController.text=Task_Master_list[0].projectName??"";
         locationController.text=Task_Master_list[0].location??"";
         timePeriodToCompleteWorkController.text=Task_Master_list[0].timePeriodToCompleteCivilWorkInMonths==null?"":Task_Master_list[0].timePeriodToCompleteCivilWorkInMonths.toString();
         furnitureIncludedInCivilController.text=Task_Master_list[0].furnitureIncludedInCivilScope==1 ? "Yes":"No";
-        customerNameController.text=Task_Master_list[0].customerName??"";
-        contactPersonHODController.text=Task_Master_list[0].contactPersonDecisionMaker??"";
-        ownerOfContractorController.text=Task_Master_list[0].ownerOfContractor??"";
-        siteManagerController.text=Task_Master_list[0].projectSiteManager??"";
         dateOfDrawingReceivedController.text=dateDrawingReceived??"";
         dateOfProposalSubmissionController.text=dateOfProposalSubmission??"";
         projectValueUpdateController.text=Task_Master_list[0].projectValue.toString();
@@ -1613,6 +1657,11 @@ class Taskmastervm extends GetxController{
        SaleCycleActive_Controller.text = "All";
        AccountOwnerForApi = '';
        AccountOwner_controller.value.clear();
+       accountNameCode='';
+       searchController.value.clear();
+       if(isAdminWritePermission=="1") {
+         EmployeeMasterGet("");
+       }
        SelectedEmployee_Member_list.value = [];
 
       SelectedCluster_list.value=[];
@@ -1644,6 +1693,7 @@ class Taskmastervm extends GetxController{
         'region_name': RegionName_controller.value.text,
         'cluster_name': clusterName_controller.value.text,
         'account_owner': AccountOwner_controller.value.text,
+        'accountNameCode': accountNameCode,
         'filterTaskCreationOnController': filterTaskCreationOnController.value.text,
         'filterTaskCreationOn_from_to_date_Controller': filterTaskCreationOn_from_to_date_Controller.value.text,
         'product_category': product_category_controller.value.text,
@@ -1676,6 +1726,7 @@ class Taskmastervm extends GetxController{
         postalCodeController.value.text=getFilterData["pin_code"]??"";
         district_controller.value.text=getFilterData["district"]??"";
         AccountOwner_controller.value.text=getFilterData["account_owner"]??"";
+        accountNameCode=getFilterData["accountNameCode"]??"";
         filterTaskCreationOnController.value.text=getFilterData["filterTaskCreationOnController"]??"";
         filterTaskCreationOn_from_to_date_Controller.value.text=getFilterData["filterTaskCreationOn_from_to_date_Controller"]??"";
         product_category_controller.value.text=getFilterData["product_category"]??"";

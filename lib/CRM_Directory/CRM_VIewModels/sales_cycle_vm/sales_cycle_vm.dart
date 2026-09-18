@@ -335,8 +335,7 @@ class SalesCycleVm extends GetxController {
   RxList<String> salesAdviseStatusList = ["Draft", "Completed"].obs;
   RxList<String> SaleCycleStatusList =
       ["All", "Suspect", "Prospect", "Propose"].obs;
-  RxList<String> qouteAcceptedList =
-      ["All", "Open", "Loss", "Won"].obs;
+  RxList<String> qouteAcceptedList = ["All", "Open", "Loss", "Won"].obs;
   RxList<String> ApprovalStatusList =
       ["All", "PENDING", "PENDING FOR APPROVAL", "APPROVED", "REJECTED"].obs;
 
@@ -402,36 +401,106 @@ class SalesCycleVm extends GetxController {
   var dateOfDrawingReceivedController = TextEditingController();
   var ItemCat_type_controller = TextEditingController();
 
+  String executiveEn ="";
+  String assistantEn ="";
+  String contactPersonHOD ="";
+  String ownerOfContractor ="";
+  String siteManager ="";
+  String architectUpdate ="";
+  String nameofInfradepUpdate ="";
+  String customerName ="";
+  String agencyContractorUpdate ="";
+  String nameOfArchitecfirmUpdate ="";
+
   RxList<ItemCategoryMstModel> Item_Category_Selected_Infra_list = <ItemCategoryMstModel>[].obs;
   RxList<ItemCategoryMstModel> Item_Category_Infra_list = <ItemCategoryMstModel>[].obs;
   RxList<String> isInfraLeadList =["Yes", "No"].obs;
+
+  RxList<EmployeeMemberModel> tempSelected = <EmployeeMemberModel>[].obs;
+  RxList<EmployeeMemberModel> filtered = <EmployeeMemberModel>[].obs;
+  RxBool selectOwner = true.obs;
+  RxBool allSelected = false.obs;
+  RxBool isSel = false.obs;
+  var searchController=TextEditingController().obs;
+
+
+  RxList<AccountMasterModel> Account_Master_list=<AccountMasterModel>[].obs;
+  RxList<ContactMstGetListModal> infra_contact_master_list=<ContactMstGetListModal>[].obs;
+  RxString account_code="".obs;
+  RxString account_name="".obs;
+  RxString contact_code="".obs;
+  String filterRouting = "";
+  String productCategory = "";
+
+
+  var quote_item_name_flt = TextEditingController().obs;
+  var quote_qty_flt = TextEditingController().obs;
+  var quote_lsp_flt = TextEditingController().obs;
+  var quote_map_flt = TextEditingController().obs;
+  var quote_seeking_per_flt = TextEditingController().obs;
+  var quote_seeking_amt_flt = TextEditingController().obs;
+  var quote_btp_flt = TextEditingController().obs;
+  var quote_st_cost_flt = TextEditingController().obs;
+  var quote_app_dis_per_flt = TextEditingController().obs;
+  var quote_app_amt_flt = TextEditingController().obs;
+  var quote_sales_credit_flt = TextEditingController().obs;
+  var quote_gm_per_flt = TextEditingController().obs;
+  var quote_gm_total_amt_flt = TextEditingController().obs;
+  var quote_total_app_price_flt = TextEditingController().obs;
+  var quote_bm_per_flt = TextEditingController().obs;
+  var quote_total_seeking_price_flt = TextEditingController().obs;
+  var quote_category_name_flt = TextEditingController().obs;
+  clearQuoteLineFil(){
+    quote_item_name_flt.value.clear();
+    quote_qty_flt.value.clear();
+    quote_lsp_flt.value.clear();
+    quote_map_flt.value.clear();
+    quote_seeking_per_flt.value.clear();
+    quote_seeking_amt_flt.value.clear();
+    quote_btp_flt.value.clear();
+    quote_st_cost_flt.value.clear();
+    quote_app_dis_per_flt.value.clear();
+    quote_app_amt_flt.value.clear();
+    quote_sales_credit_flt.value.clear();
+    quote_gm_per_flt.value.clear();
+    quote_gm_total_amt_flt.value.clear();
+    quote_total_app_price_flt.value.clear();
+    quote_bm_per_flt.value.clear();
+    quote_total_seeking_price_flt.value.clear();
+    quote_category_name_flt.value.clear();
+  }
 
   @override
   Future<void> onInit() async {
     try {
       loading.value=true;
       email = await sessionManagement.getEmail() ?? '';
+      filterRouting = await sessionManagement.getfilterRouting() ?? '';
       userType = await sessionManagement.getUserType() ?? '';
-      isAdminWritePermission.value =
-          await sessionManagement.getIsAdminPermission() ?? '';
-      isHeadofficePermission.value =
-          await sessionManagement.getisHeadofficePermission() ?? '';
+      isAdminWritePermission.value = await sessionManagement.getIsAdminPermission() ?? '';
+      isHeadofficePermission.value = await sessionManagement.getisHeadofficePermission() ?? '';
       //clearAllFieldOfFilter();
       product_category_type_Controller.value.text = "Contains";
-      getItemCategoryMstWithoutTaskIdApi();
-      getCompanyTypeMasterGet();
-      if (this.isAdminWritePermission.value == 1) {
-        EmployeeMasterGet('');
+
+      if (filterRouting == "Quote Approval List" || filterRouting == "Quote RH Approval List" ||
+          filterRouting == "Quote CBH Approval List" || filterRouting == "Quote GM Approval List") {
+
+      }else{
+        getItemCategoryMstWithoutTaskIdApi();
+        getCompanyTypeMasterGet();
+        if (this.isAdminWritePermission.value == "1") {
+          EmployeeMasterGet('');
+        }
+        else {
+          getEmployeeMemberApi();
+        }
+        //getsalesCycleData(pageNumber, "", "", '');
+
+        getClustersGetByEmail();
+        itemCategorySelectedlist.value = [];
       }
-      else {
-        getEmployeeMemberApi();
-      }
 
-
-      //getsalesCycleData(pageNumber, "", "", '');
-
-      getClustersGetByEmail();
-      itemCategorySelectedlist.value = [];
+      print("dhow ui after all data get");
     }
     catch(e){
 
@@ -476,13 +545,16 @@ class SalesCycleVm extends GetxController {
 
   Future<List<EmployeeMemberModel>> EmployeeMasterGet(String query) async {
     Map data = {
-      'filter_name': '',
-      'filter_email': query,
+      'filter_name': query,
+      'filter_email': "",
       'filter_location_id': '',
       'email_id': email,
-      'rowsPerPage': 500,
+      "filter_cluster_name": clusterName_controller.value.text.isEmpty?"":clusterName_controller.value.text,
+      "filter_region_name": RegionName_controller.value.text.isEmpty?"":RegionName_controller.value.text,
+      'rowsPerPage': 10,
       'pageNumber': 0,
     };
+    loading.value= true;
     String employee_response =await _api.EmployeeMatserGetApiHit(data, sessionManagement);
     try {
       final jsonResponse = json.decode(employee_response);
@@ -505,6 +577,9 @@ class SalesCycleVm extends GetxController {
     } catch (e) {
       Utils.sanckBarException('Exception!', e.toString());
       employee_Member_list.value = [];
+    }
+    finally{
+      loading.value= false;
     }
     return employee_Member_list.value;
   }
@@ -577,7 +652,7 @@ class SalesCycleVm extends GetxController {
     // itemMstGetByQuoteIdList[index] = item;
   }
 
-  void toggleSalesCheckbox(int index) {
+  void toggleSalesCheckbox(int index, BuildContext context) {
     clearSaleProductListController();
     var item = itemMstGetBySalesIdList[index];
     item.isSelected = item.isSelected == 1 ? 0 : 1;
@@ -589,11 +664,105 @@ class SalesCycleVm extends GetxController {
           "Add");
       itemMstGetBySalesIdList[index] = item;
     } else {
+      //showSalesProductConfirmationDialog(context, salesCycleId.value,itemMstGetBySalesIdList[index].lineNo ?? 0);
       SalesCycleLineDeleteApiHit(
           itemMstGetBySalesIdList[index].lineNo ?? 0, salesCycleId.value);
       itemMstGetBySalesIdList[index] = item;
     }
     // itemMstGetByQuoteIdList[index] = item;
+  }
+
+  showSalesProductConfirmationDialog(context, String SalesId, int LineNo) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Icon(
+                  Icons.check_circle,
+                  color: AllColors.lightredColor,
+                ),
+                const SizedBox(
+                  width: 5,
+                ),
+                Text('Delete!',
+                    style: GoogleFonts.poppins(
+                      fontSize: AllFontSize.sisxteen,
+                      fontWeight: FontWeight.w700,
+                      color: AllColors.primaryDark1,
+                    ))
+              ],
+            ),
+            content: Wrap(children: [
+              Column(
+                children: [
+                  Text('Do you want to delete this sales line ?',
+                      style: GoogleFonts.poppins(
+                        fontSize: AllFontSize.fourtine,
+                        fontWeight: FontWeight.w500,
+                        color: AllColors.primaryDark1,
+                      )),
+                  const SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      ElevatedButton(
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all<Color>(
+                            AllColors.lightredColor,
+                          ),
+                        ),
+                        onPressed: () {
+                          Navigator.pop(context);
+                          //Get.back();
+                        },
+                        child: Container(
+                          width: 60,
+                          alignment: Alignment.center,
+                          child: Text(
+                            'Cancel',
+                            style: GoogleFonts.poppins(
+                              color: AllColors.blackColor,
+                              fontSize: AllFontSize.twelve,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                      ),
+                      ElevatedButton(
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all<Color>(
+                            AllColors.greenblue,
+                          ),
+                        ),
+                        onPressed: () {
+                          SalesCycleLineDeleteApiHit(
+                              LineNo, SalesId);
+                          Navigator.pop(context);
+                          // Get.back();
+                        },
+                        child: Container(
+                          width: 60,
+                          alignment: Alignment.center,
+                          child: Text(
+                            'Confirm',
+                            style: GoogleFonts.poppins(
+                              color: AllColors.blackColor,
+                              fontSize: AllFontSize.twelve,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
+                  )
+                ],
+              ),
+            ]),
+          );
+        });
   }
 
   String extractEmail(String input) {
@@ -800,7 +969,7 @@ class SalesCycleVm extends GetxController {
               if (flag!='salesPage' && saleCycleList[0].salesCycleStatus == "Propose") {
                 print("Sales cycle status..${saleCycleList[0].salesCycleId}");
                 pageNumberForQuote = 0;
-                getQuoteHeaderData(pageNumberForQuote, saleCycleList[0].salesCycleId??"", '');
+                 getQuoteHeaderData(pageNumberForQuote, saleCycleList[0].salesCycleId??"", '');
                 getQuoteWonData(saleCycleList[0].salesCycleId??"");
               }
               /* accountNameController.value.text=saleCycleList[0].accountName??"";
@@ -810,6 +979,151 @@ class SalesCycleVm extends GetxController {
               saleCycleList.value = [];
             }
           }
+
+    } catch (e) {
+
+      print('Exception..$e');
+    }
+    finally{
+      loading.value = false;
+    }
+  }
+
+  getsalesCycleInfraDeatailData(int page_no, String saleCycleId, String flag, String fromPage) async{
+    FromPage.value = fromPage;
+    String emailForUpdate = "";
+    try {
+      if (salesCycleOwnerController.value.text.isNotEmpty) {
+        emailForUpdate = extractEmail(salesCycleOwnerController.value.text);
+      }
+      AccountOwnerForApi = '';
+      if(AccountOwner_controller.value.text.isNotEmpty){
+        AccountOwnerForApi = AccountOwner_controller.value.text
+            .split(',')
+            .map((e) => e.trim())
+            .join('|');
+      }
+
+      Map data = {
+        "filter_sales_cycle_id": saleCycleId.isNotEmpty ? saleCycleId : saleCycleController.value.text,
+        "filter_task_id": filterTask_Id_controller.value.text.isEmpty ? "" : filterTask_Id_controller.value.text,
+        "filter_account_code": accountCodeController.value.text.isEmpty ? "" : accountCodeController.value.text,
+        "filter_account_name": accountNameController.value.text.isEmpty ? "" : accountNameController.value.text,
+        "filter_sales_cycle_owner": isAdminWritePermission.value=="1"?"":email,
+        "filter_product_category": productCategoryController.value.text.isEmpty ? "" : productCategoryController.value.text,
+        "filter_product_category_type": product_category_type_Controller.value.text.isEmpty?"":product_category_type_Controller.value.text,
+        "filter_purchase_process": purchaseProcessController.value.text.isEmpty ? "" : purchaseProcessController.value.text,
+        "filter_proposed_solution": proposedSolutionController.value.text.isEmpty ? "" : proposedSolutionController.value.text,
+        "filter_expected_closure_date": extClosureStartToEnd.value.isEmpty ? "" : extClosureStartToEnd.value,
+        "filter_sales_cycle_status": SaleCycleStatusController.value.text.isEmpty || SaleCycleStatusController.value.text == 'All' ? '' : SaleCycleStatusController.value.text,
+        "filter_sales_cycle_approval_status": ApprovalStatusController.value.text.isEmpty || ApprovalStatusController.value.text == 'All' ? '' : ApprovalStatusController.value.text,
+        "filter_sales_cycle_quote_accepted": filterQuoteAcceptedFlag.value,
+        "is_commit": isCommitController.value.text.isEmpty ? -1 : (isCommitController.value.text == "Yes" ? 1 : 0),
+        "filter_solution_accepted": solutionAcceptedController.value.text.isEmpty ? -1 : (solutionAcceptedController.value.text == "Yes" ? 1 : 0),
+        "filter_created_by": createdByController.value.text.isEmpty ? "" : createdByController.value.text,
+        "filter_approved_by": "",
+        "filter_created_on": createdOnCnontroller.value.text.isEmpty ? "" : createdOnCnontroller.value.text,
+        "filter_company_profile_type": companyProfileTypeController.value.text.isEmpty ? "" : companyProfileTypeController.value.text,
+        "filter_postal_code": postalCodeController.value.text.isEmpty ? "" : postalCodeController.value.text,
+        "filter_district": district_controller.value.text.isEmpty ? "" : district_controller.value.text,
+        "filter_frontliner_value": "",
+        "filter_branch_head_value":"",
+        "filter_zone_head_value": "",
+        "filter_clusture_head_value": "",
+        "filter_sales_cycle_owner_new": "",
+        "row_per_page": rowsPerPage,
+        "page_number": page_no
+      };
+      print('sale data ${data}');
+      loading.value = true;
+      String onValue = await _api.salesCycleMstGetApihit(data, sessionManagement);
+      final jsonResponse = json.decode(onValue);
+      print(onValue);
+      if (jsonResponse is List) {
+        List<SalesCycleModal> response =
+        jsonResponse.map((e) => SalesCycleModal.fromJson(e)).toList();
+        if (response != null &&
+            response.length > 0 &&
+            response[0].condition == "True") {
+          print('listSize.....${saleCycleList.length}');
+          if (page_no == 0) {
+            saleCycleList.clear();
+          }
+          saleCycleList.addAll(response);
+          print('listSize.....${saleCycleList.length}');
+          total_rows_sales = int.parse(saleCycleList[0].totalRows!);
+          if (flag == "ViewHeader") {
+            Get.toNamed(RoutesName.viewSalesCycleHeaderScreen);
+            saleCycleList[0].isCustomerNeedIdentify == 0
+                ? customerNeedIdetityController.value.text = "No"
+                : customerNeedIdetityController.value.text = "Yes";
+            saleCycleList[0].isSolutionAccepted == 0
+                ? solutionAcceptedController.value.text = "No"
+                : solutionAcceptedController.value.text = "Yes";
+            proposedSolutionController.value.text =
+            saleCycleList[0].proposedSolution == null ? "" : saleCycleList[0].proposedSolution.toString();
+            solutionRejectedRemarkController.value.text =
+            saleCycleList[0].rejectReason.toString().isNotEmpty ? saleCycleList[0].rejectReason.toString() : "";
+            closureDateController.value.text =
+                saleCycleList[0].estClosureDate.toString();
+            saleCycleList[0].isDecisionMaker == 0
+                ? identifyDecisionMakerController.value.text = "No"
+                : identifyDecisionMakerController.value.text = "Yes";
+            saleCycleList[0].commit == 0
+                ? saleCycleCommitController.value.text = "No"
+                : saleCycleCommitController.value.text = "Yes";
+            saleCycleList[0].quoteSubmitted == 0
+                ? QuoteSubmittedController.value.text = "No"
+                : QuoteSubmittedController.value.text = "Yes";
+            saleCycleList[0].commit == 0
+                ? isCommitForProposeController.value.text = "No"
+                : isCommitForProposeController.value.text = "Yes";
+            //saleCycleList[0].confirmDecisionDate==0?ConfirmDecisionDateController.value.text="No":ConfirmDecisionDateController.value.text="Yes";
+            saleCycleList[0].confirmExpectedRevenue == 0
+                ? ConfirmExpectedRevenueController.value.text = "No"
+                : ConfirmExpectedRevenueController.value.text = "Yes";
+            purchaseProcessController.value.text =
+            saleCycleList[0].purchaseProcess == null
+                ? ""
+                : saleCycleList[0].purchaseProcess.toString();
+            purchasTimeFrameController.value.text =
+            saleCycleList[0].purchaseTimeFrame == null
+                ? ""
+                : saleCycleList[0].purchaseTimeFrame.toString();
+            budgetAmountController.value.clear();
+            expectedAmountController.value.clear();
+            productCategoryController.value.clear();
+
+            if (customerNeedIdetityController.value.text == "Yes") {
+              ischangeNeedIdentity.value = true;
+            } else {
+              ischangeNeedIdentity.value = false;
+            }
+
+            if (solutionAcceptedController.value.text == "Yes") {
+              ischangesolutionAccepted.value = true;
+            } else {
+              ischangesolutionAccepted.value = false;
+            }
+          }
+          if (flag!='salesPage' && saleCycleList[0].salesCycleStatus == "Suspect") {
+            itemCategorySelectedlist.value = [];
+            getItemCategoryMstApi(saleCycleList[0].salesCycleId??"", saleCycleList[0].taskId??"","");
+            ProductCategoryWiseAmtGet(0, saleCycleList[0].salesCycleId??"");
+          }
+          if (flag!='salesPage' && saleCycleList[0].salesCycleStatus == "Propose") {
+            print("Sales cycle status..${saleCycleList[0].salesCycleId}");
+            pageNumberForQuote = 0;
+            getQuoteHeaderData(pageNumberForQuote, saleCycleList[0].salesCycleId??"", '');
+            getQuoteWonData(saleCycleList[0].salesCycleId??"");
+          }
+          /* accountNameController.value.text=saleCycleList[0].accountName??"";
+            contactNameController.value.text=saleCycleList[0].contactName??"";
+*/
+        } else {
+          saleCycleList.value = [];
+        }
+      }
 
     } catch (e) {
 
@@ -999,8 +1313,7 @@ class SalesCycleVm extends GetxController {
                 filterQuoteAcceptedFlag.value = "";
                 pageNumber = 0;
                 clearAllFieldOfFilter();
-                getsalesCycleData(pageNumber, saleCycleList.salesCycleId!,
-                    "ViewHeader", FromPage.value);
+                getsalesCycleData(pageNumber, saleCycleList.salesCycleId!, "ViewHeader", FromPage.value);
                 Get.toNamed(RoutesName.viewSalesCycleHeaderScreen);
               }
 
@@ -1424,11 +1737,9 @@ class SalesCycleVm extends GetxController {
               getQuoteHeaderData(
                   pageNumberForQuote, saleCycleList[0].salesCycleId!, '');
               //Get.toNamed(RoutesName.viewSalesCycleHeaderScreen);
-              Utils.sanckBarSuccess(
-                  "Success Message !", response[0].message.toString());
+              Utils.sanckBarSuccess("Success Message !", response[0].message.toString());
             } else {
-              Utils.sanckBarError(
-                  "False Message !", response[0].message.toString());
+              Utils.sanckBarError("False Message !", response[0].message.toString());
               loading.value = false;
             }
           } else {
@@ -1451,7 +1762,27 @@ class SalesCycleVm extends GetxController {
     try {
       Map<String, String> data = {
         "quote_id": quoteId.toString(),
-        "created_by": email
+        "created_by": email,
+        "item_code": "",
+        "item_name": quote_item_name_flt.value.text.isEmpty?"":quote_item_name_flt.value.text,
+        "quantity": quote_qty_flt.value.text.isEmpty?"":quote_qty_flt.value.text,
+        "lsp": quote_lsp_flt.value.text.isEmpty?"":quote_lsp_flt.value.text,
+        "seeking_dis_per": quote_seeking_per_flt.value.text.isEmpty?"":quote_seeking_per_flt.value.text,
+        "seeking_price_per_unit":  quote_seeking_amt_flt.value.text.isEmpty?"":quote_seeking_amt_flt.value.text,
+        "approved_dis_per": quote_app_dis_per_flt.value.text.isEmpty?"":quote_app_dis_per_flt.value.text,
+        "approved_price_per_unit": quote_app_amt_flt.value.text.isEmpty?"":quote_app_amt_flt.value.text,
+        "sales_credit": quote_sales_credit_flt.value.text.isEmpty?"":quote_sales_credit_flt.value.text,
+        "approved_price": quote_total_app_price_flt.value.text.isEmpty?"":quote_total_app_price_flt.value.text,
+        "seeking_price": quote_total_seeking_price_flt.value.text.isEmpty?"":quote_total_seeking_price_flt.value.text,
+        "product_category": quote_category_name_flt.value.text.isEmpty?"":quote_category_name_flt.value.text,
+        "price_per_unit": "",
+        "gm_per": quote_gm_per_flt.value.text.isEmpty ? "" : quote_gm_per_flt.value.text,
+        "bm_per": quote_bm_per_flt.value.text.isEmpty?"":quote_bm_per_flt.value.text,
+        "map": quote_map_flt.value.text.isEmpty?"":quote_map_flt.value.text,
+        "btp": quote_btp_flt.value.text.isEmpty?"":quote_btp_flt.value.text,
+        "standard_cost": quote_st_cost_flt.value.text.isEmpty?"":quote_st_cost_flt.value.text,
+        "gm_absolute_amount": quote_gm_total_amt_flt.value.text.isEmpty?"":quote_gm_total_amt_flt.value.text,
+        "created_on": ""
       };
 
       _api.quoteHeaderGetByQuoteIdApiHit(data, sessionManagement).then(
@@ -1507,6 +1838,7 @@ class SalesCycleVm extends GetxController {
                 return;
               }
               quoteApprovalPage.value = flag;
+              print("Rh flag ${flag}");
               getItemCategoryMstApi(quoteHeaderdata[0].salesCycleId.toString(),"" ,  quoteId!);
               Get.toNamed(RoutesName.quoteInformationScreen);
 
@@ -2325,9 +2657,8 @@ class SalesCycleVm extends GetxController {
   }
 
   ProductCatCreateApiHit(String quoteIds, String back) async {
-    List<TaskSalesProductCategoryLinesModel> lines = itemCategorySelectedlist
-        .map((item) => TaskSalesProductCategoryLinesModel(
-            productCategoryCode: item.parentCategoryCode!)).toList();
+    List<TaskSalesProductCategoryLinesModel>lines = itemCategorySelectedlist
+          .map((item) => TaskSalesProductCategoryLinesModel(productCategoryCode: item.parentCategoryCode!)).toList();
 
     Map<String, dynamic> data = {
       "created_by": email,
@@ -2354,8 +2685,9 @@ class SalesCycleVm extends GetxController {
             print("back isss ");
             getQuoteHeaderData(pageNumberForQuote, saleCycleList[0].salesCycleId!, '');
             Get.toNamed(RoutesName.viewSalesCycleHeaderScreen);
-          }/*else{
-            getQuoteHeaderInformation(quoteId.value, "Quote");
+          }
+          /*else (){
+            getQuoteHeaderInformation(quoteHeaderdata[0].quoteId.toString(), "");
           }*/
 
           //getQuoteHeaderData(0,  saleCycleList[0].salesCycleId!, '');
@@ -2379,7 +2711,6 @@ class SalesCycleVm extends GetxController {
     }
   }
 
-
   QuoteHeaderParentCategoryUpdate(String quoteId) async {
     Map<String, dynamic> data = {
       "created_by": email,
@@ -2389,7 +2720,6 @@ class SalesCycleVm extends GetxController {
     };
     print(data);
     loading.value = true;
-
     try {
       final value = await _api.QuoteHeaderParentCategoryUpdate(data, sessionManagement);
       print(value);
@@ -2401,7 +2731,6 @@ class SalesCycleVm extends GetxController {
           Utils.sanckBarSuccess("Success!", response[0].message.toString());
           ProductCatCreateApiHit(quoteHeaderdata[0].quoteId.toString(),"");
           getQuoteHeaderInformation(quoteId, "fromQuote");
-
           //getItemCategoryMstApi(quoteHeaderdata[0].salesCycleId.toString(),"",quoteId);
 
         } else {
@@ -2441,9 +2770,8 @@ class SalesCycleVm extends GetxController {
         if (response != null && response.isNotEmpty && response[0].condition?.toLowerCase() == "true") {
           loading.value = false;
           Utils.sanckBarSuccess("Success!", response[0].message.toString());
-          getQuoteHeaderInformation(quoteId, "fromQuote");
+          getQuoteHeaderInformation(quoteId, "AllQuoteList");
           getItemCategoryMstApi(quoteHeaderdata[0].salesCycleId.toString(),"",quoteId);
-
         } else {
           loading.value = false;
           Utils.sanckBarError("Error!",  response[0].message.toString());
@@ -2472,8 +2800,7 @@ class SalesCycleVm extends GetxController {
           "item_code": item_code.toString(),
           "item_description": "",
           "qty": qtyUpdateLineController.value.text.isNotEmpty
-              ? qtyUpdateLineController.value.text
-              : 0,
+              ? qtyUpdateLineController.value.text : 0,
           "line_status": "pending"
         }
       ]
@@ -2496,8 +2823,9 @@ class SalesCycleVm extends GetxController {
                 String ProductCategory =
                     saleCycleList[0].productCategoryCode ?? "";
                 String PipeProdCate = ProductCategory.replaceAll(', ', '|');
+
                 itemMstGetBySalesIdApiHit(
-                    pageNumberForItem, SalesId, PipeProdCate);
+                    pageNumberForItem, SalesId, productCategory);
               }
               getSaleCycleProductByIdList(pageNumber, SalesId);
               //getsalesCycleCompetitorProductGetBySalesCycleId(pageNumber ,SalesId);
@@ -2703,7 +3031,7 @@ class SalesCycleVm extends GetxController {
         await file.writeAsBytes(bytes);
         print("${file.path}");
 
-        Directory? dir = await getExternalStorageDirectory();
+        /*Directory? dir = await getExternalStorageDirectory();
 
         if (dir != null) {
           // Make sure the directory exists
@@ -2728,7 +3056,9 @@ class SalesCycleVm extends GetxController {
           print("File saved successfully at ${file.path}");
         } else {
           print("Failed to get the download directory");
-        }
+        }*/
+
+        showNotification(file.path, flag);
       } else {
         print("Failed to download file: ${response.statusCode}");
       }
@@ -2883,8 +3213,7 @@ class SalesCycleVm extends GetxController {
               loading.value = false;
               itemQuoteReportList.value = response;
 
-              fileDownload(
-                  itemQuoteReportList[0].quoteReportUrl!, "quoteReport");
+              fileDownload(itemQuoteReportList[0].quoteReportUrl!, "quoteReport");
             } else {
               print("Else....");
               Utils.sanckBarError(
@@ -4755,7 +5084,7 @@ class SalesCycleVm extends GetxController {
     try {
       for (int i = 0; i < approvalPersonList.length; i++) {
         if (email.toLowerCase() == approvalPersonList[i].approvedBy?.toLowerCase()){
-          if(approvalPersonList[i].approverOrder==5){
+          if(approvalPersonList[i].approverOrder==5 && approvalPersonList[i].userType?.toLowerCase()=="general manager"){
             GmApproveDetail.value=true;
           }
           if(approvalPersonList[i].quoteStatus?.toLowerCase()=="pending for approval"){
@@ -4811,10 +5140,61 @@ class SalesCycleVm extends GetxController {
     clusterName_controller.value.clear();
     createdByController.value.clear();
     reportingManagerController.value.clear();
-    filterExpectedClosuredateController.value.clear();
     createdOnCnontroller.value.clear();
     createdOnStartToEnd.value = "";
-    extClosureStartToEnd.value = "";
+    if(quoteAcceptedForFilterOnSaleCycle.value!="Overdue"){
+      extClosureStartToEnd.value = "";
+      filterExpectedClosuredateController.value.clear();
+    }
+    SaleCycleStatusController.value.text = 'All';
+    ApprovalStatusController.value.text = 'All';
+
+    AccountOwnerForApi = '';
+    AccountOwner_controller.value.clear();
+    searchController.value.clear();
+    if(isAdminWritePermission=="1") {
+      EmployeeMasterGet("");
+    }
+    SelectedEmployee_Member_list.value = [];
+
+    SelectedCluster_list.value=[];
+    SelectedRegion_list.value=[];
+    //RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join('|');
+    clusterName_controller.value.text = clusterGetByEmailList.map((e) => e.geoValue).join('|');
+    getRegionsWithClusterFilterGetByEmail();
+  }
+  void clearAllFieldOfFunnelDashboardFilter() {
+    print("Clear Filed");
+    Selected_Item_Category_master_list_without_task.value=[];
+    selected_company_type_list.value=[];
+    createdOnCnontroller.value.clear();
+    product_category_type_Controller.value.text="Contains";
+    saleCycleController.value.clear();
+    salesCycleOwnerController.value.clear();
+    filterTask_Id_controller.value.clear();
+    //SaleCycleStatusController.value.clear();
+    //ApprovalStatusController.value.clear();
+    accountNameController.value.clear();
+    accountCodeController.value.clear();
+    productCategoryController.value.clear();
+    purchaseProcessController.value.clear();
+    companyProfileTypeController.value.clear();
+    isCommitController.value.clear();
+    solutionAcceptedController.value.clear();
+    proposedSolutionController.value.clear();
+    postalCodeController.value.clear();
+    district_controller.value.clear();
+    //RegionName_controller.value.clear();
+    //zone_head_value_controller.value.clear();
+    clusterName_controller.value.clear();
+    createdByController.value.clear();
+    reportingManagerController.value.clear();
+    createdOnCnontroller.value.clear();
+    createdOnStartToEnd.value = "";
+    if(quoteAcceptedForFilterOnSaleCycle.value!="Overdue"){
+      extClosureStartToEnd.value = "";
+      filterExpectedClosuredateController.value.clear();
+    }
     SaleCycleStatusController.value.text = 'All';
     ApprovalStatusController.value.text = 'All';
 
@@ -4826,7 +5206,7 @@ class SalesCycleVm extends GetxController {
     SelectedRegion_list.value=[];
     //RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join('|');
     clusterName_controller.value.text = clusterGetByEmailList.map((e) => e.geoValue).join('|');
-    getRegionsWithClusterFilterGetByEmail();
+    //getRegionsWithClusterFilterGetByEmail();
   }
 
   void clearAllFieldOfQuoteFilter() {
@@ -6182,23 +6562,30 @@ class SalesCycleVm extends GetxController {
     drawingcollectedUpdateController.text=saleCycleList.drawingCollected ==1 ? "Yes":"No";
     proposalSubmittedUpdateController.text=saleCycleList.drawingCollected==1 ? "Yes":"No";
     inaugrationDateUpdateController.text= inaugurationDate??"";
-    architectUpdateController.text=saleCycleList.architect ?? "";
-    executiveEngineerUpdateController.text=saleCycleList.executiveEngineer ?? "";
-    nameOfArchitecfirmUpdateController.text=saleCycleList.nameOfArchitectFirm ?? "";
-    nameofInfradepUpdateController.text=saleCycleList.nameOfInfraDepartment ?? "";
-    agencyContractorUpdateController.text=saleCycleList.nameOfAgencyContrator ?? "";
+
+    nameofInfradepUpdateController.text=saleCycleList.actualNameOfInfraDepartment ?? "";
+    executiveEngineerUpdateController.text=saleCycleList.actualExecutiveEngineer ?? "";
+    assistantEngineerController.text=saleCycleList.actualAssistantEngineer??"";
+
+    customerNameController.text=saleCycleList.actualCustomerName??"";
+    contactPersonHODController.text=saleCycleList.actualContactPersonDecisionMaker??"";
+
+    agencyContractorUpdateController.text=saleCycleList.actualNameOfAgencyContrator ?? "";
+    ownerOfContractorController.text=saleCycleList.actualOwnerOfContractor??"";
+    siteManagerController.text=saleCycleList.actualProjectSiteManager??"";
+
+    architectUpdateController.text=saleCycleList.actualArchitect ?? "";
+    nameOfArchitecfirmUpdateController.text=saleCycleList.actualNameOfArchitectFirm ?? "";
+
+
     expectedRevenueUpdateController.text=saleCycleList.expectedRevenue.toString();
     valueOfQuoteUpdateController.text=saleCycleList.valueOfQuote.toString();
     dateofcompletioneUpdateController.text=expDateOfCompletion??"";
-    assistantEngineerController.text=saleCycleList.assistantEngineer??"";
+
     nameOfProjectController.text=saleCycleList.projectName??"";
     locationController.text=saleCycleList.location??"";
     timePeriodToCompleteWorkController.text=saleCycleList.timePeriodToCompleteCivilWorkInMonths==null?"":saleCycleList.timePeriodToCompleteCivilWorkInMonths.toString();
     furnitureIncludedInCivilController.text=saleCycleList.furnitureIncludedInCivilScope==1 ? "Yes":"No";
-    customerNameController.text=saleCycleList.customerName??"";
-    contactPersonHODController.text=saleCycleList.contactPersonDecisionMaker??"";
-    ownerOfContractorController.text=saleCycleList.ownerOfContractor??"";
-    siteManagerController.text=saleCycleList.projectSiteManager??"";
     dateOfDrawingReceivedController.text=dateDrawingReceived??"";
     dateOfProposalSubmissionController.text=dateOfProposalSubmission??"";
     projectValueUpdateController.text=saleCycleList.projectValue.toString();
@@ -6218,15 +6605,12 @@ class SalesCycleVm extends GetxController {
       print(value);
       List<ItemCategoryMstModel> Response = (json.decode(value) as List<dynamic>)
           .map((i) => ItemCategoryMstModel.fromJson(i as Map<String, dynamic>)).toList();
-
       if (Response.isNotEmpty && Response[0].condition?.toLowerCase() == "true") {
         Item_Category_Infra_list.value = Response;
-
         Item_Category_Selected_Infra_list.value = [];
         for (int i = 0; i < Item_Category_Infra_list.length; i++) {
           if (Item_Category_Infra_list[i].isSelected == 1) {
-            Item_Category_Selected_Infra_list.add(
-                Item_Category_Infra_list[i]);
+            Item_Category_Selected_Infra_list.add(Item_Category_Infra_list[i]);
           }}
         print('master list1....${Item_Category_Infra_list.length.toString()}');
         loading.value = false;
@@ -6262,9 +6646,9 @@ class SalesCycleVm extends GetxController {
         "infra_lead_no": InfraNo,
         "user_region": userRegionUpdateController.text.isEmpty?"":userRegionUpdateController.text,
         "user_clusture": userClusterUpdateController.text.isEmpty?"":userClusterUpdateController.text,
-        "name_of_infra_department": nameofInfradepUpdateController.text.isEmpty?"":nameofInfradepUpdateController.text,
-        "executive_engineer": executiveEngineerUpdateController.text.isEmpty?"":executiveEngineerUpdateController.text,
-        "assistant_engineer": assistantEngineerController.text.isEmpty?"":assistantEngineerController.text,
+        "name_of_infra_department": nameofInfradepUpdateController.text.isEmpty?"":nameofInfradepUpdate,
+        "executive_engineer": executiveEngineerUpdateController.text.isEmpty?"":executiveEn,
+        "assistant_engineer": assistantEngineerController.text.isEmpty?"":assistantEn,
         "project_name": nameOfProjectController.text.isEmpty?"":nameOfProjectController.text,
         "location": locationController.text.isEmpty?"":locationController.text,
         "time_period_to_complete_civil_work_in_months": timePeriodToCompleteWorkController.text.isEmpty?"0":timePeriodToCompleteWorkController.text,
@@ -6272,13 +6656,13 @@ class SalesCycleVm extends GetxController {
         "project_value": projectValueUpdateController.text.isEmpty?"":projectValueUpdateController.text,
         "expected_revenue": expectedRevenueUpdateController.text.isEmpty?"":expectedRevenueUpdateController.text,
         "furniture_included_in_civil_scope": furnitureIncludedInCivilController.text=="Yes"?1:0,
-        "customer_name": customerNameController.text.isEmpty?"":customerNameController.text,
-        "contact_person_decision_maker": contactPersonHODController.text.isEmpty?"":contactPersonHODController.text,
-        "name_of_agency_contrator": agencyContractorUpdateController.text.isEmpty?"":agencyContractorUpdateController.text,
-        "owner_of_contrator": ownerOfContractorController.text.isEmpty?"":ownerOfContractorController.text,
-        "project_site_manager": siteManagerController.text.isEmpty?"":siteManagerController.text,
-        "name_of_architect_firm": nameOfArchitecfirmUpdateController.text.isEmpty?"":nameOfArchitecfirmUpdateController.text,
-        "architect": architectUpdateController.text.isEmpty?"":architectUpdateController.text,
+        "customer_name": customerNameController.text.isEmpty?"":customerName,
+        "contact_person_decision_maker": contactPersonHODController.text.isEmpty?"":contactPersonHOD,
+        "name_of_agency_contrator": agencyContractorUpdateController.text.isEmpty?"":agencyContractorUpdate,
+        "owner_of_contrator": ownerOfContractorController.text.isEmpty?"":ownerOfContractor,
+        "project_site_manager": siteManagerController.text.isEmpty?"":siteManager,
+        "name_of_architect_firm": nameOfArchitecfirmUpdateController.text.isEmpty?"":nameOfArchitecfirmUpdate,
+        "architect": architectUpdateController.text.isEmpty?"":architectUpdate,
         "lines": lines.map((line) => line.toJson()).toList(),
         "drawing_collected": drawingcollectedUpdateController.text=="Yes"?1:0,
         "date_drawing_received": dateDrawingReceived??"",
@@ -6297,16 +6681,13 @@ class SalesCycleVm extends GetxController {
       if (jsonResponse is List) {
         List<TaskUpdateInfraModal> response = jsonResponse.map((e) => TaskUpdateInfraModal.fromJson(e)).toList();
         if (response[0].condition == "True") {
-          loading.value = false;
           Utils.sanckBarSuccess("Message !", response[0].message.toString());
-          getsalesCycleData(pageNumber, saleCycleList[0].salesCycleId!, "ViewHeader", 'Sales');
+          getsalesCycleInfraDeatailData(pageNumber, saleCycleList[0].salesCycleId!, "ViewHeader", 'Sales');
 
           Get.toNamed(RoutesName.viewSalesCycleHeaderScreen);
 
-
           clearInfraUpdateController();
         } else {
-          loading.value = false;
           Utils.sanckBarError("False Message !", response[0].message.toString());
         }
       }
@@ -6315,9 +6696,9 @@ class SalesCycleVm extends GetxController {
       print(e);
       loading.value = false;
     }
-    /*finally{
+    finally{
                 loading.value = false;
-            }*/
+    }
   }
   void clearInfraUpdateController(){
     projectValueUpdateController.clear();
@@ -6345,7 +6726,110 @@ class SalesCycleVm extends GetxController {
     dateOfProposalSubmissionController.clear();
     projectValueUpdateController.clear();
 
+    executiveEn = "";
+    assistantEn = "";
+    contactPersonHOD = "";
+    ownerOfContractor = "";
+    siteManager = "";
+    architectUpdate = "";
+    nameofInfradepUpdate = "";
+    customerName = "";
+    agencyContractorUpdate = "";
+    nameOfArchitecfirmUpdate = "";
+
   }
+
+  Future<Iterable<AccountMasterModel>> getAccountMaster(int page_no, String accont_name) async{
+    try{
+      Map<String, dynamic> data={
+        "filter_account_code": "",
+        "filter_account_name": accont_name,
+        "filter_account_type": "",
+        "filter_email_id": "",
+        "filter_phone_no": "",
+        "filter_company_profile_type": "",
+        "filter_state_name": "",
+        "filter_postal_code": "",
+        "filter_district": "",
+        "filter_created_by": "",
+        "filter_account_owner":email,
+        "filter_frontliner_value": "",
+        "filter_branch_head_value": "",
+        "filter_zone_head_value": "",
+        "filter_clusture_head_value": "",
+        "filter_is_active": "-1",
+        "filter_created_on": "",
+        "filter_account_owner_new": "",
+        "row_per_page": rowsPerPage,
+        "page_number": 0
+      };
+      loading.value = true;
+      String onValue = await _api.AccountMasterGetApiHit(data, sessionManagement);
+      final jsonResponse = json.decode(onValue);
+      debugPrint("response ${onValue}");
+      if(jsonResponse is List){
+        List<AccountMasterModel> response = jsonResponse.map((e) => AccountMasterModel.fromJson(e)).toList();
+        if(response!= null && response.length>0 && response[0].condition=="True"){
+          Account_Master_list.value=response;
+
+        }else {
+         // Utils.sanckBarError("false ondition", "No Accouint owner found");
+          Account_Master_list.value=[];
+        }
+      }
+
+    }catch(e){
+      print(e);
+    }
+    finally{
+      loading.value = false;
+    }
+    return Account_Master_list;
+  }
+
+  Future<Iterable<ContactMstGetListModal>> getContactMasterList(String accountCode, String accountName) async {
+    try{
+      Map<String, String> data={
+        "filter_contact_name": '',
+        "filter_account_code": accountCode,
+        "filter_account_name": accountName,
+        "filter_department_name": '',
+        "row_per_page": rowsPerPage.toString(),
+        "page_number": '0'
+      };
+      loading.value = true;
+      print("data is ${data}");
+      String onValue = await _api.contactMstGetList(data, sessionManagement);
+      final jsonResponse = json.decode(onValue);
+      print(onValue);
+      if(jsonResponse is List){
+        List<ContactMstGetListModal> response = jsonResponse.map((e) => ContactMstGetListModal.fromJson(e)).toList();
+        if(response!= null && response.length>0 && response[0].condition=="True"){
+
+          if(pageNumber==0){
+            infra_contact_master_list.clear();
+          }
+          infra_contact_master_list.addAll(response);
+          total_rows=int.parse(infra_contact_master_list[0].totalRows!);
+          print('Total rows ${total_rows}');
+
+        }else {
+          //Utils.sanckBarError("false ondition", "No contractor found");
+          //infra_contact_master_list.value=[];
+        }
+      }
+
+    }catch(e){
+      print(e);
+    }
+    finally{
+      loading.value = false;
+    }
+    return infra_contact_master_list;
+
+  }
+
+
 
 }
 

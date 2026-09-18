@@ -73,6 +73,13 @@ class SalesCyclePendingForApprovalVm extends GetxController{
   RxList<ItemCategoryMstModel> Selected_Item_Category_master_list_without_task = <ItemCategoryMstModel>[].obs;
   RxList<String> productCategoryTypeList = <String>["Contains","Equals To"].obs;
 
+  RxList<EmployeeMemberModel> tempSelected = <EmployeeMemberModel>[].obs;
+  RxList<EmployeeMemberModel> filtered = <EmployeeMemberModel>[].obs;
+  RxBool selectOwner = true.obs;
+  RxBool allSelected = false.obs;
+  RxBool isSel = false.obs;
+  var searchController=TextEditingController().obs;
+
   @override
   Future<void> onInit() async {
     super.onInit();
@@ -82,7 +89,7 @@ class SalesCyclePendingForApprovalVm extends GetxController{
     product_category_type_Controller.value.text="Contains";
     getItemCategoryMstWithoutTaskIdApi();
     getCompanyTypeMasterGet();
-    if(this.isAdminWritePermission==1){
+    if(this.isAdminWritePermission=="1"){
       EmployeeMasterGet('');
     }
     else{
@@ -159,17 +166,20 @@ class SalesCyclePendingForApprovalVm extends GetxController{
   }
 
   Future<Iterable<EmployeeMemberModel>> EmployeeMasterGet(String query) async {
-    if (query == '') {
+   /* if (query == '') {
       return const Iterable<EmployeeMemberModel>.empty();
-    }
+    }*/
     Map data = {
-      'filter_name': '',
-      'filter_email': query,
+      'filter_name': query,
+      'filter_email': "",
       'filter_location_id': '',
       'email_id': email,
-      'rowsPerPage': 50,
+      "filter_cluster_name": clusterName_controller.value.text.isEmpty?"":clusterName_controller.value.text,
+      "filter_region_name": RegionName_controller.value.text.isEmpty?"":RegionName_controller.value.text,
+      'rowsPerPage': 10,
       'pageNumber': 0,
     };
+    loading.value= true;
     String employee_response =await _api.EmployeeMatserGetApiHit(data, sessionManagement);
     try {
       final jsonResponse = json.decode(employee_response);
@@ -194,6 +204,9 @@ class SalesCyclePendingForApprovalVm extends GetxController{
     } catch (e) {
       Utils.sanckBarException('Exception!', e.toString());
       employee_Member_list.value = [];
+    }
+    finally{
+      loading.value = false;
     }
     return employee_Member_list.value;
   }
@@ -286,6 +299,7 @@ class SalesCyclePendingForApprovalVm extends GetxController{
       loading.value = false;
     }
   }
+
   void getRegionsWithClusterFilterGetByEmail() {
     var selectedCluster="";
     if(clusterName_controller.value.text.isNotEmpty){
@@ -339,6 +353,7 @@ class SalesCyclePendingForApprovalVm extends GetxController{
   getsalesCycleData(int page_no) async{
     try {
       AccountOwnerForApi = '';
+      debugPrint("accoutn owner ${AccountOwner_controller.value.text}");
       if(AccountOwner_controller.value.text.isNotEmpty){
         AccountOwnerForApi = AccountOwner_controller.value.text.split(',').map((e) => e.trim()).join('|');
       }
@@ -365,11 +380,11 @@ class SalesCyclePendingForApprovalVm extends GetxController{
         "filter_postal_code": postalCodeController.value.text.isEmpty ? "" : postalCodeController.value.text,
         "filter_district": district_controller.value.text.isEmpty ? "" : district_controller.value.text,
         "filter_frontliner_value": "",
-        "filter_branch_head_value": RegionName_controller.value.text.isEmpty ? "" : RegionName_controller.value.text,
         "filter_zone_head_value": "",
-        "filter_clusture_head_value": clusterName_controller.value.text.isEmpty ? "" : clusterName_controller.value.text,
         "item_code_name": "",
         "filter_sales_cycle_owner_new": AccountOwnerForApi.isEmpty?"":AccountOwnerForApi,
+        "filter_clusture_head_value": clusterName_controller.value.text.isEmpty ? "" : clusterName_controller.value.text,
+        "filter_branch_head_value": RegionName_controller.value.text.isEmpty ? "" : RegionName_controller.value.text,
         "row_per_page": rowsPerPage,
         "page_number": page_no
       };
@@ -443,6 +458,10 @@ class SalesCyclePendingForApprovalVm extends GetxController{
 
     AccountOwnerForApi = '';
     AccountOwner_controller.value.clear();
+    searchController.value.clear();
+    if(isAdminWritePermission=="1") {
+      EmployeeMasterGet("");
+    }
     SelectedEmployee_Member_list.value = [];
     SelectedCluster_list.value = [];
     SelectedRegion_list.value = [];

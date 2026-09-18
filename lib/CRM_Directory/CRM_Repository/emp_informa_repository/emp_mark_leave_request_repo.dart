@@ -20,6 +20,11 @@ class EmpMarkLeaveRequestRepository{
     return _apiService.getApi(AppUrl.getEmployeeHolidays, sessionManagement,data);
   }
 
+
+  Future<String> EmployeeLeaveRequestDelete(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.EmployeeLeaveRequestDelete,sessionManagement);
+  }
+
   Future<String> empLeaveMarkApiHit(var data,SessionManagement sessionManagement) async{
     return _apiService.postApi(data, AppUrl.employeeLeaveRequestMark,sessionManagement);
   }

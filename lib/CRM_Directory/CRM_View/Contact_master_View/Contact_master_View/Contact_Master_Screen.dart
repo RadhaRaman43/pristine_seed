@@ -87,7 +87,7 @@ class ContactMasterScreen extends StatelessWidget{
               children: [
                 Obx((){
                   return Visibility(
-                    visible:contact_vm_controller.loading.value || account_vm_controller.loading.value ,
+                    visible:contact_vm_controller.loading.value /*|| account_vm_controller.loading.value*/ ,
                     child: LinearProgressIndicator(
                       backgroundColor: AllColors.primaryDark1,
                       color: AllColors.textColor,
