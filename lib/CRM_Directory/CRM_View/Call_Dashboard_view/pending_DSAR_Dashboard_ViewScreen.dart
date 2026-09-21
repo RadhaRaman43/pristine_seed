@@ -20,6 +20,7 @@ import '../../../constants/app_colors.dart';
 import '../../../constants/app_font_size.dart';
 import '../../../constants/static_methods.dart';
 import '../../../reources/routes/routes_name.dart';
+import '../../../utils/app_utils.dart';
 import '../../../view/custom_drawer.dart';
 import '../../CRM_Models/AccountMaster_model/Account_Master_model.dart';
 import '../../CRM_Models/AccountMaster_model/Employee_Member_Model.dart';
@@ -27,6 +28,7 @@ import '../../CRM_Models/AccountMaster_model/cluster_modal.dart';
 import '../../CRM_Models/AccountMaster_model/region_with_cluster_filter_modal.dart';
 import '../../CRM_Models/TaskMaster_model/Call_Status_Master_model.dart';
 import '../../CRM_Models/TaskMaster_model/Item_Category_Mast_model.dart';
+import '../../CRM_Models/sale_cycle_modal/alongWithPersonModel.dart';
 import '../../CRM_VIewModels/Dashboard_VM/Pending_DSAR_Dashboard_VM.dart';
 import '../../CRM_VIewModels/Task_master_vm/TaskMasterVM.dart';
 
@@ -86,6 +88,7 @@ class PendingDsarDashboardViewscreen extends StatelessWidget{
                   ),
                 ),
                 IconButton(onPressed: () {
+                  dashboard_view_Controller.getEmpMstEmailByApi();
                   showFilterBottomSheet(context);
                 }, icon: Icon(Icons.filter_alt_sharp))
               ],
@@ -1495,6 +1498,8 @@ class PendingDsarDashboardViewscreen extends StatelessWidget{
           bindLastActivityStatus(context),
           SizedBox(height: 10),
           bindProductCategoryFilter(context),
+          SizedBox(height: 10),
+          bindAlongWithPersonNameTypeDropDown(context),
           SizedBox(height: 10),
           bindClusterNameFilter(context),
           SizedBox(height: 10),
@@ -3247,6 +3252,91 @@ class PendingDsarDashboardViewscreen extends StatelessWidget{
     });
   }
 
+  bindAlongWithPersonNameTypeDropDown(BuildContext context) {
+    return Obx(() {
+      if (dashboard_view_Controller.filterAlongWithPersonNameController.value.text.isNotEmpty && dashboard_view_Controller.filterDataChecker.value=='1') {
+        List<String> nameList = dashboard_view_Controller.filterAlongWithPersonNameController.value.text.split('|');
 
+        dashboard_view_Controller.SelectedAlongPersonWith_list.value =
+            List.generate(nameList.length, (index) {
+              return AlongWithPersonModel(
+                name: nameList[index].trim(),
+              );
+            });
+      }
+      return DropdownSearch<AlongWithPersonModel>.multiSelection(
+        items: dashboard_view_Controller.AlongPersonWith_list,
+        itemAsString: (AlongWithPersonModel u) => "${u.firstName ?? ""} ${u.lastName ?? ""}",
+        selectedItems: dashboard_view_Controller.SelectedAlongPersonWith_list,
+        dropdownDecoratorProps: DropDownDecoratorProps(
+          baseStyle: TextStyle(color: Colors.black),
+          dropdownSearchDecoration: InputDecoration(
+            filled: false,
+            labelText: dashboard_view_Controller.SelectedAlongPersonWith_list.isNotEmpty ? "Along With Person Name" : null,
+            hintText: "Along With Person Name",
+            hintStyle: GoogleFonts.poppins(
+                color: AllColors.lightblackColor,
+                fontWeight: FontWeight.w300,
+                fontSize: AllFontSize.ten),
+            labelStyle: GoogleFonts.poppins(
+                color: AllColors.primaryDark1,
+                fontWeight: FontWeight.w500,
+                fontSize: AllFontSize.sisxteen),
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+          ),
+        ),
+        dropdownBuilder: (context, selectedItems) {
+          // Custom builder to just show comma-separated names
+          if (selectedItems.isEmpty) {
+            return Text(
+              "Along With Person Name",
+              style: GoogleFonts.poppins(
+                color: AllColors.primaryDark1,
+                fontSize: AllFontSize.sisxteen,
+                fontWeight: FontWeight.w500,
+              ),
+            );
+          }
+          return SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Text(
+              selectedItems.map((e) => "${e.firstName ?? ""} ${e.lastName ?? ""}").join(', '),
+              style: TextStyle(color: Colors.black), // Only black text
+            ),
+          );
+        },
+        onChanged: (List<AlongWithPersonModel> selectedList) {
+          if (selectedList.length > 10) {
+            Utils.sanckBarError('Error', 'You cannot select more than 10 Person');
+            return;
+          }
+          dashboard_view_Controller.SelectedAlongPersonWith_list.value = selectedList;
+          dashboard_view_Controller.filterAlongWithPersonNameController.value.text =
+              selectedList.map((e) => "${e.empId ?? ""}").join('|');
+
+          /* if (selectedList.length > 10) return;
+          TaskMaster_page_controller.SelectedAlongPersonWith_list.value = selectedList;
+          TaskMaster_page_controller.filterAlongWithPersonNameController.value.text =
+              selectedList.map((e) => "${e.firstName ?? ""} ${e.lastName ?? ""}").join('|');*/
+        },
+        popupProps: PopupPropsMultiSelection.dialog(
+          showSearchBox: true,
+          searchFieldProps: TextFieldProps(
+            decoration: InputDecoration(
+              contentPadding: EdgeInsets.only(top: 20, left: 12, right: 12),
+              // Top margin here
+              hintText: "Search...",
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+          ),
+          itemBuilder: (context, item, isSelected) => ListTile(
+            title: Text("${item.firstName ?? ""} ${item.lastName ?? ""}"),
+          ),
+        ),
+      );
+    });
+  }
 
 }

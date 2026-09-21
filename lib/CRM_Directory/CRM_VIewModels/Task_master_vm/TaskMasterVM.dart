@@ -495,6 +495,10 @@ class Taskmastervm extends GetxController{
         if(AccountOwner_controller.value.text.isNotEmpty){
             AccountOwnerForApi = AccountOwner_controller.value.text.split(',').map((e) => e.trim()).join('|');
         }
+
+
+
+
         try{
             Map data={
                 "filter_task_id": taskId!.isNotEmpty?taskId:filterTask_Id_controller.text,
@@ -524,7 +528,8 @@ class Taskmastervm extends GetxController{
                 "filter_frontliner_value": "",
                 "filter_branch_head_value": RegionName_controller.value.text.isEmpty?"":RegionName_controller.value.text,
                 "filter_zone_head_value": "",
-              "filter_parent_product_category":"",
+                "filter_parent_product_category":"",
+                 "filter_along_with_person_name":filterAlongWithPersonNameController.value.text.isEmpty?"":filterAlongWithPersonNameController.value.text,
                 "filter_clusture_head_value": clusterName_controller.value.text.isEmpty?"":clusterName_controller.value.text,
                 "row_per_page": rowsPerPage.toString(),
                 "page_number": page_no.toString()

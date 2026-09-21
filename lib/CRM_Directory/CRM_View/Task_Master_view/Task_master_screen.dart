@@ -3258,7 +3258,7 @@ class TaskMasterScreen extends StatelessWidget {
             return Text(
               "Along With Person Name",
               style: GoogleFonts.poppins(
-                color: AllColors.primaryDark1, // Match your hint color
+                color: AllColors.primaryDark1,
                 fontSize: AllFontSize.sisxteen,
                 fontWeight: FontWeight.w500,
               ),
@@ -3273,10 +3273,18 @@ class TaskMasterScreen extends StatelessWidget {
           );
         },
         onChanged: (List<AlongWithPersonModel> selectedList) {
-          if (selectedList.length > 10) return;
+          if (selectedList.length > 10) {
+            Utils.sanckBarError('Error', 'You cannot select more than 10 Person');
+            return;
+          }
           TaskMaster_page_controller.SelectedAlongPersonWith_list.value = selectedList;
           TaskMaster_page_controller.filterAlongWithPersonNameController.value.text =
-              selectedList.map((e) => "${e.firstName ?? ""} ${e.lastName ?? ""}").join('|');
+              selectedList.map((e) => "${e.empId ?? ""}").join('|');
+
+         /* if (selectedList.length > 10) return;
+          TaskMaster_page_controller.SelectedAlongPersonWith_list.value = selectedList;
+          TaskMaster_page_controller.filterAlongWithPersonNameController.value.text =
+              selectedList.map((e) => "${e.firstName ?? ""} ${e.lastName ?? ""}").join('|');*/
         },
         popupProps: PopupPropsMultiSelection.dialog(
           showSearchBox: true,
@@ -3297,6 +3305,10 @@ class TaskMasterScreen extends StatelessWidget {
       );
     });
   }
+
+
+
+
 }
 
 
