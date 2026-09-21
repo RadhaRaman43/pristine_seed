@@ -497,6 +497,7 @@ class SalesCycleScreen extends StatelessWidget{
               _buildLabelWithValue(label: "Sales Cycle Status : ", value: salesCycleController.saleCycleList[position].salesCycleStatus,),
               _buildLabelWithValue(label: "Quote Accepted : ", value: salesCycleController.saleCycleList[position].quoteAccepted, color: getQouteAcceptedColor(saleQuoteAccepted),),
               _buildLabelWithValue(label: "Product Category : ", value: salesCycleController.saleCycleList[position].productCategory,),
+              _buildLabelWithValue(label: "Parent Product Category : ", value: salesCycleController.saleCycleList[position].parentProductCategory,),
               _buildLabelWithValue(label: "Budget Amount : ", value: "₹ ${
                   salesCycleController
                       .numberFormatWithComma(salesCycleController.saleCycleList[position].budgetAmount)
@@ -753,6 +754,8 @@ class SalesCycleScreen extends StatelessWidget{
                               bindFilterData(salesCycleController.accountCodeController.value, 'Customer Code'),
                               const SizedBox(height: 10,),
                               bindProductCategoryDropDown(context),
+                              const SizedBox(height: 10,),
+                              bindParentProductCategoryFilter(context),
                               const SizedBox(height: 10,),
                               bindProductCategoryTypeDropDown(context),
                               const SizedBox(height: 10,),
@@ -1713,6 +1716,78 @@ class SalesCycleScreen extends StatelessWidget{
     });
   }
 
+  bindParentProductCategoryFilter(BuildContext context) {
+    return Obx((){
+      if (salesCycleController.parentProductCategory_controller.value.text.isNotEmpty && salesCycleController.filterDataChecker.value=='1') {
+        List<String> nameList = salesCycleController.parentProductCategory_controller.value.text.split('|');
+
+        salesCycleController.selectedParentProductCategoryList.value =
+            List.generate(nameList.length, (index) {
+              return ItemCategoryMstModel(
+                parentCategoryCode: nameList[index].trim(),
+              );
+            });
+      }
+      return  DropdownSearch<ItemCategoryMstModel>.multiSelection(
+        items: salesCycleController.parentProductCategoryList,
+        itemAsString: (ItemCategoryMstModel u) => u.parentCategoryCode??"",
+        selectedItems: salesCycleController.selectedParentProductCategoryList,
+        dropdownDecoratorProps: DropDownDecoratorProps(
+          baseStyle: TextStyle(color: Colors.black),
+          dropdownSearchDecoration: InputDecoration(
+            filled: false,
+            labelText: salesCycleController.selectedParentProductCategoryList.isNotEmpty?"Parent Product Category":null,
+            hintText: "Parent Product Category",
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+          ),
+        ),
+        dropdownBuilder: (context, selectedItems) {
+          // Custom builder to just show comma-separated names
+          if (selectedItems.isEmpty) {
+            return Text(
+              "Parent Product Category",
+              style: GoogleFonts.poppins(
+                color: AllColors.primaryDark1, // Match your hint color
+                fontSize: AllFontSize.sisxteen,
+                fontWeight: FontWeight.w500,
+              ),
+            );
+          }
+          return SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Text(
+              selectedItems.map((e) => e.parentCategoryCode).join(', '),
+              style: TextStyle(color: Colors.black), // Only black text
+            ),
+          );
+        },
+        onChanged: (List<ItemCategoryMstModel> selectedList) {
+          salesCycleController.selectedParentProductCategoryList.value = selectedList;
+          salesCycleController.parentProductCategory_controller.value.text =
+              selectedList.map((e) => e.parentCategoryCode).join('|');
+        },
+        popupProps: PopupPropsMultiSelection.dialog(
+          showSearchBox: true,
+          searchFieldProps: TextFieldProps(
+            padding: EdgeInsets.only(top: 20, left: 10, right: 10),
+            decoration: InputDecoration(
+              contentPadding: EdgeInsets.only(top: 20, left: 12, right: 12),
+              hintText: "Search...",
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+          ),
+
+          itemBuilder: (context, item, isSelected) =>
+              ListTile(
+                title: Text(item.parentCategoryCode??""),
+              ),
+        ),
+      );
+    });
+
+  }
 
   Widget bindProductCategoryTypeDropDown(context) {
     return DropdownMenu<String>(

@@ -242,6 +242,7 @@ class SalesCycleVm extends GetxController {
   var updateTaxAmountLineController = TextEditingController().obs;
   var updateGrossAmountLineController = TextEditingController().obs;
   var productCategoryController = TextEditingController().obs;
+  var parentProductCategory_controller = TextEditingController().obs;
 
   //todo update business terms
   var installationChargesController = TextEditingController().obs;
@@ -358,6 +359,8 @@ class SalesCycleVm extends GetxController {
   RxList<String> productCategoryTypeList = <String>["Contains","Equals To"].obs;
   RxList<ItemCategoryMstModel> Item_Category_master_list_without_task = <ItemCategoryMstModel>[].obs;
   RxList<ItemCategoryMstModel> Selected_Item_Category_master_list_without_task = <ItemCategoryMstModel>[].obs;
+  RxList<ItemCategoryMstModel> selectedParentProductCategoryList = <ItemCategoryMstModel>[].obs;
+
   RxList<CompanyTypeModal> company_profile_type_list = <CompanyTypeModal>[].obs;
   RxList<CompanyTypeModal> selected_company_type_list = <CompanyTypeModal>[].obs;
 
@@ -482,12 +485,14 @@ class SalesCycleVm extends GetxController {
       isHeadofficePermission.value = await sessionManagement.getisHeadofficePermission() ?? '';
       //clearAllFieldOfFilter();
       product_category_type_Controller.value.text = "Contains";
+      getParentItemCategoryMstGet();
+      getItemCategoryMstWithoutTaskIdApi();
 
       if (filterRouting == "Quote Approval List" || filterRouting == "Quote RH Approval List" ||
           filterRouting == "Quote CBH Approval List" || filterRouting == "Quote GM Approval List") {
 
       }else{
-        getItemCategoryMstWithoutTaskIdApi();
+
         getCompanyTypeMasterGet();
         if (this.isAdminWritePermission.value == "1") {
           EmployeeMasterGet('');
@@ -867,6 +872,7 @@ class SalesCycleVm extends GetxController {
         "filter_account_name": accountNameController.value.text.isEmpty ? "" : accountNameController.value.text,
         "filter_sales_cycle_owner": isAdminWritePermission.value=="1"?"":email,
         "filter_product_category": productCategoryController.value.text.isEmpty ? "" : productCategoryController.value.text,
+        "filter_parent_product_category": parentProductCategory_controller.value.text.isEmpty ? "" : parentProductCategory_controller.value.text,
         "filter_product_category_type": product_category_type_Controller.value.text.isEmpty?"":product_category_type_Controller.value.text,
         "filter_purchase_process": purchaseProcessController.value.text.isEmpty ? "" : purchaseProcessController.value.text,
         "filter_proposed_solution": proposedSolutionController.value.text.isEmpty ? "" : proposedSolutionController.value.text,
@@ -883,7 +889,6 @@ class SalesCycleVm extends GetxController {
         "filter_postal_code": postalCodeController.value.text.isEmpty ? "" : postalCodeController.value.text,
         "filter_district": district_controller.value.text.isEmpty ? "" : district_controller.value.text,
         "filter_frontliner_value": "",
-        "filter_parent_product_category": "",
         "filter_branch_head_value": RegionName_controller.value.text.isEmpty ? "" : RegionName_controller.value.text,
         "filter_zone_head_value": "",
         "filter_clusture_head_value": clusterName_controller.value.text.isEmpty ? "" : clusterName_controller.value.text,
@@ -899,9 +904,7 @@ class SalesCycleVm extends GetxController {
           if (jsonResponse is List) {
             List<SalesCycleModal> response =
                 jsonResponse.map((e) => SalesCycleModal.fromJson(e)).toList();
-            if (response != null &&
-                response.length > 0 &&
-                response[0].condition == "True") {
+            if (response != null && response.length > 0 && response[0].condition == "True") {
               if (page_no == 0) {
                 saleCycleList.clear();
               }
@@ -948,6 +951,7 @@ class SalesCycleVm extends GetxController {
                 budgetAmountController.value.clear();
                 expectedAmountController.value.clear();
                 productCategoryController.value.clear();
+                parentProductCategory_controller.value.clear();
 
                 if (customerNeedIdetityController.value.text == "Yes") {
                   ischangeNeedIdentity.value = true;
@@ -1010,7 +1014,8 @@ class SalesCycleVm extends GetxController {
         "filter_account_code": accountCodeController.value.text.isEmpty ? "" : accountCodeController.value.text,
         "filter_account_name": accountNameController.value.text.isEmpty ? "" : accountNameController.value.text,
         "filter_sales_cycle_owner": isAdminWritePermission.value=="1"?"":email,
-        "filter_product_category": productCategoryController.value.text.isEmpty ? "" : productCategoryController.value.text,
+        //"filter_product_category": productCategoryController.value.text.isEmpty ? "" : productCategoryController.value.text,
+        "filter_parent_product_category": parentProductCategory_controller.value.text.isEmpty ? "" : parentProductCategory_controller.value.text,
         "filter_product_category_type": product_category_type_Controller.value.text.isEmpty?"":product_category_type_Controller.value.text,
         "filter_purchase_process": purchaseProcessController.value.text.isEmpty ? "" : purchaseProcessController.value.text,
         "filter_proposed_solution": proposedSolutionController.value.text.isEmpty ? "" : proposedSolutionController.value.text,
@@ -1093,6 +1098,7 @@ class SalesCycleVm extends GetxController {
             budgetAmountController.value.clear();
             expectedAmountController.value.clear();
             productCategoryController.value.clear();
+            parentProductCategory_controller.value.clear();
 
             if (customerNeedIdetityController.value.text == "Yes") {
               ischangeNeedIdentity.value = true;
@@ -1641,6 +1647,7 @@ class SalesCycleVm extends GetxController {
               quoteValidityController.value.clear();
               expectedClosuredateController.value.clear();
               productCategoryController .value.clear();
+              parentProductCategory_controller .value.clear();
               kindAttentionController.value.clear();
               IsMultiParentCategory.value=false;
               itemCategorySelectedlist.value=[];
@@ -5117,6 +5124,7 @@ class SalesCycleVm extends GetxController {
   void clearAllFieldOfFilter() {
     print("Clear Filed");
     Selected_Item_Category_master_list_without_task.value=[];
+    selectedParentProductCategoryList.value=[];
     selected_company_type_list.value=[];
     createdOnCnontroller.value.clear();
     product_category_type_Controller.value.text="Contains";
@@ -5128,6 +5136,7 @@ class SalesCycleVm extends GetxController {
     accountNameController.value.clear();
     accountCodeController.value.clear();
     productCategoryController.value.clear();
+    parentProductCategory_controller.value.clear();
     purchaseProcessController.value.clear();
     companyProfileTypeController.value.clear();
     isCommitController.value.clear();
@@ -5165,6 +5174,7 @@ class SalesCycleVm extends GetxController {
   void clearAllFieldOfFunnelDashboardFilter() {
     print("Clear Filed");
     Selected_Item_Category_master_list_without_task.value=[];
+    selectedParentProductCategoryList.value=[];
     selected_company_type_list.value=[];
     createdOnCnontroller.value.clear();
     product_category_type_Controller.value.text="Contains";
@@ -5176,6 +5186,7 @@ class SalesCycleVm extends GetxController {
     accountNameController.value.clear();
     accountCodeController.value.clear();
     productCategoryController.value.clear();
+    parentProductCategory_controller.value.clear();
     purchaseProcessController.value.clear();
     companyProfileTypeController.value.clear();
     isCommitController.value.clear();
@@ -6354,6 +6365,7 @@ class SalesCycleVm extends GetxController {
       'customer_name': accountNameController.value.text,
       'customer_code': accountCodeController.value.text,
       'product_category': productCategoryController.value.text,
+      'parentProductCategory_controller': parentProductCategory_controller.value.text,
       'product_category_type': product_category_type_Controller.value.text,
       'purchase_process': purchaseProcessController.value.text,
       'company_profile_type': companyProfileTypeController.value.text,
@@ -6387,6 +6399,7 @@ class SalesCycleVm extends GetxController {
       accountNameController.value.text=getFilterData["customer_name"]??"";
       accountCodeController.value.text=getFilterData["customer_code"]??"";
       productCategoryController.value.text=getFilterData["product_category"]??"";
+      parentProductCategory_controller.value.text=getFilterData["parentProductCategory_controller"]??"";
       product_category_type_Controller.value.text=getFilterData["product_category_type"]??"";
       purchaseProcessController.value.text=getFilterData["purchase_process"]??"";
       companyProfileTypeController.value.text=getFilterData["company_profile_type"]??"";

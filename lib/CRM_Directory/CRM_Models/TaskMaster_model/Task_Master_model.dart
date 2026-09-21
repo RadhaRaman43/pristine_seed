@@ -16,6 +16,7 @@ class TaskMasterGetModel {
   String? taskRemarks;
   String? previousTaskId;
   String? productCategory;
+  String? parentProductCategory;
   String? alongWithPersonName;
   String? infraProductCategoryCode;
   String? infraProductCategoryName;
@@ -109,6 +110,7 @@ class TaskMasterGetModel {
         this.taskRemarks,
         this.previousTaskId,
         this.productCategory,
+        this.parentProductCategory,
         this.alongWithPersonName,
         this.infraProductCategoryCode,
         this.infraProductCategoryName,
@@ -203,6 +205,7 @@ class TaskMasterGetModel {
     taskRemarks = json['task_remarks'];
     previousTaskId = json['previous_task_id'];
     productCategory = json['product_category'];
+    parentProductCategory = json['parent_product_category'];
     alongWithPersonName = json['along_with_person_name'];
     infraProductCategoryCode = json['infra_product_category_code'];
     infraProductCategoryName = json['infra_product_category_name'];
@@ -299,6 +302,7 @@ class TaskMasterGetModel {
     data['task_remarks'] = this.taskRemarks;
     data['previous_task_id'] = this.previousTaskId;
     data['product_category'] = this.productCategory;
+    data['parent_product_category'] = this.parentProductCategory;
     data['along_with_person_name'] = this.alongWithPersonName;
     data['infra_product_category_code'] = this.infraProductCategoryCode;
     data['infra_product_category_name'] = this.infraProductCategoryName;
