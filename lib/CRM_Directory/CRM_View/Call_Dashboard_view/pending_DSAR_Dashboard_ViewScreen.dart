@@ -1499,6 +1499,8 @@ class PendingDsarDashboardViewscreen extends StatelessWidget{
           SizedBox(height: 10),
           bindProductCategoryFilter(context),
           SizedBox(height: 10),
+          bindParentProductCategoryFilter(context),
+          SizedBox(height: 10),
           bindAlongWithPersonNameTypeDropDown(context),
           SizedBox(height: 10),
           bindClusterNameFilter(context),
@@ -2780,6 +2782,79 @@ class PendingDsarDashboardViewscreen extends StatelessWidget{
           itemBuilder: (context, item, isSelected) =>
               ListTile(
                 title: Text(item.categoryName??""),
+              ),
+        ),
+      );
+    });
+
+  }
+
+  bindParentProductCategoryFilter(BuildContext context) {
+    return Obx((){
+      if (dashboard_view_Controller.parentProductCategory_controller.value.text.isNotEmpty && dashboard_view_Controller.filterDataChecker.value=='1') {
+        List<String> nameList = dashboard_view_Controller.parentProductCategory_controller.value.text.split(',');
+
+        dashboard_view_Controller.selectedParentProductCategoryList.value =
+            List.generate(nameList.length, (index) {
+              return ItemCategoryMstModel(
+                parentCategoryCode: nameList[index].trim(),
+              );
+            });
+      }
+      return  DropdownSearch<ItemCategoryMstModel>.multiSelection(
+        items: dashboard_view_Controller.parentProductCategoryList,
+        itemAsString: (ItemCategoryMstModel u) => u.parentCategoryCode??"",
+        selectedItems: dashboard_view_Controller.selectedParentProductCategoryList,
+        dropdownDecoratorProps: DropDownDecoratorProps(
+          baseStyle: TextStyle(color: Colors.black),
+          dropdownSearchDecoration: InputDecoration(
+            filled: false,
+            labelText: dashboard_view_Controller.selectedParentProductCategoryList.isNotEmpty?"Parent Product Category":null,
+            hintText: "Parent Product Category",
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+          ),
+        ),
+        dropdownBuilder: (context, selectedItems) {
+          // Custom builder to just show comma-separated names
+          if (selectedItems.isEmpty) {
+            return Text(
+              "Parent Product Category",
+              style: GoogleFonts.poppins(
+                color: AllColors.primaryDark1, // Match your hint color
+                fontSize: AllFontSize.sisxteen,
+                fontWeight: FontWeight.w500,
+              ),
+            );
+          }
+          return SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Text(
+              selectedItems.map((e) => e.parentCategoryCode).join(', '),
+              style: TextStyle(color: Colors.black), // Only black text
+            ),
+          );
+        },
+        onChanged: (List<ItemCategoryMstModel> selectedList) {
+          dashboard_view_Controller.selectedParentProductCategoryList.value = selectedList;
+          dashboard_view_Controller.parentProductCategory_controller.value.text =
+              selectedList.map((e) => e.parentCategoryCode).join(', ');
+        },
+        popupProps: PopupPropsMultiSelection.dialog(
+          showSearchBox: true,
+          searchFieldProps: TextFieldProps(
+            padding: EdgeInsets.only(top: 20, left: 10, right: 10),
+            decoration: InputDecoration(
+              contentPadding: EdgeInsets.only(top: 20, left: 12, right: 12),
+              hintText: "Search...",
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+          ),
+
+          itemBuilder: (context, item, isSelected) =>
+              ListTile(
+                title: Text(item.parentCategoryCode??""),
               ),
         ),
       );

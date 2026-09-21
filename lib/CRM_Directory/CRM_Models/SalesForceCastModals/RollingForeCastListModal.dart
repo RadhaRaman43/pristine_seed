@@ -4,12 +4,14 @@ class RollingForeCastListModal {
   String? salesForecastId;
   dynamic? lineNo;
   String? salesCycleId;
+  String? monthYear;
   String? quoteId;
   int? quoteLineNo;
   String? accountCode;
   String? accountName;
   String? regionName;
   String? clusterName;
+  String? remarks;
   String? createdBy;
   String? createdFullName;
   String? createdOn;
@@ -38,12 +40,14 @@ class RollingForeCastListModal {
         this.salesForecastId,
         this.lineNo,
         this.salesCycleId,
+        this.monthYear,
         this.quoteId,
         this.quoteLineNo,
         this.accountCode,
         this.accountName,
         this.regionName,
         this.clusterName,
+        this.remarks,
         this.createdBy,
         this.createdFullName,
         this.createdOn,
@@ -72,12 +76,14 @@ class RollingForeCastListModal {
     salesForecastId = json['sales_forecast_id'];
     lineNo = json['line_no'];
     salesCycleId = json['sales_cycle_id'];
+    monthYear = json['month_year'];
     quoteId = json['quote_id'];
     quoteLineNo = json['quote_line_no'];
     accountCode = json['account_code'];
     accountName = json['account_name'];
     regionName = json['region_name'];
     clusterName = json['cluster_name'];
+    remarks = json['remarks'];
     createdBy = json['created_by'];
     createdFullName = json['created_full_name'];
     createdOn = json['created_on'];
@@ -108,12 +114,14 @@ class RollingForeCastListModal {
     data['sales_forecast_id'] = this.salesForecastId;
     data['line_no'] = this.lineNo;
     data['sales_cycle_id'] = this.salesCycleId;
+    data['month_year'] = this.monthYear;
     data['quote_id'] = this.quoteId;
     data['quote_line_no'] = this.quoteLineNo;
     data['account_code'] = this.accountCode;
     data['account_name'] = this.accountName;
     data['region_name'] = this.regionName;
     data['cluster_name'] = this.clusterName;
+    data['remarks'] = this.remarks;
     data['created_by'] = this.createdBy;
     data['created_full_name'] = this.createdFullName;
     data['created_on'] = this.createdOn;

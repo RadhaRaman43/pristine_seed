@@ -53,6 +53,9 @@ class FunnelDashboardVm extends GetxController{
 
   RxList<ItemCategoryMstModel> Item_Category_master_list_without_task = <ItemCategoryMstModel>[].obs;
   RxList<ItemCategoryMstModel> SelectedProductCategory_list = <ItemCategoryMstModel>[].obs;
+  RxList<ItemCategoryMstModel> parentProductCategoryList = <ItemCategoryMstModel>[].obs;
+  RxList<ItemCategoryMstModel> selectedParentProductCategoryList = <ItemCategoryMstModel>[].obs;
+
   RxList<ClusterModal> clusterGetByEmailList = <ClusterModal>[].obs;
   RxList<ClusterModal> SelectedCluster_list = <ClusterModal>[].obs;
   RxList<RegionWithClusterFilterModal> regionwithclusterGetByEmailList = <RegionWithClusterFilterModal>[].obs;
@@ -77,6 +80,7 @@ class FunnelDashboardVm extends GetxController{
   var AccountOwner_controller=TextEditingController().obs;
   var typeOfCall_controller=TextEditingController().obs;
   var ProductCategory_controller=TextEditingController().obs;
+  var parentProductCategory_controller=TextEditingController().obs;
   var QuoteAccepted_controller=TextEditingController().obs;
   var IsCommit_controller=TextEditingController().obs;
   var StageName_controller=TextEditingController().obs;
@@ -89,6 +93,7 @@ class FunnelDashboardVm extends GetxController{
 
   var CustomerNameApi;
   var ProductCategoryForApi;
+  var parentProductCategoryForApi;
   var AccountOwnerForApi;
   var ClusterNameForApi;
   var RegionNameForApi;
@@ -128,6 +133,7 @@ class FunnelDashboardVm extends GetxController{
         getEmployeeTeamMemberGetByClusterRegionApi();
       }
       getItemCategoryMstWithoutTaskIdApi();
+      getParentItemCategoryMstGet();
       getAccountMaster("");
       //getFilterData();
     }
@@ -189,6 +195,13 @@ class FunnelDashboardVm extends GetxController{
           .map((e) => e.trim())
           .join('|');
     }
+    parentProductCategoryForApi = '';
+    if(parentProductCategory_controller.value.text.isNotEmpty){
+      parentProductCategoryForApi = parentProductCategory_controller.value.text
+          .split(',')
+          .map((e) => e.trim())
+          .join('|');
+    }
     QuoteAcceptedForApi = '';
     if (QuoteAccepted_controller.value.text.isNotEmpty &&
         !(QuoteAccepted_controller.value.text).toUpperCase().contains('ALL')) {
@@ -234,6 +247,7 @@ class FunnelDashboardVm extends GetxController{
         "filter_quote_accepted": (QuoteAcceptedForApi.isEmpty||QuoteAcceptedForApi.toLowerCase()=='all')?"":QuoteAcceptedForApi,
         "filter_stage_name": (StageNameForApi.isEmpty || StageNameForApi.toLowerCase()=='all')?"":StageNameForApi,
         "filter_product_category": ProductCategoryForApi.isEmpty?"":ProductCategoryForApi,
+        "filter_parent_product_category": parentProductCategoryForApi.isEmpty?"":parentProductCategoryForApi,
         "filter_customer_name": CustomerNameApi.isEmpty?"":CustomerNameApi,
       };
 
@@ -289,6 +303,7 @@ class FunnelDashboardVm extends GetxController{
         "filter_quote_accepted": (QuoteAcceptedForApi.isEmpty||QuoteAcceptedForApi.toLowerCase()=='all')?"":QuoteAcceptedForApi,
         "filter_stage_name":(StageNameForApi.isEmpty || StageNameForApi.toLowerCase()=='all')?SelectedTabForApi:StageNameForApi,
         "filter_product_category": ProductCategoryForApi.isEmpty?"":ProductCategoryForApi,
+        "filter_parent_product_category": parentProductCategoryForApi.isEmpty?"":parentProductCategoryForApi,
         "filter_customer_name": CustomerNameApi.isEmpty?"":CustomerNameApi,
         "filter_sales_cycle_id": filter_sale_cycle_id_cont.value.text.isEmpty?"":filter_sale_cycle_id_cont.value.text,
         "rowsPerPage": rowsPerPage,
@@ -510,6 +525,39 @@ class FunnelDashboardVm extends GetxController{
     return employee_Member_list.value;
   }
 
+
+  getParentItemCategoryMstGet() {
+    this.loading.value = true;
+    Map<String, String> data = {
+      'filter_category': "",
+    };
+    print(data);
+    _api.ParentItemCategoryMstGet(data, sessionManagement).then((value) {
+      print(value);
+      try {
+        List<ItemCategoryMstModel> Response = (json.decode(value)
+        as List<dynamic>)
+            .map((i) => ItemCategoryMstModel.fromJson(i as Map<String, dynamic>)).toList();
+
+        if (Response.isNotEmpty && Response[0]?.condition.toString() == "True") {
+          parentProductCategoryList.value = Response!;
+        } else {
+          parentProductCategoryList.value = [];
+
+        }
+      } catch (e) {
+        parentProductCategoryList.value = [];
+
+        print('catch....${e.toString()}');
+      }
+    }).onError((error, stackTrace) {
+      parentProductCategoryList.value = [];
+      Utils.sanckBarError('Api Exception onError', error.toString());
+      print('catchEx....${error.toString()}');
+    }).whenComplete(() {
+      this.loading.value = false;
+    });
+  }
 
   getItemCategoryMstWithoutTaskIdApi() {
     this.loading.value = true;
@@ -740,6 +788,7 @@ class FunnelDashboardVm extends GetxController{
   clearAllFilterController(){
     character.value = 'Monthly';
     ProductCategoryForApi = '';
+    parentProductCategoryForApi = '';
     AccountOwnerForApi = '';
     ClusterNameForApi = '';
     RegionNameForApi = '';
@@ -754,6 +803,7 @@ class FunnelDashboardVm extends GetxController{
     AccountOwner_controller.value.clear();
     typeOfCall_controller.value.clear();
     ProductCategory_controller.value.clear();
+    parentProductCategory_controller.value.clear();
     QuoteAccepted_controller.value.text = "OPEN";
     IsCommit_controller.value.text = 'ALL';
     StageName_controller.value.text='All';
@@ -771,6 +821,7 @@ class FunnelDashboardVm extends GetxController{
     SelectedAccount_Master_list.value = [];
     SelectedEmployee_Member_list.value = [];
     SelectedProductCategory_list.value = [];
+    selectedParentProductCategoryList.value = [];
     SelectedCluster_list.value = [];
     SelectedRegion_list.value = [];
     //selectedSalesStageStatusList.value = [];
@@ -794,6 +845,7 @@ class FunnelDashboardVm extends GetxController{
       "filter_customer_name": CustomerName_controller.value.text,
       "customerNameCode": customerNameCode,
       "filter_product_category": ProductCategory_controller.value.text,
+      "parentProductCategory_controller": parentProductCategory_controller.value.text,
       "filter_commit": IsCommit_controller.value.text,
       "filter_created_on": filter_created_on_cont.value.text,
       "filter_created_on_star_to_cont": filter_created_on_star_to_cont.value.text,
@@ -818,6 +870,7 @@ class FunnelDashboardVm extends GetxController{
         CustomerName_controller.value.text=getFilterData["filter_customer_name"]??"";
         customerNameCode=getFilterData["customerNameCode"]??"";
         ProductCategory_controller.value.text=getFilterData["filter_product_category"]??"";
+        parentProductCategory_controller.value.text=getFilterData["parentProductCategory_controller"]??"";
         IsCommit_controller.value.text=getFilterData["filter_commit"]??"";
         filter_created_on_cont.value.text=getFilterData["filter_created_on"]??"";
         filter_created_on_star_to_cont.value.text=getFilterData["filter_created_on_star_to_cont"]??"";

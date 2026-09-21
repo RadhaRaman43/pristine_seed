@@ -189,6 +189,7 @@ class RollingForeCastGMListScreen extends StatelessWidget{
           children: [
             _buildLabelWithValue(label: "Quote Id : ", value: sale_fore_cast_vm.rolling_fore_cast_list[position].quoteId??"",),
             _buildLabelWithValue(label: "Sale Cycle Id : ", value: sale_fore_cast_vm.rolling_fore_cast_list[position].salesCycleId??"",),
+            _buildLabelWithValue(label: "Month Year : ", value: sale_fore_cast_vm.rolling_fore_cast_list[position].monthYear??"",),
             _buildLabelWithValue(label: "Customer Name : ", value: sale_fore_cast_vm.rolling_fore_cast_list[position].accountName??"",),
             _buildLabelWithValue(label: "Cluster Name : ", value: sale_fore_cast_vm.rolling_fore_cast_list[position].clusterName??"",),
             _buildLabelWithValue(label: "Region Name : ", value: sale_fore_cast_vm.rolling_fore_cast_list[position].regionName??"",),
@@ -205,7 +206,7 @@ class RollingForeCastGMListScreen extends StatelessWidget{
             _buildLabelWithValue(label: "Closer Year : ", value: sale_fore_cast_vm.rolling_fore_cast_list[position].closureYear??"",),
             _buildLabelWithValue(label: "Created On : ", value: createdOn,),
             _buildLabelWithValue(label: "Required Region Name : ", value: sale_fore_cast_vm.rolling_fore_cast_list[position].requiredRegionName??"",),
-
+            _buildLabelWithValue(label: "Remark : ", value: sale_fore_cast_vm.rolling_fore_cast_list[position].remarks??"",),
           ],
         ),
 

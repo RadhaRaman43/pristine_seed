@@ -212,7 +212,6 @@ class SalesForceHeaderDetails extends StatelessWidget{
                 ),
               ),
               const SizedBox(height: 10,),
-              const SizedBox(height: 10,),
 
               Obx((){
                 final totalList = sales_force_cast_vm.salesForceCastHeader_list[0].totalMonthYearQty ?? [];
@@ -372,6 +371,7 @@ class SalesForceHeaderDetails extends StatelessWidget{
                   bindData(fixText: "Created By : ",data:sales_force_cast_vm.salesForceCastHeader_list[0].createdFullName ?? ""),
                   const SizedBox(height: 3,),
                   bindData(fixText: "Created On : ",data:createdOn??""),
+                  bindData(fixText: "Remark : ",data:sales_force_cast_vm.salesForceCastHeader_list[0].remarks ?? ""),
                   const SizedBox(height: 3,),
 
                 ],
@@ -511,6 +511,7 @@ class SalesForceHeaderDetails extends StatelessWidget{
             ),
             //_buildLabelWithValue(label: "Quote  ID : ", value: sales_force_cast_vm.salesForceCastHeader_list[0].lines?[index].quoteId ?? "",),
             _buildLabelWithValue(label: "Sales Cycle ID : ", value: sales_force_cast_vm.salesForceCastHeader_list[0].lines?[index].salesCycleId ?? "",),
+            _buildLabelWithValue(label: "Customer Name : ", value: sales_force_cast_vm.salesForceCastHeader_list[0].lines?[index].accountName ?? "",),
             _buildLabelWithValue(label: "Item Code : ", value: sales_force_cast_vm.salesForceCastHeader_list[0].lines?[index].itemCode ?? "",),
             _buildLabelWithValue(label: "Item Name : ", value: sales_force_cast_vm.salesForceCastHeader_list[0].lines?[index].itemName ?? "",),
             _buildLabelWithValue(label: "Item Category : ", value: sales_force_cast_vm.salesForceCastHeader_list[0].lines?[index].itemCategoryCode ?? "",),
