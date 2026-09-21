@@ -20,6 +20,7 @@ import '../../CRM_Models/TaskMaster_model/Call_Status_Master_model.dart';
 import '../../CRM_Models/TaskMaster_model/Item_Category_Mast_model.dart';
 import '../../CRM_Models/dashboard_models/call_DashBoard_Model.dart';
 import '../../CRM_Models/dashboard_models/call_dashboard_user_wise_Data_model.dart';
+import '../../CRM_Models/sale_cycle_modal/alongWithPersonModel.dart';
 import '../../CRM_Repository/dashboard_repository/dashboard_repo.dart';
 
 class CallDashboardVm extends GetxController{
@@ -87,6 +88,10 @@ class CallDashboardVm extends GetxController{
   var clusterName_controller=TextEditingController().obs;
   var RegionName_controller=TextEditingController().obs;
   var CustomerName_controller=TextEditingController().obs;
+  var filterAlongWithPersonNameController=TextEditingController().obs;
+
+  RxList<AlongWithPersonModel> alongWithPersonNameList = <AlongWithPersonModel>[].obs;
+  RxList<AlongWithPersonModel> selectedAlongPersonWith_list = <AlongWithPersonModel>[].obs;
 
 
   var TypeOfCallForApi;
@@ -348,6 +353,7 @@ class CallDashboardVm extends GetxController{
         "filter_task_approval_status": TaskStatusForApi.isEmpty?"All":TaskStatusForApi,
         "filter_region_name": RegionNameForApi.isEmpty?"":RegionNameForApi,
         "filter_cluster_name": ClusterNameForApi.isEmpty?"":ClusterNameForApi,
+        "filter_along_with_person_name": filterAlongWithPersonNameController.value.text.isEmpty?"":filterAlongWithPersonNameController.value.text,
         "rowsPerPage": rowsPerPage,
         "pageNumber": pageNumber
       };
@@ -661,7 +667,6 @@ class CallDashboardVm extends GetxController{
     Map<String, String> data = {
 
     };
-
     _api.getItemCategoryMstWithoutTaskIdApiHit(data, sessionManagement).then((value) {
       try {
         List<ItemCategoryMstModel> Response =
@@ -671,20 +676,15 @@ class CallDashboardVm extends GetxController{
 
         if (Response.isNotEmpty && Response[0]?.condition.toString() == "True") {
           Item_Category_master_list_without_task.value = Response!;
-
-          // print('master list....${get_Acc_type_list.length.toString()}');
         } else {
           Item_Category_master_list_without_task.value = [];
-          //print('master listelsse....${get_Acc_type_list.length.toString()}');
         }
       } catch (e) {
         Item_Category_master_list_without_task.value = [];
-        print('catch....${e.toString()}');
       }
     }).onError((error, stackTrace) {
       Item_Category_master_list_without_task.value = [];
       Utils.sanckBarError('Api Exception onError', error.toString());
-      print('catchEx....${error.toString()}');
     }).whenComplete(() {
       this.loading.value = false;
     });
@@ -919,6 +919,8 @@ class CallDashboardVm extends GetxController{
     selectedParentProductCategoryList.value = [];
     SelectedCluster_list.value = [];
     SelectedRegion_list.value = [];
+    filterAlongWithPersonNameController.value.clear();
+    selectedAlongPersonWith_list.value=[];
     //selectedTaskStatusList.value = ["All"];
     selectedTypeCallList.add(CallStatusMasterModel(taskStatus: "All",),);
     selectedDSARStatusList.add(CallStatusMasterModel(taskStatus: "All",),);
@@ -1096,5 +1098,37 @@ class CallDashboardVm extends GetxController{
     return map;
   }
 
-
+  getEmpMstEmailByApi() async{
+    try{
+      Map<String , String> data = {
+        "email_id": email
+      };
+      print(data);
+      loading.value = true;
+      String value = await _api.EmpMstEmailByGet(data, sessionManagement);
+      print(value);
+      final JsonResponse = json.decode(value);
+      if (JsonResponse is List) {
+        List<AlongWithPersonModel> response =
+        JsonResponse.map((e) => AlongWithPersonModel.fromJson(e))
+            .toList();
+        if (response != null &&
+            response.length > 0 &&
+            response[0].condition == "True") {
+          loading.value = false;
+          alongWithPersonNameList.value=response;
+        } else {
+          loading.value = false;
+          alongWithPersonNameList.value=[];
+          Utils.sanckBarError("Error!", "No Data Found");
+        }
+      } else {
+        loading.value = false;
+        Utils.sanckBarException("Api Error!", JsonResponse);
+      }
+    }catch(e){
+      loading.value = false;
+      print(e);
+    }
+  }
 }

@@ -179,7 +179,7 @@ class SalesCycleCreateQuoteScreen extends StatelessWidget{
                           saleCycleController.itemCategorySelectedlist.value.isEmpty){
                         return Utils.sanckBarError("Parent Product Category", "Please Select Parent Product Category");
                       }
-                      saleCycleController.saleCycleQuoteCreate(saleCycleController.saleCycleList[0].salesCycleId!);
+                      saleCycleController.saleCycleQuoteCreate(saleCycleController.saleCycleList[0].salesCycleId??"");
                     },
                     text: "Add Quote",
                   ),

@@ -3783,7 +3783,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
           if (saleCycleController.pageNumberForQuote + 1 < total_page) {
             saleCycleController.getQuoteHeaderData(
                 saleCycleController.pageNumberForQuote + 1,
-                saleCycleController.saleCycleList[0].salesCycleId!,
+                saleCycleController.saleCycleList[0].salesCycleId??"",
                 '');
             saleCycleController.pageNumberForQuote += 1;
           }
