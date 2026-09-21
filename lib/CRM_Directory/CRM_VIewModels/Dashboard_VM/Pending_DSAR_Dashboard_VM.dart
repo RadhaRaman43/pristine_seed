@@ -58,6 +58,9 @@ class PendingDsarDashboardVm extends GetxController{
   RxList<EmployeeMemberModel> SelectedEmployee_Member_list = <EmployeeMemberModel>[].obs;
   RxList<ItemCategoryMstModel> Item_Category_master_list_without_task = <ItemCategoryMstModel>[].obs;
   RxList<ItemCategoryMstModel> SelectedProductCategory_list = <ItemCategoryMstModel>[].obs;
+  RxList<ItemCategoryMstModel> parentProductCategoryList = <ItemCategoryMstModel>[].obs;
+  RxList<ItemCategoryMstModel> selectedParentProductCategoryList = <ItemCategoryMstModel>[].obs;
+
   RxList<ClusterModal> clusterGetByEmailList = <ClusterModal>[].obs;
   RxList<ClusterModal> SelectedCluster_list = <ClusterModal>[].obs;
   RxList<RegionWithClusterFilterModal> regionwithclusterGetByEmailList = <RegionWithClusterFilterModal>[].obs;
@@ -79,6 +82,7 @@ class PendingDsarDashboardVm extends GetxController{
   var AccountOwner_controller=TextEditingController().obs;
   var typeOfCall_controller=TextEditingController().obs;
   var ProductCategory_controller=TextEditingController().obs;
+  var parentProductCategory_controller=TextEditingController().obs;
   var clusterName_controller=TextEditingController().obs;
   var RegionName_controller=TextEditingController().obs;
   var CustomerName_controller=TextEditingController().obs;
@@ -89,6 +93,7 @@ class PendingDsarDashboardVm extends GetxController{
   var TaskStatusForApi;
   var lastActivityStatusForApi;
   var ProductCategoryForApi;
+  var parentProductCategoryForApi;
   var AccountOwnerForApi;
   var ClusterNameForApi;
   var RegionNameForApi;
@@ -125,6 +130,7 @@ class PendingDsarDashboardVm extends GetxController{
           ? EmployeeMasterGet("")
           : getEmployeeTeamMemberGetByClusterRegionApi();
       getItemCategoryMstWithoutTaskIdApi();
+      getParentItemCategoryMstGet();
       getClustersGetByEmail();
       getAccountMaster("");
     }
@@ -254,6 +260,13 @@ class PendingDsarDashboardVm extends GetxController{
           .map((e) => e.trim())
           .join('|');
     }
+    parentProductCategoryForApi = '';
+    if(parentProductCategory_controller.value.text.isNotEmpty){
+      parentProductCategoryForApi = parentProductCategory_controller.value.text
+          .split(',')
+          .map((e) => e.trim())
+          .join('|');
+    }
     TaskStatusForApi="";
     if(task_Status_controller.value.text.isNotEmpty){
       TaskStatusForApi = task_Status_controller.value.text
@@ -271,6 +284,7 @@ class PendingDsarDashboardVm extends GetxController{
         "filter_type_of_call": TypeOfCallForApi.isEmpty?"All":TypeOfCallForApi,
         "filter_owner_name": AccountOwnerForApi.isEmpty?"":AccountOwnerForApi,
         "filter_product_category": ProductCategoryForApi.isEmpty?"":ProductCategoryForApi,
+        "filter_parent_product_category": parentProductCategoryForApi.isEmpty?"": parentProductCategoryForApi,
         "filter_activity_status": lastActivityStatusForApi.isEmpty?"All":lastActivityStatusForApi,
         "filter_customer_name": CustomerNameApi.isEmpty?"":CustomerNameApi,
         "filter_task_approval_status": TaskStatusForApi.isEmpty?"Approved":TaskStatusForApi,
@@ -330,6 +344,7 @@ class PendingDsarDashboardVm extends GetxController{
         "filter_region_name": RegionNameForApi.isEmpty?"":RegionNameForApi,
         "filter_cluster_name": ClusterNameForApi.isEmpty?"":ClusterNameForApi,
         "filter_product_category": ProductCategoryForApi.isEmpty?"":ProductCategoryForApi,
+        "filter_parent_product_category": parentProductCategoryForApi.isEmpty?"": parentProductCategoryForApi,
         "rowsPerPage": rowsPerPage,
         "pageNumber": pageNumber
       };
@@ -606,6 +621,38 @@ class PendingDsarDashboardVm extends GetxController{
     }
   }
 
+  getParentItemCategoryMstGet() {
+    this.loading.value = true;
+    Map<String, String> data = {
+      'filter_category': "",
+    };
+    print(data);
+    _api.ParentItemCategoryMstGet(data, sessionManagement).then((value) {
+      print(value);
+      try {
+        List<ItemCategoryMstModel> Response = (json.decode(value)
+        as List<dynamic>)
+            .map((i) => ItemCategoryMstModel.fromJson(i as Map<String, dynamic>)).toList();
+
+        if (Response.isNotEmpty && Response[0]?.condition.toString() == "True") {
+          parentProductCategoryList.value = Response!;
+        } else {
+          parentProductCategoryList.value = [];
+
+        }
+      } catch (e) {
+        parentProductCategoryList.value = [];
+
+        print('catch....${e.toString()}');
+      }
+    }).onError((error, stackTrace) {
+      parentProductCategoryList.value = [];
+      Utils.sanckBarError('Api Exception onError', error.toString());
+      print('catchEx....${error.toString()}');
+    }).whenComplete(() {
+      this.loading.value = false;
+    });
+  }
   getItemCategoryMstWithoutTaskIdApi() {
     this.loading.value = true;
     Map<String, String> data = {
@@ -839,6 +886,7 @@ class PendingDsarDashboardVm extends GetxController{
     TaskStatusForApi = '';
     lastActivityStatusForApi = '';
     ProductCategoryForApi = '';
+    parentProductCategoryForApi = '';
     AccountOwnerForApi = '';
     ClusterNameForApi = '';
     RegionNameForApi = '';
@@ -850,11 +898,14 @@ class PendingDsarDashboardVm extends GetxController{
     accountNameCode='';
     typeOfCall_controller.value.clear();
     ProductCategory_controller.value.clear();
+    parentProductCategory_controller.value.clear();
     //clusterName_controller.value.clear();
     CustomerName_controller.value.clear();
     customerNameCode='';
     //RegionName_controller.value.clear();
     searchController.value.clear();
+    filterAlongWithPersonNameController.value.clear();
+    SelectedAlongPersonWith_list.value=[];
     if(isAdminWritePermission=="1") {
       EmployeeMasterGet("");
     }
@@ -863,6 +914,7 @@ class PendingDsarDashboardVm extends GetxController{
     selectedTypeCallList.value = [];
     SelectedEmployee_Member_list.value = [];
     SelectedProductCategory_list.value = [];
+    selectedParentProductCategoryList.value = [];
     SelectedCluster_list.value = [];
     SelectedRegion_list.value = [];
     //selectedTaskStatusList.value = ["Approved"];
@@ -889,6 +941,7 @@ class PendingDsarDashboardVm extends GetxController{
       "filter_type_of_call": typeOfCall_controller.value.text,
       "last_activity_status": lastActivity_Status_controller.value.text,
       "filter_product_category": ProductCategory_controller.value.text,
+      "parentProductCategory_controller": parentProductCategory_controller.value.text,
       "filter_owner_name": AccountOwner_controller.value.text,
       "accountNameCode":accountNameCode,
       "filter_region_name":RegionName_controller.value.text,
@@ -910,6 +963,7 @@ class PendingDsarDashboardVm extends GetxController{
       typeOfCall_controller.value.text=getFilterData["filter_type_of_call"];
       lastActivity_Status_controller.value.text=getFilterData["last_activity_status"];
       ProductCategory_controller.value.text=getFilterData["filter_product_category"];
+      parentProductCategory_controller.value.text=getFilterData["parentProductCategory_controller"];
       AccountOwner_controller.value.text=getFilterData["filter_owner_name"];
       accountNameCode=getFilterData["accountNameCode"];
 

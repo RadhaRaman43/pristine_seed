@@ -78,6 +78,9 @@ class DashboardRepo{
     return _apiService.postApi(data, AppUrl.PendingDsarDashboardUserWiseData,sessionManagement);
   }
 
+  Future<String> EmpMstEmailByGet(var data,SessionManagement sessionManagement) async{
+    return _apiService.getApi(AppUrl.EmpMstEmailByGet, sessionManagement, data);
+  }
   Future<String> ParentItemCategoryMstGet(var data,SessionManagement sessionManagement) async{
     return _apiService.getApi(AppUrl.ParentItemCategoryMstGet, sessionManagement, data);
   }
