@@ -247,6 +247,7 @@ class TaskApprovalListScreen extends StatelessWidget{
               _buildLabelWithValue(label: "Last Activity Status: ", value: TaskMaster_page_controller.Task_Master_list[position].lastActivityStatus??"",),
               _buildLabelWithValue(label: "Sales Cycle Id: ", value: TaskMaster_page_controller.Task_Master_list[position].salesCycleId??"",),
               _buildLabelWithValue(label: "Product Category: ", value: TaskMaster_page_controller.Task_Master_list[position].productCategory??"",),
+              _buildLabelWithValue(label: "Parent Product Category: ", value: TaskMaster_page_controller.Task_Master_list[position].parentProductCategory??"",),
               _buildLabelWithValue(label: "Company Profile Type: ", value: TaskMaster_page_controller.Task_Master_list[position].companyProfileType??"",),
               //_buildLabelWithValue(label: "Account Category Type: ", value: TaskMaster_page_controller.Task_Master_list[position].acc??"",),
               _buildLabelWithValue(label: "Along With Person Name: ", value: TaskMaster_page_controller.Task_Master_list[position].alongWithPersonName??"",),
@@ -408,6 +409,8 @@ class TaskApprovalListScreen extends StatelessWidget{
                               bindCreatedOn(context),
                               SizedBox(height: 10,),
                               bindProductCategory(context),
+                              SizedBox(height: 10,),
+                              bindParentProductCategoryFilter(context),
                               SizedBox(height: 10,),
                               bindProductCategoryTypeDropDown(context),
                               SizedBox(height: 10,),
@@ -1897,6 +1900,79 @@ class TaskApprovalListScreen extends StatelessWidget{
         ),
       );
     });
+  }
+
+  bindParentProductCategoryFilter(BuildContext context) {
+    return Obx((){
+      if (TaskMaster_page_controller.parentProductCategory_controller.value.text.isNotEmpty && TaskMaster_page_controller.filterDataChecker.value=='1') {
+        List<String> nameList = TaskMaster_page_controller.parentProductCategory_controller.value.text.split('|');
+
+        TaskMaster_page_controller.selectedParentProductCategoryList.value =
+            List.generate(nameList.length, (index) {
+              return ItemCategoryMstModel(
+                parentCategoryCode: nameList[index].trim(),
+              );
+            });
+      }
+      return  DropdownSearch<ItemCategoryMstModel>.multiSelection(
+        items: TaskMaster_page_controller.parentProductCategoryList,
+        itemAsString: (ItemCategoryMstModel u) => u.parentCategoryCode??"",
+        selectedItems: TaskMaster_page_controller.selectedParentProductCategoryList,
+        dropdownDecoratorProps: DropDownDecoratorProps(
+          baseStyle: TextStyle(color: Colors.black),
+          dropdownSearchDecoration: InputDecoration(
+            filled: false,
+            labelText: TaskMaster_page_controller.selectedParentProductCategoryList.isNotEmpty?"Parent Product Category":null,
+            hintText: "Parent Product Category",
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+          ),
+        ),
+        dropdownBuilder: (context, selectedItems) {
+          // Custom builder to just show comma-separated names
+          if (selectedItems.isEmpty) {
+            return Text(
+              "Parent Product Category",
+              style: GoogleFonts.poppins(
+                color: AllColors.primaryDark1, // Match your hint color
+                fontSize: AllFontSize.sisxteen,
+                fontWeight: FontWeight.w500,
+              ),
+            );
+          }
+          return SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Text(
+              selectedItems.map((e) => e.parentCategoryCode).join(', '),
+              style: TextStyle(color: Colors.black), // Only black text
+            ),
+          );
+        },
+        onChanged: (List<ItemCategoryMstModel> selectedList) {
+          TaskMaster_page_controller.selectedParentProductCategoryList.value = selectedList;
+          TaskMaster_page_controller.parentProductCategory_controller.value.text =
+              selectedList.map((e) => e.parentCategoryCode).join('|');
+        },
+        popupProps: PopupPropsMultiSelection.dialog(
+          showSearchBox: true,
+          searchFieldProps: TextFieldProps(
+            padding: EdgeInsets.only(top: 20, left: 10, right: 10),
+            decoration: InputDecoration(
+              contentPadding: EdgeInsets.only(top: 20, left: 12, right: 12),
+              hintText: "Search...",
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+          ),
+
+          itemBuilder: (context, item, isSelected) =>
+              ListTile(
+                title: Text(item.parentCategoryCode??""),
+              ),
+        ),
+      );
+    });
+
   }
 
   Widget bindProductCategoryTypeDropDown(context) {

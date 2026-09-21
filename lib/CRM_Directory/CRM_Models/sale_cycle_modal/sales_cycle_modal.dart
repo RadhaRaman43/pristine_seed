@@ -8,6 +8,7 @@ class SalesCycleModal {
   String? contactCode;
   String? contactName;
   String? productCategory;
+  String? parentProductCategory;
   String? productCategoryCode;
   String? infraProductCategoryCode;
   String? infraProductCategoryName;
@@ -119,6 +120,7 @@ class SalesCycleModal {
         this.contactCode,
         this.contactName,
         this.productCategory,
+        this.parentProductCategory,
         this.productCategoryCode,
         this.infraProductCategoryCode,
         this.infraProductCategoryName,
@@ -230,6 +232,7 @@ class SalesCycleModal {
     contactCode = json['contact_code'];
     contactName = json['contact_name'];
     productCategory = json['product_category'];
+    parentProductCategory = json['parent_product_category'];
     productCategoryCode = json['product_category_code'];
     infraProductCategoryCode = json['infra_product_category_code'];
     infraProductCategoryName = json['infra_product_category_name'];
@@ -344,6 +347,7 @@ class SalesCycleModal {
     data['contact_code'] = this.contactCode;
     data['contact_name'] = this.contactName;
     data['product_category'] = this.productCategory;
+    data['parent_product_category'] = this.parentProductCategory;
     data['product_category_code'] = this.productCategoryCode;
     data['infra_product_category_code'] = this.infraProductCategoryCode;
     data['infra_product_category_name'] = this.infraProductCategoryName;

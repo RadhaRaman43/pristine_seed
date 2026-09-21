@@ -61,6 +61,9 @@ class TaskMasterRepo{
   Future<String> getItemCategoryMstWithoutTaskIdApiHit(var data,SessionManagement sessionManagement) async{
     return _apiService.getApi(AppUrl.ItemCategoryMstGet, sessionManagement, data);
   }
+  Future<String> ParentItemCategoryMstGet(var data,SessionManagement sessionManagement) async{
+    return _apiService.getApi(AppUrl.ParentItemCategoryMstGet, sessionManagement, data);
+  }
 
 /*  Future<String> SalesProductCategoryCreate(var data,SessionManagement sessionManagement) async{
     return _apiService.postApi(data, AppUrl.SalesProductCategoryCreate, sessionManagement);

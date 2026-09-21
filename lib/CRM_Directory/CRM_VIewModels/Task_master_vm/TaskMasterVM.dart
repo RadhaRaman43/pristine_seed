@@ -120,6 +120,7 @@ class Taskmastervm extends GetxController{
     var lastActivityStatus_Controller=TextEditingController().obs;
     var PhoneNo_Controller=TextEditingController().obs;
     var product_category_controller=TextEditingController().obs;
+    var parentProductCategory_controller=TextEditingController().obs;
     var product_category_type_Controller = TextEditingController().obs;
     var method_of_call_controller=TextEditingController().obs;
     //var account_owner_controller=TextEditingController().obs;
@@ -185,6 +186,8 @@ class Taskmastervm extends GetxController{
     RxList<ItemCategoryMstModel> Item_Category_master_list = <ItemCategoryMstModel>[].obs;
     RxList<ItemCategoryMstModel> Item_Category_master_list_without_task = <ItemCategoryMstModel>[].obs;
     RxList<ItemCategoryMstModel> Selected_Item_Category_master_list_without_task = <ItemCategoryMstModel>[].obs;
+    RxList<ItemCategoryMstModel> parentProductCategoryList = <ItemCategoryMstModel>[].obs;
+    RxList<ItemCategoryMstModel> selectedParentProductCategoryList = <ItemCategoryMstModel>[].obs;
     RxList<ItemCategoryMstModel> Item_Category_Selected_list = <ItemCategoryMstModel>[].obs;
     RxList<ItemCategoryMstModel> Item_Category_Selected_Infra_list = <ItemCategoryMstModel>[].obs;
     RxList<ItemCategoryMstModel> Item_Category_Infra_list = <ItemCategoryMstModel>[].obs;
@@ -241,6 +244,7 @@ class Taskmastervm extends GetxController{
         product_category_type_Controller.value.text = "Contains";
         getClustersGetByEmail();
         getAccountMaster(pageNumber,"");
+        getParentItemCategoryMstGet();
         getItemCategoryMstWithoutTaskIdApi();
         getCompanyTypeMasterGet();
         CallStatusMasterApiHit('Call');
@@ -495,9 +499,7 @@ class Taskmastervm extends GetxController{
         if(AccountOwner_controller.value.text.isNotEmpty){
             AccountOwnerForApi = AccountOwner_controller.value.text.split(',').map((e) => e.trim()).join('|');
         }
-
-
-
+        print("parent product category text ${parentProductCategory_controller.value.text}");
 
         try{
             Map data={
@@ -507,9 +509,9 @@ class Taskmastervm extends GetxController{
                 "filter_task_owner_new": AccountOwnerForApi.isEmpty?"":AccountOwnerForApi,
                 "filter_task_status": status == 'All'?"":status,
                 "filter_product_category": product_category_controller.value.text.isEmpty?"":product_category_controller.value.text,
+                "filter_parent_product_category": parentProductCategory_controller.value.text.isEmpty? "":parentProductCategory_controller.value.text,
                 "filter_product_category_type": product_category_type_Controller.value.text.isEmpty?"":product_category_type_Controller.value.text,
-                "filter_type_of_call":  Type_of_call_controller.value.text.isEmpty?"":
-                Type_of_call_controller.value.text.toLowerCase()=="all"?"":Type_of_call_controller.value.text,
+                "filter_type_of_call":  Type_of_call_controller.value.text.isEmpty?"": Type_of_call_controller.value.text.toLowerCase()=="all"?"":Type_of_call_controller.value.text,
                 "filter_method_of_call": method_of_call_controller.value.text.isEmpty?"":method_of_call_controller.value.text,
                 "filter_last_activity_status": lastActivityStatus_Controller.value.text.isEmpty?"":lastActivityStatus_Controller.value.text,
                 "filter_company_profile_type": companyProfileTypeController.value.text.isEmpty?"":companyProfileTypeController.value.text,
@@ -528,7 +530,6 @@ class Taskmastervm extends GetxController{
                 "filter_frontliner_value": "",
                 "filter_branch_head_value": RegionName_controller.value.text.isEmpty?"":RegionName_controller.value.text,
                 "filter_zone_head_value": "",
-                "filter_parent_product_category":"",
                  "filter_along_with_person_name":filterAlongWithPersonNameController.value.text.isEmpty?"":filterAlongWithPersonNameController.value.text,
                 "filter_clusture_head_value": clusterName_controller.value.text.isEmpty?"":clusterName_controller.value.text,
                 "row_per_page": rowsPerPage.toString(),
@@ -1187,6 +1188,38 @@ class Taskmastervm extends GetxController{
 
     }
 
+    getParentItemCategoryMstGet() {
+      this.loading.value = true;
+      Map<String, String> data = {
+        'filter_category': "",
+      };
+      print(data);
+      _api.ParentItemCategoryMstGet(data, sessionManagement).then((value) {
+        print(value);
+        try {
+          List<ItemCategoryMstModel> Response = (json.decode(value)
+          as List<dynamic>)
+              .map((i) => ItemCategoryMstModel.fromJson(i as Map<String, dynamic>)).toList();
+
+          if (Response.isNotEmpty && Response[0]?.condition.toString() == "True") {
+            parentProductCategoryList.value = Response!;
+          } else {
+            parentProductCategoryList.value = [];
+
+          }
+        } catch (e) {
+          parentProductCategoryList.value = [];
+
+          print('catch....${e.toString()}');
+        }
+      }).onError((error, stackTrace) {
+        parentProductCategoryList.value = [];
+        Utils.sanckBarError('Api Exception onError', error.toString());
+        print('catchEx....${error.toString()}');
+      }).whenComplete(() {
+        this.loading.value = false;
+      });
+    }
 
     getItemCategoryMstWithoutTaskIdApi() async{
       try {
@@ -1631,6 +1664,7 @@ class Taskmastervm extends GetxController{
     Selection_MethodOfCall_Master_list.value=[];
     selected_company_type_list.value=[];
     Selected_Item_Category_master_list_without_task.value=[];
+    selectedParentProductCategoryList.value=[];
     selectedDSARStatusList.value=[];
        product_category_type_Controller.value.text="Contains";
        account_code_controller.clear();
@@ -1648,6 +1682,7 @@ class Taskmastervm extends GetxController{
        PhoneNo_Controller.value.clear();
        lastActivityStatus_Controller.value.clear();
        product_category_controller.value.clear();
+       parentProductCategory_controller.value.clear();
        method_of_call_controller.value.clear();
        //account_owner_controller.value.clear();
        Type_of_call_controller.value.clear();
@@ -1707,6 +1742,7 @@ class Taskmastervm extends GetxController{
         'filterTaskCreationOnController': filterTaskCreationOnController.value.text,
         'filterTaskCreationOn_from_to_date_Controller': filterTaskCreationOn_from_to_date_Controller.value.text,
         'product_category': product_category_controller.value.text,
+        'parentProductCategory_controller': parentProductCategory_controller.value.text,
         'product_category_type': product_category_type_Controller.value.text,
         'approved_by_controller': approved_by_controller.value.text,
       });
@@ -1740,6 +1776,7 @@ class Taskmastervm extends GetxController{
         filterTaskCreationOnController.value.text=getFilterData["filterTaskCreationOnController"]??"";
         filterTaskCreationOn_from_to_date_Controller.value.text=getFilterData["filterTaskCreationOn_from_to_date_Controller"]??"";
         product_category_controller.value.text=getFilterData["product_category"]??"";
+        parentProductCategory_controller.value.text=getFilterData["parentProductCategory_controller"]??"";
         product_category_type_Controller.value.text=getFilterData["product_category_type"]??"";
         approved_by_controller.value.text=getFilterData["approved_by_controller"]??"";
 
