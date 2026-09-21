@@ -42,6 +42,7 @@ class TaskApprovalvm extends GetxController{
   var account_Name_controller = TextEditingController().obs;
   var filterTask_Id_controller = TextEditingController().obs;
   var product_category_controller=TextEditingController().obs;
+  var parentProductCategory_controller=TextEditingController().obs;
   var product_category_type_Controller = TextEditingController().obs;
   var method_of_call_controller=TextEditingController().obs;
   var postalCodeController=TextEditingController().obs;
@@ -123,6 +124,8 @@ class TaskApprovalvm extends GetxController{
 
   RxList<ItemCategoryMstModel> Item_Category_master_list_without_task = <ItemCategoryMstModel>[].obs;
   RxList<ItemCategoryMstModel> Selected_Item_Category_master_list_without_task = <ItemCategoryMstModel>[].obs;
+  RxList<ItemCategoryMstModel> parentProductCategoryList = <ItemCategoryMstModel>[].obs;
+  RxList<ItemCategoryMstModel> selectedParentProductCategoryList = <ItemCategoryMstModel>[].obs;
   RxList<String> productCategoryTypeList = <String>["Contains","Equals To"].obs;
   RxList<CompanyTypeModal> company_profile_type_list = <CompanyTypeModal>[].obs;
   RxList<CompanyTypeModal> selected_company_type_list = <CompanyTypeModal>[].obs;
@@ -149,6 +152,7 @@ class TaskApprovalvm extends GetxController{
       product_category_type_Controller.value.text = "Contains";
       //getFilterData();
       getCompanyTypeMasterGet();
+      getParentItemCategoryMstGet();
       getItemCategoryMstWithoutTaskIdApi();
       CallStatusMasterApiHit('Call');
       MethodOfCallMasterApiHit();
@@ -200,6 +204,38 @@ class TaskApprovalvm extends GetxController{
     });
   }
 
+  getParentItemCategoryMstGet() {
+    this.loading.value = true;
+    Map<String, String> data = {
+      'filter_category': "",
+    };
+    print(data);
+    _api.ParentItemCategoryMstGet(data, sessionManagement).then((value) {
+      print(value);
+      try {
+        List<ItemCategoryMstModel> Response = (json.decode(value)
+        as List<dynamic>)
+            .map((i) => ItemCategoryMstModel.fromJson(i as Map<String, dynamic>)).toList();
+
+        if (Response.isNotEmpty && Response[0]?.condition.toString() == "True") {
+          parentProductCategoryList.value = Response!;
+        } else {
+          parentProductCategoryList.value = [];
+
+        }
+      } catch (e) {
+        parentProductCategoryList.value = [];
+
+        print('catch....${e.toString()}');
+      }
+    }).onError((error, stackTrace) {
+      parentProductCategoryList.value = [];
+      Utils.sanckBarError('Api Exception onError', error.toString());
+      print('catchEx....${error.toString()}');
+    }).whenComplete(() {
+      this.loading.value = false;
+    });
+  }
   getItemCategoryMstWithoutTaskIdApi() {
     loading.value = true;
     Map<String, String> data = {
@@ -411,6 +447,7 @@ class TaskApprovalvm extends GetxController{
         "filter_method_of_call": method_of_call_controller.value.text.isEmpty?"":method_of_call_controller.value.text,
         "filter_postal_code": postalCodeController.value.text.isEmpty?"":postalCodeController.value.text,
         "filter_product_category": product_category_controller.value.text.isEmpty?"":product_category_controller.value.text,
+        "filter_parent_product_category": parentProductCategory_controller.value.text.isEmpty?"":parentProductCategory_controller.value.text,
         "filter_sales_cycle_id": Sale_cycle_Id_controller.value.text.isEmpty?"":Sale_cycle_Id_controller.value.text,
         "filter_task_id": taskId!.isNotEmpty?taskId:filterTask_Id_controller.value.text,
         "filter_task_owner": account_owner_controller.value.text.isEmpty?"":account_owner_controller.value.text,
@@ -525,6 +562,7 @@ class TaskApprovalvm extends GetxController{
     Selection_MethodOfCall_Master_list.value=[];
     selected_company_type_list.value=[];
     Selected_Item_Category_master_list_without_task.value=[];
+    selectedParentProductCategoryList.value=[];
     product_category_type_Controller.value.text="Contains";
     account_code_controller.value.clear();
     account_Name_controller.value.clear();
@@ -540,6 +578,7 @@ class TaskApprovalvm extends GetxController{
     PhoneNo_Controller.value.clear();
     lastActivityStatus_Controller.value.clear();
     product_category_controller.value.clear();
+    parentProductCategory_controller.value.clear();
     method_of_call_controller.value.clear();
     account_owner_controller.value.clear();
     Type_of_call_controller.value.clear();
@@ -680,6 +719,7 @@ class TaskApprovalvm extends GetxController{
         "filter_account_name": account_Name_controller.value.text.isEmpty?"":account_Name_controller.value.text,
         "filter_task_status": 'PENDING FOR APPROVAL',
         "filter_product_category": product_category_controller.value.text.isEmpty?"":product_category_controller.value.text,
+        "filter_parent_product_category": parentProductCategory_controller.value.text.isEmpty?"":parentProductCategory_controller.value.text,
         "filter_product_category_type": product_category_type_Controller.value.text.isEmpty?"":product_category_type_Controller.value.text,
         "filter_type_of_call":  Type_of_call_controller.value.text.isEmpty?"":Type_of_call_controller.value.text,
         "filter_method_of_call": method_of_call_controller.value.text.isEmpty?"":method_of_call_controller.value.text,
@@ -1229,6 +1269,7 @@ class TaskApprovalvm extends GetxController{
       'accountNameCode':accountNameCode,
       'filterTaskCreationOnController': filterTaskCreationOnController.value.text,
       'product_category': product_category_controller.value.text,
+      'parentProductCategory_controller': parentProductCategory_controller.value.text,
       'product_category_type': product_category_type_Controller.value.text,
     });
     filterDataChecker.value='';
@@ -1255,6 +1296,7 @@ class TaskApprovalvm extends GetxController{
       accountNameCode=getFilterData["accountNameCode"];
       filterTaskCreationOnController.value.text=getFilterData["filterTaskCreationOnController"];
       product_category_controller.value.text=getFilterData["product_category"];
+      parentProductCategory_controller.value.text=getFilterData["parentProductCategory_controller"];
       product_category_type_Controller.value.text=getFilterData["product_category_type"];
 
       if(getFilterData["region_name"].toString().isNotEmpty && getFilterData["region_name"].toString()!=""){
