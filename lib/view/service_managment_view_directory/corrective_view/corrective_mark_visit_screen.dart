@@ -4,11 +4,13 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../constants/app_colors.dart';
 import '../../../constants/app_font_size.dart';
 import '../../../constants/static_methods.dart';
+import '../../../models/service_managment_model_directory/reasonModel/reason_master_response.dart';
 import '../../../reources/routes/routes_name.dart';
 import '../../../utils/app_utils.dart';
 import '../../../viewModel/service_managment_vm_directory/corrective_vm/corrective_vm.dart';
@@ -18,6 +20,9 @@ class CorrectiveMarkVisitScreen extends StatelessWidget{
   CorrectiveMarkVisitScreen({super.key});
   final corrective_indent_page_controller = Get.put(CorrectiveViewModel());
   Size size =Get.size;
+
+  static String _displayReasonCodeForOption(ReasonModel option) =>
+      option.reasonCode??"";
   @override
   Widget build(BuildContext context) {
     var serViceTatDate = StaticMethod.onlyDate(corrective_indent_page_controller
@@ -29,13 +34,46 @@ class CorrectiveMarkVisitScreen extends StatelessWidget{
        },
        child: Scaffold(
          appBar: AppBar(
-           title: Text(
-             'View Corrective',
-             style: GoogleFonts.poppins(
-               color: AllColors.whiteColor,
-               fontSize: 20.0,
-               fontWeight: FontWeight.w700,
-             ),
+           title: Row(
+             children: [
+               Text(
+                 'View Corrective',
+                 style: GoogleFonts.poppins(
+                   color: AllColors.whiteColor,
+                   fontSize: 20.0,
+                   fontWeight: FontWeight.w700,
+                 ),
+               ),
+               Spacer(),
+               Visibility(
+                 visible: corrective_indent_page_controller
+                     .service_corrective_details_list[0].serviceStatus?.toLowerCase()=='completed',
+                 child: GestureDetector(
+                   onTap: (){
+                     corrective_indent_page_controller.initialPosition = LatLng(
+                       double.tryParse(
+                           corrective_indent_page_controller
+                               .service_corrective_details_list[0]
+                               .fromLatitude ??
+                               '') ??
+                           0.0,
+                       double.tryParse(
+                           corrective_indent_page_controller
+                               .service_corrective_details_list[0]
+                               .fromLongitude ??
+                               '') ??
+                           0.0,
+                     );
+                     showMapBottomSheet(context);
+                   },
+
+                   child: Chip(
+                     label: Icon(Icons.location_on, color:AllColors.primaryDark1, size: 18,),
+                     shape: CircleBorder(),
+                   ),
+                 ),
+               )
+             ],
            ),
            iconTheme: IconThemeData(
              color: AllColors.whiteColor, // Change this to the desired color
@@ -1024,6 +1062,8 @@ class CorrectiveMarkVisitScreen extends StatelessWidget{
                                                    .clear();
                                               corrective_indent_page_controller.indent_visit_charge_controller.clear();
                                                remarkDialog(context);
+                                               corrective_indent_page_controller.action_taken_controller.clear();
+                                               corrective_indent_page_controller.problem_identified_controller.clear();
 
                                                // Your onPressed logic here
                                              },
@@ -1303,8 +1343,7 @@ class CorrectiveMarkVisitScreen extends StatelessWidget{
                   ),
                   InkWell(
                     onTap: () async {
-                      corrective_indent_page_controller.capture_flag.value =
-                      "Capture";
+                      corrective_indent_page_controller.capture_flag.value = "CAMERA";
                       corrective_indent_page_controller.upLoadImage(context);
                       // installation_indent_page_controller.upLoadImage(context);
                       //Navigator.of(context).pop();
@@ -1363,9 +1402,10 @@ class CorrectiveMarkVisitScreen extends StatelessWidget{
                   ),
                   InkWell(
                     onTap: () async {
-                      corrective_indent_page_controller.capture_flag.value =
-                      "Gallery";
+
+                      corrective_indent_page_controller.capture_flag.value = "GALLERY";
                       corrective_indent_page_controller.upLoadGalleryImage(context);
+
 
                       // installation_indent_page_controller.upLoadImage(context);
                       //Navigator.of(context).pop();
@@ -1457,73 +1497,176 @@ class CorrectiveMarkVisitScreen extends StatelessWidget{
             ],
           ),
 
-          content: Container(
-            height: size.height * .24,
-            child: Column(
-              children: [
-                TextFormField(
-                  controller: corrective_indent_page_controller
-                      .indent_remark_controller,
-                  decoration: InputDecoration(
-                    labelText: "Enter Remark ",
-                    labelStyle: TextStyle(color: AllColors.primaryDark1),
-                    enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: AllColors.primaryDark1),
-                    ),
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: AllColors.primaryDark1),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+
+              bindProblemIdentified(context,
+                  corrective_indent_page_controller.problem_identified_controller ,'Problem Identified'),
+
+              bindTakenAction(context,
+                  corrective_indent_page_controller.action_taken_controller ,'Action Taken'),
+              TextFormField(
+                controller: corrective_indent_page_controller
+                    .indent_remark_controller,
+                decoration: InputDecoration(
+                  labelText: "Enter Remark ",
+                  labelStyle: TextStyle(color: AllColors.primaryDark1),
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: AllColors.primaryDark1),
+                  ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: AllColors.primaryDark1),
+                  ),
+                ),
+              ),
+
+
+              TextFormField(
+                keyboardType: TextInputType.number,
+                readOnly: corrective_indent_page_controller.service_corrective_details_list[0].isWarranty==0?false:true,
+                controller: corrective_indent_page_controller
+                    .indent_visit_charge_controller,
+                decoration: InputDecoration(
+                  labelText: "Visit Charge ",
+                  labelStyle: TextStyle(color: AllColors.primaryDark1),
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: AllColors.primaryDark1),
+                  ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: AllColors.primaryDark1),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 13,
+              ),
+              ElevatedButton(
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all<Color>(
+                    AllColors.primaryDark1,
+                  ),
+                ),
+                onPressed: () {
+                  Navigator.pop(context);
+                  GeoTaggingMarkDialog(context);
+                 /* Navigator.pop(context);
+                  corrective_indent_page_controller
+                      .CorrectiveMarkComplete(
+                      corrective_indent_page_controller
+                          .service_corrective_details_list[0].id
+                          .toString());*/
+                },
+                child: Container(
+                  width: 80,
+                  alignment: Alignment.center,
+                  child: Text(
+                    'Ok',
+                    style: GoogleFonts.poppins(
+                      color: AllColors.customDarkerWhite,
+                      fontSize: AllFontSize.fourtine,
+                      fontWeight: FontWeight.w700,
                     ),
                   ),
                 ),
-                TextFormField(
-                  keyboardType: TextInputType.number,
-                  readOnly: corrective_indent_page_controller.service_corrective_details_list[0].isWarranty==0?false:true,
-                  controller: corrective_indent_page_controller
-                      .indent_visit_charge_controller,
-                  decoration: InputDecoration(
-                    labelText: "Visit Charge ",
-                    labelStyle: TextStyle(color: AllColors.primaryDark1),
-                    enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: AllColors.primaryDark1),
-                    ),
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: AllColors.primaryDark1),
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: 13,
-                ),
-                ElevatedButton(
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all<Color>(
-                      AllColors.primaryDark1,
-                    ),
-                  ),
-                  onPressed: () {
-                    Navigator.pop(context);
-                    GeoTaggingMarkDialog(context);
-                   /* Navigator.pop(context);
-                    corrective_indent_page_controller
-                        .CorrectiveMarkComplete(
-                        corrective_indent_page_controller
-                            .service_corrective_details_list[0].id
-                            .toString());*/
-                  },
-                  child: Container(
-                    width: 80,
-                    alignment: Alignment.center,
-                    child: Text(
-                      'Ok',
-                      style: GoogleFonts.poppins(
-                        color: AllColors.customDarkerWhite,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w700,
+              )
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  bindProblemIdentified(BuildContext context, TextEditingController controller, String title) {
+    corrective_indent_page_controller.reason_master_list.value=[];
+    return Autocomplete<ReasonModel>(
+      displayStringForOption: _displayReasonCodeForOption,
+      optionsBuilder: (TextEditingValue textEditingValue) async {
+        if (textEditingValue.text.isEmpty) {
+          return corrective_indent_page_controller.reason_master_list.value;
+        }
+        return await corrective_indent_page_controller
+            .getSearchReasonMaster(textEditingValue.text,title);
+      },
+      onSelected: (ReasonModel selection) {
+        print(selection.reasonCode);
+        controller.text =
+            _displayReasonCodeForOption(selection).toString();
+        corrective_indent_page_controller.problem_Identified_des.value =
+        selection.reasonDescription??"";
+        FocusScope.of(context).unfocus();
+      },
+      fieldViewBuilder: (BuildContext context, TextEditingController controller,
+          FocusNode focusNode, VoidCallback onFieldSubmitted) {
+        return TextField(
+          onChanged: (value) {
+            if (value.isEmpty) {
+              FocusScope.of(context).unfocus();
+            }
+            controller.text =
+                value;
+          },
+          cursorColor: AllColors.primaryDark1,
+          controller: controller
+            ..text = controller.text,
+          focusNode: focusNode,
+          decoration: InputDecoration(
+            contentPadding: EdgeInsets.symmetric(
+                vertical: AllFontSize.two, horizontal: AllFontSize.one),
+            hintText: 'Search ${title}',
+            labelText: 'Search ${title}',
+            suffixIcon: Icon(Icons.arrow_drop_down),
+            hintStyle: GoogleFonts.poppins(
+                color: AllColors.primaryDark1,
+                fontWeight: FontWeight.w300,
+                fontSize: AllFontSize.ten),
+            labelStyle: GoogleFonts.poppins(
+                color: AllColors.primaryDark1,
+                // fontWeight: FontWeight.w700,
+                fontSize: AllFontSize.sisxteen),
+            focusedBorder: UnderlineInputBorder(
+              borderSide: BorderSide(
+                  color: AllColors.primaryDark1), // Change the color to green
+            ),
+          ),
+        );
+      },
+      optionsViewBuilder: (BuildContext context,
+          AutocompleteOnSelected<ReasonModel> onSelected,
+          Iterable<ReasonModel> suggestions) {
+        return Align(
+          alignment: Alignment.topLeft,
+          child: Material(
+            elevation: 4.0,
+            child: Container(
+              color: AllColors.grayColor1,
+              width: size.width * .61,
+              height: size.height * .15,
+              constraints: BoxConstraints(maxHeight: 200),
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: suggestions.length,
+                itemBuilder: (context, index) {
+                  final ReasonModel option = suggestions.elementAt(index);
+                  return GestureDetector(
+                    onTap: () {
+                      onSelected(option);
+                    },
+                    child: Container(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text(
+                        option.reasonCode.toString(),
+                        style: GoogleFonts.poppins(
+                            color: AllColors.blackColor,
+                            fontWeight: FontWeight.w300,
+                            fontSize: AllFontSize
+                                .sisxteen // Change the text color here
+                        ),
                       ),
                     ),
-                  ),
-                )
-              ],
+                  );
+                },
+              ),
             ),
           ),
         );
@@ -1531,7 +1674,104 @@ class CorrectiveMarkVisitScreen extends StatelessWidget{
     );
   }
 
-
+  bindTakenAction(BuildContext context, TextEditingController controller, String title) {
+    corrective_indent_page_controller.action_taken_list.value=[];
+    return Autocomplete<ReasonModel>(
+      displayStringForOption: _displayReasonCodeForOption,
+      optionsBuilder: (TextEditingValue textEditingValue) async {
+        if (textEditingValue.text.isEmpty) {
+          return corrective_indent_page_controller.action_taken_list.value;
+          // return const Iterable<VehicleTypeResponse>.empty();
+        }
+        return await corrective_indent_page_controller
+            .getActionTaken(textEditingValue.text,title);
+      },
+      onSelected: (ReasonModel selection) {
+        print(selection.reasonCode);
+        controller.text =
+            _displayReasonCodeForOption(selection).toString();
+        corrective_indent_page_controller.action_taken_des.value =
+        selection.reasonDescription??"";
+        FocusScope.of(context).unfocus();
+      },
+      fieldViewBuilder: (BuildContext context, TextEditingController controller,
+          FocusNode focusNode, VoidCallback onFieldSubmitted) {
+        return TextField(
+          onChanged: (value) {
+            if (value.isEmpty) {
+              FocusScope.of(context).unfocus();
+            }
+            controller.text =
+                value;
+          },
+          cursorColor: AllColors.primaryDark1,
+          controller: controller
+            ..text = controller.text,
+          focusNode: focusNode,
+          //onSubmitted: onFieldSubmitted,
+          decoration: InputDecoration(
+            contentPadding: EdgeInsets.symmetric(
+                vertical: AllFontSize.two, horizontal: AllFontSize.one),
+            hintText: 'Search ${title}',
+            labelText: 'Search ${title}',
+            suffixIcon: Icon(Icons.arrow_drop_down),
+            hintStyle: GoogleFonts.poppins(
+                color: AllColors.primaryDark1,
+                fontWeight: FontWeight.w300,
+                fontSize: AllFontSize.ten),
+            labelStyle: GoogleFonts.poppins(
+                color: AllColors.primaryDark1,
+                // fontWeight: FontWeight.w700,
+                fontSize: AllFontSize.sisxteen),
+            focusedBorder: UnderlineInputBorder(
+              borderSide: BorderSide(
+                  color: AllColors.primaryDark1), // Change the color to green
+            ),
+          ),
+        );
+      },
+      optionsViewBuilder: (BuildContext context,
+          AutocompleteOnSelected<ReasonModel> onSelected,
+          Iterable<ReasonModel> suggestions) {
+        return Align(
+          alignment: Alignment.topLeft,
+          child: Material(
+            elevation: 4.0,
+            child: Container(
+              color: AllColors.grayColor1,
+              width: size.width * .61,
+              height: size.height * .15,
+              constraints: BoxConstraints(maxHeight: 200),
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: suggestions.length,
+                itemBuilder: (context, index) {
+                  final ReasonModel option = suggestions.elementAt(index);
+                  return GestureDetector(
+                    onTap: () {
+                      onSelected(option);
+                    },
+                    child: Container(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text(
+                        option.reasonCode.toString(),
+                        style: GoogleFonts.poppins(
+                            color: AllColors.blackColor,
+                            fontWeight: FontWeight.w300,
+                            fontSize: AllFontSize
+                                .sisxteen // Change the text color here
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
 
   Widget setupAlertDialoadContainer() {
     if(corrective_indent_page_controller.item_details_list.length>0
@@ -1786,6 +2026,109 @@ class CorrectiveMarkVisitScreen extends StatelessWidget{
     } else {
       print("Can't open dial pad.");
     }
+  }
+
+  void showMapBottomSheet(BuildContext context,
+      ) {
+    showModalBottomSheet(context: context,
+        backgroundColor: Colors.transparent,
+        useSafeArea: true,
+        builder: (context,){
+          return Container(
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+            ),
+            padding: EdgeInsets.only(
+              bottom: MediaQuery.of(context).viewInsets.bottom,
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Center(
+                  child: Container(
+                    margin: const EdgeInsets.only(top: 12, bottom: 16),
+                    width: 40,
+                    height: 4,
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade200,
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: AllColors.primaryDark1,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: const Icon(Icons.zoom_out_map,
+                            color: Colors.white, size: 18),
+                      ),
+                      const SizedBox(width: 10),
+                      Center(
+                        child: Text(
+                          "Map View",
+                          style: GoogleFonts.poppins(
+                            fontWeight: FontWeight.w700,
+                            fontSize: AllFontSize.eighteen,
+                            color: const Color(0xFF1A1A2E),
+                          ),
+                        ),
+                      ),
+
+                      Spacer(),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.pop(context);
+                        } ,
+                        child: Container(
+                          padding: const EdgeInsets.all(6),
+                          decoration: BoxDecoration(
+                            color: Colors.grey.shade200,
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Icon(Icons.close_rounded,
+                              size: 16, color: Colors.black54),
+                        ),
+                      ),
+
+
+
+                    ],
+                  ),
+                ),
+                Divider(),
+                Expanded(
+                  child: GoogleMap(
+                    initialCameraPosition: CameraPosition(
+                      target: corrective_indent_page_controller.initialPosition,
+                      zoom: 15,
+                    ),
+                    onMapCreated: (GoogleMapController controller) {
+                      corrective_indent_page_controller.mapController = controller;
+                    },
+                    markers: {
+                      Marker(
+                        markerId: const MarkerId("current"),
+                        position: corrective_indent_page_controller.initialPosition,
+                        infoWindow: const InfoWindow(
+                          title: "My Location",
+                        ),
+                      ),
+                    },
+                  ),
+                ),
+              ],
+            ),
+          );
+        });
   }
 
 }

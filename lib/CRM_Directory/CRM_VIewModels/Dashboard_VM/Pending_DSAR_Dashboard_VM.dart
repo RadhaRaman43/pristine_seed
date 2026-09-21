@@ -19,6 +19,7 @@ import '../../CRM_Models/TaskMaster_model/Call_Status_Master_model.dart';
 import '../../CRM_Models/TaskMaster_model/Item_Category_Mast_model.dart';
 import '../../CRM_Models/dashboard_models/call_DashBoard_Model.dart';
 import '../../CRM_Models/dashboard_models/call_dashboard_user_wise_Data_model.dart';
+import '../../CRM_Models/sale_cycle_modal/alongWithPersonModel.dart';
 import '../../CRM_Repository/dashboard_repository/dashboard_repo.dart';
 
 class PendingDsarDashboardVm extends GetxController{
@@ -68,8 +69,11 @@ class PendingDsarDashboardVm extends GetxController{
   RxBool allSelected = false.obs;
   RxBool isSel = false.obs;
   var searchController=TextEditingController().obs;
+  RxList<AlongWithPersonModel> AlongPersonWith_list = <AlongWithPersonModel>[].obs;
+  RxList<AlongWithPersonModel> SelectedAlongPersonWith_list = <AlongWithPersonModel>[].obs;
 
   var filterCustomDateController=TextEditingController().obs;
+  var filterAlongWithPersonNameController=TextEditingController().obs;
   var task_Status_controller=TextEditingController().obs;
   var lastActivity_Status_controller=TextEditingController().obs;
   var AccountOwner_controller=TextEditingController().obs;
@@ -272,6 +276,7 @@ class PendingDsarDashboardVm extends GetxController{
         "filter_task_approval_status": TaskStatusForApi.isEmpty?"Approved":TaskStatusForApi,
         "filter_region_name": RegionNameForApi.isEmpty?"":RegionNameForApi,
         "filter_cluster_name": ClusterNameForApi.isEmpty?"":ClusterNameForApi,
+        "filter_along_with_person_name":filterAlongWithPersonNameController.value.text.isEmpty?"":filterAlongWithPersonNameController.value.text,
       };
 
       print(data);
@@ -1038,4 +1043,39 @@ class PendingDsarDashboardVm extends GetxController{
     return map;
   }
 
+
+  getEmpMstEmailByApi() async{
+    try{
+      Map<String , String> data = {
+        "email_id": email
+      };
+      print(data);
+      loading.value = true;
+      String value = await _api.EmpMstEmailByGet(data, sessionManagement);
+      print(value);
+      final JsonResponse = json.decode(value);
+      if (JsonResponse is List) {
+        List<AlongWithPersonModel> response =
+        JsonResponse.map((e) => AlongWithPersonModel.fromJson(e))
+            .toList();
+        if (response != null &&
+            response.length > 0 &&
+            response[0].condition == "True") {
+          loading.value = false;
+          AlongPersonWith_list.value=response;
+        } else {
+          loading.value = false;
+          AlongPersonWith_list.value=[];
+          Utils.sanckBarError("Error!", "No Data Found");
+          //service_installation_details_list.value=[];
+        }
+      } else {
+        loading.value = false;
+        Utils.sanckBarException("Api Error!", JsonResponse);
+      }
+    }catch(e){
+      loading.value = false;
+      print(e);
+    }
+  }
 }

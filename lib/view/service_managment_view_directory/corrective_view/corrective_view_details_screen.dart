@@ -4,9 +4,11 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:navigation_drawer_flutter/models/service_managment_model_directory/serviceCorrectiveModel/corrective_details_model.dart';
 import 'package:navigation_drawer_flutter/view/custom_drawer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../component/default_button.dart';
 import '../../../constants/app_colors.dart';
 import '../../../constants/app_font_size.dart';
 import '../../../constants/static_methods.dart';
@@ -65,8 +67,7 @@ class CorrectiveViewDetailsScreen extends StatelessWidget {
                   width: double.infinity,
                   child: Column(
                     children: [
-                      Obx(
-                        () {
+                      Obx(() {
                           return Container(
                             margin: EdgeInsets.only(top: 0.3),
                             child: Visibility(
@@ -105,7 +106,7 @@ class CorrectiveViewDetailsScreen extends StatelessWidget {
                                 Text(
                                   corrective_deatils_page_controller
                                       .service_corrective_details_list[0]
-                                      .serviceNo!,
+                                      .serviceNo??"",
                                   style: GoogleFonts.poppins(
                                     color: AllColors.textColor,
                                     fontSize: AllFontSize.fourtine,
@@ -133,7 +134,7 @@ class CorrectiveViewDetailsScreen extends StatelessWidget {
                                 Text(
                                   corrective_deatils_page_controller
                                       .service_corrective_details_list[0]
-                                      .customerNo!,
+                                      .customerNo??"",
                                   style: GoogleFonts.poppins(
                                     color: AllColors.textColor,
                                     fontSize: AllFontSize.fourtine,
@@ -162,7 +163,7 @@ class CorrectiveViewDetailsScreen extends StatelessWidget {
                                   child: Tooltip(
                                     message:corrective_deatils_page_controller
                                         .service_corrective_details_list[0]
-                                        .customerName! ,
+                                        .customerName??"",
                                     child: Text(
                                       corrective_deatils_page_controller
                                           .service_corrective_details_list[0]
@@ -350,51 +351,86 @@ class CorrectiveViewDetailsScreen extends StatelessWidget {
                           ],
                         ),
                       ),
-                      Container(
-                          margin: EdgeInsets.only(top: 2),
-                         // padding: EdgeInsets.only(left: 10.0, top: 5, right: 10, bottom: 10),
-                          //height: 200,
-                          width: double.infinity,
-                          decoration: BoxDecoration(boxShadow: <BoxShadow>[
-                            BoxShadow(
-                                offset: Offset(0.0, 1.0),
-                                color: Colors.black54,
-                                blurRadius: 1.0)
-                          ], color: Colors.white),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                decoration: BoxDecoration(boxShadow: <BoxShadow>[
-                                  BoxShadow(
-                                      offset: Offset(0.0, 1.0),
-                                      color: Colors.black54,
-                                      blurRadius: 1.0)
-                                ], color: Colors.white),
-                                padding: EdgeInsets.only(left: 10.0, top: 5, right: 10, bottom: 10),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      "Product Details ",
-                                      style: GoogleFonts.poppins(
-                                        color: AllColors.primaryDark1,
-                                        fontSize: AllFontSize.sisxteen,
-                                        fontWeight: FontWeight.w700,
+
+                      Obx((){
+                        return Container(
+                            margin: EdgeInsets.only(top: 2),
+                            // padding: EdgeInsets.only(left: 10.0, top: 5, right: 10, bottom: 10),
+                            //height: 200,
+                            width: double.infinity,
+                            decoration: BoxDecoration(boxShadow: <BoxShadow>[
+                              BoxShadow(
+                                  offset: Offset(0.0, 1.0),
+                                  color: Colors.black54,
+                                  blurRadius: 1.0)
+                            ], color: Colors.white),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  decoration: BoxDecoration(boxShadow: <BoxShadow>[
+                                    BoxShadow(
+                                        offset: Offset(0.0, 1.0),
+                                        color: Colors.black54,
+                                        blurRadius: 1.0)
+                                  ], color: Colors.white),
+                                  padding: EdgeInsets.only(left: 10.0, top: 5, right: 10, bottom: 10),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "Product Details ",
+                                        style: GoogleFonts.poppins(
+                                          color: AllColors.primaryDark1,
+                                          fontSize: AllFontSize.sisxteen,
+                                          fontWeight: FontWeight.w700,
+                                        ),
                                       ),
-                                    ),
-                                    SizedBox(
-                                      height: 3,
-                                    ),
-                                    GestureDetector(
-                                      onTap: () {
-                                        corrective_deatils_page_controller.getItemDetails();
-                                        ShowItemDetailsDialog(context);
-                                      },
-                                      child: Row(
+                                      SizedBox(
+                                        height: 3,
+                                      ),
+                                      GestureDetector(
+                                        onTap: () {
+                                          corrective_deatils_page_controller.getItemDetails();
+                                          ShowItemDetailsDialog(context);
+                                        },
+                                        child: Row(
+                                          children: [
+                                            Text(
+                                              "Product",
+                                              style: GoogleFonts.poppins(
+                                                color: AllColors.primaryDark1,
+                                                fontSize: AllFontSize.fourtine,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                            Spacer(),
+                                            Container(
+                                              width: size.width*.55,
+                                              child: Tooltip(
+                                                message: "${corrective_deatils_page_controller.service_corrective_details_list[0].itemName!} (${corrective_deatils_page_controller.service_corrective_details_list[0].itemNo!})",
+                                                child: Text(
+                                                  "${corrective_deatils_page_controller.service_corrective_details_list[0].itemName!} (${corrective_deatils_page_controller.service_corrective_details_list[0].itemNo!})",
+                                                  style: GoogleFonts.poppins(
+                                                    color: AllColors.textColor,
+                                                    fontSize: AllFontSize.fourtine,
+                                                    fontWeight: FontWeight.w500,
+                                                  ),
+                                                  overflow: TextOverflow.ellipsis,
+                                                  textAlign: TextAlign.end,
+                                                ),
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 3,
+                                      ),
+                                      Row(
                                         children: [
                                           Text(
-                                            "Product",
+                                            "Category",
                                             style: GoogleFonts.poppins(
                                               color: AllColors.primaryDark1,
                                               fontSize: AllFontSize.fourtine,
@@ -405,9 +441,9 @@ class CorrectiveViewDetailsScreen extends StatelessWidget {
                                           Container(
                                             width: size.width*.55,
                                             child: Tooltip(
-                                              message: "${corrective_deatils_page_controller.service_corrective_details_list[0].itemName!} (${corrective_deatils_page_controller.service_corrective_details_list[0].itemNo!})",
+                                              message:corrective_deatils_page_controller.service_corrective_details_list[0].categoryName?? "" ,
                                               child: Text(
-                                                "${corrective_deatils_page_controller.service_corrective_details_list[0].itemName!} (${corrective_deatils_page_controller.service_corrective_details_list[0].itemNo!})",
+                                                "${corrective_deatils_page_controller.service_corrective_details_list[0].categoryName?? ""}",
                                                 style: GoogleFonts.poppins(
                                                   color: AllColors.textColor,
                                                   fontSize: AllFontSize.fourtine,
@@ -420,434 +456,260 @@ class CorrectiveViewDetailsScreen extends StatelessWidget {
                                           )
                                         ],
                                       ),
-                                    ),
-                                    SizedBox(
-                                      height: 3,
-                                    ),
-                                    Row(
-                                      children: [
-                                        Text(
-                                          "Category",
-                                          style: GoogleFonts.poppins(
-                                            color: AllColors.primaryDark1,
-                                            fontSize: AllFontSize.fourtine,
-                                            fontWeight: FontWeight.w500,
-                                          ),
-                                        ),
-                                        Spacer(),
-                                        Container(
-                                          width: size.width*.55,
-                                          child: Tooltip(
-                                            message:corrective_deatils_page_controller.service_corrective_details_list[0].categoryName?? "" ,
-                                            child: Text(
-                                              "${corrective_deatils_page_controller.service_corrective_details_list[0].categoryName?? ""}",
-                                              style: GoogleFonts.poppins(
-                                                color: AllColors.textColor,
-                                                fontSize: AllFontSize.fourtine,
-                                                fontWeight: FontWeight.w500,
-                                              ),
-                                              overflow: TextOverflow.ellipsis,
-                                              textAlign: TextAlign.end,
+                                      SizedBox(
+                                        height: 3,
+                                      ),
+                                      Row(
+                                        children: [
+                                          Text(
+                                            "Serial No. ",
+                                            style: GoogleFonts.poppins(
+                                              color: AllColors.primaryDark1,
+                                              fontSize: AllFontSize.fourtine,
+                                              fontWeight: FontWeight.w500,
                                             ),
                                           ),
-                                        )
-                                      ],
-                                    ),
-                                    SizedBox(
-                                      height: 3,
-                                    ),
-                                    Row(
-                                      children: [
-                                        Text(
-                                          "Serial No. ",
-                                          style: GoogleFonts.poppins(
-                                            color: AllColors.primaryDark1,
-                                            fontSize: AllFontSize.fourtine,
-                                            fontWeight: FontWeight.w500,
+                                          Spacer(),
+                                          Text(
+                                            corrective_deatils_page_controller
+                                                .service_corrective_details_list[0]
+                                                .serialNo!,
+                                            style: GoogleFonts.poppins(
+                                              color: AllColors.textColor,
+                                              fontSize: AllFontSize.fourtine,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                            textAlign: TextAlign.end,
+                                          )
+                                        ],
+                                      ),
+                                      SizedBox(
+                                        height: 3,
+                                      ),
+                                      Row(
+                                        children: [
+                                          Text(
+                                            "Service Tat",
+                                            style: GoogleFonts.poppins(
+                                              color: AllColors.primaryDark1,
+                                              fontSize: AllFontSize.fourtine,
+                                              fontWeight: FontWeight.w500,
+                                            ),
                                           ),
-                                        ),
-                                        Spacer(),
-                                        Text(
-                                          corrective_deatils_page_controller
-                                              .service_corrective_details_list[0]
-                                              .serialNo!,
-                                          style: GoogleFonts.poppins(
-                                            color: AllColors.textColor,
-                                            fontSize: AllFontSize.fourtine,
-                                            fontWeight: FontWeight.w500,
-                                          ),
-                                          textAlign: TextAlign.end,
-                                        )
-                                      ],
-                                    ),
-                                    SizedBox(
-                                      height: 3,
-                                    ),
-                                    Row(
-                                      children: [
-                                        Text(
-                                          "Service Tat",
-                                          style: GoogleFonts.poppins(
-                                            color: AllColors.primaryDark1,
-                                            fontSize: AllFontSize.fourtine,
-                                            fontWeight: FontWeight.w500,
-                                          ),
-                                        ),
-                                        Spacer(),
-                                        Text(
-                                          serViceTatDate!,
-                                          style: GoogleFonts.poppins(
-                                            color: AllColors.textColor,
-                                            fontSize: AllFontSize.fourtine,
-                                            fontWeight: FontWeight.w500,
-                                          ),
-                                          textAlign: TextAlign.end,
-                                        )
-                                      ],
-                                    ),
-                                    SizedBox(
-                                      height: 3,
-                                    ),
+                                          Spacer(),
+                                          Text(
+                                            serViceTatDate!,
+                                            style: GoogleFonts.poppins(
+                                              color: AllColors.textColor,
+                                              fontSize: AllFontSize.fourtine,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                            textAlign: TextAlign.end,
+                                          )
+                                        ],
+                                      ),
+                                      SizedBox(
+                                        height: 3,
+                                      ),
 
-                                    Row(
-                                      children: [
-                                        Text(
-                                          "Qty",
-                                          style: GoogleFonts.poppins(
-                                            color: AllColors.primaryDark1,
-                                            fontSize: AllFontSize.fourtine,
-                                            fontWeight: FontWeight.w500,
+                                      Row(
+                                        children: [
+                                          Text(
+                                            "Qty",
+                                            style: GoogleFonts.poppins(
+                                              color: AllColors.primaryDark1,
+                                              fontSize: AllFontSize.fourtine,
+                                              fontWeight: FontWeight.w500,
+                                            ),
                                           ),
-                                        ),
-                                        Spacer(),
-                                        Text(corrective_deatils_page_controller.service_corrective_details_list[0].qty.toString(),
-                                          style: GoogleFonts.poppins(
-                                            color: AllColors.textColor,
-                                            fontSize: AllFontSize.fourtine,
-                                            fontWeight: FontWeight.w500,
-                                          ),
-                                          overflow: TextOverflow.ellipsis,
-                                          textAlign: TextAlign.end,
-                                        )
-                                      ],
-                                    ),
-                                    SizedBox(
-                                      height: 3,
-                                    ),
-                                  ],
+                                          Spacer(),
+                                          Text(corrective_deatils_page_controller.service_corrective_details_list[0].qty.toString(),
+                                            style: GoogleFonts.poppins(
+                                              color: AllColors.textColor,
+                                              fontSize: AllFontSize.fourtine,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                            overflow: TextOverflow.ellipsis,
+                                            textAlign: TextAlign.end,
+                                          )
+                                        ],
+                                      ),
+                                      SizedBox(
+                                        height: 3,
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                              Obx(
-                                () {
+                                Obx(
+                                      () {
+                                    return Visibility(
+                                      visible: corrective_deatils_page_controller
+                                          .service_corrective_details_list[
+                                      0]
+                                          .complainReasonCode !=
+                                          null  &&  corrective_deatils_page_controller
+                                          .service_corrective_details_list[
+                                      0]
+                                          .complainReasonCode !=""
+                                          ? true
+                                          : false,
+                                      child: Container(
+                                        margin: EdgeInsets.only(top: 2),
+                                        decoration: BoxDecoration(boxShadow: <BoxShadow>[
+                                          BoxShadow(
+                                              offset: Offset(0.0, 1.0),
+                                              color: Colors.black54,
+                                              blurRadius: 1.0)
+                                        ], color: Colors.white),
+                                        padding: EdgeInsets.only(left: 10.0, top: 5, right: 10, bottom: 10),
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              "Complain Details ",
+                                              style: GoogleFonts.poppins(
+                                                color: AllColors.primaryDark1,
+                                                fontSize: AllFontSize.sisxteen,
+                                                fontWeight: FontWeight.w700,
+                                              ),
+                                            ),
+
+                                            Row(
+                                              children: [
+                                                Text(
+                                                  "Complain  Code",
+                                                  style: GoogleFonts.poppins(
+                                                    color: AllColors.primaryDark1,
+                                                    fontSize: AllFontSize.fourtine,
+                                                    fontWeight: FontWeight.w500,
+                                                  ),
+                                                ),
+                                                Spacer(),
+                                                Container(
+                                                  width: size.width*.55,
+                                                  child: Tooltip(
+                                                    message:"${corrective_deatils_page_controller.service_corrective_details_list[0].complainReasonDesc ?? ""}( ${corrective_deatils_page_controller.service_corrective_details_list[0].complainReasonCode ?? ""} )",
+                                                    child: Text(
+                                                      "${corrective_deatils_page_controller.service_corrective_details_list[0].complainReasonDesc ?? ""}( ${corrective_deatils_page_controller.service_corrective_details_list[0].complainReasonCode ?? ""} )",
+                                                      style: GoogleFonts.poppins(
+                                                        color: AllColors.textColor,
+                                                        fontSize: AllFontSize.fourtine,
+                                                        fontWeight: FontWeight.w500,
+                                                      ),
+                                                      overflow: TextOverflow.ellipsis,
+                                                      textAlign: TextAlign.end,
+                                                    ),
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+
+                                            SizedBox(
+                                              height: 3,
+                                            ),
+
+                                            Obx(
+                                                  () {
+                                                return Visibility(
+                                                  visible: corrective_deatils_page_controller
+                                                      .service_corrective_details_list[
+                                                  0]
+                                                      .complainRemark !=
+                                                      null &&
+                                                      corrective_deatils_page_controller
+                                                          .service_corrective_details_list[
+                                                      0]
+                                                          .complainRemark !=
+                                                          "" &&
+                                                      corrective_deatils_page_controller
+                                                          .service_corrective_details_list[
+                                                      0]
+                                                          .complainRemark!
+                                                          .isNotEmpty
+                                                      ? true
+                                                      : false,
+                                                  child: Row(
+                                                    children: [
+                                                      Text(
+                                                        "Complain Remark",
+                                                        style: GoogleFonts.poppins(
+                                                          color: AllColors.primaryDark1,
+                                                          fontSize: AllFontSize.fourtine,
+                                                          fontWeight: FontWeight.w500,
+                                                        ),
+                                                      ),
+                                                      Spacer(),
+                                                      Container(
+                                                        width: size.width*.55,
+                                                        child: Tooltip(
+                                                          message: corrective_deatils_page_controller
+                                                              .service_corrective_details_list[
+                                                          0]
+                                                              .complainRemark ??
+                                                              "" ,
+                                                          child: Text(
+                                                            corrective_deatils_page_controller
+                                                                .service_corrective_details_list[
+                                                            0]
+                                                                .complainRemark ??
+                                                                "",
+                                                            style: GoogleFonts.poppins(
+                                                              color: AllColors.textColor,
+                                                              fontSize: AllFontSize.fourtine,
+                                                              fontWeight: FontWeight.w500,
+                                                            ),
+                                                            overflow: TextOverflow.ellipsis,
+                                                            textAlign: TextAlign.end,
+                                                          ),
+                                                        ),
+                                                      )
+                                                    ],
+                                                  ),
+                                                );
+                                              },
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+
+                                Obx(() {
+                                  var reschedule_date = StaticMethod.onlyDate(
+                                      corrective_deatils_page_controller
+                                          .service_corrective_details_list[0].rescheduleDatetime?? "");
                                   return Visibility(
                                     visible: corrective_deatils_page_controller
-                                        .service_corrective_details_list[
-                                    0]
-                                        .complainReasonCode !=
-                                        null  &&  corrective_deatils_page_controller
-                                        .service_corrective_details_list[
-                                    0]
-                                        .complainReasonCode !=""
-                                        ? true
-                                        : false,
+                                        .service_corrective_details_list[0]
+                                        .serviceStatus ==
+                                        "Rescheduled" ?true:false ,
                                     child: Container(
-                                      margin: EdgeInsets.only(top: 2),
+                                      padding: EdgeInsets.only(left: 10,right: 10),
                                       decoration: BoxDecoration(boxShadow: <BoxShadow>[
                                         BoxShadow(
                                             offset: Offset(0.0, 1.0),
                                             color: Colors.black54,
                                             blurRadius: 1.0)
                                       ], color: Colors.white),
-                                      padding: EdgeInsets.only(left: 10.0, top: 5, right: 10, bottom: 10),
                                       child: Column(
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            "Complain Details ",
+                                            "Re-Schedule Details ",
                                             style: GoogleFonts.poppins(
                                               color: AllColors.primaryDark1,
                                               fontSize: AllFontSize.sisxteen,
                                               fontWeight: FontWeight.w700,
                                             ),
                                           ),
-
-                                                Row(
-                                                children: [
-                                                  Text(
-                                                    "Complain  Code",
-                                                    style: GoogleFonts.poppins(
-                                                      color: AllColors.primaryDark1,
-                                                      fontSize: AllFontSize.fourtine,
-                                                      fontWeight: FontWeight.w500,
-                                                    ),
-                                                  ),
-                                                  Spacer(),
-                                                  Container(
-                                                    width: size.width*.55,
-                                                    child: Tooltip(
-                                                      message:"${corrective_deatils_page_controller.service_corrective_details_list[0].complainReasonDesc ?? ""}( ${corrective_deatils_page_controller.service_corrective_details_list[0].complainReasonCode ?? ""} )",
-                                                      child: Text(
-                                                        "${corrective_deatils_page_controller.service_corrective_details_list[0].complainReasonDesc ?? ""}( ${corrective_deatils_page_controller.service_corrective_details_list[0].complainReasonCode ?? ""} )",
-                                                        style: GoogleFonts.poppins(
-                                                          color: AllColors.textColor,
-                                                          fontSize: AllFontSize.fourtine,
-                                                          fontWeight: FontWeight.w500,
-                                                        ),
-                                                        overflow: TextOverflow.ellipsis,
-                                                        textAlign: TextAlign.end,
-                                                      ),
-                                                    ),
-                                                  )
-                                                ],
-                                              ),
-
                                           SizedBox(
                                             height: 3,
                                           ),
-
-                                          Obx(
-                                                () {
-                                              return Visibility(
-                                                visible: corrective_deatils_page_controller
-                                                    .service_corrective_details_list[
-                                                0]
-                                                    .complainRemark !=
-                                                    null &&
-                                                    corrective_deatils_page_controller
-                                                        .service_corrective_details_list[
-                                                    0]
-                                                        .complainRemark !=
-                                                        "" &&
-                                                    corrective_deatils_page_controller
-                                                        .service_corrective_details_list[
-                                                    0]
-                                                        .complainRemark!
-                                                        .isNotEmpty
-                                                    ? true
-                                                    : false,
-                                                child: Row(
-                                                  children: [
-                                                    Text(
-                                                      "Complain Remark",
-                                                      style: GoogleFonts.poppins(
-                                                        color: AllColors.primaryDark1,
-                                                        fontSize: AllFontSize.fourtine,
-                                                        fontWeight: FontWeight.w500,
-                                                      ),
-                                                    ),
-                                                    Spacer(),
-                                                    Container(
-                                                      width: size.width*.55,
-                                                      child: Tooltip(
-                                                        message: corrective_deatils_page_controller
-                                                            .service_corrective_details_list[
-                                                        0]
-                                                            .complainRemark ??
-                                                            "" ,
-                                                        child: Text(
-                                                          corrective_deatils_page_controller
-                                                              .service_corrective_details_list[
-                                                          0]
-                                                              .complainRemark ??
-                                                              "",
-                                                          style: GoogleFonts.poppins(
-                                                            color: AllColors.textColor,
-                                                            fontSize: AllFontSize.fourtine,
-                                                            fontWeight: FontWeight.w500,
-                                                          ),
-                                                          overflow: TextOverflow.ellipsis,
-                                                          textAlign: TextAlign.end,
-                                                        ),
-                                                      ),
-                                                    )
-                                                  ],
-                                                ),
-                                              );
-                                            },
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  );
-                                },
-                              ),
-
-                              Obx(() {
-                                var reschedule_date = StaticMethod.onlyDate(
-                                    corrective_deatils_page_controller
-                                        .service_corrective_details_list[0].rescheduleDatetime?? "");
-                                return Visibility(
-                                  visible: corrective_deatils_page_controller
-                                      .service_corrective_details_list[0]
-                                      .serviceStatus ==
-                                      "Rescheduled" ?true:false ,
-                                  child: Container(
-                                    padding: EdgeInsets.only(left: 10,right: 10),
-                                    decoration: BoxDecoration(boxShadow: <BoxShadow>[
-                                      BoxShadow(
-                                          offset: Offset(0.0, 1.0),
-                                          color: Colors.black54,
-                                          blurRadius: 1.0)
-                                    ], color: Colors.white),
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          "Re-Schedule Details ",
-                                          style: GoogleFonts.poppins(
-                                            color: AllColors.primaryDark1,
-                                            fontSize: AllFontSize.sisxteen,
-                                            fontWeight: FontWeight.w700,
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          height: 3,
-                                        ),
-                                        Row(
-                                          children: [
-                                            Text(
-                                              "R-Scheduled Code",
-                                              style: GoogleFonts.poppins(
-                                                color: AllColors.primaryDark1,
-                                                fontSize: AllFontSize.fourtine,
-                                                fontWeight: FontWeight.w500,
-                                              ),
-                                            ),
-                                            Spacer(),
-                                            Container(
-                                              width: size.width*.55,
-                                              child: Tooltip(
-                                                message:" ${ corrective_deatils_page_controller
-                                                    .service_corrective_details_list[0]
-                                                    .rescheduleReasonCode?? "" } ",
-                                                child: Text(" ${ corrective_deatils_page_controller
-                                                    .service_corrective_details_list[0]
-                                                    .rescheduleReasonCode?? ""}"
-                                                  ,
-                                                  style: GoogleFonts.poppins(
-                                                    color: AllColors.textColor,
-                                                    fontSize: AllFontSize.fourtine,
-                                                    fontWeight: FontWeight.w500,
-                                                  ),
-                                                  overflow: TextOverflow.ellipsis,
-                                                  textAlign: TextAlign.end,
-                                                ),
-                                              ),
-                                            )
-                                          ],
-                                        ),
-                                        SizedBox(
-                                          height: 3,
-                                        ),
-                                        Row(
-                                          children: [
-                                            Text(
-                                              "Description",
-                                              style: GoogleFonts.poppins(
-                                                color: AllColors.primaryDark1,
-                                                fontSize: AllFontSize.fourtine,
-                                                fontWeight: FontWeight.w500,
-                                              ),
-                                            ),
-                                            Spacer(),
-                                            Container(
-                                              width: size.width*.5,
-                                              child: Tooltip(
-                                                message:corrective_deatils_page_controller
-                                                    .service_corrective_details_list[0]
-                                                    .rescheduleReasonDesc?? "" ,
-                                                child: Text(
-                                                  corrective_deatils_page_controller
-                                                      .service_corrective_details_list[0]
-                                                      .rescheduleReasonDesc?? "",
-                                                  style: GoogleFonts.poppins(
-                                                    color: AllColors.textColor,
-                                                    fontSize: AllFontSize.fourtine,
-                                                    fontWeight: FontWeight.w500,
-                                                  ),
-                                                    textAlign: TextAlign.end
-                                                ),
-                                              ),
-                                            )
-                                          ],
-                                        ),
-                                        SizedBox(
-                                          height: 3,
-                                        ),
-                                        Row(
-                                          children: [
-                                            Text(
-                                              "Remark",
-                                              style: GoogleFonts.poppins(
-                                                color: AllColors.primaryDark1,
-                                                fontSize: AllFontSize.fourtine,
-                                                fontWeight: FontWeight.w500,
-                                              ),
-                                            ),
-                                            Spacer(),
-                                            Container(
-                                              width: size.width*.5,
-                                              child: Tooltip(
-                                                message:corrective_deatils_page_controller
-                                                    .service_corrective_details_list[0]
-                                                    .rescheduleRemark?? "" ,
-                                                child: Text(
-                                                  corrective_deatils_page_controller
-                                                      .service_corrective_details_list[0]
-                                                      .rescheduleRemark?? "",
-                                                  style: GoogleFonts.poppins(
-                                                    color: AllColors.textColor,
-                                                    fontSize: AllFontSize.fourtine,
-                                                    fontWeight: FontWeight.w500,
-                                                  ),
-                                                  overflow: TextOverflow.ellipsis,
-                                                  textAlign: TextAlign.end,
-                                                ),
-                                              ),
-                                            )
-                                          ],
-                                        ),
-
-                                        SizedBox(
-                                          height: 3,
-                                        ),
-                                        Row(
-                                          children: [
-                                            Text(
-                                              "Date",
-                                              style: GoogleFonts.poppins(
-                                                color: AllColors.primaryDark1,
-                                                fontSize: AllFontSize.fourtine,
-                                                fontWeight: FontWeight.w500,
-                                              ),
-                                            ),
-                                            Spacer(),
-                                            Text(
-                                              reschedule_date!,
-                                              style: GoogleFonts.poppins(
-                                                color: AllColors.textColor,
-                                                fontSize: AllFontSize.fourtine,
-                                                fontWeight: FontWeight.w500,
-                                              ),
-                                              overflow: TextOverflow.ellipsis,
-                                              textAlign: TextAlign.end,
-                                            )
-                                          ],
-                                        ),
-
-                                    SizedBox(
-                                      height: 3,
-                                    ),
-                                    Obx(() {
-                                        return  Visibility(
-                                          visible: corrective_deatils_page_controller
-                                              .service_corrective_details_list[0]
-                                              .isUnderApproval==0 && corrective_deatils_page_controller
-                                              .service_corrective_details_list[0].serviceStatus=="Rescheduled"?true:false,
-                                          child: Row(
+                                          Row(
                                             children: [
                                               Text(
-                                                "Status",
+                                                "R-Scheduled Code",
                                                 style: GoogleFonts.poppins(
                                                   color: AllColors.primaryDark1,
                                                   fontSize: AllFontSize.fourtine,
@@ -855,64 +717,205 @@ class CorrectiveViewDetailsScreen extends StatelessWidget {
                                                 ),
                                               ),
                                               Spacer(),
-                                              Tooltip(
-                                                message:corrective_deatils_page_controller
-                                                    .service_corrective_details_list[0].recheduleApprovalRemark??"" ,
-                                                child: Text(corrective_deatils_page_controller
-                                                    .service_corrective_details_list[0].recheduleApprovalStatus?? "",
-                                                  style: GoogleFonts.poppins(
-                                                    color: AllColors.redColor,
-                                                    fontSize: AllFontSize.fourtine,
-                                                    fontWeight: FontWeight.w500,
+                                              Container(
+                                                width: size.width*.55,
+                                                child: Tooltip(
+                                                  message:" ${ corrective_deatils_page_controller
+                                                      .service_corrective_details_list[0]
+                                                      .rescheduleReasonCode?? "" } ",
+                                                  child: Text(" ${ corrective_deatils_page_controller
+                                                      .service_corrective_details_list[0]
+                                                      .rescheduleReasonCode?? ""}"
+                                                    ,
+                                                    style: GoogleFonts.poppins(
+                                                      color: AllColors.textColor,
+                                                      fontSize: AllFontSize.fourtine,
+                                                      fontWeight: FontWeight.w500,
+                                                    ),
+                                                    overflow: TextOverflow.ellipsis,
+                                                    textAlign: TextAlign.end,
                                                   ),
-                                                  textAlign: TextAlign.end,
                                                 ),
-                                              ),
+                                              )
                                             ],
                                           ),
-                                        );
-                                      },
-                                      // child:
-                                    ),
-                                    SizedBox(
-                                      height: 3,
-                                    ),
-                                    Obx(() {
-                                      return  Visibility(
-                                        visible: corrective_deatils_page_controller
-                                            .service_corrective_details_list[0]
-                                            .isUnderApproval==1 && corrective_deatils_page_controller
-                                            .service_corrective_details_list[0].serviceStatus=="Rescheduled" ?true:false,
-                                        child: Row(
-                                          children: [
-                                            Text(
-                                              "Status",
-                                              style: GoogleFonts.poppins(
-                                                color: AllColors.primaryDark1,
-                                                fontSize: AllFontSize.fourtine,
-                                                fontWeight: FontWeight.w500,
+                                          SizedBox(
+                                            height: 3,
+                                          ),
+                                          Row(
+                                            children: [
+                                              Text(
+                                                "Description",
+                                                style: GoogleFonts.poppins(
+                                                  color: AllColors.primaryDark1,
+                                                  fontSize: AllFontSize.fourtine,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
                                               ),
-                                            ),
-                                            Spacer(),
-                                            Text("Under Approval",
-                                              style: GoogleFonts.poppins(
-                                                color: AllColors.redColor,
-                                                fontSize: AllFontSize.fourtine,
-                                                fontWeight: FontWeight.w500,
+                                              Spacer(),
+                                              Container(
+                                                width: size.width*.5,
+                                                child: Tooltip(
+                                                  message:corrective_deatils_page_controller
+                                                      .service_corrective_details_list[0]
+                                                      .rescheduleReasonDesc?? "" ,
+                                                  child: Text(
+                                                      corrective_deatils_page_controller
+                                                          .service_corrective_details_list[0]
+                                                          .rescheduleReasonDesc?? "",
+                                                      style: GoogleFonts.poppins(
+                                                        color: AllColors.textColor,
+                                                        fontSize: AllFontSize.fourtine,
+                                                        fontWeight: FontWeight.w500,
+                                                      ),
+                                                      textAlign: TextAlign.end
+                                                  ),
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                          SizedBox(
+                                            height: 3,
+                                          ),
+                                          Row(
+                                            children: [
+                                              Text(
+                                                "Remark",
+                                                style: GoogleFonts.poppins(
+                                                  color: AllColors.primaryDark1,
+                                                  fontSize: AllFontSize.fourtine,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
                                               ),
-                                              textAlign: TextAlign.end,
-                                            ),
-                                          ],
-                                        ),
-                                      );
-                                    },)
-                                      ],
-                                    ),
-                                  ),
-                                );
-                              },),
+                                              Spacer(),
+                                              Container(
+                                                width: size.width*.5,
+                                                child: Tooltip(
+                                                  message:corrective_deatils_page_controller
+                                                      .service_corrective_details_list[0]
+                                                      .rescheduleRemark?? "" ,
+                                                  child: Text(
+                                                    corrective_deatils_page_controller
+                                                        .service_corrective_details_list[0]
+                                                        .rescheduleRemark?? "",
+                                                    style: GoogleFonts.poppins(
+                                                      color: AllColors.textColor,
+                                                      fontSize: AllFontSize.fourtine,
+                                                      fontWeight: FontWeight.w500,
+                                                    ),
+                                                    overflow: TextOverflow.ellipsis,
+                                                    textAlign: TextAlign.end,
+                                                  ),
+                                                ),
+                                              )
+                                            ],
+                                          ),
 
-                              Obx(() {
+                                          SizedBox(
+                                            height: 3,
+                                          ),
+                                          Row(
+                                            children: [
+                                              Text(
+                                                "Date",
+                                                style: GoogleFonts.poppins(
+                                                  color: AllColors.primaryDark1,
+                                                  fontSize: AllFontSize.fourtine,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                              ),
+                                              Spacer(),
+                                              Text(
+                                                reschedule_date!,
+                                                style: GoogleFonts.poppins(
+                                                  color: AllColors.textColor,
+                                                  fontSize: AllFontSize.fourtine,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                                overflow: TextOverflow.ellipsis,
+                                                textAlign: TextAlign.end,
+                                              )
+                                            ],
+                                          ),
+
+                                          SizedBox(
+                                            height: 3,
+                                          ),
+                                          Obx(() {
+                                            return  Visibility(
+                                              visible: corrective_deatils_page_controller
+                                                  .service_corrective_details_list[0]
+                                                  .isUnderApproval==0 && corrective_deatils_page_controller
+                                                  .service_corrective_details_list[0].serviceStatus=="Rescheduled"?true:false,
+                                              child: Row(
+                                                children: [
+                                                  Text(
+                                                    "Status",
+                                                    style: GoogleFonts.poppins(
+                                                      color: AllColors.primaryDark1,
+                                                      fontSize: AllFontSize.fourtine,
+                                                      fontWeight: FontWeight.w500,
+                                                    ),
+                                                  ),
+                                                  Spacer(),
+                                                  Tooltip(
+                                                    message:corrective_deatils_page_controller
+                                                        .service_corrective_details_list[0].recheduleApprovalRemark??"" ,
+                                                    child: Text(corrective_deatils_page_controller
+                                                        .service_corrective_details_list[0].recheduleApprovalStatus?? "",
+                                                      style: GoogleFonts.poppins(
+                                                        color: AllColors.redColor,
+                                                        fontSize: AllFontSize.fourtine,
+                                                        fontWeight: FontWeight.w500,
+                                                      ),
+                                                      textAlign: TextAlign.end,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            );
+                                          },
+                                            // child:
+                                          ),
+                                          SizedBox(
+                                            height: 3,
+                                          ),
+                                          Obx(() {
+                                            return  Visibility(
+                                              visible: corrective_deatils_page_controller
+                                                  .service_corrective_details_list[0]
+                                                  .isUnderApproval==1 && corrective_deatils_page_controller
+                                                  .service_corrective_details_list[0].serviceStatus=="Rescheduled" ?true:false,
+                                              child: Row(
+                                                children: [
+                                                  Text(
+                                                    "Status",
+                                                    style: GoogleFonts.poppins(
+                                                      color: AllColors.primaryDark1,
+                                                      fontSize: AllFontSize.fourtine,
+                                                      fontWeight: FontWeight.w500,
+                                                    ),
+                                                  ),
+                                                  Spacer(),
+                                                  Text("Under Approval",
+                                                    style: GoogleFonts.poppins(
+                                                      color: AllColors.redColor,
+                                                      fontSize: AllFontSize.fourtine,
+                                                      fontWeight: FontWeight.w500,
+                                                    ),
+                                                    textAlign: TextAlign.end,
+                                                  ),
+                                                ],
+                                              ),
+                                            );
+                                          },)
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                },),
+
+                                Obx(() {
                                   return Visibility(
                                     visible: corrective_deatils_page_controller
                                         .service_corrective_details_list[
@@ -1072,262 +1075,299 @@ class CorrectiveViewDetailsScreen extends StatelessWidget {
                                     ),
                                   );
                                 },
-                              ),
+                                ),
 
 
-                              Container(
-                               alignment: Alignment.bottomLeft,
-                                padding: EdgeInsets.all(5),
-                                child: Wrap(
-                                 spacing: 20.0,
-                                 runAlignment: WrapAlignment.spaceBetween,
-                                  alignment: WrapAlignment.spaceBetween,
-                                  children: [
-                                    //SizedBox(width: 50,),
-                                    Obx(
-                                          () {
-                                        return Padding(
-                                          padding: const EdgeInsets.only(left: 2.0),
-                                          child: Visibility(
-                                            visible: corrective_deatils_page_controller
-                                                .service_corrective_details_list[
-                                            0]
-                                                .serviceStatus ==
-                                                "Reassignment" ||
-                                                corrective_deatils_page_controller
-                                                    .service_corrective_details_list[
-                                                0]
-                                                    .serviceStatus ==
-                                                    "Completed"
-                                                ? false
-                                                : true,
-                                            child: ElevatedButton(
-
-                                                style:
-                                                ElevatedButton.styleFrom(
-
-
-                                                    backgroundColor:
-                                                    AllColors
-                                                        .textColor2,
-                                                    side: BorderSide(
-                                                        color: AllColors
-                                                            .primaryDark1,
-                                                        width: 1)),
-                                                onPressed: () {
-                                                  ReAssignRequestDialog(
-                                                      context);
-                                                },
-                                                child: Text(
-                                                  "Re- Assignment",
-                                                  style: GoogleFonts.poppins(
-                                                    color: AllColors
-                                                        .primaryDark1,
-                                                    fontSize:
-                                                    AllFontSize.fourtine,
-                                                    fontWeight:
-                                                    FontWeight.w500,
-                                                  ),
-                                                )),
-
-                                          ),
-                                        );
-                                      },
-                                    ),
-
-                                    //SizedBox(width: size.width*.2,),
-                                    Obx(
-                                      () {
-                                        return Padding(
-                                          padding: const EdgeInsets.only(left:2.0),
-                                          child: Visibility(
-                                            visible: (corrective_deatils_page_controller
-                                                .service_corrective_details_list[0]
-                                                .serviceStatus ==
-                                                "Rescheduled" && corrective_deatils_page_controller
-                                                .service_corrective_details_list[0]
-                                                .recheduleApprovalStatus ==
-                                                "Pending") ||corrective_deatils_page_controller
-                                                .service_corrective_details_list[0]
-                                                .serviceStatus ==
-                                                "Completed"?false:true,
-                                            child: ElevatedButton(
-                                                style:
-                                                ElevatedButton.styleFrom(
-                                                    backgroundColor:
-                                                    AllColors
-                                                        .textColor2,
-                                                    side: BorderSide(
-                                                        color: AllColors
-                                                            .primaryDark1,
-                                                        width: 1)),
-                                                onPressed: () {
-
-
-                                                  corrective_deatils_page_controller.reason_code_controller.clear();
+                                Container(
+                                  alignment: Alignment.bottomLeft,
+                                  padding: EdgeInsets.all(5),
+                                  child: Wrap(
+                                    spacing: 20.0,
+                                    runAlignment: WrapAlignment.spaceBetween,
+                                    alignment: WrapAlignment.spaceBetween,
+                                    children: [
+                                      //SizedBox(width: 50,),
+                                      Obx(
+                                            () {
+                                          return Padding(
+                                            padding: const EdgeInsets.only(left: 2.0),
+                                            child: Visibility(
+                                              visible: corrective_deatils_page_controller
+                                                  .service_corrective_details_list[
+                                              0]
+                                                  .serviceStatus ==
+                                                  "Reassignment" ||
                                                   corrective_deatils_page_controller
-                                                      .reschdule_remark_controller.clear();
-                                                  ReSchduleRequestDialog(
-                                                      context);
-                                                },
-                                                child: Text(
-                                                  "Re-Schedule",
-                                                  style: GoogleFonts.poppins(
-                                                    color: AllColors
-                                                        .primaryDark1,
-                                                    fontSize:
-                                                    AllFontSize.fourtine,
-                                                    fontWeight:
-                                                    FontWeight.w500,
-                                                  ),
-                                                )),
-                                          ),
-                                        );
-                                      },
-                                    //  child:
-                                    ),
-                                    Obx(
-                                          () {
+                                                      .service_corrective_details_list[
+                                                  0]
+                                                      .serviceStatus ==
+                                                      "Completed"
+                                                  ? false
+                                                  : true,
+                                              child: ElevatedButton(
+
+                                                  style:
+                                                  ElevatedButton.styleFrom(
+
+
+                                                      backgroundColor:
+                                                      AllColors
+                                                          .textColor2,
+                                                      side: BorderSide(
+                                                          color: AllColors
+                                                              .primaryDark1,
+                                                          width: 1)),
+                                                  onPressed: () {
+                                                    ReAssignRequestDialog(
+                                                        context);
+                                                  },
+                                                  child: Text(
+                                                    "Re- Assignment",
+                                                    style: GoogleFonts.poppins(
+                                                      color: AllColors
+                                                          .primaryDark1,
+                                                      fontSize:
+                                                      AllFontSize.fourtine,
+                                                      fontWeight:
+                                                      FontWeight.w500,
+                                                    ),
+                                                  )),
+
+                                            ),
+                                          );
+                                        },
+                                      ),
+
+                                      //SizedBox(width: size.width*.2,),
+                                      Obx(
+                                            () {
+                                          return Padding(
+                                            padding: const EdgeInsets.only(left:2.0),
+                                            child: Visibility(
+                                              visible: (corrective_deatils_page_controller
+                                                  .service_corrective_details_list[0]
+                                                  .serviceStatus ==
+                                                  "Rescheduled" && corrective_deatils_page_controller
+                                                  .service_corrective_details_list[0]
+                                                  .recheduleApprovalStatus ==
+                                                  "Pending") ||corrective_deatils_page_controller
+                                                  .service_corrective_details_list[0]
+                                                  .serviceStatus ==
+                                                  "Completed"?false:true,
+                                              child: ElevatedButton(
+                                                  style:
+                                                  ElevatedButton.styleFrom(
+                                                      backgroundColor:
+                                                      AllColors
+                                                          .textColor2,
+                                                      side: BorderSide(
+                                                          color: AllColors
+                                                              .primaryDark1,
+                                                          width: 1)),
+                                                  onPressed: () {
+
+
+                                                    corrective_deatils_page_controller.reason_code_controller.clear();
+                                                    corrective_deatils_page_controller
+                                                        .reschdule_remark_controller.clear();
+                                                    ReSchduleRequestDialog(
+                                                        context);
+                                                  },
+                                                  child: Text(
+                                                    "Re-Schedule",
+                                                    style: GoogleFonts.poppins(
+                                                      color: AllColors
+                                                          .primaryDark1,
+                                                      fontSize:
+                                                      AllFontSize.fourtine,
+                                                      fontWeight:
+                                                      FontWeight.w500,
+                                                    ),
+                                                  )),
+                                            ),
+                                          );
+                                        },
+                                        //  child:
+                                      ),
+                                      Obx(
+                                            () {
+                                          return Padding(
+                                            padding: const EdgeInsets.only(left: 2.0),
+                                            child: Visibility(
+                                              visible:
+                                              corrective_deatils_page_controller
+                                                  .service_corrective_details_list[
+                                              0]
+                                                  .serviceStatus ==
+                                                  "Reassignment" ||
+                                                  corrective_deatils_page_controller
+                                                      .service_corrective_details_list[
+                                                  0]
+                                                      .serviceStatus==
+                                                      "Completed"
+                                                  ? false
+                                                  : true,
+                                              child: ElevatedButton(
+                                                  style:
+                                                  ElevatedButton.styleFrom(
+                                                      backgroundColor:
+                                                      AllColors
+                                                          .textColor2,
+                                                      side: BorderSide(
+                                                          color: AllColors
+                                                              .primaryDark1,
+                                                          width: 1)),
+                                                  onPressed: () {
+                                                    corrective_deatils_page_controller
+                                                        .CorrectiveMarkVisitApi();
+                                                    //  markVisitDialog(context);
+                                                  },
+                                                  child: Text(
+                                                    "Mark Visit",
+                                                    style: GoogleFonts.poppins(
+                                                      color: AllColors
+                                                          .primaryDark1,
+                                                      fontSize:
+                                                      AllFontSize.fourtine,
+                                                      fontWeight:
+                                                      FontWeight.w500,
+                                                    ),
+                                                  )),
+                                            ),
+                                          );
+                                        },
+                                        //child:
+                                      ),
+                                      Obx(
+                                            () {
+                                          return Padding(
+                                            padding: const EdgeInsets.only(left: 2.0),
+                                            child: Visibility(
+                                              visible:
+                                              corrective_deatils_page_controller
+                                                  .service_corrective_details_list[
+                                              0]
+                                                  .serviceStatus ==
+                                                  "Completed" ||  corrective_deatils_page_controller
+                                                  .service_corrective_details_list[
+                                              0]
+                                                  .serviceStatus=="Reassignment"
+                                                  ? true
+                                                  : false,
+                                              child: ElevatedButton(
+                                                  style:
+                                                  ElevatedButton.styleFrom(
+                                                      backgroundColor:
+                                                      AllColors
+                                                          .textColor2,
+                                                      side: BorderSide(
+                                                          color: AllColors
+                                                              .primaryDark1,
+                                                          width: 1)),
+                                                  onPressed: () {
+                                                    Get.toNamed(RoutesName
+                                                        .corrective_markvisit_screen);
+                                                    corrective_deatils_page_controller
+                                                        .CorrectiveIndentHeaderListApi();
+
+                                                    //  markVisitDialog(context);
+                                                  },
+                                                  child: Text(
+                                                    "GoTo Next",
+                                                    style: GoogleFonts.poppins(
+                                                      color: AllColors
+                                                          .primaryDark1,
+                                                      fontSize:
+                                                      AllFontSize.fourtine,
+                                                      fontWeight:
+                                                      FontWeight.w300,
+                                                    ),
+                                                  )),
+                                            ),
+                                          );
+                                        },
+                                        //child:
+                                      ),
+
+
+                                      Obx(() {
                                         return Padding(
-                                          padding: const EdgeInsets.only(left: 2.0),
+                                          padding: const EdgeInsets.only(left: 15.0),
                                           child: Visibility(
                                             visible:
-                                            corrective_deatils_page_controller
-                                                .service_corrective_details_list[
-                                            0]
-                                                .serviceStatus ==
-                                                "Reassignment" ||
-                                                corrective_deatils_page_controller
-                                                    .service_corrective_details_list[
-                                                0]
-                                                    .serviceStatus==
-                                                    "Completed"
-                                                ? false
-                                                : true,
-                                            child: ElevatedButton(
-                                                style:
-                                                ElevatedButton.styleFrom(
-                                                    backgroundColor:
-                                                    AllColors
-                                                        .textColor2,
-                                                    side: BorderSide(
-                                                        color: AllColors
-                                                            .primaryDark1,
-                                                        width: 1)),
-                                                onPressed: () {
-                                                  corrective_deatils_page_controller
-                                                      .CorrectiveMarkVisitApi();
-                                                  //  markVisitDialog(context);
-                                                },
-                                                child: Text(
-                                                  "Mark Visit",
-                                                  style: GoogleFonts.poppins(
-                                                    color: AllColors
-                                                        .primaryDark1,
-                                                    fontSize:
-                                                    AllFontSize.fourtine,
-                                                    fontWeight:
-                                                    FontWeight.w500,
-                                                  ),
-                                                )),
-                                          ),
-                                        );
-                                      },
-                                      //child:
-                                    ),
-                                    Obx(
-                                          () {
-                                        return Padding(
-                                          padding: const EdgeInsets.only(left: 2.0),
-                                          child: Visibility(
-                                            visible:
-                                            corrective_deatils_page_controller
-                                                .service_corrective_details_list[
-                                            0]
-                                                .serviceStatus ==
-                                                "Completed" ||  corrective_deatils_page_controller
-                                                .service_corrective_details_list[
-                                            0]
-                                                .serviceStatus=="Reassignment"
+                                            corrective_deatils_page_controller.service_corrective_details_list[0].serviceStatus!=
+                                                "Completed"
                                                 ? true
                                                 : false,
                                             child: ElevatedButton(
-                                                style:
-                                                ElevatedButton.styleFrom(
+                                                style: ElevatedButton.styleFrom(
                                                     backgroundColor:
-                                                    AllColors
-                                                        .textColor2,
+                                                    AllColors.textColor2,
                                                     side: BorderSide(
                                                         color: AllColors
                                                             .primaryDark1,
                                                         width: 1)),
                                                 onPressed: () {
-                                                  Get.toNamed(RoutesName
-                                                      .corrective_markvisit_screen);
-                                                  corrective_deatils_page_controller
-                                                      .CorrectiveIndentHeaderListApi();
-
-                                                  //  markVisitDialog(context);
+                                                  showOffsetClosureDialog(context);
                                                 },
                                                 child: Text(
-                                                  "GoTo Next",
+                                                  "Offsite Closure",
                                                   style: GoogleFonts.poppins(
-                                                    color: AllColors
-                                                        .primaryDark1,
+                                                    color:
+                                                    AllColors.primaryDark1,
                                                     fontSize:
                                                     AllFontSize.fourtine,
-                                                    fontWeight:
-                                                    FontWeight.w300,
+                                                    fontWeight: FontWeight.w500,
                                                   ),
                                                 )),
                                           ),
                                         );
                                       },
-                                      //child:
-                                    ),
 
-
-                                    Obx(() {
-                                      return Padding(
-                                        padding: const EdgeInsets.only(left: 15.0),
-                                        child: Visibility(
-                                          visible:
-                                          corrective_deatils_page_controller.service_corrective_details_list[0].serviceStatus!=
-                                              "Completed"
-                                              ? true
-                                              : false,
-                                          child: ElevatedButton(
-                                              style: ElevatedButton.styleFrom(
-                                                  backgroundColor:
-                                                  AllColors.textColor2,
-                                                  side: BorderSide(
-                                                      color: AllColors
-                                                          .primaryDark1,
-                                                      width: 1)),
-                                              onPressed: () {
-                                                showOffsetClosureDialog(context);
-                                              },
-                                              child: Text(
-                                                "Offsite Closure",
-                                                style: GoogleFonts.poppins(
-                                                  color:
-                                                  AllColors.primaryDark1,
-                                                  fontSize:
-                                                  AllFontSize.fourtine,
-                                                  fontWeight: FontWeight.w500,
-                                                ),
-                                              )),
-                                        ),
-                                      );
-                                    },
-                                      //child:
-                                    ),
-                                  ],
+                                        //child:
+                                      ),
+                                      Obx(
+                                            () {
+                                          return Padding(
+                                            padding: const EdgeInsets.only(left: 2),
+                                            child: Visibility(
+                                              visible: corrective_deatils_page_controller.service_corrective_details_list[0]
+                                                  .serviceStatus
+                                                  ?.toLowerCase() !=
+                                                  "completed" &&
+                                                  corrective_deatils_page_controller.service_corrective_details_list[0]
+                                                      .isReplaceSerial ==
+                                                      1,
+                                              child: ElevatedButton(
+                                                  style: ElevatedButton.styleFrom(
+                                                      backgroundColor:
+                                                      AllColors.textColor2,
+                                                      side: BorderSide(
+                                                          color: AllColors
+                                                              .primaryDark1,
+                                                          width: 1)),
+                                                  onPressed: () {
+                                                    updateSerialDialog(context,corrective_deatils_page_controller.service_corrective_details_list[0]);
+                                                  },
+                                                  child: Text(
+                                                    "Update Serial",
+                                                    style: GoogleFonts.poppins(
+                                                      color: AllColors.primaryDark1,
+                                                      fontSize:
+                                                      AllFontSize.fourtine,
+                                                      fontWeight: FontWeight.w500,
+                                                    ),
+                                                  )),
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ),
 
 
-                              /*Container(
+                                /*Container(
                               //  height: size.height*.13,
                                 margin: EdgeInsets.only(top: 5),
                                 padding: EdgeInsets.only(
@@ -1554,9 +1594,11 @@ class CorrectiveViewDetailsScreen extends StatelessWidget {
 
 
 
-                              // },)
-                            ],
-                          )),
+                                // },)
+                              ],
+                            ));
+                      }),
+
                       Obx(
                         () {
                           return  Container(
@@ -1577,8 +1619,7 @@ class CorrectiveViewDetailsScreen extends StatelessWidget {
                                     ),
                                   ),
                                 ),
-                                Obx(
-                                      () {
+                                Obx(() {
                                     return IconButton(
                                       onPressed: () {
                                         corrective_deatils_page_controller.toggle();
@@ -1646,7 +1687,7 @@ class CorrectiveViewDetailsScreen extends StatelessWidget {
             height: 230,
             child: Column(
               children: [
-                bindReasonDropDown(context),
+                bindReasonDropDown(context, 'Reschedule'),
                 TextFormField(
                   controller: corrective_deatils_page_controller
                       .reschdule_remark_controller,
@@ -1852,7 +1893,7 @@ class CorrectiveViewDetailsScreen extends StatelessWidget {
     );
   }*/
 
-  Widget bindReasonDropDown(context) {
+  Widget bindReasonDropDown(context, String subReasonType) {
     corrective_deatils_page_controller.reason_master_list.value=[];
     return Autocomplete<ReasonModel>(
       displayStringForOption: _displayReasonCodeForOption,
@@ -1861,7 +1902,7 @@ class CorrectiveViewDetailsScreen extends StatelessWidget {
           return corrective_deatils_page_controller.reason_master_list.value;
           // return const Iterable<VehicleTypeResponse>.empty();
         }
-        return  await corrective_deatils_page_controller.getSearchReasonMaster(textEditingValue.text);
+        return  await corrective_deatils_page_controller.getSearchReasonMaster(textEditingValue.text, subReasonType);
       },
       onSelected: (ReasonModel selection) {
         print(selection.reasonCode);
@@ -1890,8 +1931,8 @@ class CorrectiveViewDetailsScreen extends StatelessWidget {
           decoration: InputDecoration(
             contentPadding: EdgeInsets.symmetric(
                 vertical: AllFontSize.two, horizontal: AllFontSize.one),
-            hintText: 'Enter Reason Code.',
-            labelText: 'Enter Reason Code',
+            hintText: 'Search Reason Code.',
+            labelText: 'Search Reason Code',
             hintStyle: GoogleFonts.poppins(
               color: AllColors.primaryDark1,
               // fontWeight: FontWeight.w300,
@@ -1972,7 +2013,7 @@ class CorrectiveViewDetailsScreen extends StatelessWidget {
             height: 200,
             child: Column(
               children: [
-                bindReasonDropDown(context),
+                bindReasonDropDown(context,'Reassignment'),
                 TextFormField(
                   controller: corrective_deatils_page_controller
                       .reason_description_controller,
@@ -2313,8 +2354,7 @@ class CorrectiveViewDetailsScreen extends StatelessWidget {
   return  corrective_deatils_page_controller
         .service_corrective_details_list[0]
         .serviceHistory!
-        .length >
-        0 &&
+        .length > 0 &&
         corrective_deatils_page_controller
             .service_corrective_details_list[0]
             .serviceHistory!
@@ -2706,5 +2746,71 @@ class CorrectiveViewDetailsScreen extends StatelessWidget {
     } else {
       print("Can't open dial pad.");
     }
+  }
+
+  Future updateSerialDialog(BuildContext context, ServiceCorrectiveDetails service_corrective_details_list,) {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title:  Text("Update Serial",
+              style: GoogleFonts.poppins(
+                color: AllColors.primaryDark1,
+                fontSize: AllFontSize.twentee,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            content:  Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextFormField(
+                  controller: corrective_deatils_page_controller
+                      .serialNoController,
+                  decoration: InputDecoration(
+                    labelText: "Enter Serial No.",
+                    labelStyle: TextStyle(color: AllColors.primaryDark1),
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: AllColors.primaryDark1),
+                    ),
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: AllColors.primaryDark1),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: DefaultButton(
+                        text: 'Ok',
+                        press: (){
+                          corrective_deatils_page_controller.serviceSerialNumberUpdate(
+                              service_corrective_details_list.id??0, service_corrective_details_list.serialNo??"", context
+                          );
+                        },
+                      ),
+                    ),
+                    SizedBox(width: 10,),
+                    Expanded(
+                      child: DefaultButton(
+                        text: 'Cancel',
+                        press: (){
+                          Navigator.pop(context);
+                          corrective_deatils_page_controller
+                              .serialNoController
+                              .clear();
+                        },
+                      ),
+                    ),
+
+                  ],
+                )
+              ],
+            ),
+          );
+        });
   }
 }

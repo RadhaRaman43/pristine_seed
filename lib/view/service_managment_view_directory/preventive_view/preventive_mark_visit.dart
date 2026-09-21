@@ -4,12 +4,14 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:navigation_drawer_flutter/reources/routes/routes_name.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../constants/app_colors.dart';
 import '../../../constants/app_font_size.dart';
 import '../../../constants/static_methods.dart';
+import '../../../models/service_managment_model_directory/reasonModel/reason_master_response.dart';
 import '../../../utils/app_utils.dart';
 import '../../../viewModel/service_managment_vm_directory/preventive_vm/preventive_vm.dart';
 import '../../custom_drawer.dart';
@@ -20,6 +22,9 @@ class PreventiveMarkVisitScreen extends StatelessWidget {
 
   final preventive_indent_page_controller = Get.put(PreventiveViewModel());
   Size size = Get.size;
+
+  static String _displayReasonCodeForOption(ReasonModel option) =>
+      option.reasonCode!;
 
   @override
   Widget build(BuildContext context) {
@@ -34,13 +39,45 @@ class PreventiveMarkVisitScreen extends StatelessWidget {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text(
-            'View Preventive',
-            style: GoogleFonts.poppins(
-              color: AllColors.whiteColor,
-              fontSize: AllFontSize.twentee,
-              fontWeight: FontWeight.w700,
-            ),
+          title: Row(
+            children: [
+              Text(
+                'View Preventive',
+                style: GoogleFonts.poppins(
+                  color: AllColors.whiteColor,
+                  fontSize: AllFontSize.twentee,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              Spacer(),
+              Visibility(
+                visible: preventive_indent_page_controller.service_preventive_details_list[0].serviceStatus?.toLowerCase()=='completed',
+                child: GestureDetector(
+                  onTap: (){
+                    preventive_indent_page_controller.initialPosition = LatLng(
+                      double.tryParse(
+                          preventive_indent_page_controller
+                              .service_preventive_details_list[0]
+                              .fromLatitude ??
+                              '') ??
+                          0.0,
+                      double.tryParse(
+                          preventive_indent_page_controller
+                              .service_preventive_details_list[0]
+                              .fromLongitude ??
+                              '') ??
+                          0.0,
+                    );
+                    showMapBottomSheet(context,preventive_indent_page_controller.service_preventive_details_list[0]);
+                  },
+
+                  child: Chip(
+                    label: Icon(Icons.location_on, color:AllColors.primaryDark1, size: 18,),
+                    shape: CircleBorder(),
+                  ),
+                ),
+              )
+            ],
           ),
           iconTheme: IconThemeData(
             color: AllColors.whiteColor, // Change this to the desired color
@@ -1122,6 +1159,8 @@ class PreventiveMarkVisitScreen extends StatelessWidget {
                                                     .clear();
                                                 preventive_indent_page_controller.indent_visit_charge_controller.clear();
                                                 remarkDialog(context);
+                                                preventive_indent_page_controller.actionTakenController.clear();
+                                                preventive_indent_page_controller.problemIdentifiedController.clear();
 
                                                 // Your onPressed logic here
                                               },
@@ -1411,7 +1450,7 @@ class PreventiveMarkVisitScreen extends StatelessWidget {
                   ),
                   InkWell(
                     onTap: () async {
-                      preventive_indent_page_controller.capture_flag.value == "Capture";
+                      preventive_indent_page_controller.capture_flag.value == "CAMERA";
                       preventive_indent_page_controller.upLoadImage(context);
 
                       // installation_indent_page_controller.upLoadImage(context);
@@ -1468,7 +1507,7 @@ class PreventiveMarkVisitScreen extends StatelessWidget {
                   ),
                   InkWell(
                     onTap: () async {
-                      preventive_indent_page_controller.capture_flag.value = "Gallery";
+                      preventive_indent_page_controller.capture_flag.value = "GALLERY";
                       preventive_indent_page_controller.upLoadGalleryImage(context);
 
                       // installation_indent_page_controller.upLoadImage(context);
@@ -1562,76 +1601,274 @@ class PreventiveMarkVisitScreen extends StatelessWidget {
             ],
           ),
 
-          content: Container(
-            height: size.height * .24,
-            child: Column(
-              children: [
-                TextFormField(
-                  controller: preventive_indent_page_controller
-                      .indent_remark_controller,
-                  decoration: InputDecoration(
-                    labelText: "Enter Remark ",
-                    labelStyle: TextStyle(color: AllColors.primaryDark1),
-                    enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: AllColors.primaryDark1),
-                    ),
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: AllColors.primaryDark1),
-                    ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+
+              bindProblemIdentified(context),
+              bindTakenAction(context),
+              TextFormField(
+                controller: preventive_indent_page_controller
+                    .indent_remark_controller,
+                decoration: InputDecoration(
+                  labelText: "Enter Remark ",
+                  labelStyle: TextStyle(color: AllColors.primaryDark1),
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: AllColors.primaryDark1),
+                  ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: AllColors.primaryDark1),
                   ),
                 ),
-                TextFormField(
-                  keyboardType: TextInputType.number,
-                  readOnly: preventive_indent_page_controller
-                      .service_preventive_details_list[0].isWarranty==0?false:true,
-                  controller: preventive_indent_page_controller
-                      .indent_visit_charge_controller,
-                  decoration: InputDecoration(
-                    labelText: "Visit Charge ",
-                    labelStyle: TextStyle(color: AllColors.primaryDark1),
-                    enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: AllColors.primaryDark1),
-                    ),
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: AllColors.primaryDark1),
-                    ),
+              ),
+
+
+              TextFormField(
+                keyboardType: TextInputType.number,
+                readOnly: preventive_indent_page_controller
+                    .service_preventive_details_list[0].isWarranty==0?false:true,
+                controller: preventive_indent_page_controller
+                    .indent_visit_charge_controller,
+                decoration: InputDecoration(
+                  labelText: "Visit Charge ",
+                  labelStyle: TextStyle(color: AllColors.primaryDark1),
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: AllColors.primaryDark1),
+                  ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: AllColors.primaryDark1),
                   ),
                 ),
-                SizedBox(
-                  height: 13,
-                ),
-                ElevatedButton(
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all<Color>(
-                      AllColors.primaryDark1,
-                    ),
+              ),
+              SizedBox(
+                height: 13,
+              ),
+              ElevatedButton(
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all<Color>(
+                    AllColors.primaryDark1,
                   ),
-                  onPressed: () {
-                    Navigator.pop(context);
-                    GeoTaggingMarkDialog(context);
-                    /*
-                    preventive_indent_page_controller.PreventiveMarkComplete(
-                        preventive_indent_page_controller
-                            .service_preventive_details_list[0].id
-                            .toString());*/
+                ),
+                onPressed: () {
+                  Navigator.pop(context);
+                  GeoTaggingMarkDialog(context);
+                  /*
+                  preventive_indent_page_controller.PreventiveMarkComplete(
+                      preventive_indent_page_controller
+                          .service_preventive_details_list[0].id
+                          .toString());*/
 
 
 
-                  },
-                  child: Container(
-                    width: 80,
-                    alignment: Alignment.center,
-                    child: Text(
-                      'Ok',
-                      style: GoogleFonts.poppins(
-                        color: AllColors.customDarkerWhite,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w700,
+                },
+                child: Container(
+                  width: 80,
+                  alignment: Alignment.center,
+                  child: Text(
+                    'Ok',
+                    style: GoogleFonts.poppins(
+                      color: AllColors.customDarkerWhite,
+                      fontSize: AllFontSize.fourtine,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ),
+              )
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  bindProblemIdentified(BuildContext context) {
+    preventive_indent_page_controller.reason_master_list.value=[];
+    return Autocomplete<ReasonModel>(
+      displayStringForOption: _displayReasonCodeForOption,
+      optionsBuilder: (TextEditingValue textEditingValue) async {
+        if (textEditingValue.text.isEmpty) {
+          return preventive_indent_page_controller.reason_master_list.value;
+        }
+        return await preventive_indent_page_controller
+            .getSearchReasonMaster(textEditingValue.text,'Problem Identified');
+      },
+      onSelected: (ReasonModel selection) {
+        print(selection.reasonCode);
+        preventive_indent_page_controller.problemIdentifiedController.text =
+            _displayReasonCodeForOption(selection).toString();
+        preventive_indent_page_controller.problem_Identified_des.value =
+            selection.reasonDescription??"";
+        FocusScope.of(context).unfocus();
+      },
+      fieldViewBuilder: (BuildContext context, TextEditingController controller,
+          FocusNode focusNode, VoidCallback onFieldSubmitted) {
+        return TextField(
+          onChanged: (value) {
+            if (value.isEmpty) {
+              FocusScope.of(context).unfocus();
+            }
+            preventive_indent_page_controller.problemIdentifiedController.text =
+                value;
+          },
+          cursorColor: AllColors.primaryDark1,
+          controller: controller
+            ..text = preventive_indent_page_controller.problemIdentifiedController.text,
+          focusNode: focusNode,
+          decoration: InputDecoration(
+            contentPadding: EdgeInsets.symmetric(
+                vertical: AllFontSize.two, horizontal: AllFontSize.one),
+            hintText: 'Search Problem Identified',
+            labelText: 'Search Problem Identified',
+            suffixIcon: Icon(Icons.arrow_drop_down),
+            hintStyle: GoogleFonts.poppins(
+                color: AllColors.primaryDark1,
+                fontWeight: FontWeight.w300,
+                fontSize: AllFontSize.ten),
+            labelStyle: GoogleFonts.poppins(
+                color: AllColors.primaryDark1,
+                // fontWeight: FontWeight.w700,
+                fontSize: AllFontSize.sisxteen),
+            focusedBorder: UnderlineInputBorder(
+              borderSide: BorderSide(
+                  color: AllColors.primaryDark1),
+            ),
+          ),
+        );
+      },
+      optionsViewBuilder: (BuildContext context,
+          AutocompleteOnSelected<ReasonModel> onSelected,
+          Iterable<ReasonModel> suggestions) {
+        return Align(
+          alignment: Alignment.topLeft,
+          child: Material(
+            elevation: 4.0,
+            child: Container(
+              color: AllColors.grayColor1,
+              width: size.width * .61,
+              height: size.height * .15,
+              constraints: BoxConstraints(maxHeight: 200),
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: suggestions.length,
+                itemBuilder: (context, index) {
+                  final ReasonModel option = suggestions.elementAt(index);
+                  return GestureDetector(
+                    onTap: () {
+                      onSelected(option);
+                    },
+                    child: Container(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text(
+                        option.reasonCode.toString(),
+                        style: GoogleFonts.poppins(
+                            color: AllColors.blackColor,
+                            fontWeight: FontWeight.w300,
+                            fontSize: AllFontSize
+                                .sisxteen // Change the text color here
+                        ),
                       ),
                     ),
-                  ),
-                )
-              ],
+                  );
+                },
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  bindTakenAction(BuildContext context) {
+    preventive_indent_page_controller.action_taken_list.value=[];
+    return Autocomplete<ReasonModel>(
+      displayStringForOption: _displayReasonCodeForOption,
+      optionsBuilder: (TextEditingValue textEditingValue) async {
+        if (textEditingValue.text.isEmpty) {
+          return preventive_indent_page_controller.action_taken_list.value;
+        }
+        return await preventive_indent_page_controller
+            .getActionTaken(textEditingValue.text,'Action Taken');
+      },
+      onSelected: (ReasonModel selection) {
+        print(selection.reasonCode);
+        preventive_indent_page_controller.actionTakenController.text =
+            _displayReasonCodeForOption(selection).toString();
+        preventive_indent_page_controller.action_taken_des.value =
+            selection.reasonDescription??"";
+        FocusScope.of(context).unfocus();
+      },
+      fieldViewBuilder: (BuildContext context, TextEditingController controller,
+          FocusNode focusNode, VoidCallback onFieldSubmitted) {
+        return TextField(
+          onChanged: (value) {
+            if (value.isEmpty) {
+              FocusScope.of(context).unfocus();
+            }
+            preventive_indent_page_controller.actionTakenController.text =
+                value;
+          },
+          cursorColor: AllColors.primaryDark1,
+          controller: controller
+            ..text = preventive_indent_page_controller.actionTakenController.text,
+          focusNode: focusNode,
+          //onSubmitted: onFieldSubmitted,
+          decoration: InputDecoration(
+            contentPadding: EdgeInsets.symmetric(
+                vertical: AllFontSize.two, horizontal: AllFontSize.one),
+            hintText: 'Search Action Taken',
+            labelText: 'Search Action Taken',
+            suffixIcon: Icon(Icons.arrow_drop_down),
+            hintStyle: GoogleFonts.poppins(
+                color: AllColors.primaryDark1,
+                fontWeight: FontWeight.w300,
+                fontSize: AllFontSize.ten),
+            labelStyle: GoogleFonts.poppins(
+                color: AllColors.primaryDark1,
+                // fontWeight: FontWeight.w700,
+                fontSize: AllFontSize.sisxteen),
+            focusedBorder: UnderlineInputBorder(
+              borderSide: BorderSide(
+                  color: AllColors.primaryDark1), // Change the color to green
+            ),
+          ),
+        );
+      },
+      optionsViewBuilder: (BuildContext context,
+          AutocompleteOnSelected<ReasonModel> onSelected,
+          Iterable<ReasonModel> suggestions) {
+        return Align(
+          alignment: Alignment.topLeft,
+          child: Material(
+            elevation: 4.0,
+            child: Container(
+              color: AllColors.grayColor1,
+              width: size.width * .61,
+              height: size.height * .15,
+              constraints: BoxConstraints(maxHeight: 200),
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: suggestions.length,
+                itemBuilder: (context, index) {
+                  final ReasonModel option = suggestions.elementAt(index);
+                  return GestureDetector(
+                    onTap: () {
+                      onSelected(option);
+                    },
+                    child: Container(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text(
+                        option.reasonCode.toString(),
+                        style: GoogleFonts.poppins(
+                            color: AllColors.blackColor,
+                            fontWeight: FontWeight.w300,
+                            fontSize: AllFontSize
+                                .sisxteen // Change the text color here
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
             ),
           ),
         );
@@ -1901,6 +2138,109 @@ class PreventiveMarkVisitScreen extends StatelessWidget {
     } else {
       print("Can't open dial pad.");
     }
+  }
+
+  void showMapBottomSheet(BuildContext context,
+      ServicePreventiveDetailsResponse service_preventive_details_list) {
+    showModalBottomSheet(context: context,
+        backgroundColor: Colors.transparent,
+        useSafeArea: true,
+        builder: (context,){
+      return Container(
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+        ),
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.of(context).viewInsets.bottom,
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Center(
+              child: Container(
+                margin: const EdgeInsets.only(top: 12, bottom: 16),
+                width: 40,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade200,
+                  borderRadius: BorderRadius.circular(4),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: AllColors.primaryDark1,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: const Icon(Icons.zoom_out_map,
+                        color: Colors.white, size: 18),
+                  ),
+                  const SizedBox(width: 10),
+                  Center(
+                    child: Text(
+                      "Map View",
+                      style: GoogleFonts.poppins(
+                        fontWeight: FontWeight.w700,
+                        fontSize: AllFontSize.eighteen,
+                        color: const Color(0xFF1A1A2E),
+                      ),
+                    ),
+                  ),
+
+                  Spacer(),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pop(context);
+                    } ,
+                    child: Container(
+                      padding: const EdgeInsets.all(6),
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade200,
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(Icons.close_rounded,
+                          size: 16, color: Colors.black54),
+                    ),
+                  ),
+
+
+
+                ],
+              ),
+            ),
+            Divider(),
+            Expanded(
+              child: GoogleMap(
+                initialCameraPosition: CameraPosition(
+                  target: preventive_indent_page_controller.initialPosition,
+                  zoom: 15,
+                ),
+                onMapCreated: (GoogleMapController controller) {
+                  preventive_indent_page_controller.mapController = controller;
+                },
+                markers: {
+                  Marker(
+                    markerId: const MarkerId("current"),
+                    position: preventive_indent_page_controller.initialPosition,
+                    infoWindow: const InfoWindow(
+                      title: "My Location",
+                    ),
+                  ),
+                },
+              ),
+            ),
+          ],
+        ),
+      );
+    });
   }
 
 }

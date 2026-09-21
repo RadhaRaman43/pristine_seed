@@ -1,10 +1,11 @@
 class ServiceCorrectiveDetails {
   String? condition;
-  int? isGeoTag;
-  int? isWarranty;
-  int? id;
+  dynamic? isGeoTag;
+  dynamic? isWarranty;
+  dynamic? isReplaceSerial;
+  dynamic? id;
   String? serviceNo;
-  int? lineNo;
+  dynamic? lineNo;
   String? message;
   String? serviceType;
   String? invoiceNo;
@@ -30,7 +31,7 @@ class ServiceCorrectiveDetails {
   String? serviceStatus;
   String? parentServiceNo;
   String? parentServiceId;
-  int? isAssignment;
+  dynamic? isAssignment;
   String? assignedPersonEmail;
   String? assignedReasonCode;
   String? assignedReasonDesc;
@@ -46,17 +47,20 @@ class ServiceCorrectiveDetails {
   String? complainRemark;
   String? reopenRemark;
   String? completeRemark;
-  int? isWarrantyReceive;
+  dynamic? isWarrantyReceive;
   String? warrantyStartDate;
   String? warrantyEndDate;
-  int? frequencyOfPm;
+  dynamic? frequencyOfPm;
   String? serviceTatDatetime;
+  dynamic? visitCharges;
+  String? fromLatitude;
+  String? fromLongitude;
   String? categoryName;
-  int? isUnderApproval;
+  dynamic? isUnderApproval;
   String? completeApprovalStatus;
   String? completeApprovalRemark;
   String? recheduleApprovalRemark;
-  double? qty;
+  dynamic? qty;
   String? recheduleApprovalStatus;
   List<ServiceHistory>? serviceHistory;
   List<FileList>? fileList;
@@ -66,6 +70,7 @@ class ServiceCorrectiveDetails {
         this.id,
         this.isGeoTag,
         this.isWarranty,
+        this.isReplaceSerial,
         this.serviceNo,
         this.lineNo,
         this.message,
@@ -114,6 +119,9 @@ class ServiceCorrectiveDetails {
         this.warrantyEndDate,
         this.frequencyOfPm,
         this.serviceTatDatetime,
+        this.visitCharges,
+        this.fromLatitude,
+        this.fromLongitude,
         this.serviceHistory,
         this.categoryName,
         this.isUnderApproval,
@@ -129,6 +137,7 @@ class ServiceCorrectiveDetails {
     id = json['id'];
     isGeoTag = json['is_geo_tag'];
     isWarranty = json['is_warranty'];
+    isReplaceSerial = json['is_replace_serial'];
     message = json['message'];
     serviceNo = json['service_no'];
     lineNo = json['line_no'];
@@ -177,6 +186,9 @@ class ServiceCorrectiveDetails {
     warrantyEndDate = json['warranty_end_date'];
     frequencyOfPm = json['frequency_of_pm'];
     serviceTatDatetime = json['service_tat_datetime'];
+    visitCharges = json['visit_charges'];
+    fromLatitude = json['from_latitude'];
+    fromLongitude = json['from_longitude'];
     isUnderApproval = json['is_under_approval'];
     categoryName = json['category_name'];
     recheduleApprovalStatus = json['rechedule_approval_status'];
@@ -203,6 +215,7 @@ class ServiceCorrectiveDetails {
     data['condition'] = this.condition;
     data['is_geo_tag'] = this.isGeoTag;
     data['is_warranty'] = this.isWarranty;
+    data['is_replace_serial'] = this.isReplaceSerial;
     data['id'] = this.id;
     data['message'] = this.message;
     data['service_no'] = this.serviceNo;
@@ -252,6 +265,9 @@ class ServiceCorrectiveDetails {
     data['warranty_end_date'] = this.warrantyEndDate;
     data['frequency_of_pm'] = this.frequencyOfPm;
     data['service_tat_datetime'] = this.serviceTatDatetime;
+    data['visit_charges'] = this.visitCharges;
+    data['from_latitude'] = this.fromLatitude;
+    data['from_longitude'] = this.fromLongitude;
     data['category_name'] = this.categoryName;
     data['is_under_approval'] = this.isUnderApproval;
     data['rechedule_approval_status'] = this.recheduleApprovalStatus;
@@ -271,7 +287,7 @@ class ServiceCorrectiveDetails {
 }
 
 class ServiceHistory {
-  int? id;
+  dynamic? id;
   String? documentType;
   String? documentNo;
   String? subDocumentNo;
@@ -320,7 +336,7 @@ class ServiceHistory {
 }
 
 class FileList {
-  int? id;
+  dynamic? id;
   String? processType;
   String? documentType;
   String? documentNo;
@@ -330,6 +346,7 @@ class FileList {
   String? fileName;
   String? fileDesc;
   String? createdOn;
+  String? captureType;
 
   FileList(
       {this.id,
@@ -341,7 +358,8 @@ class FileList {
         this.fileType,
         this.fileName,
         this.fileDesc,
-        this.createdOn});
+        this.createdOn,
+        this.captureType});
 
   FileList.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -354,6 +372,7 @@ class FileList {
     fileName = json['file_name'];
     fileDesc = json['file_desc'];
     createdOn = json['created_on'];
+    captureType = json['capture_type'];
   }
 
   Map<String, dynamic> toJson() {
@@ -368,6 +387,7 @@ class FileList {
     data['file_name'] = this.fileName;
     data['file_desc'] = this.fileDesc;
     data['created_on'] = this.createdOn;
+    data['capture_type'] = this.captureType;
     return data;
   }
 }

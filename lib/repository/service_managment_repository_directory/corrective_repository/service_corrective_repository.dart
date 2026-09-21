@@ -99,5 +99,7 @@ class ServiceCorrectiveRepository{
     return _apiService.postApi(data, AppUrl.correctiveDeleteDocument,sessionManagement);
   }
 
-
+  Future<String> serviceSerialNumberUpdateApiHit(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.serviceSerialNumberUpdate,sessionManagement);
+  }
 }

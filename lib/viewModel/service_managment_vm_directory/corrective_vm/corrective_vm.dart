@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:get/get_rx/get_rx.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 //import 'package:marquee/marquee.dart';
 
@@ -42,6 +43,8 @@ class CorrectiveViewModel extends GetxController{
   int total_rows = 0;
   String email="";
   String reason_code = "";
+  RxString problem_Identified_des="".obs;
+  RxString action_taken_des="".obs;
   RxString image_description_flag = "".obs;
   RxString upLoadLocalImagesList = ''.obs;
   int is_warrenty= 0;
@@ -75,13 +78,15 @@ class CorrectiveViewModel extends GetxController{
   var indent_type_controller=TextEditingController();
   var indent_date_controller=TextEditingController();
   var paybal_amount_controller=TextEditingController();
-
   var item_price_controller=TextEditingController();
+  var serialNoController=TextEditingController();
+  var problem_identified_controller=TextEditingController();
+  var action_taken_controller=TextEditingController();
 
   RxDouble currentLat = 0.0.obs;
   RxDouble currentLng = 0.0.obs;
 
-  RxString capture_flag = ''.obs;
+  RxString capture_flag = 'CAMERA'.obs;
   String item_no = "";
   RxBool is_Showindent=false.obs;
   RxBool is_indent_type_dropDown=false.obs;
@@ -89,6 +94,7 @@ class CorrectiveViewModel extends GetxController{
   final ImagePicker _picker = ImagePicker();
 
   RxString description="".obs;
+  RxString fileCaptureType="".obs;
 
   RxString date_filter="TODAY".obs;
   RxInt button_select=0.obs;
@@ -100,6 +106,7 @@ class CorrectiveViewModel extends GetxController{
   RxList<ServiceCorrectiveIndentHeaderResponse> service_indent_header_list =
       <ServiceCorrectiveIndentHeaderResponse>[].obs;
   RxList<ReasonModel> reason_master_list = <ReasonModel>[].obs;
+  RxList<ReasonModel> action_taken_list = <ReasonModel>[].obs;
   RxList<CorrectiveItemDetailsResponse> item_details_list = <CorrectiveItemDetailsResponse>[].obs;
 
   RxList<CorrectiveIndentHeaderCreateResponse> service_indent_header_create_list =
@@ -110,6 +117,12 @@ class CorrectiveViewModel extends GetxController{
   void toggle() {
     isExpand.value = !isExpand.value;
   }
+
+  GoogleMapController? mapController;
+  LatLng initialPosition =  LatLng(
+    28.6139,
+    77.2090,
+  );
 
   Future<void> refreshCorrectiveDetailsData() async {
     // Implement your refresh logic here
@@ -344,7 +357,6 @@ getServiceCorrectiveList(int is_done, int page_no,String date_filter,{String glo
                 Get.toNamed(RoutesName.corrective_details_screen);
               } else {
 
-
               }
             } else {
               Utils.showErrorToastification("False", response[0].message!);
@@ -515,12 +527,26 @@ getServiceCorrectiveList(int is_done, int page_no,String date_filter,{String glo
 
 
   CorrectiveMarkComplete(String service_id) {
+    if(problem_identified_controller.text.isEmpty){
+      Utils.sanckBarError('Error', 'Action Taken can not be blank');
+      return;
+    }
+
+    if(action_taken_controller.text.isEmpty){
+      Utils.sanckBarError('Error', 'Action Taken can not be blank');
+      return;
+    }
+
     Map data = {
       "service_id": service_id,
       "user_remark":indent_remark_controller.text,
       "visit_charges": indent_visit_charge_controller.text,
       "from_latitude": currentLat.value,
       "from_longitude": currentLng.value,
+      "problem_reason_code": problem_identified_controller.text,
+      "problem_reason_desc": problem_Identified_des.value,
+      "action_taken_reason_code": action_taken_controller.text,
+      "action_taken_reason_desc": action_taken_des.value,
       "email_id": email
     };
     print(data);
@@ -962,7 +988,7 @@ getServiceCorrectiveList(int is_done, int page_no,String date_filter,{String glo
               response_data[0].condition == 'True') {
             loading.value = false;
             upLoadLocalImagesList.value = '';
-            capture_flag.value='';
+            capture_flag.value='CAMERA';
             getServiceCorrectiveDetailsGet(id, "Refresh");
 
             Utils.sanckBarSuccess(
@@ -1045,15 +1071,16 @@ getServiceCorrectiveList(int is_done, int page_no,String date_filter,{String glo
 
 
 
-  Future<Iterable<ReasonModel>> getSearchReasonMaster(String text) async {
+  Future<Iterable<ReasonModel>> getSearchReasonMaster(String text, String subReasonType) async {
     if (text == '') {
       return const Iterable<ReasonModel>.empty();
     }
     Map data = {
       "flag": "select",
       "reason_code": text,
-      "reason_type": "Installation",
+      "reason_type": "Corrective",
       "reason_description": "",
+      "sub_reason_type":subReasonType,
       "created_by": email,
       "id": "",
     };
@@ -1086,7 +1113,44 @@ getServiceCorrectiveList(int is_done, int page_no,String date_filter,{String glo
   }
 
 
+  Future<Iterable<ReasonModel>> getActionTaken(String text, String subReasonType) async {
+    if (text == '') {
+      return const Iterable<ReasonModel>.empty();
+    }
+    Map data = {
+      "flag": "select",
+      "reason_code": text,
+      "reason_type": "Corrective",
+      "reason_description": "",
+      "sub_reason_type":subReasonType,
+      "created_by": email,
+      "id": "",
+    };
 
+    String reasondropdownresp = await _api.reasonMasterApiHit(data, sessionManagement);
+    try {
+      final jsonResponse = json.decode(reasondropdownresp);
+      if (jsonResponse is List) {
+        print(jsonResponse);
+        List<ReasonModel> response = jsonResponse
+            .map((data) => ReasonModel.fromJson(data))
+            .toList();
+        if (response[0].condition == 'True') {
+          print(jsonResponse);
+          action_taken_list.value = response;
+        } else {
+          action_taken_list.value = [];
+        }
+      } else {
+        Utils.sanckBarException('False!', jsonResponse.message);
+        action_taken_list.value = [];
+      }
+    } catch (e) {
+      Utils.sanckBarException('Exception!', e.toString());
+      action_taken_list.value= [];
+    }
+    return   action_taken_list.value;
+  }
 
 
   reAssignRequestApi(BuildContext context) {
@@ -1273,10 +1337,13 @@ getServiceCorrectiveList(int is_done, int page_no,String date_filter,{String glo
     }
     if(dialog_file_list.length>0){
       upLoadLocalImagesList.value=dialog_file_list[0].fileUrl!;
-      description.value=dialog_file_list[0].fileDesc!;
+      description.value=dialog_file_list[0].fileDesc??"";
+      fileCaptureType.value=dialog_file_list[0].captureType??"";
     }else{
       upLoadLocalImagesList.value="";
       description.value="";
+
+      fileCaptureType.value="";
       Get.toNamed(RoutesName.image_not_found_screen);
       return;
     }
@@ -1389,8 +1456,7 @@ getServiceCorrectiveList(int is_done, int page_no,String date_filter,{String glo
                         ),
                         SizedBox(height: 10),
                         // Check if imageUrls is empty, display a message, else display images
-                        dialog_file_list ==null && dialog_file_list!.length<=0
-                            ? Center(
+                        if (dialog_file_list ==null && dialog_file_list!.length<=0) Center(
                           child:Text( 'No Images found',
                             style:GoogleFonts.poppins(
                                 fontSize: AllFontSize.eighteen,
@@ -1398,8 +1464,7 @@ getServiceCorrectiveList(int is_done, int page_no,String date_filter,{String glo
                                 color: AllColors.primaryDark1
                             ),
                           ),
-                        )
-                            : Container(
+                        ) else Container(
                           height: 100,
                           child: ListView.builder(
                             scrollDirection: Axis.horizontal,
@@ -1408,7 +1473,8 @@ getServiceCorrectiveList(int is_done, int page_no,String date_filter,{String glo
                               return GestureDetector(
                                 onTap: () {
                                   upLoadLocalImagesList.value=dialog_file_list![index].fileUrl!;
-                                  description.value=dialog_file_list![index].fileDesc!;
+                                  description.value=dialog_file_list![index].fileDesc??"";
+                                  fileCaptureType.value=dialog_file_list[index].captureType??"";
                                 },
                                 child: Stack(
                                   children: [
@@ -1424,23 +1490,26 @@ getServiceCorrectiveList(int is_done, int page_no,String date_filter,{String glo
                                         child: upLoadImageSection(dialog_file_list![index]),
                                       ),
                                     ),
-                                    Positioned(
-                                      right: 5,
-                                      child: InkWell(
-                                        onTap: () {
-                                          CustomConfirmDialog.showDialog(context: context, title: "Confirm", content: "Do You Want to continue", onPress: () {
-                                            Navigator.of(context).pop();
-                                            imageDeleteApiHit(dialog_file_list[index].id.toString(),context);
-                                          }, isLoading: loading);
-                                        },
-                                        child: Container(
-                                          height: 30,
-                                          width: 30,
-                                          decoration: BoxDecoration(
-                                              shape: BoxShape.circle,
-                                              color: AllColors.primaryDark1
+                                    Visibility(
+                                      visible: service_corrective_details_list[0].serviceStatus?.toLowerCase()!='completed',
+                                      child: Positioned(
+                                        right: 5,
+                                        child: InkWell(
+                                          onTap: () {
+                                            CustomConfirmDialog.showDialog(context: context, title: "Confirm", content: "Do You Want to continue", onPress: () {
+                                              Navigator.of(context).pop();
+                                              imageDeleteApiHit(dialog_file_list[index].id.toString(),context);
+                                            }, isLoading: loading);
+                                          },
+                                          child: Container(
+                                            height: 30,
+                                            width: 30,
+                                            decoration: BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                color: AllColors.primaryDark1
+                                            ),
+                                            child: Icon(Icons.delete,size: 18,color: AllColors.customDarkerWhite,),
                                           ),
-                                          child: Icon(Icons.delete,size: 18,color: AllColors.customDarkerWhite,),
                                         ),
                                       ),
                                     )
@@ -1597,8 +1666,8 @@ getServiceCorrectiveList(int is_done, int page_no,String date_filter,{String glo
                       ],color: Colors.white60
                   ),
                   child: Tooltip(
-                    message:" "+description.value,
-                    child: Text(" "+description.value,style:  GoogleFonts.poppins(
+                    message:" "+description.value+" (${fileCaptureType.value})",
+                    child: Text(" "+description.value+" (${fileCaptureType.value})",style:  GoogleFonts.poppins(
                         color: AllColors.primaryDark1,
                         fontWeight: FontWeight.w700,
                         fontSize: AllFontSize.twenteetwo
@@ -1767,4 +1836,53 @@ getServiceCorrectiveList(int is_done, int page_no,String date_filter,{String glo
 
   }
 
+
+
+  serviceSerialNumberUpdate(int id, String oldSerialNo, BuildContext context) {
+    if(serialNoController.text.isEmpty){
+      Utils.sanckBarError('Error', 'Serial No is empty');
+      return ;
+    }
+    Map data = {
+      "id": id,
+      "old_serial_no": oldSerialNo,
+      "new_serial_no": serialNoController.text,
+      "email_id": email
+    };
+    print(data);
+    loading.value = true;
+    try {
+      _api.serviceSerialNumberUpdateApiHit(data, sessionManagement).then(
+            (value) {
+          print(value);
+          final JsonResponse = json.decode(value);
+          if (JsonResponse is List) {
+            List<ServiceCorrectiveDetails> response =
+            JsonResponse.map((e) => ServiceCorrectiveDetails.fromJson(e))
+                .toList();
+            if (response != null &&
+                response.length > 0 &&
+                response[0].condition?.toLowerCase() == "true") {
+              loading.value = false;
+              getServiceCorrectiveDetailsGet(
+                  id,"");
+              Navigator.pop(context);
+            } else {
+              loading.value = false;
+            }
+          } else {
+            loading.value = false;
+            Utils.sanckBarException("Api Error!", JsonResponse);
+          }
+        },
+      ).onError(
+            (error, stackTrace) {
+          print(error);
+        },
+      );
+    } catch (e) {
+      loading.value = false;
+      print(e);
+    }
+  }
 }

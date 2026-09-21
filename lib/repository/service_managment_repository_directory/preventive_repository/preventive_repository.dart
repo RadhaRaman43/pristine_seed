@@ -108,4 +108,7 @@ class PreventiveRepository {
     return _apiService.postApi(data, AppUrl.aMCRequestCreation,sessionManagement);
   }
 
+  Future<String> serviceSerialNumberUpdateApiHit(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.serviceSerialNumberUpdate,sessionManagement);
+  }
 }

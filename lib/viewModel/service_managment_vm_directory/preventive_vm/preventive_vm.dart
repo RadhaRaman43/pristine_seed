@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:navigation_drawer_flutter/models/service_managment_model_directory/servicePreventiveModel/amc_request_invoice_item_get_modal.dart';
 import 'package:navigation_drawer_flutter/models/service_managment_model_directory/servicePreventiveModel/amc_request_invoice_modal.dart';
@@ -47,11 +48,13 @@ class PreventiveViewModel extends GetxController {
   RxString image_description_flag = "".obs;
   RxBool isExpand = true.obs;
   String reason_code = "";
-  RxString capture_flag = ''.obs;
+  RxString capture_flag = 'CAMERA'.obs;
   RxString description = "".obs;
+
   RxString image_flag = "".obs;
   RxString upLoadLocalImagesList = ''.obs;
   final ImagePicker _picker = ImagePicker();
+
   Size size = Get.size;
 
   String item_no = "";
@@ -81,6 +84,7 @@ class PreventiveViewModel extends GetxController {
       <CreatePreventiveCalender>[].obs;
 
   RxList<ReasonModel> reason_master_list = <ReasonModel>[].obs;
+  RxList<ReasonModel> action_taken_list = <ReasonModel>[].obs;
 
   RxList<PreventiveItemDetailsResponse> item_details_list =
       <PreventiveItemDetailsResponse>[].obs;
@@ -91,6 +95,11 @@ class PreventiveViewModel extends GetxController {
   RxList<AMCRequestInvoiceItemGetModal> amcRequestInvoiceItemNoList =
       <AMCRequestInvoiceItemGetModal>[].obs;
   RxList<String> indent_type_list = <String>["Self", "Warehouse"].obs;
+  GoogleMapController? mapController;
+   LatLng initialPosition =  LatLng(
+    28.6139,
+    77.2090,
+  ); // Delhi
 
   var reason_code_controller = TextEditingController();
   var reason_description_controller = TextEditingController();
@@ -123,6 +132,10 @@ class PreventiveViewModel extends GetxController {
   var indent_date_controller = TextEditingController();
 
   var item_price_controller = TextEditingController();
+  var serialNoController = TextEditingController();
+  var actionTakenController= TextEditingController();
+  var problemIdentifiedController= TextEditingController();
+
 
   //todo add new preventive calender controller
 
@@ -136,6 +149,8 @@ class PreventiveViewModel extends GetxController {
   RxBool isShowItemNo=true.obs;
   RxInt invoiceKey = 0.obs;
   RxInt itemKey = 0.obs;
+  RxString problem_Identified_des="".obs;
+  RxString action_taken_des="".obs;
 
   RxString serviceNo="".obs;
   RxString selectedItemNo="".obs;
@@ -635,15 +650,16 @@ class PreventiveViewModel extends GetxController {
     }
   }*/
 
-  Future<Iterable<ReasonModel>> getSearchReasonMaster(String text) async {
+  Future<Iterable<ReasonModel>> getSearchReasonMaster(String text, String flagApiType) async {
     if (text == '') {
       return const Iterable<ReasonModel>.empty();
     }
     Map data = {
       "flag": "select",
       "reason_code": text,
-      "reason_type": "Installation",
+      "reason_type": "Preventive",
       "reason_description": "",
+      "sub_reason_type":flagApiType,
       "created_by": email,
       "id": "",
     };
@@ -672,6 +688,44 @@ class PreventiveViewModel extends GetxController {
       reason_master_list.value = [];
     }
     return reason_master_list.value;
+  }
+
+  Future<Iterable<ReasonModel>> getActionTaken(String text, String flagApiType) async {
+    if (text == '') {
+      return const Iterable<ReasonModel>.empty();
+    }
+    Map data = {
+      "flag": "select",
+      "reason_code": text,
+      "reason_type": "Preventive",
+      "reason_description": "",
+      "sub_reason_type":flagApiType,
+      "created_by": email,
+      "id": "",
+    };
+
+    String reasondropdownresp = await _api.preventiveReasonMasterApiHit(data, sessionManagement);
+    try {
+      final jsonResponse = json.decode(reasondropdownresp);
+      if (jsonResponse is List) {
+        print(jsonResponse);
+        List<ReasonModel> response =
+        jsonResponse.map((data) => ReasonModel.fromJson(data)).toList();
+        if (response[0].condition == 'True') {
+          print(jsonResponse);
+          action_taken_list.value = response;
+        } else {
+          action_taken_list.value = [];
+        }
+      } else {
+        Utils.sanckBarException('False!', jsonResponse.message);
+        action_taken_list.value = [];
+      }
+    } catch (e) {
+      Utils.sanckBarException('Exception!', e.toString());
+      action_taken_list.value = [];
+    }
+    return action_taken_list.value;
   }
 
   IndentLineCreate(String indent_no, BuildContext context) {
@@ -1227,12 +1281,25 @@ class PreventiveViewModel extends GetxController {
       Utils.showErrorToastification("Message!", "Please Enter remark");
       return;
     }
+    if(problemIdentifiedController.text.isEmpty){
+      Utils.sanckBarError('Error', 'Action Taken can not be blank');
+      return;
+    }
+
+    if(actionTakenController.text.isEmpty){
+      Utils.sanckBarError('Error', 'Action Taken can not be blank');
+      return;
+    }
     Map data = {
       "service_id": service_id,
       "user_remark": indent_remark_controller.text,
       "visit_charges": indent_visit_charge_controller.text,
       "from_latitude": currentLat.value,
       "from_longitude": currentLng.value,
+      "problem_reason_code": problemIdentifiedController.text,
+      "problem_reason_desc": problem_Identified_des.value,
+      "action_taken_reason_code": actionTakenController.text,
+      "action_taken_reason_desc": action_taken_des.value,
       "email_id": email
     };
     print(data);
@@ -1316,7 +1383,7 @@ class PreventiveViewModel extends GetxController {
               response_data[0].condition == 'True') {
             loading.value = false;
             upLoadLocalImagesList.value = '';
-            capture_flag.value = '';
+            capture_flag.value = 'CAMERA';
             Navigator.pop(context);
             getServicePreventiveDetails(id, "Refresh");
 
@@ -1423,10 +1490,12 @@ class PreventiveViewModel extends GetxController {
     }
     if (dialog_file_list.length > 0) {
       upLoadLocalImagesList.value = dialog_file_list[0].fileUrl!;
-      description.value = dialog_file_list[0].fileDesc!;
+      description.value ="${dialog_file_list[0].fileDesc!} (${dialog_file_list[0].captureType})" ;
+
     } else {
       upLoadLocalImagesList.value = "";
       description.value = "";
+
       Get.toNamed(RoutesName.image_not_found_screen);
       return;
     }
@@ -1543,9 +1612,8 @@ class PreventiveViewModel extends GetxController {
                         ),
                         SizedBox(height: 10),
                         // Check if imageUrls is empty, display a message, else display images
-                        dialog_file_list == null &&
-                                dialog_file_list!.length <= 0
-                            ? Center(
+                        if (dialog_file_list == null &&
+                                dialog_file_list!.length <= 0) Center(
                                 child: Text(
                                   'No Images found',
                                   style: GoogleFonts.poppins(
@@ -1553,8 +1621,7 @@ class PreventiveViewModel extends GetxController {
                                       fontWeight: FontWeight.w700,
                                       color: AllColors.primaryDark1),
                                 ),
-                              )
-                            : Container(
+                              ) else Container(
                                 height: 100,
                                 child: ListView.builder(
                                   scrollDirection: Axis.horizontal,
@@ -1565,8 +1632,9 @@ class PreventiveViewModel extends GetxController {
                                       onTap: () {
                                         upLoadLocalImagesList.value =
                                             dialog_file_list![index].fileUrl!;
-                                        description.value =
-                                            dialog_file_list![index].fileDesc!;
+                                        description.value =" ${ dialog_file_list![index].fileDesc??""}  (${dialog_file_list![index].captureType})"
+                                          ;
+
                                       },
                                       child: Stack(
                                         children: [
@@ -1587,39 +1655,42 @@ class PreventiveViewModel extends GetxController {
                                                   dialog_file_list![index]),
                                             ),
                                           ),
-                                          Positioned(
-                                            right: 5,
-                                            child: InkWell(
-                                              onTap: () {
-                                                CustomConfirmDialog.showDialog(
-                                                    context: context,
-                                                    title: "Confirm",
-                                                    content:
-                                                        "Do You Want to continue",
-                                                    onPress: () {
-                                                      Navigator.of(context)
-                                                          .pop();
-                                                      imageDeleteApiHit(
-                                                          dialog_file_list[
-                                                                  index]
-                                                              .id
-                                                              .toString(),
-                                                          context);
-                                                    },
-                                                    isLoading: loading);
-                                              },
-                                              child: Container(
-                                                height: 30,
-                                                width: 30,
-                                                decoration: BoxDecoration(
-                                                    shape: BoxShape.circle,
-                                                    color:
-                                                        AllColors.primaryDark1),
-                                                child: Icon(
-                                                  Icons.delete,
-                                                  size: 18,
-                                                  color: AllColors
-                                                      .customDarkerWhite,
+                                          Visibility(
+                                            visible: service_preventive_details_list[0].serviceStatus?.toLowerCase()!='completed',
+                                            child: Positioned(
+                                              right: 5,
+                                              child: InkWell(
+                                                onTap: () {
+                                                  CustomConfirmDialog.showDialog(
+                                                      context: context,
+                                                      title: "Confirm",
+                                                      content:
+                                                          "Do You Want to continue",
+                                                      onPress: () {
+                                                        Navigator.of(context)
+                                                            .pop();
+                                                        imageDeleteApiHit(
+                                                            dialog_file_list[
+                                                                    index]
+                                                                .id
+                                                                .toString(),
+                                                            context);
+                                                      },
+                                                      isLoading: loading);
+                                                },
+                                                child: Container(
+                                                  height: 30,
+                                                  width: 30,
+                                                  decoration: BoxDecoration(
+                                                      shape: BoxShape.circle,
+                                                      color:
+                                                          AllColors.primaryDark1),
+                                                  child: Icon(
+                                                    Icons.delete,
+                                                    size: 18,
+                                                    color: AllColors
+                                                        .customDarkerWhite,
+                                                  ),
                                                 ),
                                               ),
                                             ),
@@ -2038,14 +2109,14 @@ class PreventiveViewModel extends GetxController {
 
   }
 
-  @override
+  /*@override
   void onClose() {
     amcRequestInvoiceNoController.value.dispose();
     warrantyStartDateController.value.dispose();
     warrantyEndDateController.value.dispose();
     frequencyController.value.dispose();
     super.onClose();
-  }
+  }*/
 
   getAMCRequestCreation() {
     Map<String, String> data = {
@@ -2092,4 +2163,51 @@ class PreventiveViewModel extends GetxController {
       print(e);
     }
   }
+  serviceSerialNumberUpdate(int id, String oldSerialNo, BuildContext context) {
+    if(serialNoController.text.isEmpty){
+      Utils.sanckBarError('Error', 'Serial No is empty');
+      return ;
+    }
+    Map data = {
+      "id": id,
+      "old_serial_no": oldSerialNo,
+      "new_serial_no": serialNoController.text,
+      "email_id": email
+    };
+    print(data);
+    loading.value = true;
+    try {
+      _api.serviceSerialNumberUpdateApiHit(data, sessionManagement).then(
+            (value) {
+          print(value);
+          final JsonResponse = json.decode(value);
+          if (JsonResponse is List) {
+            List<AMCRequestInvoiceItemGetModal> response =
+            JsonResponse.map((e) => AMCRequestInvoiceItemGetModal.fromJson(e))
+                .toList();
+            if (response != null &&
+                response.length > 0 &&
+                response[0].condition?.toLowerCase() == "true") {
+              loading.value = false;
+              getServicePreventiveDetails(id,"");
+              Navigator.pop(context);
+            } else {
+              loading.value = false;
+            }
+          } else {
+            loading.value = false;
+            Utils.sanckBarException("Api Error!", JsonResponse);
+          }
+        },
+      ).onError(
+            (error, stackTrace) {
+          print(error);
+        },
+      );
+    } catch (e) {
+      loading.value = false;
+      print(e);
+    }
+  }
+
 }

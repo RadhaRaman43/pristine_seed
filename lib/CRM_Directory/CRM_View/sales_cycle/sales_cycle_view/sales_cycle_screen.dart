@@ -132,7 +132,7 @@ class SalesCycleScreen extends StatelessWidget{
                               salesCycleController.filterQuoteAcceptedFlag.value = 'Open';
                               salesCycleController.quoteAcceptedForFilterOnSaleCycle.value="Open";
                               salesCycleController.pageNumber=0;
-                              salesCycleController.getsalesCycleData(salesCycleController.pageNumber, "", "salesPage",'',);
+                              salesCycleController.getsalesCycleData(salesCycleController.pageNumber, "", "salesPage",'Sales',);
                             },
                           );
                         }),

@@ -106,6 +106,7 @@ class AppUrl {
      static const String aMCRequestInvoiceGet="$BASE_URL/api/ServiceActivity/AMCRequestInvoiceGet";
      static const String aMCRequestInvoiceWiseItemGet="$BASE_URL/api/ServiceActivity/AMCRequestInvoiceWiseItemGet";
      static const String aMCRequestCreation="$BASE_URL/api/ServiceActivity/AMCRequestCreation";
+     static const String serviceSerialNumberUpdate="$BASE_URL/api/ServiceActivity/ServiceSerialNumberUpdate";
 
 
 
@@ -257,6 +258,7 @@ class AppUrl {
      static const String salesCycleMstUpdate = "$BASE_URL/api/CRM/SalesCycle/SalesCycleMstUpdate";
      static const String salesCycleMstApproveReject = "$BASE_URL/api/CRM/SalesCycle/SalesCycleMstApproveReject";
      static const String SalesCycleMstGetByAccountCode = "$BASE_URL/api/CRM/SalesCycle/SalesCycleMstGetByAccountCode";
+     static const String SalesCycleMstStatusChangeSuspectToProspect = "$BASE_URL/api/CRM/SalesCycle/SalesCycleMstStatusChangeSuspectToProspect";
      static const String quoteHeaderGet = "$BASE_URL/api/CRM/Quote/QuoteHeaderGet";
      static const String QuoteHeaderGetApprovalPendency = "$BASE_URL/api/CRM/Quote/QuoteHeaderGetApprovalPendency";
      static const String QuoteWonDataGet = "$BASE_URL/api/CRM/Quote/QuoteWonDataGet";
