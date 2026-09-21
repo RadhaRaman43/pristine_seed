@@ -7,6 +7,7 @@ class SalesForceCastHeaderModal {
   String? createdBy;
   String? createdFullName;
   String? createdOn;
+  String? remarks;
   String? regionName;
   String? clusterName;
   dynamic? totalQuoteQty;
@@ -23,6 +24,7 @@ class SalesForceCastHeaderModal {
         this.createdBy,
         this.createdFullName,
         this.createdOn,
+        this.remarks,
         this.regionName,
         this.clusterName,
         this.totalQuoteQty,
@@ -39,6 +41,7 @@ class SalesForceCastHeaderModal {
     createdBy = json['created_by'];
     createdFullName = json['created_full_name'];
     createdOn = json['created_on'];
+    remarks = json['remarks'];
     regionName = json['region_name'];
     clusterName = json['cluster_name'];
     totalQuoteQty = json['total_quote_qty'];
@@ -67,6 +70,7 @@ class SalesForceCastHeaderModal {
     data['created_by'] = this.createdBy;
     data['created_full_name'] = this.createdFullName;
     data['created_on'] = this.createdOn;
+    data['remarks'] = this.remarks;
     data['region_name'] = this.regionName;
     data['cluster_name'] = this.clusterName;
     data['total_quote_qty'] = this.totalQuoteQty;
@@ -87,6 +91,8 @@ class Lines {
   String? salesCycleId;
   String? quoteId;
   dynamic? quoteLineNo;
+  String? accountCode;
+  String? accountName;
   String? itemCode;
   String? itemName;
   String? itemDescription;
@@ -105,6 +111,8 @@ class Lines {
         this.salesCycleId,
         this.quoteId,
         this.quoteLineNo,
+        this.accountCode,
+        this.accountName,
         this.itemCode,
         this.itemName,
         this.itemDescription,
@@ -121,6 +129,8 @@ class Lines {
     salesCycleId = json['sales_cycle_id'];
     quoteId = json['quote_id'];
     quoteLineNo = json['quote_line_no'];
+    accountCode = json['account_code'];
+    accountName = json['account_name'];
     itemCode = json['item_code'];
     itemName = json['item_name'];
     itemDescription = json['item_description'];
@@ -153,6 +163,8 @@ class Lines {
     data['sales_cycle_id'] = this.salesCycleId;
     data['quote_id'] = this.quoteId;
     data['quote_line_no'] = this.quoteLineNo;
+    data['account_code'] = this.accountCode;
+    data['account_name'] = this.accountName;
     data['item_code'] = this.itemCode;
     data['item_name'] = this.itemName;
     data['item_description'] = this.itemDescription;

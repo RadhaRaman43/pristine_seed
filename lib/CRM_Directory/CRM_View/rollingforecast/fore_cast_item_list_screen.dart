@@ -271,11 +271,12 @@ class CreateForeCastIyemScreen extends StatelessWidget{
         ),
         subtitle: Column(
           children: [
+            _buildLabelWithValue(label: "Sales Cycle Id: ", value:  sales_force_cast_vm.ForeCastQuote_list[position].salesCycleId??""),
+            //_buildLabelWithValue(label: "Customer Name: ", value:  sales_force_cast_vm.ForeCastQuote_list[position].??""),
             _buildLabelWithValue(label: "Item Code: ", value:  sales_force_cast_vm.ForeCastQuote_list[position].itemCode??""),
             _buildLabelWithValue(label: "Item Name: ", value:  sales_force_cast_vm.ForeCastQuote_list[position].itemName??""),
-            _buildLabelWithValue(label: "Sales Cycle Id: ", value:  sales_force_cast_vm.ForeCastQuote_list[position].salesCycleId??""),
             _buildLabelWithValue(label: "Product Category: ", value:  sales_force_cast_vm.ForeCastQuote_list[position].productCategory??""),
-
+            _buildLabelWithValue(label: "Parent Product Category: ", value:  sales_force_cast_vm.ForeCastQuote_list[position].parentProductCategory??""),
             _buildLabelWithValue(label: "Item Qty: ", value:  sales_force_cast_vm.ForeCastQuote_list[position].qty.toString()??""),
             _buildLabelWithValue(label: "Approve Price P/U: ", value:  "₹${sales_force_cast_vm.ForeCastQuote_list[position].approvedAmountPerUnit??"0.0"}"),
             _buildLabelWithValue(label: "Approve Price: ", value:  "₹${sales_force_cast_vm.ForeCastQuote_list[position].approvedAmount??"0.0"}"),

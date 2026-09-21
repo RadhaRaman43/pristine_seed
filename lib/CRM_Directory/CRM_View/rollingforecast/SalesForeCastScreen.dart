@@ -232,7 +232,7 @@ class SalesForceCastScreen extends StatelessWidget{
               child: Row(
                 children: [
                   Text(
-                    "Sales Force Cast Id : ",
+                    "Rolling Forecast Id : ",
                     style: GoogleFonts.poppins(
                         color: AllColors.primaryDark1,
                         fontSize: AllFontSize.fourtine,
@@ -273,12 +273,13 @@ class SalesForceCastScreen extends StatelessWidget{
         subtitle:Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildLabelWithValue(label: "Sales Forecast Status : ", value: sales_force_cast_vm.sales_force_cast_list[position].salesForecastStatus??"", ),
-           _buildLabelWithValue(label: "Created On : ", value: createdOn,),
+            //_buildLabelWithValue(label: "Sales Forecast Status : ", value: sales_force_cast_vm.sales_force_cast_list[position].salesForecastStatus??"", ),
            _buildLabelWithValue(label: "Month Year : ", value: sales_force_cast_vm.sales_force_cast_list[position].monthYear??"",),
-           _buildLabelWithValue(label: "Created By : ", value: sales_force_cast_vm.sales_force_cast_list[position].createdFullName??"",),
-           _buildLabelWithValue(label: "Region Name : ", value: sales_force_cast_vm.sales_force_cast_list[position].regionName??"",),
            _buildLabelWithValue(label: "Cluster Name : ", value: sales_force_cast_vm.sales_force_cast_list[position].clusterName??"",),
+           _buildLabelWithValue(label: "Region Name : ", value: sales_force_cast_vm.sales_force_cast_list[position].regionName??"",),
+           _buildLabelWithValue(label: "Created By : ", value: sales_force_cast_vm.sales_force_cast_list[position].createdFullName??"",),
+           _buildLabelWithValue(label: "Created On : ", value: createdOn,),
+           _buildLabelWithValue(label: "Remark : ", value: sales_force_cast_vm.sales_force_cast_list[position].remarks??"",),
           ],
         ),
 
@@ -386,8 +387,8 @@ class SalesForceCastScreen extends StatelessWidget{
                             children: [
                               const SizedBox(height: 5,),
                               bindFilterData(sales_force_cast_vm.salesForceCastId.value, 'Rolling Forecast ID'),
-                              const SizedBox(height: 5,),
-                              bindFilterData(sales_force_cast_vm.month_year_controller.value, 'Month Year'),
+                              /*const SizedBox(height: 5,),
+                              bindFilterData(sales_force_cast_vm.month_year_controller.value, 'Month Year'),*/
                               const SizedBox(height: 10,),
                               bindClusterNameFilter(context),
                               const SizedBox(height: 10,),

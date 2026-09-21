@@ -188,10 +188,13 @@ class RollingForeCastLogisticListScreen extends StatelessWidget{
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _buildLabelWithValue(label: "Quote Id : ", value: sale_fore_cast_vm.rolling_fore_cast_list[position].quoteId??"",),
-            _buildLabelWithValue(label: "Sale Cycle Id : ", value: sale_fore_cast_vm.rolling_fore_cast_list[position].salesCycleId??"",),
+            _buildLabelWithValue(label: "Month Year : ", value: sale_fore_cast_vm.rolling_fore_cast_list[position].monthYear??"",),
+            //_buildLabelWithValue(label: "Sale Cycle Id : ", value: sale_fore_cast_vm.rolling_fore_cast_list[position].salesCycleId??"",),
             //_buildLabelWithValue(label: "Customer Name : ", value: sale_fore_cast_vm.rolling_fore_cast_list[position].accountName??"",),
             _buildLabelWithValue(label: "Cluster Name : ", value: sale_fore_cast_vm.rolling_fore_cast_list[position].clusterName??"",),
             _buildLabelWithValue(label: "Region Name : ", value: sale_fore_cast_vm.rolling_fore_cast_list[position].regionName??"",),
+            _buildLabelWithValue(label: "Required Cluster Name : ", value: sale_fore_cast_vm.rolling_fore_cast_list[position].requiredClusterName??"",),
+            _buildLabelWithValue(label: "Required Region Name : ", value: sale_fore_cast_vm.rolling_fore_cast_list[position].requiredRegionName??"",),
             _buildLabelWithValue(label: "Created By : ", value: sale_fore_cast_vm.rolling_fore_cast_list[position].createdFullName??"",),
             _buildLabelWithValue(label: "Item Code : ", value: sale_fore_cast_vm.rolling_fore_cast_list[position].itemCode??"",),
             _buildLabelWithValue(label: "Item Name : ", value: sale_fore_cast_vm.rolling_fore_cast_list[position].itemName??"",),
@@ -203,7 +206,7 @@ class RollingForeCastLogisticListScreen extends StatelessWidget{
             _buildLabelWithValue(label: "Closer Month : ", value: sale_fore_cast_vm.rolling_fore_cast_list[position].closureMonth??"",),
             _buildLabelWithValue(label: "Closer Year : ", value: sale_fore_cast_vm.rolling_fore_cast_list[position].closureYear??"",),
             _buildLabelWithValue(label: "Created On : ", value: createdOn,),
-            _buildLabelWithValue(label: "Required Region Name : ", value: sale_fore_cast_vm.rolling_fore_cast_list[position].requiredRegionName??"",),
+            _buildLabelWithValue(label: "Remark : ", value: sale_fore_cast_vm.rolling_fore_cast_list[position].remarks??"",),
 
           ],
         ),
