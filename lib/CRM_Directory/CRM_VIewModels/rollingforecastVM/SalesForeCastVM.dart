@@ -1856,5 +1856,86 @@ class SalesForeCastVM extends GetxController{
 
   }
 
+  Future<void> exportNonStandardExcelWithProgress(BuildContext context, ) async {
+    try {
+      if(sales_force_cast_list.length<=0){
+        Utils.sanckBarError("False!", "No Data Found");
+        return;
+      }
+
+      excelLoading.value = true;
+      excelProgress.value = 0;
+      showExcelProgressDialog(context);
+      final excel = Excel.createExcel();
+      excel.rename('Sheet1', "Rolling Forecast List");
+      final sheet = excel["Rolling Forecast List"];
+
+
+      // Write Headers
+      List<String> headers = [];
+      final firstRowMap = removeExcelKeys(sales_force_cast_list.first,);
+      headers = firstRowMap.keys.toList();
+      for (int col = 0; col < headers.length; col++) {
+        sheet.cell(CellIndex.indexByColumnRow(columnIndex: col, rowIndex: 5)).value
+        = TextCellValue(headers[col]);
+      }
+      final totalRows = sales_force_cast_list.length;
+
+      for (int row = 0; row < totalRows; row++) {
+        final rowMap = removeExcelKeys(sales_force_cast_list[row],);
+        for (int col = 0; col < headers.length; col++) {
+          final value = rowMap[headers[col]];
+          sheet.cell(CellIndex.indexByColumnRow(
+              columnIndex: col, rowIndex: row + 1+5)).value = value == null
+              ? TextCellValue('') : TextCellValue(value.toString());
+        }
+        excelProgress.value = ((row + 1) / totalRows) * 100;
+        await Future.delayed(const Duration(milliseconds: 5));
+      }
+      late Directory dir;
+      if (Platform.isAndroid) {
+        dir = Directory('/storage/emulated/0/Download');
+      }
+      else {
+        dir = await getApplicationDocumentsDirectory();
+      }
+
+      final fileName = "rolling_forecast_data.xlsx";
+      final filePath = "${dir.path}/$fileName";
+      final file = File(filePath);
+      if (await file.exists()) {
+        await file.delete();
+      }
+      await file.writeAsBytes(excel.encode()!);
+      excelProgress.value = 100;
+      excelLoading.value = false;
+      Get.back();
+      // Open File
+      await OpenFilex.open(filePath);
+      debugPrint("Excel saved at: $filePath");
+    }catch(e){
+      Utils.sanckBarError("Failed to download file!", e.toString());
+      print(e.toString());
+      excelLoading.value = false;
+      Get.back();
+    }
+  }
+
+  Map<String, dynamic> removeExcelKeys(SalesForceCastListModal items) {
+    final map = Map<String, dynamic>.from(item.toJson());
+    map.remove('condition');
+    map.remove('total_rows');
+    map.remove('sales_forecast_id');
+    map.remove('sales_forecast_status');
+    map.remove('created_full_name');
+    map.remove('reopen_by');
+    map.remove('reopen_full_name');
+    map.remove('reopen_on');
+    map.remove('reopen_remarks');
+    return map;
+
+
+  }
+
 
 }

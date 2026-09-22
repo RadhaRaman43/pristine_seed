@@ -69,6 +69,7 @@ class CallDashboardUserWiseDataModel {
   dynamic? companyProfileType;
   dynamic? accountOwnerFullName;
   dynamic? productCategory;
+  String? parentProductCategory;
   dynamic? approvedFullName;
   dynamic? createdFullName;
   dynamic? alongWithPersonName;
@@ -144,6 +145,7 @@ class CallDashboardUserWiseDataModel {
         this.companyProfileType,
         this.accountOwnerFullName,
         this.productCategory,
+        this.parentProductCategory,
         this.approvedFullName,
         this.createdFullName,
         this.alongWithPersonName});
@@ -220,6 +222,7 @@ class CallDashboardUserWiseDataModel {
     companyProfileType = json['company_profile_type'];
     accountOwnerFullName = json['account_owner_full_name'];
     productCategory = json['product_category'];
+    parentProductCategory = json['parent_product_category'];
     approvedFullName = json['approved_full_name'];
     createdFullName = json['created_full_name'];
     alongWithPersonName = json['along_with_person_name'];
@@ -299,6 +302,7 @@ class CallDashboardUserWiseDataModel {
     data['company_profile_type'] = this.companyProfileType;
     data['account_owner_full_name'] = this.accountOwnerFullName;
     data['product_category'] = this.productCategory;
+    data['parent_product_category'] = this.parentProductCategory;
     data['approved_full_name'] = this.approvedFullName;
     data['created_full_name'] = this.createdFullName;
     data['along_with_person_name'] = this.alongWithPersonName;

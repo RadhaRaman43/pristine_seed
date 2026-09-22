@@ -1014,6 +1014,7 @@ class CallDashboardViewScreen extends StatelessWidget {
               _buildLabelWithValue(label: "Last Activity Updated On: ", value:  dashboard_view_Controller.callDashboardUserWiseDataList[position].lastActivityUpdatedOn ?? "",color:AllColors.textColor),
               _buildLabelWithValue(label: "Sales Cycle Id: ", value:  dashboard_view_Controller.callDashboardUserWiseDataList[position].salesCycleId ?? "",color:AllColors.textColor),
               _buildLabelWithValue(label: "Product Category: ", value:  dashboard_view_Controller.callDashboardUserWiseDataList[position].productCategory  ?? "",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Parent Product Category: ", value:  dashboard_view_Controller.callDashboardUserWiseDataList[position].parentProductCategory  ?? "",color:AllColors.textColor),
               _buildLabelWithValue(label: "Along With Person Name: ", value:  dashboard_view_Controller.callDashboardUserWiseDataList[position].alongWithPersonName ?? "",color:AllColors.textColor),
               _buildLabelWithValue(label: "Due Date: ", value:  dashboard_view_Controller.callDashboardUserWiseDataList[position].taskDueDate ?? "",color:AllColors.textColor),
               _buildLabelWithValue(label: "Pin Code: ", value:  dashboard_view_Controller.callDashboardUserWiseDataList[position].postCode ?? "",color:AllColors.textColor),

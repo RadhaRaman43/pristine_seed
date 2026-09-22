@@ -910,6 +910,7 @@ class CommitDashboardViewscreen extends StatelessWidget{
               }",color:AllColors.textColor),
               _buildLabelWithValue(label: "Contact Name: ", value:  dashboard_view_Controller.commitDashboardUserWiseDataList[position].contactName??"",color:AllColors.textColor),
               _buildLabelWithValue(label: "Product Category: ", value:  dashboard_view_Controller.commitDashboardUserWiseDataList[position].productCategory??"",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Parent Product Category: ", value:  dashboard_view_Controller.commitDashboardUserWiseDataList[position].parentProductCategory??"",color:AllColors.textColor),
               _buildLabelWithValue(label: "Purchase Process: ", value:  dashboard_view_Controller.commitDashboardUserWiseDataList[position].purchaseProcess??"",color:AllColors.textColor),
               _buildLabelWithValue(label: "Company Profile Type: ", value:  dashboard_view_Controller.commitDashboardUserWiseDataList[position].companyProfileType??"",color:AllColors.textColor),
               _buildLabelWithValue(label: "Is Commit: ", value:  dashboard_view_Controller.commitDashboardUserWiseDataList[position].commit==1?"Yes":"No"??"",color:AllColors.textColor),

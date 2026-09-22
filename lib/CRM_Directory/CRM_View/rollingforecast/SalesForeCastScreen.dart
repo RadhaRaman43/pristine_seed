@@ -42,7 +42,15 @@ class SalesForceCastScreen extends StatelessWidget{
                     fontWeight: FontWeight.w700,
                   ),
                 ),
-                Spacer(),
+                Tooltip(
+                  message: "Download Data",
+                  child: IconButton(
+                    icon: const Icon(Icons.download),
+                    onPressed: ()  {
+                      sales_force_cast_vm.exportNonStandardExcelWithProgress(context,);;
+                    },
+                  ),
+                ),
                 IconButton(onPressed: () {
                       sales_force_cast_vm.getCurrentDate();
                       sales_force_cast_vm.showList.value = false;
@@ -52,7 +60,6 @@ class SalesForceCastScreen extends StatelessWidget{
 
                       Get.toNamed(RoutesName.createSalesForeCastScreen);
                     }, icon: Icon(Icons.add)),
-
                 IconButton(onPressed: () {
                   showFilterBottomSheet(context);
                 }, icon: Icon(Icons.filter_alt_sharp))

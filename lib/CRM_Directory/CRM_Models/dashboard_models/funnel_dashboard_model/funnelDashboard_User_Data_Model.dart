@@ -80,6 +80,7 @@ class funnelDashboardDataListModel {
   dynamic estimatedAmount;
   String? accountOwnerFullName;
   String? productCategory;
+  String? parentProductCategory;
   String? approvedFullName;
   String? createdFullName;
   String? salesCycleOwnerName;
@@ -167,6 +168,7 @@ class funnelDashboardDataListModel {
         this.estimatedAmount,
         this.accountOwnerFullName,
         this.productCategory,
+        this.parentProductCategory,
         this.approvedFullName,
         this.createdFullName,
         this.salesCycleOwnerName,
@@ -255,6 +257,7 @@ class funnelDashboardDataListModel {
     estimatedAmount = json['estimated_amount'];
     accountOwnerFullName = json['account_owner_full_name'];
     productCategory = json['product_category'];
+    parentProductCategory = json['parent_product_category'];
     approvedFullName = json['approved_full_name'];
     createdFullName = json['created_full_name'];
     salesCycleOwnerName = json['sales_cycle_owner_name'];
@@ -346,6 +349,7 @@ class funnelDashboardDataListModel {
     data['estimated_amount'] = this.estimatedAmount;
     data['account_owner_full_name'] = this.accountOwnerFullName;
     data['product_category'] = this.productCategory;
+    data['parent_product_category'] = this.parentProductCategory;
     data['approved_full_name'] = this.approvedFullName;
     data['created_full_name'] = this.createdFullName;
     data['sales_cycle_owner_name'] = this.salesCycleOwnerName;

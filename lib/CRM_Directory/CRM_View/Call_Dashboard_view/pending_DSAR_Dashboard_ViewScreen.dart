@@ -1020,6 +1020,7 @@ class PendingDsarDashboardViewscreen extends StatelessWidget{
               _buildLabelWithValue(label: "Last Activity Updated On: ", value:  dashboard_view_Controller.pendingDSARDashboardUserWiseDataList[position].lastActivityUpdatedOn ?? "",color:AllColors.textColor),
               _buildLabelWithValue(label: "Sales Cycle Id: ", value:  dashboard_view_Controller.pendingDSARDashboardUserWiseDataList[position].salesCycleId ?? "",color:AllColors.textColor),
               _buildLabelWithValue(label: "Product Category: ", value:  dashboard_view_Controller.pendingDSARDashboardUserWiseDataList[position].productCategory  ?? "",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Parent Product Category: ", value:  dashboard_view_Controller.pendingDSARDashboardUserWiseDataList[position].parentProductCategory  ?? "",color:AllColors.textColor),
               _buildLabelWithValue(label: "Along With Person Name: ", value:  dashboard_view_Controller.pendingDSARDashboardUserWiseDataList[position].alongWithPersonName ?? "",color:AllColors.textColor),
               _buildLabelWithValue(label: "Due Date: ", value:  dashboard_view_Controller.pendingDSARDashboardUserWiseDataList[position].taskDueDate ?? "",color:AllColors.textColor),
               _buildLabelWithValue(label: "Pin Code: ", value:  dashboard_view_Controller.pendingDSARDashboardUserWiseDataList[position].postCode ?? "",color:AllColors.textColor),
