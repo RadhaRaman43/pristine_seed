@@ -47,6 +47,7 @@ class SalesCyclePendingForApprovalVm extends GetxController{
   var accountNameController = TextEditingController().obs;
   var saleCycleController = TextEditingController().obs;
   var productCategoryController = TextEditingController().obs;
+  var parentProductCategory_controller=TextEditingController().obs;
   var purchaseProcessController = TextEditingController().obs;
   var salesCycleOwnerController = TextEditingController().obs;
   var solutionAcceptedController = TextEditingController().obs;
@@ -71,6 +72,9 @@ class SalesCyclePendingForApprovalVm extends GetxController{
   RxList<CompanyTypeModal> selected_company_type_list = <CompanyTypeModal>[].obs;
   RxList<ItemCategoryMstModel> Item_Category_master_list_without_task = <ItemCategoryMstModel>[].obs;
   RxList<ItemCategoryMstModel> Selected_Item_Category_master_list_without_task = <ItemCategoryMstModel>[].obs;
+  RxList<ItemCategoryMstModel> parentProductCategoryList = <ItemCategoryMstModel>[].obs;
+  RxList<ItemCategoryMstModel> selectedParentProductCategoryList = <ItemCategoryMstModel>[].obs;
+
   RxList<String> productCategoryTypeList = <String>["Contains","Equals To"].obs;
 
   RxList<EmployeeMemberModel> tempSelected = <EmployeeMemberModel>[].obs;
@@ -88,6 +92,7 @@ class SalesCyclePendingForApprovalVm extends GetxController{
     isHeadofficePermission.value = await sessionManagement.getisHeadofficePermission() ?? '';
     product_category_type_Controller.value.text="Contains";
     getItemCategoryMstWithoutTaskIdApi();
+    getParentItemCategoryMstGet();
     getCompanyTypeMasterGet();
     if(this.isAdminWritePermission=="1"){
       EmployeeMasterGet('');
@@ -100,6 +105,38 @@ class SalesCyclePendingForApprovalVm extends GetxController{
 
   }
 
+  getParentItemCategoryMstGet() {
+    this.loading.value = true;
+    Map<String, String> data = {
+      'filter_category': "",
+    };
+    print(data);
+    _api.ParentItemCategoryMstGet(data, sessionManagement).then((value) {
+      print(value);
+      try {
+        List<ItemCategoryMstModel> Response = (json.decode(value)
+        as List<dynamic>)
+            .map((i) => ItemCategoryMstModel.fromJson(i as Map<String, dynamic>)).toList();
+
+        if (Response.isNotEmpty && Response[0]?.condition.toString() == "True") {
+          parentProductCategoryList.value = Response!;
+        } else {
+          parentProductCategoryList.value = [];
+
+        }
+      } catch (e) {
+        parentProductCategoryList.value = [];
+
+        print('catch....${e.toString()}');
+      }
+    }).onError((error, stackTrace) {
+      parentProductCategoryList.value = [];
+      Utils.sanckBarError('Api Exception onError', error.toString());
+      print('catchEx....${error.toString()}');
+    }).whenComplete(() {
+      this.loading.value = false;
+    });
+  }
   getItemCategoryMstWithoutTaskIdApi() {
     this.loading.value = true;
     Map<String, String> data = {
@@ -364,6 +401,7 @@ class SalesCyclePendingForApprovalVm extends GetxController{
         "filter_account_name": accountNameController.value.text.isEmpty ? "" : accountNameController.value.text,
         "filter_sales_cycle_owner": isAdminWritePermission=="1" || isHeadofficePermission.value=="1"?"":email,
         "filter_product_category": productCategoryController.value.text.isEmpty ? "" : productCategoryController.value.text,
+        "filter_parent_product_category": parentProductCategory_controller.value.text.isEmpty? "":parentProductCategory_controller.value.text,
         "filter_product_category_type": product_category_type_Controller.value.text.isEmpty?"":product_category_type_Controller.value.text,
         "filter_purchase_process": purchaseProcessController.value.text.isEmpty ? "" : purchaseProcessController.value.text,
         "filter_proposed_solution": proposedSolutionController.value.text.isEmpty ? "" : proposedSolutionController.value.text,
@@ -432,6 +470,7 @@ class SalesCyclePendingForApprovalVm extends GetxController{
     product_category_type_Controller.value.text="Contains";
     selected_company_type_list.value=[];
     Selected_Item_Category_master_list_without_task.value=[];
+    selectedParentProductCategoryList.value=[];
     saleCycleController.value.clear();
     salesCycleOwnerController.value.clear();
     filterTask_Id_controller.value.clear();
@@ -439,6 +478,7 @@ class SalesCyclePendingForApprovalVm extends GetxController{
     accountCodeController.value.clear();
     salesCycleOwnerController.value.clear();
     productCategoryController.value.clear();
+    parentProductCategory_controller.value.clear();
     purchaseProcessController.value.clear();
     companyProfileTypeController.value.clear();
     isCommitController.value.clear();
@@ -466,7 +506,8 @@ class SalesCyclePendingForApprovalVm extends GetxController{
     SelectedCluster_list.value = [];
     SelectedRegion_list.value = [];
     //RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join(',');
-    clusterName_controller.value.text = clusterGetByEmailList.map((e) => e.geoValue).join(',');
+    clusterName_controller.value.text = clusterGetByEmailList.map((e) => e.geoValue).join('|');
+    print("cluster head value ${clusterName_controller.value.text}");
     getRegionsWithClusterFilterGetByEmail();
   }
 
@@ -497,6 +538,7 @@ class SalesCyclePendingForApprovalVm extends GetxController{
       'cluster_name': clusterName_controller.value.text,
       'account_owner': AccountOwner_controller.value.text,
       'product_category': productCategoryController.value.text,
+      'parentProductCategory_controller': parentProductCategory_controller.value.text,
       'product_category_type': product_category_type_Controller.value.text,
 
     });
@@ -524,6 +566,7 @@ class SalesCyclePendingForApprovalVm extends GetxController{
       createdOnCnontroller.value.text=getFilterData["createdOn_Controller"];
       AccountOwner_controller.value.text=getFilterData["account_owner"];
       productCategoryController.value.text=getFilterData["product_category"];
+      parentProductCategory_controller.value.text=getFilterData["parentProductCategory_controller"];
       product_category_type_Controller.value.text=getFilterData["product_category_type"];
 
       if(getFilterData["region_name"].toString().isNotEmpty && getFilterData["region_name"].toString()!=""){

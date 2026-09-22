@@ -44,6 +44,7 @@ class SalesCycleCompetitorProductInforVm extends GetxController{
   var filterQuoteValidityController = TextEditingController().obs;
   var filterQuoteIdController = TextEditingController().obs;
   var productCategoryController = TextEditingController().obs;
+  var parentProductCategory_controller=TextEditingController().obs;
   var RegionName_controller = TextEditingController().obs;
   var createdOnCnontroller = TextEditingController().obs;
   var filterItemCodeController = TextEditingController().obs;
@@ -73,6 +74,9 @@ class SalesCycleCompetitorProductInforVm extends GetxController{
 
   RxList<ItemCategoryMstModel> Item_Category_master_list_without_task = <ItemCategoryMstModel>[].obs;
   RxList<ItemCategoryMstModel> Selected_Item_Category_master_list_without_task = <ItemCategoryMstModel>[].obs;
+  RxList<ItemCategoryMstModel> parentProductCategoryList = <ItemCategoryMstModel>[].obs;
+  RxList<ItemCategoryMstModel> selectedParentProductCategoryList = <ItemCategoryMstModel>[].obs;
+
 
 
   @override
@@ -88,6 +92,38 @@ class SalesCycleCompetitorProductInforVm extends GetxController{
     super.onInit();
   }
 
+  getParentItemCategoryMstGet() {
+    this.loading.value = true;
+    Map<String, String> data = {
+      'filter_category': "",
+    };
+    print(data);
+    _api.ParentItemCategoryMstGet(data, sessionManagement).then((value) {
+      print(value);
+      try {
+        List<ItemCategoryMstModel> Response = (json.decode(value)
+        as List<dynamic>)
+            .map((i) => ItemCategoryMstModel.fromJson(i as Map<String, dynamic>)).toList();
+
+        if (Response.isNotEmpty && Response[0]?.condition.toString() == "True") {
+          parentProductCategoryList.value = Response!;
+        } else {
+          parentProductCategoryList.value = [];
+
+        }
+      } catch (e) {
+        parentProductCategoryList.value = [];
+
+        print('catch....${e.toString()}');
+      }
+    }).onError((error, stackTrace) {
+      parentProductCategoryList.value = [];
+      Utils.sanckBarError('Api Exception onError', error.toString());
+      print('catchEx....${error.toString()}');
+    }).whenComplete(() {
+      this.loading.value = false;
+    });
+  }
   getItemCategoryMstWithoutTaskIdApi() {
     this.loading.value = true;
     Map<String, String> data = {
@@ -221,6 +257,7 @@ class SalesCycleCompetitorProductInforVm extends GetxController{
       "filter_account_name": accountNameController.value.text.isNotEmpty?accountNameController.value.text:"",
       "filter_flag": "AllCompetitorLines",
       "filter_product_category": productCategoryController.value.text.isNotEmpty?productCategoryController.value.text:"",
+      "filter_parent_product_category": parentProductCategory_controller.value.text.isEmpty? "":parentProductCategory_controller.value.text,
       "filter_product_category_type": product_category_type_Controller.value.text.isEmpty?"":product_category_type_Controller.value.text,
       "filter_created_by": email,
       "filter_created_on": createdOnStartToEnd.value.isNotEmpty?createdOnStartToEnd.value:"",
@@ -283,6 +320,7 @@ class SalesCycleCompetitorProductInforVm extends GetxController{
   void clearAllField() {
     product_category_type_Controller.value.text="Contains";
     Selected_Item_Category_master_list_without_task.value=[];
+    selectedParentProductCategoryList.value=[];
     filterSalesCycleApprovalStatusController.value.clear();
     filterQuoteAcceptedController.value.clear();
     filterSalesCycleStatusController.value.clear();
@@ -291,6 +329,7 @@ class SalesCycleCompetitorProductInforVm extends GetxController{
     accountCodeController.value.clear();
     filterSalesCycleIdController.value.clear();
     productCategoryController.value.clear();
+    parentProductCategory_controller.value.clear();
     filterExpectedClosuredateController.value.clear();
     postalCodeController.value.clear();
     district_controller.value.clear();
@@ -326,6 +365,7 @@ class SalesCycleCompetitorProductInforVm extends GetxController{
         'created_by': createdByController.value.text,
         'createdOn_Controller': createdOnCnontroller.value.text,
         'product_category': productCategoryController.value.text,
+        'parentProductCategory_controller': parentProductCategory_controller.value.text,
         'product_category_type': product_category_type_Controller.value.text,
         'postalCodeController': postalCodeController.value.text,
         'district_controller': district_controller.value.text,
@@ -361,6 +401,7 @@ class SalesCycleCompetitorProductInforVm extends GetxController{
       createdByController.value.text=getFilterData["created_by"]??"";
       createdOnCnontroller.value.text=getFilterData["createdOn_Controller"]??"";
       productCategoryController.value.text=getFilterData["product_category"]??"";
+      parentProductCategory_controller.value.text=getFilterData["parentProductCategory_controller"]??"";
       product_category_type_Controller.value.text=getFilterData["product_category_type"]??"";
       postalCodeController.value.text=getFilterData["postalCodeController"]??"";
       district_controller.value.text=getFilterData["district_controller"]??"";

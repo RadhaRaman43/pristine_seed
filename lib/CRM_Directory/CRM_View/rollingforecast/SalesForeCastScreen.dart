@@ -33,13 +33,19 @@ class SalesForceCastScreen extends StatelessWidget{
               color: AllColors.whiteColor,
             ),
             title:Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  'Sales ForceCast List',
-                  style: GoogleFonts.poppins(
-                    color: AllColors.whiteColor,
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.w700,
+                Flexible(
+                  child: Tooltip(
+                    message: 'Sales ForceCast List',
+                    child: Text(
+                      'Sales ForceCast List',
+                      style: GoogleFonts.poppins(
+                        color: AllColors.whiteColor,
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
                   ),
                 ),
                 Tooltip(

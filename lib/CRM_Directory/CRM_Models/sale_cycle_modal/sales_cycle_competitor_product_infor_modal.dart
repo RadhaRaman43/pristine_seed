@@ -8,6 +8,7 @@ class SaleCycleCompetitorProductInformationModal {
   String? accountCode;
   String? accountName;
   String? productCategory;
+  String? parentProductCategory;
   String? createdBy;
   String? createdFullName;
   String? createdOn;
@@ -50,6 +51,7 @@ class SaleCycleCompetitorProductInformationModal {
         this.accountCode,
         this.accountName,
         this.productCategory,
+        this.parentProductCategory,
         this.createdBy,
         this.createdFullName,
         this.createdOn,
@@ -93,6 +95,7 @@ class SaleCycleCompetitorProductInformationModal {
     accountCode = json['account_code'];
     accountName = json['account_name'];
     productCategory = json['product_category'];
+    parentProductCategory = json['parent_product_category'];
     createdBy = json['created_by'];
     createdFullName = json['created_full_name'];
     createdOn = json['created_on'];
@@ -137,6 +140,7 @@ class SaleCycleCompetitorProductInformationModal {
     data['account_code'] = this.accountCode;
     data['account_name'] = this.accountName;
     data['product_category'] = this.productCategory;
+    data['parent_product_category'] = this.parentProductCategory;
     data['created_by'] = this.createdBy;
     data['created_full_name'] = this.createdFullName;
     data['created_on'] = this.createdOn;

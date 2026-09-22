@@ -203,6 +203,8 @@ class SalesCycleCompetitorProductInforScreen extends StatelessWidget{
                               const SizedBox(height: 10,),
                               bindProductCategory(context),
                               const SizedBox(height: 10,),
+                              bindProductCategory(context),
+                              const SizedBox(height: 10,),
                               bindProductCategoryTypeDropDown(context),
                               const SizedBox(height: 10,),
                             ],
@@ -596,6 +598,9 @@ class SalesCycleCompetitorProductInforScreen extends StatelessWidget{
               label: "Product Category: ",
               value: saleCycleCompetitorController.salesCycleCompetitorProductInformationList[position].productCategory??"",),
             _buildLabelWithValue(
+              label: "Parent Product Category: ",
+              value: saleCycleCompetitorController.salesCycleCompetitorProductInformationList[position].parentProductCategory??"",),
+            _buildLabelWithValue(
               label: "Item Code: ",
               value: saleCycleCompetitorController.salesCycleCompetitorProductInformationList[position].itemCode??"",),
             _buildLabelWithValue(
@@ -843,6 +848,80 @@ class SalesCycleCompetitorProductInforScreen extends StatelessWidget{
       );
     });
   }
+  
+  bindParentProductCategoryFilter(BuildContext context) {
+    return Obx((){
+      if (saleCycleCompetitorController.parentProductCategory_controller.value.text.isNotEmpty && saleCycleCompetitorController.filterDataChecker.value=='1') {
+        List<String> nameList = saleCycleCompetitorController.parentProductCategory_controller.value.text.split('|');
+
+        saleCycleCompetitorController.selectedParentProductCategoryList.value =
+            List.generate(nameList.length, (index) {
+              return ItemCategoryMstModel(
+                parentCategoryCode: nameList[index].trim(),
+              );
+            });
+      }
+      return  DropdownSearch<ItemCategoryMstModel>.multiSelection(
+        items: saleCycleCompetitorController.parentProductCategoryList,
+        itemAsString: (ItemCategoryMstModel u) => u.parentCategoryCode??"",
+        selectedItems: saleCycleCompetitorController.selectedParentProductCategoryList,
+        dropdownDecoratorProps: DropDownDecoratorProps(
+          baseStyle: TextStyle(color: Colors.black),
+          dropdownSearchDecoration: InputDecoration(
+            filled: false,
+            labelText: saleCycleCompetitorController.selectedParentProductCategoryList.isNotEmpty?"Parent Product Category":null,
+            hintText: "Parent Product Category",
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+          ),
+        ),
+        dropdownBuilder: (context, selectedItems) {
+          // Custom builder to just show comma-separated names
+          if (selectedItems.isEmpty) {
+            return Text(
+              "Parent Product Category",
+              style: GoogleFonts.poppins(
+                color: AllColors.primaryDark1, // Match your hint color
+                fontSize: AllFontSize.sisxteen,
+                fontWeight: FontWeight.w500,
+              ),
+            );
+          }
+          return SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Text(
+              selectedItems.map((e) => e.parentCategoryCode).join(', '),
+              style: TextStyle(color: Colors.black), // Only black text
+            ),
+          );
+        },
+        onChanged: (List<ItemCategoryMstModel> selectedList) {
+          saleCycleCompetitorController.selectedParentProductCategoryList.value = selectedList;
+          saleCycleCompetitorController.parentProductCategory_controller.value.text =
+              selectedList.map((e) => e.parentCategoryCode).join('|');
+        },
+        popupProps: PopupPropsMultiSelection.dialog(
+          showSearchBox: true,
+          searchFieldProps: TextFieldProps(
+            padding: EdgeInsets.only(top: 20, left: 10, right: 10),
+            decoration: InputDecoration(
+              contentPadding: EdgeInsets.only(top: 20, left: 12, right: 12),
+              hintText: "Search...",
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+          ),
+
+          itemBuilder: (context, item, isSelected) =>
+              ListTile(
+                title: Text(item.parentCategoryCode??""),
+              ),
+        ),
+      );
+    });
+
+  }
+  
   Widget bindProductCategoryTypeDropDown(context) {
     return DropdownMenu<String>(
       width: MediaQuery.of(context).size.width - 15,

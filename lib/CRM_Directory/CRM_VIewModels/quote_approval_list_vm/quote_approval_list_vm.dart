@@ -45,6 +45,7 @@ class QuoteApprovalListVm extends GetxController{
   var RegionName_controller=TextEditingController().obs;
   var createdOnCnontroller=TextEditingController().obs;
   var productCategoryController=TextEditingController().obs;
+  var parentProductCategory_controller=TextEditingController().obs;
   var product_category_type_Controller = TextEditingController().obs;
   var filterQuoteAccountNameController=TextEditingController().obs;
   var filterQuoteContactNameController=TextEditingController().obs;
@@ -70,6 +71,8 @@ class QuoteApprovalListVm extends GetxController{
 
   RxList<ItemCategoryMstModel> Item_Category_master_list_without_task = <ItemCategoryMstModel>[].obs;
   RxList<ItemCategoryMstModel> Selected_Item_Category_master_list_without_task = <ItemCategoryMstModel>[].obs;
+  RxList<ItemCategoryMstModel> parentProductCategoryList = <ItemCategoryMstModel>[].obs;
+  RxList<ItemCategoryMstModel> selectedParentProductCategoryList = <ItemCategoryMstModel>[].obs;
 
   @override
   Future<void> onInit() async {
@@ -91,6 +94,7 @@ class QuoteApprovalListVm extends GetxController{
     }
     //getQuoteHeaderData(pageNumberForQuote);
     product_category_type_Controller.value.text="Contains";
+    getParentItemCategoryMstGet();
     getItemCategoryMstWithoutTaskIdApi();
     getClustersGetByEmail();
 
@@ -101,6 +105,38 @@ class QuoteApprovalListVm extends GetxController{
     getQuoteHeaderData(pageNumberForQuote);
   }
 
+  getParentItemCategoryMstGet() {
+    this.loading.value = true;
+    Map<String, String> data = {
+      'filter_category': "",
+    };
+    print(data);
+    _api.ParentItemCategoryMstGet(data, sessionManagement).then((value) {
+      print(value);
+      try {
+        List<ItemCategoryMstModel> Response = (json.decode(value)
+        as List<dynamic>)
+            .map((i) => ItemCategoryMstModel.fromJson(i as Map<String, dynamic>)).toList();
+
+        if (Response.isNotEmpty && Response[0]?.condition.toString() == "True") {
+          parentProductCategoryList.value = Response!;
+        } else {
+          parentProductCategoryList.value = [];
+
+        }
+      } catch (e) {
+        parentProductCategoryList.value = [];
+
+        print('catch....${e.toString()}');
+      }
+    }).onError((error, stackTrace) {
+      parentProductCategoryList.value = [];
+      Utils.sanckBarError('Api Exception onError', error.toString());
+      print('catchEx....${error.toString()}');
+    }).whenComplete(() {
+      this.loading.value = false;
+    });
+  }
   getItemCategoryMstWithoutTaskIdApi() async{
     try {
     Map<String, String> data = {
@@ -225,6 +261,7 @@ class QuoteApprovalListVm extends GetxController{
         "filter_exp_closure_date": extClosureStartToEnd.value.isNotEmpty?extClosureStartToEnd.value:"",
         "filter_quote_status": apiQuoteStatusField,
         "filter_product_category": productCategoryController.value.text.isEmpty?"":productCategoryController.value.text,
+        "filter_parent_product_category": parentProductCategory_controller.value.text.isEmpty?"":parentProductCategory_controller.value.text,
         "filter_product_category_type": product_category_type_Controller.value.text.isEmpty?"":product_category_type_Controller.value.text,
         "filter_created_by": isAdminWritePermission.value=="1" || isHeadofficePermission.value=="1"?"":email,
         "filter_created_on": createdOnStartToEnd.value.isNotEmpty?createdOnStartToEnd.value:"",
@@ -276,6 +313,7 @@ class QuoteApprovalListVm extends GetxController{
     product_category_type_Controller.value.text="Contains";
     filterQuoteVersionController.value.clear();
     Selected_Item_Category_master_list_without_task.value=[];
+    selectedParentProductCategoryList.value=[];
     filterQuoteIdController.value.clear();
     filterQuoteStatusController.value.clear();
     filterExpectedClosuredateController.value.clear();
@@ -287,6 +325,7 @@ class QuoteApprovalListVm extends GetxController{
     category_Approval_controller.value.clear();
     gm_Approval_controller.value.clear();
     productCategoryController.value.clear();
+    parentProductCategory_controller.value.clear();
     createdOnCnontroller.value.clear();
     frontliner_controller.value.clear();
     zone_head_value_controller.value.clear();
@@ -325,6 +364,7 @@ class QuoteApprovalListVm extends GetxController{
       'createdOn_Controller': createdOnCnontroller.value.text,
       'createdOnStartToEnd': createdOnStartToEnd.value,
       'product_category': productCategoryController.value.text,
+      'parentProductCategory_controller': parentProductCategory_controller.value.text,
       'product_category_type': product_category_type_Controller.value.text,
       'filterQuoteAcceptedController': filterQuoteAcceptedController.value.text,
 
@@ -356,6 +396,7 @@ class QuoteApprovalListVm extends GetxController{
       createdOnCnontroller.value.text=getFilterData["createdOn_Controller"];
       createdOnStartToEnd.value=getFilterData["createdOnStartToEnd"];
       productCategoryController.value.text=getFilterData["product_category"];
+      parentProductCategory_controller.value.text=getFilterData["parentProductCategory_controller"];
       product_category_type_Controller.value.text=getFilterData["product_category_type"];
       filterQuoteAcceptedController.value.text=getFilterData["filterQuoteAcceptedController"]??"";
 

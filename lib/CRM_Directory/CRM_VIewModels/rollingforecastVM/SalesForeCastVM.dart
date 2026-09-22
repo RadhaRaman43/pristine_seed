@@ -1876,7 +1876,8 @@ class SalesForeCastVM extends GetxController{
       final firstRowMap = removeExcelKeys(sales_force_cast_list.first,);
       headers = firstRowMap.keys.toList();
       for (int col = 0; col < headers.length; col++) {
-        sheet.cell(CellIndex.indexByColumnRow(columnIndex: col, rowIndex: 5)).value
+        print("column name ${headers[col]}");
+        sheet.cell(CellIndex.indexByColumnRow(columnIndex: col, rowIndex: 0)).value
         = TextCellValue(headers[col]);
       }
       final totalRows = sales_force_cast_list.length;
@@ -1922,7 +1923,8 @@ class SalesForeCastVM extends GetxController{
   }
 
   Map<String, dynamic> removeExcelKeys(SalesForceCastListModal items) {
-    final map = Map<String, dynamic>.from(item.toJson());
+
+    final map = Map<String, dynamic>.from(items.toJson());
     map.remove('condition');
     map.remove('total_rows');
     map.remove('sales_forecast_id');

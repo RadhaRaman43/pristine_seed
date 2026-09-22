@@ -232,6 +232,7 @@ class SaleCyclePendingForApprovalList extends StatelessWidget{
             _buildLabelWithValue(label: "Sales Cycle Stage: ", value: salesCyclePendingForApprovalController.saleCyclePendingForApprovalList[position].salesCycleStatus,),
             _buildLabelWithValue(label: "Quote Accepted: ", value: salesCyclePendingForApprovalController.saleCyclePendingForApprovalList[position].quoteAccepted, ),
             _buildLabelWithValue(label: "Product Category : ", value: salesCyclePendingForApprovalController.saleCyclePendingForApprovalList[position].productCategory,),
+            _buildLabelWithValue(label: "Parent Product Category : ", value: salesCyclePendingForApprovalController.saleCyclePendingForApprovalList[position].parentProductCategory,),
             _buildLabelWithValue(label: "Budget Amount : ", value: "₹ ${salesCyclePendingForApprovalController.saleCyclePendingForApprovalList[position].budgetAmount.toString()}",),
             _buildLabelWithValue(label: "Contact Name : ", value: salesCyclePendingForApprovalController.saleCyclePendingForApprovalList[position].contactName,),
             _buildLabelWithValue(label: "Purchase Process : ", value: salesCyclePendingForApprovalController.saleCyclePendingForApprovalList[position].purchaseProcess,),
@@ -388,6 +389,8 @@ class SaleCyclePendingForApprovalList extends StatelessWidget{
                               bindAccountOwnerFilter(context),
                               SizedBox(height: 10,),
                               bindProductCategory(context),
+                              SizedBox(height: 10,),
+                              bindParentProductCategoryFilter(context),
                               SizedBox(height: 10,),
                               bindProductCategoryTypeDropDown(context),
                               SizedBox(height: 10,),
@@ -705,6 +708,80 @@ class SaleCyclePendingForApprovalList extends StatelessWidget{
       );
     });
   }
+
+  bindParentProductCategoryFilter(BuildContext context) {
+    return Obx((){
+      if (salesCyclePendingForApprovalController.parentProductCategory_controller.value.text.isNotEmpty && salesCyclePendingForApprovalController.filterDataChecker.value=='1') {
+        List<String> nameList = salesCyclePendingForApprovalController.parentProductCategory_controller.value.text.split('|');
+
+        salesCyclePendingForApprovalController.selectedParentProductCategoryList.value =
+            List.generate(nameList.length, (index) {
+              return ItemCategoryMstModel(
+                parentCategoryCode: nameList[index].trim(),
+              );
+            });
+      }
+      return  DropdownSearch<ItemCategoryMstModel>.multiSelection(
+        items: salesCyclePendingForApprovalController.parentProductCategoryList,
+        itemAsString: (ItemCategoryMstModel u) => u.parentCategoryCode??"",
+        selectedItems: salesCyclePendingForApprovalController.selectedParentProductCategoryList,
+        dropdownDecoratorProps: DropDownDecoratorProps(
+          baseStyle: TextStyle(color: Colors.black),
+          dropdownSearchDecoration: InputDecoration(
+            filled: false,
+            labelText: salesCyclePendingForApprovalController.selectedParentProductCategoryList.isNotEmpty?"Parent Product Category":null,
+            hintText: "Parent Product Category",
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+          ),
+        ),
+        dropdownBuilder: (context, selectedItems) {
+          // Custom builder to just show comma-separated names
+          if (selectedItems.isEmpty) {
+            return Text(
+              "Parent Product Category",
+              style: GoogleFonts.poppins(
+                color: AllColors.primaryDark1, // Match your hint color
+                fontSize: AllFontSize.sisxteen,
+                fontWeight: FontWeight.w500,
+              ),
+            );
+          }
+          return SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Text(
+              selectedItems.map((e) => e.parentCategoryCode).join(', '),
+              style: TextStyle(color: Colors.black), // Only black text
+            ),
+          );
+        },
+        onChanged: (List<ItemCategoryMstModel> selectedList) {
+          salesCyclePendingForApprovalController.selectedParentProductCategoryList.value = selectedList;
+          salesCyclePendingForApprovalController.parentProductCategory_controller.value.text =
+              selectedList.map((e) => e.parentCategoryCode).join('|');
+        },
+        popupProps: PopupPropsMultiSelection.dialog(
+          showSearchBox: true,
+          searchFieldProps: TextFieldProps(
+            padding: EdgeInsets.only(top: 20, left: 10, right: 10),
+            decoration: InputDecoration(
+              contentPadding: EdgeInsets.only(top: 20, left: 12, right: 12),
+              hintText: "Search...",
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+          ),
+
+          itemBuilder: (context, item, isSelected) =>
+              ListTile(
+                title: Text(item.parentCategoryCode??""),
+              ),
+        ),
+      );
+    });
+
+  }
+
   Widget bindProductCategoryTypeDropDown(context) {
     return DropdownMenu<String>(
       width: MediaQuery.of(context).size.width - 15,
