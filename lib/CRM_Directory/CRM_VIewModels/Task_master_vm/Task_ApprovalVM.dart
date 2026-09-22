@@ -18,6 +18,7 @@ import '../../CRM_Models/TaskMaster_model/Item_Category_Mast_model.dart';
 import '../../CRM_Models/TaskMaster_model/Task_DSAR_model.dart';
 import '../../CRM_Models/TaskMaster_model/Task_Master_model.dart';
 import '../../CRM_Models/TaskMaster_model/company_type_modal.dart';
+import '../../CRM_Models/sale_cycle_modal/alongWithPersonModel.dart';
 import '../../CRM_Repository/Task_master_Repository/Task_master_repo.dart';
 
 class TaskApprovalvm extends GetxController{
@@ -68,6 +69,7 @@ class TaskApprovalvm extends GetxController{
   var RejectReason_Controller = TextEditingController();
   var managerRemarksController=TextEditingController().obs;
   var AccountOwner_controller=TextEditingController().obs;
+  var filterAlongWithPersonNameController=TextEditingController().obs;
   String accountNameCode='';
 
   RxBool RejectBool=false.obs;
@@ -85,6 +87,8 @@ class TaskApprovalvm extends GetxController{
 
   RxList<EmployeeMemberModel> tempSelected = <EmployeeMemberModel>[].obs;
   RxList<EmployeeMemberModel> filtered = <EmployeeMemberModel>[].obs;
+  RxList<AlongWithPersonModel> AlongPersonWith_list = <AlongWithPersonModel>[].obs;
+  RxList<AlongWithPersonModel> SelectedAlongPersonWith_list = <AlongWithPersonModel>[].obs;
   RxBool selectOwner = true.obs;
   RxBool allSelected = false.obs;
   RxBool isSel = false.obs;
@@ -588,6 +592,8 @@ class TaskApprovalvm extends GetxController{
     isInfraLeadFilterController.text = "No";
     filterTaskDuedateController.value.clear();
     filterTaskCreationOnController.value.clear();
+    filterAlongWithPersonNameController.value.clear();
+    SelectedAlongPersonWith_list.value=[];
     createdOnStartToEnd.value = "";
     is_Active = -1;
 
@@ -741,7 +747,7 @@ class TaskApprovalvm extends GetxController{
         "filter_branch_head_value": RegionName_controller.value.text.isEmpty?"":RegionName_controller.value.text,
         "filter_zone_head_value": "",
         "filter_clusture_head_value": clusterName_controller.value.text.isEmpty?"":clusterName_controller.value.text,
-
+        "filter_along_with_person_name":filterAlongWithPersonNameController.value.text.isEmpty?"":filterAlongWithPersonNameController.value.text,
         "row_per_page": rowsPerPage.toString(),
         "page_number": page_no.toString()
       };
@@ -1319,5 +1325,42 @@ class TaskApprovalvm extends GetxController{
   void clearFilterData() {
     filterDataChecker.value='';
     sessionManagement.clearTaskApproverData();
+  }
+
+  getEmpMstEmailByApi() async{
+    try{
+      Map<String , String> data = {
+        "email_id": email
+      };
+      print(data);
+      loading.value = true;
+      String value = await _api.EmpMstEmailByGet(data, sessionManagement);
+      print(value);
+      final JsonResponse = json.decode(value);
+      if (JsonResponse is List) {
+        List<AlongWithPersonModel> response =
+        JsonResponse.map((e) => AlongWithPersonModel.fromJson(e))
+            .toList();
+        if (response != null &&
+            response.length > 0 &&
+            response[0].condition == "True") {
+          loading.value = false;
+          AlongPersonWith_list.value=response;
+        } else {
+          loading.value = false;
+          AlongPersonWith_list.value=[];
+          Utils.sanckBarError("Error!", "No Data Found");
+          //service_installation_details_list.value=[];
+        }
+      } else {
+        loading.value = false;
+        Utils.sanckBarException("Api Error!", JsonResponse);
+      }
+    }catch(e){
+      loading.value = false;
+      print(e);
+    }/*finally{
+                    loading.value = false;
+                }*/
   }
 }

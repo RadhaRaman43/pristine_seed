@@ -1643,15 +1643,16 @@ class SalesCycleVm extends GetxController {
               loading.value = false;
               Utils.sanckBarSuccess("Success!", response[0].message.toString());
               pageNumberForQuote = 0;
-              ProductCatCreateApiHit(response[0].quoteId!,"back");
+              ProductCatCreateApiHit(response[0].quoteId??"","back");
               quoteValidityController.value.clear();
               expectedClosuredateController.value.clear();
               productCategoryController .value.clear();
               parentProductCategory_controller .value.clear();
               kindAttentionController.value.clear();
+              ApprovalStatusController.value.clear();
               IsMultiParentCategory.value=false;
               itemCategorySelectedlist.value=[];
-              getQuoteHeaderData(pageNumberForQuote, saleCycleList[0].salesCycleId!, '');
+              getQuoteHeaderData(pageNumberForQuote, saleCycleList[0].salesCycleId??"", '');
               IsMultiParentCategory.value=false;
               Get.toNamed(RoutesName.viewSalesCycleHeaderScreen);
 
@@ -1846,7 +1847,7 @@ class SalesCycleVm extends GetxController {
               }
               quoteApprovalPage.value = flag;
               print("Rh flag ${flag}");
-              getItemCategoryMstApi(quoteHeaderdata[0].salesCycleId.toString(),"" ,  quoteId!);
+              getItemCategoryMstApi(quoteHeaderdata[0].salesCycleId.toString(),"" ,  quoteId??"");
               Get.toNamed(RoutesName.quoteInformationScreen);
 
               /*if (flag == "quoteApprovalScreen") {
@@ -2644,10 +2645,9 @@ class SalesCycleVm extends GetxController {
             .map((i) => ItemCategoryMstModel.fromJson(i as Map<String, dynamic>)).toList();
 
         if (Response.isNotEmpty && Response[0]?.condition.toString() == "True") {
-          parentProductCategoryList.value = Response!;
+          parentProductCategoryList.value = Response??[];
         } else {
           parentProductCategoryList.value = [];
-
         }
       } catch (e) {
         parentProductCategoryList.value = [];
